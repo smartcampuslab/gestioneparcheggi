@@ -110,6 +110,17 @@ Renderer_Via.prototype.renderPopup = function(modeEdit,data) {
 			+ ((data['handicappedSlotNumber'] != undefined) ? data['handicappedSlotNumber']
 					: "")
 			+ '"/>'
+			+ viaLabels['timedParkSlotNumber']+' <label id="via_timedParkSlotNumber_msg" class="errorMsg"></label> <input name="via_timedParkSlotNumber" type="text" value="'
+			+ ((data['timedParkSlotNumber'] != undefined) ? data['timedParkSlotNumber']
+					: "")
+			+ '"/>'
+			+ viaLabels['freeParkSlotNumber']+' <label id="via_freeParkSlotNumber_msg" class="errorMsg"></label> <input name="via_freeParkSlotNumber" type="text" value="'
+			+ ((data['freeParkSlotNumber'] != undefined) ? data['freeParkSlotNumber']
+					: "")
+			+ '"/>'
+			+ viaLabels['subscritionAllowedPark']+' <label id="via_subscritionAllowedPark_msg" class="errorMsg"></label> <input name="via_subscritionAllowedPark" type="checkbox" value="y"'
+			+ ((data['subscritionAllowedPark'] != undefined && data['subscritionAllowedPark']) ? 'checked="checked"' : "")
+			+ '/>'
 			+ viaLabels['areaId']+' <label id="via_area_msg" class="errorMsg"></label> '
 			+ areeCombo
 			+ '<input name="via_tempId" type="hidden" value="'
@@ -130,6 +141,12 @@ Renderer_Via.prototype.renderPopup = function(modeEdit,data) {
 			+data['slotNumber']
 			+'<p class="title-popup">'+viaLabels['handicappedSlotNumber']+'</p>'
 			+data['handicappedSlotNumber']
+			+'<p class="title-popup">'+viaLabels['timedParkSlotNumber']+'</p>'
+			+data['timedParkSlotNumber']
+			+'<p class="title-popup">'+viaLabels['freeParkSlotNumber']+'</p>'
+			+data['freeParkSlotNumber']
+			+'<p class="title-popup">'+viaLabels['subscritionAllowedPark']+'</p>'
+			+((data['subscritionAllowedPark']) ? '<img src="imgs/yes.png" alt="si" title="si"/>' : '<img src="imgs/no.png" alt="no" title="no"/>')
 			+'<br/>'
 			+ rendererArea.renderPopupDetails(aree[data['areaId']]);
 	}

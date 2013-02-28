@@ -301,6 +301,12 @@ function saveVia() {
 	via['slotNumber'] = $('input[name="via_slotNumber"]').val();
 	via['handicappedSlotNumber'] = $('input[name="via_handicappedSlotNumber"]')
 			.val();
+	via['timedParkSlotNumber'] = $('input[name="via_timedParkSlotNumber"]')
+	.val();
+	via['freeParkSlotNumber'] = $('input[name="via_freeParkSlotNumber"]')
+	.val();
+	via['subscritionAllowedPark'] = $('input[name="via_subscritionAllowedPark"]')
+	.prop('checked');
 	via['areaId'] = $('select[name="via_area"]').val();
 	$coords = $('input[name^="via_coord_"]');
 	var a = [];
@@ -346,6 +352,31 @@ function saveVia() {
 		$('input[name="via_handicappedSlotNumber"]').addClass('ui-state-error');
 		isValid = false;
 	}
+	
+	
+	if (via['timedParkSlotNumber'].length == 0) {
+		$('#via_timedParkSlotNumber_msg').text('Campo obbligatorio');
+		$('input[name="via_timedParkSlotNumber"]').addClass('ui-state-error');
+		isValid = false;
+	}
+	if (isNaN(via['timedParkSlotNumber'])) {
+		$('#via_timedParkSlotNumber_msg').text('Campo numerico');
+		$('input[name="via_timedParkSlotNumber"]').addClass('ui-state-error');
+		isValid = false;
+	}
+	
+	if (via['freeParkSlotNumber'].length == 0) {
+		$('#via_freeParkSlotNumber_msg').text('Campo obbligatorio');
+		$('input[name="via_freeParkSlotNumber"]').addClass('ui-state-error');
+		isValid = false;
+	}
+	if (isNaN(via['freeParkSlotNumber'])) {
+		$('#via_freeParkSlotNumber_msg').text('Campo numerico');
+		$('input[name="via_freeParkSlotNumber"]').addClass('ui-state-error');
+		isValid = false;
+	}
+	
+	
 
 	if (isValid) {
 		if (via['id'].length == 0) {

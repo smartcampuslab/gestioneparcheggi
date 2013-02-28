@@ -239,6 +239,10 @@ public class StorageManager {
 					temp.setSlotNumber(vb.getSlotNumber());
 					temp.setHandicappedSlotNumber(vb.getHandicappedSlotNumber());
 					temp.setStreetReference(vb.getStreetReference());
+					temp.setTimedParkSlotNumber(vb.getTimedParkSlotNumber());
+					temp.setFreeParkSlotNumber(vb.getFreeParkSlotNumber());
+					temp.setSubscritionAllowedPark(vb
+							.isSubscritionAllowedPark());
 					temp.getGeometry().getPoints().clear();
 					for (PointBean pb : vb.getGeometry().getPoints()) {
 						temp.getGeometry().getPoints()

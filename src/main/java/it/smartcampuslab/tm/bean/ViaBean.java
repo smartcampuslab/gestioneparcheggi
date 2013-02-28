@@ -5,6 +5,9 @@ public class ViaBean {
 	private String streetReference;
 	private Integer slotNumber;
 	private Integer handicappedSlotNumber;
+	private Integer timedParkSlotNumber;
+	private Integer freeParkSlotNumber;
+	private boolean subscritionAllowedPark;
 	private String areaId;
 	private LineBean geometry;
 	private String color;
@@ -63,6 +66,30 @@ public class ViaBean {
 
 	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
 		this.handicappedSlotNumber = handicappedSlotNumber;
+	}
+
+	public Integer getTimedParkSlotNumber() {
+		return timedParkSlotNumber;
+	}
+
+	public void setTimedParkSlotNumber(Integer timedParkSlotNumber) {
+		this.timedParkSlotNumber = timedParkSlotNumber;
+	}
+
+	public Integer getFreeParkSlotNumber() {
+		return freeParkSlotNumber;
+	}
+
+	public void setFreeParkSlotNumber(Integer freeParkSlotNumber) {
+		this.freeParkSlotNumber = freeParkSlotNumber;
+	}
+
+	public boolean isSubscritionAllowedPark() {
+		return subscritionAllowedPark;
+	}
+
+	public void setSubscritionAllowedPark(boolean subscritionAllowedPark) {
+		this.subscritionAllowedPark = subscritionAllowedPark;
 	}
 
 }

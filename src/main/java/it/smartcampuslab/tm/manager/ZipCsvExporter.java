@@ -69,7 +69,7 @@ public class ZipCsvExporter implements Exporter {
 
 	private String getVieCsv() {
 		List<Area> areaList = db.findAll(Area.class);
-		String result = "AREA_APPARTENENZA,STRADA_RIFERIMENTO, NUMERO_POSTI,NUMERO_POSTI_DISABILI,GEOMETRIA\n";
+		String result = "AREA_APPARTENENZA,STRADA_RIFERIMENTO, NUMERO_POSTI,NUMERO_POSTI_DISABILI,NUMERO_POSTI_DISCO_ORARIO,NUMERO_POSTI_SOSTA_LIBERA,PARCHEGGIO_PER_ABBONATI,GEOMETRIA\n";
 		for (Area area : areaList) {
 			if (area.getVie() != null) {
 				for (Via via : area.getVie()) {
@@ -77,6 +77,9 @@ public class ZipCsvExporter implements Exporter {
 							+ "\"" + via.getStreetReference() + "\""
 							+ CSV_SEPARATOR + via.getSlotNumber()
 							+ CSV_SEPARATOR + via.getHandicappedSlotNumber()
+							+ CSV_SEPARATOR + via.getTimedParkSlotNumber()
+							+ CSV_SEPARATOR + via.getFreeParkSlotNumber()
+							+ CSV_SEPARATOR + via.isSubscritionAllowedPark()
 							+ CSV_SEPARATOR + geoToCsv(via.getGeometry())
 							+ "\n";
 				}
