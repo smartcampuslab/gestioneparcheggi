@@ -41,6 +41,9 @@ public class MarkerIconStorage {
 
 	public byte[] getMarkerIcon(String basePath, String company, String entity,
 			String color) throws IOException {
+		if (color == null) {
+			return getTemplateMarker(basePath, company, entity);
+		}
 		if (!new File(getIconFolder(basePath, ICON_FOLDER_CACHE) + company
 				+ "-" + entity + "-" + color + ICON_EXTENSION).exists()) {
 			// load template icon
@@ -54,6 +57,19 @@ public class MarkerIconStorage {
 				+ "-"
 				+ color
 				+ ICON_EXTENSION));
+	}
+
+	private byte[] getTemplateMarker(String basePath, String company,
+			String entity) throws IOException {
+		String filename = getIconFolder(basePath, ICON_FOLDER_TEMPLATE);
+		List<String> markerDetails = getMarkerIconDetails(company, entity);
+		if (markerDetails == null) {
+			filename += TEMPLATE_FILE;
+		} else {
+			filename += markerDetails.get(0);
+		}
+
+		return FileUtils.readFileToByteArray(new File(filename));
 	}
 
 	/**

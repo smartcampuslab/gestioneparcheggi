@@ -1,6 +1,7 @@
 package it.smartcampuslab.tm.controller;
 
 import it.smartcampuslab.tm.bean.AreaBean;
+import it.smartcampuslab.tm.bean.ParcheggioStrutturaBean;
 import it.smartcampuslab.tm.bean.ParcometroBean;
 import it.smartcampuslab.tm.bean.PuntoBiciBean;
 import it.smartcampuslab.tm.bean.ViaBean;
@@ -173,6 +174,34 @@ public class EditingController {
 		return storage.editPuntobici(bici);
 	}
 
+	@RequestMapping(method = RequestMethod.POST, value = "/parcheggiostruttura")
+	public @ResponseBody
+	ParcheggioStrutturaBean createParcheggioStruttura(
+			@RequestBody ParcheggioStrutturaBean entityBean)
+			throws DatabaseException {
+		return storage.save(entityBean);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/parcheggiostruttura")
+	public @ResponseBody
+	List<ParcheggioStrutturaBean> getAllParcheggioStruttura() {
+		return storage.getAllParcheggioStruttura();
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/parcheggiostruttura/{id}")
+	public @ResponseBody
+	boolean deleteParcheggioStruttura(@PathVariable String id) {
+		return storage.removeParcheggioStruttura(id);
+	}
+
+	@RequestMapping(method = RequestMethod.PUT, value = "/parcheggiostruttura/{id}")
+	public @ResponseBody
+	ParcheggioStrutturaBean editParcheggioStruttura(@PathVariable String id,
+			@RequestBody ParcheggioStrutturaBean entityBean)
+			throws NotFoundException {
+		return storage.editParcheggioStruttura(entityBean);
+	}
+
 	@RequestMapping(method = RequestMethod.GET, value = "/data")
 	public @ResponseBody
 	byte[] exportData() throws ExportException {
@@ -198,12 +227,26 @@ public class EditingController {
 			@PathVariable String entity, @PathVariable String company)
 			throws IOException {
 
-		byte[] icon = markerIconStorage.getMarkerIcon(request.getSession()
-				.getServletContext().getRealPath("/"), company, entity, color);
+		getMarkerIcon(response, request.getSession().getServletContext()
+				.getRealPath("/"), company, entity, color);
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/marker/{company}/{entity}")
+	public void getMarkerIconNoColor(HttpServletRequest request,
+			HttpServletResponse response, @PathVariable String entity,
+			@PathVariable String company) throws IOException {
+		getMarkerIcon(response, request.getSession().getServletContext()
+				.getRealPath("/"), company, entity, null);
+	}
+
+	private void getMarkerIcon(HttpServletResponse response, String basePath,
+			String company, String entity, String color) throws IOException {
+		byte[] icon = markerIconStorage.getMarkerIcon(basePath, company,
+				entity, color);
 		response.setContentLength(icon.length);
 		response.setContentType(MarkerIconStorage.ICON_CONTENT_TYPE);
 		response.getOutputStream().write(icon);
 		response.getOutputStream().flush();
-
 	}
+
 }

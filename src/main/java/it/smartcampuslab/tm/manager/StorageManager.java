@@ -1,6 +1,7 @@
 package it.smartcampuslab.tm.manager;
 
 import it.smartcampuslab.tm.bean.AreaBean;
+import it.smartcampuslab.tm.bean.ParcheggioStrutturaBean;
 import it.smartcampuslab.tm.bean.ParcometroBean;
 import it.smartcampuslab.tm.bean.PointBean;
 import it.smartcampuslab.tm.bean.PuntoBiciBean;
@@ -11,6 +12,7 @@ import it.smartcampuslab.tm.exception.DatabaseException;
 import it.smartcampuslab.tm.exception.ExportException;
 import it.smartcampuslab.tm.exception.NotFoundException;
 import it.smartcampuslab.tm.model.Area;
+import it.smartcampuslab.tm.model.ParcheggioStruttura;
 import it.smartcampuslab.tm.model.Parcometro;
 import it.smartcampuslab.tm.model.PuntoBici;
 import it.smartcampuslab.tm.model.Via;
@@ -367,6 +369,51 @@ public class StorageManager {
 			result.add(ModelConverter.convert(pb, PuntoBiciBean.class));
 		}
 		return result;
+	}
+
+	public boolean removeParcheggioStruttura(String id) {
+		Criteria crit = new Criteria();
+		crit.and("id").is(id);
+		mongodb.remove(Query.query(crit), ParcheggioStruttura.class);
+		return true;
+	}
+
+	public ParcheggioStrutturaBean save(ParcheggioStrutturaBean entityBean) {
+		ParcheggioStruttura entity = ModelConverter.convert(entityBean,
+				ParcheggioStruttura.class);
+		entity = processId(entity, ParcheggioStruttura.class);
+		mongodb.save(entity);
+		entityBean.setId(entity.getId());
+		return entityBean;
+	}
+
+	public List<ParcheggioStrutturaBean> getAllParcheggioStruttura() {
+		List<ParcheggioStrutturaBean> result = new ArrayList<ParcheggioStrutturaBean>();
+		for (ParcheggioStruttura entity : mongodb
+				.findAll(ParcheggioStruttura.class)) {
+			result.add(ModelConverter.convert(entity,
+					ParcheggioStrutturaBean.class));
+		}
+		return result;
+	}
+
+	public ParcheggioStrutturaBean editParcheggioStruttura(
+			ParcheggioStrutturaBean entityBean) throws NotFoundException {
+		ParcheggioStruttura entity = findById(entityBean.getId(),
+				ParcheggioStruttura.class);
+		entity.setFee(entityBean.getFee());
+		entity.setManagementMode(entityBean.getManagementMode());
+		entity.setName(entityBean.getName());
+		entity.setPaymentMode(entityBean.getPaymentMode());
+		entity.setPhoneNumber(entityBean.getPhoneNumber());
+		entity.setSlotNumber(entityBean.getSlotNumber());
+		entity.setStreetReference(entityBean.getStreetReference());
+		entity.setTimeSlot(entityBean.getTimeSlot());
+
+		entity.getGeometry().setLat(entityBean.getGeometry().getLat());
+		entity.getGeometry().setLng(entityBean.getGeometry().getLng());
+		mongodb.save(entity);
+		return entityBean;
 	}
 
 	public byte[] exportData() throws ExportException {

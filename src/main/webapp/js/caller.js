@@ -407,3 +407,87 @@ Caller.prototype.editPuntobici = function(data) {
 		}
 	});
 };
+
+
+//********************** parcheggiostruttura
+
+Caller.prototype.getAllParcheggiostruttura = function(modeEdit) {
+	$.ajax({
+		async : true,
+		type : 'GET',
+		headers : {},
+		url : baseUrl + '/rest/parcheggiostruttura',
+		success : function(data, textStatus, jqXHR) {
+			$.each(data, function(key, value) {
+				parcheggiostruttura[value['id']] = value;
+				rendererParcheggiostruttura.render(true, value);
+				rendererParcheggiostruttura.renderGeo(modeEdit, value, false);
+			});
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+		}
+	});
+};
+
+Caller.prototype.createParcheggiostruttura = function(tempId, data) {
+	var json = JSON.stringify(data);
+	$.ajax({
+		async : true,
+		type : 'POST',
+		headers : {},
+		contentType : 'application/json',
+		data : json,
+		url : baseUrl + '/rest/parcheggiostruttura',
+		success : function(data, textStatus, jqXHR) {
+			parcheggiostruttura[data['id']] = data;
+			parcheggiostrutturaGeo[data['id']] = tempGeo[tempId];
+			delete tempGeo[tempId];
+			rendererParcheggiostruttura.render(true, data);
+			rendererParcheggiostruttura.updateGeo(parcheggiostrutturaGeo[data['id']], data);
+			map.closeInfoWindow();
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+		}
+	});
+};
+
+Caller.prototype.deleteParcheggiostruttura = function(parcheggiostrutturaId) {
+	$.ajax({
+		async : true,
+		type : 'DELETE',
+		headers : {},
+		url : baseUrl + '/rest/parcheggiostruttura/' + parcheggiostrutturaId,
+		success : function(data, textStatus, jqXHR) {
+			if (data) {
+				map.removeOverlay(parcheggiostrutturaGeo[parcheggiostrutturaId]);
+				rendererParcheggiostruttura.render(false, parcheggiostrutturaId);
+				delete parcheggiostruttura[parcheggiostrutturaId];
+				delete parcheggiostrutturaGeo[parcheggiostrutturaId];
+				map.closeInfoWindow();
+			}
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+		}
+	});
+};
+
+Caller.prototype.editParcheggiostruttura = function(data) {
+	var json = JSON.stringify(data);
+	$.ajax({
+		async : true,
+		type : 'PUT',
+		headers : {},
+		contentType : 'application/json',
+		data : json,
+		url : baseUrl + '/rest/parcheggiostruttura/' + data['id'],
+		success : function(data, textStatus, jqXHR) {
+			parcheggiostruttura[data['id']] = data;
+			rendererParcheggiostruttura.render(true, data);
+			rendererParcheggiostruttura.updateGeo(parcheggiostrutturaGeo[data['id']], data);
+			map.closeInfoWindow();
+		},
+		error : function(jqXHR, textStatus, errorThrown) {
+		}
+	});
+};
+

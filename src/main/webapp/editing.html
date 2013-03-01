@@ -34,6 +34,9 @@
 <script src="js/renderer/viaFilter.js" type="text/javascript"></script>
 <script src="js/renderer/zona.js" type="text/javascript"></script>
 <script src="js/renderer/puntobici.js" type="text/javascript"></script>
+<script src="js/renderer/parcheggiostrutturaLabels.js"
+	type="text/javascript"></script>
+<script src="js/renderer/parcheggiostruttura.js" type="text/javascript"></script>
 <script src="js/global.js" type="text/javascript"></script>
 
 <script src="js/editor.js" type="text/javascript"></script>
@@ -45,7 +48,7 @@
 <script type="text/javascript">
 	$(document).ready(function() {
 		initializeMap();
-		populate(true,[ 'area', 'via', 'parcometro', 'zona' ]);
+		populate(true, [ 'area', 'via', 'parcometro', 'zona','parcheggiostruttura' ]);
 	});
 </script>
 
@@ -65,6 +68,9 @@
 			onclick="createParcometro();">Crea parcometro</button>
 		<button id="crea-zona" class="toolbar-action" onclick="createZona();">Crea
 			zona</button>
+		<button id="crea-parcheggiostruttura" class="toolbar-action"
+			onclick="createParcheggiostruttura();">Crea parcheggio in
+			struttura</button>
 
 	</div>
 	<div id="map"></div>
@@ -92,6 +98,12 @@
 			</table>
 		</div>
 		<div class="element-list">
+			<span class="title">Parcheggi in struttura</span>
+			<div class="toolbar-local-hidden"></div>
+			<table id='parcheggiostruttura-info'>
+			</table>
+		</div>
+		<div class="element-list">
 			<span class="title">Zone</span>
 			<div class="toolbar-local-hidden"></div>
 			<table id='zona-info'>
@@ -103,29 +115,26 @@
 	<!-- Crea Area form -->
 	<div id="form-area">
 		<form>
-<!-- 			<ul id="areaMsg"></ul> -->
-<!-- 			<fieldset> -->
-				<label for="area_nome">Nome</label> <label id="area_nome_msg"
-					class="errorMsg"></label> <input type="text" name="area_nome"
-					class="text ui-widget-content ui-corner-all" /> <label
-					for="area_tariffa">Tariffa (euro/ora)</label> <label
-					id="area_tariffa_msg" class="errorMsg"></label> <input type="text"
-					name="area_tariffa" class="text ui-widget-content ui-corner-all" />
+			<label for="area_nome">Nome</label> <label id="area_nome_msg"
+				class="errorMsg"></label> <input type="text" name="area_nome"
+				class="text ui-widget-content ui-corner-all" /> <label
+				for="area_tariffa">Tariffa (euro/ora)</label> <label
+				id="area_tariffa_msg" class="errorMsg"></label> <input type="text"
+				name="area_tariffa" class="text ui-widget-content ui-corner-all" />
 
-				<label for="area_fascia-oraria">Fascia oraria</label> <label
-					id="area_fascia-oraria_msg" class="errorMsg"></label>
-				<textarea name="area_fascia-oraria"
-					class="note text ui-widget-content ui-corner-all">
+			<label for="area_fascia-oraria">Fascia oraria</label> <label
+				id="area_fascia-oraria_msg" class="errorMsg"></label>
+			<textarea name="area_fascia-oraria"
+				class="note text ui-widget-content ui-corner-all">
 					</textarea>
-				<label for="area_codice-sms">Codice SMS</label> <label
-					id="area_codice-sms_msg" class="errorMsg"></label> <input
-					type="text" name="area_codice-sms"
-					class="text ui-widget-content ui-corner-all" /> <label
-					for="area_colore">Colore</label> <label id="area_colore_msg"
-					class="errorMsg"></label> <input type="text" name="area_colore"
-					class="text ui-widget-content ui-corner-all" />
-				<input type="hidden" name="area_id" />
-<!-- 			</fieldset> -->
+			<label for="area_codice-sms">Codice SMS</label> <label
+				id="area_codice-sms_msg" class="errorMsg"></label> <input
+				type="text" name="area_codice-sms"
+				class="text ui-widget-content ui-corner-all" /> <label
+				for="area_colore">Colore</label> <label id="area_colore_msg"
+				class="errorMsg"></label> <input type="text" name="area_colore"
+				class="text ui-widget-content ui-corner-all" /> <input
+				type="hidden" name="area_id" />
 		</form>
 	</div>
 

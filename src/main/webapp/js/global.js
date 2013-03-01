@@ -4,7 +4,7 @@ var company = 'amr';
 
 var zoomLevel = 15;
 var zoomToLevel = 15;
-var mapExtent = [46.0698, 11.1213];
+var mapExtent = [45.89182,11.034136];
 
 var defaultMarkerColor = "FF0000";
 var markerWidth = 32;
@@ -26,6 +26,7 @@ var fillPolygonOpacity=0.2;
 
 
 var parcometroStatus = {'ACTIVE':'Attivo', 'INACTIVE':'Non Attivo'};
+var parcheggiostrutturaPaymentMode = {'CASH':'Contanti', 'AUTOMATED_TELLER':'Cassa automatica', 'PREPAID_CARD': 'Tessere prepagate'};
 
 var tempIndex = 0;
 var tempGeo = {};
@@ -38,6 +39,8 @@ var zone = {};
 var zoneGeo = {};
 var puntobici={};
 var puntobiciGeo={};
+var parcheggiostruttura={};
+var parcheggiostrutturaGeo={};
 
 // CONTAINER DATA
 var containerArea;
@@ -45,6 +48,7 @@ var containerParcometro;
 var containerVia;
 var containerZona;
 var containerPuntobici;
+var containerParcheggiostruttura;
 
 
 var caller;
@@ -55,6 +59,7 @@ var rendererZona;
 var rendererParcometroFilter;
 var rendererViaFilter;
 var rendererPuntobici;
+var rendererParcheggiostruttura;
 
 var dialogArea;
 var dialogPicker;
@@ -76,6 +81,7 @@ $(document).ready(function(){
 	containerVia = $('#via-info');
 	containerZona = $('#zona-info');
 	containerPuntobici = $('#puntobici-info');
+	containerParcheggiostruttura = $('#parcheggiostruttura-info');
 	dialogArea = $('#form-area');
 	dialogPicker = $("#color-picker-dialog");
 	dialogCreationArea=$('#no-area');
@@ -89,5 +95,6 @@ $(document).ready(function(){
 	rendererParcometroFilter = new Renderer_ParcometroFilter();
 	rendererViaFilter = new Renderer_ViaFilter();
 	rendererPuntobici = new Renderer_Puntobici();
+	rendererParcheggiostruttura = new Renderer_Parcheggiostruttura();
 	geocoder = new GClientGeocoder();
 });

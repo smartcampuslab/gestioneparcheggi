@@ -2,6 +2,7 @@ package it.smartcampuslab.tm.manager;
 
 import it.smartcampuslab.tm.exception.ExportException;
 import it.smartcampuslab.tm.model.Area;
+import it.smartcampuslab.tm.model.ParcheggioStruttura;
 import it.smartcampuslab.tm.model.Parcometro;
 import it.smartcampuslab.tm.model.PuntoBici;
 import it.smartcampuslab.tm.model.Via;
@@ -59,6 +60,11 @@ public class ZipCsvExporter implements Exporter {
 			zout.write(getPuntobiciCsv().getBytes());
 			zout.closeEntry();
 
+			entry = new ZipEntry("parcheggistruttura.csv");
+			zout.putNextEntry(entry);
+			zout.write(getParcheggiostrutturaCsv().getBytes());
+			zout.closeEntry();
+
 			zout.close();
 		} catch (IOException e) {
 			throw new ExportException(e.getMessage());
@@ -97,6 +103,23 @@ public class ZipCsvExporter implements Exporter {
 					+ zona.getNote() + "\"" + CSV_SEPARATOR + "#"
 					+ zona.getColor() + CSV_SEPARATOR
 					+ geoToCsv(zona.getGeometry()) + "\n";
+		}
+		return result;
+	}
+
+	private String getParcheggiostrutturaCsv() {
+		List<ParcheggioStruttura> list = db.findAll(ParcheggioStruttura.class);
+		String result = "NOME,INDIRIZZO,GESTIONE,CAPIENZA,ORARI,PAGAMENTO,TELEFONO,TARIFFE,GEOMETRIA\n";
+		for (ParcheggioStruttura element : list) {
+			result += "\"" + element.getName() + "\"" + CSV_SEPARATOR + "\""
+					+ element.getStreetReference() + "\"" + CSV_SEPARATOR
+					+ "\"" + element.getManagementMode() + "\"" + CSV_SEPARATOR
+					+ "\"" + element.getSlotNumber() + "\"" + CSV_SEPARATOR
+					+ "\"" + element.getTimeSlot() + "\"" + CSV_SEPARATOR
+					+ "\"" + element.getPaymentMode() + "\"" + CSV_SEPARATOR
+					+ "\"" + element.getPhoneNumber() + "\"" + CSV_SEPARATOR
+					+ "\"" + element.getFee() + "\"" + CSV_SEPARATOR
+					+ geoToCsv(element.getGeometry()) + "\n";
 		}
 		return result;
 	}

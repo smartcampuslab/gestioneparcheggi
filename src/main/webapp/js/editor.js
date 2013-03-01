@@ -4,6 +4,7 @@ function resetToolbar() {
 	$('#crea-via').removeClass('selected');
 	$('#crea-zona').removeClass('selected');
 	$('#crea-puntobici').removeClass('selected');
+	$('#crea-parcheggiostruttura').removeClass('selected');
 }
 
 function select(buttonId) {
@@ -126,14 +127,14 @@ function createVia() {
 	} else {
 		select("crea-via");
 		var newVia = {};
-		rendererVia.renderGeo(true,newVia);
+		rendererVia.renderGeo(true, newVia);
 	}
 }
 
 function createZona() {
 	select('crea-zona');
 	var newZona = {};
-	rendererZona.renderGeo(true,newZona);
+	rendererZona.renderGeo(true, newZona);
 }
 
 function resetAreaForm() {
@@ -302,11 +303,10 @@ function saveVia() {
 	via['handicappedSlotNumber'] = $('input[name="via_handicappedSlotNumber"]')
 			.val();
 	via['timedParkSlotNumber'] = $('input[name="via_timedParkSlotNumber"]')
-	.val();
-	via['freeParkSlotNumber'] = $('input[name="via_freeParkSlotNumber"]')
-	.val();
-	via['subscritionAllowedPark'] = $('input[name="via_subscritionAllowedPark"]')
-	.prop('checked');
+			.val();
+	via['freeParkSlotNumber'] = $('input[name="via_freeParkSlotNumber"]').val();
+	via['subscritionAllowedPark'] = $(
+			'input[name="via_subscritionAllowedPark"]').prop('checked');
 	via['areaId'] = $('select[name="via_area"]').val();
 	$coords = $('input[name^="via_coord_"]');
 	var a = [];
@@ -352,8 +352,7 @@ function saveVia() {
 		$('input[name="via_handicappedSlotNumber"]').addClass('ui-state-error');
 		isValid = false;
 	}
-	
-	
+
 	if (via['timedParkSlotNumber'].length == 0) {
 		$('#via_timedParkSlotNumber_msg').text('Campo obbligatorio');
 		$('input[name="via_timedParkSlotNumber"]').addClass('ui-state-error');
@@ -364,7 +363,7 @@ function saveVia() {
 		$('input[name="via_timedParkSlotNumber"]').addClass('ui-state-error');
 		isValid = false;
 	}
-	
+
 	if (via['freeParkSlotNumber'].length == 0) {
 		$('#via_freeParkSlotNumber_msg').text('Campo obbligatorio');
 		$('input[name="via_freeParkSlotNumber"]').addClass('ui-state-error');
@@ -375,8 +374,6 @@ function saveVia() {
 		$('input[name="via_freeParkSlotNumber"]').addClass('ui-state-error');
 		isValid = false;
 	}
-	
-	
 
 	if (isValid) {
 		if (via['id'].length == 0) {
@@ -392,7 +389,7 @@ function addParchimetro(latlng) {
 	newParcometro['geometry'] = {};
 	newParcometro['geometry']['lat'] = latlng.lat();
 	newParcometro['geometry']['lng'] = latlng.lng();
-	rendererParcometro.renderGeo(true,newParcometro, true);
+	rendererParcometro.renderGeo(true, newParcometro, true);
 }
 
 function addPuntobici(latlng) {
@@ -400,7 +397,15 @@ function addPuntobici(latlng) {
 	newPuntobici['geometry'] = {};
 	newPuntobici['geometry']['lat'] = latlng.lat();
 	newPuntobici['geometry']['lng'] = latlng.lng();
-	rendererPuntobici.renderGeo(true,newPuntobici, true);
+	rendererPuntobici.renderGeo(true, newPuntobici, true);
+}
+
+function addParcheggiostruttura(latlng) {
+	var newParcheggiostruttura = {};
+	newParcheggiostruttura['geometry'] = {};
+	newParcheggiostruttura['geometry']['lat'] = latlng.lat();
+	newParcheggiostruttura['geometry']['lng'] = latlng.lng();
+	rendererParcheggiostruttura.renderGeo(true, newParcheggiostruttura, true);
 }
 
 function saveParcometro() {
@@ -471,7 +476,20 @@ function removePuntobici() {
 			delete tempGeo[tempId];
 		}
 	}
+}
 
+function removeParcheggiostruttura() {
+	var parcheggiostrutturaId = $('input[name="parcheggiostruttura_id"]').val();
+	var tempId = $('input[name="parcheggiostruttura_tempId"]').val();
+	if (confirm("Procedere con l\'eliminazione?")) {
+		if (parcheggiostrutturaId.length != 0) {
+			caller.deleteParcheggiostruttura(parcheggiostrutturaId);
+		} else {
+			map.closeInfoWindow();
+			map.removeOverlay(tempGeo[tempId]);
+			delete tempGeo[tempId];
+		}
+	}
 }
 
 function removeParcometro() {
@@ -532,6 +550,128 @@ function createPuntobici() {
 	});
 }
 
+function createParcheggiostruttura() {
+	select("crea-parcheggiostruttura");
+	var listener = GEvent.addListener(map, "click", function(overlay, latlng) {
+		if (latlng) {
+			GEvent.removeListener(listener);
+			resetToolbar();
+			addParcheggiostruttura(latlng);
+		}
+	});
+}
+
+function saveParcheggiostruttura() {
+	var isValid = true;
+	$([]).add($('#parcheggiostruttura_name_msg')).add(
+			$('#parcheggiostruttura_slotNumber_msg')).add(
+			$('#parcheggiostruttura_streetReference_msg')).add(
+			$('#parcheggiostruttura_manageMode_msg')).add(
+			$('#parcheggiostruttura_timeSlot_msg')).add(
+			$('#parcheggiostruttura_paymentMode_msg')).add(
+			$('#parcheggiostruttura_phoneNumber_msg')).add(
+			$('#parcheggiostruttura_fee_msg')).text('');
+	$([]).add($('input[name="parcheggiostruttura_name"]')).add(
+			$('textarea[name="parcheggiostruttura_slotNumber"]')).add(
+			$('input[name="parcheggiostruttura_streetReference"]')).add(
+			$('input[name="parcheggiostruttura_managementMode"]')).add(
+			$('textarea[name="parcheggiostruttura_timeSlot"]')).add(
+			$('select[name="parcheggiostruttura_paymentMode"]')).add(
+			$('textarea[name="parcheggiostruttura_phoneNumber"]')).add(
+			$('textarea[name="parcheggiostruttura_fee"]')).removeClass(
+			'ui-state-error');
+
+	var parcheggiostruttura = {};
+	var coord = $('input[name="parcheggiostruttura_coord"]').val();
+	var tempGeoId = $('input[name="parcheggiostruttura_tempId"]').val();
+	parcheggiostruttura['id'] = $('input[name="parcheggiostruttura_id"]').val();
+	parcheggiostruttura['name'] = $('input[name="parcheggiostruttura_name"]')
+			.val().trim();
+	parcheggiostruttura['slotNumber'] = $(
+			'textarea[name="parcheggiostruttura_slotNumber"]').val();
+	parcheggiostruttura['streetReference'] = $(
+			'input[name="parcheggiostruttura_streetReference"]').val().trim();
+	parcheggiostruttura['managementMode'] = $(
+			'input[name="parcheggiostruttura_managementMode"]').val().trim();
+	parcheggiostruttura['timeSlot'] = $(
+			'textarea[name="parcheggiostruttura_timeSlot"]').val().trim();
+	parcheggiostruttura['paymentMode'] = $(
+			'select[name="parcheggiostruttura_paymentMode"]').val().trim();
+	parcheggiostruttura['phoneNumber'] = $(
+			'textarea[name="parcheggiostruttura_phoneNumber"]').val().trim();
+	parcheggiostruttura['fee'] = $('textarea[name="parcheggiostruttura_fee"]')
+			.val().trim();
+
+	parcheggiostruttura['geometry'] = {
+		'lat' : coord.split(',')[0],
+		'lng' : coord.split(',')[1]
+	};
+
+	if (parcheggiostruttura['name'].length == 0) {
+		$('#parcheggiostruttura_name_msg').text('Campo obbligatorio');
+		$('input[name="parcheggiostruttura_name"]').addClass('ui-state-error');
+		isValid = false;
+	}
+
+	if (parcheggiostruttura['streetReference'].length == 0) {
+		$('#parcheggiostruttura_streetReference_msg')
+				.text('Campo obbligatorio');
+		$('input[name="parcheggiostruttura_streetReference"]').addClass(
+				'ui-state-error');
+		isValid = false;
+	}
+
+	if (parcheggiostruttura['slotNumber'].length == 0) {
+		$('#parcheggiostruttura_slotNumber_msg').text('Campo obbligatorio');
+		$('textarea[name="parcheggiostruttura_slotNumber"]').addClass(
+				'ui-state-error');
+		isValid = false;
+	}
+
+	if (parcheggiostruttura['managementMode'].length == 0) {
+		$('#parcheggiostruttura_managementMode_msg').text('Campo obbligatorio');
+		$('input[name="parcheggiostruttura_managementMode"]').addClass(
+				'ui-state-error');
+		isValid = false;
+	}
+
+	if (parcheggiostruttura['timeSlot'].length == 0) {
+		$('#parcheggiostruttura_timeSlot_msg').text('Campo obbligatorio');
+		$('textarea[name="parcheggiostruttura_timeSlot"]').addClass(
+				'ui-state-error');
+		isValid = false;
+	}
+
+	if (parcheggiostruttura['paymentMode'].length == 0) {
+		$('#parcheggiostruttura_paymentMode_msg').text('Campo obbligatorio');
+		$('select[name="parcheggiostruttura_paymentMode"]').addClass(
+				'ui-state-error');
+		isValid = false;
+	}
+
+	if (parcheggiostruttura['phoneNumber'].length == 0) {
+		$('#parcheggiostruttura_phoneNumber_msg').text('Campo obbligatorio');
+		$('textarea[name="parcheggiostruttura_phoneNumber"]').addClass(
+				'ui-state-error');
+		isValid = false;
+	}
+
+	if (parcheggiostruttura['fee'].length == 0) {
+		$('#parcheggiostruttura_fee_msg').text('Campo obbligatorio');
+		$('textarea[name="parcheggiostruttura_fee"]')
+				.addClass('ui-state-error');
+		isValid = false;
+	}
+
+	if (isValid) {
+		if (parcheggiostruttura['id'].length == 0) {
+			caller.createParcheggiostruttura(tempGeoId, parcheggiostruttura);
+		} else {
+			caller.editParcheggiostruttura(parcheggiostruttura);
+		}
+	}
+
+}
 function savePuntobici() {
 	var isValid = true;
 	$([]).add($('#puntobici_name_msg')).add($('#puntobici_slotNumber_msg'))
@@ -594,7 +734,7 @@ function savePuntobici() {
 	}
 }
 
-function populate(modeEdit,elements) {
+function populate(modeEdit, elements) {
 	$.each(elements, function(k, v) {
 		switch (v) {
 		case 'area':
@@ -623,6 +763,12 @@ function populate(modeEdit,elements) {
 				$('#view-bici').attr('checked', 'true');
 			}
 			caller.getAllPuntobici(modeEdit);
+			break;
+		case 'parcheggiostruttura':
+			if ($('#view-parcheggiostruttura')) {
+				$('#view-parcheggiostruttura').attr('checked', 'true');
+			}
+			caller.getAllParcheggiostruttura(modeEdit);
 			break;
 		default:
 			break;
@@ -680,6 +826,15 @@ function visibility(component) {
 			caller.getAllPuntobici();
 		} else {
 			$.each(puntobiciGeo, function(k, v) {
+				map.removeOverlay(v);
+			});
+		}
+		break;
+	case 'view-parcheggiostruttura':
+		if (component.checked) {
+			caller.getAllParcheggiostruttura();
+		} else {
+			$.each(parcheggiostrutturaGeo, function(k, v) {
 				map.removeOverlay(v);
 			});
 		}
