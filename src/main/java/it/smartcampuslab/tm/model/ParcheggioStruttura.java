@@ -2,6 +2,8 @@ package it.smartcampuslab.tm.model;
 
 import it.smartcampuslab.tm.model.geo.Point;
 
+import java.util.List;
+
 public class ParcheggioStruttura {
 
 	public static enum PaymentMode {
@@ -14,7 +16,7 @@ public class ParcheggioStruttura {
 	private String managementMode;
 	private String slotNumber;
 	private String timeSlot;
-	private PaymentMode paymentMode;
+	private List<PaymentMode> paymentMode;
 	private String phoneNumber;
 	private String fee;
 	private Point geometry;
@@ -59,14 +61,6 @@ public class ParcheggioStruttura {
 		this.timeSlot = timeSlot;
 	}
 
-	public PaymentMode getPaymentMode() {
-		return paymentMode;
-	}
-
-	public void setPaymentMode(PaymentMode paymentMode) {
-		this.paymentMode = paymentMode;
-	}
-
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -97,6 +91,14 @@ public class ParcheggioStruttura {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public void setPaymentMode(List<PaymentMode> paymentMode) {
+		this.paymentMode = paymentMode;
+	}
+
+	public List<PaymentMode> getPaymentMode() {
+		return paymentMode;
 	}
 
 }

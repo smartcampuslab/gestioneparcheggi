@@ -7,6 +7,12 @@ input,select,textarea {
 	display: block;
 }
 
+input.check{
+	display:inline;
+}
+
+
+
 input.text,textarea.text {
 	margin-bottom: 1em;
 	width: 95%;
@@ -25,9 +31,6 @@ input.text,textarea.text {
 
 fieldset {
 	border-radius: 0.6em;
-/* 	padding: 0; */
-/* 	border: 0; */
-/* 	margin-top: 5px; */
 }
 
 #toolbar {
@@ -107,7 +110,7 @@ fieldset {
 
 .note {
 	width: 100%;
-	height: 6em;
+	height: 5em;
 	resize: none;
 }
 
@@ -140,5 +143,10 @@ css view
 
 legend.popup{
 	font-size: 90%;
+}
+
+ul.payment{
+	margin-left: 1em;
+	padding: 0em;
 }
 

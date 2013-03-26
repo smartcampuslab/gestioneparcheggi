@@ -55,21 +55,12 @@ Renderer_Parcheggiostruttura.prototype.renderPopup = function(modeEdit, data) {
 	var popup = '';
 	if (modeEdit) {
 
-		var paymentMode = '<select name="parcheggiostruttura_paymentMode">';
-		paymentMode += '<option value=""></option>';
-
-		$
-				.each(
-						parcheggiostrutturaPaymentMode,
-						function(key, value) {
-							paymentMode += '<option value="'
-									+ key
-									+ '"'
-									+ ((data['paymentMode'] != undefined && data['paymentMode'] == key) ? ' selected="selected"'
-											: '') + '>' + value + '</option>';
-						});
-		paymentMode += ' </select>';
-
+		
+		var paymentMode = '';
+		$.each(parcheggiostrutturaPaymentMode,function(key,value){
+			paymentMode +='<input class="check" type="checkbox" name="parcheggiostruttura_paymentMode[]" value="'+key+'" '+ ((data['paymentMode'] != undefined && $.inArray(key,data['paymentMode']) != -1) ? ' checked="checked"' : '')+'/>'+value+'<br/>';
+		});
+		
 		popup = parcheggiostrutturaLabels['name']
 				+ ' <label id="parcheggiostruttura_name_msg" class="errorMsg"></label><input name="parcheggiostruttura_name" type="text" value="'
 				+ ((data['name'] != undefined) ? data['name'] : "")
@@ -93,7 +84,7 @@ Renderer_Parcheggiostruttura.prototype.renderPopup = function(modeEdit, data) {
 				+ ((data['timeSlot'] != undefined) ? data['timeSlot'] : "")
 				+ '</textarea>'
 				+ parcheggiostrutturaLabels['paymentMode']
-				+ '<label id="parcheggiostruttura_paymentMode_msg" class="errorMsg"></label>'
+				+ '<label id="parcheggiostruttura_paymentMode_msg" class="errorMsg"></label><br />'
 				+ paymentMode
 				+ parcheggiostrutturaLabels['phoneNumber']
 				+ ' <label id="parcheggiostruttura_phoneNumber_msg" class="errorMsg"></label><textarea class="note" name="parcheggiostruttura_phoneNumber" >'
@@ -119,6 +110,11 @@ Renderer_Parcheggiostruttura.prototype.renderPopup = function(modeEdit, data) {
 				+ '<hr/><a href="#" onclick="saveParcheggiostruttura();">Salva</a>'
 				+ ' <a href="#" onclick="removeParcheggiostruttura();">Elimina</a>';
 	} else {
+		var paymentMode = '<ul class="payment">';
+		$.each(data['paymentMode'],function(i,v){
+			paymentMode += '<li>' + parcheggiostrutturaPaymentMode[v]+ '</li>';
+		});
+		paymentMode += '</ul>';
 		popup = '<p class="title-popup">' + parcheggiostrutturaLabels['name']
 				+ '</p>' + data['name'] + '<p class="title-popup">'
 				+ parcheggiostrutturaLabels['streetReference'] + '</p>'
@@ -132,7 +128,7 @@ Renderer_Parcheggiostruttura.prototype.renderPopup = function(modeEdit, data) {
 				+ data['timeSlot'].replace(/\n/g, '<br/>')
 				+ '<p class="title-popup">'
 				+ parcheggiostrutturaLabels['paymentMode'] + '</p>'
-				+ parcheggiostrutturaPaymentMode[data['paymentMode']]
+				+ paymentMode;
 				+ '<p class="title-popup">'
 				+ parcheggiostrutturaLabels['phoneNumber'] + '</p>'
 				+ data['phoneNumber'].replace(/\n/g, '<br/>')

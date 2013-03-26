@@ -404,7 +404,8 @@ public class StorageManager {
 		entity.setFee(entityBean.getFee());
 		entity.setManagementMode(entityBean.getManagementMode());
 		entity.setName(entityBean.getName());
-		entity.setPaymentMode(entityBean.getPaymentMode());
+		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean
+				.getPaymentMode()));
 		entity.setPhoneNumber(entityBean.getPhoneNumber());
 		entity.setSlotNumber(entityBean.getSlotNumber());
 		entity.setStreetReference(entityBean.getStreetReference());

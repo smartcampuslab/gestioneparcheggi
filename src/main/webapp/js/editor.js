@@ -563,6 +563,7 @@ function createParcheggiostruttura() {
 
 function saveParcheggiostruttura() {
 	var isValid = true;
+	var paymentModeVar = $('input[name="parcheggiostruttura_paymentMode[]"]:checked');
 	$([]).add($('#parcheggiostruttura_name_msg')).add(
 			$('#parcheggiostruttura_slotNumber_msg')).add(
 			$('#parcheggiostruttura_streetReference_msg')).add(
@@ -576,7 +577,6 @@ function saveParcheggiostruttura() {
 			$('input[name="parcheggiostruttura_streetReference"]')).add(
 			$('input[name="parcheggiostruttura_managementMode"]')).add(
 			$('textarea[name="parcheggiostruttura_timeSlot"]')).add(
-			$('select[name="parcheggiostruttura_paymentMode"]')).add(
 			$('textarea[name="parcheggiostruttura_phoneNumber"]')).add(
 			$('textarea[name="parcheggiostruttura_fee"]')).removeClass(
 			'ui-state-error');
@@ -595,13 +595,16 @@ function saveParcheggiostruttura() {
 			'input[name="parcheggiostruttura_managementMode"]').val().trim();
 	parcheggiostruttura['timeSlot'] = $(
 			'textarea[name="parcheggiostruttura_timeSlot"]').val().trim();
-	parcheggiostruttura['paymentMode'] = $(
-			'select[name="parcheggiostruttura_paymentMode"]').val().trim();
 	parcheggiostruttura['phoneNumber'] = $(
 			'textarea[name="parcheggiostruttura_phoneNumber"]').val().trim();
 	parcheggiostruttura['fee'] = $('textarea[name="parcheggiostruttura_fee"]')
 			.val().trim();
 
+	
+	parcheggiostruttura['paymentMode'] = [];
+	paymentModeVar.each(function(){
+		parcheggiostruttura['paymentMode'].push($(this).val());
+	});
 	parcheggiostruttura['geometry'] = {
 		'lat' : coord.split(',')[0],
 		'lng' : coord.split(',')[1]
@@ -644,8 +647,7 @@ function saveParcheggiostruttura() {
 
 	if (parcheggiostruttura['paymentMode'].length == 0) {
 		$('#parcheggiostruttura_paymentMode_msg').text('Campo obbligatorio');
-		$('select[name="parcheggiostruttura_paymentMode"]').addClass(
-				'ui-state-error');
+		paymentModeVar.addClass('ui-state-error');
 		isValid = false;
 	}
 

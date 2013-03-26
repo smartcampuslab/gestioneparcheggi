@@ -3,6 +3,7 @@ package it.smartcampuslab.tm.manager;
 import it.smartcampuslab.tm.exception.ExportException;
 import it.smartcampuslab.tm.model.Area;
 import it.smartcampuslab.tm.model.ParcheggioStruttura;
+import it.smartcampuslab.tm.model.ParcheggioStruttura.PaymentMode;
 import it.smartcampuslab.tm.model.Parcometro;
 import it.smartcampuslab.tm.model.PuntoBici;
 import it.smartcampuslab.tm.model.Via;
@@ -115,9 +116,13 @@ public class ZipCsvExporter implements Exporter {
 					+ element.getStreetReference() + "\"" + CSV_SEPARATOR
 					+ "\"" + element.getManagementMode() + "\"" + CSV_SEPARATOR
 					+ "\"" + element.getSlotNumber() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getTimeSlot() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getPaymentMode() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getPhoneNumber() + "\"" + CSV_SEPARATOR
+					+ "\"" + element.getTimeSlot() + "\"" + CSV_SEPARATOR;
+			result += "\"";
+			for (PaymentMode p : element.getPaymentMode()) {
+				result += p + " ";
+			}
+			result += "\"" + CSV_SEPARATOR;
+			result += "\"" + element.getPhoneNumber() + "\"" + CSV_SEPARATOR
 					+ "\"" + element.getFee() + "\"" + CSV_SEPARATOR
 					+ geoToCsv(element.getGeometry()) + "\n";
 		}

@@ -1,6 +1,6 @@
 package it.smartcampuslab.tm.bean;
 
-import it.smartcampuslab.tm.model.ParcheggioStruttura.PaymentMode;
+import java.util.List;
 
 public class ParcheggioStrutturaBean {
 
@@ -10,12 +10,10 @@ public class ParcheggioStrutturaBean {
 	private String managementMode;
 	private String slotNumber;
 	private String timeSlot;
-	private PaymentMode paymentMode;
+	private List<String> paymentMode;
 	private String phoneNumber;
 	private String fee;
 	private PointBean geometry;
-
-	// private String color;
 
 	public String getName() {
 		return name;
@@ -57,14 +55,6 @@ public class ParcheggioStrutturaBean {
 		this.timeSlot = timeSlot;
 	}
 
-	public PaymentMode getPaymentMode() {
-		return paymentMode;
-	}
-
-	public void setPaymentMode(PaymentMode paymentMode) {
-		this.paymentMode = paymentMode;
-	}
-
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
@@ -97,12 +87,12 @@ public class ParcheggioStrutturaBean {
 		this.id = id;
 	}
 
-	// public String getColor() {
-	// return color;
-	// }
-	//
-	// public void setColor(String color) {
-	// this.color = color;
-	// }
+	public List<String> getPaymentMode() {
+		return paymentMode;
+	}
+
+	public void setPaymentMode(List<String> paymentMode) {
+		this.paymentMode = paymentMode;
+	}
 
 }
