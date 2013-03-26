@@ -1,4 +1,4 @@
-var baseUrl = 'http://localhost:8080/trentinomobilita.web';
+var baseUrl = '${baseUrl}';
 var company = 'amr';
 
 

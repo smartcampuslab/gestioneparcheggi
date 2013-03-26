@@ -9,6 +9,8 @@
 	<properties>
 		<spring.version>3.1.0.RELEASE</spring.version>
 		<spring.data.mongo.version>1.0.1.RELEASE</spring.data.mongo.version>
+		
+		<app.name>amr-rovereto</app.name>
 	</properties>
 
 	<dependencies>
@@ -131,8 +133,43 @@
 					<skipTests>true</skipTests>
 				</configuration>
 			</plugin>
+			<plugin>
+        <groupId>org.apache.maven.plugins</groupId>
+        <artifactId>maven-war-plugin</artifactId>
+        <version>2.0.2</version>
+        <configuration>
+          <webResources>
+            <resource>
+              <filtering>true</filtering>
+              <directory>src/main/webapp</directory>
+              <includes>
+                <include>js/global.js</include>
+                <include>**/*.html</include>
+              </includes>
+            </resource>
+          </webResources>
+        </configuration>
+      </plugin>
 		</plugins>
-		<finalName>amr-rovereto</finalName>
+		<finalName>${app.name}</finalName>
 	</build>
+	
+	<!-- Profiles -->
+  <profiles>
+    <profile>
+      <id>dev</id>
+      <properties>
+        <baseUrl>http://localhost:8080/${app.name}</baseUrl>
+        <gmap.key>AIzaSyBJVnWg1myfUFITi0H4eaW0XU7ZoLTgzZ0</gmap.key>
+      </properties>
+    </profile>
+    <profile>
+      <id>prod</id>
+      <properties>
+        <baseUrl>http://vas-dev.smartcampuslab.it/${app.name}</baseUrl>
+        <gmap.key>AIzaSyBNufsI8pLg82UF0GPz4fbb1rGtFnWNqOI</gmap.key>
+      </properties>
+    </profile>
+  </profiles>
 
 </project>
