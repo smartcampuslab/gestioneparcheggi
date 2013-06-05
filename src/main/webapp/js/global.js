@@ -4,7 +4,7 @@ var company = 'amr';
 
 var zoomLevel = 15;
 var zoomToLevel = 15;
-var mapExtent = [45.89182,11.034136];
+var mapExtent = [45.886931,11.034265];
 
 var defaultMarkerColor = "FF0000";
 var markerWidth = 32;
