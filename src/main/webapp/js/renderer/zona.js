@@ -75,14 +75,14 @@ Renderer_Zona.prototype.renderPopup = function(modeEdit,data) {
 				+ value['lat'] + "," + value['lng'] + '" />';
 	});
 
-	popup = 'Nome <label id="zona_name_msg" class="errorMsg"></label><input name="zona_name" type="text" value="'
+	popup = zonaLabels['name']+' <label id="zona_name_msg" class="errorMsg"></label><input name="zona_name" type="text" value="'
 			+ ((data['name'] != undefined) ? data['name'] : "")
 			+ '"/>'
-			+ '<br/>Note <label id="zona_note_msg" class="errorMsg"></label>'
+			+ '<br/>'+zonaLabels['note']+' <label id="zona_note_msg" class="errorMsg"></label>'
 			+ ' <br/><textarea class="note" name="zona_note" >'
 			+ ((data['note'] != undefined) ? data['note'] : "")
 			+ '</textarea>'
-			+ '<br/>Colore <label id="zona_color_msg" class="errorMsg"></label><input name="zona_color" type="text" value="'
+			+ '<br/>'+zonaLabels['color']+' <label id="zona_color_msg" class="errorMsg"></label><input name="zona_color" type="text" value="'
 			+ ((data['color'] != undefined) ? data['color'] : "")
 			+ '" onclick="loadColorPicker();" />'
 			+ '<br/><input name="zona_tempId" type="hidden" value="'
@@ -94,10 +94,10 @@ Renderer_Zona.prototype.renderPopup = function(modeEdit,data) {
 			+ coords
 			+ '<hr/><a href="#" onclick="saveZona();">Salva</a> <a href="#" onclick="removeZona();">Elimina</a>';
 	}else{
-		popup='<p class="title-popup">Nome</p>'
+		popup='<p class="title-popup">'+zonaLabels['name']+'</p>'
 			+ data['name']
 		+
-		(data['note'] ? '<br/><p class="title-popup">Note</p>'+data['note'].replace(/\n/g,'<br/>') : '');
+		(data['note'] ? '<br/><p class="title-popup">'+zonaLabels['note']+'</p>'+data['note'].replace(/\n/g,'<br/>') : '');
 			
 		
 	}
@@ -215,7 +215,7 @@ Renderer_Zona.prototype.renderGeo = function(modeEdit, data) {
 				});
 			}
 
-			var p = rendererZona.renderPopup(data);
+			var p = rendererZona.renderPopup(modeEdit,data);
 			map.openInfoWindowHtml(polygon.getVertex(Math
 					.floor((numVertex / 2) - 1)), p);
 

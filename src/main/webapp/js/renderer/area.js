@@ -3,10 +3,10 @@ function Renderer_Area() {
 
 Renderer_Area.prototype.renderDetails = function(data) {
 	var detail = '<table class="details">' 
-		+ '<tr><td>tariffa</td><td> ' + data['fee'].toFixed(2)
-			+ ' euro/ora</td></tr>' + '<tr><td>fascia oraria</td><td>' + data['timeSlot']
-			+ '</td></tr>' + '<tr><td>codice sms</td><td>' + data['smsCode'] + '</td></tr>'
-			+ '<tr><td>colore area</td><td> ' +'<div class="color-div" style="background-color: #'+data['color']+';"></div>'
+		+ '<tr><td>'+areaLabels['fee']+'</td><td> ' + data['fee'].toFixed(2)
+			+ ' euro/ora</td></tr>' + '<tr><td>'+areaLabels['timeSlot']+'</td><td>' + data['timeSlot']
+			+ '</td></tr>' + '<tr><td>'+areaLabels['smsCode']+'</td><td>' + data['smsCode'] + '</td></tr>'
+			+ '<tr><td>'+areaLabels['color']+'</td><td> ' +'<div class="color-div" style="background-color: #'+data['color']+';"></div>'
 			+ '</td></tr></table>' + '<hr />'
 			+ '<a href="#" onclick="loadAreaEditForm(\'' + data['id']
 			+ '\');">Modifica</a> ' + '<a href="#" onclick="removeArea(\''
@@ -16,9 +16,9 @@ Renderer_Area.prototype.renderDetails = function(data) {
 
 Renderer_Area.prototype.renderPopupDetails = function(data) {
 	var detail = '<fieldset class="popup"><legend class="popup">'+data['name']+'</legend>'+
-	'<p class="title-popup">tariffa</p> ' + data['fee'].toFixed(2)
-	+ ' euro/ora' + '<p class="title-popup">fascia oraria</p>' + data['timeSlot'].replace(/\n/g,'<br/>')
-	+ '<p class="title-popup">codice sms</p>' + data['smsCode']; 
+	'<p class="title-popup">'+areaLabels['fee']+'</p> ' + data['fee'].toFixed(2)
+	+ ' euro/ora' + '<p class="title-popup">'+areaLabels['timeSlot']+'</p>' + data['timeSlot'].replace(/\n/g,'<br/>')
+	+ '<p class="title-popup">'+areaLabels['smsCode']+'</p>' + data['smsCode']; 
 	+'</fieldset>';
 	return detail;
 };

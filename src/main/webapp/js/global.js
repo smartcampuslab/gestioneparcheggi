@@ -26,7 +26,7 @@ var fillPolygonOpacity=0.2;
 
 
 var parcometroStatus = {'ACTIVE':'Attivo', 'INACTIVE':'Non Attivo'};
-var parcheggiostrutturaPaymentMode = {'CASH':'Contanti', 'AUTOMATED_TELLER':'Cassa automatica', 'PREPAID_CARD': 'Tessere prepagate'};
+var parcheggiostrutturaPaymentMode = {'CASH':'Cassa manuale', 'AUTOMATED_TELLER':'Cassa automatica', 'PREPAID_CARD': 'Tessera prepagata', 'PARCOMETRO': 'Parcometro'};
 
 var tempIndex = 0;
 var tempGeo = {};

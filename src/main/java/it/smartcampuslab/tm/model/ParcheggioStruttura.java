@@ -7,7 +7,7 @@ import java.util.List;
 public class ParcheggioStruttura {
 
 	public static enum PaymentMode {
-		CASH, AUTOMATED_TELLER, PREPAID_CARD
+		CASH, AUTOMATED_TELLER, PREPAID_CARD, PARCOMETRO
 	}
 
 	private String id;
