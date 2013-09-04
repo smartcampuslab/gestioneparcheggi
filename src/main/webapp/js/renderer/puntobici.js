@@ -94,21 +94,38 @@ Renderer_Puntobici.prototype.updateGeo = function(marker, data) {
 };
 
 Renderer_Puntobici.prototype.renderGeo = function(modeEdit, data, open) {
-	var iconOptions = {};
-	iconOptions.width = markerWidth;
-	iconOptions.height = markerHeight;
-	iconOptions.primaryColor = '#'
-			+ ((data['color']) ? data['color'] : defaultMarkerColor);
-	iconOptions.cornerColor = '#'
-			+ ((data['color']) ? data['color'] : defaultMarkerColor);
-	iconOptions.strokeColor = "#000000FF";
-	var iconSeller = MapIconMaker.createMarkerIcon(iconOptions);
+//	var iconOptions = {};
+//	iconOptions.width = markerWidth;
+//	iconOptions.height = markerHeight;
+//	iconOptions.primaryColor = '#'
+//			+ ((data['color']) ? data['color'] : defaultMarkerColor);
+//	iconOptions.cornerColor = '#'
+//			+ ((data['color']) ? data['color'] : defaultMarkerColor);
+//	iconOptions.strokeColor = "#000000FF";
+//	var iconSeller = MapIconMaker.createMarkerIcon(iconOptions);
+//	var marker = new GMarker(new GLatLng(
+//			((data != null) ? data['geometry']['lat'] : lat),
+//			((data != null) ? data['geometry']['lng'] : lng)), {
+//		draggable : modeEdit,
+//		icon : iconSeller
+//	});
+	
+	var icon = new GIcon();
+	icon.image = baseUrl + '/rest/marker/' + company + '/puntobici';
+	var width = 16;
+	var height = 26;
+	icon.shadowSize = new GSize(Math.floor(width * 1.6), height);
+	icon.iconAnchor = new GPoint(width / 2, height);
+	icon.infoWindowAnchor = new GPoint(width / 2, Math.floor(height / 12));
 	var marker = new GMarker(new GLatLng(
 			((data != null) ? data['geometry']['lat'] : lat),
 			((data != null) ? data['geometry']['lng'] : lng)), {
 		draggable : modeEdit,
-		icon : iconSeller
+		icon : icon
 	});
+	
+	
+	
 
 	if (data['id'] != null) {
 		puntobiciGeo[data['id']] = marker;
