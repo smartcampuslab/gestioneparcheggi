@@ -600,9 +600,8 @@ function saveParcheggiostruttura() {
 	parcheggiostruttura['fee'] = $('textarea[name="parcheggiostruttura_fee"]')
 			.val().trim();
 
-	
 	parcheggiostruttura['paymentMode'] = [];
-	paymentModeVar.each(function(){
+	paymentModeVar.each(function() {
 		parcheggiostruttura['paymentMode'].push($(this).val());
 	});
 	parcheggiostruttura['geometry'] = {
@@ -760,13 +759,13 @@ function populate(modeEdit, elements) {
 			}
 			caller.getAllZona(modeEdit);
 			break;
-		case 'bici':
+		case 'puntobici':
 			if ($('#view-bici')) {
 				$('#view-bici').attr('checked', 'true');
 			}
 			caller.getAllPuntobici(modeEdit);
 			break;
-		case 'parcheggiostruttura':
+		case 'parcheggioStruttura':
 			if ($('#view-parcheggiostruttura')) {
 				$('#view-parcheggiostruttura').attr('checked', 'true');
 			}
@@ -791,7 +790,112 @@ function initializeMap() {
 }
 
 /*******************************************************************************
- * view functions
+ * view functions BACKEND
+ */
+
+function setupEditorPage(elements) {
+	var toolbar = $("#toolbar");
+	var contents = $("#contents");
+	var id, onclick, label;
+	$.each(elements, function(k, v) {
+		setupToolbar(v, toolbar);
+		setupContents(v,contents);
+		// if (v === 'area') {
+		// label = 'Crea area';
+		// id = 'crea-area';
+		// onclick= 'createArea()';
+		// } else if (v === 'parcometro') {
+		// label = 'Crea parcometro';
+		// id = 'crea-parcometro';
+		// onclick= 'createParcometro()';
+		// } else if (v === 'via') {
+		// label = 'Crea via';
+		// id = 'crea-via';
+		// onclick= 'createVia()';
+		// } else if (v === 'parcheggioStruttura') {
+		// label = 'Crea parcheggio in struttura';
+		// id = 'crea-parcheggiostruttura';
+		// onclick= 'createParcheggiostruttura()';
+		// } else if (v === 'puntobici') {
+		// label = 'Crea puntobici';
+		// id = 'crea-puntobici';
+		// onclick= 'createPuntobici()';
+		// }else if (v === 'zona') {
+		// label = 'Crea Zona';
+		// id = 'crea-zona';
+		// onclick= 'createZona()';
+		// }
+		// toolbar.append("<button id='"+id+"' class='toolbar-action'
+		// onclick='"+onclick+"'>"+label+"</button>");
+	});
+	
+	init();
+	populate(true,elements);
+}
+function setupContents(entity,contents){
+	var id, label, filterLink;
+	if (entity === 'area') {
+		label = 'Aree';
+		id = 'area-info';
+		filterLink =  '<div class="toolbar-local-hidden"></div>';
+	} else if (entity === 'parcometro') {
+		label = 'Parcometri';
+		id = 'parcometro-info';
+		filterLink =  '<div class="toolbar-local"><a href="#" onclick="loadParcometroFilter();">filtra</a></div>';
+	} else if (entity === 'via') {
+		label = 'Vie';
+		id = 'via-info';
+		filterLink =  '<div class="toolbar-local"><a href="#" onclick="loadViaFilter();">filtra</a></div>';
+	} else if (entity === 'parcheggioStruttura') {
+		label = 'Parcheggi in struttura';
+		id = 'parcheggiostruttura-info';
+		filterLink =  '<div class="toolbar-local-hidden"></div>';
+	} else if (entity === 'puntobici') {
+		label = 'Punto bici';
+		id = 'puntobici-info';
+		filterLink =  '<div class="toolbar-local-hidden"></div>';
+	} else if (entity === 'zona') {
+		label = 'zone';
+		id = 'zona-info';
+		filterLink =  '<div class="toolbar-local-hidden"></div>';
+	}
+
+	contents.append("<div class='element-list'><span class='title'>"+label+"</span>"+filterLink+"<table id='"+id+"'></table></div>");
+}
+
+
+function setupToolbar(entity, toolbar) {
+	var id, onclick, label;
+	if (entity === 'area') {
+		label = 'Crea area';
+		id = 'crea-area';
+		onclick = 'createArea()';
+	} else if (entity === 'parcometro') {
+		label = 'Crea parcometro';
+		id = 'crea-parcometro';
+		onclick = 'createParcometro()';
+	} else if (entity === 'via') {
+		label = 'Crea via';
+		id = 'crea-via';
+		onclick = 'createVia()';
+	} else if (entity === 'parcheggioStruttura') {
+		label = 'Crea parcheggio in struttura';
+		id = 'crea-parcheggiostruttura';
+		onclick = 'createParcheggiostruttura()';
+	} else if (entity === 'puntobici') {
+		label = 'Crea puntobici';
+		id = 'crea-puntobici';
+		onclick = 'createPuntobici()';
+	} else if (entity === 'zona') {
+		label = 'Crea Zona';
+		id = 'crea-zona';
+		onclick = 'createZona()';
+	}
+	toolbar.append("<button id='" + id + "' class='toolbar-action' onclick='"
+			+ onclick + "'>" + label + "</button>");
+}
+/*******************************************************************************
+ * view functions FRONTEND
  */
 
 function visibility(component) {
@@ -844,4 +948,38 @@ function visibility(component) {
 	default:
 		break;
 	}
+}
+
+
+function setupFrontendPage(elements) {
+	var toc = $("<table>");
+	$.each(elements, function(k, v) {
+		var id, label;
+
+		if (v === 'area') {
+			label = 'Aree';
+			id = 'view-area';
+		} else if (v === 'parcometro') {
+			label = 'Parcometri';
+			id = 'view-parcometro';
+		} else if (v === 'via') {
+			label = 'Vie';
+			id = 'view-via';
+		} else if (v === 'parcheggioStruttura') {
+			label = 'Parcheggio in struttura';
+			id = 'view-parcheggiostruttura';
+		} else if (v === 'puntobici') {
+			label = 'Punto Bici';
+			id = 'view-bici';
+		} else if (v === 'zona') {
+			label = 'Zone';
+			id = 'view-zona';
+		}
+		toc.append($("<tr><td width='90%'>" + label + "</td>"
+				+ "<td><input type='checkbox' id='" + id
+				+ "' onclick='visibility(this);'></td></tr>"));
+	});
+	$("#toc").prepend(toc);
+	
+	init();
 }

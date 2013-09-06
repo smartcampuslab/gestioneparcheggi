@@ -45,9 +45,11 @@
 </head>
 
 <script type="text/javascript">
+//admitted values 'area','parcometro','via','zona','puntobici','parcheggioStruttura'
+var elementsInPage = ['puntobici']
 $(document).ready(function(){
 	initializeMap();
-	populate(true,['bici']);
+	setupEditorPage(elementsInPage);
 });
 </script>
 
@@ -57,20 +59,9 @@ $(document).ready(function(){
 		<li><a href="editing-bike.html">Editor puntobici</a></li>
 	</ul>
 	<div id="toolbar">
-		<button id="crea-puntobici" class="toolbar-action"
-			onclick="createPuntobici();">Crea puntobici</button>
 	</div>
 	<div id="map"></div>
 	<div id="contents">
-		<div class="element-list">
-			<span class="title">Punto bici</span>
-			<div class="toolbar-local-hidden">
-				
-			</div>
-			<table id='puntobici-info'>
-			</table>
-		</div>
-
 	</div>
 
 

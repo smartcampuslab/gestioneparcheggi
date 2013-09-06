@@ -75,7 +75,7 @@ filterCache['parcometro']= {};
 filterCache['via']= {};
 
 //init
-$(document).ready(function(){
+function init(){
 	containerArea = $('#area-info');
 	containerParcometro = $('#parcometro-info');
 	containerVia = $('#via-info');
@@ -97,4 +97,4 @@ $(document).ready(function(){
 	rendererPuntobici = new Renderer_Puntobici();
 	rendererParcheggiostruttura = new Renderer_Parcheggiostruttura();
 	geocoder = new GClientGeocoder();
-});
+}

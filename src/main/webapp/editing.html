@@ -48,9 +48,11 @@
 </head>
 
 <script type="text/javascript">
+//admitted values 'area','parcometro','via','zona','puntobici','parcheggioStruttura'
+var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 	$(document).ready(function() {
 		initializeMap();
-		populate(true, [ 'area', 'via', 'parcometro', 'zona','parcheggiostruttura' ]);
+		setupEditorPage(elementsInPage);
 	});
 </script>
 
@@ -62,56 +64,9 @@
 	</ul>
 
 	<div id="toolbar">
-		<button id="crea-area" class="toolbar-action" onclick="createArea();">Crea
-			area</button>
-		<button id="crea-via" class="toolbar-action" onclick="createVia();">Crea
-			via</button>
-		<button id="crea-parcometro" class="toolbar-action"
-			onclick="createParcometro();">Crea parcometro</button>
-		<button id="crea-zona" class="toolbar-action" onclick="createZona();">Crea
-			zona</button>
-		<button id="crea-parcheggiostruttura" class="toolbar-action"
-			onclick="createParcheggiostruttura();">Crea parcheggio in
-			struttura</button>
-
 	</div>
 	<div id="map"></div>
 	<div id="contents">
-		<div class="element-list">
-			<span class="title">Aree</span>
-			<div class="toolbar-local-hidden"></div>
-			<table id='area-info'>
-			</table>
-		</div>
-		<div class="element-list">
-			<span class="title">Parcometri</span>
-			<div class="toolbar-local">
-				<a href="#" onclick="loadParcometroFilter();">filtra</a>
-			</div>
-			<table id='parcometro-info'>
-			</table>
-		</div>
-		<div class="element-list">
-			<span class="title">Vie</span>
-			<div class="toolbar-local">
-				<a href="#" onclick="loadViaFilter();">filtra</a>
-			</div>
-			<table id='via-info'>
-			</table>
-		</div>
-		<div class="element-list">
-			<span class="title">Parcheggi in struttura</span>
-			<div class="toolbar-local-hidden"></div>
-			<table id='parcheggiostruttura-info'>
-			</table>
-		</div>
-		<div class="element-list">
-			<span class="title">Zone</span>
-			<div class="toolbar-local-hidden"></div>
-			<table id='zona-info'>
-			</table>
-		</div>
-
 	</div>
 
 	<!-- Crea Area form -->

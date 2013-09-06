@@ -44,21 +44,19 @@
 </head>
 
 <script type="text/javascript">
+//admitted values 'area','parcometro','via','zona','puntobici','parcheggioStruttura'
+var elementsInPage= ['via','parcometro','parcheggioStruttura','puntobici'];
+var activeElements = ['area','via','parcometro'];
 $(document).ready(function(){
 	initializeMap();
-	populate(false,['area','via','parcometro']);
+	setupFrontendPage(elementsInPage);
+	populate(false,activeElements);
 });
 </script>
 
 <body  onunload="GUnload()">
 <div id="toc">
-<table>
-<tr><td width="90%">Vie</td><td><input type="checkbox" id="view-via" onclick="visibility(this);"></td></tr>
-<tr><td width="90%">Parcometri</td><td><input type="checkbox" id="view-parcometro" onclick="visibility(this);"/></td></tr>
-<tr><td width="90%">Parcheggi in struttura</td><td><input type="checkbox" id="view-parcheggiostruttura" onclick="visibility(this);"/></td></tr>
-<tr><td width="90%">Zone</td><td><input type="checkbox" id="view-zona" onclick="visibility(this);"/></td></tr>
-<tr><td width="90%">Punto Bici</td><td><input type="checkbox" id="view-bici" onclick="visibility(this);"/></td></tr>
-</table>
+
 <div  style="width=100%;text-align:center;margin:1em 1em 1em 1em;"><a href="rest/export">Scarica dati</a></div>
 <div style="width=100%;text-align:center;margin:1em 1em 0.2em 1em;"><img src="imgs/opendata.png" alt="opendata"/></div>
 <div style="width=100%;text-align:center;margin:0.2em 1em 1em 1em;"><a href="http://creativecommons.org/licenses/by/2.5/it" target="_blank"><img src="imgs/license.png" alt="license"/></a></div>
