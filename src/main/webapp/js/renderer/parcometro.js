@@ -117,6 +117,12 @@ Renderer_Parcometro.prototype.renderPopup = function(modeEdit, data) {
 				+ ' <label id="parcometro_code_msg" class="errorMsg"></label> <input name="parcometro_code" type="text" value="'
 				+ ((data['code'] != undefined) ? data['code'] : "")
 				+ '"/>'
+				+ '<br/>'
+				+ 'Posizione<br/>'
+				+ data['geometry']['lat']
+				+ ','
+				+ data['geometry']['lng']
+				+ '<br/>'
 				+ parcometroLabels['note']
 				+ ' <label id="parcometro_note_msg" class="errorMsg"></label><textarea class="note" name="parcometro_note" >'
 				+ ((data['note'] != undefined) ? data['note'] : "")
@@ -142,6 +148,11 @@ Renderer_Parcometro.prototype.renderPopup = function(modeEdit, data) {
 				+ parcometroLabels['code']
 				+ '</p>'
 				+ data['code']
+				+ '<p class="title-popup">Posizione</p>'
+				+ data['geometry']['lat']
+				+ ','
+				+ data['geometry']['lng']
+				+ '<br/>'
 				+ (data['note'] ? '<p class="title-popup">'
 						+ parcometroLabels['note'] + '</p>'
 						+ data['note'].replace(/\n/g, '<br/>') : '')
