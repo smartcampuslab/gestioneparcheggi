@@ -92,15 +92,41 @@ Renderer_Area.prototype.render = function(add, data, container) {
 	// </li>
 };
 
-Renderer_Area.prototype.renderGeo = function(modeEdit, data) {
-	var coords = [];
+Renderer_Area.prototype.renderGeo = function(modeEdit, data, modeLoading) {
+	if (data['geometry'] != undefined) {
+		$.each(data['geometry'], function(key, value) {
+			coords = [];
+			$.each(value['points'], function(k, v) {
+				coords.push(new GLatLng(v['lat'], v['lng']));
+			});
+			var geom = {};
+			geom['color'] = data['color'];
+			geom['coords']=coords;
+			rendererArea.addGeo(modeEdit, geom, modeLoading);
+		});
+	}
+};
+
+Renderer_Area.prototype.addGeo = function(modeEdit, data, modeLoading) {
+	var coords = data['coords'] != undefined ? data['coords'] : [];
 //	if (data['geometry'] != undefined) {
-//		$.each(data['geometry'], function(key,value) {
-//			$.each(value['points'],function(k,v){
+//		$.each(data['geometry'], function(key, value) {
+//			coords = [];
+//			$.each(value['points'], function(k, v) {
 //				coords.push(new GLatLng(v['lat'], v['lng']));
 //			});
+//			var colorBorder = '#'
+//					+ ((data['color'] != null) ? data['color']
+//							: defaultPolygonColor);
+//			var fillColor = '#'
+//					+ ((data['color'] != null) ? data['color']
+//							: defaultFillPolygonColor);
+//			var polygon = new GPolygon(coords, colorBorder, polygonWeight,
+//					polygonOpacity, fillColor, fillPolygonOpacity);
+//			map.addOverlay(polygon);
 //		});
 //	}
+
 	var colorBorder = '#'
 			+ ((data['color'] != null) ? data['color'] : defaultPolygonColor);
 	var fillColor = '#'
@@ -110,15 +136,11 @@ Renderer_Area.prototype.renderGeo = function(modeEdit, data) {
 			polygonOpacity, fillColor, fillPolygonOpacity);
 	map.addOverlay(polygon);
 
-	if (data['id'] != undefined) {
-		areeGeo[data['id']] = polygon;
-	} else {
-		tempGeo[tempIndex] = polygon;
-		data['tempId'] = tempIndex;
-		tempIndex++;
-	}
+	tempGeo[tempIndex] = polygon;
+	data['tempId'] = tempIndex;
+	tempIndex++;
 
-	if (coords.length == 0) {
+	if (!modeLoading) {
 		polygon.enableDrawing();
 	} else {
 		if (modeEdit) {
@@ -176,36 +198,35 @@ Renderer_Area.prototype.renderGeo = function(modeEdit, data) {
 						"endline",
 						function() {
 							addAreaGeometryActive = false;
-							//resetToolbar();
 							var numVertex = polygon.getVertexCount();
-							if (data['geometry'] == undefined) {
-								data['geometry'] = {};
-								data['geometry']['points'] = [];
-							}
+//							if (data['geometry'] == undefined) {
+//								data['geometry'] = {};
+//								data['geometry']['points'] = [];
+//							}
 
 							// find last geometry id number
 							var n = 0;
 							var coords = $('input[name^="area_coord_g"]');
 							if (coords.size() > 0) {
-								var matches = coords.last().attr('name')
-										.match(/area_coord_g(\d+)_(\d+)/);
+								var matches = coords.last().attr('name').match(
+										/area_coord_g(\d+)_(\d+)/);
 								if (matches) {
 									n = parseInt(matches[1], 10);
 									n = n + 1;
 								}
 							}
-							
+
 							for ( var i = 0; i < numVertex; i++) {
 								var vertex = polygon.getVertex(i);
 
 								// add geometry to data AREA
-								data['geometry']['points'].push({
-									'lat' : vertex.lat(),
-									'lng' : vertex.lng()
-								});
+//								data['geometry']['points'].push({
+//									'lat' : vertex.lat(),
+//									'lng' : vertex.lng()
+//								});
 
 								// add hidden field
-								
+
 								$('#form')
 										.append(
 												$('<input>').attr('type',
@@ -260,33 +281,35 @@ Renderer_Area.prototype.renderGeo = function(modeEdit, data) {
 																			.css(
 																					'font-weight',
 																					'normal');
-																})
+																});
 												// highlight element in table
 												row.children('td:first').css(
 														'font-weight', 'bold');
 											});
 
-							var deleteLink = $('<a>').attr('href', '#')
-									.append(
-											$('<img>').attr('src',
-													'imgs/delete.ico').attr(
-													'alt', 'elimina').attr(
-													'title', 'elimina'))
-									.click(function() {
-										//remove from map
+							var deleteLink = $('<a>').attr('href', '#').append(
+									$('<img>').attr('src', 'imgs/delete.ico')
+											.attr('alt', 'elimina').attr(
+													'title', 'elimina')).click(
+									function() {
+										// remove from map
 										var polygon = tempGeo[data['tempId']];
 										map.removeOverlay(polygon);
-										//remove coords
-										$('input[name^="area_coord_g'+n+'"]').each(function(){
-											$(this).remove();
-										});
+										// remove coords
+										$(
+												'input[name^="area_coord_g' + n
+														+ '"]').each(
+												function() {
+													$(this).remove();
+												});
 										$(row).remove();
 									});
 							row.append($('<td>').text('Geometria')).append(
 									$('<td>').append(detailsLink)).append(
 									$('<td>').append(deleteLink)).append(
 									$('<td>').append(
-											$('<input>').attr('type', 'hidden').attr('name','tempId')
+											$('<input>').attr('type', 'hidden')
+													.attr('name', 'tempId')
 													.val(data['tempId'])));
 							$('#area_geometries').append(row);
 
@@ -301,7 +324,7 @@ Renderer_Area.prototype.renderGeo = function(modeEdit, data) {
 									polygon.deleteVertex(index);
 
 								} else {
-									//map.openInfoWindowHtml(latlng, p);
+									// map.openInfoWindowHtml(latlng, p);
 								}
 							});
 
@@ -340,11 +363,9 @@ Renderer_Area.prototype.renderGeo = function(modeEdit, data) {
 Renderer_Area.prototype.closeDialog = function() {
 	addAreaGeometryActive = false;
 	$('#map').css('z-index', '0');
-	$('input[name^="area_coord"]').each(function(){
-		$(this).remove();
-	});
 	rendererArea.resetHighlightedAreaGeometry();
 	resetAreaMsgs();
 	resetAreaForm();
+	resetToolbar();
 
 };

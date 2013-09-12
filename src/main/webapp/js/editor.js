@@ -31,6 +31,100 @@ function loadAreaEditForm(id) {
 	$('input[name="area_codice-sms"]').val(data['smsCode']);
 	$('input[name="area_colore"]').val(data['color']);
 	$('input[name="area_id"]').val(data['id']);
+
+	if (data['geometry'] != undefined) {
+		$
+				.each(
+						data['geometry'],
+						function(key, value) {
+							$.each(value['points'], function(k, v) {
+								$('#form').append(
+										$('<input>').attr('type', 'hidden')
+												.attr(
+														'name',
+														"area_coord_g" + key
+																+ "_" + k).val(
+														v['lat'] + ','
+																+ v['lng']));
+							});
+							var row = $('<tr>');
+							var detailsLink = $('<a>')
+									.attr('href', '#')
+									.append(
+											$('<img>').attr('src',
+													'imgs/details.ico').attr(
+													'alt', 'visualizza').attr(
+													'title', 'visualizza'))
+									.click(
+											function() {
+												var polygon = tempGeo[data['tempId']];
+												polygon.setFillStyle({
+													'color' : '#000000'
+												});
+												var vertex = Math
+														.floor((polygon
+																.getVertexCount() / 2) - 1);
+												// center the map on highlighted
+												// geometry
+												map.setCenter(polygon
+														.getVertex(vertex),
+														zoomToLevel);
+
+												// highlight geometry
+												if (highlightedAreaGeometry['geom'] != null
+														&& highlightedAreaGeometry['geom'] != polygon) {
+													rendererArea
+															.resetHighlightedAreaGeometry();
+												}
+												highlightedAreaGeometry['geom'] = polygon;
+												highlightedAreaGeometry['origColor'] = data['color'] != null ? data['color']
+														: defaultFillPolygonColor;
+
+												// remove previous text
+												// highlighting
+												$('#area_geometries tr')
+														.each(
+																function() {
+																	$(this)
+																			.children(
+																					'td:first')
+																			.css(
+																					'font-weight',
+																					'normal');
+																})
+												// highlight element in table
+												row.children('td:first').css(
+														'font-weight', 'bold');
+											});
+
+							var deleteLink = $('<a>').attr('href', '#').append(
+									$('<img>').attr('src', 'imgs/delete.ico')
+											.attr('alt', 'elimina').attr(
+													'title', 'elimina')).click(
+									function() {
+										// remove from map
+										var polygon = tempGeo[data['tempId']];
+										map.removeOverlay(polygon);
+										// remove coords
+										$(
+												'input[name^="area_coord_g' + n
+														+ '"]').each(
+												function() {
+													$(this).remove();
+												});
+										$(row).remove();
+									});
+							row.append($('<td>').text('Geometria')).append(
+									$('<td>').append(detailsLink)).append(
+									$('<td>').append(deleteLink)).append(
+									$('<td>').append(
+											$('<input>').attr('type', 'hidden')
+													.attr('name', 'tempId')
+													.val(data['tempId'])));
+							$('#area_geometries').append(row);
+						});
+	}
+
 	dialogArea.dialog("open");
 }
 
@@ -137,21 +231,21 @@ function createZona() {
 	rendererZona.renderGeo(true, newZona);
 }
 
-function resetAreaForm() {
+function resetAreaForm(modeSave) {
 	$([]).add($('input[name="area_nome"]'))
 			.add($('input[name="area_tariffa"]')).add(
 					$('textarea[name="area_fascia-oraria"]')).add(
 					$('input[name="area_codice-sms"]')).add(
 					$('input[name="area_colore"]')).add(
 					$('input[name="area_id"]')).val('');
-	// delete geometries from map
-	$('#area_geometries tr').each(function(k, v) {
-		var id = $(this).children("td").eq(3).children('input').val();
-		map.removeOverlay(tempGeo[id]);
+	// delete coords
+	$('input[name^="area_coord"]').each(function() {
+		$(this).remove();
 	});
-	// empty table
+	// delete geometries from table
 	$('#area_geometries').empty();
 }
+
 function resetAreaMsgs() {
 	$([]).add($('input[name="area_nome"]'))
 			.add($('input[name="area_tariffa"]')).add(
@@ -175,34 +269,34 @@ function saveArea() {
 	area['timeSlot'] = $('textarea[name="area_fascia-oraria"]').val();
 	area['color'] = $('input[name="area_colore"]').val();
 	area['geometry'] = [];
-	for(var geomNum = 0 ; geomNum < 50; geomNum ++){
-		var geoms = $('input[name^="area_coord_g'+geomNum+'"]');
-		if(geoms.size() == 0){
+	for ( var geomNum = 0; geomNum < 50; geomNum++) {
+		var geoms = $('input[name^="area_coord_g' + geomNum + '"]');
+		if (geoms.size() == 0) {
 			break;
-		}else{
+		} else {
 			var a = [];
-			$.each(geoms,function(){
+			$.each(geoms, function() {
 				a.push({
 					'lat' : $(this).val().split(',')[0],
 					'lng' : $(this).val().split(',')[1]
 				});
 			});
 			var geom = {};
-			geom['points']=a;
+			geom['points'] = a;
 			area['geometry'].push(geom);
 		}
 	}
-//	alert(JSON.stringify(area));
-//	$coords = $('input[name^="zona_coord_"]');
-//	var a = [];
-//	$coords.each(function() {
-//		a.push({
-//			'lat' : $(this).val().split(',')[0],
-//			'lng' : $(this).val().split(',')[1]
-//		});
-//	});
-//	zona['geometry'] = {};
-//	zona['geometry']['points'] = a;
+	// alert(JSON.stringify(area));
+	// $coords = $('input[name^="zona_coord_"]');
+	// var a = [];
+	// $coords.each(function() {
+	// a.push({
+	// 'lat' : $(this).val().split(',')[0],
+	// 'lng' : $(this).val().split(',')[1]
+	// });
+	// });
+	// zona['geometry'] = {};
+	// zona['geometry']['points'] = a;
 
 	if (area['name'].length == 0) {
 		$('#area_nome_msg').text('Campo obbligatorio');
@@ -826,12 +920,11 @@ function initializeMap() {
 }
 
 function addAreaGeometry() {
-	// $('#form-area').dialog('option', 'modal', false);
-	$('#map').css("z-index","11003");
+	$('#map').css("z-index", "11003");
 	if (!addAreaGeometryActive) {
 		var newArea = {};
 		addAreaGeometryActive = true;
-		rendererArea.renderGeo(true, newArea);
+		rendererArea.addGeo(true, newArea);
 	}
 }
 

@@ -67,7 +67,7 @@ Caller.prototype.getAllArea = function(modeEdit) {
 		success : function(data, textStatus, jqXHR) {
 			$.each(data, function(key, value) {
 				rendererArea.render(true, value);
-				//rendererArea.renderGeo(modeEdit,value);
+				rendererArea.renderGeo(modeEdit,value,true);
 				aree[value['id']] = value;
 			});
 		},
