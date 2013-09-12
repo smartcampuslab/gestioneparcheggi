@@ -31,6 +31,7 @@ var parcheggiostrutturaPaymentMode = {'CASH':'Cassa manuale', 'AUTOMATED_TELLER'
 var tempIndex = 0;
 var tempGeo = {};
 var aree = {};
+var areeGeo = {};
 var parcometri = {};
 var parcometriGeo = {};
 var vie = {};
@@ -73,6 +74,10 @@ var geocoder;
 var filterCache={};
 filterCache['parcometro']= {};
 filterCache['via']= {};
+
+// temporary info about selected area geometry
+var highlightedAreaGeometry = {};
+var addAreaGeometryActive;
 
 //init
 function init(){

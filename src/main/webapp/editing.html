@@ -71,7 +71,7 @@ var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 
 	<!-- Crea Area form -->
 	<div id="form-area">
-		<form>
+		<form id="form">
 			<label for="area_nome">Nome</label> <label id="area_nome_msg"
 				class="errorMsg"></label> <input type="text" name="area_nome"
 				class="text ui-widget-content ui-corner-all" /> <label
@@ -93,6 +93,8 @@ var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 				class="text ui-widget-content ui-corner-all" /> <input
 				type="hidden" name="area_id" />
 		</form>
+		<a href="#" onclick="addAreaGeometry();"><img src="imgs/add.ico" alt="aggiungi geometria" title="aggiungi geometria"/></a>
+		<table id="area_geometries"></table>
 	</div>
 
 	<!-- dialog color picker  -->
@@ -128,7 +130,7 @@ var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 				rgb : false,
 				hsv : false,
 				parts : 'popup',
-				modal : false,
+				modal : true,
 				showNoneButton : false,
 				close : function(event, color) {
 					dialogPicker.dialog("close");
@@ -172,9 +174,8 @@ var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 				},
 				close : function() {
 					map.enableScrollWheelZoom();
+					rendererArea.closeDialog();
 					resetToolbar();
-					resetAreaMsgs();
-					resetAreaForm();
 				}
 			});
 
@@ -182,7 +183,7 @@ var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 				autoOpen : false,
 				height : 400,
 				width : 350,
-				modal : true,
+				modal : false,
 				resizable : false,
 				buttons : {
 					"Annulla" : function() {

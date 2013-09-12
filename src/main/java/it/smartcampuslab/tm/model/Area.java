@@ -1,5 +1,7 @@
 package it.smartcampuslab.tm.model;
 
+import it.smartcampuslab.tm.model.geo.Polygon;
+
 import java.util.List;
 
 public class Area {
@@ -9,6 +11,7 @@ public class Area {
 	private String timeSlot;
 	private String smsCode;
 	private String color;
+	private List<Polygon> geometry;
 
 	private List<Via> vie;
 	private List<Parcometro> parcometri;
@@ -75,6 +78,14 @@ public class Area {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	public List<Polygon> getGeometry() {
+		return geometry;
+	}
+
+	public void setGeometry(List<Polygon> geometry) {
+		this.geometry = geometry;
 	}
 
 }
