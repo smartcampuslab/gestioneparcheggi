@@ -4,6 +4,7 @@ import it.smartcampuslab.tm.bean.AreaBean;
 import it.smartcampuslab.tm.bean.ParcheggioStrutturaBean;
 import it.smartcampuslab.tm.bean.ParcometroBean;
 import it.smartcampuslab.tm.bean.PointBean;
+import it.smartcampuslab.tm.bean.PolygonBean;
 import it.smartcampuslab.tm.bean.PuntoBiciBean;
 import it.smartcampuslab.tm.bean.ViaBean;
 import it.smartcampuslab.tm.bean.ZonaBean;
@@ -18,6 +19,7 @@ import it.smartcampuslab.tm.model.PuntoBici;
 import it.smartcampuslab.tm.model.Via;
 import it.smartcampuslab.tm.model.Zona;
 import it.smartcampuslab.tm.model.geo.Point;
+import it.smartcampuslab.tm.model.geo.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,6 +55,12 @@ public class StorageManager {
 		area.setFee(a.getFee());
 		area.setSmsCode(a.getSmsCode());
 		area.setTimeSlot(a.getTimeSlot());
+		area.getGeometry().clear();
+		for (PolygonBean polygon : a.getGeometry()) {
+			area.getGeometry().add(
+					ModelConverter.convert(polygon, Polygon.class));
+		}
+
 		mongodb.save(area);
 		return a;
 	}

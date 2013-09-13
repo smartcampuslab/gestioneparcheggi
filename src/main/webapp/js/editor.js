@@ -23,8 +23,8 @@ function createArea() {
 	dialogArea.dialog("open");
 }
 
-function mapInForground(){
-	$('#map').css('z-index','111119');
+function mapInForground() {
+	$('#map').css('z-index', '111119');
 }
 function loadAreaEditForm(id) {
 	saveEditMode = true;
@@ -36,102 +36,98 @@ function loadAreaEditForm(id) {
 	$('input[name="area_colore"]').val(data['color']);
 	$('input[name="area_id"]').val(data['id']);
 
-	if (data['geometry'] != undefined) {
+	if (data['geometry'] != undefined && data['geometry'].length > 0) {
+		$.each(data['geometry'], function(key, value) {
+			$.each(value['points'], function(k, v) {
+				$('#form').append(
+						$('<input>').attr('type', 'hidden').attr('name',
+								"area_coord_g" + areeGeo[id][key] + "_" + k).val(
+								v['lat'] + ',' + v['lng']));
+			});
+		});
+
+		// add geometries in table
 		$
 				.each(
-						data['geometry'],
-						function(key, value) {
-							$.each(value['points'], function(k, v) {
-								$('#form').append(
-										$('<input>').attr('type', 'hidden')
-												.attr(
-														'name',
-														"area_coord_g" + key
-																+ "_" + k).val(
-														v['lat'] + ','
-																+ v['lng']));
-							});
-						});
-		
-		// add geometries in table
-		$.each(areeGeo[data['id']],function(k,v){
-		var row = $('<tr>');
-		var detailsLink = $('<a>')
-				.attr('href', '#')
-				.append(
-						$('<img>').attr('src',
-								'imgs/details.ico').attr(
-								'alt', 'visualizza').attr(
-								'title', 'visualizza'))
-				.click(
-						function() {
-							mapInForground();
-							var polygon = tempGeo[v];
-							polygon.setFillStyle({
-								'color' : '#000000'
-							});
-							var vertex = Math
-									.floor((polygon
-											.getVertexCount() / 2) - 1);
-							// center the map on highlighted
-							// geometry
-							map.setCenter(polygon
-									.getVertex(vertex),
-									zoomToLevel);
-
-							// highlight geometry
-							if (highlightedAreaGeometry['geom'] != null
-									&& highlightedAreaGeometry['geom'] != polygon) {
-								rendererArea
-										.resetHighlightedAreaGeometry();
-							}
-							highlightedAreaGeometry['geom'] = polygon;
-							highlightedAreaGeometry['origColor'] = data['color'] != null ? data['color']
-									: defaultFillPolygonColor;
-
-							// remove previous text
-							// highlighting
-							$('#area_geometries tr')
-									.each(
+						areeGeo[data['id']],
+						function(k, v) {
+							var row = $('<tr>');
+							var detailsLink = $('<a>')
+									.attr('href', '#')
+									.append(
+											$('<img>').attr('src',
+													'imgs/details.ico').attr(
+													'alt', 'visualizza').attr(
+													'title', 'visualizza'))
+									.click(
 											function() {
-												$(this)
-														.children(
-																'td:first')
-														.css(
-																'font-weight',
-																'normal');
-											})
-							// highlight element in table
-							row.children('td:first').css(
-									'font-weight', 'bold');
-						});
+												mapInForground();
+												var polygon = tempGeo[v];
+												polygon.setFillStyle({
+													'color' : '#000000'
+												});
+												var vertex = Math
+														.floor((polygon
+																.getVertexCount() / 2) - 1);
+												// center the map on highlighted
+												// geometry
+												map.setCenter(polygon
+														.getVertex(vertex),
+														zoomToLevel);
 
-		var deleteLink = $('<a>').attr('href', '#').append(
-				$('<img>').attr('src', 'imgs/delete.ico')
-						.attr('alt', 'elimina').attr(
-								'title', 'elimina')).click(
-				function() {
-					// remove from map
-					var polygon = tempGeo[v];
-					map.removeOverlay(polygon);
-					// remove coords
-					$(
-							'input[name^="area_coord_g' + k
-									+ '"]').each(
-							function() {
-								$(this).remove();
-							});
-					$(row).remove();
-				});
-		row.append($('<td>').text('Geometria')).append(
-				$('<td>').append(detailsLink)).append(
-				$('<td>').append(deleteLink)).append(
-				$('<td>').append(
-						$('<input>').attr('type', 'hidden')
-								.attr('name', 'tempId')
-								.val(v)));
-		$('#area_geometries').append(row);
-		});
+												// highlight geometry
+												if (highlightedAreaGeometry['geom'] != null
+														&& highlightedAreaGeometry['geom'] != polygon) {
+													rendererArea
+															.resetHighlightedAreaGeometry();
+												}
+												highlightedAreaGeometry['geom'] = polygon;
+												highlightedAreaGeometry['origColor'] = data['color'] != null ? data['color']
+														: defaultFillPolygonColor;
+
+												// remove previous text
+												// highlighting
+												$('#area_geometries tr')
+														.each(
+																function() {
+																	$(this)
+																			.children(
+																					'td:first')
+																			.css(
+																					'font-weight',
+																					'normal');
+																})
+												// highlight element in table
+												row.children('td:first').css(
+														'font-weight', 'bold');
+											});
+
+							var deleteLink = $('<a>').attr('href', '#').append(
+									$('<img>').attr('src', 'imgs/delete.ico')
+											.attr('alt', 'elimina').attr(
+													'title', 'elimina')).click(
+									function() {
+										// remove from map
+										var polygon = tempGeo[v];
+										map.removeOverlay(polygon);
+										// remove coords
+										$(
+												'input[name^="area_coord_g' + areeGeo[id][k]
+														+ '"]').each(
+												function() {
+													$(this).remove();
+												});
+										$(row).remove();
+									});
+							row.append($('<td>').text('Geometria')).append(
+									$('<td>').append(detailsLink)).append(
+									$('<td>').append(deleteLink)).append(
+									$('<td>').append(
+											$('<input>').attr('type', 'hidden')
+													.attr('name', 'tempId')
+													.val(v)));
+							$('#area_geometries').append(row);
+						});
 	}
 
 	dialogArea.dialog("open");
@@ -278,11 +274,9 @@ function saveArea() {
 	area['timeSlot'] = $('textarea[name="area_fascia-oraria"]').val();
 	area['color'] = $('input[name="area_colore"]').val();
 	area['geometry'] = [];
-	for ( var geomNum = 0; geomNum < 50; geomNum++) {
+	for ( var geomNum = 0; geomNum < 1000; geomNum++) {
 		var geoms = $('input[name^="area_coord_g' + geomNum + '"]');
-		if (geoms.size() == 0) {
-			break;
-		} else {
+		if (geoms.size() != 0) {
 			var a = [];
 			$.each(geoms, function() {
 				a.push({
@@ -295,17 +289,6 @@ function saveArea() {
 			area['geometry'].push(geom);
 		}
 	}
-	// alert(JSON.stringify(area));
-	// $coords = $('input[name^="zona_coord_"]');
-	// var a = [];
-	// $coords.each(function() {
-	// a.push({
-	// 'lat' : $(this).val().split(',')[0],
-	// 'lng' : $(this).val().split(',')[1]
-	// });
-	// });
-	// zona['geometry'] = {};
-	// zona['geometry']['points'] = a;
 
 	if (area['name'].length == 0) {
 		$('#area_nome_msg').text('Campo obbligatorio');

@@ -35,6 +35,8 @@ Caller.prototype.createArea = function(data) {
 			rendererArea.render(true, data);
 			aree[data['id']] = data;
 			dialogArea.dialog('close');
+			// TODO not mandatory, improve this behaviour
+			location.reload();
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
