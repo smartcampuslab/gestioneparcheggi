@@ -16,6 +16,17 @@ Renderer_Area.prototype.renderDetails = function(data) {
 	return detail;
 };
 
+
+Renderer_Area.prototype.renderPopup = function(data) {
+	popup='<p class="title-popup">'+areaLabels['fee']+'</p>'
+	+ data['fee']
+	+'<p class="title-popup">'+areaLabels['timeSlot']+'</p>'
+	+ data['timeSlot']
+	+ '<p class="title-popup">'+areaLabels['smsCode']+'</p>'
+	+ data['smsCode'];
+	return popup;
+};
+
 Renderer_Area.prototype.renderPopupDetails = function(data) {
 	var detail = '<fieldset class="popup"><legend class="popup">'
 			+ data['name'] + '</legend>' + '<p class="title-popup">'
@@ -192,8 +203,8 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 							});
 		} else {
 			GEvent.addListener(polygon, "click", function(latlng, index) {
-				map.openInfoWindowHtml(latlng, rendererarea.renderPopup(
-						modeEdit, aree[data['id']]));
+				map.openInfoWindowHtml(latlng, rendererArea.renderPopup(
+						modeEdit, aree[area['id']]));
 			});
 		}
 	}
