@@ -171,10 +171,12 @@ var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 					}
 				},
 				open : function() {
+// 					rendererArea.editGeometryMode(true);
 					map.disableScrollWheelZoom();
 				},
 				close : function() {
 					map.enableScrollWheelZoom();
+// 					rendererArea.editGeometryMode(false);
 					rendererArea.closeDialog();
 					resetToolbar();
 				}

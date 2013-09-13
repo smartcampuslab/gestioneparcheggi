@@ -41,8 +41,8 @@ function loadAreaEditForm(id) {
 			$.each(value['points'], function(k, v) {
 				$('#form').append(
 						$('<input>').attr('type', 'hidden').attr('name',
-								"area_coord_g" + areeGeo[id][key] + "_" + k).val(
-								v['lat'] + ',' + v['lng']));
+								"area_coord_g" + areeGeo[id][key] + "_" + k)
+								.val(v['lat'] + ',' + v['lng']));
 			});
 		});
 
@@ -102,23 +102,28 @@ function loadAreaEditForm(id) {
 														'font-weight', 'bold');
 											});
 
-							var deleteLink = $('<a>').attr('href', '#').append(
-									$('<img>').attr('src', 'imgs/delete.ico')
-											.attr('alt', 'elimina').attr(
-													'title', 'elimina')).click(
-									function() {
-										// remove from map
-										var polygon = tempGeo[v];
-										map.removeOverlay(polygon);
-										// remove coords
-										$(
-												'input[name^="area_coord_g' + areeGeo[id][k]
-														+ '"]').each(
-												function() {
-													$(this).remove();
-												});
-										$(row).remove();
-									});
+							var deleteLink = $('<a>')
+									.attr('href', '#')
+									.append(
+											$('<img>').attr('src',
+													'imgs/delete.ico').attr(
+													'alt', 'elimina').attr(
+													'title', 'elimina'))
+									.click(
+											function() {
+												// remove from map
+												var polygon = tempGeo[v];
+												map.removeOverlay(polygon);
+												// remove coords
+												$(
+														'input[name^="area_coord_g'
+																+ areeGeo[id][k]
+																+ '"]').each(
+														function() {
+															$(this).remove();
+														});
+												$(row).remove();
+											});
 							row.append($('<td>').text('Geometria')).append(
 									$('<td>').append(detailsLink)).append(
 									$('<td>').append(deleteLink)).append(
@@ -861,6 +866,9 @@ function populate(modeEdit, elements) {
 	$.each(elements, function(k, v) {
 		switch (v) {
 		case 'area':
+			if ($('#view-area')) {
+				$('#view-area').attr('checked', 'true');
+			}
 			caller.getAllArea(modeEdit);
 			break;
 		case 'via':
@@ -1003,6 +1011,17 @@ function setupToolbar(entity, toolbar) {
 
 function visibility(component) {
 	switch (component.id) {
+	case 'view-area':
+		if (component.checked) {
+			caller.getAllArea();
+		} else {
+			$.each(areeGeo, function() {
+				$.each($(this), function(k, v) {
+					map.removeOverlay(tempGeo[v]);
+				});
+			});
+		}
+		break;
 	case 'view-via':
 		if (component.checked) {
 			caller.getAllVia();

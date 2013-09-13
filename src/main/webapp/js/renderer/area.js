@@ -122,19 +122,9 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 	tempGeo[tempIndex] = polygon;
 	data['tempId'] = tempIndex;
 	tempIndex++;
-	
+
 	// relative id of geometry
 	var geometryId = data['tempId'];
-//	var coords = $('input[name^="area_coord_g"]');
-//	if (coords.size() > 0) {
-//		var matches = coords.last().attr('name').match(
-//				/area_coord_g(\d+)_(\d+)/);
-//		if (matches) {
-//			geometryId = parseInt(matches[1], 10);
-//			geometryId++;
-//		}
-//	}
-	
 
 	if (area != undefined && area['id'] != undefined) {
 		id = area['id'];
@@ -151,43 +141,55 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 			GEvent.addListener(polygon, "click", function(latlng, index) {
 				if (index) {
 					polygon.deleteVertex(index);
-
 				} else {
-					map.openInfoWindowHtml(latlng, rendererarea.renderPopup(
-							modeEdit, aree[data['id']]));
+					if (area != undefined && !saveEditMode) {
+						loadAreaEditForm(area['id']);
+					}
+					dialogArea.dialog('open');
 				}
 			});
 
-			GEvent.addListener(polygon, "lineupdated", function() {
-				var numVertex = polygon.getVertexCount();
-				
-				// clean previous coords
-				$('input[name^="area_coord_g'+geometryId+'"]').each(function(){
-				 $(this).remove();	
-				});
+			GEvent
+					.addListener(
+							polygon,
+							"lineupdated",
+							function() {
+								var numVertex = polygon.getVertexCount();
 
-				for ( var i = 0; i < numVertex; i++) {
-					var vertex = polygon.getVertex(i);
+								if (saveEditMode) {
+									// clean previous coords
+									$(
+											'input[name^="area_coord_g'
+													+ geometryId + '"]').each(
+											function() {
+												$(this).remove();
+											});
 
-					// add hidden field
+									for ( var i = 0; i < numVertex; i++) {
+										var vertex = polygon.getVertex(i);
 
-					$('#form')
-							.append(
-									$('<input>').attr('type',
-											'hidden').attr(
-											'name',
-											"area_coord_g" + geometryId
-													+ "_" + i).val(
-											vertex.lat() + ','
-													+ vertex.lng()));
-				}
-				
-				//aree[data['id']] = data;
+										// add hidden field
 
-				// var p = rendererArea.renderPopupDetails(modeEdit,data);
-				// map.openInfoWindowHtml(polygon.getVertex(Math
-				// .floor((numVertex / 2) - 1)), p);
-			});
+										$('#form')
+												.append(
+														$('<input>')
+																.attr('type',
+																		'hidden')
+																.attr(
+																		'name',
+																		"area_coord_g"
+																				+ geometryId
+																				+ "_"
+																				+ i)
+																.val(
+																		vertex
+																				.lat()
+																				+ ','
+																				+ vertex
+																						.lng()));
+									}
+								}
+							});
 		} else {
 			GEvent.addListener(polygon, "click", function(latlng, index) {
 				map.openInfoWindowHtml(latlng, rendererarea.renderPopup(
@@ -211,18 +213,6 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 							addAreaGeometryActive = false;
 							var numVertex = polygon.getVertexCount();
 
-							// find last geometry id number
-//							var n = 0;
-//							var coords = $('input[name^="area_coord_g"]');
-//							if (coords.size() > 0) {
-//								var matches = coords.last().attr('name').match(
-//										/area_coord_g(\d+)_(\d+)/);
-//								if (matches) {
-//									n = parseInt(matches[1], 10);
-//									n = n + 1;
-//								}
-//							}
-
 							for ( var i = 0; i < numVertex; i++) {
 								var vertex = polygon.getVertex(i);
 
@@ -233,7 +223,8 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 												$('<input>').attr('type',
 														'hidden').attr(
 														'name',
-														"area_coord_g" + geometryId
+														"area_coord_g"
+																+ geometryId
 																+ "_" + i).val(
 														vertex.lat() + ','
 																+ vertex.lng()));
@@ -299,9 +290,9 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 										map.removeOverlay(polygon);
 										// remove coords
 										$(
-												'input[name^="area_coord_g' + geometryId
-														+ '"]').each(
-												function() {
+												'input[name^="area_coord_g'
+														+ geometryId + '"]')
+												.each(function() {
 													$(this).remove();
 												});
 										$(row).remove();
@@ -330,55 +321,77 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 								}
 							});
 
-							GEvent.addListener(polygon, "lineupdated",
-									function() {
-								// clean previous coords
-								$('input[name^="area_coord_g'+geometryId+'"]').each(function(){
-								 $(this).remove();	
-								});
-										var numVertex = polygon
-												.getVertexCount();
+							GEvent
+									.addListener(
+											polygon,
+											"lineupdated",
+											function() {
+												if (saveEditMode) {
+													// clean previous coords
+													$(
+															'input[name^="area_coord_g'
+																	+ geometryId
+																	+ '"]')
+															.each(
+																	function() {
+																		$(this)
+																				.remove();
+																	});
+													var numVertex = polygon
+															.getVertexCount();
 
-								for ( var i = 0; i < numVertex; i++) {
-									var vertex = polygon.getVertex(i);
+													for ( var i = 0; i < numVertex; i++) {
+														var vertex = polygon
+																.getVertex(i);
 
-									// add hidden field
+														// add hidden field
 
-									$('#form')
-											.append(
-													$('<input>').attr('type',
-															'hidden').attr(
-															'name',
-															"area_coord_g" + geometryId
-																	+ "_" + i).val(
-															vertex.lat() + ','
-																	+ vertex.lng()));
-								}
-//										if (data['geometry'] == undefined) {
-//											data['geometry'] = {};
-//											data['geometry']['points'] = [];
-//										}
-//										// clear the array
-//										data['geometry']['points'].length = 0;
-//
-//										for ( var i = 0; i < numVertex; i++) {
-//											var vertex = polygon.getVertex(i);
-//
-//											data['geometry']['points'].push({
-//												'lat' : vertex.lat(),
-//												'lng' : vertex.lng()
-//											});
-//										}
-//										aree[data['id']] = data;
-
-										// var p =
-										// rendererArea.renderPopupDetails(data);
-										// map.openInfoWindowHtml(polygon.getVertex(Math
-										// .floor((numVertex / 2) - 1)), p);
-									});
+														$('#form')
+																.append(
+																		$(
+																				'<input>')
+																				.attr(
+																						'type',
+																						'hidden')
+																				.attr(
+																						'name',
+																						"area_coord_g"
+																								+ geometryId
+																								+ "_"
+																								+ i)
+																				.val(
+																						vertex
+																								.lat()
+																								+ ','
+																								+ vertex
+																										.lng()));
+													}
+												}
+											});
 
 						});
 	}
+
+};
+
+Renderer_Area.prototype.editGeometryMode = function(isActive) {
+
+	$.each(areeGeo, function() {
+		$.each($(this), function(k, v) {
+			if (isActive) {
+				GEvent.addListener(tempGeo[v], "mouseover", function() {
+					tempGeo[$(this)].enableEditing();
+				});
+				GEvent.addListener(tempGeo[v], "mouseout", function() {
+					tempGeo[$(this)].disableEditing();
+				});
+			} else {
+				GEvent.clearListeners(tempGeo[v], "mouseover");
+				GEvent.clearListeners(tempGeo[v], "mouseout");
+			}
+
+		});
+	});
 
 };
 
@@ -392,7 +405,7 @@ Renderer_Area.prototype.closeDialog = function() {
 				map.removeOverlay(tempGeo[id]);
 			}
 		});
-	}else{
+	} else {
 		saveEditMode = false;
 	}
 	rendererArea.resetHighlightedAreaGeometry();
