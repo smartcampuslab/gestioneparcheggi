@@ -79,6 +79,8 @@ filterCache['via']= {};
 var highlightedAreaGeometry = {};
 var addAreaGeometryActive;
 
+var saveEditMode;
+
 //init
 function init(){
 	containerArea = $('#area-info');

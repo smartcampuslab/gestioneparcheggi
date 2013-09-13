@@ -101,31 +101,31 @@ Renderer_Area.prototype.renderGeo = function(modeEdit, data, modeLoading) {
 			});
 			var geom = {};
 			geom['color'] = data['color'];
-			geom['coords']=coords;
-			rendererArea.addGeo(modeEdit, geom, modeLoading);
+			geom['coords'] = coords;
+			rendererArea.addGeo(modeEdit, geom, data, modeLoading);
 		});
 	}
 };
 
-Renderer_Area.prototype.addGeo = function(modeEdit, data, modeLoading) {
+Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 	var coords = data['coords'] != undefined ? data['coords'] : [];
-//	if (data['geometry'] != undefined) {
-//		$.each(data['geometry'], function(key, value) {
-//			coords = [];
-//			$.each(value['points'], function(k, v) {
-//				coords.push(new GLatLng(v['lat'], v['lng']));
-//			});
-//			var colorBorder = '#'
-//					+ ((data['color'] != null) ? data['color']
-//							: defaultPolygonColor);
-//			var fillColor = '#'
-//					+ ((data['color'] != null) ? data['color']
-//							: defaultFillPolygonColor);
-//			var polygon = new GPolygon(coords, colorBorder, polygonWeight,
-//					polygonOpacity, fillColor, fillPolygonOpacity);
-//			map.addOverlay(polygon);
-//		});
-//	}
+	// if (data['geometry'] != undefined) {
+	// $.each(data['geometry'], function(key, value) {
+	// coords = [];
+	// $.each(value['points'], function(k, v) {
+	// coords.push(new GLatLng(v['lat'], v['lng']));
+	// });
+	// var colorBorder = '#'
+	// + ((data['color'] != null) ? data['color']
+	// : defaultPolygonColor);
+	// var fillColor = '#'
+	// + ((data['color'] != null) ? data['color']
+	// : defaultFillPolygonColor);
+	// var polygon = new GPolygon(coords, colorBorder, polygonWeight,
+	// polygonOpacity, fillColor, fillPolygonOpacity);
+	// map.addOverlay(polygon);
+	// });
+	// }
 
 	var colorBorder = '#'
 			+ ((data['color'] != null) ? data['color'] : defaultPolygonColor);
@@ -139,6 +139,21 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, modeLoading) {
 	tempGeo[tempIndex] = polygon;
 	data['tempId'] = tempIndex;
 	tempIndex++;
+
+	if (area != undefined && area['id'] != undefined) {
+		id = area['id'];
+		if (areeGeo[id] == undefined) {
+			areeGeo[id] = [];
+		}
+		areeGeo[id].push(data['tempId']);
+	}
+
+	// if(area != undefined){
+	// if(area['tempId'] == undefined){
+	// area['tempId'] = [];
+	// }
+	// area['tempId'].push(tempId);
+	// }
 
 	if (!modeLoading) {
 		polygon.enableDrawing();
@@ -199,10 +214,10 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, modeLoading) {
 						function() {
 							addAreaGeometryActive = false;
 							var numVertex = polygon.getVertexCount();
-//							if (data['geometry'] == undefined) {
-//								data['geometry'] = {};
-//								data['geometry']['points'] = [];
-//							}
+							// if (data['geometry'] == undefined) {
+							// data['geometry'] = {};
+							// data['geometry']['points'] = [];
+							// }
 
 							// find last geometry id number
 							var n = 0;
@@ -220,10 +235,10 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, modeLoading) {
 								var vertex = polygon.getVertex(i);
 
 								// add geometry to data AREA
-//								data['geometry']['points'].push({
-//									'lat' : vertex.lat(),
-//									'lng' : vertex.lng()
-//								});
+								// data['geometry']['points'].push({
+								// 'lat' : vertex.lat(),
+								// 'lng' : vertex.lng()
+								// });
 
 								// add hidden field
 
@@ -294,6 +309,7 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, modeLoading) {
 									function() {
 										// remove from map
 										var polygon = tempGeo[data['tempId']];
+
 										map.removeOverlay(polygon);
 										// remove coords
 										$(
@@ -363,6 +379,16 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, modeLoading) {
 Renderer_Area.prototype.closeDialog = function() {
 	addAreaGeometryActive = false;
 	$('#map').css('z-index', '0');
+	if (!saveEditMode) {
+		$('#area_geometries tr').each(function() {
+			var id = $(this).children("td").eq(3).children('input').val();
+			if (id !== "") {
+				map.removeOverlay(tempGeo[id]);
+			}
+		});
+	}else{
+		saveEditMode = false;
+	}
 	rendererArea.resetHighlightedAreaGeometry();
 	resetAreaMsgs();
 	resetAreaForm();

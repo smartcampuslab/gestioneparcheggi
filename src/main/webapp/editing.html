@@ -166,6 +166,7 @@ var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 						$(this).dialog("close");
 					},
 					"Salva" : function() {
+						saveEditMode =true;
 						saveArea();
 					}
 				},
@@ -174,12 +175,6 @@ var elementsInPage = [ 'area','via','parcometro', 'zona','parcheggioStruttura'];
 				},
 				close : function() {
 					map.enableScrollWheelZoom();
-					$('#area_geometries tr').each(function() {
-							var id = $(this).children("td").eq(3).children('input').val();
-							if (id !== "") {
-								map.removeOverlay(tempGeo[id]);
-							}
-					});
 					rendererArea.closeDialog();
 					resetToolbar();
 				}

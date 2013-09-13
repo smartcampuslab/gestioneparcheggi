@@ -23,7 +23,11 @@ function createArea() {
 	dialogArea.dialog("open");
 }
 
+function mapInForground(){
+	$('#map').css('z-index','111119');
+}
 function loadAreaEditForm(id) {
+	saveEditMode = true;
 	var data = aree[id];
 	$('input[name="area_nome"]').val(data['name']);
 	$('input[name="area_tariffa"]').val(data['fee'].toFixed(2));
@@ -47,82 +51,87 @@ function loadAreaEditForm(id) {
 														v['lat'] + ','
 																+ v['lng']));
 							});
-							var row = $('<tr>');
-							var detailsLink = $('<a>')
-									.attr('href', '#')
-									.append(
-											$('<img>').attr('src',
-													'imgs/details.ico').attr(
-													'alt', 'visualizza').attr(
-													'title', 'visualizza'))
-									.click(
-											function() {
-												var polygon = tempGeo[data['tempId']];
-												polygon.setFillStyle({
-													'color' : '#000000'
-												});
-												var vertex = Math
-														.floor((polygon
-																.getVertexCount() / 2) - 1);
-												// center the map on highlighted
-												// geometry
-												map.setCenter(polygon
-														.getVertex(vertex),
-														zoomToLevel);
-
-												// highlight geometry
-												if (highlightedAreaGeometry['geom'] != null
-														&& highlightedAreaGeometry['geom'] != polygon) {
-													rendererArea
-															.resetHighlightedAreaGeometry();
-												}
-												highlightedAreaGeometry['geom'] = polygon;
-												highlightedAreaGeometry['origColor'] = data['color'] != null ? data['color']
-														: defaultFillPolygonColor;
-
-												// remove previous text
-												// highlighting
-												$('#area_geometries tr')
-														.each(
-																function() {
-																	$(this)
-																			.children(
-																					'td:first')
-																			.css(
-																					'font-weight',
-																					'normal');
-																})
-												// highlight element in table
-												row.children('td:first').css(
-														'font-weight', 'bold');
-											});
-
-							var deleteLink = $('<a>').attr('href', '#').append(
-									$('<img>').attr('src', 'imgs/delete.ico')
-											.attr('alt', 'elimina').attr(
-													'title', 'elimina')).click(
-									function() {
-										// remove from map
-										var polygon = tempGeo[data['tempId']];
-										map.removeOverlay(polygon);
-										// remove coords
-										$(
-												'input[name^="area_coord_g' + n
-														+ '"]').each(
-												function() {
-													$(this).remove();
-												});
-										$(row).remove();
-									});
-							row.append($('<td>').text('Geometria')).append(
-									$('<td>').append(detailsLink)).append(
-									$('<td>').append(deleteLink)).append(
-									$('<td>').append(
-											$('<input>').attr('type', 'hidden')
-													.attr('name', 'tempId')
-													.val(data['tempId'])));
-							$('#area_geometries').append(row);
 						});
+		
+		// add geometries in table
+		$.each(areeGeo[data['id']],function(k,v){
+		var row = $('<tr>');
+		var detailsLink = $('<a>')
+				.attr('href', '#')
+				.append(
+						$('<img>').attr('src',
+								'imgs/details.ico').attr(
+								'alt', 'visualizza').attr(
+								'title', 'visualizza'))
+				.click(
+						function() {
+							mapInForground();
+							var polygon = tempGeo[v];
+							polygon.setFillStyle({
+								'color' : '#000000'
+							});
+							var vertex = Math
+									.floor((polygon
+											.getVertexCount() / 2) - 1);
+							// center the map on highlighted
+							// geometry
+							map.setCenter(polygon
+									.getVertex(vertex),
+									zoomToLevel);
+
+							// highlight geometry
+							if (highlightedAreaGeometry['geom'] != null
+									&& highlightedAreaGeometry['geom'] != polygon) {
+								rendererArea
+										.resetHighlightedAreaGeometry();
+							}
+							highlightedAreaGeometry['geom'] = polygon;
+							highlightedAreaGeometry['origColor'] = data['color'] != null ? data['color']
+									: defaultFillPolygonColor;
+
+							// remove previous text
+							// highlighting
+							$('#area_geometries tr')
+									.each(
+											function() {
+												$(this)
+														.children(
+																'td:first')
+														.css(
+																'font-weight',
+																'normal');
+											})
+							// highlight element in table
+							row.children('td:first').css(
+									'font-weight', 'bold');
+						});
+
+		var deleteLink = $('<a>').attr('href', '#').append(
+				$('<img>').attr('src', 'imgs/delete.ico')
+						.attr('alt', 'elimina').attr(
+								'title', 'elimina')).click(
+				function() {
+					// remove from map
+					var polygon = tempGeo[v];
+					map.removeOverlay(polygon);
+					// remove coords
+					$(
+							'input[name^="area_coord_g' + k
+									+ '"]').each(
+							function() {
+								$(this).remove();
+							});
+					$(row).remove();
+				});
+		row.append($('<td>').text('Geometria')).append(
+				$('<td>').append(detailsLink)).append(
+				$('<td>').append(deleteLink)).append(
+				$('<td>').append(
+						$('<input>').attr('type', 'hidden')
+								.attr('name', 'tempId')
+								.val(v)));
+		$('#area_geometries').append(row);
+		});
 	}
 
 	dialogArea.dialog("open");
@@ -920,7 +929,7 @@ function initializeMap() {
 }
 
 function addAreaGeometry() {
-	$('#map').css("z-index", "11003");
+	mapInForground();
 	if (!addAreaGeometryActive) {
 		var newArea = {};
 		addAreaGeometryActive = true;
