@@ -114,6 +114,7 @@ Renderer_Area.prototype.renderGeo = function(modeEdit, data, modeLoading) {
 			var geom = {};
 			geom['color'] = data['color'];
 			geom['coords'] = coords;
+			geom['localId'] = key;
 			rendererArea.addGeo(modeEdit, geom, data, modeLoading);
 		});
 	}
@@ -137,7 +138,7 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 
 	// relative id of geometry
 	var geometryId = data['tempId'];
-
+	
 	if (area != undefined && area['id'] != undefined) {
 		id = area['id'];
 		if (areeGeo[id] == undefined) {
@@ -167,7 +168,17 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 							"lineupdated",
 							function() {
 								var numVertex = polygon.getVertexCount();
-
+								
+								// updates polygon coords
+								if(area != undefined  && area['id'] != undefined){
+									var a = aree[area['id']];
+									var editedPolygon = [];
+									for ( var i = 0; i < numVertex; i++) {
+										var vertex = polygon.getVertex(i);
+										editedPolygon.push({'lat': vertex.lat(),'lng': vertex.lng()});
+									}
+									a['geometry'][data['localId']] = {'points':editedPolygon};
+								}
 								if (saveEditMode) {
 									// clean previous coords
 									$(
