@@ -18,7 +18,8 @@ Renderer_Area.prototype.renderDetails = function(data) {
 
 
 Renderer_Area.prototype.renderPopup = function(data) {
-	popup='<p class="title-popup">'+areaLabels['fee']+'</p>'
+	popup='<h3>'+data['name']+'</h3>'
+	+'<p class="title-popup">'+areaLabels['fee']+'</p>'
 	+ data['fee']
 	+'<p class="title-popup">'+areaLabels['timeSlot']+'</p>'
 	+ data['timeSlot']
@@ -204,7 +205,7 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 		} else {
 			GEvent.addListener(polygon, "click", function(latlng, index) {
 				map.openInfoWindowHtml(latlng, rendererArea.renderPopup(
-						modeEdit, aree[area['id']]));
+						aree[area['id']]));
 			});
 		}
 	}
