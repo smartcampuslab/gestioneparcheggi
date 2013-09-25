@@ -183,7 +183,7 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 									// clean previous coords
 									$(
 											'input[name^="area_coord_g'
-													+ geometryId + '"]').each(
+													+ geometryId + '_"]').each(
 											function() {
 												$(this).remove();
 											});
@@ -314,7 +314,7 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 										// remove coords
 										$(
 												'input[name^="area_coord_g'
-														+ geometryId + '"]')
+														+ geometryId + '_"]')
 												.each(function() {
 													$(this).remove();
 												});
@@ -354,7 +354,7 @@ Renderer_Area.prototype.addGeo = function(modeEdit, data, area, modeLoading) {
 													$(
 															'input[name^="area_coord_g'
 																	+ geometryId
-																	+ '"]')
+																	+ '_"]')
 															.each(
 																	function() {
 																		$(this)

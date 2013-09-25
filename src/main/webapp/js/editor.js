@@ -118,7 +118,7 @@ function loadAreaEditForm(id) {
 												$(
 														'input[name^="area_coord_g'
 																+ areeGeo[id][k]
-																+ '"]').each(
+																+ '_"]').each(
 														function() {
 															$(this).remove();
 														});
@@ -280,7 +280,7 @@ function saveArea() {
 	area['color'] = $('input[name="area_colore"]').val();
 	area['geometry'] = [];
 	for ( var geomNum = 0; geomNum < 1000; geomNum++) {
-		var geoms = $('input[name^="area_coord_g' + geomNum + '"]');
+		var geoms = $('input[name^="area_coord_g' + geomNum + '_"]');
 		if (geoms.size() != 0) {
 			var a = [];
 			$.each(geoms, function() {
