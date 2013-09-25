@@ -55,7 +55,11 @@ public class StorageManager {
 		area.setFee(a.getFee());
 		area.setSmsCode(a.getSmsCode());
 		area.setTimeSlot(a.getTimeSlot());
-		area.getGeometry().clear();
+		if (area.getGeometry() != null) {
+			area.getGeometry().clear();
+		} else {
+			area.setGeometry(new ArrayList<Polygon>());
+		}
 		for (PolygonBean polygon : a.getGeometry()) {
 			area.getGeometry().add(
 					ModelConverter.convert(polygon, Polygon.class));
