@@ -160,14 +160,14 @@
       <id>dev</id>
       <properties>
         <baseUrl>http://localhost:8080/${app.name}</baseUrl>
-        <gmap.key>AIzaSyBJVnWg1myfUFITi0H4eaW0XU7ZoLTgzZ0</gmap.key>
+        <gmap.key>**INSERT_YOUR_GMAP_KEY**</gmap.key>
       </properties>
     </profile>
     <profile>
       <id>prod</id>
       <properties>
         <baseUrl>http://vas-dev.smartcampuslab.it/${app.name}</baseUrl>
-        <gmap.key>AIzaSyBNufsI8pLg82UF0GPz4fbb1rGtFnWNqOI</gmap.key>
+        <gmap.key>**INSERT_YOUR_GMAP_KEY**</gmap.key>
       </properties>
     </profile>
   </profiles>
