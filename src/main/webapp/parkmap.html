@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2008 Google Inc. 
+ Licensed under the Apache License, Version 2.0: 
+ http://www.apache.org/licenses/LICENSE-2.0 
+ -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>Trentino Mobilita  - Mappa parcheggi</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css"
+	href="lib/jquery/css/redmond/jquery-ui-1.9.1.custom.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="lib/jquery/css/jquery.colorpicker.css" />
+<script
+	src="http://maps.google.com/maps?file=api&amp;v=2&amp;key=${gmap.key}"
+	type="text/javascript"></script>
+<script src="lib/jquery/jquery-1.8.2.js" type="text/javascript"></script>
+<script src="lib/jquery/jquery-ui-1.9.1.custom.min.js"
+	type="text/javascript"></script>
+<script src="lib/jquery/jquery.colorpicker.js" type="text/javascript"></script>
+<script src="lib/jquery/i18n/jquery.ui.colorpicker-it.js"></script>
+<script src="lib/json2.js" type="text/javascript"></script>
+<script src="lib/mapiconmaker.js" type="text/javascript"></script>
+
+<script src="js/caller.js" type="text/javascript"></script>
+<script src="js/renderer/area.js" type="text/javascript"></script>
+<script src="js/renderer/puntobici.js" type="text/javascript"></script>
+<script src="js/renderer/parcometroLabels.js" type="text/javascript"></script>
+<script src="js/renderer/parcometro.js" type="text/javascript"></script>
+<script src="js/renderer/parcometroFilter.js" type="text/javascript"></script>
+<script src="js/renderer/viaLabels.js" type="text/javascript"></script>
+<script src="js/renderer/via.js" type="text/javascript"></script>
+<script src="js/renderer/viaFilter.js" type="text/javascript"></script>
+<script src="js/renderer/zona.js" type="text/javascript"></script>
+<script src="js/global.js" type="text/javascript"></script>
+
+<script src="js/editor.js" type="text/javascript"></script>
+
+</head>
+
+<script type="text/javascript">
+$(document).ready(function(){
+	initializeMap();
+	populate(false,['area','via','parcometro']);
+});
+</script>
+
+<body  onunload="GUnload()">
+<div id="toc">
+<table>
+<tr><td width="90%">Vie</td><td><input type="checkbox" id="view-via" onclick="visibility(this);"></td></tr>
+<tr><td width="90%">Parcometri</td><td><input type="checkbox" id="view-parcometro" onclick="visibility(this);"/></td></tr>
+<tr><td width="90%">Zone</td><td><input type="checkbox" id="view-zona" onclick="visibility(this);"/></td></tr>
+<tr><td width="90%">Punto Bici</td><td><input type="checkbox" id="view-bici" onclick="visibility(this);"/></td></tr>
+</table>
+<div  style="width=100%;text-align:center;margin:1em 1em 1em 1em;"><a href="rest/export">Scarica dati</a></div>
+<div style="width=100%;text-align:center;margin:1em 1em 0.2em 1em;"><img src="imgs/opendata.png" alt="opendata"/></div>
+<div style="width=100%;text-align:center;margin:0.2em 1em 1em 1em;"><a href="http://creativecommons.org/licenses/by/2.5/it" target="_blank"><img src="imgs/license.png" alt="license"/></a></div>
+</div>
+	<div id="map"></div>
+
+</body>
+</html>
+
+
