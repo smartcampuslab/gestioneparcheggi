@@ -1,6 +1,7 @@
 var baseUrl = '${baseUrl}';
 var company = 'tm';
 
+var infowindow = null;
 
 var zoomLevel = 15;
 var zoomToLevel = 15;
@@ -89,5 +90,5 @@ $(document).ready(function(){
 	rendererParcometroFilter = new Renderer_ParcometroFilter();
 	rendererViaFilter = new Renderer_ViaFilter();
 	rendererPuntobici = new Renderer_Puntobici();
-	geocoder = new GClientGeocoder();
+	geocoder = new google.maps.Geocoder();
 });

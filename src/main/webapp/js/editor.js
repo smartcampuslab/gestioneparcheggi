@@ -9,11 +9,11 @@ function resetToolbar() {
 function select(buttonId) {
 	resetToolbar();
 	$('#' + buttonId).addClass('selected');
-	GEvent.clearListeners(map, "click");
+	google.maps.event.clearListeners(map, "click");
 
 	if (tempIndex > 0
-			&& (tempGeo[tempIndex - 1] instanceof GPolyline || tempGeo[tempIndex - 1] instanceof GPolygon)) {
-		tempGeo[tempIndex - 1].disableEditing();
+			&& (tempGeo[tempIndex - 1] instanceof google.maps.Polyline || tempGeo[tempIndex - 1] instanceof google.maps.Polygon)) {
+		tempGeo[tempIndex - 1].setEditable(false);
 	}
 }
 
@@ -33,108 +33,6 @@ function loadAreaEditForm(id) {
 	dialogArea.dialog("open");
 }
 
-function loadParcometroFilter() {
-	rendererParcometroFilter.render($('#parcometro-filter'));
-	parcometroFilter.dialog("open");
-}
-
-function loadViaFilter() {
-	rendererViaFilter.render($('#via-filter'));
-	viaFilter.dialog("open");
-}
-
-function removeFilterParcometro() {
-	$('select[name="filter-parc-area"]').val('');
-	$('select[name="filter-parc-status"]').val('');
-	$('input[name="filter-parc-code"]').val('');
-	filterParcometro();
-}
-
-function removeFilterVia() {
-	$('select[name="filter-via-area"]').val('');
-	$('input[name="filter-via-street"]').val('');
-	filterVia();
-}
-
-function filterParcometro() {
-	var area = $('select[name="filter-parc-area"]').val();
-	var status = $('select[name="filter-parc-status"]').val();
-	var code = $('input[name="filter-parc-code"]').val();
-
-	var result = [];
-	if (area.length != 0 || status.length != 0 || code.length != 0) {
-		$.each(parcometri, function(k, v) {
-			if (area.length == 0 || area == v['areaId']) {
-				if (status.length == 0 || status == v['status']) {
-					if (code.length == 0
-							|| v['code'].toString().match(
-									new RegExp('^' + code, 'i')) != null) {
-						result.push(v);
-					}
-				}
-			}
-		});
-	} else {
-		result = parcometri;
-	}
-
-	rendererParcometro.reset();
-	$.each(result, function(k, v) {
-		rendererParcometro.render(true, v);
-	});
-
-	filterCache['parcometro'] = {};
-	filterCache['parcometro']['area'] = area;
-	filterCache['parcometro']['status'] = status;
-	filterCache['parcometro']['code'] = code;
-
-}
-
-function filterVia() {
-	var area = $('select[name="filter-via-area"]').val();
-	var street = $('input[name="filter-via-street"]').val();
-
-	var result = [];
-	if (area.length != 0 || street.length != 0) {
-		$.each(vie, function(k, v) {
-			if (area.length == 0 || area == v['areaId']) {
-				if (street.length == 0
-						|| v['streetReference'].toString().match(
-								new RegExp(street, 'i')) != null) {
-					result.push(v);
-				}
-			}
-		});
-	} else {
-		result = vie;
-	}
-
-	rendererVia.reset();
-	$.each(result, function(k, v) {
-		rendererVia.render(true, v);
-	});
-
-	filterCache['via'] = {};
-	filterCache['via']['area'] = area;
-	filterCache['via']['streetReference'] = street;
-
-}
-
-function createVia() {
-	if (Object.keys(aree).length === 0) {
-		dialogCreationArea.dialog("open");
-	} else {
-		select("crea-via");
-		var newVia = {};
-		rendererVia.renderGeo(true,newVia);
-	}
-}
-
-function createZona() {
-	select('crea-zona');
-	var newZona = {};
-	rendererZona.renderGeo(true,newZona);
-}
 
 function resetAreaForm() {
 	$([]).add($('input[name="area_nome"]'))
@@ -214,74 +112,86 @@ function saveArea() {
 	}
 }
 
-function saveZona() {
-	var isValid = true;
-	$([]).add($('#zona_name_msg')).add($('#zona_color_msg')).text('');
-	$([]).add($('input[name="zona_name"]')).add($('input[name="zona_color"]'))
-			.removeClass('ui-state-error');
-
-	var zona = {};
-	var geoTempId = $('input[name="zona_tempId"]').val();
-	zona['id'] = $('input[name="zona_id"]').val();
-	zona['name'] = $('input[name="zona_name"]').val().trim();
-	zona['note'] = $('textarea[name="zona_note"]').val().trim();
-	zona['color'] = $('input[name="zona_color"]').val();
-	$coords = $('input[name^="zona_coord_"]');
-	var a = [];
-	$coords.each(function() {
-		a.push({
-			'lat' : $(this).val().split(',')[0],
-			'lng' : $(this).val().split(',')[1]
-		});
-	});
-	zona['geometry'] = {};
-	zona['geometry']['points'] = a;
-
-	if (zona['name'].length == 0) {
-		$('#zona_name_msg').text('Campo obbligatorio');
-		$('input[name="zona_name"]').addClass('ui-state-error');
-		isValid = false;
-	}
-
-	if (zona['color'].length == 0) {
-		$('#zona_color_msg').text('Campo obbligatorio');
-		$('input[name="zona_color"]').addClass('ui-state-error');
-		isValid = false;
-	}
-
-	if (isValid) {
-		if (zona['id'].length == 0) {
-			caller.createZona(zona, geoTempId);
-		} else {
-			caller.editZona(zona);
-		}
-	}
-}
-
-function loadColorPicker() {
-	$('#picker').val($('input[name="zona_color"]').val());
-	dialogPicker.dialog("open");
-}
-
-function removeZona() {
-	var zonaId = $('input[name="zona_id"]').val();
-	var tempId = $('input[name="zona_tempId"]').val();
-	if (confirm("Procedere con l\'eliminazione?")) {
-		if (zonaId.length != 0) {
-			caller.deleteZona(zonaId);
-		} else {
-			map.closeInfoWindow();
-			map.removeOverlay(tempGeo[tempId]);
-			delete tempGeo[tempId];
-		}
-	}
-}
 
 function removeArea(areaId) {
 	var result = confirm("Attenzione eliminando l\'area verranno eliminati tutti gli elementi appartenenti alla stessa. Procedere alla eliminazione?");
 	if (result) {
 		caller.deleteArea(areaId);
 	}
+}
+function loadViaFilter() {
+	rendererViaFilter.render($('#via-filter'));
+	viaFilter.dialog("open");
+}
+
+function removeFilterVia() {
+	$('select[name="filter-via-area"]').val('');
+	$('input[name="filter-via-street"]').val('');
+	filterVia();
+}
+function filterVia() {
+	var area = $('select[name="filter-via-area"]').val();
+	var street = $('input[name="filter-via-street"]').val();
+
+	var result = [];
+	if (area.length != 0 || street.length != 0) {
+		$.each(vie, function(k, v) {
+			if (area.length == 0 || area == v['areaId']) {
+				if (street.length == 0
+						|| v['streetReference'].toString().match(
+								new RegExp(street, 'i')) != null) {
+					result.push(v);
+				}
+			}
+		});
+	} else {
+		result = vie;
+	}
+
+	rendererVia.reset();
+	$.each(result, function(k, v) {
+		rendererVia.render(true, v);
+	});
+
+	filterCache['via'] = {};
+	filterCache['via']['area'] = area;
+	filterCache['via']['streetReference'] = street;
+
+}
+
+function createVia() {
+	if (Object.keys(aree).length === 0) {
+		dialogCreationArea.dialog("open");
+	} else {
+		select("crea-via");
+		var newVia = {};
+		rendererVia.renderGeo(true,newVia);
+	}
+}
+
+
+function removeVia() {
+	var id = $('input[name="via_id"]').val();
+	var tempId = $('input[name="via_tempId"]').val();
+	var areaId = $('input[name="via_areaId"]').val();
+	if (confirm("Procedere con l\'eliminazione?")) {
+		if (id.length != 0) {
+			caller.deleteVia(areaId, id);
+		} else {
+			if (!!infowindow) {
+				infowindow.close();
+			}
+			tempGeo[tempId].setMap(null);
+			delete tempGeo[tempId];
+		}
+	}
+}
+
+function editVia() {
+	var id = $('input[name="via_id"]').val();
+	vieGeo[id].setMap(null);
+	rendererVia.renderGeo(true,vie[id]);
+	rendererVia.updatePopup(true, vie[id]);
 }
 
 function saveVia() {
@@ -356,6 +266,20 @@ function saveVia() {
 	}
 }
 
+
+function loadParcometroFilter() {
+	rendererParcometroFilter.render($('#parcometro-filter'));
+	parcometroFilter.dialog("open");
+}
+
+
+function removeFilterParcometro() {
+	$('select[name="filter-parc-area"]').val('');
+	$('select[name="filter-parc-status"]').val('');
+	$('input[name="filter-parc-code"]').val('');
+	filterParcometro();
+}
+
 function addParchimetro(latlng) {
 	var newParcometro = {};
 	newParcometro['geometry'] = {};
@@ -364,12 +288,39 @@ function addParchimetro(latlng) {
 	rendererParcometro.renderGeo(true,newParcometro, true);
 }
 
-function addPuntobici(latlng) {
-	var newPuntobici = {};
-	newPuntobici['geometry'] = {};
-	newPuntobici['geometry']['lat'] = latlng.lat();
-	newPuntobici['geometry']['lng'] = latlng.lng();
-	rendererPuntobici.renderGeo(true,newPuntobici, true);
+
+function filterParcometro() {
+	var area = $('select[name="filter-parc-area"]').val();
+	var status = $('select[name="filter-parc-status"]').val();
+	var code = $('input[name="filter-parc-code"]').val();
+
+	var result = [];
+	if (area.length != 0 || status.length != 0 || code.length != 0) {
+		$.each(parcometri, function(k, v) {
+			if (area.length == 0 || area == v['areaId']) {
+				if (status.length == 0 || status == v['status']) {
+					if (code.length == 0
+							|| v['code'].toString().match(
+									new RegExp('^' + code, 'i')) != null) {
+						result.push(v);
+					}
+				}
+			}
+		});
+	} else {
+		result = parcometri;
+	}
+
+	rendererParcometro.reset();
+	$.each(result, function(k, v) {
+		rendererParcometro.render(true, v);
+	});
+
+	filterCache['parcometro'] = {};
+	filterCache['parcometro']['area'] = area;
+	filterCache['parcometro']['status'] = status;
+	filterCache['parcometro']['code'] = code;
+
 }
 
 function saveParcometro() {
@@ -428,21 +379,6 @@ function saveParcometro() {
 	}
 }
 
-function removePuntobici() {
-	var puntobiciId = $('input[name="puntobici_id"]').val();
-	var tempId = $('input[name="puntobici_tempId"]').val();
-	if (confirm("Procedere con l\'eliminazione?")) {
-		if (puntobiciId.length != 0) {
-			caller.deletePuntobici(puntobiciId);
-		} else {
-			map.closeInfoWindow();
-			map.removeOverlay(tempGeo[tempId]);
-			delete tempGeo[tempId];
-		}
-	}
-
-}
-
 function removeParcometro() {
 	var areaId = $('input[name="parcometro_areaId"]').val();
 	var parcometroId = $('input[name="parcometro_id"]').val();
@@ -451,27 +387,16 @@ function removeParcometro() {
 		if (parcometroId.length != 0) {
 			caller.deleteParcometro(areaId, parcometroId);
 		} else {
-			map.closeInfoWindow();
-			map.removeOverlay(tempGeo[tempId]);
+			if (infowindow) {
+				infowindow.close();
+			}
+			if (tempGeo[tempId]) {
+				tempGeo[tempId].setMap(null);
+			}
 			delete tempGeo[tempId];
 		}
 	}
 
-}
-
-function removeVia() {
-	var id = $('input[name="via_id"]').val();
-	var tempId = $('input[name="via_tempId"]').val();
-	var areaId = $('input[name="via_areaId"]').val();
-	if (confirm("Procedere con l\'eliminazione?")) {
-		if (id.length != 0) {
-			caller.deleteVia(areaId, id);
-		} else {
-			map.closeInfoWindow();
-			map.removeOverlay(tempGeo[tempId]);
-			delete tempGeo[tempId];
-		}
-	}
 }
 
 function createParcometro() {
@@ -479,24 +404,137 @@ function createParcometro() {
 		dialogCreationArea.dialog("open");
 	} else {
 		select("crea-parcometro");
-		var listener = GEvent.addListener(map, "click", function(overlay,
-				latlng) {
-			if (latlng) {
-				GEvent.removeListener(listener);
+		var listener = google.maps.event.addListener(map, "click", function(event) {
+			if (event.latLng) {
+				google.maps.event.removeListener(listener);
 				resetToolbar();
-				addParchimetro(latlng);
+				addParchimetro(event.latLng);
 			}
 		});
 	}
 }
 
+function editParcometro() {
+	var id = $('input[name="parcometro_id"]').val();
+	parcometriGeo[id].setMap(null);
+	rendererParcometro.renderGeo(true,parcometri[id]);
+	rendererParcometro.updatePopup(true, parcometri[id]);
+}
+
+function createZona() {
+	select('crea-zona');
+	var newZona = {};
+	rendererZona.renderGeo(true,newZona);
+}
+
+function editZona() {
+	var id = $('input[name="zona_id"]').val();
+	zoneGeo[id].setMap(null);
+	rendererZona.renderGeo(true,zone[id]);
+	rendererZona.updatePopup(true, zone[id]);
+}
+
+function saveZona() {
+	var isValid = true;
+	$([]).add($('#zona_name_msg')).add($('#zona_color_msg')).text('');
+	$([]).add($('input[name="zona_name"]')).add($('input[name="zona_color"]'))
+			.removeClass('ui-state-error');
+
+	var zona = {};
+	var geoTempId = $('input[name="zona_tempId"]').val();
+	zona['id'] = $('input[name="zona_id"]').val();
+	zona['name'] = $('input[name="zona_name"]').val().trim();
+	zona['note'] = $('textarea[name="zona_note"]').val().trim();
+	zona['color'] = $('input[name="zona_color"]').val();
+	$coords = $('input[name^="zona_coord_"]');
+	var a = [];
+	$coords.each(function() {
+		a.push({
+			'lat' : $(this).val().split(',')[0],
+			'lng' : $(this).val().split(',')[1]
+		});
+	});
+	zona['geometry'] = {};
+	zona['geometry']['points'] = a;
+
+	if (zona['name'].length == 0) {
+		$('#zona_name_msg').text('Campo obbligatorio');
+		$('input[name="zona_name"]').addClass('ui-state-error');
+		isValid = false;
+	}
+
+	if (zona['color'].length == 0) {
+		$('#zona_color_msg').text('Campo obbligatorio');
+		$('input[name="zona_color"]').addClass('ui-state-error');
+		isValid = false;
+	}
+
+	if (isValid) {
+		if (zona['id'].length == 0) {
+			caller.createZona(zona, geoTempId);
+		} else {
+			caller.editZona(zona);
+		}
+	}
+}
+function removeZona() {
+	var zonaId = $('input[name="zona_id"]').val();
+	var tempId = $('input[name="zona_tempId"]').val();
+	if (confirm("Procedere con l\'eliminazione?")) {
+		if (zonaId.length != 0) {
+			caller.deleteZona(zonaId);
+		} else {
+			if (infowindow) {
+				infowindow.close();
+			}
+			if (tempGeo[tempId]) {
+				tempGeo[tempId].setMap(null);
+			}
+			delete tempGeo[tempId];
+		}
+	}
+}
+
+function editPuntobici() {
+	var id = $('input[name="puntobici_id"]').val();
+	puntobiciGeo[id].setMap(null);
+	rendererPuntobici.renderGeo(true,puntobici[id]);
+	rendererPuntobici.updatePopup(true, puntobici[id]);
+}
+
+function addPuntobici(latlng) {
+	var newPuntobici = {};
+	newPuntobici['geometry'] = {};
+	newPuntobici['geometry']['lat'] = latlng.lat();
+	newPuntobici['geometry']['lng'] = latlng.lng();
+	rendererPuntobici.renderGeo(true,newPuntobici, true);
+}
+
+function removePuntobici() {
+	var puntobiciId = $('input[name="puntobici_id"]').val();
+	var tempId = $('input[name="puntobici_tempId"]').val();
+	if (confirm("Procedere con l\'eliminazione?")) {
+		if (puntobiciId.length != 0) {
+			caller.deletePuntobici(puntobiciId);
+		} else {
+			if (!!infowindow) {
+				infowindow.close();
+			}
+			tempGeo[tempId].setMap(null);
+			delete tempGeo[tempId];
+		}
+	}
+
+}
+
+
 function createPuntobici() {
 	select("crea-puntobici");
-	var listener = GEvent.addListener(map, "click", function(overlay, latlng) {
-		if (latlng) {
-			GEvent.removeListener(listener);
+	var listener = google.maps.event.addListener(map, "click", function(event) {
+		if (event.latLng) {
+			google.maps.event.removeListener(listener);
 			resetToolbar();
-			addPuntobici(latlng);
+			addPuntobici(event.latLng);
 		}
 	});
 }
@@ -563,6 +601,12 @@ function savePuntobici() {
 	}
 }
 
+
+function loadColorPicker() {
+	$('#picker').val($('input[name="zona_color"]').val());
+	dialogPicker.dialog("open");
+}
+
 function populate(modeEdit,elements) {
 	$.each(elements, function(k, v) {
 		switch (v) {
@@ -601,14 +645,13 @@ function populate(modeEdit,elements) {
 }
 
 function initializeMap() {
-	if (GBrowserIsCompatible()) {
-		map = new GMap2(document.getElementById("map"));
-		map.enableScrollWheelZoom();
-		map.setCenter(new GLatLng(mapExtent[0], mapExtent[1]), zoomLevel);
-		map.addControl(new GSmallMapControl());
-		map.addControl(new GMapTypeControl());
-		map.clearOverlays();
-	}
+	map = new google.maps.Map(document.getElementById("map"),
+			{
+				center: new google.maps.LatLng(mapExtent[0], mapExtent[1]),
+				zoom: zoomLevel,
+				mapTypeControl: true
+			});
+//	map.addControl(new GSmallMapControl());
 }
 
 /*******************************************************************************
@@ -622,7 +665,7 @@ function visibility(component) {
 			caller.getAllVia();
 		} else {
 			$.each(vieGeo, function(k, v) {
-				map.removeOverlay(v);
+				v.setMap(null);
 			});
 		}
 		break;
@@ -631,7 +674,7 @@ function visibility(component) {
 			caller.getAllParcometro();
 		} else {
 			$.each(parcometriGeo, function(k, v) {
-				map.removeOverlay(v);
+				v.setMap(null);
 			});
 		}
 		break;
@@ -640,7 +683,7 @@ function visibility(component) {
 			caller.getAllZona();
 		} else {
 			$.each(zoneGeo, function(k, v) {
-				map.removeOverlay(v);
+				v.setMap(null);
 			});
 		}
 		break;
@@ -649,7 +692,7 @@ function visibility(component) {
 			caller.getAllPuntobici();
 		} else {
 			$.each(puntobiciGeo, function(k, v) {
-				map.removeOverlay(v);
+				v.setMap(null);
 			});
 		}
 		break;

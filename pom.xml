@@ -9,7 +9,6 @@
 	<properties>
 		<spring.version>3.1.0.RELEASE</spring.version>
 		<spring.data.mongo.version>1.0.1.RELEASE</spring.data.mongo.version>
-
 		<app.name>tm-trento</app.name>
 	</properties>
 
@@ -160,14 +159,14 @@
 			<id>dev</id>
 			<properties>
 				<baseUrl>http://localhost:8080/${app.name}</baseUrl>
-				<gmap.key>**INSERT_YOUR_GMAP_KEY**</gmap.key>
+				<gmap.key>AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs</gmap.key>
 			</properties>
 		</profile>
 		<profile>
 			<id>prod</id>
 			<properties>
 				<baseUrl>http://vas-dev.smartcampuslab.it/${app.name}</baseUrl>
-				<gmap.key>**INSERT_YOUR_GMAP_KEY**</gmap.key>
+				<gmap.key>AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs</gmap.key>
 			</properties>
 		</profile>
 	</profiles>

@@ -112,7 +112,9 @@ Caller.prototype.createParcometro = function(tempId, data) {
 			delete tempGeo[tempId];
 			rendererParcometro.render(true, data);
 			rendererParcometro.updateGeo(parcometriGeo[data['id']], data);
-			map.closeInfoWindow();
+			if (infowindow) {
+				infowindow.close();
+			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
@@ -132,7 +134,9 @@ Caller.prototype.editParcometro = function(data) {
 			parcometri[data['id']] = data;
 			rendererParcometro.render(true, data);
 			rendererParcometro.updateGeo(parcometriGeo[data['id']], data);
-			map.closeInfoWindow();
+			if (infowindow) {
+				infowindow.close();
+			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
@@ -147,7 +151,7 @@ Caller.prototype.deleteParcometro = function(areaId, parcometroId) {
 		url : baseUrl + '/rest/parcometro' + "/" + areaId + '/' + parcometroId,
 		success : function(data, textStatus, jqXHR) {
 			if (data) {
-				map.removeOverlay(parcometriGeo[parcometroId]);
+				parcometriGeo[parcometroId].setMap(null);
 				rendererParcometro.render(false, parcometroId);
 				delete parcometri[parcometroId];
 				delete parcometriGeo[parcometroId];
@@ -191,10 +195,11 @@ Caller.prototype.createVia = function(data, tempId) {
 			vie[data['id']] = data;
 			vieGeo[data['id']] = tempGeo[tempId];
 			delete tempGeo[tempId];
-			rendererVia.updatePopup(vieGeo[data['id']], data);
 			rendererVia.updateGeo(vieGeo[data['id']], data);
 			rendererVia.render(true, data);
-			map.closeInfoWindow();
+			if (infowindow) {
+				infowindow.close();
+			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
@@ -209,11 +214,13 @@ Caller.prototype.deleteVia = function(areaId, viaId) {
 		url : baseUrl + '/rest/via' + "/" + areaId + '/' + viaId,
 		success : function(data, textStatus, jqXHR) {
 			if (data) {
-				map.removeOverlay(vieGeo[viaId]);
+				vieGeo[viaId].setMap(null);
 				rendererVia.render(false, viaId);
 				delete vie[viaId];
 				delete vieGeo[viaId];
-				map.closeInfoWindow();
+				if (infowindow) {
+					infowindow.close();
+				}
 			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
@@ -233,9 +240,10 @@ Caller.prototype.editVia = function(data) {
 		success : function(data, textStatus, jqXHR) {
 			vie[data['id']] = data;
 			rendererVia.render(true, data);
-			rendererVia.updatePopup(vieGeo[data['id']], data);
 			rendererVia.updateGeo(vieGeo[data['id']], data);
-			map.closeInfoWindow();
+			if (infowindow) {
+				infowindow.close();
+			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
@@ -275,10 +283,11 @@ Caller.prototype.createZona = function(data, tempId) {
 			zone[data['id']] = data;
 			zoneGeo[data['id']] = tempGeo[tempId];
 			delete tempGeo[tempId];
-			rendererZona.updatePopup(zoneGeo[data['id']], data);
 			rendererZona.updateGeo(zoneGeo[data['id']], data);
 			rendererZona.render(true, data);
-			map.closeInfoWindow();
+			if (infowindow) {
+				infowindow.close();
+			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
@@ -297,9 +306,10 @@ Caller.prototype.editZona = function(data) {
 		success : function(data, textStatus, jqXHR) {
 			zone[data['id']] = data;
 			rendererZona.render(true, data);
-			rendererZona.updatePopup(zoneGeo[data['id']], data);
 			rendererZona.updateGeo(zoneGeo[data['id']], data);
-			map.closeInfoWindow();
+			if (infowindow) {
+				infowindow.close();
+			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
@@ -314,11 +324,13 @@ Caller.prototype.deleteZona = function(zonaId) {
 		url : baseUrl + '/rest/zona' + "/" + zonaId,
 		success : function(data, textStatus, jqXHR) {
 			if (data) {
-				map.removeOverlay(zoneGeo[zonaId]);
+				zoneGeo[zonaId].setMap(null);
 				rendererZona.render(false, zonaId);
 				delete zone[zonaId];
 				delete zoneGeo[zonaId];
-				map.closeInfoWindow();
+				if (infowindow) {
+					infowindow.close();
+				}
 			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
@@ -361,7 +373,9 @@ Caller.prototype.createPuntobici = function(tempId, data) {
 			delete tempGeo[tempId];
 			rendererPuntobici.render(true, data);
 			rendererPuntobici.updateGeo(puntobiciGeo[data['id']], data);
-			map.closeInfoWindow();
+			if (infowindow) {
+				infowindow.close();
+			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
@@ -376,11 +390,13 @@ Caller.prototype.deletePuntobici = function(puntobiciId) {
 		url : baseUrl + '/rest/puntobici/' + puntobiciId,
 		success : function(data, textStatus, jqXHR) {
 			if (data) {
-				map.removeOverlay(puntobiciGeo[puntobiciId]);
+				puntobiciGeo[puntobiciId].setMap(null);
 				rendererPuntobici.render(false, puntobiciId);
 				delete puntobici[puntobiciId];
 				delete puntobiciGeo[puntobiciId];
-				map.closeInfoWindow();
+				if (infowindow) {
+					infowindow.close();
+				}
 			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
@@ -401,7 +417,9 @@ Caller.prototype.editPuntobici = function(data) {
 			puntobici[data['id']] = data;
 			rendererPuntobici.render(true, data);
 			rendererPuntobici.updateGeo(puntobiciGeo[data['id']], data);
-			map.closeInfoWindow();
+			if (infowindow) {
+				infowindow.close();
+			}
 		},
 		error : function(jqXHR, textStatus, errorThrown) {
 		}
