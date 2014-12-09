@@ -9,7 +9,7 @@
 	<properties>
 		<spring.version>3.1.0.RELEASE</spring.version>
 		<spring.data.mongo.version>1.0.1.RELEASE</spring.data.mongo.version>
-		
+        <java.version>1.6</java.version>
 		<app.name>amr-rovereto</app.name>
 	</properties>
 
@@ -125,7 +125,17 @@
 
 	<build>
 		<plugins>
-			<plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerArgument>-proc:none</compilerArgument>
+                </configuration>
+            </plugin>
+		    <plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-surefire-plugin</artifactId>
 				<version>2.6</version>
@@ -166,8 +176,8 @@
     <profile>
       <id>prod</id>
       <properties>
-        <baseUrl>http://vas-dev.smartcampuslab.it/${app.name}</baseUrl>
-        <gmap.key>**INSERT_YOUR_GMAP_KEY**</gmap.key>
+        <baseUrl>http://tn.smartcommunitylab.it/${app.name}</baseUrl>
+        <gmap.key>AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs</gmap.key>
       </properties>
     </profile>
   </profiles>
