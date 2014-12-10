@@ -176,7 +176,7 @@
     <profile>
       <id>prod</id>
       <properties>
-        <baseUrl>http://tn.smartcommunitylab.it/${app.name}</baseUrl>
+        <baseUrl>https://tn.smartcommunitylab.it/${app.name}</baseUrl>
         <gmap.key>AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs</gmap.key>
       </properties>
     </profile>
