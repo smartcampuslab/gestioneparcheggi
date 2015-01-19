@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css"
 	href="lib/jquery/css/jquery.colorpicker.css" />
 <script
-	src="https://maps.google.com/maps?file=api&amp;v=2&amp;key=${gmap.key}"
+    src="//maps.googleapis.com/maps/api/js?&sensor=true"
 	type="text/javascript"></script>
 <script src="lib/jquery/jquery-1.8.2.js" type="text/javascript"></script>
 <script src="lib/jquery/jquery-ui-1.9.1.custom.min.js"
@@ -46,14 +46,15 @@
 
 <script type="text/javascript">
 //admitted values 'area','parcometro','via','zona','puntobici','parcheggioStruttura'
-var elementsInPage = ['puntobici']
-$(document).ready(function(){
-	initializeMap();
-	setupEditorPage(elementsInPage);
-});
+var elementsInPage = [ 'puntobici'];
+var initPage = function() {
+    initializeMap();    
+    setupEditorPage(elementsInPage);
+};
+google.maps.event.addDomListener(window, 'load', initPage);
 </script>
 
-<body  onunload="GUnload()">
+<body>
 <ul id="menu">
 		<li><a href="editing.html">Editor parcheggi</a></li>
 		<li><a href="editing-bike.html">Editor puntobici</a></li>

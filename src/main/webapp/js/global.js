@@ -1,6 +1,7 @@
 var baseUrl = '${baseUrl}';
 var company = 'amr';
 
+var infowindow = null;
 
 var zoomLevel = 15;
 var zoomToLevel = 15;
@@ -103,5 +104,5 @@ function init(){
 	rendererViaFilter = new Renderer_ViaFilter();
 	rendererPuntobici = new Renderer_Puntobici();
 	rendererParcheggiostruttura = new Renderer_Parcheggiostruttura();
-	geocoder = new GClientGeocoder();
+	geocoder = new google.maps.Geocoder();
 }

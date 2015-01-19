@@ -22,9 +22,10 @@ Renderer_Parcometro.prototype.render = function(add, data, container) {
 					.attr('alt', 'dettagli').attr('title', 'dettagli');
 			action.attr('href', '#');
 			action.click(function() {
-				map.setCenter(new GLatLng(data['geometry']['lat'],
+				map.setCenter(new google.maps.LatLng(data['geometry']['lat'],
 						data['geometry']['lng']), zoomToLevel);
-				GEvent.trigger(parcometriGeo[data['id']], 'click');
+				parcometriGeo[data['id']].setMap(map);
+				google.maps.event.trigger(parcometriGeo[data['id']], 'click');
 			});
 			li.append($('<td></td>').attr('width', '16px').append(
 					$('<div></div>')
@@ -80,108 +81,26 @@ Renderer_Parcometro.prototype.render = function(add, data, container) {
 // <li id="#id"><span>Parcometro 1<a href="">dettagli</a></span>
 // </li>
 
-Renderer_Parcometro.prototype.renderPopup = function(modeEdit, data) {
-	var popup = '';
-	if (modeEdit) {
-		var areeCombo = '<select name="parcometro_area">';
-		areeCombo += '<option value=""></option>';
-		$
-				.each(
-						aree,
-						function(key, value) {
-							areeCombo += '<option value="'
-									+ this['id']
-									+ '"'
-									+ ((data['areaId'] != undefined && data['areaId'] == this['id']) ? ' selected="selected"'
-											: '') + '>' + this['name']
-									+ '</option>';
-						});
-		areeCombo += '</select>';
-
-		var status = '<select name="parcometro_status">';
-		status += '<option value=""></option>';
-
-		$
-				.each(
-						parcometroStatus,
-						function(key, value) {
-							status += '<option value="'
-									+ key
-									+ '"'
-									+ ((data['status'] != undefined && data['status'] == key) ? ' selected="selected"'
-											: '') + '>' + value + '</option>';
-						});
-		status += ' </select>';
-
-		popup = parcometroLabels['code']
-				+ ' <label id="parcometro_code_msg" class="errorMsg"></label> <input name="parcometro_code" type="text" value="'
-				+ ((data['code'] != undefined) ? data['code'] : "")
-				+ '"/>'
-				+ '<br/>'
-				+ 'Posizione<br/>'
-				+ data['geometry']['lat']
-				+ ','
-				+ data['geometry']['lng']
-				+ '<br/>'
-				+ parcometroLabels['note']
-				+ ' <label id="parcometro_note_msg" class="errorMsg"></label><textarea class="note" name="parcometro_note" >'
-				+ ((data['note'] != undefined) ? data['note'] : "")
-				+ '</textarea>'
-				+ parcometroLabels['status']
-				+ ' <label id="parcometro_status_msg" class="errorMsg"></label>'
-				+ status + parcometroLabels['areaId']
-				+ ' <label id="parcometro_area_msg" class="errorMsg"></label>'
-				+ areeCombo
-				+ '<input name="parcometro_id" type="hidden" value="'
-				+ ((data['id'] != undefined) ? data['id'] : "") + '"/>'
-				+ '<input name="parcometro_tempId" type="hidden" value="'
-				+ ((data['tempId'] != undefined) ? data['tempId'] : "") + '"/>'
-				+ '<input name="parcometro_areaId" type="hidden" value="'
-				+ ((data['areaId'] != undefined) ? data['areaId'] : "") + '"/>'
-				+ '<input name="parcometro_coord" type="hidden" value="'
-				+ data['geometry']['lat'] + ',' + data['geometry']['lng']
-				+ '"/>'
-				+ '<hr/><a href="#" onclick="saveParcometro();">Salva</a>'
-				+ ' <a href="#" onclick="removeParcometro();">Elimina</a>';
-	} else {
-		popup = '<p class="title-popup">'
-				+ parcometroLabels['code']
-				+ '</p>'
-				+ data['code']
-				+ '<p class="title-popup">Posizione</p>'
-				+ data['geometry']['lat']
-				+ ','
-				+ data['geometry']['lng']
-				+ '<br/>'
-				+ (data['note'] ? '<p class="title-popup">'
-						+ parcometroLabels['note'] + '</p>'
-						+ data['note'].replace(/\n/g, '<br/>') : '')
-				+ '<br/><br/>'
-				+ rendererArea.renderPopupDetails(aree[data['areaId']]);
-	}
-	return popup;
-};
-
 Renderer_Parcometro.prototype.updateGeo = function(marker, data) {
-	map.removeOverlay(marker);
+	marker.setMap(null);
 	data['color'] = aree[data['areaId']]['color'];
-	rendererParcometro.renderGeo(true, data, false);
+	rendererParcometro.renderGeo(false, data, false);
 };
 
 Renderer_Parcometro.prototype.renderGeo = function(modeEdit, data, open) {
-	var icon = new GIcon();
-	icon.image = baseUrl + '/rest/marker/' + company + '/parcometro/'
-			+ ((data['color'] != null) ? data['color'] : defaultMarkerColor);
-	var width = 16;
+	var width =16;
 	var height = 26;
-	icon.shadowSize = new GSize(Math.floor(width * 1.6), height);
-	icon.iconAnchor = new GPoint(width / 2, height);
-	icon.infoWindowAnchor = new GPoint(width / 2, Math.floor(height / 12));
-	var marker = new GMarker(new GLatLng(
-			((data != null) ? data['geometry']['lat'] : lat),
-			((data != null) ? data['geometry']['lng'] : lng)), {
-		draggable : modeEdit,
-		icon : icon
+
+	var position = new google.maps.LatLng(((data != null) ? data['geometry']['lat'] : lat),
+			((data != null) ? data['geometry']['lng'] : lng));
+	var marker = new google.maps.Marker({
+		icon: {
+			url: baseUrl+'/rest/marker/'+company+'/parcometro/'+((data['color'] != null) ? data['color'] : defaultMarkerColor),
+			ancor: new google.maps.Point(width / 2, height)
+		},
+		position: position,
+		draggable: modeEdit,
+		map: map
 	});
 
 	if (data['id'] != null) {
@@ -193,33 +112,136 @@ Renderer_Parcometro.prototype.renderGeo = function(modeEdit, data, open) {
 	}
 
 	if (modeEdit) {
-		GEvent.addListener(marker, 'dragstart', function() {
-			map.closeInfoWindow();
+		google.maps.event.addListener(marker, 'dragstart', function() {
+			if (infowindow) {
+				infowindow.close();
+			}
 		});
 	}
 
-	GEvent.addListener(marker, 'click', function() {
-		marker.openInfoWindowHtml(rendererParcometro.renderPopup(modeEdit,
-				((data['id'] != null) ? parcometri[data['id']] : data)));
+	google.maps.event.addListener(marker, 'click', function() {
+		rendererParcometro.popup(modeEdit, (data['id'] != null) ? parcometri[data['id']] : data, marker);
 	});
 
 	if (modeEdit) {
-		GEvent.addListener(marker, "dragend", function() {
+		google.maps.event.addListener(marker, "dragend", function() {
 			var info;
 			if (data['id'] != null) {
 				info = parcometri[data['id']];
 			} else {
 				info = data;
 			}
-			info['geometry']['lat'] = marker.getLatLng().lat();
-			info['geometry']['lng'] = marker.getLatLng().lng();
-			GEvent.trigger(marker, 'click');
+			info['geometry']['lat'] = marker.position.lat();
+			info['geometry']['lng'] = marker.position.lng();
+			google.maps.event.trigger(marker, 'click');
 		});
 	}
 
-	map.addOverlay(marker);
-
 	if (open) {
-		GEvent.trigger(marker, 'click');
+		google.maps.event.trigger(marker, 'click');
 	}
 };
+
+Renderer_Parcometro.prototype.updatePopup = function(modeEdit, data) {
+	if (!!infowindow) {
+		rendererParcometro.popup(modeEdit, data, infowindow.getPosition());
+	}
+};
+
+Renderer_Parcometro.prototype.popup = function(modeEdit, data, marker) {
+	var renderPopup = function(modeEdit, data) {
+		var popup = '';
+		if (modeEdit) {
+			var areeCombo = '<select name="parcometro_area">';
+			areeCombo += '<option value=""></option>';
+			$
+					.each(
+							aree,
+							function(key, value) {
+								areeCombo += '<option value="'
+										+ this['id']
+										+ '"'
+										+ ((data['areaId'] != undefined && data['areaId'] == this['id']) ? ' selected="selected"'
+												: '') + '>' + this['name']
+										+ '</option>';
+							});
+			areeCombo += '</select>';
+
+			var status = '<select name="parcometro_status">';
+			status += '<option value=""></option>';
+
+			$
+					.each(
+							parcometroStatus,
+							function(key, value) {
+								status += '<option value="'
+										+ key
+										+ '"'
+										+ ((data['status'] != undefined && data['status'] == key) ? ' selected="selected"'
+												: '') + '>' + value + '</option>';
+							});
+			status += ' </select>';
+
+			popup = '<div style="width:200px;">'
+					+ parcometroLabels['code']+' <label id="parcometro_code_msg" class="errorMsg"></label> <input name="parcometro_code" type="text" value="'
+					+ ((data['code'] != undefined) ? data['code'] : "")
+					+ '"/>'
+					+ '<br/>'
+					+ 'Posizione<br/>'
+					+ data['geometry']['lat']
+					+ ','
+					+ data['geometry']['lng']
+					+ '<br/>'
+					+ parcometroLabels['note']
+					+ ' <label id="parcometro_note_msg" class="errorMsg"></label><textarea class="note" name="parcometro_note" >'
+					+ ((data['note'] != undefined) ? data['note'] : "")
+					+ '</textarea>'
+					+ parcometroLabels['status']
+					+ ' <label id="parcometro_status_msg" class="errorMsg"></label>'
+					+ status + parcometroLabels['areaId']
+					+ ' <label id="parcometro_area_msg" class="errorMsg"></label>'
+					+ areeCombo
+					+ '<input name="parcometro_id" type="hidden" value="'
+					+ ((data['id'] != undefined) ? data['id'] : "") + '"/>'
+					+ '<input name="parcometro_tempId" type="hidden" value="'
+					+ ((data['tempId'] != undefined) ? data['tempId'] : "") + '"/>'
+					+ '<input name="parcometro_areaId" type="hidden" value="'
+					+ ((data['areaId'] != undefined) ? data['areaId'] : "") + '"/>'
+					+ '<input name="parcometro_coord" type="hidden" value="'
+					+ data['geometry']['lat'] + ',' + data['geometry']['lng']
+					+ '"/>'
+					+ '<hr/><a href="#" onclick="saveParcometro();">Salva</a>'
+					+ ' <a href="#" onclick="removeParcometro();">Elimina</a>'
+					+ '</div>';
+		} else {
+			popup = '<div style="width:200px;">'
+					+ '<p class="title-popup">'+parcometroLabels['code']+'</p>'
+					+ data['code']
+					+ '<p class="title-popup">Posizione</p>'
+					+ data['geometry']['lat']
+					+ ','
+					+ data['geometry']['lng']
+					+ '<br/>'
+					+ (data['note'] ? '<p class="title-popup">'
+							+ parcometroLabels['note'] + '</p>'
+							+ data['note'].replace(/\n/g, '<br/>') : '')
+					+ '<br/><br/>'
+					+ rendererArea.renderPopupDetails(aree[data['areaId']])
+					+ '</div><input name="parcometro_id" type="hidden" value="'
+					+ ((data['id'] != undefined) ? data['id'] : "")
+					+ '"/>'
+					+ '<hr/><a href="#" onclick="editParcometro();">Modifica</a>'
+					+ '</div>';
+		}
+		return popup;
+	};
+	
+	if (!!infowindow) {
+		infowindow.close();
+	}
+	infowindow = new google.maps.InfoWindow(
+		      { 
+		    	  content: renderPopup(modeEdit, data)
+		      });
+	infowindow.open(map, marker);
+};	

@@ -14,7 +14,7 @@
 <link rel="stylesheet" type="text/css"
 	href="lib/jquery/css/jquery.colorpicker.css" />
 <script
-	src="https://maps.google.com/maps?file=api&amp;v=2&amp;key=${gmap.key}"
+	src="//maps.googleapis.com/maps/api/js?&libraries=drawing&sensor=true"
 	type="text/javascript"></script>
 <script src="lib/jquery/jquery-1.8.2.js" type="text/javascript"></script>
 <script src="lib/jquery/jquery-ui-1.9.1.custom.min.js"
@@ -48,16 +48,17 @@
 </head>
 
 <script type="text/javascript">
-//admitted values 'area','parcometro','via','zona','puntobici','parcheggioStruttura'
-var elementsInPage = [ 'area','via','parcometro','parcheggioStruttura'];
-	$(document).ready(function() {
-		initializeMap();
+	//admitted values 'area','parcometro','via','zona','puntobici','parcheggioStruttura'
+	var elementsInPage = [ 'area','via','parcometro','parcheggioStruttura'];
+	var initPage = function() {
+		initializeMap();	
 		setupEditorPage(elementsInPage);
-	});
+	};
+	google.maps.event.addDomListener(window, 'load', initPage);
 </script>
 
 
-<body onunload="GUnload()">
+<body>
 	<ul id="menu">
 		<li><a href="editing.html">Editor parcheggi</a></li>
 		<li><a href="editing-bike.html">Editor puntobici</a></li>
@@ -149,10 +150,10 @@ var elementsInPage = [ 'area','via','parcometro','parcheggioStruttura'];
 				resizable : false,
 				buttons : {},
 				open : function() {
-					map.disableScrollWheelZoom();
+					map.setOptions({scrollwheel:false});;
 				},
 				close : function() {
-					map.enableScrollWheelZoom();
+					map.setOptions({scrollwheel:true});
 				}
 			});
 
@@ -171,12 +172,10 @@ var elementsInPage = [ 'area','via','parcometro','parcheggioStruttura'];
 					}
 				},
 				open : function() {
-// 					rendererArea.editGeometryMode(true);
-					map.disableScrollWheelZoom();
+					map.setOptions({scrollwheel:false});;
 				},
 				close : function() {
-					map.enableScrollWheelZoom();
-// 					rendererArea.editGeometryMode(false);
+					map.setOptions({scrollwheel:true});
 					rendererArea.closeDialog();
 					resetToolbar();
 				}
@@ -199,10 +198,10 @@ var elementsInPage = [ 'area','via','parcometro','parcheggioStruttura'];
 					}
 				},
 				open : function() {
-					map.disableScrollWheelZoom();
+					map.setOptions({scrollwheel:false});;
 				},
 				close : function() {
-					map.enableScrollWheelZoom();
+					map.setOptions({scrollwheel:true});
 				}
 			});
 
@@ -223,10 +222,10 @@ var elementsInPage = [ 'area','via','parcometro','parcheggioStruttura'];
 					}
 				},
 				open : function() {
-					map.disableScrollWheelZoom();
+					map.setOptions({scrollwheel:false});;
 				},
 				close : function() {
-					map.enableScrollWheelZoom();
+					map.setOptions({scrollwheel:true});
 				}
 			});
 
@@ -239,10 +238,10 @@ var elementsInPage = [ 'area','via','parcometro','parcheggioStruttura'];
 						$(this).dialog("close");
 					},
 					open : function() {
-						map.disableScrollWheelZoom();
+						map.setOptions({scrollwheel:false});;
 					},
 					close : function() {
-						map.enableScrollWheelZoom();
+						map.setOptions({scrollwheel:true});
 					}
 				}
 			});
