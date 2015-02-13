@@ -1,0 +1,81 @@
+package it.smartcommunitylab.parking.management.web.bean;
+
+import java.io.Serializable;
+import java.util.List;
+
+public class RateAreaBean implements Serializable {
+	private static final long serialVersionUID = -3932473344785941029L;
+	private String id;
+	private String id_app;
+	private String name;
+	private Float fee;
+	private String timeSlot;
+	private String smsCode;
+	private String color;
+	private List<PolygonBean> geometry;
+
+	public String getId() {
+		return id;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public String getId_app() {
+		return id_app;
+	}
+
+	public void setId_app(String id_app) {
+		this.id_app = id_app;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public Float getFee() {
+		return fee;
+	}
+
+	public void setFee(Float fee) {
+		this.fee = fee;
+	}
+
+	public String getTimeSlot() {
+		return timeSlot;
+	}
+
+	public void setTimeSlot(String timeSlot) {
+		this.timeSlot = timeSlot;
+	}
+
+	public String getSmsCode() {
+		return smsCode;
+	}
+
+	public void setSmsCode(String smsCode) {
+		this.smsCode = smsCode;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public List<PolygonBean> getGeometry() {
+		return geometry;
+	}
+
+	public void setGeometry(List<PolygonBean> geometry) {
+		this.geometry = geometry;
+	}
+
+}

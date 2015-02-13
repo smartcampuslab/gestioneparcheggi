@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<!--
+ Copyright 2008 Google Inc. 
+ Licensed under the Apache License, Version 2.0: 
+ http://www.apache.org/licenses/LICENSE-2.0 
+ -->
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<title>AMR  - Mappa parcheggi</title>
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css"
+	href="lib/jquery/css/redmond/jquery-ui-1.9.1.custom.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="lib/jquery/css/jquery.colorpicker.css" />
+<script
+    src="//maps.googleapis.com/maps/api/js?&sensor=true"
+	type="text/javascript"></script>
+<script src="lib/jquery/jquery-1.8.2.js" type="text/javascript"></script>
+<script src="lib/jquery/jquery-ui-1.9.1.custom.min.js"
+	type="text/javascript"></script>
+<script src="lib/jquery/jquery.colorpicker.js" type="text/javascript"></script>
+<script src="lib/jquery/i18n/jquery.ui.colorpicker-it.js"></script>
+<script src="lib/json2.js" type="text/javascript"></script>
+<script src="lib/mapiconmaker.js" type="text/javascript"></script>
+
+<script src="js/caller.js" type="text/javascript"></script>
+<script src="js/renderer/areaLabels.js" type="text/javascript"></script>
+<script src="js/renderer/area.js" type="text/javascript"></script>
+<script src="js/renderer/puntobici.js" type="text/javascript"></script>
+<script src="js/renderer/parcometroLabels.js" type="text/javascript"></script>
+<script src="js/renderer/parcometro.js" type="text/javascript"></script>
+<script src="js/renderer/parcometroFilter.js" type="text/javascript"></script>
+<script src="js/renderer/viaLabels.js" type="text/javascript"></script>
+<script src="js/renderer/via.js" type="text/javascript"></script>
+<script src="js/renderer/viaFilter.js" type="text/javascript"></script>
+<script src="js/renderer/zona.js" type="text/javascript"></script>
+<script src="js/renderer/parcheggiostrutturaLabels.js" type="text/javascript"></script>
+<script src="js/renderer/parcheggiostruttura.js" type="text/javascript"></script>
+<script src="js/global.js" type="text/javascript"></script>
+
+<script src="js/editor.js" type="text/javascript"></script>
+
+</head>
+
+<script type="text/javascript">
+google.maps.event.addDomListener(window, 'load', initializeMap);
+//admitted values 'area','parcometro','via','zona','puntobici','parcheggioStruttura'
+var elementsInPage= ['via','parcometro','parcheggioStruttura','area','puntobici'];
+var activeElements = ['area','via','parcometro'];
+
+var initPage = function() {
+//    initializeMap();    
+    setupFrontendPage(elementsInPage);
+    populate(false,activeElements);
+};
+google.maps.event.addDomListener(window, 'load', initPage);
+</script>
+
+<body>
+<div id="toc">
+
+<div  style="width=100%;text-align:center;margin:1em 1em 1em 1em;"><a href="rest/export">Scarica dati</a></div>
+<div style="width=100%;text-align:center;margin:1em 1em 0.2em 1em;"><img src="imgs/opendata.png" alt="opendata"/></div>
+<div style="width=100%;text-align:center;margin:0.2em 1em 1em 1em;"><a href="http://creativecommons.org/licenses/by/2.5/it" target="_blank"><img src="imgs/license.png" alt="license"/></a></div>
+</div>
+	<div id="map"></div>
+
+</body>
+</html>
+
+
