@@ -33,20 +33,12 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 @Service("storageManager")
-public class StorageManager {
+public class DynamicManager {
 
-	private static final Logger logger = Logger.getLogger(StorageManager.class);
+	private static final Logger logger = Logger.getLogger(DynamicManager.class);
 
 	@Autowired
 	private MongoTemplate mongodb;
-
-	public RateAreaBean save(RateAreaBean a) {
-		RateArea area = ModelConverter.convert(a, RateArea.class);
-		area = processId(area, RateArea.class);
-		mongodb.save(area);
-		a.setId(area.getId());
-		return a;
-	}
 
 	public RateAreaBean editArea(RateAreaBean a) throws NotFoundException {
 		RateArea area = findById(a.getId(), RateArea.class);
@@ -77,6 +69,7 @@ public class StorageManager {
 		bici.setBikeNumber(pb.getBikeNumber());
 		bici.getGeometry().setLat(pb.getGeometry().getLat());
 		bici.getGeometry().setLng(pb.getGeometry().getLng());
+		bici.setLastChange(System.currentTimeMillis());
 		mongodb.save(bici);
 		return pb;
 	}
@@ -198,26 +191,6 @@ public class StorageManager {
 		return null;
 	}
 
-	public boolean removeParkingMeter(String areaId, String parcometroId) {
-		RateArea area = mongodb.findById(areaId, RateArea.class);
-		ParkingMeter p = new ParkingMeter();
-		p.setId(parcometroId);
-		boolean result = area.getParkingMeters() != null
-				&& area.getParkingMeters().remove(p);
-		if (result) {
-			mongodb.save(area);
-			logger.info(String.format(
-					"Success removing parcometro %s of area %s", parcometroId,
-					areaId));
-		} else {
-			logger.warn(String.format(
-					"Failure removing parcometro %s of area %s", parcometroId,
-					areaId));
-		}
-
-		return result;
-	}
-
 	public ParkingMeterBean editParkingMeter(ParkingMeterBean pb)
 			throws DatabaseException {
 		RateArea area = mongodb.findById(pb.getAreaId(), RateArea.class);
@@ -236,34 +209,8 @@ public class StorageManager {
 				}
 			}
 		}
-		if (!founded) {
-			ParkingMeterBean todel = findParkingMeter(pb.getId());
-			if (todel != null) {
-				removeParkingMeter(todel.getAreaId(), pb.getId());
-			}
-			pb = save(pb);
-		}
+		
 		return pb;
-	}
-
-	public ParkingMeterBean save(ParkingMeterBean p) throws DatabaseException {
-		ParkingMeter parcometro = ModelConverter.convert(p, ParkingMeter.class);
-		parcometro = processId(parcometro, ParkingMeter.class);
-		try {
-			RateArea area = findById(p.getAreaId(), RateArea.class);
-			if (area.getParkingMeters() == null) {
-				area.setParkingMeters(new ArrayList<ParkingMeter>());
-			}
-			// TODO check if parcometro is already present
-			area.getParkingMeters().add(parcometro);
-			mongodb.save(area);
-			p.setId(parcometro.getId());
-			return p;
-		} catch (NotFoundException e) {
-			logger.error("Exception saving parcometro, relative area not found");
-			throw new DatabaseException();
-		}
-
 	}
 
 	public StreetBean editStreet(StreetBean vb) throws DatabaseException {
@@ -287,6 +234,14 @@ public class StorageManager {
 								.add(ModelConverter.convert(pb, Point.class));
 					}
 					temp.setZones(vb.getZoneBeanToZone());
+					// Dynamic updates
+					temp.setFreeParkSlotOccupied(vb.getFreeParkSlotOccupied());
+					temp.setFreeParkSlotSignOccupied(vb.getFreeParkSlotSignOccupied());
+					temp.setHandicappedSlotOccupied(vb.getHandicappedSlotOccupied());
+					temp.setTimedParkSlotOccupied(vb.getTimedParkSlotOccupied());
+					temp.setPaidSlotOccupied(vb.getPaidSlotOccupied());
+					temp.setLastChange(System.currentTimeMillis());
+					
 					mongodb.save(area);
 					founded = true;
 					break;
@@ -294,32 +249,7 @@ public class StorageManager {
 			}
 		}
 
-		if (!founded) {
-			StreetBean todel = findStreet(vb.getId());
-			if (todel != null) {
-				removeStreet(todel.getRateAreaId(), vb.getId());
-			}
-			vb = save(vb);
-		}
-
 		return vb;
-	}
-
-	public boolean removeStreet(String areaId, String viaId) {
-		RateArea area = mongodb.findById(areaId, RateArea.class);
-		Street v = new Street();
-		v.setId(viaId);
-		boolean result = area.getStreets() != null && area.getStreets().remove(v);
-		if (result) {
-			mongodb.save(area);
-			logger.info(String.format("Success removing via %s of area %s",
-					viaId, areaId));
-		} else {
-			logger.warn(String.format("Failure removing via %s of area %s",
-					viaId, areaId));
-		}
-
-		return result;
 	}
 
 	public StreetBean save(StreetBean s) throws DatabaseException {

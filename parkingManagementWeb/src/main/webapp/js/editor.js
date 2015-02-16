@@ -174,6 +174,7 @@ function saveArea() {
 	resetAreaMsgs();
 	var area = {};
 	area['id'] = $('input[name="area_id"]').val();
+	area['id_app'] = 'rv';
 	area['name'] = $('input[name="area_nome"]').val();
 	area['fee'] = $('input[name="area_tariffa"]').val();
 	area['smsCode'] = $('input[name="area_codice-sms"]').val();

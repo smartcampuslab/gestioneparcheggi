@@ -141,11 +141,11 @@ public class ParkingStructureBean {
 		this.paymentMode = paymentMode;
 	}
 
-	public long getLastChange() {
+	public Long getLastChange() {
 		return lastChange;
 	}
 
-	public void setLastChange(long lastChange) {
+	public void setLastChange(Long lastChange) {
 		this.lastChange = lastChange;
 	}
 

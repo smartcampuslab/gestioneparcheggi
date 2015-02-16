@@ -1,5 +1,8 @@
 package it.smartcommunitylab.parking.management.web.bean;
 
+import it.smartcommunitylab.parking.management.web.model.Zone;
+
+import java.util.ArrayList;
 import java.util.List;
 
 public class StreetBean {
@@ -17,11 +20,12 @@ public class StreetBean {
 	private Integer freeParkSlotSignOccupied;
 	private Integer paidSlotNumber;
 	private Integer paidSlotOccupied;
+	private Integer unusuableSlotNumber;
 	private boolean subscritionAllowedPark;
 	private String rateAreaId;
 	private LineBean geometry;
 	private String color;
-	private List<String> zones;	//List with the id of the associated zone
+	private List<ZoneBean> zones;	//List with the id of the associated zone
 	private Long lastChange;
 
 	public String getId() {
@@ -136,7 +140,7 @@ public class StreetBean {
 		return paidSlotOccupied;
 	}
 
-	public List<String> getZones() {
+	public List<ZoneBean> getZoneBeans() {
 		return zones;
 	}
 
@@ -176,12 +180,40 @@ public class StreetBean {
 		this.paidSlotOccupied = paidSlotOccupied;
 	}
 
-	public void setZones(List<String> zones) {
+	public void setZoneBeans(List<ZoneBean> zones) {
 		this.zones = zones;
 	}
 
 	public void setLastChange(Long lastChange) {
 		this.lastChange = lastChange;
 	}
+	
+	
+	
+	public Integer getUnusuableSlotNumber() {
+		return unusuableSlotNumber;
+	}
 
+	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
+		this.unusuableSlotNumber = unusuableSlotNumber;
+	}
+
+	public List<Zone> getZoneBeanToZone(){
+		List<Zone> zons = new ArrayList<Zone>();
+		if(this.zones != null){
+			for(int i = 0; i < this.zones.size(); i++){
+				Zone z = new Zone();
+				z.setId(this.zones.get(i).getId());
+				z.setId_app(this.zones.get(i).getId_app());
+				z.setName(this.zones.get(i).getName());
+				z.setNote(this.zones.get(i).getNote());
+				z.setColor(this.zones.get(i).getColor());
+				z.setSubmacro(this.zones.get(i).getSubmacro());
+				z.setGeometry(this.zones.get(i).getGeometryObj());
+				zons.add(z);
+			}
+		}
+		return zons;
+	}
+	
 }

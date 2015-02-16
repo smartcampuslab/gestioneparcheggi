@@ -19,7 +19,7 @@
 
 	<!-- Scan controllers in this package -->
 	<context:component-scan
-		base-package="it.smartcampuslab.tm" />
+		base-package="it.smartcommunitylab.parking.management.web" />
 
 	<context:property-placeholder location="classpath:tm.properties" />
 

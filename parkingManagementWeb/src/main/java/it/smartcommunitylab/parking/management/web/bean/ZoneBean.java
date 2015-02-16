@@ -1,5 +1,7 @@
 package it.smartcommunitylab.parking.management.web.bean;
 
+import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
+
 public class ZoneBean {
 	private String id;
 	private String id_app;
@@ -63,6 +65,15 @@ public class ZoneBean {
 
 	public void setSubmacro(String submacro) {
 		this.submacro = submacro;
+	}
+	
+	public Polygon getGeometryObj() {
+		
+		Polygon pol = new Polygon();
+		if(this.geometry != null){
+			pol.setPoints(geometry.getPointObjs());
+		}
+		return pol;
 	}
 
 }
