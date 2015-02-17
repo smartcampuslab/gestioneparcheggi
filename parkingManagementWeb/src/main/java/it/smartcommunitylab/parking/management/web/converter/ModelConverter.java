@@ -1,6 +1,12 @@
 package it.smartcommunitylab.parking.management.web.converter;
 
+import it.smartcommunitylab.parking.management.web.bean.LineBean;
+import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentMode;
+import it.smartcommunitylab.parking.management.web.model.RateArea;
+import it.smartcommunitylab.parking.management.web.model.Street;
+import it.smartcommunitylab.parking.management.web.model.Zone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -55,6 +61,44 @@ public class ModelConverter {
 			}
 		}
 		return result;
+	}
+	
+	/**
+	 * Method toStreetBean: used to transform a Street object in a StreetBean object
+	 * @param area
+	 * @param s
+	 * @return
+	 */
+	public static StreetBean toStreetBean(RateArea area, Street s){
+		StreetBean sb = new StreetBean();
+		sb.setId(s.getId());
+		sb.setId_app(s.getId_app());
+		sb.setStreetReference(s.getStreetReference());
+		sb.setSlotNumber(s.getSlotNumber());
+		sb.setFreeParkSlotNumber(s.getFreeParkSlotNumber());
+		sb.setFreeParkSlotOccupied(s.getFreeParkSlotOccupied());
+		sb.setFreeParkSlotSignNumber(s.getFreeParkSlotSignNumber());
+		sb.setFreeParkSlotSignOccupied(s.getFreeParkSlotSignOccupied());
+		sb.setHandicappedSlotNumber(s.getHandicappedSlotNumber());
+		sb.setHandicappedSlotOccupied(s.getHandicappedSlotOccupied());
+		sb.setPaidSlotNumber(s.getPaidSlotNumber());
+		sb.setPaidSlotOccupied(s.getPaidSlotOccupied());
+		sb.setTimedParkSlotNumber(s.getTimedParkSlotNumber());
+		sb.setTimedParkSlotOccupied(s.getTimedParkSlotOccupied());
+		sb.setUnusuableSlotNumber(s.getUnusuableSlotNumber());
+		sb.setLastChange(s.getLastChange());
+		sb.setRateAreaId(area.getId());
+		sb.setColor(area.getColor());
+		sb.setGeometry(convert(s.getGeometry(), LineBean.class));
+		sb.setSubscritionAllowedPark(s.isSubscritionAllowedPark());
+		List<Zone> zones = s.getZones();
+		List<ZoneBean> zoneBeans = new ArrayList<ZoneBean>();
+		for(Zone z : zones){
+			ZoneBean zon = convert(z, ZoneBean.class);
+			zoneBeans.add(zon);
+		}
+		sb.setZoneBeans(zoneBeans);
+		return sb;
 	}
 
 }

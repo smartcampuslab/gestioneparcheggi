@@ -148,5 +148,22 @@ public class ParkingStructureBean {
 	public void setLastChange(Long lastChange) {
 		this.lastChange = lastChange;
 	}
+	
+	public String toJSON(){
+		String json = "{";
+		json += "\"id\":\"" + getId() + "\",";
+		json += "\"id_app\":\"" + getId_app() + "\",";
+		json += "\"name\":\"" + getName() + "\",";
+		json += "\"streetReference\":\"" + getStreetReference() + "\",";
+		json += "\"geometry\":\"" + getGeometry() + "\",";
+		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
+		json += "\"slotOccupied\":\"" + getSlotOccupied() + "\",";
+		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
+		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"lastChange\":\"" + getLastChange() + "\",";
+		json += "}";
+		return json;
+	}
 
 }

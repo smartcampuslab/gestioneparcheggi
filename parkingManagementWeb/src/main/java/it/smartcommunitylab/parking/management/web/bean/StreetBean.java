@@ -215,5 +215,26 @@ public class StreetBean {
 		}
 		return zons;
 	}
+
+	@Override
+	public String toString() {
+		return "StreetBean [id=" + id + ", id_app=" + id_app
+				+ ", streetReference=" + streetReference + ", slotNumber="
+				+ slotNumber + ", handicappedSlotNumber="
+				+ handicappedSlotNumber + ", handicappedSlotOccupied="
+				+ handicappedSlotOccupied + ", timedParkSlotNumber="
+				+ timedParkSlotNumber + ", timedParkSlotOccupied="
+				+ timedParkSlotOccupied + ", freeParkSlotNumber="
+				+ freeParkSlotNumber + ", freeParkSlotOccupied="
+				+ freeParkSlotOccupied + ", freeParkSlotSignNumber="
+				+ freeParkSlotSignNumber + ", freeParkSlotSignOccupied="
+				+ freeParkSlotSignOccupied + ", paidSlotNumber="
+				+ paidSlotNumber + ", paidSlotOccupied=" + paidSlotOccupied
+				+ ", unusuableSlotNumber=" + unusuableSlotNumber
+				+ ", subscritionAllowedPark=" + subscritionAllowedPark
+				+ ", rateAreaId=" + rateAreaId + ", geometry=" + geometry
+				+ ", color=" + color + ", zones=" + zones + ", lastChange="
+				+ lastChange + "]";
+	}
 	
 }

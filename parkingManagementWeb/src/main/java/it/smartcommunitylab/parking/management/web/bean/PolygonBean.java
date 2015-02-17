@@ -18,11 +18,13 @@ public class PolygonBean {
 	
 	public List<Point> getPointObjs(){
 		List<Point> pts = new ArrayList<Point>();
-		for(int i = 0; i < points.size(); i++){
-			Point p = new Point();
-			p.setLat(points.get(i).getLat());
-			p.setLng(points.get(i).getLng());
-			pts.add(p);
+		if(points != null){
+			for(int i = 0; i < points.size(); i++){
+				Point p = new Point();
+				p.setLat(points.get(i).getLat());
+				p.setLng(points.get(i).getLng());
+				pts.add(p);
+			}
 		}
 		return pts;
 	}

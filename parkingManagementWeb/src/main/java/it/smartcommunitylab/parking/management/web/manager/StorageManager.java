@@ -40,6 +40,7 @@ public class StorageManager {
 	@Autowired
 	private MongoTemplate mongodb;
 
+	// RateArea Methods
 	public RateAreaBean save(RateAreaBean a) {
 		RateArea area = ModelConverter.convert(a, RateArea.class);
 		area = processId(area, RateArea.class);
@@ -69,18 +70,6 @@ public class StorageManager {
 		return a;
 	}
 
-	public BikePointBean editBikePoint(BikePointBean pb)
-			throws NotFoundException {
-		BikePoint bici = findById(pb.getId(), BikePoint.class);
-		bici.setName(pb.getName());
-		bici.setSlotNumber(pb.getSlotNumber());
-		bici.setBikeNumber(pb.getBikeNumber());
-		bici.getGeometry().setLat(pb.getGeometry().getLat());
-		bici.getGeometry().setLng(pb.getGeometry().getLng());
-		mongodb.save(bici);
-		return pb;
-	}
-
 	public List<RateAreaBean> getAllArea() {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
 		for (RateArea a : mongodb.findAll(RateArea.class)) {
@@ -88,7 +77,15 @@ public class StorageManager {
 		}
 		return result;
 	}
+	
+	public boolean removeArea(String areaId) {
+		Criteria crit = new Criteria();
+		crit.and("id").is(areaId);
+		mongodb.remove(Query.query(crit), RateArea.class);
+		return true;
+	}
 
+	// ParkingMeter Methods
 	public List<ParkingMeterBean> getAllParkingMeters() {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 
@@ -114,72 +111,7 @@ public class StorageManager {
 		}
 		return result;
 	}
-
-	public List<StreetBean> getAllStreets() {
-		List<StreetBean> result = new ArrayList<StreetBean>();
-
-		for (RateAreaBean temp : getAllArea()) {
-			result.addAll(getAllStreets(temp));
-		}
-
-		return result;
-	}
-
-	public List<StreetBean> getAllStreets(RateAreaBean ab) {
-		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
-		List<StreetBean> result = new ArrayList<StreetBean>();
-
-		if (area.getStreets() != null) {
-			for (Street tmp : area.getStreets()) {
-				StreetBean v = ModelConverter.convert(tmp, StreetBean.class);
-				v.setRateAreaId(ab.getId());
-				v.setColor(area.getColor());
-				result.add(v);
-			}
-		}
-		return result;
-	}
 	
-	public List<StreetBean> getAllStreets(ZoneBean z) {
-		//RateArea area = mongodb.findById(ab.getId(), RateArea.class);
-		List<RateArea> areas = mongodb.findAll(RateArea.class);
-		List<StreetBean> result = new ArrayList<StreetBean>();
-		
-		for(RateArea area : areas){
-			if (area.getStreets() != null) {
-				for (Street tmp : area.getStreets()) {
-					List<Zone> zones = tmp.getZones();
-					StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
-					for(Zone zona : zones){
-						if((zona.getId().compareTo(z.getId()) == 0) && (zona.getId_app().compareTo(z.getId_app()) == 0)){
-							s.setColor(z.getColor());
-							result.add(s);
-						}
-					}
-				}
-			}
-		}
-		return result;
-	}
-
-	public StreetBean findStreet(String parcometroId) {
-		List<RateArea> aree = mongodb.findAll(RateArea.class);
-		Street v = new Street();
-		for (RateArea area : aree) {
-			if (area.getStreets() != null) {
-				v.setId(parcometroId);
-				int index = area.getStreets().indexOf(v);
-				if (index != -1) {
-					StreetBean result = ModelConverter.convert(
-							area.getStreets().get(index), StreetBean.class);
-					result.setRateAreaId(area.getId());
-					return result;
-				}
-			}
-		}
-		return null;
-	}
-
 	public ParkingMeterBean findParkingMeter(String parcometroId) {
 		List<RateArea> aree = mongodb.findAll(RateArea.class);
 		ParkingMeter p = new ParkingMeter();
@@ -192,6 +124,27 @@ public class StorageManager {
 							.getParkingMeters().get(index), ParkingMeterBean.class);
 					result.setAreaId(area.getId());
 					return result;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Method findParkingMeterByCode: used to find a ParkingMeterBean object using the code
+	 * @param code: code of the parkingMeter to find
+	 * @return ParkingMeterBean object found;
+	 */
+	public ParkingMeterBean findParkingMeterByCode(Integer code) {
+		List<RateArea> aree = mongodb.findAll(RateArea.class);
+		for (RateArea area : aree) {
+			if (area.getParkingMeters() != null) {
+				for(ParkingMeter pm : area.getParkingMeters()){
+					if(pm.getCode().compareTo(code) == 0){
+						ParkingMeterBean result = ModelConverter.convert(pm, ParkingMeterBean.class);
+						result.setAreaId(area.getId());
+						return result;
+					}
 				}
 			}
 		}
@@ -266,6 +219,133 @@ public class StorageManager {
 
 	}
 
+	// Street Methods
+	public List<StreetBean> getAllStreets() {
+		List<StreetBean> result = new ArrayList<StreetBean>();
+
+		for (RateAreaBean temp : getAllArea()) {
+			result.addAll(getAllStreets(temp));
+		}
+
+		return result;
+	}
+
+	/**
+	 * Method getAllStreets(filter by rateArea)
+	 * @param ab: rateArea where find the streets
+	 * @return List of StreetBean in the specific area
+	 */
+	public List<StreetBean> getAllStreets(RateAreaBean ab) {
+		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
+		List<StreetBean> result = new ArrayList<StreetBean>();
+
+		if (area.getStreets() != null) {
+			for (Street tmp : area.getStreets()) {
+				StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
+				s.setRateAreaId(ab.getId());
+				s.setColor(area.getColor());
+				result.add(s);
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Method getAllStreets(filter by zone)
+	 * @param z: zone where find the streets
+	 * @return List of StreetBean in the specific zone
+	 */
+	public List<StreetBean> getAllStreets(ZoneBean z) {
+		//RateArea area = mongodb.findById(ab.getId(), RateArea.class);
+		List<RateArea> areas = mongodb.findAll(RateArea.class);
+		List<StreetBean> result = new ArrayList<StreetBean>();
+		
+		for(RateArea area : areas){
+			if (area.getStreets() != null) {
+				for (Street tmp : area.getStreets()) {
+					List<Zone> zones = tmp.getZones();
+					StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
+					for(Zone zona : zones){
+						if((zona.getId().compareTo(z.getId()) == 0) && (zona.getId_app().compareTo(z.getId_app()) == 0)){
+							s.setColor(z.getColor());
+							result.add(s);
+						}
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Method getAllStreets(filter by rateArea and zone)
+	 * @param ab: rateArea where find the streets
+	 * @param z: zone where find the streets
+	 * @return List of StreetBean in the specific area and zone
+	 */
+	public List<StreetBean> getAllStreets(RateAreaBean ab, ZoneBean z) {
+		//RateArea area = mongodb.findById(ab.getId(), RateArea.class);
+		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
+		List<StreetBean> result = new ArrayList<StreetBean>();
+		
+		if (area.getStreets() != null) {
+			for (Street tmp : area.getStreets()) {
+				List<Zone> zones = tmp.getZones();
+				StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
+				for(Zone zona : zones){
+					if((zona.getId().compareTo(z.getId()) == 0) && (zona.getId_app().compareTo(z.getId_app()) == 0)){
+						s.setColor(z.getColor());
+						result.add(s);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
+	public StreetBean findStreet(String parkingMeterId) {
+		List<RateArea> aree = mongodb.findAll(RateArea.class);
+		Street s = new Street();
+		for (RateArea area : aree) {
+			if (area.getStreets() != null) {
+				s.setId(parkingMeterId);
+				int index = area.getStreets().indexOf(s);
+				if (index != -1) {
+					Street st = area.getStreets().get(index);
+					StreetBean result = ModelConverter.toStreetBean(area, st);
+					//StreetBean result = ModelConverter.convert(area.getStreets().get(index), StreetBean.class);
+					//result.setRateAreaId(area.getId());
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+	
+	/**
+	 * Method findStreetByName: find a list of street with the specific street reference
+	 * @param referencedStreet: name of the street referenced
+	 * @return List of street found
+	 */
+	public List<StreetBean> findStreetByName(String referencedStreet) {
+		List<StreetBean> result = new ArrayList<StreetBean>();
+		List<RateArea> aree = mongodb.findAll(RateArea.class);
+		for (RateArea area : aree) {
+			if (area.getStreets() != null) {
+				List<Street> streets = area.getStreets();
+				for(Street street : streets){
+					if(street.getStreetReference().compareToIgnoreCase(referencedStreet) == 0){
+						//StreetBean s = ModelConverter.convert(street, StreetBean.class);
+						StreetBean s = ModelConverter.toStreetBean(area, street);
+						logger.info(String.format("Street found: %s", s.toString() ));
+						result.add(s);
+					}
+				}
+			}
+		}
+		return result;
+	}
+
 	public StreetBean editStreet(StreetBean vb) throws DatabaseException {
 		RateArea area = mongodb.findById(vb.getRateAreaId(), RateArea.class);
 		boolean founded = false;
@@ -279,12 +359,10 @@ public class StorageManager {
 					temp.setHandicappedSlotNumber(vb.getHandicappedSlotNumber());
 					temp.setStreetReference(vb.getStreetReference());
 					temp.setTimedParkSlotNumber(vb.getTimedParkSlotNumber());
-					temp.setSubscritionAllowedPark(vb
-							.isSubscritionAllowedPark());
+					temp.setSubscritionAllowedPark(vb.isSubscritionAllowedPark());
 					temp.getGeometry().getPoints().clear();
 					for (PointBean pb : vb.getGeometry().getPoints()) {
-						temp.getGeometry().getPoints()
-								.add(ModelConverter.convert(pb, Point.class));
+						temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
 					}
 					temp.setZones(vb.getZoneBeanToZone());
 					mongodb.save(area);
@@ -342,50 +420,19 @@ public class StorageManager {
 		}
 	}
 
-	public ZoneBean save(ZoneBean z) {
-		Zone zona = ModelConverter.convert(z, Zone.class);
-		zona = processId(zona, Zone.class);
-		mongodb.save(zona);
-		z.setId(zona.getId());
-		return z;
+	// BikePoint Methods
+	public BikePointBean editBikePoint(BikePointBean pb)
+			throws NotFoundException {
+		BikePoint bici = findById(pb.getId(), BikePoint.class);
+		bici.setName(pb.getName());
+		bici.setSlotNumber(pb.getSlotNumber());
+		bici.setBikeNumber(pb.getBikeNumber());
+		bici.getGeometry().setLat(pb.getGeometry().getLat());
+		bici.getGeometry().setLng(pb.getGeometry().getLng());
+		mongodb.save(bici);
+		return pb;
 	}
-
-	public List<ZoneBean> getAllZone() {
-		List<ZoneBean> result = new ArrayList<ZoneBean>();
-		for (Zone z : mongodb.findAll(Zone.class)) {
-			result.add(ModelConverter.convert(z, ZoneBean.class));
-		}
-		return result;
-	}
-
-	public ZoneBean editZone(ZoneBean z) throws NotFoundException {
-		Zone zona = findById(z.getId(), Zone.class);
-		zona.setName(z.getName());
-		zona.setColor(z.getColor());
-		zona.setNote(z.getNote());
-		zona.getGeometry().getPoints().clear();
-		for (PointBean pb : z.getGeometry().getPoints()) {
-			zona.getGeometry().getPoints()
-					.add(ModelConverter.convert(pb, Point.class));
-		}
-		mongodb.save(zona);
-		return z;
-	}
-
-	public boolean removeZone(String zonaId) {
-		Criteria crit = new Criteria();
-		crit.and("id").is(zonaId);
-		mongodb.remove(Query.query(crit), Zone.class);
-		return true;
-	}
-
-	public boolean removeArea(String areaId) {
-		Criteria crit = new Criteria();
-		crit.and("id").is(areaId);
-		mongodb.remove(Query.query(crit), RateArea.class);
-		return true;
-	}
-
+	
 	public boolean removeBikePoint(String puntobiciId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(puntobiciId);
@@ -408,7 +455,23 @@ public class StorageManager {
 		}
 		return result;
 	}
+	
+	/**
+	 * Method getBikePointsByName: return a list of BikePointBean having a specific name
+	 * @param name: name of the BikePoints to find;
+	 * @return List of BikePointBean found;
+	 */
+	public List<BikePointBean> getBikePointsByName(String name) {
+		List<BikePointBean> result = new ArrayList<BikePointBean>();
+		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
+			if(bp.getName().compareToIgnoreCase(name) == 0){
+				result.add(ModelConverter.convert(bp, BikePointBean.class));
+			}
+		}
+		return result;
+	}
 
+	// ParkingStructure Methods
 	public boolean removeParkingStructure(String id) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(id);
@@ -434,6 +497,21 @@ public class StorageManager {
 		}
 		return result;
 	}
+	
+	/**
+	 * Method getParkingStructureByName: used to find a ParkingStructure given a specific name
+	 * @param name: name of the structure to find
+	 * @return List of ParkingStructureBean with the specific name
+	 */
+	public List<ParkingStructureBean> getParkingStructureByName(String name) {
+		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
+		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
+			if(entity.getName().compareToIgnoreCase(name) == 0){
+				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+			}
+		}
+		return result;
+	}
 
 	public ParkingStructureBean editParkingStructure(
 			ParkingStructureBean entityBean) throws NotFoundException {
@@ -442,8 +520,7 @@ public class StorageManager {
 		entity.setFee(entityBean.getFee());
 		entity.setManagementMode(entityBean.getManagementMode());
 		entity.setName(entityBean.getName());
-		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean
-				.getPaymentMode()));
+		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean.getPaymentMode()));
 		entity.setPhoneNumber(entityBean.getPhoneNumber());
 		entity.setSlotNumber(entityBean.getSlotNumber());
 		entity.setStreetReference(entityBean.getStreetReference());
@@ -453,6 +530,59 @@ public class StorageManager {
 		entity.getGeometry().setLng(entityBean.getGeometry().getLng());
 		mongodb.save(entity);
 		return entityBean;
+	}
+	
+	// Zone Methods
+	public ZoneBean save(ZoneBean z) {
+		Zone zona = ModelConverter.convert(z, Zone.class);
+		zona = processId(zona, Zone.class);
+		mongodb.save(zona);
+		z.setId(zona.getId());
+		return z;
+	}
+
+	public List<ZoneBean> getAllZone() {
+		List<ZoneBean> result = new ArrayList<ZoneBean>();
+		for (Zone z : mongodb.findAll(Zone.class)) {
+			result.add(ModelConverter.convert(z, ZoneBean.class));
+		}
+		return result;
+	}
+	/**
+	 * Method getZoneByName: get a list of zone having a specific name
+	 * @param name: name of the zone to search
+	 * @return List of ZoneBean found
+	 */
+	public List<ZoneBean> getZoneByName(String name) {
+		List<ZoneBean> result = new ArrayList<ZoneBean>();
+		for (Zone z : mongodb.findAll(Zone.class)) {
+			if(z.getName().compareToIgnoreCase(name) == 0){
+				result.add(ModelConverter.convert(z, ZoneBean.class));
+			}
+		}	
+		return result;
+	}
+
+	public ZoneBean editZone(ZoneBean z) throws NotFoundException {
+		Zone zona = findById(z.getId(), Zone.class);
+		zona.setName(z.getName());
+		zona.setColor(z.getColor());
+		zona.setType(z.getType());
+		zona.setNote(z.getNote());
+		zona.getGeometry().getPoints().clear();
+		for (PointBean pb : z.getGeometry().getPoints()) {
+			zona.getGeometry().getPoints()
+					.add(ModelConverter.convert(pb, Point.class));
+		}
+		mongodb.save(zona);
+		return z;
+	}
+
+	public boolean removeZone(String zonaId) {
+		Criteria crit = new Criteria();
+		crit.and("id").is(zonaId);
+		mongodb.remove(Query.query(crit), Zone.class);
+		return true;
 	}
 
 	public byte[] exportData() throws ExportException {

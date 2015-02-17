@@ -201,7 +201,7 @@ public class StorageManagerTest {
 		
 		ParkingMeterBean p4 = new ParkingMeterBean();
 		p4.setAreaId(area2.getId());
-		p4.setCode(1);
+		p4.setCode(4);
 		p4.setStatus(Status.ACTIVE);
 		PointBean g4 = new PointBean();
 		g4.setLat(45.88669987887168);
@@ -210,7 +210,7 @@ public class StorageManagerTest {
 		
 		ParkingMeterBean p5 = new ParkingMeterBean();
 		p5.setAreaId(area2.getId());
-		p5.setCode(2);
+		p5.setCode(5);
 		p5.setStatus(Status.ACTIVE);
 		PointBean g5 = new PointBean();
 		g5.setLat(45.88552438375571);
@@ -219,7 +219,7 @@ public class StorageManagerTest {
 		
 		ParkingMeterBean p6 = new ParkingMeterBean();
 		p6.setAreaId(area2.getId());
-		p6.setCode(3);
+		p6.setCode(6);
 		p6.setStatus(Status.INACTIVE);
 		PointBean g6 = new PointBean();
 		g6.setLat(45.883851463705895);
@@ -228,7 +228,7 @@ public class StorageManagerTest {
 		
 		ParkingMeterBean p7 = new ParkingMeterBean();
 		p7.setAreaId(area3.getId());
-		p7.setCode(1);
+		p7.setCode(7);
 		p7.setStatus(Status.ACTIVE);
 		PointBean g7 = new PointBean();
 		g7.setLat(45.88669987887168);
@@ -237,7 +237,7 @@ public class StorageManagerTest {
 		
 		ParkingMeterBean p8 = new ParkingMeterBean();
 		p8.setAreaId(area3.getId());
-		p8.setCode(2);
+		p8.setCode(8);
 		p8.setStatus(Status.ACTIVE);
 		PointBean g8 = new PointBean();
 		g8.setLat(45.88552438375571);
@@ -246,7 +246,7 @@ public class StorageManagerTest {
 		
 		ParkingMeterBean p9 = new ParkingMeterBean();
 		p9.setAreaId(area3.getId());
-		p9.setCode(4);
+		p9.setCode(9);
 		p9.setStatus(Status.INACTIVE);
 		PointBean g9 = new PointBean();
 		g9.setLat(45.883851463705895);

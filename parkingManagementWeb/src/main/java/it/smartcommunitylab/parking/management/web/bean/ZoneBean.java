@@ -7,6 +7,7 @@ public class ZoneBean {
 	private String id_app;
 	private String name;
 	private String submacro;
+	private String type;
 	private String note;
 	private String color;
 	private PolygonBean geometry;
@@ -33,6 +34,14 @@ public class ZoneBean {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getColor() {

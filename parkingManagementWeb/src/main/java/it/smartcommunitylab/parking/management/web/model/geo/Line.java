@@ -12,4 +12,5 @@ public class Line extends Geom {
 	public void setPoints(List<Point> points) {
 		this.points = points;
 	}
+	
 }

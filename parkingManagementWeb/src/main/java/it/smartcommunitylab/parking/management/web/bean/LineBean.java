@@ -12,4 +12,5 @@ public class LineBean {
 	public void setPoints(List<PointBean> points) {
 		this.points = points;
 	}
+	
 }

@@ -7,6 +7,7 @@ public class Zone {
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String name;
 	private String submacro;
+	private String type; 	//type of division(geo, green, history, etc)
 	private String note;
 	private String color;
 	private Polygon geometry;
@@ -41,6 +42,14 @@ public class Zone {
 
 	public void setSubmacro(String submacro) {
 		this.submacro = submacro;
+	}
+
+	public String getType() {
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getColor() {
