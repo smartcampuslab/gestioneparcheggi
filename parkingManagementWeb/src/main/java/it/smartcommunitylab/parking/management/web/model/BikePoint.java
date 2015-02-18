@@ -67,5 +67,18 @@ public class BikePoint {
 	public void setLastChange(Long lastChange) {
 		this.lastChange = lastChange;
 	}
+	
+	public String toJSON(){
+		String json = "{";
+		json += "\"id\":\"" + getId() + "\",";
+		json += "\"id_app\":\"" + getId_app() + "\",";
+		json += "\"name\":\"" + getName() + "\",";
+		json += "\"geometry\":\"" + getGeometry() + "\",";
+		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
+		json += "\"bikeNumber\":\"" + getBikeNumber() + "\",";
+		json += "\"lastChange\":\"" + getLastChange() + "\"";
+		json += "}";
+		return json;
+	}
 
 }

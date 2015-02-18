@@ -21,7 +21,7 @@ public class Street {
 	private Integer paidSlotOccupied;
 	private Integer unusuableSlotNumber;	// off_in
 	private boolean subscritionAllowedPark;
-	
+	private String rateAreaId;				// I need this field in data log
 	private Line geometry;
 	private List<Zone> zones;
 	private Long lastChange;
@@ -172,6 +172,14 @@ public class Street {
 		this.subscritionAllowedPark = subscritionAllowedPark;
 	}
 
+	public String getRateAreaId() {
+		return rateAreaId;
+	}
+
+	public void setRateAreaId(String rateAreaId) {
+		this.rateAreaId = rateAreaId;
+	}
+
 	public List<Zone> getZones() {
 		return zones;
 	}
@@ -186,6 +194,32 @@ public class Street {
 
 	public void setLastChange(Long lastChange) {
 		this.lastChange = lastChange;
+	}
+	
+	public String toJSON(){
+		String json = "{";
+		json += "\"id\":\"" + getId() + "\",";
+		json += "\"id_app\":\"" + getId_app() + "\",";
+		json += "\"streetReference\":\"" + getStreetReference() + "\",";
+		json += "\"geometry\":\"" + getGeometry() + "\",";
+		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
+		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
+		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";
+		json += "\"freeParkSlotSignNumber\":\"" + getFreeParkSlotSignNumber() + "\",";
+		json += "\"freeParkSlotSignOccupied\":\"" + getFreeParkSlotSignOccupied() + "\",";
+		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
+		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
+		json += "\"timedParkSlotNumber\":\"" + getTimedParkSlotNumber() + "\",";
+		json += "\"timedParkSlotOccupied\":\"" + getTimedParkSlotOccupied() + "\",";
+		json += "\"paidSlotNumber\":\"" + getPaidSlotNumber() + "\",";
+		json += "\"paidSlotOccupied\":\"" + getPaidSlotOccupied() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"subscritionAllowedPark\":\"" + isSubscritionAllowedPark() + "\",";
+		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";
+		json += "\"lastChange\":\"" + getLastChange() + "\"";
+		json += "\"zones\":\"" + getZones() + "\"";
+		json += "}";
+		return json;
 	}
 	
 }

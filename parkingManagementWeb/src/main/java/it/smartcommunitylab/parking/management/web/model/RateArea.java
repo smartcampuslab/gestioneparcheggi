@@ -6,6 +6,7 @@ import java.util.List;
 
 public class RateArea {
 	private String id;
+	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String name;
 	private Float fee;
 	private String timeSlot;
@@ -22,6 +23,14 @@ public class RateArea {
 
 	public void setId(String id) {
 		this.id = id;
+	}
+
+	public String getId_app() {
+		return id_app;
+	}
+
+	public void setId_app(String id_app) {
+		this.id_app = id_app;
 	}
 
 	public Float getFee() {

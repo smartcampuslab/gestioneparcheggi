@@ -1,5 +1,6 @@
 package it.smartcommunitylab.parking.management.web.manager;
 
+import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
@@ -23,6 +24,7 @@ import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -44,7 +46,7 @@ public class StorageManager {
 	public RateAreaBean save(RateAreaBean a) {
 		RateArea area = ModelConverter.convert(a, RateArea.class);
 		area = processId(area, RateArea.class);
-		mongodb.save(area);
+		mongodb.save(area);	
 		a.setId(area.getId());
 		return a;
 	}
@@ -78,10 +80,29 @@ public class StorageManager {
 		return result;
 	}
 	
+	public RateAreaBean getAreaById(String areaId) {
+		RateArea a = mongodb.findById(areaId, RateArea.class);
+		RateAreaBean ra = ModelConverter.convert(a, RateAreaBean.class);
+		return ra;
+	}
+	
 	public boolean removeArea(String areaId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(areaId);
+		
+		RateAreaBean ra = getAreaById(areaId);
+		
+		DataLogBean dl = new DataLogBean();
+		for(StreetBean sb : getAllStreets(ra)){
+			dl.setObjId("@" + sb.getId_app() + "@street@" + sb.getId());
+			dl.setType("street");
+			dl.setUpdateTime(System.currentTimeMillis());
+			dl.setDeleted(true);
+		}
+		mongodb.save(dl);
+		
 		mongodb.remove(Query.query(crit), RateArea.class);
+		
 		return true;
 	}
 
@@ -346,25 +367,26 @@ public class StorageManager {
 		return result;
 	}
 
-	public StreetBean editStreet(StreetBean vb) throws DatabaseException {
-		RateArea area = mongodb.findById(vb.getRateAreaId(), RateArea.class);
+	public StreetBean editStreet(StreetBean sb) throws DatabaseException {
+		RateArea area = mongodb.findById(sb.getRateAreaId(), RateArea.class);
 		boolean founded = false;
 		if (area.getStreets() != null) {
 			for (Street temp : area.getStreets()) {
-				if (temp.getId().equals(vb.getId())) {
-					temp.setSlotNumber(vb.getSlotNumber());
-					temp.setFreeParkSlotNumber(vb.getFreeParkSlotNumber());
-					temp.setFreeParkSlotSignNumber(vb.getFreeParkSlotSignNumber());
-					temp.setUnusuableSlotNumber(vb.getUnusuableSlotNumber());
-					temp.setHandicappedSlotNumber(vb.getHandicappedSlotNumber());
-					temp.setStreetReference(vb.getStreetReference());
-					temp.setTimedParkSlotNumber(vb.getTimedParkSlotNumber());
-					temp.setSubscritionAllowedPark(vb.isSubscritionAllowedPark());
+				if (temp.getId().equals(sb.getId())) {
+					temp.setSlotNumber(sb.getSlotNumber());
+					temp.setFreeParkSlotNumber(sb.getFreeParkSlotNumber());
+					temp.setFreeParkSlotSignNumber(sb.getFreeParkSlotSignNumber());
+					temp.setUnusuableSlotNumber(sb.getUnusuableSlotNumber());
+					temp.setHandicappedSlotNumber(sb.getHandicappedSlotNumber());
+					temp.setStreetReference(sb.getStreetReference());
+					temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());
+					temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());
 					temp.getGeometry().getPoints().clear();
-					for (PointBean pb : vb.getGeometry().getPoints()) {
+					for (PointBean pb : sb.getGeometry().getPoints()) {
 						temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
 					}
-					temp.setZones(vb.getZoneBeanToZone());
+					temp.setZones(sb.getZoneBeanToZone());
+					temp.setRateAreaId(sb.getRateAreaId());
 					mongodb.save(area);
 					founded = true;
 					break;
@@ -373,28 +395,33 @@ public class StorageManager {
 		}
 
 		if (!founded) {
-			StreetBean todel = findStreet(vb.getId());
+			StreetBean todel = findStreet(sb.getId());
 			if (todel != null) {
-				removeStreet(todel.getRateAreaId(), vb.getId());
+				removeStreet(todel.getRateAreaId(), sb.getId());
 			}
-			vb = save(vb);
+			sb = save(sb);
 		}
 
-		return vb;
+		return sb;
 	}
 
-	public boolean removeStreet(String areaId, String viaId) {
+	public boolean removeStreet(String areaId, String streetId) {
 		RateArea area = mongodb.findById(areaId, RateArea.class);
-		Street v = new Street();
-		v.setId(viaId);
-		boolean result = area.getStreets() != null && area.getStreets().remove(v);
+		Street s = new Street();
+		s.setId(streetId);
+		//Street s = ModelConverter.convert(findStreet(streetId), Street.class);
+		boolean result = area.getStreets() != null && area.getStreets().remove(s);
 		if (result) {
 			mongodb.save(area);
-			logger.info(String.format("Success removing via %s of area %s",
-					viaId, areaId));
+			logger.info(String.format("Success removing via %s of area %s", streetId, areaId));
+			DataLogBean dl = new DataLogBean();
+			dl.setObjId("@" + area.getId_app() + "@street@" + streetId);
+			dl.setType("street");
+			dl.setUpdateTime(System.currentTimeMillis());
+			dl.setDeleted(true);
+			mongodb.save(dl);
 		} else {
-			logger.warn(String.format("Failure removing via %s of area %s",
-					viaId, areaId));
+			logger.warn(String.format("Failure removing via %s of area %s", streetId, areaId));
 		}
 
 		return result;
@@ -413,6 +440,21 @@ public class StorageManager {
 			area.getStreets().add(processId(street, Street.class));
 			mongodb.save(area);
 			s.setId(street.getId());
+			
+			DataLogBean dl = new DataLogBean();
+			dl.setObjId("@" + s.getId_app() + "@street@" + s.getId());
+			dl.setType("street");
+			dl.setVersion(new Integer(1));
+			dl.setUpdateTime(System.currentTimeMillis());
+			if(street.getGeometry() != null){
+				dl.setLocation(street.getGeometry().getPointBeans().get(0));	// I get the first element of the line
+			}
+			dl.setDeleted(false);
+			@SuppressWarnings("unchecked")
+			Map<String,Object> map = ModelConverter.convert(s, Map.class);
+			dl.setContent(map);
+			mongodb.save(dl);
+			
 			return s;
 		} catch (NotFoundException e) {
 			logger.error("Exception saving via, relative area not found");
@@ -436,16 +478,43 @@ public class StorageManager {
 	public boolean removeBikePoint(String puntobiciId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(puntobiciId);
+		
+		BikePoint bp = mongodb.findById(puntobiciId, BikePoint.class);
+		DataLogBean dl = new DataLogBean();
+		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + puntobiciId);
+		dl.setType("bikePoint");
+		dl.setUpdateTime(System.currentTimeMillis());
+		dl.setDeleted(true);
+		mongodb.save(dl);
+		
 		mongodb.remove(Query.query(crit), BikePoint.class);
 		return true;
 	}
 
-	public BikePointBean save(BikePointBean pb) {
-		BikePoint puntoBici = ModelConverter.convert(pb, BikePoint.class);
+	public BikePointBean save(BikePointBean bp) {
+		BikePoint puntoBici = ModelConverter.convert(bp, BikePoint.class);
 		puntoBici = processId(puntoBici, BikePoint.class);
 		mongodb.save(puntoBici);
-		pb.setId(puntoBici.getId());
-		return pb;
+		bp.setId(puntoBici.getId());
+		
+		DataLogBean dl = new DataLogBean();
+		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + bp.getId());
+		dl.setType("bikePoint");
+		dl.setVersion(new Integer(1));
+		dl.setUpdateTime(System.currentTimeMillis());
+		if(bp.getGeometry() != null){
+			PointBean point = new PointBean();
+			point.setLat(bp.getGeometry().getLat());
+			point.setLng(bp.getGeometry().getLng());
+			dl.setLocation(point);
+		}
+		dl.setDeleted(false);
+		@SuppressWarnings("unchecked")
+		Map<String,Object> map = ModelConverter.convert(bp, Map.class);
+		dl.setContent(map);
+		mongodb.save(dl);
+		
+		return bp;
 	}
 
 	public List<BikePointBean> getAllBikePoints() {
@@ -475,6 +544,15 @@ public class StorageManager {
 	public boolean removeParkingStructure(String id) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(id);
+		
+		ParkingStructure ps = mongodb.findById(id, ParkingStructure.class);
+		DataLogBean dl = new DataLogBean();
+		dl.setObjId("@" + ps.getId_app() + "@parkingStructure@" + id);
+		dl.setType("parkingStructure");
+		dl.setUpdateTime(System.currentTimeMillis());
+		dl.setDeleted(true);
+		mongodb.save(dl);
+		
 		mongodb.remove(Query.query(crit), ParkingStructure.class);
 		return true;
 	}
@@ -485,6 +563,24 @@ public class StorageManager {
 		entity = processId(entity, ParkingStructure.class);
 		mongodb.save(entity);
 		entityBean.setId(entity.getId());
+		
+		DataLogBean dl = new DataLogBean();
+		dl.setObjId("@" + entity.getId_app() + "@parkingStructure@" + entity.getId());
+		dl.setType("parkingStructure");
+		dl.setVersion(new Integer(1));
+		dl.setUpdateTime(System.currentTimeMillis());
+		if(entity.getGeometry() != null){
+			PointBean point = new PointBean();
+			point.setLat(entity.getGeometry().getLat());
+			point.setLng(entity.getGeometry().getLng());
+			dl.setLocation(point);
+		}
+		dl.setDeleted(false);
+		@SuppressWarnings("unchecked")
+		Map<String,Object> map = ModelConverter.convert(entity, Map.class);
+		dl.setContent(map);
+		mongodb.save(dl);
+		
 		return entityBean;
 	}
 
@@ -581,6 +677,19 @@ public class StorageManager {
 	public boolean removeZone(String zonaId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(zonaId);
+		
+		ZoneBean z = ModelConverter.convert(mongodb.findById(zonaId, Zone.class), ZoneBean.class);
+		
+		List<StreetBean> streets = getAllStreets(z);
+		for(StreetBean s : streets){
+			List<ZoneBean> zones = s.getZoneBeans();
+			for(ZoneBean zb : zones){
+				if(zb.getId() == zonaId){
+					zones.remove(zb);
+				}
+			}
+		}
+		
 		mongodb.remove(Query.query(crit), Zone.class);
 		return true;
 	}

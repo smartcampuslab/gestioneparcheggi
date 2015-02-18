@@ -87,7 +87,7 @@ public class ModelConverter {
 		sb.setTimedParkSlotOccupied(s.getTimedParkSlotOccupied());
 		sb.setUnusuableSlotNumber(s.getUnusuableSlotNumber());
 		sb.setLastChange(s.getLastChange());
-		sb.setRateAreaId(area.getId());
+		sb.setRateAreaId(s.getRateAreaId());
 		sb.setColor(area.getColor());
 		sb.setGeometry(convert(s.getGeometry(), LineBean.class));
 		sb.setSubscritionAllowedPark(s.isSubscritionAllowedPark());

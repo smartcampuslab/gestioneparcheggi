@@ -102,6 +102,7 @@ public class StorageManagerTest {
 		// Streets Creation
 		StreetBean s = new StreetBean();
 		s.setStreetReference("Via Unione");
+		s.setId_app(appId);
 		s.setFreeParkSlotNumber(0);
 		s.setFreeParkSlotSignNumber(0);
 		s.setPaidSlotNumber(10);
@@ -117,6 +118,7 @@ public class StorageManagerTest {
 		
 		StreetBean s2 = new StreetBean();
 		s2.setStreetReference("Via Monte Nero");
+		s2.setId_app(appId);
 		s2.setFreeParkSlotNumber(0);
 		s2.setFreeParkSlotSignNumber(1);
 		s2.setPaidSlotNumber(3);
@@ -130,6 +132,7 @@ public class StorageManagerTest {
 		
 		StreetBean s3 = new StreetBean();
 		s3.setStreetReference("Viale della Vittoria");
+		s3.setId_app(appId);
 		s3.setFreeParkSlotNumber(2);
 		s3.setFreeParkSlotSignNumber(3);
 		s3.setPaidSlotNumber(3);
@@ -145,6 +148,7 @@ public class StorageManagerTest {
 		
 		StreetBean s4 = new StreetBean();
 		s4.setStreetReference("Via Macerie1");
+		s4.setId_app(appId);
 		s4.setFreeParkSlotNumber(0);
 		s4.setFreeParkSlotSignNumber(0);
 		s4.setPaidSlotNumber(15);
@@ -158,6 +162,7 @@ public class StorageManagerTest {
 		
 		StreetBean s5 = new StreetBean();
 		s5.setStreetReference("Via Macerie2");
+		s5.setId_app(appId);
 		s5.setFreeParkSlotNumber(2);
 		s5.setFreeParkSlotSignNumber(0);
 		s5.setPaidSlotNumber(3);
@@ -173,6 +178,7 @@ public class StorageManagerTest {
 		
 		// ParkingMeters Creation
 		ParkingMeterBean p = new ParkingMeterBean();
+		p.setId_app(appId);
 		p.setAreaId(area.getId());
 		p.setCode(1);
 		p.setStatus(Status.ACTIVE);
@@ -182,6 +188,7 @@ public class StorageManagerTest {
 		p.setGeometry(g1);
 		
 		ParkingMeterBean p2 = new ParkingMeterBean();
+		p2.setId_app(appId);
 		p2.setAreaId(area.getId());
 		p2.setCode(2);
 		p2.setStatus(Status.INACTIVE);
@@ -191,6 +198,7 @@ public class StorageManagerTest {
 		p.setGeometry(g2);
 		
 		ParkingMeterBean p3 = new ParkingMeterBean();
+		p3.setId_app(appId);
 		p3.setAreaId(area.getId());
 		p3.setCode(3);
 		p3.setStatus(Status.ACTIVE);
@@ -200,6 +208,7 @@ public class StorageManagerTest {
 		p.setGeometry(g3);
 		
 		ParkingMeterBean p4 = new ParkingMeterBean();
+		p4.setId_app(appId);
 		p4.setAreaId(area2.getId());
 		p4.setCode(4);
 		p4.setStatus(Status.ACTIVE);
@@ -209,6 +218,7 @@ public class StorageManagerTest {
 		p4.setGeometry(g4);
 		
 		ParkingMeterBean p5 = new ParkingMeterBean();
+		p5.setId_app(appId);
 		p5.setAreaId(area2.getId());
 		p5.setCode(5);
 		p5.setStatus(Status.ACTIVE);
@@ -218,6 +228,7 @@ public class StorageManagerTest {
 		p5.setGeometry(g5);
 		
 		ParkingMeterBean p6 = new ParkingMeterBean();
+		p6.setId_app(appId);
 		p6.setAreaId(area2.getId());
 		p6.setCode(6);
 		p6.setStatus(Status.INACTIVE);
@@ -227,6 +238,7 @@ public class StorageManagerTest {
 		p6.setGeometry(g6);
 		
 		ParkingMeterBean p7 = new ParkingMeterBean();
+		p.setId_app(appId);
 		p7.setAreaId(area3.getId());
 		p7.setCode(7);
 		p7.setStatus(Status.ACTIVE);
@@ -236,6 +248,7 @@ public class StorageManagerTest {
 		p4.setGeometry(g7);
 		
 		ParkingMeterBean p8 = new ParkingMeterBean();
+		p8.setId_app(appId);
 		p8.setAreaId(area3.getId());
 		p8.setCode(8);
 		p8.setStatus(Status.ACTIVE);
@@ -245,6 +258,7 @@ public class StorageManagerTest {
 		p8.setGeometry(g8);
 		
 		ParkingMeterBean p9 = new ParkingMeterBean();
+		p9.setId_app(appId);
 		p9.setAreaId(area3.getId());
 		p9.setCode(9);
 		p9.setStatus(Status.INACTIVE);
@@ -254,6 +268,7 @@ public class StorageManagerTest {
 		p9.setGeometry(g9);
 		
 		ParkingMeterBean p10 = new ParkingMeterBean();
+		p10.setId_app(appId);
 		p10.setAreaId(area3.getId());
 		p10.setCode(121);
 		p10.setStatus(Status.INACTIVE);

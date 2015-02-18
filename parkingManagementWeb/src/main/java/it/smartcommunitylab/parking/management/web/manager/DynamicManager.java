@@ -1,5 +1,7 @@
 package it.smartcommunitylab.parking.management.web.manager;
 
+import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
+import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
@@ -17,11 +19,14 @@ import it.smartcommunitylab.parking.management.web.model.Zone;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 // Manager used to store the dynamic data
@@ -223,8 +228,23 @@ public class DynamicManager {
 					temp.setTimedParkSlotOccupied(vb.getTimedParkSlotOccupied());
 					temp.setPaidSlotOccupied(vb.getPaidSlotOccupied());
 					temp.setLastChange(timestamp);
-					
 					mongodb.save(area);
+					
+					DataLogBean dl = new DataLogBean();
+					dl.setObjId("@" + temp.getId_app() + "@street@" + vb.getId());
+					dl.setType("street");
+					dl.setUpdateTime(timestamp);
+					Integer oldVersion = getLastVersion(dl.getObjId());
+					dl.setVersion(new Integer(oldVersion.intValue() + 1));
+					if(temp.getGeometry() != null){
+						dl.setLocation(temp.getGeometry().getPointBeans().get(0));	// I get the first element of the line
+					}
+					dl.setDeleted(false);
+					//dl.setContent(temp.toJSON());
+					@SuppressWarnings("unchecked")
+					Map<String,Object> map = ModelConverter.convert(temp, Map.class);
+					dl.setContent(map);
+					mongodb.save(dl);
 					break;
 				}
 			}
@@ -247,18 +267,37 @@ public class DynamicManager {
 		return result;
 	}
 	
-	public BikePointBean editBikePoint(BikePointBean pb, Long timestamp)
+	public BikePointBean editBikePoint(BikePointBean bp, Long timestamp)
 			throws NotFoundException {
-		BikePoint bici = findById(pb.getId(), BikePoint.class);
+		BikePoint bike = findById(bp.getId(), BikePoint.class);
 //		bici.setName(pb.getName());
 //		bici.getGeometry().setLat(pb.getGeometry().getLat());
 //		bici.getGeometry().setLng(pb.getGeometry().getLng());
 		// Dynamic Data
-		bici.setSlotNumber(pb.getSlotNumber());
-		bici.setBikeNumber(pb.getBikeNumber());
-		bici.setLastChange(timestamp);
-		mongodb.save(bici);
-		return pb;
+		bike.setSlotNumber(bp.getSlotNumber());
+		bike.setBikeNumber(bp.getBikeNumber());
+		bike.setLastChange(timestamp);
+		mongodb.save(bike);
+		
+		DataLogBean dl = new DataLogBean();
+		dl.setObjId("@" + bike.getId_app() + "@bikePoint@" + bp.getId());
+		dl.setType("bikePoint");
+		dl.setUpdateTime(timestamp);
+		Integer oldVersion = getLastVersion(dl.getObjId());
+		dl.setVersion(new Integer(oldVersion.intValue() + 1));
+		if(bike.getGeometry() != null){
+			PointBean point = new PointBean();
+			point.setLat(bike.getGeometry().getLat());
+			point.setLng(bike.getGeometry().getLng());
+			dl.setLocation(point);
+		}
+		dl.setDeleted(false);
+		@SuppressWarnings("unchecked")
+		Map<String,Object> map = ModelConverter.convert(bike, Map.class);
+		dl.setContent(map);
+		mongodb.save(dl);
+		
+		return bp;
 	}
 
 	// ParkingStructure Methods
@@ -297,6 +336,25 @@ public class DynamicManager {
 		entity.setLastChange(timestamp);
 		
 		mongodb.save(entity);
+		
+		DataLogBean dl = new DataLogBean();
+		dl.setObjId("@" + entity.getId_app() + "@parkingStructure@" + entityBean.getId());
+		dl.setType("parkingStructure");
+		dl.setUpdateTime(timestamp);
+		Integer oldVersion = getLastVersion(dl.getObjId());
+		dl.setVersion(new Integer(oldVersion.intValue() + 1));
+		if(entity.getGeometry() != null){
+			PointBean point = new PointBean();
+			point.setLat(entity.getGeometry().getLat());
+			point.setLng(entity.getGeometry().getLng());
+			dl.setLocation(point);
+		}
+		dl.setDeleted(false);
+		//dl.setContent(entity.toJSON());
+		@SuppressWarnings("unchecked")
+		Map<String,Object> map = ModelConverter.convert(entity, Map.class);
+		mongodb.save(map);
+		
 		return entityBean;
 	}
 
@@ -313,19 +371,19 @@ public class DynamicManager {
 		}
 		return result;
 	}
-
-	@SuppressWarnings("unchecked")
-	private <T> T processId(Object o, Class<T> javaClass) {
-		try {
-			String id = (String) o.getClass().getMethod("getId", null)
-					.invoke(o, null);
-			if (id == null || id.trim().isEmpty()) {
-				o.getClass().getMethod("setId", String.class)
-						.invoke(o, new ObjectId().toString());
-			}
-		} catch (Exception e) {
-			throw new IllegalArgumentException();
+	
+	private Integer getLastVersion(String objId){
+		Integer version = new Integer(0);
+		Query q = new Query();
+		q.addCriteria(Criteria.where("objId").is(objId));
+		q.sort().on("updateTime", Order.DESCENDING);
+		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
+		if(result != null && result.size() > 0){
+			version = result.get(0).getVersion();
+			logger.info(String.format("Version finded: %d", version ));
 		}
-		return (T) o;
+		
+		return version;
 	}
+
 }

@@ -27,7 +27,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = { "/spring/applicationContext.xml" })
 public class DynamicManagerTest {
 
-	private static final String appId="rv";
 	private static final Long NOW = System.currentTimeMillis();
 	
 	@Autowired

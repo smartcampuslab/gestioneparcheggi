@@ -161,7 +161,7 @@ public class ParkingStructureBean {
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
-		json += "\"lastChange\":\"" + getLastChange() + "\",";
+		json += "\"lastChange\":\"" + getLastChange() + "\"";
 		json += "}";
 		return json;
 	}

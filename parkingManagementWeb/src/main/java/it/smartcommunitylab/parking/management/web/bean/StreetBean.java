@@ -237,4 +237,30 @@ public class StreetBean {
 				+ lastChange + "]";
 	}
 	
+	public String toJSON(){
+		String json = "{";
+		json += "\"id\":\"" + getId() + "\",";
+		json += "\"id_app\":\"" + getId_app() + "\",";
+		json += "\"streetReference\":\"" + getStreetReference() + "\",";
+		json += "\"geometry\":\"" + getGeometry() + "\",";
+		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
+		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
+		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";
+		json += "\"freeParkSlotSignNumber\":\"" + getFreeParkSlotSignNumber() + "\",";
+		json += "\"freeParkSlotSignOccupied\":\"" + getFreeParkSlotSignOccupied() + "\",";
+		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
+		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
+		json += "\"timedParkSlotNumber\":\"" + getTimedParkSlotNumber() + "\",";
+		json += "\"timedParkSlotOccupied\":\"" + getTimedParkSlotOccupied() + "\",";
+		json += "\"paidSlotNumber\":\"" + getPaidSlotNumber() + "\",";
+		json += "\"paidSlotOccupied\":\"" + getPaidSlotOccupied() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"subscritionAllowedPark\":\"" + isSubscritionAllowedPark() + "\",";
+		json += "\"lastChange\":\"" + getLastChange() + "\",";
+		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";
+		json += "\"zones\":\"" + getZoneBeans() + "\"";
+		json += "}";
+		return json;
+	}
+	
 }
