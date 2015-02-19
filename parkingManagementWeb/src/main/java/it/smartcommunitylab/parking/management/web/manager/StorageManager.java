@@ -31,6 +31,7 @@ import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
@@ -92,14 +93,16 @@ public class StorageManager {
 		
 		RateAreaBean ra = getAreaById(areaId);
 		
-		DataLogBean dl = new DataLogBean();
+		// Here I save the dataLog of the streets removing
 		for(StreetBean sb : getAllStreets(ra)){
+			DataLogBean dl = new DataLogBean();
 			dl.setObjId("@" + sb.getId_app() + "@street@" + sb.getId());
 			dl.setType("street");
+			dl.setVersion(getLastVersion(dl.getObjId()));
 			dl.setUpdateTime(System.currentTimeMillis());
 			dl.setDeleted(true);
+			mongodb.save(dl);
 		}
-		mongodb.save(dl);
 		
 		mongodb.remove(Query.query(crit), RateArea.class);
 		
@@ -285,7 +288,8 @@ public class StorageManager {
 			if (area.getStreets() != null) {
 				for (Street tmp : area.getStreets()) {
 					List<Zone> zones = tmp.getZones();
-					StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
+					StreetBean s = ModelConverter.toStreetBean(area, tmp);
+					//StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
 					for(Zone zona : zones){
 						if((zona.getId().compareTo(z.getId()) == 0) && (zona.getId_app().compareTo(z.getId_app()) == 0)){
 							s.setColor(z.getColor());
@@ -407,9 +411,9 @@ public class StorageManager {
 
 	public boolean removeStreet(String areaId, String streetId) {
 		RateArea area = mongodb.findById(areaId, RateArea.class);
-		Street s = new Street();
-		s.setId(streetId);
-		//Street s = ModelConverter.convert(findStreet(streetId), Street.class);
+		//Street s = new Street();
+		//s.setId(streetId);
+		Street s = ModelConverter.convert(findStreet(streetId), Street.class);
 		boolean result = area.getStreets() != null && area.getStreets().remove(s);
 		if (result) {
 			mongodb.save(area);
@@ -418,6 +422,10 @@ public class StorageManager {
 			dl.setObjId("@" + area.getId_app() + "@street@" + streetId);
 			dl.setType("street");
 			dl.setUpdateTime(System.currentTimeMillis());
+			if(s.getGeometry() != null){
+				dl.setLocation(s.getGeometry().getPointBeans().get(0));	// I get the first element of the line
+			}
+			dl.setVersion(getLastVersion(dl.getObjId()));
 			dl.setDeleted(true);
 			mongodb.save(dl);
 		} else {
@@ -484,6 +492,7 @@ public class StorageManager {
 		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + puntobiciId);
 		dl.setType("bikePoint");
 		dl.setUpdateTime(System.currentTimeMillis());
+		dl.setVersion(getLastVersion(dl.getObjId()));
 		dl.setDeleted(true);
 		mongodb.save(dl);
 		
@@ -520,6 +529,7 @@ public class StorageManager {
 	public List<BikePointBean> getAllBikePoints() {
 		List<BikePointBean> result = new ArrayList<BikePointBean>();
 		for (BikePoint pb : mongodb.findAll(BikePoint.class)) {
+			logger.info(String.format("Bike point found : %s", pb.toString()));
 			result.add(ModelConverter.convert(pb, BikePointBean.class));
 		}
 		return result;
@@ -550,6 +560,7 @@ public class StorageManager {
 		dl.setObjId("@" + ps.getId_app() + "@parkingStructure@" + id);
 		dl.setType("parkingStructure");
 		dl.setUpdateTime(System.currentTimeMillis());
+		dl.setVersion(getLastVersion(dl.getObjId()));
 		dl.setDeleted(true);
 		mongodb.save(dl);
 		
@@ -586,10 +597,8 @@ public class StorageManager {
 
 	public List<ParkingStructureBean> getAllParkingStructure() {
 		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
-		for (ParkingStructure entity : mongodb
-				.findAll(ParkingStructure.class)) {
-			result.add(ModelConverter.convert(entity,
-					ParkingStructureBean.class));
+		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
+			result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
 		}
 		return result;
 	}
@@ -684,6 +693,7 @@ public class StorageManager {
 		for(StreetBean s : streets){
 			List<ZoneBean> zones = s.getZoneBeans();
 			for(ZoneBean zb : zones){
+				//logger.info(String.format("Finded zona: %s", zb.toString()));
 				if(zb.getId() == zonaId){
 					zones.remove(zb);
 				}
@@ -706,6 +716,19 @@ public class StorageManager {
 			throw new NotFoundException();
 		}
 		return result;
+	}
+	
+	private Integer getLastVersion(String objId){
+		Integer version = new Integer(0);
+		Query q = new Query();
+		q.addCriteria(Criteria.where("objId").is(objId));
+		q.sort().on("updateTime", Order.DESCENDING);
+		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
+		if(result != null && result.size() > 0){
+			version = result.get(0).getVersion();
+			//logger.info(String.format("Version finded: %d", version ));
+		}
+		return version;
 	}
 
 	@SuppressWarnings("unchecked")

@@ -170,7 +170,7 @@
       <id>dev</id>
       <properties>
         <baseUrl>http://localhost:8080/${app.name}</baseUrl>
-        <gmap.key>**INSERT_YOUR_GMAP_KEY**</gmap.key>
+        <gmap.key>AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs</gmap.key>
       </properties>
     </profile>
     <profile>

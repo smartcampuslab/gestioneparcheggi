@@ -401,14 +401,14 @@ public class StorageManagerTest {
 			NoSuchMethodException, InvocationTargetException,
 			JsonGenerationException, JsonMappingException, IOException {
 		
+		List<ZoneBean> zones = manager.getAllZone();
+		for(ZoneBean z : zones){
+			manager.removeZone(z.getId());
+		}
+		
 		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters();
 		for(ParkingMeterBean pm : parkingMeters){
 			manager.removeParkingMeter(pm.getAreaId(), pm.getId());
-		}
-		
-		List<RateAreaBean> areas = manager.getAllArea();
-		for(RateAreaBean area : areas){
-			manager.removeArea(area.getId());
 		}
 		
 		List<ParkingStructureBean> parkingStructs = manager.getAllParkingStructure();
@@ -416,14 +416,14 @@ public class StorageManagerTest {
 			manager.removeParkingStructure(ps.getId());
 		}
 		
-		List<ZoneBean> zones = manager.getAllZone();
-		for(ZoneBean z : zones){
-			manager.removeZone(z.getId());
-		}
-		
 		List<BikePointBean> bikePoints = manager.getAllBikePoints();
 		for(BikePointBean bp : bikePoints){
 			manager.removeBikePoint(bp.getId());
+		}
+		
+		List<RateAreaBean> areas = manager.getAllArea();
+		for(RateAreaBean area : areas){
+			manager.removeArea(area.getId());
 		}
 		
 		Assert.assertTrue(manager.getAllArea().size() == 0);

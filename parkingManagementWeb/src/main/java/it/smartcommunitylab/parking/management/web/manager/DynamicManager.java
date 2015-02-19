@@ -353,7 +353,8 @@ public class DynamicManager {
 		//dl.setContent(entity.toJSON());
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(entity, Map.class);
-		mongodb.save(map);
+		dl.setContent(map);
+		mongodb.save(dl);
 		
 		return entityBean;
 	}
@@ -380,9 +381,8 @@ public class DynamicManager {
 		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
 		if(result != null && result.size() > 0){
 			version = result.get(0).getVersion();
-			logger.info(String.format("Version finded: %d", version ));
+			//logger.info(String.format("Version finded: %d", version ));
 		}
-		
 		return version;
 	}
 
