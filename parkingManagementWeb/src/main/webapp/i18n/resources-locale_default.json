@@ -1,0 +1,2750 @@
+[{
+    "key": "msg_err_creation_no_rec",
+    "value": "Nessuna struttura di recupero inserita! E' obbigatorio specificarne i dati per il componente che ne e' stato ospite.",
+    "description": "Testo messaggio creazione pratica, nessun dato di struttura di recupero inserito"
+},{
+    "key": "msg_err_creation_no_ed_fin",
+    "value": "Edizione Finanziata Scaduta in data 31/12/2014: non e' possibile presentare nuove domande in data odierna.",
+    "description": "Testo messaggio errore creazione pratica, edizione finanziata non presente o scaduta"
+},{
+    "key": "msg_err_edit_no_rec",
+    "value": "Nessuna struttura di recupero inserita! E' obbigatorio specificarne i dati per il componente specifico.",
+    "description": "Testo messaggio modifica pratica, nessun dato di struttura di recupero inserito"
+},{
+    "key": "msg_err_stato_civile",
+    "value": "Stato civile dichiarato non idoneo. Richiedi un altro ICEF per poter effettuare una domanda idonea.",
+    "description": "Testo messaggio stato civile non idoneo"
+},{
+    "key": "msg_text_attention",
+    "value": "Attenzione",
+    "description": "Testo generico attenzione"
+},{
+    "key": "msg_err_residenza_already_exist",
+    "value": "Anni Residenza gia' inseriti per un altro componente. Inserendo nuovi dati i vecchi dati verrano sovrascritti, continuare?",
+    "description": "Testo messaggio residenza gia' inserita per un componente"
+},{
+    "key": "msg_err_no_comune_da_a",
+    "value": "Nessun valore inserito nei campi 'Comune', 'Data Dal' e 'Data Al'. I campi sono obbligatori",
+    "description": "Testo messaggio campi comune data da e data a obbligatori"
+},{
+    "key": "msg_err_comune_required",
+    "value": "Campo Comune obbligatorio",
+    "description": "Testo messaggio campo comune obbligatorio"
+},{
+    "key": "msg_err_data_da_a_required",
+    "value": "Campi Data Da/A obbligatori",
+    "description": "Testo messaggio campi data da e data a obbligatori"
+},{
+    "key": "msg_err_data_da_major_data_a",
+    "value": "Data di inizio maggiore di data di fine",
+    "description": "Testo messaggio valore data da maggiore di data a"
+},{
+    "key": "msg_err_data_da_minor_data_nascita",
+    "value": "Data di inizio inferiore alla data di nascita del componente",
+    "description": "Testo messaggio valore data da minore di data nascita componente"
+},{
+    "key": "msg_err_data_a_major_data_creazione",
+    "value": "Data di fine maggiore della data odierna ",
+    "description": "Testo messaggio valore data a maggiore di data presentazione domanda"
+},{
+    "key": "msg_err_no_struct_place_da_a",
+    "value": "Nessun valore inserito nei campi 'Nome Struttura', 'Luogo', 'Data Dal' e 'Data Al'. I campi sono obbligatori",
+    "description": "Testo messaggio campi nome struttura, luogo, data da e data a obbligatori"
+},{
+    "key": "msg_err_struct_required",
+    "value": "Campo 'Nome Struttura' obbligatorio",
+    "description": "Testo messaggio campo nome struttura obbligatorio"
+},{
+    "key": "msg_err_place_required",
+    "value": "Campo Luogo obbligatorio",
+    "description": "Testo messaggio campo luogo obbligatorio"
+},{
+    "key": "msg_err_rec_period_before_lasts_two_years",
+    "value": "Il periodo inserito e' precedente agli ultimi due anni",
+    "description": "Testo messaggio errore storico struttura precedente agli ultimi 2 anni"
+},{
+    "key": "msg_err_res_required",
+    "value": "Attenzione: Non e' stata inserita la durata della residenza per nessun componente. Specificare il valore per il componente con il periodo di residenza maggiore",
+    "description": "Testo messaggio errore storico residenza obbligatorio per un componente"
+},{
+    "key": "msg_err_no_requirement_residence",
+    "value": "Attenzione: non possiedi i requisiti per continuare con la creazione di una nuova domanda: durata della residenza in Trentino minore di 3 anni.",
+    "description": "Testo messaggio errore requisito residenza non rispettato"
+},{
+    "key": "msg_err_no_struct_inserted",
+    "value": "Non hai inserito nessuna struttura. Devi specificare i dati della/delle strutture di recupero.",
+    "description": "Testo messaggio errore nessuna struttura inserita in storico"
+},{
+    "key": "msg_err_no_requirement_residence_out_periods",
+    "value": "Attenzione: non possiedi i requisiti per continuare con la creazione di una nuova domanda: esistono periodi di non residenza in Trentino negli ultimi 3 anni.",
+    "description": "Testo messaggio errore periodi di non residenza negli ultimi tre anni"
+},{
+    "key": "msg_err_no_enouch_month_in_structs",
+    "value": "Il totale dei mesi effettuati in una struttura di recupero e' inferiore a 6 quindi non sufficiente.",
+    "description": "Testo messaggio errore mesi in strutture di recupero inveriore a 6"
+},{
+    "key": "msg_err_no_requirement_component_1",
+    "value": "Il componente '",
+    "description": "Testo messaggio errore componente senza requisiti parte 1"
+},{
+    "key": "msg_err_no_requirement_component_2",
+    "value": "' non possiede i requisiti richiesti.",
+    "description": "Testo messaggio errore componente senza requisiti parte 2"
+},{
+    "key": "msg_err_no_requirement_components_1",
+    "value": "I componenti '",
+    "description": "Testo messaggio errore componenti senza requisiti parte 1"
+},{
+    "key": "msg_err_no_requirement_components_2",
+    "value": "' e '",
+    "description": "Testo messaggio errore componenti senza requisiti parte 2"
+},{
+    "key": "msg_err_no_requirement_components_3",
+    "value": "' non possiedono i requisiti richiesti.",
+    "description": "Testo messaggio errore componenti senza requisiti parte 3"
+},{
+    "key": "msg_err_no_requirement_practice_creation",
+    "value": "Non sei in possesso dei requisiti minimi per poter effettuare una domanda idonea. La domanda e' ammissibile solo se nessun componente del nucleo richiedente e' proprietario o usufruttuario di un alloggio adeguato. Vedi nota informativa (i)",
+    "description": "Testo messaggio errore no requisiti in creazione pratica"
+},{
+    "key": "msg_err_practice_recovery",
+    "value": "Errore Recupero pratiche utente loggato.",
+    "description": "Testo messaggio errore recupero pratiche utente"
+},{
+    "key": "msg_err_practice_creation_icef",
+    "value": "Creazione Pratica non riuscita. Identificativo ICEF non corretto",
+    "description": "Testo messaggio errore creazione pratica icef non corretto"
+},{
+    "key": "msg_info_practice_creation_richiedente_donna",
+    "value": "Nel caso di richiedente di sesso 'FEMMINILE' il sistema potrebbe non assegnare i punti relativi alla coniuge/convivente lavoratrice (5 punti). Nel caso in cui si presentasse questa situazione suggeriamo di presentare la domanda con il richiedente di sesso 'MASCHILE'.",
+    "description": "Testo messaggio errore creazione pratica icef non corretto"
+},{
+    "key": "msg_succ_practice_creation_1",
+    "value": "Creazione Pratica ",
+    "description": "Testo messaggio successo creazione pratica parte 1"
+},{
+    "key": "msg_succ_practice_creation_2",
+    "value": " avvenuta con successo.",
+    "description": "Testo messaggio successo creazione pratica parte 2"
+},{
+    "key": "msg_err_practice_creation_icef_high",
+    "value": "Non possiedi i requisiti per creare una nuova domanda. Il tuo indicatore ICEF  di accesso risulta essere troppo alto.",
+    "description": "Testo messaggio errore creazione pratica icef troppo alto"
+},{
+    "key": "msg_text_success",
+    "value": "Successo",
+    "description": "Testo messaggio generico successo"
+},{
+    "key": "msg_succ_edit_alloggio",
+    "value": "Modifica Alloggio Occupato avvenuta con successo.",
+    "description": "Testo messaggio successo aggiornamento alloggio occupato"
+},{
+    "key": "msg_err_edit_alloggio",
+    "value": "Errore Modifica Pratica - Alloggio Occupato",
+    "description": "Testo messaggio errore aggiornamento alloggio occupato"
+},{
+    "key": "msg_succ_edit_residenza",
+    "value": "Modifica Residenza avvenuta con successo.",
+    "description": "Testo messaggio successo aggiornamento residenza"
+},{
+    "key": "msg_err_edit_residenza",
+    "value": "Errore Modifica Pratica - Residenza",
+    "description": "Testo messaggio errore aggiornamento residenza"
+},{
+    "key": "msg_text_no_ambito_selected",
+    "value": "Non hai effettuato nessuna scelta riguardo al comune o alla circoscrizione: attenzione. La mancata indicazione di una preferenza e' intesa come scelta indifferenziata di tutti i comuni",
+    "description": "Testo messaggio nessun ambito scelto"
+},{
+    "key": "msg_succ_edit_ambito",
+    "value": "Settaggio Ambito territoriale avvenuto con successo.",
+    "description": "Testo messaggio successo aggiornamento ambito"
+},{
+    "key": "msg_err_edit_ambito",
+    "value": "Errore nel settaggio dell'Ambito territoriale",
+    "description": "Testo messaggio errore settaggio ambito"
+},{
+    "key": "msg_succ_edit_nucleo_fam",
+    "value": "Modifica Nucleo familiare avvenuta con successo.",
+    "description": "Testo messaggio successo modifica nucleo familiare"
+},{
+    "key": "msg_err_edit_nucleo_fam",
+    "value": "Modifica Nucleo familiare non riuscita.",
+    "description": "Testo messaggio errore modifica nucleo familiare"
+},{
+    "key": "msg_err_check_parentela_sc",
+    "value": "Stato civile specificato non corretto. E' necessario inserire i dati per la sentenza di separazione.",
+    "description": "Testo messaggio errore in stato civile"
+},{
+    "key": "msg_succ_edit_parentela_sc",
+    "value": "Modifica Dati di parentela e stato civile dei Componenti avvenuta con successo.",
+    "description": "Testo messaggio successo modifica parentela e stato civile"
+},{
+    "key": "msg_err_edit_parentela_sc",
+    "value": "Modifica Dati di parentela e stato civile dei Componenti non riuscita.",
+    "description": "Testo messaggio errore modifica parentela e stato civile"
+},{
+    "key": "msg_succ_edit_component_data",
+    "value": "Modifica dati Componente avvenuta con successo.",
+    "description": "Testo messaggio successo modifica dati componente"
+},{
+    "key": "msg_succ_edit_all_components",
+    "value": "Tutti i componenti il nucleo sono stati correttamente aggiornati. Premi sul pulsante 'Avanti' per continuare",
+    "description": "Testo messaggio successo modifica dati ultimo componente il nucleo familiare"
+},{
+    "key": "msg_err_edit_component_data",
+    "value": "Modifica Dati Componente non riuscita.",
+    "description": "Testo messaggio errore modifica dati componente"
+},{
+    "key": "msg_succ_edit_info_ass",
+    "value": "Aggiornamento informazioni assegnazione avvenuto con successo",
+    "description": "Testo messaggio successo modifica info assegnazione"
+},{
+    "key": "msg_err_edit_info_ass",
+    "value": "Aggiornamento informazioni assegnazione non riuscito.",
+    "description": "Testo messaggio errore modifica info assegnazione"
+},{
+    "key": "msg_succ_change_ric",
+    "value": "Cambio richiedente avvenuto con successo.",
+    "description": "Testo messaggio successo cambio richiedente"
+},{
+    "key": "msg_err_change_ric",
+    "value": "Cambio richiedente non riuscito.",
+    "description": "Testo messaggio errore cambio richiedente"
+},{
+    "key": "msg_text_err",
+    "value": "Errore",
+    "description": "Testo messaggio generico errore"
+},{
+    "key": "msg_text_failure",
+    "value": "Insuccesso",
+    "description": "Testo messaggio generico insuccesso"
+},{
+    "key": "msg_text_refused",
+    "value": "Rifiutata",
+    "description": "Testo messaggio generico rifiutata"
+},{
+    "key": "msg_err_practice_confirmation",
+    "value": "Errore nella conferma della pratica.",
+    "description": "Testo messaggio errore conferma pratica"
+},{
+    "key": "msg_err_practice_confirmation_error_list",
+    "value": "Domanda non confermata. Lista errori: ",
+    "description": "Testo messaggio lista errori in conferma pratica"
+},{
+    "key": "msg_err_practice_confirmation_exception_desc",
+    "value": "Domanda non confermata. Eccezione: ",
+    "description": "Testo messaggio descrizione eccezione in conferma pratica"
+},{
+    "key": "msg_succ_practice_confirmation",
+    "value": "Domanda creata e confermata dall'utente.",
+    "description": "Testo messaggio successo creazione e conferma pratica"
+},{
+    "key": "msg_succ_practice_refused",
+    "value": "Domanda rifiutata dall'utente.",
+    "description": "Testo messaggio successo pratica rifiutata"
+},{
+    "key": "msg_err_practice_view_json",
+    "value": "Errore nell recupero dei dati della pratica. Riprovare piu' tardi.",
+    "description": "Testo messaggio errore stampa pratica json"
+},{
+    "key": "msg_err_practice_view_pdf",
+    "value": "Errore nel caricamento del file PDF. Riprovare piu' tardi.",
+    "description": "Testo messaggio errore crea PDF da pratica"
+},{
+    "key": "msg_err_no_autocert_from_practice_in_pay",
+    "value": "Impossibile caricare i dati di autocertificazione. Riprovare in un secondo momento.",
+    "description": "Testo messaggio errore recupero dati autocertificazione pratica in pagamento"
+},{
+    "key": "msg_ask_load_old_practice_in_create",
+    "value": "Vuoi caricare i dati dell' ultima domanda effettuata?",
+    "description": "Testo messaggio domanda caricamento vecchia pratica in create"
+},{
+    "key": "text_btn_end",
+    "value": "Termina",
+    "description": "Testo pulsante 'termina'"
+},{
+    "key": "text_btn_next",
+    "value": "Avanti",
+    "description": "Testo pulsante 'avanti'"
+},{
+    "key": "text_btn_close",
+    "value": "Chiudi",
+    "description": "Testo pulsante 'chiudi'"
+},{
+    "key": "text_btn_next_comp",
+    "value": "Seguente",
+    "description": "Testo pulsante 'prossimo componente'"
+},{
+    "key": "text_btn_save_comp",
+    "value": "Salva componente e continua",
+    "description": "Testo pulsante 'salva componente'"
+},{
+    "key": "text_btn_save",
+    "value": "Salva",
+    "description": "Testo pulsante 'salva'"
+},{
+    "key": "app_tab-title",
+    "value": "Gestione Parcheggi",
+    "description": "Titolo tab browser"
+}, {
+    "key": "app_home-title",
+    "value": "Gestione Parcheggi",
+    "description": "Titolo pagina home app"
+}, {
+    "key": "app_console-title",
+    "value": "Console Operatore",
+    "description": "Titolo pagina console app"
+}, {
+    "key": "menu_bar-home",
+    "value": "Home",
+    "description": "Link home"
+}, {
+    "key": "menu_bar-logout",
+    "value": "Esci",
+    "description": "Link esci"
+}, {
+    "key": "text_btn_prec_comp",
+    "value": "Precedente",
+    "description": "Testo pulsante 'componente precedente'"
+}, {
+	"key": "left_menu-availableServices_eu",
+	"value": "Servizi per cittadini comunitari",
+	"description": "Menu sx Servizi disponibili"
+}, {
+	"key": "left_menu-availableServices_extraeu",
+	"value": "Servizi per cittadini extracomunitari",
+	"description": "Menu sx Servizi disponibili"
+}, {
+	"key": "left_menu-availableServices_op",
+	"value": "Servizi Operatore",
+	"description": "Menu sx Servizi disponibili operatore"
+}, {
+	"key": "left_menu-moreServices",
+	"value": "Servizi utili",
+	"description": "Menu sx Servizi utili"
+}, {
+	"key": "left_menu-bildings",
+	"value": "Richiesta alloggio",
+	"description": "Link servizio edilizia"
+}, {
+	"key": "left_menu-allowances",
+	"value": "Integrazione al canone",
+	"description": "Link servizio assegni"
+}, {
+	"key": "left_menu-search",
+	"value": "Ricerca pratica",
+	"description": "Link servizio ricerca"
+}, {
+	"key": "left_menu-classification",
+	"value": "Graduatoria",
+	"description": "Link servizio graduatoria"
+}, {
+	"key": "left_menu-classification_provv",
+	"value": "Graduatoria Provvisoria",
+	"description": "Link servizio graduatoria provvisoria"
+}, {
+	"key": "left_menu-classification_final",
+	"value": "Graduatoria Definitiva",
+	"description": "Link servizio graduatoria definitiva"
+}, {
+	"key": "left_menu-classification_benefits",
+	"value": "Assegnazione Benefici",
+	"description": "Link servizio graduatoria assegnazione benefici"
+}, {
+	"key": "left_menu-classification_notifics",
+	"value": "Invio Notifiche",
+	"description": "Link servizio graduatoria invio notifiche"
+}, {
+	"key": "left_menu-report",
+	"value": "Analizza dati",
+	"description": "Link servizio report"
+}, {
+	"key": "citizen_info",
+	"value": "Informazioni Cittadino",
+	"description": "Titolo informazioni cittadino"
+}, {
+	"key": "comunity_info",
+	"value": "Informazioni Comunita'",
+	"description": "Titolo informazioni comunita"
+}, {
+	"key": "citizen_name",
+	"value": "Nome",
+	"description": "Label nome cittadino"
+}, {
+	"key": "comunity_name",
+	"value": "Nome",
+	"description": "Nome comunita"
+}, {
+	"key": "operator_name",
+	"value": "Nome Operatore",
+	"description": "Nome operatore"
+}, {
+	"key": "citizen_surname",
+	"value": "Cognome",
+	"description": "Label cognome cittadino"
+}, {
+	"key": "citizen_address",
+	"value": "Indirizzo",
+	"description": "Label indirizzo cittadino"
+}, {
+	"key": "comunity_address",
+	"value": "Indirizzo",
+	"description": "Indirizzo comunita"
+}, {
+	"key": "citizen_phone",
+	"value": "Telefono",
+	"description": "Label telefono cittadino"
+}, {
+	"key": "citizen_gender",
+	"value": "Sesso",
+	"description": "Label sesso cittadino"
+}, {
+	"key": "citizen_taxcode",
+	"value": "CF",
+	"description": "Label cf cittadino"
+}, {
+	"key": "citizen_date_of_birth",
+	"value": "Data e luogo di nascita",
+	"description": "Label data e luogo di nascita cittadino"
+}, {
+	"key": "citizen_birth_place",
+	"value": "Stato di nascita:",
+	"description": "Label stato di nascita cittadino"
+}, {
+	"key": "citizen_birth_municipality",
+	"value": "Comune di nascita:",
+	"description": "Label comune di nascita cittadino"
+}, {
+	"key": "citizen_citizenship",
+	"value": "Cittadinanza:",
+	"description": "Label cittadinanza cittadino"
+}, {
+	"key": "citizen_mail",
+	"value": "E-mail",
+	"description": "Label mail cittadino"
+}, {
+	"key": "citizen_ueCitizen",
+	"value": "Cittadino Extracomunitario",
+	"description": "Label cittadino extracomunitario"
+}, {
+	"key": "citizen_ueCitizen_yes",
+	"value": "Si",
+	"description": "Valore cittadino comunitario"
+}, {
+	"key": "citizen_ueCitizen_no",
+	"value": "No",
+	"description": "Valore cittadino extracomunitario"
+}, {
+	"key": "need_help",
+	"value": "Ti serve aiuto",
+	"description": "Menu dx Assistenza online"
+}, {
+	"key": "call_skype",
+	"value": "Chiama",
+	"description": "Link chiamata skype"
+}, {
+	"key": "online_assistance_skype",
+	"value": "l'assistenza on-line",
+	"description": "Label assistenza skype"
+}, {
+	"key": "guide",
+	"value": "Guida",
+	"description": "Menu dx Guida"
+}, {
+	"key": "faq",
+	"value": "Domande frequenti",
+	"description": "Link faq"
+}, {
+	"key": "documents",
+	"value": "Documenti",
+	"description": "Link documenti"
+}, {
+	"key": "home_title-recent_practices",
+	"value": "Pratiche recenti",
+	"description": "Titolo home pratiche recenti"
+}, {
+	"key": "home_title-old_practices",
+	"value": "Scorse edizioni finanziate",
+	"description": "Titolo home pratiche scorse edizioni"
+}, {
+	"key": "home_title-console",
+	"value": "Console Operatore",
+	"description": "Titolo home console operatore"
+}, {
+	"key": "home_filter_label",
+	"value": "Filtra per cod.",
+	"description": "Label per filtro pratiche"
+}, {
+	"key": "filter_text",
+	"value": "filtra elementi...",
+	"description": "Testo iniziale text box del filtro"
+}, {
+	"key": "practice_type_online",
+	"value": "Pratica creata in myweb",
+	"description": "Label tipo pratica myweb"
+}, {
+	"key": "practice_type_not_online",
+	"value": "Pratica creata in ambiente extra myweb",
+	"description": "Label tipo pratica non myweb"
+}, {
+	"key": "practice_code",
+	"value": "Cod",
+	"description": "Label codice pratica"
+}, {
+	"key": "practice_position",
+	"value": "Posizione",
+	"description": "Label posizione pratica"
+}, {
+	"key": "practice_title",
+	"value": "Titolo",
+	"description": "Label titolo pratica"
+}, {
+	"key": "practice_cat",
+	"value": "Cat",
+	"description": "Label categoria pratica"
+}, {
+	"key": "practice_state",
+	"value": "Stato",
+	"description": "Label stato pratica"
+}, {
+	"key": "practice_state_approved",
+	"value": "Approvata",
+	"description": "Stato pratica approvata"
+}, {
+	"key": "practice_state_to_be_approved",
+	"value": "Da Approvare",
+	"description": "Stato pratica da approvare"
+}, {
+	"key": "practice_state_consolidated",
+	"value": "Consolidata",
+	"description": "Stato pratica consolidata"
+}, {
+	"key": "practice_state_to_be_consolidated",
+	"value": "Da Consolidare",
+	"description": "Stato pratica da consolidare"
+}, {
+	"key": "practice_state_removed",
+	"value": "Rimossa",
+	"description": "Stato pratica rimossa"
+}, {
+	"key": "practice_editing_state_console",
+	"value": "Stato inserimento dati: ",
+	"description": "Stato editing pratiche"
+}, {
+	"key": "practice_editing_form_name_details",
+	"value": "Dettaglio",
+	"description": "Titolo form dettagli pratica"
+}, {
+	"key": "practice_editing_form_name_nucleo_ric",
+	"value": "Nucleo - Richiedente",
+	"description": "Titolo form dettagli nucleo richiedente"
+}, {
+	"key": "practice_editing_form_name_nucleo_comp",
+	"value": "Nucleo - Componenti",
+	"description": "Titolo form dettagli nucleo componenti"
+}, {
+	"key": "practice_editing_form_name_nucleo_details",
+	"value": "Nucleo - Dettagli",
+	"description": "Titolo form dettagli nucleo dettagli"
+}, {
+	"key": "practice_editing_form_name_nucleo_ass",
+	"value": "Nucleo - Assegnazione",
+	"description": "Titolo form dettagli nucleo assegnazione"
+}, {
+	"key": "practice_editing_form_actual",
+	"value": "Form attuale: ",
+	"description": "Titolo form attuale"
+}, {
+	"key": "practice_type",
+	"value": "Tipo",
+	"description": "Label tipo pratica"
+}, {
+	"key": "practice_opening_date",
+	"value": "Giorno apertura",
+	"description": "Label giorno apertura pratica"
+}, {
+	"key": "practice_financed_edition",
+	"value": "Edizione finanziata",
+	"description": "Label edizione finanziata pratica"
+}, {
+	"key": "practice_operations",
+	"value": "Azioni",
+	"description": "Label operazioni su pratica"
+}, {
+	"key": "practice_view",
+	"value": "Visualizza",
+	"description": "Link visualizza"
+}, {
+	"key": "practice_view_pdf_file",
+	"value": "Scheda PDF",
+	"description": "Link visualizza pdf"
+}, {
+	"key": "practice_edit",
+	"value": "Modifica",
+	"description": "Link modifica"
+}, {
+	"key": "practice_cons",
+	"value": "Conferma",
+	"description": "Link conferma"
+}, {
+	"key": "previous_label",
+	"value": "Prec",
+	"description": "Label precedente"
+}, {
+	"key": "next_label",
+	"value": "Succ",
+	"description": "Label successivo"
+}, {
+	"key": "no_practice_in_lists",
+	"value": "Nessuna pratica presente.",
+	"description": "Label no practice in lists"
+}, {
+	"key": "page_title-family_allowances",
+	"value": "Edilizia abitativa",
+	"description": "Titolo pagina edilizia abitativa"
+}, {
+	"key": "add_practice_label",
+	"value": "Nuova Domanda",
+	"description": "Label pulsante aggiungi"
+}, {
+	"key": "practice_remove",
+	"value": "Rimuovi",
+	"description": "Link rimuovi"
+}, {
+	"key": "classification_label_provv",
+	"value": "Graduatoria Provvisoria",
+	"description": "Label pulsante graduatoria provvisoria"
+}, {
+	"key": "classification_label_final",
+	"value": "Graduatoria Definitiva",
+	"description": "Label pulsante graduatoria definitiva"
+}, {
+	"key": "user_not_in_provv_classification_label",
+	"value": "La sua domanda non rientra in graduatoria provvisoria pubblicata in data ",
+	"description": "Label messaggio non in graduatoria provvisoria"
+}, {
+	"key": "user_not_in_final_classification_label",
+	"value": "La sua domanda non rientra in graduatoria definitiva pubblicata in data ",
+	"description": "Label messaggio non in graduatoria definitiva"
+}, {
+	"key": "user_in_provv_classification_label",
+	"value": "Di seguito la graduatoria provvisoria pubblicata in data ",
+	"description": "Label tabella graduatoria provvisoria"
+}, {
+	"key": "user_in_final_classification_label",
+	"value": "Di seguito la graduatoria definitiva pubblicata in data ",
+	"description": "Label tabella graduatoria definitiva"
+}, {
+	"key": "page_title-housing",
+	"value": "Edilizia abitativa",
+	"description": "Titolo pagina edilizia abitativa"
+}, {
+	"key": "practice_details_title",
+	"value": "Dettagli pratica",
+	"description": "Titolo pagina dettagli pratica"
+}, {
+	"key": "practice_edit_label",
+	"value": "Modifica",
+	"description": "Label modifica pratica"
+}, {
+	"key": "practice_goback_label",
+	"value": "Indietro",
+	"description": "Label torna indietro"
+}, {
+	"key": "housing_type",
+	"value": "Edilizia abitativa",
+	"description": "Tipo pratica edilizia abitativa"
+}, {
+	"key": "allowances_type",
+	"value": "Assegni familiari",
+	"description": "Tipo pratica assegni familiari"
+}, {
+	"key": "document_title",
+	"value": "Documenti",
+	"description": "Testo sezione documenti"
+}, {
+	"key": "document_link_edil",
+	"value": "locazione alloggio",
+	"description": "Testo link locazione alloggio"
+}, {
+	"key": "document_link_allowances",
+	"value": "integrazione canone affitto",
+	"description": "Testo link integrazione affitto"
+}, {
+	"key": "usefull_link",
+	"value": "Contatti utili",
+	"description": "Titolo sezione contatti utili"
+}, {
+	"key": "usefull_link_text",
+	"value": "Per informazioni o domante selezionare il seguente link ",
+	"description": "Testo sezione contatti utili"
+}, {
+	"key": "loading_text",
+	"value": "Caricamento in corso",
+	"description": "Testo caricamento"
+}, {
+	"key": "edil_practice_title",
+	"value": "Domanda di locazione alloggio",
+	"description": "Titolo pagina domanda di locazione alloggio"
+}, {
+	"key": "ass_practice_title",
+	"value": "Domanda di contributo integrativo sul canone di locazione",
+	"description": "Titolo pagina integrazione affitto"
+}, {
+	"key": "legge_prov_title",
+	"value": "L.P. 7.11.2005, n. 15 e Regolamento d'esecuzione DPP n. 17 - 75/Leg dd. 12.12.2011",
+	"description": "Titolo legge provinciale"
+}, {
+	"key": "ass_practice_panel_title",
+	"value": "Contributo sul canone di affitto",
+	"description": "Titolo pannello info affitto"
+}, {
+	"key": "edil_practice_panel_title",
+	"value": "Locazione alloggio pubblico a canone sociale",
+	"description": "Titolo pannello info locazione"
+}, {
+	"key": "ass_practice_panel_text",
+	"value": "La normativa prevede, per i cittadini residenti sul territorio provinciale, la possibilita' di ottenere la concessione di un contributo per l'abbattimento del canone di locazione degli alloggi locati sul libero mercato. Tale agevolazione e' denominata contributo integrativo ed e' concesso dagli Enti locali, cioe' le Comunita' di valle e il Comune di Trento. Per ottenere l'agevolazione e' necessario avere i requisiti previsti dalla legge provinciale 7 novembre 2005, n. 15 e relativo regolamento di esecuzione. I requisiti vengono accertati in fase di presentazione della domanda. Il contributo viene concesso sulla base di una graduatoria, fino all’esaurimento delle risorse stanziate a tale scopo; ha durata di 12 mesi ed e' erogato a decorrere dal mese successivo alla data di adozione del provvedimento di concessione.",
+	"description": "Blocco testo pannello info affitto"
+}, {
+	"key": "ass_practice_panel_click_1",
+	"value": "Requisiti:",
+	"description": "Testo link click 1 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_link_1",
+	"value": "Per l'accesso ai benefici e' necessario possedere particolari requisiti, riferiti al richiedente e al suo nucleo familiare, che vengono verificati al momento della presentazione della domanda. La mancanza di uno dei requisiti comporta la decadenza dai benefici e l’esclusione dalla graduatoria.",
+	"description": "Testo link 1 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_click_2",
+	"value": "Domande:",
+	"description": "Testo link click 2 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_link_2",
+	"value": "La domanda di contributo integrativo puo' essere presentata dal 1° luglio al 31 dicembre di ogni anno all'Ente locale sul cui territorio si trova l'alloggio locato ed e' soggetta a marca da bollo.",
+	"description": "Testo link 2 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_click_3",
+	"value": "Graduatorie:",
+	"description": "Testo link click 3 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_link_3",
+	"value": "Gli Enti provvedono alla formazione delle graduatorie dal 1° gennaio al 30 giugno di ogni anno.",
+	"description": "Testo link 3 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_click_4",
+	"value": "Calcolo del contributo integrativo:",
+	"description": "Testo link click 4 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_link_4",
+	"value": "Il contributo viene calcolato tenendo conto del numero di componenti del nucleo familiare e del coefficiente ICEF. Non puo' eccedere il 50% del canone di locazione, con un limite di € 300,00 mensili.",
+	"description": "Testo link 4 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_click_5",
+	"value": "L’indicatore della condizione economico-patrimoniale familiare (I.C.E.F.):",
+	"description": "Testo link click 5 pannello info affitto"
+}, {
+	"key": "ass_practice_panel_link_5",
+	"value": " La Provincia Autonoma di Trento ha previsto l'introduzione, per tutti coloro che richiedono agevolazioni pubbliche, di un’unica metodologia per la valutazione della condizione economica (reddituale e patrimoniale) .",
+	"description": "Testo link 5 pannello info affitto"
+}, {
+	"key": "edil_practice_panel_text",
+	"value": "Per favorire il diritto all’abitazione, la normativa provinciale prevede la locazione di alloggi di proprieta' o in disponibilita' di ITEA S.p.A. o di imprese convenzionate, applicando un canone di affitto sostenibile, ovvero commisurato alla effettiva possibilita' del nucleo familiare di far fronte alle spese per l'alloggio. ",
+	"description": "Blocco testo pannello info locazione"
+}, {
+	"key": "edil_practice_panel_click_1",
+	"value": "Requisiti:",
+	"description": "Testo link click 1 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_link_1",
+	"value": "Il possesso dei requisiti necessari per l’accesso ai benefici è verificato sia al momento della presentazione della domanda che al momento della comunicazione della disponibilità dell’alloggio. La mancanza di uno dei requisiti comporta la decadenza dai benefici e l’eventuale esclusione dalla graduatoria.",
+	"description": "Testo link 1 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_click_2",
+	"value": "Domande:",
+	"description": "Testo link click 2 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_link_2",
+	"value": "La domanda di locazione alloggio puo' essere presentata dal 1° luglio al 31 dicembre di ogni anno all'Ente locale. E' soggetta a marca da bollo. Prima di presentare la domanda, presso l’Ente locale competente per territorio, e' necessario ottenere l’attestazione ICEF, relativa alla condizione economico-patrimoniale del nucleo familiare.",
+	"description": "Testo link 2 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_click_3",
+	"value": "Graduatorie:",
+	"description": "Testo link click 3 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_link_3",
+	"value": "Gli Enti provvedono alla formazione delle graduatorie, dal 1° gennaio al 30 giugno di ogni anno.",
+	"description": "Testo link 3 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_click_4",
+	"value": "Verifica annuale:",
+	"description": "Testo link click 4 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_link_4",
+	"value": "I nuclei familiari in locazione di un alloggio di edilizia abitativa pubblica hanno l'obbligo di presentare la documentazione necessaria per la verifica annuale dei requisiti.",
+	"description": "Testo link 4 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_click_5",
+	"value": "L’indicatore della condizione economico-patrimoniale familiare (I.C.E.F.):",
+	"description": "Testo link click 5 pannello info locazione"
+}, {
+	"key": "edil_practice_panel_link_5",
+	"value": " La Provincia Autonoma di Trento ha previsto l'introduzione, per tutti coloro che richiedono agevolazioni pubbliche, di un'unica metodologia per la valutazione della condizione economica (reddituale e patrimoniale).",
+	"description": "Testo link 5 pannello info locazione"
+}, {
+	"key": "info_0",
+	"value": "Per 'residenza' si intende la residenza anagrafica in Provincia di Trento da almeno 3 ANNI IN VIA CONTINUATIVA alla data di presentazione della domanda.",
+	"description": "Descrizione del campo residenza"
+}, {
+	"key": "info_1a",
+	"value": "Se il permesso di soggiorno e' SCADUTO (o non piu' disponibile) e' necessario indicare lo USER ID della ricevuta postale di rinnovo.",
+	"description": "Descrizione del campo possesso alloggio"
+}, {
+	"key": "info_1b",
+	"value": "Inserire il numero della vostra ricevuta postale di rinnovo del permesso (evidenziato nell'immagine).",
+	"description": "Descrizione del campo possesso alloggio"
+}, {
+	"key": "info_1",
+	"value": "Per 'proprieta' o usufrutto' si intende la titolarità riconducibile per intero in capo al nucleo familiare richiedente, con riferimento al triennio precedente la data di presentazione della domanda, di un DIRITTO ESCLUSIVO DI PROPRIETA', USUFRUTTO O ABITAZIONE su un alloggio adeguato. Non si considerano gli alloggi il cui titolo di disponibilità sia cessato a seguito di esecuzione immobiliare.",
+	"description": "Descrizione del campo possesso alloggio"
+}, {
+	"key": "info_2",
+	"value": "Per 'alloggio adeguato' si intende l'alloggio dotato di servizi igienici interni e che non sia stato dichiarato inagibile dalla competente autorità.",
+	"description": "Descrizione del campo alloggio adeguato"
+}, {
+	"key": "info_3",
+	"value": "Per 'occupanti l'alloggio' si intendono le persone RESIDENTI ANAGRAFICAMENTE.",
+	"description": "Descrizione del campo occupanti"
+}, {
+	"key": "info_4",
+	"value": "Per 'stanza da letto' si intende ogni vano finestrato, avente superficie mimina di mq.8, ulteriore rispetto a quelli adibiti a servizi igienici, cucina e soggiorno.",
+	"description": "Descrizione del campo stanza da letto"
+}, {
+	"key": "info_5",
+	"value": "Va indicato il numero dei componenti che sono rientrati nel nucleo familiare da NON PIU' DI 2 ANNI dalla data di presentazione della domanda a seguito di permanenza per ALMENO 6 MESI consecutivi in strutture, enti, aziende residenziali di cura, assistenza, accoglienza, recupero o in strutture carcerarie.",
+	"description": "Descrizione del campo componenti da strutture"
+}, {
+	"key": "info_6",
+	"value": "Inserire ID DOMANDA ovvero solo le cifre prima della barra (nell'immagine evidenziate in giallo).",
+	"description": "Descrizione del campo icef"
+}, {
+	"key": "info_7",
+	"value": "Per 'ambito territoriale' si intende la preferenza di uno specifico comune (ad una distanza inferiore o pari a 15 km da quanto indicato) per la locazione di un alloggio pubblico. La scelta dell'ambito non è obbligatoria tuttavia è preferibile specificarla in quanto la mancata indicazione è intesa come scelta indifferenziata di tutti i comuni.",
+	"description": "Descrizione del campo ambito"
+}, {
+	"key": "info_7b",
+	"value": "Il nucleo familiare richiedente deve essere in possesso delle seguenti condizioni:",
+	"description": "Descrizione del campo contratto locazione"
+}, {
+	"key": "info_8a",
+	"value": "a) Un componente il nucleo familiare richiedente dev’essere titolare di un contratto di locazione alla data di presentazione della domanda stipulato ai sensi dell’articolo 2 della Legge 9 dicembre 1998, n. 431 (con durata 4+4  oppure 3+2); sono pertanto esclusi i contratti di locazione di natura transitoria; ",
+	"description": "Descrizione del campo contratto locazione"
+}, {
+	"key": "info_8b",
+	"value": "b) Il contratto di locazione per il quale si richiede l’agevolazione si deve riferire ad un alloggio ubicato nel territorio della Comunità della Vallagarina e nello stesso alloggio il nucleo familiare deve aver stabilito la residenza;",
+	"description": "Descrizione del campo contratto locazione"
+}, {
+	"key": "info_8c",
+	"value": "c) Sono esclusi i contratti di locazione:",
+	"description": "Descrizione del campo contratto locazione"
+}, {
+	"key": "info_8ca",
+	"value": "relativi ad unità abitative appartenenti alle categorie catastali A/1, A/7, A/8, A/9;",
+	"description": "Descrizione del campo contratto locazione"
+}, {
+	"key": "info_8cb",
+	"value": "relativi ad alloggi di edilizia abitativa pubblica locati a canone sostenibile o a canone concordato;",
+	"description": "Descrizione del campo contratto locazione"
+}, {
+	"key": "info_8cc",
+	"value": "stipulati tra coniugi non legalmente separati o parenti o affini di primo grado.",
+	"description": "Descrizione del campo contratto locazione"
+}, {
+	"key": "info_7c",
+	"value": "Inserire la DATA DI REGISTRAZIONE del contratto come negli esempi riportati in alto (versione cartacea nella prima immagine, versione telematica nella seconda immagine).",
+	"description": "Descrizione del campo contratto locazione"
+}, {
+	"key": "info_8",
+	"value": "Inserire SOLO l'importo del canone di locazione SENZA ALCUN ALTRO TIPO DI SPESA. Inserire l'importo con massimo 2 decimali separati da virgola.",
+	"description": "Descrizione del campo canone alloggio"
+}, {
+	"key": "info_9",
+	"value": "In presenza di SEPARAZIONE LEGALE, lo stato civile da indicare è 'Coniugato/a'; in presenza di DIVORZIO, lo stato civile da dichiarare è 'Gia coniugato/a'.",
+	"description": "Descrizione del campo stato civile"
+}, {
+	"key": "info_10",
+	"value": "Inserire gli anni di residenza nella scheda del componente il nucleo familiare che possiede il maggior numero di anni di residenza in Provincia di Trento.",
+	"description": "Descrizione del campo residenza"
+}, {
+	"key": "info_11",
+	"value": "L'AIRE è l'anagrafe degli italiani residenti all'estero; l'iscrizione all'Aire in un comune della Provincia di Trento equivale alla residenza in provincia.",
+	"description": "Descrizione del campo aire"
+}, {
+	"key": "info_12",
+	"value": "Inserisci gli anni di attività lavorativa nella scheda del componente il nucleo familiare che possiede il maggior numero di anni di attività lavorativa dipendente o autonoma (ai fini della determinazione degli anni di attività lavorativa svolta sono considerati anche i periodi coperti dalgi ammortizzatori sociali previsti in caso di sospensione del rapporto di lavoro); PER UN CORRETTO CALCOLO DEGLI ANNI UTILI SI CONSIGLIA DI CONSULTARE L'ESTRATTO CONTRIBUTIVO INPS. A tale scopo rivolgersi alle sedi INPS oppure collegarsi al sito ",
+	"description": "Descrizione del campo anzianita lavorativa"
+}, {
+	"key": "info_12a0",
+	"value": "Effettuare il calcolo nel seguente modo: ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 0"
+}, {
+	"key": "info_12a",
+	"value": " dall’estratto contributivo INPS nella colonna “contributi utili alla pensione - al diritto e al calcolo” trasformare le settimane/giorni/mesi in ANNI; ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 1"
+}, {
+	"key": "info_12b",
+	"value": " la somma degli anni dei lavori svolti vengono arrotondati se la frazione di anno residua e' superiore a 6 mesi (es. 10 anni, 6 mesi e 10 giorni = 11 anni); ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 2"
+}, {
+	"key": "info_12c",
+	"value": " per ogni anno conteggiare al massimo 52 settimane; ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 3"
+}, {
+	"key": "info_12d",
+	"value": " i rapporti di lavoro sovrapposti (es. part-time in contemporanea) vanno calcolati solamente una volta; ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 4"
+}, {
+	"key": "info_12e",
+	"value": " considerare anche i periodi di iscrizione alla Camera di Commercio se lavoratore autonomo se non riportati nell’estratto contributivo INPS; ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 5"
+}, {
+	"key": "info_12f",
+	"value": " sono da calcolare anche i periodi coperti da ammortizzatori sociali previsti in caso di sospensione del rapporto di lavoro (disoccupazione, mobilita', cassa integrazione, Aspi e Mini Aspi); ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 6"
+}, {
+	"key": "info_12g",
+	"value": " aggiungere anche l'eventuale periodo di leva (servizio militare in Italia); ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 7"
+}, {
+	"key": "info_12h",
+	"value": " per i dipendenti pubblici, poiche' la gestione INPS non e' ancora aggiornata con i dati INPDAP, utilizzare lo stato di servizio; ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 8"
+}, {
+	"key": "info_12i",
+	"value": " al massimo sono attribuiti 20 punti corrispondenti a 20 anni. ",
+	"description": "Descrizione del campo anzianita lavorativa calcolo 9"
+}, {
+	"key": "info_13",
+	"value": "Indicare solo nel caso in cui il soggetto femminile (coniuge o convivente more uxorio) al momento della presentazione della domanda svolge attività lavorativa SOLO IN PRESENZA DI UNO O PIU' SOGGETTI MINORI.",
+	"description": "Descrizione del campo donna lavoratrive"
+}, {
+	"key": "info_14",
+	"value": "Indicare solo nel caso di coniuge non separato legalmente che risiede altrove.",
+	"description": "Descrizione del campo fuori alloggio"
+}, {
+	"key": "info_15",
+	"value": "Selezionare il link 'Visualizza Scheda PDF' per visualizzare il documento con le informazioni della domanda di contributo. Si ricorda di MANTENERE UNA COPIA DEL DOCUMENTO in formato elettronico e/o cartaceo in modo da facilitare la consultazione dei dati. E' obbligatorio selezionare il link per avere accesso alle funzioni di 'conferma' o 'rifiuta' pratica.",
+	"description": "Descrizione del campo link pdf"
+}, {
+	"key": "info_19",
+	"value": "Specificare il numero corretto solo in presenza di uno o piu' lavoratori domestici (badante, colf) che vivono in locali specifici all'interno dell'alloggio",
+	"description": "Descrizione del campo extra icef"
+}, {
+	"key": "info_20",
+	"value": "Indicare 'alloggio sbarrierato' quando nel nucleo familiare esistono disabili con difficolta' deambulatorie.",
+	"description": "Descrizione del campo alloggio sbarrierato"
+}, {
+	"key": "info_close",
+	"value": "CHIUDI",
+	"description": "Link chiudi pannello informativo"
+}, {
+	"key": "info_alt_title",
+	"value": "Visualizza informazioni",
+	"description": "Testo alt o title del link di apertura pannello informativo"
+}, {
+	"key": "filter_option_title",
+	"value": "Opzioni filtro",
+	"description": "Titolo pannello opzioni filtro"
+}, {
+	"key": "upload_option_title",
+	"value": "Mail Graduatoria",
+	"description": "Titolo pannello carica file"
+}, {
+	"key": "search_for_code",
+	"value": "Filtra per codice",
+	"description": "Titolo pagina ricerca per codice"
+}, {
+	"key": "search_for_ric",
+	"value": "Filtra per richiedente",
+	"description": "Titolo pagina ricerca per richiedente"
+}, {
+	"key": "search_for_comp",
+	"value": "Filtra per componente",
+	"description": "Titolo pagina ricerca per componente"
+}, {
+	"key": "start_search",
+	"value": "Avvia ricerca",
+	"description": "Testo pulsante ricerca"
+}, {
+	"key": "clear_search",
+	"value": "Azzera ricerca",
+	"description": "Testo pulsante cancella"
+}, {
+	"key": "practice_code_search",
+	"value": "Codice pratica",
+	"description": "Label codice pratica"
+}, {
+	"key": "ric_name_search",
+	"value": "Nome richiedente",
+	"description": "Label nome richiedente"
+}, {
+	"key": "ric_code_search",
+	"value": "Codice fiscale richiedente",
+	"description": "Label cf richiedente"
+}, {
+	"key": "comp_name_search",
+	"value": "Nome componente",
+	"description": "Label nome componente"
+}, {
+	"key": "comp_code_search",
+	"value": "Codice fiscale componente",
+	"description": "Label cf componente"
+}, {
+	"key": "opt_ric_name_search",
+	"value": "Cerca per nome",
+	"description": "Label opt nome richiedente"
+}, {
+	"key": "opt_ric_code_search",
+	"value": "Cerca per Codice fiscale",
+	"description": "Label opt cf richiedente"
+}, {
+	"key": "no_practice_found",
+	"value": "Nessuna pratica trovata per i parametri di ricerca inseriti.",
+	"description": "Messaggio Nessuna pratica trovata"
+}, {
+	"key": "practice_code_pattern",
+	"value": "Codice di ricerca non valido. Inserire un codice valido nel formato XX-X-XXXXXXX.",
+	"description": "Messaggio codice non corretto"
+}, {
+	"key": "practice_code_required",
+	"value": "Nessun codice inserito. Inserire un codice pratica.",
+	"description": "Messaggio codice mancante"
+}, {
+	"key": "ric_name_pattern",
+	"value": "Campo di ricerca non valido. Inserire un valore testuale.",
+	"description": "Messaggio codice fiscale non corretto"
+}, {
+	"key": "ric_name_required",
+	"value": "Nessun valore inserito. Inserire il nome del richiedente.",
+	"description": "Messaggio codice mancante"
+}, {
+	"key": "no_value_inserted_sr",
+	"value": "Nessun valore inserito.",
+	"description": "Messaggio nessun valore inserito in storico res"
+}, {
+	"key": "ric_code_pattern",
+	"value": "Codice fiscale di ricerca non valido. Inserire un codice fiscale valido.",
+	"description": "Messaggio codice fiscale non corretto"
+}, {
+	"key": "ric_code_required",
+	"value": "Nessun codice fiscale inserito. Inserire un codice fiscale.",
+	"description": "Messaggio codice mancante"
+}, {
+	"key": "practicecode_search_placeholder",
+	"value": "Inserisci un codice pratica",
+	"description": "Testo placeholder per codice pratica."
+}, {
+	"key": "ricname_search_placeholder",
+	"value": "Inserisci nome e cognome richiedente",
+	"description": "Testo placeholder per nome e cognome richiedente."
+}, {
+	"key": "riccode_search_placeholder",
+	"value": "Inserisci codice fiscale richiedente",
+	"description": "Testo placeholder per cf richiedente."
+}, {
+	"key": "compname_search_placeholder",
+	"value": "Inserisci nome e cognome componente",
+	"description": "Testo placeholder per nome e cognome componente."
+}, {
+	"key": "compcode_search_placeholder",
+	"value": "Inserisci codice fiscale componente",
+	"description": "Testo placeholder per cf componente."
+}, {
+	"key": "close_view_button",
+	"value": "Chiudi",
+	"description": "Testo pulsante chiudi pagina visualizza."
+}, {
+	"key": "extracomunitary_section_title_create",
+	"value": "Sezione per Cittadini Extracomunitari",
+	"description": "Titolo blocco extracomunitari crea pratica"
+}, {
+	"key": "basic_requirements_section_title_create",
+	"value": "Requisiti di base",
+	"description": "Titolo blocco requisiti di base crea pratica"
+}, {
+	"key": "alloggio_type_section_title_create",
+	"value": "Dettagli alloggio",
+	"description": "Titolo blocco tipo alloggio crea pratica"
+}, {
+	"key": "permission_label_create",
+	"value": "Permesso:",
+	"description": "Label seleziona permesso ec crea pratica"
+}, {
+	"key": "permission_val_create",
+	"value": "Seleziona permesso",
+	"description": "Default val select permesso ec crea pratica"
+}, {
+	"key": "permission_err_required_create",
+	"value": "Campo 'Permesso' obbligatorio.",
+	"description": "Errore permesso ec obbligatorio in crea pratica"
+}, {
+	"key": "p_expiration_date_label_create",
+	"value": "Scadenza permesso di soggiorno:",
+	"description": "Label scadenza permesso ec crea pratica"
+}, {
+	"key": "p_expiration_date_placeholder_create",
+	"value": "Inserisci data scadenza nel formato gg/MM/aaaa",
+	"description": "Default val select permesso ec crea pratica"
+}, {
+	"key": "p_expiration_date_err_required_create",
+	"value": "Inserire un valore nel campo 'Scadenza permesso di Soggiorno'.",
+	"description": "Errore scadenza permesso ec obbligatorio in crea pratica"
+}, {
+	"key": "residence_permit_ticket_id_create",
+	"value": "Ricevuta Permesso (USERID):",
+	"description": "Label codice ricevuta di soggiorno"
+}, {
+	"key": "residence_permit_ticket_id_placeholder_create",
+	"value": "Inserisci codice ricevuta:",
+	"description": "Default val codice ricevuta di soggiorno"
+}, {
+	"key": "residence_permit_ticket_id_err_required_create",
+	"value": "Campo 'Ricevuta permesso di soggiorno (USERID)' obbligatorio.",
+	"description": "Errore campo userid obbligatorio"
+}, {
+	"key": "job_label_create",
+	"value": "Lavoro:",
+	"description": "Label seleziona lavoro ec crea pratica"
+}, {
+	"key": "job_val_create",
+	"value": "Seleziona lavoro",
+	"description": "Default val select lavoro ec crea pratica"
+}, {
+	"key": "job_err_required_create",
+	"value": "Campo 'Lavoro' obbligatorio.",
+	"description": "Errore lavoro ec obbligatorio in crea pratica"
+}, {
+	"key": "residence_tn_label_1_create",
+	"value": "Residenza",
+	"description": "Label 1 residenza in trentino crea pratica"
+}, {
+	"key": "residence_tn_label_2_create",
+	"value": " in Provincia di Trento (almeno 3 anni in via continuativa):",
+	"description": "Label 2 residenza in trentino crea pratica"
+}, {
+	"key": "residence_tn_val_create",
+	"value": "Scegli Si o No",
+	"description": "Def val residenza in trentino crea pratica"
+}, {
+	"key": "residence_tn_err_required_create",
+	"value": "Campo obbligatorio: selezionare 'Si' o 'No'.",
+	"description": "Errore residenza in trentino obbligatoria crea pratica"
+}, {
+	"key": "accomodation_label_1_create",
+	"value": "Proprieta' o Usufrutto",
+	"description": "Label 1 (possesso - ora proprieta'/usufrutto) alloggio adeguato crea pratica"
+}, {
+	"key": "accomodation_label_2_create",
+	"value": " nell'ultimo triennio di ",
+	"description": "Label 2 possesso alloggio adeguato crea pratica"
+}, {
+	"key": "accomodation_label_3_create",
+	"value": "alloggio adeguato",
+	"description": "Label 3 possesso alloggio adeguato crea pratica"
+}, {
+	"key": "accomodation_val_create",
+	"value": "Scegli Si o No",
+	"description": "Def val possesso alloggio adeguato crea pratica"
+}, {
+	"key": "accomodation_err_required_create",
+	"value": "Campo obbligatorio: selezionare 'Si' o 'No'.",
+	"description": "Errore possesso alloggio adeguato obbligatorio crea pratica"
+}, {
+	"key": "family_components_label_1_create",
+	"value": "Numero componenti ",
+	"description": "Label 1 numero occupanti alloggio crea pratica"
+}, {
+	"key": "family_components_label_2_create",
+	"value": "occupanti l'alloggio",
+	"description": "Label 2 numero occupanti alloggio crea pratica"
+}, {
+	"key": "family_components_placeholder_create",
+	"value": "Inserisci numero componenti nucleo famigliare",
+	"description": "Def val numero occupanti alloggio crea pratica"
+}, {
+	"key": "family_components_label_err_required_create",
+	"value": "Campo 'Numero componenti Famiglia' mancante o non corretto.",
+	"description": "Errore numero occupanti alloggio obbligatorio crea pratica"
+}, {
+	"key": "family_components_label_err_pattern_create",
+	"value": "Valore inserito non numerico.",
+	"description": "Errore numero occupanti alloggio non corretto crea pratica"
+}, {
+	"key": "rooms_number_label_1_create",
+	"value": "Numero ",
+	"description": "Label 1 numero stanze letto crea pratica"
+}, {
+	"key": "rooms_number_label_2_create",
+	"value": "stanze da letto",
+	"description": "Label 2 numero stanze letto crea pratica"
+}, {
+	"key": "rooms_number_placeholder_create",
+	"value": "Inserisci numero camere da letto",
+	"description": "Def val numero stanze letto crea pratica"
+}, {
+	"key": "rooms_number_err_required_create",
+	"value": "Campo 'Numero stanze da letto' mancante o non corretto.",
+	"description": "Errore numero stanze letto obbligatorio crea pratica"
+}, {
+	"key": "rooms_number_err_pattern_create",
+	"value": "Valore inserito non numerico.",
+	"description": "Errore numero stanze letto non corretto crea pratica"
+}, {
+	"key": "accomodation_type_label_create",
+	"value": "Tipo di alloggio:",
+	"description": "Label tipo alloggio crea pratica"
+}, {
+	"key": "accomodation_type_val_create",
+	"value": "Seleziona tipo di alloggio",
+	"description": "Def val tipo alloggio crea pratica"
+}, {
+	"key": "accomodation_type_err_required_create",
+	"value": "Campo 'Tipo alloggio' obbligatorio.",
+	"description": "Errore tipo alloggio obbligatorio crea pratica"
+}, {
+	"key": "comp_num_struct_label_1_create",
+	"value": "Numero componenti",
+	"description": "Label 1 numero componenti da strutture di recupero crea pratica"
+}, {
+	"key": "comp_num_struct_label_2_create",
+	"value": " provenienti da strutture, enti, aziende residenziali di cura, assistenza, accoglienza, recupero o strutture carcerarie (massimo 2):",
+	"description": "Label 2 numero componenti da strutture di recupero crea pratica"
+}, {
+	"key": "comp_num_struct_placeholder_create",
+	"value": "Inserisci numero componenti nucleo famigliare provenienti da strutture di recupero",
+	"description": "Def val numero stanze letto crea pratica"
+}, {
+	"key": "comp_num_struct_err_required_create",
+	"value": "Campo mancante o non corretto.",
+	"description": "Errore numero stanze letto obbligatorio crea pratica"
+}, {
+	"key": "comp_num_struct_err_pattern_create",
+	"value": "Valore inserito non numerico.",
+	"description": "Errore numero stanze letto non corretto crea pratica"
+}, {
+	"key": "comp_num_struct_err_min_create",
+	"value": "Campo non corretto.Inserire un valore piu' grande.",
+	"description": "Errore numero stanze letto non corretto crea pratica"
+}, {
+	"key": "comp_num_struct_err_max_create",
+	"value": "Campo non corretto.Inserire un valore piu' piccolo.",
+	"description": "Errore numero stanze letto non corretto crea pratica"
+}, {
+	"key": "comp_detail_title_create",
+	"value": "Dettagli Componenti e Strutture",
+	"description": "Titolo dettagli strutture recupero crea pratica"
+}, {
+	"key": "comp_detail_tab_header_create",
+	"value": "Componente",
+	"description": "Itestazione componente tabella dettagli strutture recupero crea pratica"
+}, {
+	"key": "name_detail_tab_header_create",
+	"value": "Nome",
+	"description": "Itestazione nome tabella dettagli strutture recupero crea pratica"
+}, {
+	"key": "place_detail_tab_header_create",
+	"value": "Luogo",
+	"description": "Itestazione luogo tabella dettagli strutture recupero crea pratica"
+}, {
+	"key": "startdate_detail_tab_header_create",
+	"value": "Dal",
+	"description": "Itestazione luogo tabella dettagli strutture recupero crea pratica"
+}, {
+	"key": "enddate_detail_tab_header_create",
+	"value": "Al",
+	"description": "Itestazione luogo tabella dettagli strutture recupero crea pratica"
+}, {
+	"key": "comp_detail_edit_button_create",
+	"value": "Modifica",
+	"description": "Testo bottone modifica sezione componenti da strutture di recupero"
+}, {
+	"key": "recovery_struct_detail_title_create",
+	"value": "Dettagli Struttura di recupero",
+	"description": "Titolo dettagli strutture sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_1_detail_title_create",
+	"value": "Componente 1",
+	"description": "Titolo componente1 sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_1_namesurname_label_create",
+	"value": "Nome e Cognome componente 1:",
+	"description": "Label nome e cognome componente1 sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_namesurname_placeholder_create",
+	"value": "Inserisci nome e cognome componente",
+	"description": "Def val nome e cognome componente1 sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_structname_label_create",
+	"value": "Nome Struttura",
+	"description": "Label nome struttura componente1 sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_structname_placeholder_create",
+	"value": "Nome Struttura",
+	"description": "Def val nome struttura componente1 sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_place_placeholder_create",
+	"value": "Luogo Struttura",
+	"description": "Def val luogo sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_2_detail_title_create",
+	"value": "Componente 2",
+	"description": "Titolo componente2 sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_2_namesurname_label_create",
+	"value": "Nome e Cognome componente 2:",
+	"description": "Label nome e cognome componente2 sezione componenti da strutture di recupero"
+}, {
+	"key": "comp_startdate_err_required_create",
+	"value": "Inserire un valore nel campo 'Data da'",
+	"description": "Test errore data da componenti da strutture di recupero"
+}, {
+	"key": "comp_enddate_err_required_create",
+	"value": "Inserire un valore nel campo 'Data a'",
+	"description": "Test errore data a componenti da strutture di recupero"
+}, {
+	"key": "comp_date_err_pattern_create",
+	"value": "Valore non corretto. Inserire la data nel formato gg/MM/aaaa",
+	"description": "Test errore data da componenti da strutture di recupero"
+}, {
+	"key": "comp_add_struct_button_create",
+	"value": "Aggiungi Struttura",
+	"description": "Testo bottone aggiungi struttura in sezione strutture recupero create"
+}, {
+	"key": "comp_history_struct_create",
+	"value": "Storico Strutture",
+	"description": "Titolo sezione storico strutture in sezione strutture recupero create"
+}, {
+	"key": "comp_del_struct_button_create",
+	"value": "Cancella",
+	"description": "Testo bottone cancella struttura in sezione strutture recupero create"
+}, {
+	"key": "comp_canc_struct_button_create",
+	"value": "Annulla",
+	"description": "Testo bottone annulla in sezione strutture recupero create"
+}, {
+	"key": "comp_save_structs_button_create",
+	"value": "Salva",
+	"description": "Testo bottone salva in sezione strutture recupero create"
+}, {
+	"key": "ric_mail_label_create",
+	"value": "Indirizzo E-Mail Richiedente:",
+	"description": "Label indirizzo mail richiedente crea pratica"
+}, {
+	"key": "ric_mail_placeholder_create",
+	"value": "Inserisci indirizzo email",
+	"description": "Def val indirizzo mail richiedente crea pratica"
+}, {
+	"key": "ric_mail_err_required_create",
+	"value": "Campo 'E-Mail Richiedente' obbligatorio.",
+	"description": "Errore indirizzo mail obbligatorio crea pratica"
+}, {
+	"key": "ric_mail_err_pattern_create",
+	"value": "Campo 'E-Mail Richiedente' non corretto.",
+	"description": "Errore indirizzo mail non corretto crea pratica"
+}, {
+	"key": "icef_id_label_1_create",
+	"value": "Identificativo",
+	"description": "Label 1 cod icef crea pratica"
+}, {
+	"key": "icef_id_label_2_create",
+	"value": " domanda (codice ICEF):",
+	"description": "Label 1 cod icef crea pratica"
+}, {
+	"key": "icef_id_placeholder_create",
+	"value": "Inserisci Numero domanda ICEF",
+	"description": "Def val icef id crea pratica"
+}, {
+	"key": "icef_id_err_required_create",
+	"value": "Campo 'Identificativo domanda' obbligatorio.",
+	"description": "Errore icef id obbligatorio crea pratica"
+}, {
+	"key": "icef_details",
+	"value": "Dettagli ICEF",
+	"description": "Titolo sezione ICEF form dettagli"
+}, {
+	"key": "comp_number_rec_structs_details",
+	"value": "Numero componenti provenienti da strutture, enti, aziende residenziali di cura, assistenza, accoglienza, recupero o strutture carcerarie:",
+	"description": "Label dettagli componenti provenienti da strutture di recupero"
+}, {
+	"key": "res_ambito_preferences_panel_title",
+	"value": "Ambito territoriale ",
+	"description": "Titolo pannello scelta preferenza ambito territoriale in dettagli form"
+}, {
+	"key": "res_ambito_preferences_label_details",
+	"value": "Preferenza ambito territoriale alloggio (l'alloggio sara' localizzato ad una distanza inferiore o pari a 15 km dal comune indicato): ",
+	"description": "Label scelta preferenza ambito territoriale in dettagli form"
+}, {
+	"key": "res_ambito_preferences_val_details",
+	"value": "Seleziona la preferenza per il comune in cui collocare l'alloggio",
+	"description": "Def value scelta preferenza ambito territoriale in dettagli form"
+}, {
+	"key": "res_ambito_preferences_err_required_details",
+	"value": "Nessuna preferenza specificata. Selezionare un comune.",
+	"description": "Errore campo obbligatorio scelta preferenza ambito territoriale in dettagli form"
+}, {
+	"key": "alloggio_occupato_title_details",
+	"value": "Alloggio Occupato",
+	"description": "Titolo alloggio occupato in form dettagli"
+}, {
+	"key": "municipality_select_label_details",
+	"value": "Comune Alloggio:",
+	"description": "Label comune alloggio in form dettagli"
+}, {
+	"key": "municipality_select_val_details",
+	"value": "Seleziona il comune",
+	"description": "Def value comune alloggio in form dettagli"
+}, {
+	"key": "municipality_select_err_required_details",
+	"value": "Campo 'Comune Alloggio' obbligatorio.",
+	"description": "Errore campo obbligatorio comune alloggio in form dettagli"
+}, {
+	"key": "home_address_label_details",
+	"value": "Indirizzo Alloggio:",
+	"description": "Label indirizzo alloggio in form dettagli"
+}, {
+	"key": "home_address_err_required_details",
+	"value": "Campo 'Indirizzo Alloggio' obbligatorio.",
+	"description": "Errore campo obbligatorio indirizzo alloggio in form dettagli"
+}, {
+	"key": "contract_type_select_label_details",
+	"value": "Tipo contratto:",
+	"description": "Label tipo contratto in form dettagli"
+}, {
+	"key": "contract_type_select_val_details",
+	"value": "Seleziona il tipo di contratto",
+	"description": "Def value tipo contratto in form dettagli"
+}, {
+	"key": "contract_type_select_err_required_details",
+	"value": "Campo 'Tipo contratto' obbligatorio.",
+	"description": "Errore campo obbligatorio tipo contratto in form dettagli"
+}, {
+	"key": "contract_startdate_label_details",
+	"value": "Data Registrazione contratto:",
+	"description": "Label data registrazione contratto in form dettagli"
+}, {
+	"key": "contract_startdate_placeholder_details",
+	"value": "Inserisci data stipulazione contratto nel formato gg/MM/aaaa",
+	"description": "Def value data registrazione contratto in form dettagli"
+}, {
+	"key": "contract_startdate_err_required_details",
+	"value": "Campo 'Data Registrazione contratto' obbligatoria",
+	"description": "Errore campo obbligatorio data registrazione contratto in form dettagli"
+}, {
+	"key": "contract_startdate_err_future_date",
+	"value": "Data future inserita nel campo 'Data Registrazione contratto'. Inserire un valore passato.",
+	"description": "Errore campo data futura in data registrazione contratto"
+}, {
+	"key": "contract_startdate_err_pattern_details",
+	"value": "Valore non corretto. Inserire la data nel formato gg/MM/aaaa",
+	"description": "Errore campo non corretto data registrazione contratto in form dettagli"
+}, {
+	"key": "contract_imp_label_details",
+	"value": "Importo (mensile) canone del mese corrente: ",
+	"description": "Label importo contratto in form dettagli"
+}, {
+	"key": "contract_imp_placeholder_details",
+	"value": "Inserisci importo in euro",
+	"description": "Def value importo contratto in form dettagli"
+}, {
+	"key": "contract_imp_err_required_details",
+	"value": "Campo 'Importo Canone' obbligatorio.",
+	"description": "Errore campo obbligatorio importo contratto in form dettagli"
+}, {
+	"key": "contract_imp_err_pattern_details",
+	"value": "Valore inserito non corretto. es: 300,50",
+	"description": "Errore campo non corretto importo contratto in form dettagli"
+}, {
+	"key": "contract_imp_err_min_details",
+	"value": "Valore inserito non corretto.",
+	"description": "Errore campo non corretto importo contratto in form dettagli"
+}, {
+	"key": "img_contract_standard_alt_title",
+	"value": "Esempio contatto cartaceo",
+	"description": "Testo alt o title dell'immagine contratto cartaceo"
+}, {
+	"key": "img_contract_it_alt_title",
+	"value": "Esempio contatto telematico",
+	"description": "Testo alt o title dell'immagine contratto telematico"
+}, {
+	"key": "anagrafic_data_title_ric",
+	"value": "Dati Anagrafici Richiedente",
+	"description": "Dati anagrafici label in richiedente form"
+}, {
+	"key": "annulla_button_ric",
+	"value": "Annulla",
+	"description": "Testo pulsante annulla in richiedente form"
+}, {
+	"key": "save_button_ric",
+	"value": "Salva",
+	"description": "Testo pulsante salva in richiedente form"
+}, {
+	"key": "save_richiedente_button_ric",
+	"value": "Salva Richiedente",
+	"description": "Testo pulsante salva richiedente in richiedente form"
+}, {
+	"key": "mono_genitore_check_label_ric",
+	"value": "Nucleo Familiare composto da un solo soggetto maggiorenne e uno o piu' soggetti minori",
+	"description": "Testo label check monogenitore in richiedente form"
+}, {
+	"key": "comp_label_comp",
+	"value": "Componenti",
+	"description": "Testo label componenti form componenti"
+}, {
+	"key": "name_surname_label_comp",
+	"value": "Nome e Cognome",
+	"description": "Testo label nome e cognome form componenti"
+}, {
+	"key": "date_of_birth_label_comp",
+	"value": "Data di nascita",
+	"description": "Testo label data di nascita form componenti"
+}, {
+	"key": "affinity_label_comp",
+	"value": "Parentela",
+	"description": "Testo label parentela form componenti"
+}, {
+	"key": "marital_status_label_comp",
+	"value": "Stato Civile",
+	"description": "Testo label stato civile form componenti"
+}, {
+	"key": "affinity_def_select_comp",
+	"value": "Richiedente",
+	"description": "Def value select parentela form componenti"
+}, {
+	"key": "marital_status_err_req_comp",
+	"value": "Campo 'Stato Civile' obbligatorio: specificarlo per tutti i componenti",
+	"description": "Testo errore stato civile obbligatorio form componenti"
+}, {
+	"key": "edit_button_text_comp",
+	"value": "Modifica",
+	"description": "Testo pulsante modifica form componenti"
+}, {
+	"key": "edit_save_button_text_comp",
+	"value": "Salva Modifiche",
+	"description": "Testo pulsante salva modifiche form componenti"
+}, {
+	"key": "separation_sentence_title_section_comp",
+	"value": "Sezione per Coniugi con Sentenza di Separazione",
+	"description": "Titolo sezione sentenza di separazione form componenti"
+}, {
+	"key": "consensual_sentence_label_comp",
+	"value": "Sentenza di separazione consensuale",
+	"description": "Label sentenza di separazione consensuale form componenti"
+}, {
+	"key": "judicial_sentence_label_comp",
+	"value": "Sentenza di separazione giudiziale",
+	"description": "Label sentenza di separazione consensuale form componenti"
+}, {
+	"key": "tmp_sentence_label_comp",
+	"value": "Provvedimento temporaneo giudiziale (in attesa di sentenza di separazione)",
+	"description": "Label provvedimento temporaneo form componenti"
+}, {
+	"key": "no_sentence_label_comp",
+	"value": "Nessuno dei precedenti",
+	"description": "Label provvedimento temporaneo form componenti"
+}, {
+	"key": "approval_date_sentence_label_comp",
+	"value": "Omologata in data",
+	"description": "Label data omologazione sentenza form componenti"
+}, {
+	"key": "approval_date_sentence_placeholder_comp",
+	"value": "Inserisci data omologazione nel formato gg/MM/aaaa",
+	"description": "Def value data omologazione sentenza form componenti"
+}, {
+	"key": "approval_date_sentence_err_req_comp",
+	"value": "Inserire un valore nel campo 'Data omologazione'",
+	"description": "Errore data omologazione sentenza obbligatoria form componenti"
+}, {
+	"key": "date_sentence_err_pattern_comp",
+	"value": "Valore non corretto. Inserire la data nel formato gg/MM/aaaa",
+	"description": "Errore data inserita non corretta form componenti"
+}, {
+	"key": "date_sentence_err_futur_date",
+	"value": "Valore non corretto (data futura). Inserire una data del passato",
+	"description": "Errore data inserita non corretta futura"
+}, {
+	"key": "trib_sentence_label_comp",
+	"value": "Dal Tribunale di",
+	"description": "Label tribunale sentenza form componenti"
+}, {
+	"key": "trib_sentence_placeholder_comp",
+	"value": "Inserisci comune Tribunale",
+	"description": "Def value tribunale sentenza form componenti"
+}, {
+	"key": "trib_approval_err_req_comp",
+	"value": "Inserire un valore nel campo 'Tribunale di omologazione'",
+	"description": "Errore tribunale omologazione obbligatorio form componenti"
+}, {
+	"key": "trib_emission_err_req_comp",
+	"value": "Inserire un valore nel campo 'Tribunale di emissione'",
+	"description": "Errore tribunale emissione obbligatorio form componenti"
+}, {
+	"key": "emission_date_sentence_label_comp",
+	"value": "Emessa in data",
+	"description": "Label data emissione sentenza form componenti"
+}, {
+	"key": "emission_date_sentence_placeholder_comp",
+	"value": "Inserisci data emissione nel formato gg/MM/aaaa",
+	"description": "Def value data emissione sentenza form componenti"
+}, {
+	"key": "emission_date_sentence_err_req_comp",
+	"value": "Inserire un valore nel campo 'Data emissione'",
+	"description": "Errore data emissione sentenza obbligatoria form componenti"
+}, {
+	"key": "emission_date_tmp_label_comp",
+	"value": "Emesso in data",
+	"description": "Label data emissione provvedimento temporaneo form componenti"
+}, {
+	"key": "trib_tmp_label_comp",
+	"value": "Del Tribunale di",
+	"description": "Label tribunale provvedimento temporaneo form componenti"
+}, {
+	"key": "ok_button",
+	"value": "OK",
+	"description": "Testo pulsante ok generico"
+}, {
+	"key": "history_sentence_label_comp",
+	"value": "Sentenza di ",
+	"description": "Label sentenza sezione storico sentenze form componenti"
+}, {
+	"key": "history_tmp_label_comp",
+	"value": "Provvedimento ",
+	"description": "Label provvedimento sezione storico sentenze form componenti"
+}, {
+	"key": "history_consensual_sep_label_comp",
+	"value": "Separazione Consensuale",
+	"description": "Label consensuale sezione storico sentenze form componenti"
+}, {
+	"key": "history_judicial_sep_label_comp",
+	"value": "Separazione Giudiziale",
+	"description": "Label giudiziale sezione storico sentenze form componenti"
+}, {
+	"key": "history_judicial_tmp_label_comp",
+	"value": "Temporaneo Giudiziale",
+	"description": "Label provvedimento temporaneo sezione storico sentenze form componenti"
+}, {
+	"key": "history_tmp_trib_label_comp",
+	"value": "del Tribunale di ",
+	"description": "Label tribunale provvedimento temporaneo sezione storico sentenze form componenti"
+}, {
+	"key": "history_tmp_emission_date_label_comp",
+	"value": "emesso in data ",
+	"description": "Label data emissione provvedimento temporaneo sezione storico sentenze form componenti"
+}, {
+	"key": "history_sentence_emission_date_label_comp",
+	"value": "emessa il ",
+	"description": "Label data emissione sentenza sezione storico sentenze form componenti"
+}, {
+	"key": "history_sentence_trib_label_comp",
+	"value": "dal Tribunale di ",
+	"description": "Label tribunale sentenza sezione storico sentenze form componenti"
+}, {
+	"key": "history_sentence_tmp_title_comp",
+	"value": "Sentenza di Separazione / Provvedimento Temporaneo ",
+	"description": "Titolo sentenza provvedimento sezione storico sentenze form componenti"
+}, {
+	"key": "info_ass_title_ass",
+	"value": "Informazioni per l'assegnazione",
+	"description": "Titolo info ass form ass"
+}, {
+	"key": "extra_icef_label_ass",
+	"value": "Numero di lavoratori domestici (badante, colf) che necessitano di locali specifici all'interno dell'alloggio",
+	"description": "Label componenti extra icef form ass"
+}, {
+	"key": "no_barrier_accomodation_label_ass",
+	"value": "Alloggio Sbarrierato",
+	"description": "Label alloggio sbarrierato form ass"
+}, {
+	"key": "no_barrier_accomodation_more_label_ass",
+	"value": " (in caso di disabile non deambulante)",
+	"description": "Label aggiuntiva alloggio sbarrierato form ass"
+}, {
+	"key": "extra_icef_err_pattern_ass",
+	"value": "Valore non corretto. Inserire un valore numerico",
+	"description": "Errore valore non corretto componenti extra icef form ass"
+}, {
+	"key": "edit_info_button_ass",
+	"value": "Modifica Info",
+	"description": "Testo pulsante modifica info form ass"
+}, {
+	"key": "save_info_button_ass",
+	"value": "Salva Info",
+	"description": "Testo pulsante salva info form ass"
+}, {
+	"key": "nucleo_fam_det_title_form",
+	"value": "Dati Anagrafici Componente",
+	"description": "Titolo form dettagli componenti nucleo fam"
+}, {
+	"key": "comp_fam_det_title_subform_max",
+	"value": "Dati Personali Componente (inserire i dati del componente con valore maggiore)",
+	"description": "Titolo sezione dati personali componente valore maggiore in form nucleo fam"
+}, {
+	"key": "comp_fam_det_title_subform_all",
+	"value": "Dati Personali Componente (inserire i dati per ogni componente)",
+	"description": "Titolo sezione dati personali componente - tutti - in form nucleo fam"
+}, {
+	"key": "comp_fam_det_title_subform_ric",
+	"value": "Dati Personali Componente (inserire i dati solo per il componente richiedente)",
+	"description": "Titolo sezione dati personali componente - richiedente - in form nucleo fam"
+}, {
+	"key": "comp_fam_res_years_title",
+	"value": "Anni di Residenza",
+	"description": "Titolo sezione anni residenza componente"
+}, {
+	"key": "comp_fam_res_municipality_title",
+	"value": "Comune",
+	"description": "Titolo colonna comune tabella anni residenza componente"
+}, {
+	"key": "comp_fam_res_aire_title",
+	"value": "AIRE",
+	"description": "Titolo colonna aire tabella anni residenza componente"
+}, {
+	"key": "comp_fam_res_startdate",
+	"value": "Dal ",
+	"description": "Titolo colonna data inizio residenza tabella anni residenza componente"
+}, {
+	"key": "comp_fam_res_startdate_error_required",
+	"value": "Inserire un valore nel campo 'Data da'",
+	"description": "Testo errore data inizio residenza mancante"
+}, {
+	"key": "comp_fam_res_startdate_error_pattern",
+	"value": "Valore non corretto. Inserire la data nel formato gg/MM/aaaa",
+	"description": "Testo errore data inizio residenza non corretta"
+}, {
+	"key": "comp_fam_res_enddate",
+	"value": "Al",
+	"description": "Titolo colonna data fine residenza tabella anni residenza componente"
+}, {
+	"key": "comp_fam_res_enddate_error_required",
+	"value": "Inserire un valore nel campo 'Data a'",
+	"description": "Testo errore data fine residenza mancante"
+}, {
+	"key": "comp_fam_res_enddate_error_pattern",
+	"value": "Valore non corretto. Inserire la data nel formato gg/MM/aaaa",
+	"description": "Testo errore data fine residenza non corretta"
+}, {
+	"key": "comp_fam_res_municipality_select",
+	"value": "Seleziona comune di residenza",
+	"description": "Label seleziona comune in anni residenza componente"
+}, {
+	"key": "comp_fam_add_period_text",
+	"value": "Aggiungi periodo",
+	"description": "Testo pulsante aggiungi periodo in tabella anni residenza componente"
+}, {
+	"key": "comp_fam_res_historic_title",
+	"value": "Storico Residenze in comuni della provincia di Trento e/o anni di iscrizione all'AIRE",
+	"description": "Titolo tabella storico anni residenza componente"
+}, {
+	"key": "comp_fam_res_historic_aire",
+	"value": "AIRE del Comune di ",
+	"description": "Label comune AIRE in tabella storico residenza"
+}, {
+	"key": "comp_fam_years_count_text",
+	"value": "Calcola Anni",
+	"description": "Testo pulsante calcola anni in tabella anni residenza componente"
+}, {
+	"key": "comp_fam_res_historic_del",
+	"value": "Cancella",
+	"description": "Testo pulsante cancella in tabella storico anni residenza componente"
+}, {
+	"key": "annulla_button_res",
+	"value": "Annulla",
+	"description": "Testo pulsante annulla in tabella storico residenza"
+}, {
+	"key": "comp_fam_res_years_label_1",
+	"value": "Numero ",
+	"description": "Testo 1 label anni residenza componente"
+}, {
+	"key": "comp_fam_res_years_label_2",
+	"value": "anni di residenza",
+	"description": "Testo 2 label anni residenza componente"
+}, {
+	"key": "comp_fam_res_years_label_3",
+	"value": " (per componente con valore maggiore) ",
+	"description": "Testo 3 label anni residenza componente"
+}, {
+	"key": "comp_fam_res_insert_edit",
+	"value": "Inserisci/Modifica",
+	"description": "Testo pulsante inserisci/modifica form componente"
+}, {
+	"key": "comp_fam_no_history_res_error",
+	"value": "Attenzione: nessuno 'storico residenza' inserito. Verificare e aggiornare i dati",
+	"description": "Testo errore nessuno storico residenza inserito form componente"
+}, {
+	"key": "comp_fam_seniority_working_title",
+	"value": "Anzianita' lavorativa",
+	"description": "Titolo sezione anzianita' lavorativa componente"
+}, {
+	"key": "comp_fam_seniority_working_years_label",
+	"value": "Anni",
+	"description": "Label anni anzianita' lavorativa componente"
+}, {
+	"key": "comp_fam_seniority_working_months_label",
+	"value": "e Mesi",
+	"description": "Label mesi anzianita' lavorativa componente"
+}, {
+	"key": "comp_fam_seniority_working_days_label",
+	"value": "e Giorni (se mese esatto indicare 0)",
+	"description": "Label giorni anzianita' lavorativa componente"
+}, {
+	"key": "comp_fam_seniority_working_years_placeholder",
+	"value": "Inserisci anni anzianita' lavorativa",
+	"description": "Valore predefinito anni anzianita' lavorativa componente"
+}, {
+	"key": "comp_fam_seniority_working_months_placeholder",
+	"value": "Inserisci mesi restanti anzianita' lavorativa",
+	"description": "Valore predefinito mesi anzianita' lavorativa componente"
+}, {
+	"key": "comp_fam_seniority_working_days_placeholder",
+	"value": "Inserisci giorni restanti anzianita' lavorativa",
+	"description": "Valore predefinito giorni anzianita' lavorativa componente"
+}, {
+	"key": "comp_fam_residence_years_placeholder",
+	"value": "Inserisci anni residenza",
+	"description": "Valore predefinito anni residenza componente"
+}, {
+	"key": "comp_fam_seniority_working_placeholder",
+	"value": "Inserisci anzianita' lavorativa",
+	"description": "Valore predefinito anzianita' lavorativa componente"
+}, {
+	"key": "only_numbers_error_pattern",
+	"value": "Valore non corretto. Inserire un valore numerico",
+	"description": "Testo errore valore non numerico"
+}, {
+	"key": "comp_fam_seniority_working_label",
+	"value": "Anzianita' lavorativa",
+	"description": "Label campo anzianita' lavorativa componente"
+}, {
+	"key": "comp_fam_working_woman_label",
+	"value": "Coniuge o Convivente lavoratrice in presenza di figli minori",
+	"description": "Label campo coniuge lavolatrice"
+}, {
+	"key": "comp_fam_not_at_home_label",
+	"value": "Componente che risiede altrove",
+	"description": "Label campo non occupa l'alloggio"
+}, {
+	"key": "comp_fam_invalidity_title",
+	"value": "Invalidita'",
+	"description": "Titolo sezione invalidita' form componente"
+}, {
+	"key": "comp_fam_no_invalidity_label",
+	"value": "Nessuna Invalidita'",
+	"description": "Label nessuna invalidita' form componente"
+}, {
+	"key": "comp_fam_under18_invalidity_label",
+	"value": "Invalido Minore di 18 anni (selezionare codice)",
+	"description": "Label invalido minorenne form componente"
+}, {
+	"key": "comp_fam_invalidity_cat_label",
+	"value": "Categoria d'invalidita'",
+	"description": "Label categoria invalidita' form componente"
+}, {
+	"key": "comp_fam_invalidity_def_value",
+	"value": "Seleziona la categoria di disabilita'",
+	"description": "Testo categoria def invalidita' form componente"
+}, {
+	"key": "comp_fam_invalidity_error_required",
+	"value": "Campo 'Categoria' obbligatorio per l'eta' del disabile selezionata",
+	"description": "Testo errore categoria invalidita' obbligatoria form componente"
+}, {
+	"key": "comp_fam_18_65_invalidity_label",
+	"value": "Invalido con eta' compresa tra i 18 e i 65 anni ",
+	"description": "Label invalido adulto form componente"
+}, {
+	"key": "comp_fam_invalidity_level_label",
+	"value": "Grado d'invalidita'(%)",
+	"description": "Label grado invalidita' form componente"
+}, {
+	"key": "comp_fam_invalidity_level_def_value",
+	"value": "Inserisci percentuale grado di invalidita'",
+	"description": "Def value grado invalidita' form componente"
+}, {
+	"key": "comp_fam_invalidity_level_error_required",
+	"value": "Grado di invalidita' obbligatorio per la categoria selezionata.",
+	"description": "Testo errore grado invalidita' obbligatoria form componente"
+}, {
+	"key": "comp_fam_invalidity_level_error_valid",
+	"value": "Grado di invalidita' non corretto. Inserire un valore compreso tra 0 e 100",
+	"description": "Testo errore grado invalidita' non corretto form componente"
+}, {
+	"key": "comp_fam_over65_invalidity_label",
+	"value": "Invalido ultra 65enne (selezionare codice)",
+	"description": "Label invalido anziano form componente"
+}, {
+	"key": "comp_fam_other_invalidity_label",
+	"value": "Altre Invalidita'",
+	"description": "Label altre invalidita' form componente"
+}, {
+	"key": "comp_fam_blind_invalidity_label",
+	"value": "Invalido Cieco ",
+	"description": "Label invalido cieco form componente"
+}, {
+	"key": "comp_fam_mute_invalidity_label",
+	"value": "Invalido Sordomuto",
+	"description": "Label invalido sordomuto form componente"
+}, {
+	"key": "comp_fam_confirm_invalidity_text",
+	"value": "Conferma",
+	"description": "Testo pulsante conferma invalidita' form componente"
+}, {
+	"key": "comp_fam_invalidity_cat_title",
+	"value": "Categoria Invalidita'",
+	"description": "Titolo categoria invalidita' form componente"
+}, {
+	"key": "comp_fam_invalidity_level_title",
+	"value": "Grado Invalidita'",
+	"description": "Titolo grado invalidita' form componente"
+}, {
+	"key": "comp_fam_invalidity_blind_title",
+	"value": "Cieco",
+	"description": "Titolo invalido cieco form componente"
+}, {
+	"key": "comp_fam_invalidity_mute_title",
+	"value": "Sordomuto",
+	"description": "Titolo invalido sordomuto form componente"
+}, {
+	"key": "comp_fam_citizenship_label",
+	"value": "Cittadinanza",
+	"description": "Label campo cittadinanza in form componente"
+}, {
+	"key": "comp_fam_citizenship_def_value",
+	"value": "Inserisci Cittadinanza",
+	"description": "Def value campo cittadinanza in form componente"
+}, {
+	"key": "comp_fam_citizenship_error_required",
+	"value": "Campo 'Cittadinanza' obbligatorio",
+	"description": "Testo errore campo cittadinanza obbligatorio in form componente"
+}, {
+	"key": "comp_fam_res_city_label",
+	"value": "Comune di Residenza",
+	"description": "Label campo comune residenza in form componente"
+}, {
+	"key": "comp_fam_res_city_error_required",
+	"value": "Campo 'Comune Residenza' obbligatorio",
+	"description": "Testo errore campo comune residenza obbligatorio in form componente"
+}, {
+	"key": "comp_fam_res_city_def_value",
+	"value": "Seleziona il comune di residenza",
+	"description": "Default value campo comune residenza in form componente"
+}, {
+	"key": "comp_fam_res_address_label",
+	"value": "Indirizzo di Residenza",
+	"description": "Label campo indirizzo residenza in form componente"
+}, {
+	"key": "comp_fam_res_address_def_value",
+	"value": "Inserisci Indirizzo Residenza",
+	"description": "Def value campo indirizzo residenza in form componente"
+}, {
+	"key": "comp_fam_res_address_error_required",
+	"value": "Campo 'Indirizzo Residenza' obbligatorio",
+	"description": "Testo errore campo indirizzo residenza obbligatorio in form componente"
+}, {
+	"key": "comp_fam_res_civic_label",
+	"value": "Numero civico",
+	"description": "Label campo civico residenza in form componente"
+}, {
+	"key": "comp_fam_res_civic_def_value",
+	"value": "Inserisci Numero civico",
+	"description": "Def value campo civico residenza in form componente"
+}, {
+	"key": "comp_fam_res_civic_error_required",
+	"value": "Campo 'Numero civico' obbligatorio",
+	"description": "Testo errore campo civico residenza obbligatorio in form componente"
+}, {
+	"key": "comp_fam_mail_label",
+	"value": "Mail",
+	"description": "Label campo mail in form componente"
+}, {
+	"key": "comp_fam_mail_def_value",
+	"value": "Inserisci indirizzo mail",
+	"description": "Def value campo mail in form componente"
+}, {
+	"key": "comp_fam_mail_error_required",
+	"value": "Campo 'mail' obbligatorio",
+	"description": "Testo errore campo mail obbligatorio in form componente"
+}, {
+	"key": "comp_fam_mail_error_pattern",
+	"value": "Valore non corretto nel campo 'mail'. Inserire un valore corretto",
+	"description": "Testo errore campo mail non corretto in form componente"
+}, {
+	"key": "comp_fam_phone_label",
+	"value": "Telefono",
+	"description": "Label campo telefono in form componente"
+}, {
+	"key": "comp_fam_phone_def_value",
+	"value": "Inserisci Numero di telefono",
+	"description": "Def value campo telefono in form componente"
+}, {
+	"key": "comp_fam_phone_error_required",
+	"value": "Campo 'telefono' obbligatorio",
+	"description": "Testo errore campo telefono obbligatorio in form componente"
+}, {
+	"key": "comp_fam_phone_error_pattern",
+	"value": "Valore non corretto nel campo 'telefono'. Inserire un valore numerico corretto",
+	"description": "Testo errore campo telefono non corretto in form componente"
+}, {
+	"key": "sale_title_form",
+	"value": "Pagamento",
+	"description": "Titolo form pagamento"
+}, {
+	"key": "warning_title_subform",
+	"value": "AVVERTENZA",
+	"description": "Titolo avvertenza in form pagamento"
+}, {
+	"key": "warning_info_text",
+	"value": "Il procedimento richiede il pagamento di un'imposta di bollo: e' necessario aver acquistato la marca da bollo destinata esclusivamente alla presentazione dell'istanza. Il numero seriale presente nel modulo identifica la marca da bollo che dovrà essere conservata dal sottoscrittore per eventuali accertamenti e non potra' essere riutilizzata. (Ai sensi dell'articolo 3 del Decreto Ministeriale 10/11/2011).",
+	"description": "Testo avvertenza di pagamento"
+}, {
+	"key": "example_pay_image",
+	"value": "Immagine esempio: in giallo e' evidenziata la data, in verde l'ora e in viola il codice identificativo (composto da soli numeri)",
+	"description": "Testo spiegazione immagine esempio"
+}, {
+	"key": "sale_day_label",
+	"value": "Giorno",
+	"description": "Label giorno marca da bollo"
+}, {
+	"key": "sale_day_error_required",
+	"value": "Campo 'Giorno' mancante o non corretto.",
+	"description": "Testo errore giorno marca da bollo mancante"
+}, {
+	"key": "sale_day_error_pattern",
+	"value": "Formato non corretto: inserire la data nel formato gg/MM/aaaa.",
+	"description": "Testo errore giorno marca da bollo non corretto"
+}, {
+	"key": "sale_day_error_futur_date",
+	"value": "Data non corretta (data futura): inserire una data del passato.",
+	"description": "Testo errore giorno marca da bollo futura"
+}, {
+	"key": "sale_time_label",
+	"value": "Ora",
+	"description": "Label ora marca da bollo"
+}, {
+	"key": "sale_time_error_required",
+	"value": "Campo 'Ora' mancante o non corretto.",
+	"description": "Testo errore ora marca da bollo mancante"
+}, {
+	"key": "sale_time_error_pattern",
+	"value": "Formato non corretto: inserire l'ora nel formato HH:mm:ss.",
+	"description": "Testo errore ora marca da bollo non corretta"
+}, {
+	"key": "sale_id_label",
+	"value": "Identificativo (14 cifre)",
+	"description": "Label id marca da bollo"
+}, {
+	"key": "sale_id_error_required",
+	"value": "Campo 'Identificativo' mancante o non corretto.",
+	"description": "Testo errore id marca da bollo mancante"
+}, {
+	"key": "sale_id_error_max",
+	"value": "Numero cifre superiore a 14: inserirne il numero corretto.",
+	"description": "Testo errore id marca da bollo troppo lungo"
+}, {
+	"key": "sale_id_error_min",
+	"value": "Numero cifre inferiore a 14: inserirne il numero corretto.",
+	"description": "Testo errore id marca da bollo troppo corto"
+},{
+	"key": "submit_title_form",
+	"value": "Sottometti",
+	"description": "Titolo form sottometti"
+}, {
+	"key": "practice_details_title_subform",
+	"value": "Dettagli Domanda",
+	"description": "Titolo form sottometti parte dettagli pratica"
+}, {
+	"key": "practice_id_label",
+	"value": "Id Domanda",
+	"description": "Label id domanda in dettagli pratica"
+}, {
+	"key": "protocol_label",
+	"value": "Protocollo",
+	"description": "Label protocollo domanda in dettagli pratica"
+}, {
+	"key": "ric_label",
+	"value": "Richiedente",
+	"description": "Label richiedente domanda in dettagli pratica"
+}, {
+	"key": "practice_open_date_label",
+	"value": "Data apertura pratica",
+	"description": "Label data apertura pratica in dettagli pratica"
+}, {
+	"key": "practice_state_label",
+	"value": "Stato domanda",
+	"description": "Label stato domanda in dettagli pratica"
+}, {
+	"key": "total_score_label",
+	"value": "Punteggio totale",
+	"description": "Label punteggio totale in dettagli pratica"
+}, {
+	"key": "acceptance_note_title",
+	"value": "Nota di accettazione",
+	"description": "Titolo nota di accettazione in conferma pratica"
+}, {
+	"key": "acceptance_note_text_1",
+	"value": "Leggere l'informativa e alla fine confermare per inviare i documenti",
+	"description": "Testo 1 nota di accettazione in conferma pratica"
+}, {
+	"key": "acceptance_note_text_2",
+	"value": "Io, ",
+	"description": "Testo 2 nota di accettazione in conferma pratica"
+}, {
+	"key": "acceptance_note_text_3",
+	"value": " confermo la correttezza dei dati e delle informazioni contenute nei documenti predisposti per l'invio telematico.",
+	"description": "Testo 3 nota di accettazione in conferma pratica"
+}, {
+	"key": "acceptance_note_text_4",
+	"value": "L'identificatione tramite Carta Provinciale dei Servizi (tessera sanitaria) e la conferma dell'invio tramite il portale dei servizi equivalgono alla sottoscrizione della domanda.",
+	"description": "Testo 4 nota di accettazione in conferma pratica"
+}, {
+	"key": "pdf_doc_view",
+	"value": "Visualizza e conserva la pratica in formato PDF",
+	"description": "Testo link scheda pdf"
+}, {
+	"key": "refuse_practice_link",
+	"value": "Rifiuta",
+	"description": "Testo link rifiuta pratica"
+}, {
+	"key": "confirm_practice_link",
+	"value": "Conferma e Termina",
+	"description": "Testo link conferma pratica"
+}, {
+	"key": "state_form_page_title",
+	"value": "Verifica Domanda",
+	"description": "Titolo form visualizza pratica"
+}, {
+	"key": "state_form_ente_title",
+	"value": "Ente",
+	"description": "Titolo ente in form visualizza pratica"
+}, {
+	"key": "state_form_desc_label",
+	"value": "Descrizione",
+	"description": "Label campo descrizione ente in form visualizza pratica"
+}, {
+	"key": "state_form_address_label",
+	"value": "Indirizzo",
+	"description": "Label campo indirizzo ente in form visualizza pratica"
+}, {
+	"key": "state_form_phone_label",
+	"value": "Telefono",
+	"description": "Label campo telefono ente in form visualizza pratica"
+}, {
+	"key": "state_form_mail_label",
+	"value": "Email",
+	"description": "Label campo mail ente in form visualizza pratica"
+}, {
+	"key": "state_form_personal_data_ref_label",
+	"value": "Responsabile trattamento dati",
+	"description": "Label campo responsabile trattamento dati in form visualizza pratica"
+}, {
+	"key": "state_form_ric_delivery_label",
+	"value": "Recapito Richiedente",
+	"description": "Titolo recapito richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_ric_name_label",
+	"value": "Nominativo",
+	"description": "Label campo nome richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_ric_address_label",
+	"value": "Indirizzo",
+	"description": "Label campo indirizzo richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_ric_city_label",
+	"value": "Comune",
+	"description": "Label campo comune richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_data_title",
+	"value": "Dati Identificativi Domanda",
+	"description": "Titolo sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_data_id_domanda_label",
+	"value": "Id Domanda",
+	"description": "Label id domanda sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_data_opendate_label",
+	"value": "Data Presentazione",
+	"description": "Label data presentazione sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_protocol_label",
+	"value": "Protocollo",
+	"description": "Label protocollo sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_printdate_label",
+	"value": "Data Stampa",
+	"description": "Label data stampa sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_state_label",
+	"value": "Stato Domanda",
+	"description": "Label stato domanda sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_consdate_label",
+	"value": "Data Consolidamento",
+	"description": "Label data consolidamento sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_edition_label",
+	"value": "Edizione",
+	"description": "Label edizione sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_int_tool_label",
+	"value": "Strumento Intervento",
+	"description": "Label strumento intervento sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ban_label",
+	"value": "Bando",
+	"description": "Label bando sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_category_label",
+	"value": "Categoria",
+	"description": "Label categoria sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_total_score_label",
+	"value": "Punteggio Totale",
+	"description": "Label punteggio totale sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_rate_label",
+	"value": "Contributo Alloggio Privato",
+	"description": "Label contributo alloggio sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_citizenship_label",
+	"value": "Cittadinanza UE",
+	"description": "Label cittadinanza sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_residence_tn_label",
+	"value": "Residente in Provincia di Trento",
+	"description": "Label residenza tn sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_adeguate_housing_label",
+	"value": "Alloggio Adeguato",
+	"description": "Label alloggio sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_aire_label",
+	"value": "Iscrizione AIRE",
+	"description": "Label aire sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ambit_label",
+	"value": "Ambiti Scelti",
+	"description": "Label ambito sezione dati domanda in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_condition_title",
+	"value": "Condizione Familiare",
+	"description": "Titolo sezione condizione fam in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_residence_label",
+	"value": "Residenza",
+	"description": "Label residenza sezione condizione fam in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_recovery_struct_components_label",
+	"value": "Componenti provenienti da strutture, enti, aziende residenziali di cura, assistenza, accoglienza, recupero o strutture carcerarie",
+	"description": "Label componenti da strutture di recupero sezione condizione fam in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_recovery_struct_component_num_label",
+	"value": "Numero Componenti",
+	"description": "Label numero componenti da strutture di recupero sezione condizione fam in form visualizza pratica"
+}, {
+	"key": "state_form_practice_nucleo_fam_title",
+	"value": "Nucleo Familiare",
+	"description": "Titolo sezione nucleo fam in form visualizza pratica"
+}, {
+	"key": "state_form_practice_lodging_det_title",
+	"value": "Dati Appartamento",
+	"description": "Titolo sezione dati appartamento in form visualizza pratica"
+}, {
+	"key": "state_form_practice_lodging_rooms_label",
+	"value": "Numero Stanze",
+	"description": "Label numero stanze dati appartamento in form visualizza pratica"
+}, {
+	"key": "state_form_practice_lodging_extra_icef_label",
+	"value": "Componenti Extra Icef",
+	"description": "Label componenti extra icef dati appartamento in form visualizza pratica"
+}, {
+	"key": "state_form_practice_lodging_invalid_num_label",
+	"value": "Numero Invalidi",
+	"description": "Label numero invalidi dati appartamento in form visualizza pratica"
+}, {
+	"key": "state_form_practice_lodging_single_parent_label",
+	"value": "Nucleo Mono Genitore",
+	"description": "Label mono genitore dati appartamento in form visualizza pratica"
+}, {
+	"key": "state_form_practice_lodging_no_barrier_label",
+	"value": "Alloggio Sbarrierato",
+	"description": "Label alloggio sbarrierato dati appartamento in form visualizza pratica"
+}, {
+	"key": "state_form_practice_lodging_original_core_label",
+	"value": "Nucleo Originario",
+	"description": "Label nucleo originario dati appartamento in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_data_title",
+	"value": "Dati Richiedente",
+	"description": "Titolo sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_name_label",
+	"value": "Nome Richiedente",
+	"description": "Label nome ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_surname_label",
+	"value": "Cognome Richiedente",
+	"description": "Label cognome ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_sex_label",
+	"value": "Sesso Richiedente",
+	"description": "Label sesso ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_taxcode_label",
+	"value": "Codice Fiscale",
+	"description": "Label codice fiscale ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_birthdate_label",
+	"value": "Data di Nascita",
+	"description": "Label data nascita ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_birthplace_label",
+	"value": "Nazione di Nascita",
+	"description": "Label stato nascita ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_birthcity_label",
+	"value": "Comune di Nascita",
+	"description": "Label comune di nascita ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_citizenship_label",
+	"value": "Cittadinanza",
+	"description": "Label cittadinanza ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_res_years_label",
+	"value": "Anni Residenza",
+	"description": "Label anni residenza ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_res_years_city_label",
+	"value": "Anni Residenza nel Comune",
+	"description": "Label anni residenza nel comune ric sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_seniority_working_label",
+	"value": "Anzianita' lavorativa",
+	"description": "Label anzianita' lavorativa sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_guest_label",
+	"value": "Ospite",
+	"description": "Label ospite sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_working_woman_label",
+	"value": "Donna Lavoratrice",
+	"description": "Label donna lavoratrice sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_pensioner_label",
+	"value": "Pensionato",
+	"description": "Label pensionato sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_res_city_label",
+	"value": "Comune Residenza",
+	"description": "Label comune residenza sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_res_address_label",
+	"value": "Indirizzo Residenza",
+	"description": "Label comune residenza sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_ric_res_civic_label",
+	"value": "Numero Civico",
+	"description": "Label civico residenza sezione richiedente in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_components_title",
+	"value": "Componenti Nucleo Familiare",
+	"description": "Titolo sezione componenti nucleo in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_components_name_label",
+	"value": "Nome e Cognome",
+	"description": "Label nome e cognome sezione componenti nucleo in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_components_birthdate_label",
+	"value": "Data di Nascita",
+	"description": "Label data nascita sezione componenti nucleo in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_components_guest_label",
+	"value": "Ospite",
+	"description": "Label ospite sezione componenti nucleo in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_components_affinity_label",
+	"value": "Parentela",
+	"description": "Label parentela sezione componenti nucleo in form visualizza pratica"
+}, {
+	"key": "state_form_practice_family_components_marital_status_label",
+	"value": "Stato Civile",
+	"description": "Label stato civile sezione componenti nucleo in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_title",
+	"value": "Indicatori Economici",
+	"description": "Titolo sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_checkdate_label",
+	"value": "Data Verifica",
+	"description": "Label data verifica sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_last_income_year_label",
+	"value": "Ultimo anno di reddito",
+	"description": "Label ultimo anno reddito sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_protocol_label",
+	"value": "Protocollo",
+	"description": "Label protocollo sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_icefdate_label",
+	"value": "Data Presentazione ICEF",
+	"description": "Label data presentazione icef sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_icefdate_calc_label",
+	"value": "Data Calcolo ICEF",
+	"description": "Label data calcolo icef sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_icef_access_label",
+	"value": "ICEF di accesso",
+	"description": "Label icef accesso sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_icef_maintenance_label",
+	"value": "ICEF (Mantenim. benefici)",
+	"description": "Label icef mantenimento sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_icef_calc_label",
+	"value": "ICEF (Calcolo canone sost.)",
+	"description": "Label icef calcolo sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_total_income_label",
+	"value": "Reddito Complessivo",
+	"description": "Label reddito complessivo sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_significant_year_income_label",
+	"value": "Anno di Reddito significativo",
+	"description": "Label anno reddito significativo sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_enddate_label",
+	"value": "Data Fine",
+	"description": "Label data fine sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_eco_index_check_result_label",
+	"value": "Esito Verifica",
+	"description": "Label esito verifica sezione indicatori economici in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_title",
+	"value": "Punteggi",
+	"description": "Titolo sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_eco_condition_title",
+	"value": "Condizione Economica (E)",
+	"description": "Titolo parte condizione economica sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_eco_condition_label",
+	"value": "Condizione Economica",
+	"description": "Label condizione economica sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_title",
+	"value": "Condizione Familiare (F)",
+	"description": "Titolo parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_invalid_label",
+	"value": "Componente con invalidita' certificata",
+	"description": "Label invalidita' certificata parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_invalid_level_label",
+	"value": "Componente (grado invalidita'",
+	"description": "Label invalidita' certificata parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_minor_label",
+	"value": "Minorenni presenti nel nucleo familiare",
+	"description": "Label minorenni parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_minor_label_1",
+	"value": "Minorenne ",
+	"description": "Label 1 minorenni parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_minor_label_2",
+	"value": " anni",
+	"description": "Label 2 minorenni parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_maggiorenne_con_minori_label",
+	"value": "Nucleo familiare composto da un soggetto maggiorenne e uno o piu' soggetti minorenni",
+	"description": "Label maggiorenne con minori parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_unsuitable_lodging_label",
+	"value": "Nucleo familiare residente in alloggio inidoneo, privo di servizi o impropriamente adibito",
+	"description": "Label alloggio non idoneo parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_recovery_struct_comp_label",
+	"value": "Presenza di componenti rientrati da strutture di recupero, accoglienza, assistenza o carceri",
+	"description": "Label componenti da strutture recupero parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_family_condition_working_woman_label",
+	"value": "Coniuge o convivente lavoratrice in presenza di figli minori",
+	"description": "Label donna lavoratrice parte condizione familiare sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_local_condition_title",
+	"value": "Condizione Localizzativa (L)",
+	"description": "Titolo parte condizione localizzativa sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_local_condition_res_years_label",
+	"value": "Anni di residenza in Provincia di Trento",
+	"description": "Label anni residenza provincia tn parte condizione localizzativa sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_local_condition_seniority_working_label",
+	"value": "Anni di attivita' lavorativa",
+	"description": "Label anzianita lavorativa parte condizione localizzativa sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_totals_title",
+	"value": "Totali",
+	"description": "Titolo totali sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_scores_total_scores_title",
+	"value": "Totale Punteggio (P)",
+	"description": "Titolo punteggio totale sezione punteggi in form visualizza pratica"
+}, {
+	"key": "state_form_practice_yes_value",
+	"value": "SI'",
+	"description": "Valore positivo in presenza componenti da strutture di recupero"
+}, {
+	"key": "state_form_practice_no_value",
+	"value": "NO",
+	"description": "Valore negativo in presenza componenti da strutture di recupero"
+}, {
+	"key": "state_form_page_title_2",
+	"value": "Dettagli Domanda",
+	"description": "Titolo form visualizza pratica"
+}, {
+	"key": "finded_practice_list",
+	"value": "Risultato Ricerca",
+	"description": "Titolo tab lista pratiche trovate in ricerca"
+}, {
+	"key": "selected_practice_det",
+	"value": "Dettagli Domanda",
+	"description": "Titolo tab dettagli domanda selezionata"
+}, {
+	"key": "utilization_report_title",
+	"value": "Report Utilizzo Portale",
+	"description": "Titolo tab report utilizzo portale"
+}, {
+	"key": "users_report_title",
+	"value": "Report Utenti",
+	"description": "Titolo tab report utenti"
+}, {
+	"key": "practice_report_title",
+	"value": "Report Domande",
+	"description": "Titolo tab report domande"
+}, {
+	"key": "practice_next_report_text",
+	"value": "Prossimo Report",
+	"description": "Testo bottone prossimo report"
+}, {
+	"key": "user_report_month_table_title",
+	"value": "Mese",
+	"description": "Titolo mesi tabella report utenti"
+}, {
+	"key": "user_report_ue_table_title",
+	"value": "Utenti UE",
+	"description": "Titolo utenti UE tabella report utenti"
+}, {
+	"key": "user_report_extraUe_table_title",
+	"value": "Utenti Extra UE",
+	"description": "Titolo utenti extra UE tabella report utenti"
+}, {
+	"key": "user_report_tot_table_title",
+	"value": "Totali",
+	"description": "Titolo totali tabella report utenti"
+}, {
+	"key": "user_report_age_table_title",
+	"value": "Fascia d'eta'",
+	"description": "Titolo fascia eta tabella report utenti"
+}, {
+	"key": "user_report_tot_access_table_title",
+	"value": "Numero accessi",
+	"description": "Titolo totali tabella report utenti"
+}, {
+	"key": "user_report_city_table_title",
+	"value": "Comune di residenza",
+	"description": "Titolo comune res tabella report utenti"
+}, {
+	"key": "autocert_title_form",
+	"value": "Dati Autocertificazione",
+	"description": "Titolo form autocertificazione"
+}, {
+	"key": "autocert_storico_res_title_form",
+	"value": "Storico Residenza Richiedente",
+	"description": "Titolo sezione storico residenza form autocertificazione"
+}, {
+	"key": "autocert_sep_sentence_title_form",
+	"value": "Sentenza di separazione / Provvedimento Temporaneo",
+	"description": "Titolo sezione sentenza separazione form autocertificazione"
+}, {
+	"key": "practice_other_data_text",
+	"value": "Altri dati",
+	"description": "Testo pulsante swith tab verso dati autocertificazione"
+}, {
+	"key": "opt_report_user",
+	"value": "Utenti per mese",
+	"description": "Testo opt per report utenti per mese"
+}, {
+	"key": "opt_report_age",
+	"value": "Utenti per fascia di eta'",
+	"description": "Testo opt per report utenti per fascia di eta'"
+}, {
+	"key": "opt_report_city",
+	"value": "Utenti per comune residenza",
+	"description": "Testo opt per report utenti per comune di residenza"
+}, {
+	"key": "opt_report_practice",
+	"value": "Pratiche per stato",
+	"description": "Testo opt per report pratiche per stato"
+}, {
+	"key": "opt_report_cons_practice",
+	"value": "Dettagli consolidate",
+	"description": "Testo opt per report pratiche consolidate per tipo domanda"
+}, {
+	"key": "opt_report_ref_practice",
+	"value": "Dettagli rifiutate",
+	"description": "Testo opt per report pratiche rifiutate per tipo domanda"
+}, {
+	"key": "opt_report_edit_practice",
+	"value": "Dettagli editabili",
+	"description": "Testo opt per report pratiche editabili per tipo domanda"
+}, {
+	"key": "practice_report_table_title",
+	"value": "Stato pratiche",
+	"description": "Titolo tabella pratiche per stato"
+}, {
+	"key": "practice_report_type_table_title",
+	"value": "Tipo pratiche",
+	"description": "Titolo tabella pratiche cons per composizione"
+}, {
+	"key": "opt_report_utilization",
+	"value": "Utilizzo Portale",
+	"description": "Testo opt per report utilizzo portale"
+}, {
+	"key": "opt_report_time_utilization",
+	"value": "Utilizzo Portale per fascia oraria",
+	"description": "Testo opt per report utilizzo portale per fascia oraria"
+}, {
+	"key": "utilization_report_month_table_title",
+	"value": "Mese",
+	"description": "Titolo mese tabella utilizzo portale"
+}, {
+	"key": "utilization_report_locUe_table_title",
+	"value": "Locazione Cittadini UE",
+	"description": "Titolo locazione ue tabella utilizzo portale"
+}, {
+	"key": "utilization_report_affUe_table_title",
+	"value": "Integrazione Canone Cittadini UE",
+	"description": "Titolo integrazione canone ue tabella utilizzo portale"
+}, {
+	"key": "utilization_report_locExtraUe_table_title",
+	"value": "Locazione Cittadini Extra UE",
+	"description": "Titolo locazione extra ue tabella utilizzo portale"
+}, {
+	"key": "utilization_report_affExtraUe_table_title",
+	"value": "Integrazione Canone Cittadini Extra UE",
+	"description": "Titolo integrazione canone extra ue tabella utilizzo portale"
+}, {
+	"key": "utilization_report_time_table_title",
+	"value": "Fascia Oraria",
+	"description": "Titolo mese tabella utilizzo portale"
+}, {
+	"key": "histor_residence_tot_label",
+	"value": "Totale residenza (anni)",
+	"description": "Label totale residenza in tabella storico"
+}, {
+	"key": "histor_struct_months_label",
+	"value": "Mesi",
+	"description": "Label mesi in tabella storico strutture recupero"
+}, {
+	"key": "histor_struct_rec_tot_label1",
+	"value": "Totale permanenza",
+	"description": "Label totale residenza in tabella storico strutture recupero"
+}, {
+	"key": "histor_struct_rec_tot_label2",
+	"value": "Componente ",
+	"description": "Label totale residenza in tabella storico strutture recupero"
+}, {
+	"key": "pdf_link_help_message_reselect",
+	"value": " Riselezionare il link se il documento PDF non viene caricato correttamente",
+	"description": "Messaggio di riselezione link in caso di fallimento in upload pdf"
+}, {
+	"key": "no_autocert_data_found",
+	"value": "Nessun dato di autocertificazione presente",
+	"description": "Messaggio di dati autocertificazione mancanti"
+}, {
+	"key": "datepicker_button_today",
+	"value": "Oggi",
+	"description": "Testo pulsante datapicker per oggi"
+}, {
+	"key": "datepicker_button_canc",
+	"value": "Cancella",
+	"description": "Testo pulsante datapicker per cancella"
+}, {
+	"key": "datepicker_button_close",
+	"value": "Chiudi",
+	"description": "Testo pulsante datapicker per chiudi"
+}, {
+	"key": "error_overlap_storico_res",
+	"value": "Periodo residenza non corretto: l'intervallo si sovrappone a periodi gia' inseriti.",
+	"description": "Testo pulsante datapicker per chiudi"
+}, {
+	"key": "info_state_panel_title",
+	"value": "Dettagli stato Pratica",
+	"description": "Titolo pannello dettagli stato pratica"
+}, {
+	"key": "info_states_panel_text",
+	"value": "Durante il processo di creazione e accettazione una pratica si puo' trovare in differenti stati che ne individuano la situazione in un certo tempo lungo tutto l'iter. Nello specifico gli stati sono i seguenti:",
+	"description": "Testo introduttivo pannello dettagli stato pratica"
+}, {
+	"key": "info_state_panel_bold_1",
+	"value": "Provvisoria",
+	"description": "Testo in grassetto stato 1, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_bold_2",
+	"value": "Provvisoria",
+	"description": "Testo in grassetto stato 2, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_bold_3",
+	"value": "Accettata/Rifiutata",
+	"description": "Testo in grassetto stato 3, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_bold_4",
+	"value": "In Graduatoria Provvisoria",
+	"description": "Testo in grassetto stato 4, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_bold_5",
+	"value": "In Graduatoria Definitiva",
+	"description": "Testo in grassetto stato 5, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_text_1",
+	"value": " : la pratica si trova in questo stato quando è stata creata ed è stata compilata solo in parte oppure quando è stata pagata ma non accettata/rifiutata dall'utente.",
+	"description": "Testo descrittivo stato 1, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_text_2",
+	"value": " : la pratica si trova in questo stato quando è stata creata ed è stata compilata solo in parte oppure quando è stata pagata ma non accettata/rifiutata dall'utente.",
+	"description": "Testo descrittivo stato 2, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_text_3",
+	"value": " : la pratica si trova in questo stato quando è stata sottomessa(o rifiutata) dall'utente ed è stata consolidata(/cancellata) dal sistema. La pratica non è piu' modificabile ma l'utente puo' continuare a visualizzarla in sola lettura.",
+	"description": "Testo descrittivo stato 3, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_text_4",
+	"value": " : se una pratica riesce ad ottenere un punteggio rilevante allora viene inserita nella graduatoria provvisoria in attesa dell'approvazione di quella definitiva.",
+	"description": "Testo descrittivo stato 4, pannello informativo degli stati di una pratica"
+}, {
+	"key": "info_state_panel_text_5",
+	"value": " : se una pratica si trova in questo stato significa che ha ottenuto un punteggio che le ha permesso di rientrare nella graduatoria definitiva.",
+	"description": "Testo descrittivo stato 5, pannello informativo degli stati di una pratica"
+}, {
+	"key": "practice_classification_provv",
+	"value": "visualizza graduatoria provvisoria",
+	"description": "Title link graduatoria provvisoria"
+}, {
+	"key": "practice_classification_final",
+	"value": "visualizza graduatoria definitiva",
+	"description": "Title link graduatoria definitiva"
+}, {
+	"key": "resend_mail_link",
+	"value": "Reinvia e-mail",
+	"description": "Title link reinvia mail"
+}
+]
