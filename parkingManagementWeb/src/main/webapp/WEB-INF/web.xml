@@ -18,7 +18,7 @@
   </servlet>
   <servlet-mapping>
     <servlet-name>default</servlet-name>
-    <url-pattern>/img/*</url-pattern>
+    <url-pattern>/imgs/*</url-pattern>
     <url-pattern>/pdf/*</url-pattern>
     <url-pattern>/upload/*</url-pattern>
     <url-pattern>/css/*</url-pattern>

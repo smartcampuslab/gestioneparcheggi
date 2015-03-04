@@ -112,10 +112,15 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     
     // for services selection
     var homeShowed = true;
-    var activeLinkEdil = "";
-    var activeLinkAss = "";
-    var activeLinkEdilExtra = "";
-    var activeLinkAssExtra = "";
+    // for menu manageing
+    var home = "active";
+    var editingPark = "";
+    var editingBike = "";
+    var viewingAll = "";
+    
+    $scope.option = {
+    		
+    };
         
     $scope.hideHome = function(){
     	homeShowed = false;   		
@@ -123,71 +128,61 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     
     $scope.showHome = function(){
     	homeShowed = true;
-    };
-                  			
-    $scope.showPractices = function(type,isEu){
-        homeShowed = false;
-        sharedDataService.setUeCitizen(isEu);
-        if(type == 1){
-        	if(sharedDataService.getUeCitizen()){
-        		activeLinkEdil="active";
-            	activeLinkAss="";
-            	activeLinkEdilExtra = "";
-                activeLinkAssExtra = "";
-        	} else {
-        		activeLinkEdil="";
-            	activeLinkAss="";
-        		activeLinkEdilExtra = "active";
-        		activeLinkAssExtra="";
-        	}
-            sharedDataService.setFamilyAllowances(false);
-        } else {
-        	if(sharedDataService.getUeCitizen()){
-        		activeLinkEdil="";
-            	activeLinkAss="active";
-        		activeLinkEdilExtra="";
-                activeLinkAssExtra="";
-                
-        	} else {
-        		activeLinkEdil="";
-            	activeLinkAss="";
-        		activeLinkEdilExtra = "";
-        		activeLinkAssExtra="active";
-        	}
-            
-            sharedDataService.setFamilyAllowances(true);
-        }
-        $scope.setFrameOpened(false);
-    };
-                  			
-    $scope.consolidedPractices = function(item){
-        if(item.statoDomanda == 'IDONEA'){
-            return true;
-        } else {
-            return false;
-        }
-    };
-                  			
-    $scope.isActiveLinkEdil = function(){
-        return activeLinkEdil;
-    };
-                  			
-    $scope.isActiveLinkAss = function(){
-    	return activeLinkAss;
-    };
-    
-    $scope.isActiveLinkEdilExtra = function(){
-    	return activeLinkEdilExtra;
-    };
-    
-    $scope.isActiveLinkAssExtra = function(){
-    	return activeLinkAssExtra;
-    };
+    };            			
                   			
     $scope.isHomeShowed = function(){
     	return homeShowed;
     };
-                  			
+    
+    $scope.isHomeActive = function(){
+    	return home;
+    };
+      
+    $scope.home = function() {
+    	$scope.setFrameOpened(false);
+    	// I refresh all the actived Link
+    	home="active";
+    	editingPark = "";
+    	editingBike = "";
+    	viewingAll = "";
+        //window.document.location = "./";
+        $scope.showHome();
+    };
+    
+    $scope.setEditingParkActive = function(){
+    	home = "";
+        editingPark = "active";
+        editingBike = "";
+        viewingAll = "";
+    };
+    
+    $scope.isEditingParkActive = function(){
+        return editingPark;
+    };
+    
+    $scope.setEditingBikeActive = function(){
+    	home = "";
+        editingPark = "";
+        editingBike = "active";
+        viewingAll = "";
+    };
+    
+    $scope.isEditingBikeActive = function(){
+        return editingBike;
+    };
+    
+    $scope.setViewAllActive = function(){
+    	home = "";
+        editingPark = "";
+        editingBike = "";
+        viewingAll = "active";
+    };
+    
+    $scope.isViewAllActive = function(){
+        return viewingAll;
+    };
+    
+    
     $scope.logout = function() {
     	// Clear some session variables
     	sharedDataService.setName(null);
@@ -200,17 +195,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
         user_surname = null;
         
     	window.location.href = "myweb/logout";
-    };
-                  		    
-    $scope.home = function() {
-    	$scope.setFrameOpened(false);
-    	// I refresh all the actived Link
-    	activeLinkEdil="";
-    	activeLinkAss="";
-		activeLinkEdilExtra = "";
-		activeLinkAssExtra="";
-        //window.document.location = "./";
-        $scope.showHome();
     };
                   		    
     $scope.getToken = function() {

@@ -282,14 +282,6 @@
     "key": "text_btn_save",
     "value": "Salva",
     "description": "Testo pulsante 'salva'"
-},{
-    "key": "app_tab-title",
-    "value": "Gestione Parcheggi",
-    "description": "Titolo tab browser"
-}, {
-    "key": "app_home-title",
-    "value": "Gestione Parcheggi",
-    "description": "Titolo pagina home app"
 }, {
     "key": "app_console-title",
     "value": "Console Operatore",
@@ -2746,5 +2738,141 @@
 	"key": "resend_mail_link",
 	"value": "Reinvia e-mail",
 	"description": "Title link reinvia mail"
+},{
+    "key": "app_tab-title",
+    "value": "Gestione Parcheggi",
+    "description": "Titolo tab browser"
+}, {
+    "key": "app_home-title",
+    "value": "Gestione Parcheggi",
+    "description": "Titolo pagina home app"
+}, {
+    "key": "app_home_info",
+    "value": "Descrizione App",
+    "description": "Titolo sezione info pagina home app"
+}, {
+    "key": "app_home_info_text",
+    "value": "L'applicazione 'gestione parcheggi' e' stata pensata per gestire i parcheggi di un centro urbano. Nello specifico e' possibile aggiungere e modificare parcheggi, strade, parcometri e punti bici raggruppandoli in diverse aree tariffarie o in diverse zone tematiche. L'app permette di rappresentare quanto descritto su mappa in modo da avere traccia chiara della localizzazione degli elementi all'interno della citta'.",
+    "description": "Titolo sezione info pagina home app"
+}, {
+    "key": "menu_bar-parkediting",
+    "value": "Editing parcheggi",
+    "description": "Valore link menu per editing parcheggi"
+}, {
+    "key": "menu_bar-bikeediting",
+    "value": "Editing punti bici",
+    "description": "Valore link menu per editing punti bici"
+}, {
+    "key": "menu_bar-parkview",
+    "value": "Visualizza elementi",
+    "description": "Valore link menu per visualizzazione elementi"
+}, {
+    "key": "parkEditingPanelTitle",
+    "value": "Editor parcheggi",
+    "description": "Titolo pannello per editing parcheggi"
+}, {
+    "key": "bikeEditingPanelTitle",
+    "value": "Editor punti bici",
+    "description": "Titolo pannello per editing punti bici"
+}, {
+    "key": "viewAllPanelTitle",
+    "value": "Visualizza",
+    "description": "Titolo pannello per visualizzazione"
+}, {
+    "key": "view_hide_block_title",
+    "value": "Mostra/Nascondi",
+    "description": "Titolo pannello per impostazione di visualizzazione oggetti sulla mappa"
+}, {
+    "key": "view_areas",
+    "value": "Aree di tariffazione",
+    "description": "Label checkbox aree di tariffazione"
+}, {
+    "key": "view_streets",
+    "value": "Vie",
+    "description": "Label checkbox vie"
+}, {
+    "key": "view_parkingmeters",
+    "value": "Parcometri",
+    "description": "Label checkbox parcometri"
+}, {
+    "key": "view_parkingstructs",
+    "value": "Parcheggi in strutture",
+    "description": "Label checkbox parcheggi in strutture"
+}, {
+    "key": "view_bikepoints",
+    "value": "Punti bici",
+    "description": "Label checkbox punti bici"
+}, {
+    "key": "object_list_block_title",
+    "value": "Modifica Componenti",
+    "description": "Titolo pannello per modifica componenti parcheggio"
+}, {
+    "key": "area_list",
+    "value": "Lista Aree",
+    "description": "Titolo tabella lista aree"
+}, {
+    "key": "area_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista aree"
+}, {
+    "key": "area_rate",
+    "value": "Tariffa",
+    "description": "Intestazione colonna tariffa in tabella lista aree"
+}, {
+    "key": "area_time",
+    "value": "Orario",
+    "description": "Intestazione colonna orario in tabella lista aree"
+}, {
+    "key": "area_color",
+    "value": "Colore",
+    "description": "Intestazione colonna colore in tabella lista aree"
+}, {
+    "key": "no_areas_in_lists",
+    "value": "Nessuna area presente nel db",
+    "description": "Messaggio nessuna area in db"
+}, {
+	"key": "operations",
+	"value": "Azioni",
+	"description": "Label operazioni"
+}, {
+    "key": "street_list",
+    "value": "Lista Strade",
+    "description": "Titolo tabella lista strade"
+}, {
+    "key": "street_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista strade"
+}, {
+    "key": "street_slots",
+    "value": "Posti",
+    "description": "Intestazione colonna parcheggi in tabella lista strade"
+}, {
+    "key": "street_area_name",
+    "value": "Area",
+    "description": "Intestazione colonna area in tabella lista strade"
+}, {
+    "key": "no_streets_in_lists",
+    "value": "Nessuna strada presente nel db",
+    "description": "Messaggio nessuna strada in db"
+}, {
+    "key": "pm_list",
+    "value": "Lista Parchimetri",
+    "description": "Titolo tabella lista parchimetri"
+}, {
+    "key": "pm_code",
+    "value": "Codice",
+    "description": "Intestazione colonna codice in tabella lista parchimetri"
+}, {
+    "key": "pm_note",
+    "value": "Note",
+    "description": "Intestazione colonna parcheggi in tabella lista parchimetri"
+}, {
+    "key": "pm_area_name",
+    "value": "Area",
+    "description": "Intestazione colonna area in tabella lista parchimetri"
+}, {
+    "key": "no_pm_in_lists",
+    "value": "Nessun parchimetro presente nel db",
+    "description": "Messaggio nessun parchimetro in db"
 }
 ]

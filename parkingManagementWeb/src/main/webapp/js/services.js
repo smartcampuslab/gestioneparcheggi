@@ -19,6 +19,8 @@ pm.service('sharedDataService', function(){
 	this.practicesAss = [];
 	this.oldPractices = [];
 	
+	this.sharedLocalAreas = [];
+	
 	this.allFamilyUpdated = false;
 	this.isTest = false;
 	this.userId = '';
@@ -575,6 +577,14 @@ pm.service('sharedDataService', function(){
 	
 	this.setOldPractices = function(list){
 		this.oldPractices = list;
+	};
+	
+	this.getSharedLocalAreas = function(){
+		return this.sharedLocalAreas;
+	};
+	
+	this.setSharedLocalAreas = function(list){
+		this.sharedLocalAreas = list;
 	};
 	
 	this.setAllFamilyUpdate = function(value){

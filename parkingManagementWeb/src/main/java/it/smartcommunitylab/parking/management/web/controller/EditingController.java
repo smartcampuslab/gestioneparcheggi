@@ -110,6 +110,13 @@ public class EditingController {
 			@RequestBody RateAreaBean area) throws NotFoundException {
 		return storage.editArea(area);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/area/{aid}")
+	public @ResponseBody
+	RateAreaBean getRateArea(@PathVariable("aid") String aid,
+			@RequestBody RateAreaBean area) throws NotFoundException {
+		return storage.getAreaById(aid);
+	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/area")
 	public @ResponseBody

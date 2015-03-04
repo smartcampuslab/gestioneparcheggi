@@ -5,6 +5,7 @@ import it.smartcommunitylab.parking.management.web.bean.LineBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
+import it.smartcommunitylab.parking.management.web.bean.PolygonBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
@@ -12,6 +13,7 @@ import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter.Status;
+import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
@@ -50,6 +52,57 @@ public class StorageManagerTest {
 			NoSuchMethodException, InvocationTargetException {
 		
 		// Rate Area Creation
+		
+		//Polygon List 1;
+		List<PolygonBean> areaGeo = new ArrayList<PolygonBean>();
+		PolygonBean pol1 = new PolygonBean();
+		PointBean pbe1 = new PointBean();
+		pbe1.setLat(45.893244);
+		pbe1.setLng(11.024332);
+		PointBean pbe2 = new PointBean();
+		pbe2.setLat(45.894140);
+		pbe2.setLng(11.029181);
+		PointBean pbe3 = new PointBean();
+		pbe3.setLat(45.891063);
+		pbe3.setLng(11.034288);
+		PointBean pbe4 = new PointBean();
+		pbe4.setLat(45.886493);
+		pbe4.setLng(11.032700);
+		PointBean pbe5 = new PointBean();
+		pbe5.setLat(45.884671);
+		pbe5.setLng(11.026263);
+		List<PointBean> points = new ArrayList<PointBean>();
+		points.add(pbe1);
+		points.add(pbe2);
+		points.add(pbe3);
+		points.add(pbe4);
+		points.add(pbe5);
+		pol1.setPoints(points);
+		areaGeo.add(pol1);
+		
+		//Polygon List 2;
+		List<PolygonBean> areaGeo2 = new ArrayList<PolygonBean>();
+		PolygonBean pol12 = new PolygonBean();
+		PointBean pbe12 = new PointBean();
+		pbe12.setLat(45.886254);
+		pbe12.setLng(11.028709);
+		PointBean pbe22 = new PointBean();
+		pbe22.setLat(45.887688);
+		pbe22.setLng(11.032614);
+		PointBean pbe32 = new PointBean();
+		pbe32.setLat(45.885537);
+		pbe32.setLng(11.034760);
+		PointBean pbe42 = new PointBean();
+		pbe42.setLat(45.884103);
+		pbe42.setLng(11.029954);
+		List<PointBean> points2 = new ArrayList<PointBean>();
+		points2.add(pbe12);
+		points2.add(pbe22);
+		points2.add(pbe32);
+		points2.add(pbe42);
+		pol12.setPoints(points2);
+		areaGeo2.add(pol12);
+		
 		RateAreaBean area = new RateAreaBean();
 		area.setId_app(appId);
 		area.setName("Pasubio");
@@ -57,6 +110,7 @@ public class StorageManagerTest {
 		area.setFee(new Float(0.50));
 		area.setTimeSlot("08:00 - 18:00");
 		area.setSmsCode("567");
+		area.setGeometry(areaGeo);
 		area = manager.save(area);
 		
 		RateAreaBean area2 = new RateAreaBean();
@@ -66,6 +120,7 @@ public class StorageManagerTest {
 		area2.setFee(new Float(1.00));
 		area2.setTimeSlot("10:00 - 14:00");
 		area2.setSmsCode("1234");
+		area2.setGeometry(areaGeo2);
 		area2 = manager.save(area2);
 		
 		RateAreaBean area3 = new RateAreaBean();
@@ -100,9 +155,34 @@ public class StorageManagerTest {
 		z3 = manager.save(z3);
 		
 		// Streets Creation
+		PointBean pbes1 = new PointBean();
+		pbes1.setLat(45.890306864971116);
+		pbes1.setLng(11.025209426879883);
+		PointBean pbes2 = new PointBean();
+		pbes2.setLat(45.889261385860465);
+		pbes2.setLng(11.024823188781738);
+		PointBean pbes3 = new PointBean();
+		pbes3.setLat(45.88875357462059);
+		pbes3.setLng(11.024394035339355);
+		PointBean pbes4 = new PointBean();
+		pbes4.setLat(45.88881331736036);
+		pbes4.setLng(11.024651527404785);
+		PointBean pbes5 = new PointBean();
+		pbes5.setLat(45.88875357462059);
+		pbes5.setLng(11.024394035339355);
+		List<PointBean> pointsS = new ArrayList<PointBean>();
+		pointsS.add(pbes1);
+		pointsS.add(pbes2);
+		pointsS.add(pbes3);
+		pointsS.add(pbes4);
+		pointsS.add(pbes5);
+		LineBean line1 = new LineBean();
+		line1.setPoints(pointsS);
+		
 		StreetBean s = new StreetBean();
 		s.setStreetReference("Via Unione");
 		s.setId_app(appId);
+		s.setSlotNumber(16);
 		s.setFreeParkSlotNumber(0);
 		s.setFreeParkSlotSignNumber(0);
 		s.setPaidSlotNumber(10);
@@ -112,6 +192,7 @@ public class StorageManagerTest {
 		s.setSubscritionAllowedPark(false);
 		s.setColor(area.getColor());
 		s.setRateAreaId(area.getId());
+		s.setGeometry(line1);
 		List<ZoneBean> zones = new ArrayList<ZoneBean>();
 		zones.add(z);
 		s.setZoneBeans(zones);
@@ -119,6 +200,7 @@ public class StorageManagerTest {
 		StreetBean s2 = new StreetBean();
 		s2.setStreetReference("Via Monte Nero");
 		s2.setId_app(appId);
+		s2.setSlotNumber(8);
 		s2.setFreeParkSlotNumber(0);
 		s2.setFreeParkSlotSignNumber(1);
 		s2.setPaidSlotNumber(3);
@@ -133,6 +215,7 @@ public class StorageManagerTest {
 		StreetBean s3 = new StreetBean();
 		s3.setStreetReference("Viale della Vittoria");
 		s3.setId_app(appId);
+		s3.setSlotNumber(9);
 		s3.setFreeParkSlotNumber(2);
 		s3.setFreeParkSlotSignNumber(3);
 		s3.setPaidSlotNumber(3);
@@ -149,6 +232,7 @@ public class StorageManagerTest {
 		StreetBean s4 = new StreetBean();
 		s4.setStreetReference("Via Macerie1");
 		s4.setId_app(appId);
+		s4.setSlotNumber(19);
 		s4.setFreeParkSlotNumber(0);
 		s4.setFreeParkSlotSignNumber(0);
 		s4.setPaidSlotNumber(15);
@@ -163,6 +247,7 @@ public class StorageManagerTest {
 		StreetBean s5 = new StreetBean();
 		s5.setStreetReference("Via Macerie2");
 		s5.setId_app(appId);
+		s5.setSlotNumber(7);
 		s5.setFreeParkSlotNumber(2);
 		s5.setFreeParkSlotSignNumber(0);
 		s5.setPaidSlotNumber(3);
@@ -195,7 +280,7 @@ public class StorageManagerTest {
 		PointBean g2 = new PointBean();
 		g2.setLat(45.88802918878782);
 		g2.setLng(11.024115085601807);
-		p.setGeometry(g2);
+		p2.setGeometry(g2);
 		
 		ParkingMeterBean p3 = new ParkingMeterBean();
 		p3.setId_app(appId);
@@ -205,7 +290,7 @@ public class StorageManagerTest {
 		PointBean g3 = new PointBean();
 		g3.setLat(45.889731853895526);
 		g3.setLng(11.024951934814453);
-		p.setGeometry(g3);
+		p3.setGeometry(g3);
 		
 		ParkingMeterBean p4 = new ParkingMeterBean();
 		p4.setId_app(appId);
@@ -245,7 +330,7 @@ public class StorageManagerTest {
 		PointBean g7 = new PointBean();
 		g7.setLat(45.88669987887168);
 		g7.setLng(11.028202772140503);
-		p4.setGeometry(g7);
+		p7.setGeometry(g7);
 		
 		ParkingMeterBean p8 = new ParkingMeterBean();
 		p8.setId_app(appId);
@@ -288,7 +373,11 @@ public class StorageManagerTest {
 		ps.setUnusuableSlotNumber(5);
 		ps.setTimeSlot("05:00 - 00:00");
 		ps.setFee("2 euro/ora");
-		ps.setPhoneNumber("0464112233");		
+		ps.setPhoneNumber("0464112233");
+		PointBean g11 = new PointBean();
+		g11.setLat(45.887509);
+		g11.setLng(11.032121);
+		ps.setGeometry(g11);
 		List<String> payMode = new ArrayList<String>();
 		payMode.add("AUTOMATED_TELLER");
 		payMode.add("PARCOMETRO");
@@ -304,7 +393,11 @@ public class StorageManagerTest {
 		ps2.setUnusuableSlotNumber(5);
 		ps2.setTimeSlot("05:00 - 00:00");
 		ps2.setFee("2,5 euro/ora");
-		ps2.setPhoneNumber("0464511233");		
+		ps2.setPhoneNumber("0464511233");	
+		PointBean g12 = new PointBean();
+		g12.setLat(45.891057);
+		g12.setLng(11.033929);
+		ps2.setGeometry(g12);
 		List<String> payMode2 = new ArrayList<String>();
 		payMode2.add("AUTOMATED_TELLER");
 		payMode2.add("PREPAID_CARD");

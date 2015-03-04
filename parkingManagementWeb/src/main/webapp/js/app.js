@@ -6,6 +6,8 @@ var pm = angular.module('pm', [
 	'localization',
 	'ngRoute',
 	'ngSanitize',
+	'uiGmapgoogle-maps',
+	/*'ngMap',*/
 	
 	'pmServices',
 	'pmControllers',
@@ -37,20 +39,20 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'MainCtrl',
     		controllerAs: 'main'
     	})
-    	.when('/Practice/view/:id', {
-    		templateUrl: 'partials/view_practice.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
+    	.when('/edit/park', {
+    		templateUrl: 'partials/edit/parkediting.html',
+    		controller: 'ParkCtrl',
+    		controllerAs: 'park_ctrl'
     	})
-    	.when('/Practice/new/add/:type', {
-    		templateUrl: 'partials/new_practice.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
+    	.when('/edit/bike', {
+    		templateUrl: 'partials/edit/bikeediting.html',
+    		controller: 'ParkCtrl',
+    		controllerAs: 'park_ctrl'
     	})
-    	.when('/PracticeList/edil/:type', {
-    		templateUrl: 'partials/practice_edil_list.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
+    	.when('/view', {
+    		templateUrl: 'partials/view/viewall.html',
+    		controller: 'ViewCtrl',
+    		controllerAs: 'view_ctrl'
     	})
     	.when('/PracticeList/ass/:type', {
     		templateUrl: 'partials/practice_ass_list.html',
@@ -160,6 +162,13 @@ pm.config(['$compileProvider',
         // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
     }
 ]);
+pm.config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        key: 'AIzaSyBAyoQGPbpu84FQoIw_nfxaodL3vDYUgGA',
+        v: '3.17',
+        libraries: 'weather,geometry,visualization'
+    });
+});
 pm.run(function(editableOptions) {
 	 editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });

@@ -1,0 +1,71 @@
+<div class="row" ><!-- ng-init="getStreetsFromDb()" -->
+				<div class="col-md-6" ng-show="streetMapReady" ><!-- id="map_canvas" -->
+					<ui-gmap-google-map id="3" center="streetMap.center" draggable="true" zoom="streetMap.zoom" options="options" control="streetMap.control" bounds="streetMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+<!--         					<ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'"> -->
+<!--         						<ui-gmap-window show="'show'" ng-cloak> -->
+<!--                 					<p> -->
+<!-- 			                        	Latitude: {{coords.latitude}}<br/> -->
+<!-- 			                        	Longitude: {{coords.longitude}}<br/> -->
+<!-- 			                        	Codice: <strong>{{title}}</strong> -->
+<!-- 			                    	</p> -->
+<!--             					</ui-gmap-window> -->
+<!--         					</ui-gmap-markers>		 -->
+<!-- 						<ui-gmap-polygon static="true" ng-repeat="p in polygons track by p.id" path="p.path" stroke="p.stroke" visible="p.visible" geodesic="p.geodesic" fill="p.fill" fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polygon> -->
+					
+					<ui-gmap-polyline ng-repeat="p in geoStreets" path="p.path" stroke="p.stroke" visible='p.visible'
+                  geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polyline>
+					
+					</ui-gmap-google-map>
+				</div>
+				<div class="col-md-6" ng-show="!streetMapReady">
+					<div style="text-align: center">
+							<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
+							<h3>{{ 'loading_text' | i18n }}...</h3>
+						</div>
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-primary">
+						<div class="panel-body">
+							<div class="panel panel-primary" align="center">
+								<div class="panel-heading">
+									<h5 class="panel-title">{{ 'street_list' | i18n }}</h5>
+								</div>
+								<div class="panel-body">
+									<table class="table table-striped" style="width: 100%">
+										<tr ng-show="streetWS.length != 0">
+											<th width="40%">{{ 'street_name' | i18n }}</th>
+											<th width="15%">{{ 'street_slots' | i18n }}</th>
+											<th width="40%" colspan="2">{{ 'street_area_name' | i18n }}</th>
+											<th width="5%">{{ 'operations' | i18n }}</th>
+										</tr>
+										<tbody class="animate-repeat"
+											ng-repeat="street in streetWS | filter:q | orderBy:'-name' | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+											<tr>
+												<td width="40%" align="left">{{street.streetReference}}</td>
+												<td width="15%" align="left">{{street.totalSlots}}</td>
+												<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
+												<td width="35%" align="center">{{street.area_name}}</td>
+												<td width="5%" align="left">
+													<a href="#/street/view/{{ street.id }}" ng-click="setViewTabs()" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!-- {{ 'practice_view' | i18n }} -->
+													<a href="#/street/edit/{{ street.id }}" ng-click="setClassTabs()"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+												</td>
+											</tr>
+										</tbody>
+										<tr ng-show="areaWS.length == 0">
+											<td colspan="5"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+										</tr>
+									</table>
+									<button class="btn btn-primary"
+											ng-disabled="currentPage == 0"
+											ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+										{{currentPage+1}}/{{numberOfPages(2)}}
+									<button class="btn btn-primary"
+											ng-disabled="currentPage >= streetWS.length/maxStreets - 1"
+											ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>

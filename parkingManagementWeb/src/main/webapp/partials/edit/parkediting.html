@@ -1,0 +1,14 @@
+<div class="panel panel-primary">
+	<div class="panel-heading">
+		<h4 class="panel-title">{{ 'parkEditingPanelTitle' | i18n }}</h4>
+	</div>
+	<div class="panel-body" ng-controller="ParkCtrl">
+		<tabset ><!-- ng-show="!isLoading" -->
+			<tab  ng-repeat="tab in editparktabs" heading="{{ tab.title }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index)">
+				<br>
+				<div ng-include="tab.content"></div>
+			</tab>
+		</tabset>
+		
+	</div>
+</div>

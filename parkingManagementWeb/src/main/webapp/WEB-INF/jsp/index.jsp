@@ -27,8 +27,8 @@
 <script src="js/controllers/ctrl.js?1001"></script>
 <script src="js/controllers/ctrl_login.js?1000"></script>
 <script src="js/controllers/ctrl_main.js?1000"></script>
-<script src="js/controllers/ctrl_practice.js?1001"></script>
-<script src="js/controllers/ctrl_info.js"></script>
+<script src="js/controllers/ctrl_park.js?1001"></script>
+<script src="js/controllers/ctrl_view.js"></script>
 
 <script src="js/filters.js?1001"></script>
 <script src="js/services.js?1001"></script>
@@ -49,6 +49,13 @@
 <script src="lib/angular-route.min.js"></script>
 <script src="lib/xeditable.min.js"></script>
 <script src="lib/angular-base64.min.js"></script>
+
+<script src="lib/lodash.js"></script>
+<script src="lib/angular-google-maps.js"></script>
+<!-- <script src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
+<!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script> -->
+<!-- <script src="lib/ng-map.min.js"></script> -->
+
 <base href="/parking-management/" />
 
 <script>
@@ -83,23 +90,6 @@
 
   ga('create', 'UA-54947160-1', 'auto');
   ga('send', 'pageview');
-  
-//   angular.module('cpControllers', [])
-//   .controller('LangController', ['$scope', 'sharedDataService', function($scope, sharedDataService) {
-    
-// 	$scope.init_lang = function(){ 
-// 		$scope.lang = sharedDataService.getUsedLanguage();
-	    
-// 		if($scope.lang == 'ita'){
-// 			var locale = 'it-IT';
-// 			$.getScript('i18n/angular-locale_it-IT.js');
-// 	  	} else {
-// 	  		//$("#lang_script").remove();
-// 	  		$.getScript('i18n/angular-locale_en-EN.js');
-// 		};
-
-// 	};
-//   }]);
   
 // 	var language_script = document.createElement('script');
 // 	language_script.type = 'text/javascript';
@@ -141,13 +131,26 @@
 	    }
 	});
 
-  
   </script>
   
   <style>
   
   	.borderless td{
 	    border: 0;
+	}
+	
+	.angular-google-map-container {
+		height: 500px; 
+	}
+	
+	.colorBox {   
+    	float: left;
+    	width: 15px;
+    	height: 15px;
+    	margin: 2px;
+    	border-width: 1px;
+    	border-style: solid;
+    	border-color: rgba(0,0,0,.2);
 	}
 	
   </style>
@@ -160,24 +163,23 @@
       <div class="container">
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
-            <li class="active"><a href="#/" ng-click="home()">{{ 'menu_bar-home' | i18n }}</a></li>
-            <li ng-show="frameOpened && (isActiveLinkEdil() == 'active')" class="active"><a href="#/PracticeList/edil/1" ng-click="showPractices(1, true)">{{ 'left_menu-bildings' | i18n }}</a></li>
-            <li ng-show="frameOpened && (isActiveLinkAss() == 'active')" class="active"><a href="#/PracticeList/ass/1" ng-click="showPractices(2, true)">{{ 'left_menu-allowances' | i18n }}</a></li>
-          	<li ng-show="frameOpened && (isActiveLinkEdilExtra() == 'active')" class="active"><a href="#/PracticeList/edil/2" ng-click="showPractices(1, false)">{{ 'left_menu-bildings' | i18n }}</a></li>
-            <li ng-show="frameOpened && (isActiveLinkAssExtra() == 'active')" class="active"><a href="#/PracticeList/ass/2" ng-click="showPractices(2, false)">{{ 'left_menu-allowances' | i18n }}</a></li>
+            <li class="{{ isHomeActive() }}"><a href="#/" ng-click="home()">{{ 'menu_bar-home' | i18n }}</a></li>
+            <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li>
+            <li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li>
+          	<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right" >
-          	<li class="dropdown">
-          		<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'guide' | i18n }} <span class="caret"></span></a>
-          		<ul class="dropdown-menu" role="menu">
-            		<li><a href="http://www.trentinosociale.it/index.php/Servizi-ai-cittadini/Guida-ai-servizi/per-destinatari/Anziani/Abitare-o-disporre-di-un-alloggio-adeguato-e-sicuro/Locazione-alloggio-pubblico-a-canone-sociale" target="_blank">{{ 'document_link_edil' | i18n }}</a></li>
-            		<li><a href="http://www.trentinosociale.it/index.php/Servizi-ai-cittadini/Guida-ai-servizi/per-destinatari/Anziani/Abitare-o-disporre-di-un-alloggio-adeguato-e-sicuro/Contributo-sul-canone-di-affitto" target="_blank">{{ 'document_link_allowances' | i18n }}</a></li>
-            	</ul>
-          	</li>
+<!--           	<li class="dropdown"> -->
+<!--           		<a href="#" class="dropdown-toggle" data-toggle="dropdown">{{ 'guide' | i18n }} <span class="caret"></span></a> -->
+<!--           		<ul class="dropdown-menu" role="menu"> -->
+<!--             		<li><a href="http://www.trentinosociale.it/index.php/Servizi-ai-cittadini/Guida-ai-servizi/per-destinatari/Anziani/Abitare-o-disporre-di-un-alloggio-adeguato-e-sicuro/Locazione-alloggio-pubblico-a-canone-sociale" target="_blank">{{ 'document_link_edil' | i18n }}</a></li> -->
+<!--             		<li><a href="http://www.trentinosociale.it/index.php/Servizi-ai-cittadini/Guida-ai-servizi/per-destinatari/Anziani/Abitare-o-disporre-di-un-alloggio-adeguato-e-sicuro/Contributo-sul-canone-di-affitto" target="_blank">{{ 'document_link_allowances' | i18n }}</a></li> -->
+<!--             	</ul> -->
+<!--           	</li> -->
           	<li><a href="mailto:myweb.edilizia@comunitadellavallagarina.tn.it?Subject=Info%20MyWeb" target="_top" alt="myweb.edilizia@comunitadellavallagarina.tn.it" title="myweb.edilizia@comunitadellavallagarina.tn.it">{{ 'usefull_link'| i18n }}</a></li>
           	<li class="{{ isActiveItaLang() }}"><a href ng-click="setItalianLanguage()">IT</a></li>
           	<li class="{{ isActiveEngLang() }}"><a href ng-click="setEnglishLanguage()">EN</a></li>
-            <li><a href="logout" ng-click="logout()">{{ 'menu_bar-logout' | i18n }}</a></li><!-- ng-click="logout()" -->
+            <!-- <li><a href="logout" ng-click="logout()">{{ 'menu_bar-logout' | i18n }}</a></li> -->
           </ul>
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
@@ -190,7 +192,7 @@
 				<div class="panel panel-default" style="margin-top:65px;">
 			  		<div class="panel-body">
 			  			<div style="margin:5px 15px;">
-							<div class="row" align="center" style="height: 100px"><!-- ; margin-top: 20px; -->
+							<div class="row" align="center" style="height: 80px"><!-- ; margin-top: 20px; -->
 								<div><!-- "text-align: center" -->
 									<table>
 										<tr>
@@ -201,75 +203,42 @@
 									
 								</div>
 							</div>
-							<div class="row" ng-show="isHomeShowed()">
-								<div class="well"><!-- style="height: 250px" -->
-									<table class="table"><!-- ng-init="retrieveUserData()" style="width: 98%" -->
-										<tr>
-											<th colspan="3" align="center">
-											<strong>{{ 'citizen_info' | i18n }}</strong>
-											</th>
-										</tr>
-										<tr>
-											<td width="10%" rowspan="4" align="center">
-												<a href="#"
-													class="thumbnail"><img
-													src="img/user.jpg" alt="">
-												</a>
-											</td>
-											<td width="45%">{{ 'citizen_name' | i18n }}: <strong>{{ getUserName() }}</strong></td><!-- <span id="user_name"></span> -->
-											<td width="45%">{{ 'citizen_gender' | i18n }}: <strong>{{ utenteCS.sesso }}</strong></td><!-- {{ translateUserGender(user.gender) }} -->
-										</tr>
-										<tr>
-											<td>{{ 'citizen_surname' | i18n }}: <strong>{{ getUserSurname() }}</strong></td><!-- <span id="user_surname"></span> -->
-											<td>{{ 'citizen_taxcode' | i18n }}: <strong>{{ utenteCS.codiceFiscale }}</strong></td>
-										</tr>
-										<tr>
-											<td>{{ 'citizen_address' | i18n }}: <strong>{{ utenteCS.indirizzoRes }},{{ utenteCS.capRes }},{{ utenteCS.cittaRes }}-{{ utenteCS.provinciaRes }}</strong></td>
-											<td>{{ 'citizen_date_of_birth' | i18n }}: <strong>{{ utenteCS.dataNascita }} , {{ utenteCS.luogoNascita }} ({{ utenteCS.provinciaNascita }})</strong></td>
-										</tr>
-										<tr>
-											<td>{{ 'citizen_phone' | i18n }}: <strong>{{ utenteCS.cellulare }}</strong></td>
-											<td>{{ 'citizen_mail' | i18n }}: <strong>{{ getMail() }}</strong></td>
-										</tr>
-									</table>
-								</div>
-							</div>
-							<div class="row" style="height: 170px; margin-bottom: 10px;" ng-show="!frameOpened">
-								<div class="panel panel-primary">
-									<div class="panel-body">
-										<table width="100%">
-											<tr>
-											<td width="50%" valign="middle" style="padding:0px 10px">
-												<div class="panel panel-primary">
-													<div class="panel-heading">
-														<h4 class="panel-title">{{ 'left_menu-availableServices_eu' | i18n }}</h4>
-													</div>
-													<div class="panel-body">
-														<ul class="nav nav-pills nav-stacked" style="font-size: 14px">
-										            		<li class="{{ isActiveLinkEdil() }}"><a href="#/PracticeList/edil/1" ng-click="showPractices(1, true)">{{ 'left_menu-bildings' | i18n }}</a></li>
-										            		<li class="{{ isActiveLinkAss() }}"><a href="#/PracticeList/ass/1" ng-click="showPractices(2, true)">{{ 'left_menu-allowances' | i18n }}</a></li>
-										        		</ul>
-										        	</div>
-										        </div>
-										    </td>
-										    <td width="50%" valign="middle" style="padding:0px 10px">    
-										        <div class="panel panel-primary">
-													<div class="panel-heading">
-														<h4 class="panel-title">{{ 'left_menu-availableServices_extraeu' | i18n }}</h4>
-													</div>
-													<div class="panel-body">
-														<ul class="nav nav-pills nav-stacked" style="font-size: 14px">
-										            		<li class="{{ isActiveLinkEdilExtra() }}"><a href="#/PracticeList/edil/2" ng-click="showPractices(1, false)">{{ 'left_menu-bildings' | i18n }}</a></li>
-										            		<li class="{{ isActiveLinkAssExtra() }}"><a href="#/PracticeList/ass/2" ng-click="showPractices(2, false)">{{ 'left_menu-allowances' | i18n }}</a></li>
-										        		</ul>
-										        	</div>
-										        </div>
-										    </td>
-										    <tr>
-									    </table>
-								    </div>
-							    </div>    
-							</div>
+<!-- 							<div class="row" style="height: 170px; margin-bottom: 10px;" ng-show="!frameOpened"> -->
+<!-- 								<div class="panel panel-primary"> -->
+<!-- 									<div class="panel-body"> -->
+<!-- 										<table width="100%"> -->
+<!-- 											<tr> -->
+<!-- 											<td width="50%" valign="middle" style="padding:0px 10px"> -->
+<!-- 												<div class="panel panel-primary"> -->
+<!-- 													<div class="panel-heading"> -->
+<!-- 														<h4 class="panel-title">{{ 'left_menu-availableServices_eu' | i18n }}</h4> -->
+<!-- 													</div> -->
+<!-- 													<div class="panel-body"> -->
+<!-- 														<ul class="nav nav-pills nav-stacked" style="font-size: 14px"> -->
+<!-- 										            		<li class="{{ isActiveLinkEdil() }}"><a href="#/PracticeList/edil/1" ng-click="showPractices(1, true)">{{ 'left_menu-bildings' | i18n }}</a></li> -->
+<!-- 										            		<li class="{{ isActiveLinkAss() }}"><a href="#/PracticeList/ass/1" ng-click="showPractices(2, true)">{{ 'left_menu-allowances' | i18n }}</a></li> -->
+<!-- 										        		</ul> -->
+<!-- 										        	</div> -->
+<!-- 										        </div> -->
+<!-- 										    </td> -->
+<!-- 										    <td width="50%" valign="middle" style="padding:0px 10px">     -->
+<!-- 										        <div class="panel panel-primary"> -->
+<!-- 													<div class="panel-heading"> -->
+<!-- 														<h4 class="panel-title">{{ 'left_menu-availableServices_extraeu' | i18n }}</h4> -->
+<!-- 													</div> -->
+<!-- 													<div class="panel-body"> -->
+<!-- 														<ul class="nav nav-pills nav-stacked" style="font-size: 14px"> -->
+<!-- 										            		<li class="{{ isActiveLinkEdilExtra() }}"><a href="#/PracticeList/edil/2" ng-click="showPractices(1, false)">{{ 'left_menu-bildings' | i18n }}</a></li> -->
+<!-- 										            		<li class="{{ isActiveLinkAssExtra() }}"><a href="#/PracticeList/ass/2" ng-click="showPractices(2, false)">{{ 'left_menu-allowances' | i18n }}</a></li> -->
+<!-- 										        		</ul> -->
+<!-- 										        	</div> -->
+<!-- 										        </div> -->
+<!-- 										    </td> -->
+<!-- 										    <tr> -->
+<!-- 									    </table> -->
+<!-- 								    </div> -->
+<!-- 							    </div>     -->
+<!-- 							</div> -->
 							<div class="row" style="height: 30px;" ng-show="!frameOpened">&nbsp;</div>
 							<div ng-view class="row" ng-hide="isNewPractice()" >{{ 'loading_text'| i18n }}...</div>
 						</div>
