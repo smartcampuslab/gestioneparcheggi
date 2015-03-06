@@ -1543,7 +1543,7 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
-		} else {
+		} else if(method == 'POST'){
 			$http({
 				method : method,
 				url : 'rest/allPost',
@@ -1559,7 +1559,24 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
+		} else if(method == 'PUT'){
+			$http({
+				method : method,
+				url : 'rest/allPut',
+				params : {
+					"urlWS" : urlWS,
+				},
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
 		}
+			
 		return deferred.promise;
 	};
 	return {getProxy : getProxy};

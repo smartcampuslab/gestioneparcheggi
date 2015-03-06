@@ -37,7 +37,7 @@
 											<th width="5%">{{ 'operations' | i18n }}</th>
 										</tr>
 										<tbody class="animate-repeat"
-											ng-repeat="area in areaWS | filter:q | orderBy:'-name' | startFrom:currentPage*maxAreas | limitTo:maxAreas">
+											ng-repeat="area in areaWS | filter:q | orderBy:'name' | startFrom:currentPage*maxAreas | limitTo:maxAreas">
 				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 											<tr>
 												<td width="25%" align="left">{{area.name}}</td>

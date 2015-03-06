@@ -1,15 +1,16 @@
 <div class="row"><!-- ng-init="getParkingMetersFromDb()" -->
+	<div ng-show="!editModePM && !viewModePM">			
 				<div class="col-md-6" ng-show="pmMapReady" ><!-- id="map_canvas" -->
-					<ui-gmap-google-map center="map.center" draggable="true" zoom="map.zoom" options="options" control="map.control" bounds="map.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
-<!--         					<ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'"> -->
-<!--         						<ui-gmap-window show="'show'" ng-cloak> -->
-<!--                 					<p> -->
-<!-- 			                        	Latitude: {{coords.latitude}}<br/> -->
-<!-- 			                        	Longitude: {{coords.longitude}}<br/> -->
-<!-- 			                        	Codice: <strong>{{title}}</strong> -->
-<!-- 			                    	</p> -->
-<!--             					</ui-gmap-window> -->
-<!--         					</ui-gmap-markers>		 -->
+					<ui-gmap-google-map id="4"center="pMeterMap.center" draggable="true" zoom="pMeterMap.zoom" options="options" control="pMeterMap.control" bounds="pMeterMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+							<ui-gmap-markers models="parkingMetersMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'"><!-- click="'onClick'" -->
+								<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+                					<p>
+			                        	Lat: {{coords.latitude}}<br/>
+			                        	Lng: {{coords.longitude}}<br/>
+			                        	Codice: <strong>{{title}}</strong>
+			                    	</p>
+            					</ui-gmap-window>
+        					</ui-gmap-markers>
 					</ui-gmap-google-map>
 				</div>
 				<div class="col-md-6" ng-show="!pmMapReady">
@@ -19,48 +20,219 @@
 						</div>
 				</div>
 				<div class="col-md-6">
-					<div class="panel panel-primary">
+					<div class="panel panel-primary" align="center">
+						<div class="panel-heading">
+							<h5 class="panel-title">{{ 'pm_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setPmEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+						</div>
 						<div class="panel-body">
-							<div class="panel panel-primary" align="center">
-								<div class="panel-heading">
-									<h5 class="panel-title">{{ 'pm_list' | i18n }}</h5>
-								</div>
-								<div class="panel-body">
-									<table class="table table-striped" style="width: 100%">
-										<tr ng-show="pmeterWS.length != 0">
-											<th width="40%">{{ 'pm_code' | i18n }}</th>
-											<th width="15%">{{ 'pm_note' | i18n }}</th>
-											<th width="40%" colspan="2">{{ 'pm_area_name' | i18n }}</th>
-											<th width="5%">{{ 'operations' | i18n }}</th>
-										</tr>
-										<tbody class="animate-repeat"
-											ng-repeat="pmeter in pmeterWS | filter:q | orderBy:'-name' | startFrom:currentPage*maxPmeters | limitTo:maxPmeters">
-				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
-											<tr>
-												<td width="40%" align="left">{{pmeter.code}}</td>
-												<td width="15%" align="left">{{pmeter.note}}</td>
-												<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pm.color)}"></div></td><!-- {{area.color}} -->
-												<td width="35%" align="center">{{pm.area_name}}</td>
-												<td width="5%" align="left">
-													<a href="#/parkingmeter/view/{{ pmeter.id }}" ng-click="setViewTabs()" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!-- {{ 'practice_view' | i18n }} -->
-													<a href="#/parkingmeter/edit/{{ pmeter.id }}" ng-click="setClassTabs()"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
-												</td>
-											</tr>
-										</tbody>
-										<tr ng-show="areaWS.length == 0">
-											<td colspan="5"><strong>{{ 'no_pm_in_lists' | i18n }}</strong></td>
-										</tr>
-									</table>
-									<button class="btn btn-primary"
-											ng-disabled="currentPage == 0"
-											ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-										{{currentPage+1}}/{{numberOfPages(3)}}
-									<button class="btn btn-primary"
-											ng-disabled="currentPage >= pmeterWS.length/maxPmeters - 1"
-											ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
-								</div>
-							</div>
+							<table class="table table-striped" style="width: 100%">
+								<tr ng-show="pmeterWS.length != 0">
+									<th width="40%">{{ 'pm_code' | i18n }}</th>
+									<th width="15%">{{ 'pm_note' | i18n }}</th>
+									<th width="10%">{{ 'pm_status' | i18n }}</th>
+									<th width="30%" colspan="2">{{ 'pm_area_name' | i18n }}</th>
+									<th width="5%">{{ 'operations' | i18n }}</th>
+								</tr>
+								<tbody class="animate-repeat"
+									ng-repeat="pmeter in pmeterWS | filter:q | orderBy:'code' | startFrom:currentPage*maxPmeters | limitTo:maxPmeters">
+				<!--						ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+									<tr ng-show="pmeter.status=='INACTIVE'">
+										<td width="40%" align="left">{{pmeter.code}}</td>
+										<td width="15%" align="left">{{pmeter.note}}</td>
+										<td width="10%" align="center">OFF</td>
+										<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
+										<td width="25%" align="center">{{pmeter.area_name}}</td>
+										<td width="5%" align="left">
+											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!-- {{ 'practice_view' | i18n }} -->
+											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+										</td>
+									</tr>
+									<tr class="success" ng-show="pmeter.status=='ACTIVE'">
+										<td width="40%" align="left">{{pmeter.code}}</td>
+										<td width="15%" align="left">{{pmeter.note}}</td>
+										<td width="10%" align="center">ON</td>
+										<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
+										<td width="25%" align="center">{{pmeter.area_name}}</td>
+										<td width="5%" align="left">
+											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!--  ng-click="setPmDetails(pmeter)" {{ 'practice_view' | i18n }} -->
+											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+										</td>
+									</tr>
+								</tbody>
+								<tr ng-show="pmeterWS.length == 0">
+									<td colspan="5"><strong>{{ 'no_pm_in_lists' | i18n }}</strong></td>
+								</tr>
+							</table>
+							<button class="btn btn-primary"
+									ng-disabled="currentPage == 0"
+									ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+								{{currentPage+1}}/{{numberOfPages(3)}}
+							<button class="btn btn-primary"
+									ng-disabled="currentPage >= pmeterWS.length/maxPmeters - 1"
+									ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 						</div>
 					</div>
 				</div>
+	</div>
+	<div ng-show="editModePM">
+		<form role="form" name="form">
+			<div class="panel panel-default" width="90%">
+		   		<div class="panel-heading">
+		    		<h3 class="panel-title"><strong>{{ 'edit_parkingmeter' | i18n }}</strong></h3>
+		  		</div>
+		  		<div class="panel-body">	
+				   	<div class="form-group">
+				    	<label for="code">{{ 'pm_code' | i18n }}</label>
+				    	<input id="code" type="text" class="form-control" name="pCode" ng-model="parckingMeter.code" ng-required="true" ><!-- ng-change="setAlloggioChanged(true)" -->
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pCode.$error.required">{{ 'parkingmeter_code_err_required' | i18n }}</div>
+				   	</div>
+		<!-- 		   	<div class="form-group" ng-show="alloggioOccupato.comuneAlloggio != null"> -->
+		<!-- 		    	<label for="municipality">{{ 'municipality_select_label_details' | i18n }}</label> -->
+		<!-- 		    	<select id="municipality" name="pMunicipality" class="form-control" ng-options="l.idObj as l.descrizione for l in listaComuniVallagarina" ng-model="alloggioOccupato.comuneAlloggio" ng-required="getFamilyAllowaces()==true"> -->
+		<!-- 		    		<option value="">{{ myAlloggio.descrizione }}</option> -->
+		<!-- 		    	</select> -->
+		<!-- 		   		<div class="alert alert-danger" ng-show="!initForm() && form.pMunicipality.$error.required">{{ 'municipality_select_err_required_details' | i18n }}</div> -->
+		<!-- 		   	</div> -->
+				   	<div class="form-group">
+				    	<label for="note">{{ 'pm_note' | i18n }}</label>
+				    	<input id="note" type="text" class="form-control" name="pNote" ng-model="parckingMeter.note" ng-required="false" ><!-- ng-change="setAlloggioChanged(true)" -->
+				   	</div>
+				   	<div class="form-group">
+				    	<label for="status">{{ 'pm_status' | i18n }}</label>
+				    	<select id="status" name="pStatus" class="form-control" ng-options="s as s.descrizione for s in listaStati" ng-model="myStatus" ng-required="true">
+				    	</select>
+				    	<div class="alert alert-danger" ng-show="!isInit && form.pStatus.$error.required">{{ 'parkingmeter_status_select_err_required' | i18n }}</div>
+				   	</div>
+				   	<div class="form-group">
+				    	<label for="area">{{ 'pm_area_name' | i18n }}</label>
+				    	<select id="area" name="pArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="true">
+				    	</select>
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pArea.$error.required">{{ 'parkingmeter_area_select_err_required' | i18n }}</div>
+					</div>
+					<div class="form-group">
+				    	<label for="geometry">{{ 'pm_geometry' | i18n }}</label>
+				    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="false" ng-pattern="gpsPos" >
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pArea.$error.pattern">{{ 'parkingmeter_geometry_select_err_pattern' | i18n }}</div>
+					</div>
+					<div class="col-md-12" ng-show="isEditing"><!-- id="map_canvas" -->
+						<ui-gmap-google-map id="5" center="pmEditMap.center" draggable="true" zoom="pmEditMap.zoom" options="pmEditMap.options" control="pmEditMap.control" bounds="pmEditMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+								<ui-gmap-marker idkey="myPm.id" coords="myPm.coords" options="myPm.options" icon="myPm.icon" events="myPm.events"><!-- click="'onClick'" -->
+									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+	                					<p>
+				                        	Lat: {{myPm.coords.latitude}}<br/>
+				                        	Lng: {{myPm.coords.longitude}}<br/>
+				                    	</p>
+	            					</ui-gmap-window>
+	        					</ui-gmap-marker>
+						</ui-gmap-google-map>
+					</div>
+					<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
+						<ui-gmap-google-map id="6" center="pmCreateMap.center" draggable="true" zoom="pmCreateMap.zoom" options="pmCreateMap.options" control="pmCreateMap.control" bounds="pmCreateMap.bounds" events="pmCreateMap.events"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+								<ui-gmap-marker idkey="myNewPm.id" coords="myNewPm.coords" options="myNewPm.options" icon="myNewPm.icon" events="myNewPm.events"><!-- click="'onClick'" -->
+									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+	                					<p>
+				                        	Lat: {{myPm.coords.latitude}}<br/>
+				                        	Lng: {{myPm.coords.longitude}}<br/>
+				                    	</p>
+	            					</ui-gmap-window>
+	        					</ui-gmap-marker>
+						</ui-gmap-google-map>
+					</div>
+				</div>
+				<div class="alert alert-danger" ng-show="showUpdatingErrorMessage">{{ 'err_in_update_parkingmeter' | i18n }}</div>
+		   		<table width="95%">			
+				   	<tr>
+				   		<td width="34%"></td>
+				   		<td width="32%" align="center"></td>
+				   		<td width="34%" align="right">
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePmeter(form, myStatus, myArea, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePmeter(form, myStatus, myArea, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   		</td>
+					</tr>
+				</table>
+		   	</div>
+		   	
+	   	</form>
+	</div>
+	<div ng-show="viewModePM">	
+		<div class="col-md-6" ng-show="pmViewMapReady" ><!-- id="map_canvas" -->
+			<ui-gmap-google-map id="7" center="pViewMeterMap.center" draggable="true" zoom="pViewMeterMap.zoom" options="pViewMeterMap.options" control="pViewMeterMap.control" bounds="pViewMeterMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+				<ui-gmap-markers models="pViewMetersMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'"
+					<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+                		<p>
+			                Lat: {{coords.latitude}}<br/>
+			                Lng: {{coords.longitude}}<br/>
+			                Codice: <strong>{{title}}</strong>
+			            </p>
+            		</ui-gmap-window>
+        		</ui-gmap-markers>
+        		<ui-gmap-marker idkey="mySpecialMarker.id" coords="mySpecialMarker.coords" options="mySpecialMarker.options" icon="mySpecialMarker.icon">
+					<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+	                	<p>
+				        	Lat: {{mySpecialMarker.coords.latitude}}<br/>
+				            Lng: {{mySpecialMarker.coords.longitude}}<br/>
+				        </p>
+	            	</ui-gmap-window>
+	        	</ui-gmap-marker>
+        		
+			</ui-gmap-google-map>
+		</div>
+		<div class="col-md-6" ng-show="!pmViewMapReady">
+			<div style="text-align: center">
+				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
+				<h3>{{ 'loading_text' | i18n }}...</h3>
 			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-default" width="90%">
+		   		<div class="panel-heading">
+		    		<h3 class="panel-title"><strong>{{ 'view_parkingmeter' | i18n }}</strong></h3>
+		  		</div>
+		  		<div class="panel-body">	
+		  			<table width="100%">
+						<tr>
+							<td width="30%"><strong>{{ 'pm_code' | i18n }}:</strong></td>
+							<td width="70%"> {{ parckingMeter.code }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
+							<td> {{ scheda.ente.indirizzo }}</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>{{ 'pm_status' | i18n }}:</strong>
+							</td>
+							<td>	 
+								<span ng-show="parckingMeter.status=='ACTIVE'">Attivo</span>
+								<span ng-show="parckingMeter.status!='ACTIVE'">Disattivo</span>
+							</td>
+						</tr>
+						<tr>	
+							<td>
+								<strong>{{ 'pm_area_name' | i18n }}:</strong>
+							</td>
+							<td>	 
+								{{ myArea.name }} 
+								<span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
+							<td>{{ myGeometry }}</td>
+						</tr>
+			   		</table>
+			   		<hr>
+				   	<table width="95%">			
+						<tr>
+							<td width="50%" align="right">
+								<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>	
+							</td>
+							<td width="50%" align="left">
+								<button type="button" class="btn btn-default btn-lg" ng-click="setPmEdit(parckingMeter)">{{ 'text_btn_edit' | i18n  }}</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+	</div>
+</div>			

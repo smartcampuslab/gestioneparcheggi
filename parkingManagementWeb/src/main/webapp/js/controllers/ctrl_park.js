@@ -16,6 +16,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.maxAreas = 10;
     $scope.maxStreets = 10;
     $scope.maxPmeters = 10;
+    $scope.maxPStructs = 10;
+    $scope.maxZones = 10;
+    
+    // Regex
+    $scope.gpsPos = /^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/;
+    $scope.onlyNumbers = /^\d+$/;
+    $scope.decimalNumbers = /^([0-9]+)[\,]{0,1}[0-9]{0,2}$/;
+    $scope.datePatternIt=/^\d{1,2}\/\d{1,2}\/\d{4}$/;
+    $scope.datePattern=/^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/i;
+    $scope.datePattern2=/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/i;
+    $scope.datePattern3=/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/i;
+    $scope.timePattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
+    $scope.phonePattern=/^[(]{0,1}[0-9]{3}[)\.\- ]{0,1}[0-9]{3}[\.\- ]{0,1}[0-9]{4}$/;
 
     // ------------------ Start datetimepicker section -----------------------
     $scope.today = function() {
@@ -71,13 +84,23 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	if($index == 2){
        		$scope.getParkingMetersFromDb();
        	}
-       	
+       	if($index == 3){
+       		$scope.getParkingStructuresFromDb();
+       	}
+       	if($index == 4){
+       		$scope.getZonesFromDb();
+       	}
     };  
+    
+    $scope.areaWS = [];
+    $scope.streetWS = [];
+    $scope.pmeterWS = [];
+    $scope.pstructWS = [];
+    $scope.zoneWS = [];
      
     // for next and prev in practice list
     $scope.currentPage = 0;
     $scope.currentClassPage = 0;	// for classification
-    $scope.maxClassPractices = 30;	// for classification
     $scope.numberOfPages = function(type){
        	if(type == 1){
        		if($scope.areaWS != null){
@@ -86,14 +109,26 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        			return 0;
       		}
        	} else if(type == 2) {
-       		if($scope.streetsWS != null){
+       		if($scope.streetWS != null){
        			return Math.ceil($scope.streetWS.length/$scope.maxStreets);
        		} else {
        			return 0;
      		}
        	} else if(type == 3){
-       		if($scope.pmetersWS != null){
-       			return Math.ceil($scope.pmetersWS.length/$scope.maxPmeters);
+       		if($scope.pmeterWS != null){
+       			return Math.ceil($scope.pmeterWS.length/$scope.maxPmeters);
+       		} else {
+       			return 0;
+     		}
+       	} else if(type == 4){
+       		if($scope.pstructWS != null){
+       			return Math.ceil($scope.pstructWS.length/$scope.maxPStructs);
+       		} else {
+       			return 0;
+     		}
+       	} else if(type == 5){
+       		if($scope.zoneWS != null){
+       			return Math.ceil($scope.zoneWS.length/$scope.maxZones);
        		} else {
        			return 0;
      		}
@@ -163,6 +198,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	$scope.getParkingMetersFromDb = function(){
+		$scope.editModePM = false;
+		var markers = [];
 		$scope.pmMapReady = false;
 		var allPmeters = [];
 		var method = 'GET';
@@ -172,13 +209,57 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	angular.copy(result, allPmeters);
 	    	console.log("ParkingMeters retrieved from db: " + JSON.stringify(result));
 	    	
+	    	for (var i = 0; i <  allPmeters.length; i++) {
+	    		markers.push(createMarkers(i, allPmeters[i], 1));
+		    }
+	    	
 	    	$scope.pmeterWS = $scope.initPMObjects(allPmeters);
-	    	//$scope.initStreetMap();
+	    	$scope.initPMeterMap(markers);
 	    	//$scope.initStreetsOnMap($scope.streetWS);
 	    	$scope.pmMapReady = true;
 	    });
 	};
 	
+	$scope.getParkingStructuresFromDb = function(){
+		var markers = [];
+		$scope.psMapReady = false;
+		var allPstructs = [];
+		var method = 'GET';
+		
+	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	angular.copy(result, allPstructs);
+	    	console.log("ParkingStructures retrieved from db: " + JSON.stringify(result));
+	    	
+	    	for (var i = 0; i <  allPstructs.length; i++) {
+	    		markers.push(createMarkers(i, allPstructs[i], 2));
+		    }
+	    	
+	    	$scope.pstructWS = allPstructs;
+	    	$scope.initPStructMap(markers);
+	    	//$scope.initStreetsOnMap($scope.streetWS);
+	    	$scope.psMapReady = true;
+	    });
+	};
+	
+	$scope.getZonesFromDb = function(){
+		$scope.zoneMapReady = false;
+		var allZones = [];
+		var method = 'GET';
+		
+	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	angular.copy(result, allZones);
+	    	console.log("Zone retrieved from db: " + JSON.stringify(result));
+	    	
+	    	$scope.zoneWS = allZones;
+	    	$scope.initZoneMap();
+	    	$scope.initZonesOnMap($scope.zoneWS);
+	    	$scope.zoneMapReady = true;
+	    });
+	};
+	
+	// Utility methods
 	$scope.correctColor = function(value){
 		return "#" + value;
 	};
@@ -193,6 +274,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			corr_points.push(point);
 		}
 		return corr_points;
+	};
+	
+	$scope.correctMyGeometry = function(geo){
+		var pos = geo.split(",");
+		return {
+			lat: pos[0],
+			lng: pos[1]
+		};
 	};
 	
 	$scope.initStreetsObjects = function(streets){
@@ -219,7 +308,391 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return myPms;
 	};
 	
+	// View management
+	// ParkingMeters
+	$scope.setPmDetails = function(parkingMeter){
+		$scope.pmViewMapReady = false;
+		
+		$scope.parckingMeter = parkingMeter;
+		
+		$scope.allArea = sharedDataService.getSharedLocalAreas();
+		for(var i = 0; i < $scope.allArea.length; i++){
+			if($scope.parckingMeter.areaId == $scope.allArea[i].id){
+				$scope.myArea = $scope.allArea[i];
+			}
+		}
+		$scope.setMyGeometry($scope.parckingMeter.geometry.lat + "," + $scope.parckingMeter.geometry.lng);
+		
+		// Init the map for view
+		$scope.pViewMeterMap = {
+			control: {},
+			center: $scope.mapCenter,
+			zoom: 14,
+			bounds: {},
+			options: {
+				scrollwheel: true
+			}
+		};
+		
+		$scope.pViewMetersMarkers = $scope.parkingMetersMarkers;
+		for(var i = 0; i < $scope.pViewMetersMarkers.length; i++){
+			if($scope.pViewMetersMarkers[i].title == $scope.parckingMeter.code){
+				$scope.pViewMetersMarkers.splice(i, 1);
+			};
+		}
+		
+		$scope.mySpecialMarker = {
+			id: 0,
+			coords: {
+				latitude: $scope.parckingMeter.geometry.lat,
+				longitude: $scope.parckingMeter.geometry.lng
+			},
+			options: { 
+				draggable: false,
+				animation: 1
+			},
+			icon: $scope.pmMarkerIcon
+		};
+		
+		$scope.viewModePM = true;
+		$scope.editModePM = false;
+		$scope.pmViewMapReady = true;
+	};
+	
+	$scope.closeView = function(){
+		$scope.getParkingMetersFromDb();	// to refresh the data on page
+		$scope.viewModePM = false;
+		$scope.editModePM = false;
+	};
+	
+	// Edit management
+	// ParkingMeters
+	$scope.setPmEdit = function(parkingMeter){
+		// Case create
+		$scope.isEditing = false;
+		$scope.isInit = true;
+		$scope.listaStati = [{
+				idObj: "ACTIVE",
+				descrizione: "Attivo"
+			},
+			{
+				idObj: "INACTIVE",
+				descrizione: "Disattivo"
+			}
+		];
+		
+		$scope.allArea = sharedDataService.getSharedLocalAreas();
+		
+		$scope.parckingMeter = {
+			id: null,
+			code: null,
+			note: null,
+			status: null,
+			areaId: null,
+			geometry: null
+		};
+		$scope.mystatus = "Seleziona lo stato del parcometro";
+		
+		// Case edit
+		if(parkingMeter != null){
+			$scope.isEditing = true;
+			$scope.isInit = false;
+			$scope.parckingMeter = parkingMeter;
+			if(parkingMeter.status == "ACTIVE"){
+				$scope.myStatus = $scope.listaStati[0];
+			} else {
+				$scope.myStatus = $scope.listaStati[1];
+			}
+			for(var i = 0; i < $scope.allArea.length; i++){
+				if($scope.parckingMeter.areaId == $scope.allArea[i].id){
+					$scope.myArea = $scope.allArea[i];
+				}
+			}
+			
+			$scope.pmEditMap = {
+				control: {},
+				center: $scope.mapCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				}
+			};
+			
+			$scope.setMyGeometry($scope.parckingMeter.geometry.lat + "," + $scope.parckingMeter.geometry.lng);
+			
+			$scope.myPm = {
+				id: 0,
+				coords: {
+					latitude: $scope.parckingMeter.geometry.lat,
+					longitude: $scope.parckingMeter.geometry.lng
+				},
+				options: { 
+					draggable: true
+				},
+				events: {
+				    dragend: function (marker, eventName, args) {
+				    	var lat = marker.getPosition().lat();
+				    	var lng = marker.getPosition().lng();
+				    	console.log('marker dragend: ' + lat + "," + lng);
+				    	$scope.setMyGeometry(lat + "," + lng);
+				    }
+				}
+			};
+			// animation: 1 to set the marker bounce
+			
+		} else {
+			$scope.setMyGeometry("0,0");
+			
+			$scope.pmCreateMap = {
+				control: {},
+				center: $scope.mapCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				},
+				events: {
+					click: function(map, eventName, args){
+						var e = args[0];
+		            	console.log("I am in click event function" + e.latLng);
+		            	var latLngString = "" + e.latLng;
+		            	var pos = latLngString.split(",");
+		            	var lat = pos[0].substring(1, pos[0].length);
+		            	var lng = pos[1].substring(1, pos[1].length-1);
+		            	var tmppos = {
+		            			lat: lat,
+		            			lng: lng
+		            	};
+		            	$scope.setMyGeometry(lat + "," + lng);
+		            	$scope.addMyNewMarker(tmppos, map);
+					}
+				}
+			};
+		}
+		$scope.viewModePM = false;
+		$scope.editModePM = true;
+	};
+	
+	// ParkingStructure
+	$scope.setPsEdit = function(parkingStruct){
+		// Case create
+		$scope.isEditing = false;
+		$scope.isInit = true;
+		
+		$scope.listaPagamenti = [{
+				idObj: "CASH",
+				descrizione: "Contanti",
+				checked: false
+			},
+			{
+				idObj: "AUTOMATED_TELLER",
+				descrizione: "Cassa automatica",
+				checked: false
+			},
+			{
+				idObj: "PREPAID_CARD",
+				descrizione: "Carta prepagata",
+				checked: false
+			},
+			{
+				idObj: "PARCOMETRO",
+				descrizione: "Parcometro",
+				checked: false
+			}
+		];
+		
+		$scope.parckingStructure = {
+			name: null,
+			streetReference: null,
+			managementMode: null,
+			paymentMode: null,
+			phoneNumber: null,
+			fee: null,
+			timeSlot: null,
+			slotNumber: null,
+			handicappedSlotNumber: null,
+			unusuableSlotNumber: null,
+			geometry: null
+		};
+		$scope.myPayment = {
+			cash_checked: false,
+			automated_teller_checked: false,
+			prepaid_card_checked: false,
+			parcometro_checked: false
+		};
+		
+		// Case edit
+		if(parkingStruct != null){
+			$scope.isEditing = true;
+			$scope.isInit = false;
+			$scope.parckingStructure = parkingStruct;
+			for(var i = 0; i < parkingStruct.paymentMode.length; i++){
+				switch(parkingStruct.paymentMode[i]){
+					case "CASH":
+						$scope.myPayment.cash_checked = true;
+						break;
+					case "AUTOMATED_TELLER": 
+						$scope.myPayment.automated_teller_checked = true;
+						break;
+					case "PREPAID_CARD": 
+						$scope.myPayment.prepaid_card_checked = true;
+						break;
+					case "PARCOMETRO": 
+						$scope.myPayment.parcometro_checked = true;
+						break;
+				}
+			}
+			
+			$scope.psEditMap = {
+				control: {},
+				center: $scope.mapCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				}
+			};
+			
+			$scope.setMyGeometry($scope.parckingStructure.geometry.lat + "," + $scope.parckingStructure.geometry.lng);
+			
+			$scope.myPs = {
+				id: 0,
+				coords: {
+					latitude: $scope.parckingStructure.geometry.lat,
+					longitude: $scope.parckingStructure.geometry.lng
+				},
+				options: { 
+					draggable: true
+				},
+				events: {
+				    dragend: function (marker, eventName, args) {
+				    	var lat = marker.getPosition().lat();
+				    	var lng = marker.getPosition().lng();
+				    	console.log('marker dragend: ' + lat + "," + lng);
+				    	$scope.setMyGeometry(lat + "," + lng);
+				    }
+				}
+			};
+			
+		} else {
+			$scope.setMyGeometry("0,0");
+			
+			$scope.psCreateMap = {
+				control: {},
+				center: $scope.mapCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				},
+				events: {
+					click: function(map, eventName, args){
+						var e = args[0];
+		            	console.log("I am in click event function" + e.latLng);
+		            	var latLngString = "" + e.latLng;
+		            	var pos = latLngString.split(",");
+		            	var lat = pos[0].substring(1, pos[0].length);
+		            	var lng = pos[1].substring(1, pos[1].length-1);
+		            	var tmppos = {
+		            			lat: lat,
+		            			lng: lng
+		            	};
+		            	$scope.setMyGeometry(lat + "," + lng);
+		            	$scope.addMyNewMarker(tmppos, map);
+					}
+				}
+			};
+		}
+		$scope.viewModePS = false;
+		$scope.editModePS = true;
+	};
+	
+	$scope.setMyGeometry = function(value){
+		$scope.myGeometry = value;
+	};
+	
+	$scope.addMyNewMarker = function(pos, map){
+		$scope.myNewPm = {
+				id: 0,
+				coords: {
+					latitude: pos.lat,
+					longitude: pos.lng
+				},
+				options: { 
+					draggable: true,
+					visible: true
+				},
+				map: map,
+				events: {
+				    dragend: function (marker, eventName, args) {
+				    	var lat = marker.getPosition().lat();
+				    	var lng = marker.getPosition().lng();
+				    	console.log('marker dragend: ' + lat + "," + lng);
+				    	$scope.setMyGeometry(lat + "," + lng);
+				    }
+				}
+		};
+	};
+	
+	// Update parkingMeter Object
+	$scope.updatePmeter = function(form, status, area, geometry){
+		if(!form.$valid){
+			$scope.isInit=false;
+		} else {
+			$scope.isInit=true;
+			$scope.showUpdatingErrorMessage = false;
+			
+			var id = $scope.parckingMeter.id;
+			var method = 'PUT';
+			var pm = $scope.parckingMeter;
+			
+			var data = {
+				id: pm.id,
+				id_app: pm.id_app,
+				code: pm.code,
+				note: pm.note,
+				status: status.idObj,
+				areaId: area.id,
+				geometry: $scope.correctMyGeometry(geometry)
+			};
+			
+		    var value = JSON.stringify(data);
+		    if($scope.showLog) console.log("Parkingmeter data : " + value);
+			
+		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter/" + id, null, $scope.authHeaders, value);
+		    myDataPromise.then(function(result){
+		    	console.log("Updated parkinMeter: " + result);
+		    	if(result == "OK"){
+		    		$scope.getParkingMetersFromDb();
+		    		$scope.editModePM = false;
+		    	} else {
+		    		$scope.editModePM = true;
+		    		$scope.showUpdatingErrorMessage = true;
+		    	}
+		    });
+		}
+	};
+	
+	
+	// Update ParkingStructure Object
+	$scope.updatePstruct = function(form, paymode, geo){
+		// TO FINISH
+		
+		$scope.getParkingStructuresFromDb();
+		$scope.editModePS = false;
+		
+	};
+	
 	// Maps management
+	$scope.parkingMetersMarkers = [];
+	$scope.parkingStructureMarkers = [];
+	$scope.bikePointMarkers = [];
+	
+	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
+	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
+	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
+	
 	$scope.mapCenter = {
 		latitude: 45.88875357753771,
 		longitude: 11.037440299987793
@@ -251,7 +724,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		};
 	};
 	
+	$scope.initZoneMap = function(){
+		$scope.zoneMap = {
+			control: {},
+			center: $scope.mapCenter,
+		    zoom: 10,
+		    bounds: {}
+		};
+			
+		$scope.options = {
+		    scrollwheel: true
+		};
+	};
+	
 	$scope.polygons = [];
+	$scope.zone_polygons = [];
 	$scope.geoStreets = [];
 	
 	$scope.initAreasOnMap = function(areas){
@@ -305,6 +792,193 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.geoStreets.push(street);
 			}
 		}
+	};
+	
+	$scope.initZonesOnMap = function(zones){
+		var zone = {};
+		var poligons = {};
+		
+		for(var i = 0; i < zones.length; i++){
+			if(zones[i].geometry != null){
+				poligons = zones[i].geometry;
+				zone = {
+					id: i,
+					path: $scope.correctPoints(poligons.points),
+					stroke: {
+					    color: $scope.correctColor(zones[i].color),
+					    weight: 3
+					},
+					editable: true,
+					draggable: true,
+					geodesic: false,
+					visible: true,
+					fill: {
+					    color: $scope.correctColor(zones[i].color),
+					    opacity: 0.7
+					}
+				};
+				$scope.zone_polygons.push(zone);
+			}
+		}
+	};
+	
+	$scope.addMarkerToMap = function(map, type){
+		switch(type){
+			case 1: 
+				if($scope.parkingMetersMarkers != null){
+					for(var i = 0; i < $scope.parkingMetersMarkers.length; i++){
+						$scope.parkingMetersMarkers[i].options.map = map;
+					}
+				};
+				break;
+			case 2: 
+				if($scope.parkingStructureMarkers != null){
+					for(var i = 0; i < $scope.parkingStructureMarkers.length; i++){
+						$scope.parkingStructureMarkers[i].options.map = map;
+					}
+				};
+				break;
+			case 3:
+				if($scope.bikePointMarkers != null){
+					for(var i = 0; i < $scope.bikePointMarkers.length; i++){
+						$scope.bikePointMarkers[i].options.map = map;
+					}
+				};
+				break;
+		}
+	};
+	
+	
+	var createMarkers = function(i, marker, type) {
+		var myIcon = "";
+		switch(type){
+			case 1 : 
+				myIcon = $scope.pmMarkerIcon; 
+				break;
+			case 2 : 
+				myIcon = $scope.psMarkerIcon; 
+				break;
+			case 3 :
+				myIcon = $scope.bpMarkerIcon;
+		}
+		
+		var ret = {
+			title: marker.code,
+			id: i	
+		};
+		if(marker.geometry != null){
+			ret = {
+				id: i,
+			    coords: { 
+			        latitude: marker.geometry.lat,
+			        longitude: marker.geometry.lng
+			    },
+			    options: { 
+			    	draggable: true,
+			    	visible: true,
+			    	map: null
+			    },
+				title: marker.code,
+				icon: myIcon,
+				showWindow: false,
+			    events: {
+			    	mouseover: function(marker, eventName, args) {
+			    		var e = args[0];
+			    		console.log("I am in marker mouseover event function " + e);
+			    		marker.show = true;
+//			    	 	$scope.$apply();
+			    	},
+			    	click: function (marker, eventName, args){
+		            	var e = args[0];
+		            	console.log("I am in marker click event function " + e.latLng);
+		            	//$scope.$apply();
+		            }	
+			    }
+			};
+			ret.closeClick = function () {
+		        ret.showWindow = false;
+		        $scope.$apply();
+		    };
+		    ret.click = function (marker, eventName, model, args) {
+		        $scope.onMarkerClicked(ret);
+		    };
+		}
+		return ret;
+	};
+	
+	$scope.initPMeterMap = function(pmMarkers){
+		$scope.pMeterMap = {
+			control: {},
+			center: $scope.mapCenter,
+		    zoom: 14,
+		    bounds: {}
+		};
+			
+		$scope.options = {
+		    scrollwheel: true
+		};
+		
+		if(pmMarkers!= null){
+			$scope.parkingMetersMarkers = pmMarkers;
+		} else {
+			$scope.parkingMetersMarkers = [];
+		}
+		$scope.addMarkerToMap($scope.pMeterMap, 1);
+		
+	};
+	
+	$scope.initPStructMap = function(psMarkers){
+		$scope.pStructureMap = {
+			control: {},
+			center: $scope.mapCenter,
+		    zoom: 14,
+		    bounds: {}
+		};
+			
+		$scope.options = {
+		    scrollwheel: true
+		};
+		
+		if(psMarkers!= null){
+			$scope.parkingStructureMarkers = psMarkers;
+		} else {
+			$scope.parkingStructureMarkers = [];
+		}
+		$scope.addMarkerToMap($scope.pStructureMap, 2);
+		
+	};
+	
+	$scope.initMap = function(pmMarkers, psMarkers, bpMarkers){
+		
+		$scope.pmap = {
+			control: {},
+			center: $scope.mapCenter,
+		    zoom: 14,
+		    bounds: {}
+		};
+		
+		$scope.options = {
+		    scrollwheel: true
+		};
+		
+		if(pmMarkers!= null){
+			$scope.parkingMetersMarkers = pmMarkers;
+		} else {
+			$scope.parkingMetersMarkers = [];
+		}
+		if(psMarkers != null){
+			$scope.parkingStructureMarkers = psMarkers;
+		} else {
+			$scope.parkingStructureMarkers = [];
+		}
+		if(bpMarkers != null){
+			$scope.bikePointMarkers = bpMarkers;
+		} else {
+			$scope.bikePointMarkers = [];
+		}
+		$scope.addMarkerToMap($scope.map);
+		$scope.mapReady = true;
+		//$scope.$apply();
 	};
 	
 //	$scope.polygons = [

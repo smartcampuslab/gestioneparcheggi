@@ -1,67 +1,230 @@
 <div class="row">
-				<div class="col-md-6" ng-show="mapReady" ><!-- id="map_canvas" -->
-					<ui-gmap-google-map center="map.center" draggable="true" zoom="map.zoom" options="options" control="map.control" bounds="map.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
-<!--         					<ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'"> -->
-<!--         						<ui-gmap-window show="'show'" ng-cloak> -->
-<!--                 					<p> -->
-<!-- 			                        	Latitude: {{coords.latitude}}<br/> -->
-<!-- 			                        	Longitude: {{coords.longitude}}<br/> -->
-<!-- 			                        	Codice: <strong>{{title}}</strong> -->
-<!-- 			                    	</p> -->
-<!--             					</ui-gmap-window> -->
-<!--         					</ui-gmap-markers>		 -->
+	<div ng-show="!editModePS && !viewModePS">
+				<div class="col-md-6" ng-show="psMapReady" >
+					<ui-gmap-google-map center="pStructureMap.center" draggable="true" zoom="pStructureMap.zoom" options="options" control="pStructureMap.control" bounds="pStructureMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+        					<ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'">
+        						<ui-gmap-window show="'show'" ng-cloak>
+                					<p>
+			                        	Latitude: {{coords.latitude}}<br/>
+			                        	Longitude: {{coords.longitude}}<br/>
+			                        	Codice: <strong>{{title}}</strong>
+			                    	</p>
+            					</ui-gmap-window>
+        					</ui-gmap-markers>		
 					</ui-gmap-google-map>
 				</div>
-				<div class="col-md-6" ng-show="!mapReady">
+				<div class="col-md-6" ng-show="!psMapReady">
 					<div style="text-align: center">
 							<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
 							<h3>{{ 'loading_text' | i18n }}...</h3>
 						</div>
 				</div>
 				<div class="col-md-6">
-					<div class="panel panel-primary">
-						<div class="panel-body">
 							<div class="panel panel-primary" align="center">
 								<div class="panel-heading">
-									<h5 class="panel-title">Lista Aree</h5>
+									<h5 class="panel-title">{{ 'ps_list' | i18n }}</h5>
 								</div>
 								<div class="panel-body">
 									<table class="table table-striped" style="width: 100%">
-										<tr ng-show="areaWS.length != 0">
-											<th width="25%">{{ 'area_name' | i18n }}</th>
-											<th width="20%">{{ 'area_rate' | i18n }}</th>
-											<th width="45%">{{ 'area_time' | i18n }}</th>
-											<th width="5%">{{ 'area_color' | i18n }}</th>
+										<tr ng-show="pstructWS.length != 0">
+											<th width="25%">{{ 'ps_name' | i18n }}</th>
+											<th width="25%">{{ 'ps_address' | i18n }}</th>
+											<th width="40%">{{ 'ps_time' | i18n }}</th>
+											<th width="5%">{{ 'ps_slots' | i18n }}</th>
 											<th width="5%">{{ 'operations' | i18n }}</th>
 										</tr>
 										<tbody class="animate-repeat"
-											ng-repeat="area in areaWS | filter:q | orderBy:'-name' | startFrom:currentPage*maxAreas | limitTo:maxAreas">
-				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+											ng-repeat="pstruct in pstructWS | filter:q | orderBy:'name' | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
 											<tr>
-												<td width="25%" align="left">{{area.name}}</td>
-												<td width="20%" align="left">{{area.fee}}</td>
-												<td width="45%" align="center">{{area.timeSlot}}</td>
-												<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(area.color)}"></div></td><!-- {{area.color}} -->
+												<td width="25%" align="left">{{pstruct.name}}</td>
+												<td width="25%" align="left">{{pstruct.streetReference}}</td>
+												<td width="40%" align="center">{{pstruct.timeSlot}}</td>
+												<td width="5%" align="center">{{pstruct.slotNumber}}</td>
 												<td width="5%" align="left">
-													<a href="#/area/view/{{ area.id }}" ng-click="setViewTabs()" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!-- {{ 'practice_view' | i18n }} -->
-													<a href="#/area/edit/{{ area.id }}" ng-click="setClassTabs()"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+													<a href ng-click="setPsDetails(pstruct)" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+													<a href ng-click="setPsEdit(pstruct)"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
 												</td>
 											</tr>
 										</tbody>
-										<tr ng-show="areaWS.length == 0">
-											<td colspan="5"><strong>{{ 'no_areas_in_lists' | i18n }}</strong></td>
+										<tr ng-show="pstructWS.length == 0">
+											<td colspan="5"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
 										</tr>
 									</table>
 									<button class="btn btn-primary"
 											ng-disabled="currentPage == 0"
 											ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-										{{currentPage+1}}/{{numberOfPages(2)}}
+										{{currentPage+1}}/{{numberOfPages(4)}}
 									<button class="btn btn-primary"
-											ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
+											ng-disabled="currentPage >= pstructWS.length/maxPStructs - 1"
 											ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 								</div>
 							</div>
-						</div>
+				</div>
+	</div>
+	<div ng-show="editModePS">
+		<form role="form" name="form">
+			<div class="panel panel-default" width="90%">
+		   		<div class="panel-heading">
+		    		<h3 class="panel-title"><strong>{{ 'edit_parkingstructure' | i18n }}</strong></h3>
+		  		</div>
+		  		<div class="panel-body">	
+				   	<div class="form-group">
+				    	<label for="name">{{ 'ps_name' | i18n }}</label>
+				    	<input id="name" type="text" class="form-control" name="pName" ng-model="parckingStructure.name" ng-required="true" >
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pCode.$error.required">{{ 'parkingstructure_name_err_required' | i18n }}</div>
+				   	</div>
+				   	<div class="form-group">
+				    	<label for="address">{{ 'ps_address' | i18n }}</label>
+				    	<input id="address" type="text" class="form-control" name="pAddress" ng-model="parckingStructure.streetReference" ng-required="false" ><!-- ng-change="setAlloggioChanged(true)" -->
+				   	</div>
+				   	<div class="form-group">
+				    	<label for="time">{{ 'ps_time' | i18n }}</label>
+				    	<input id="time" type="text" class="form-control" name="pTime" ng-model="parckingStructure.timeSlot" ng-pattern="timePattern" ng-required="false" >
+				   	</div>
+				   	<div class="form-group">
+				    	<label for="managementMode">{{ 'ps_management_mode' | i18n }}</label>
+				    	<input id="managementMode" type="text" class="form-control" name="pTime" ng-model="parckingStructure.managementMode" ng-required="false" >
+				   	</div>
+				   	<div class="form-group">
+					   	<table width="100%">
+					   		<tr>
+					   			<td colspan="4"><label for="paymentMode">{{ 'ps_payment_mode' | i18n }}</label></td>
+					   		</tr>
+					   		<tr>
+					   			<td width="25%"><label for="cashPayment">{{ listaPagamenti[0].descrizione }}:</label> <input id="cashPayment" type="checkbox" ng-model="myPayment.cash_checked"></td>
+					   			<td width="25%"><label for="automatedPayment">{{ listaPagamenti[1].descrizione }}:</label> <input id="automatedPayment" type="checkbox" ng-model="myPayment.automated_teller_checked"></td>
+					   			<td width="25%"><label for="prepaidPayment">{{ listaPagamenti[2].descrizione }}:</label> <input id="prepaidPayment" type="checkbox" ng-model="myPayment.prepaid_card_checked"></td>
+					   			<td width="25%"><label for="parcometroPayment">{{ listaPagamenti[3].descrizione }}:</label> <input id="parcometroPayment" type="checkbox" ng-model="myPayment.parcometro_checked"></td>
+					   		</tr>
+					   	</table>
+				    	<div class="alert alert-danger" ng-show="!isInit && form.pPayment.$error.required">{{ 'parkingstructure_payment_mode_select_err_required' | i18n }}</div>
+				   	</div>
+				 
+					<div class="form-group">
+				    	<label for="geometry">{{ 'pm_geometry' | i18n }}</label>
+				    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="false" ng-pattern="gpsPos" >
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pArea.$error.pattern">{{ 'parkingmeter_geometry_select_err_pattern' | i18n }}</div>
+					</div>
+					<div class="col-md-12" ng-show="isEditing"><!-- id="map_canvas" -->
+						<ui-gmap-google-map id="5" center="psEditMap.center" draggable="true" zoom="psEditMap.zoom" options="psEditMap.options" control="psEditMap.control" bounds="psEditMap.bounds">
+								<ui-gmap-marker idkey="myPs.id" coords="myPs.coords" options="myPs.options" icon="myPs.icon" events="myPs.events">
+									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+	                					<p>
+				                        	Lat: {{myPs.coords.latitude}}<br/>
+				                        	Lng: {{myPs.coords.longitude}}<br/>
+				                    	</p>
+	            					</ui-gmap-window>
+	        					</ui-gmap-marker>
+						</ui-gmap-google-map>
+					</div>
+					<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
+						<ui-gmap-google-map id="6" center="psCreateMap.center" draggable="true" zoom="psCreateMap.zoom" options="psCreateMap.options" control="psCreateMap.control" bounds="psCreateMap.bounds" events="psCreateMap.events">
+								<ui-gmap-marker idkey="myNewPs.id" coords="myNewPs.coords" options="myNewPs.options" icon="myNewPs.icon" events="myNewPs.events"><!-- click="'onClick'" -->
+									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+	                					<p>
+				                        	Lat: {{myNewPs.coords.latitude}}<br/>
+				                        	Lng: {{myNewPs.coords.longitude}}<br/>
+				                    	</p>
+	            					</ui-gmap-window>
+	        					</ui-gmap-marker>
+						</ui-gmap-google-map>
 					</div>
 				</div>
+				<div class="alert alert-danger" ng-show="showUpdatingErrorMessage">{{ 'err_in_update_parkingmeter' | i18n }}</div>
+		   		<table width="95%">			
+				   	<tr>
+				   		<td width="34%"></td>
+				   		<td width="32%" align="center"></td>
+				   		<td width="34%" align="right">
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   		</td>
+					</tr>
+				</table>
+		   	</div>
+		   	
+	   	</form>
+	</div>
+	<div ng-show="viewModePS">	
+		<div class="col-md-6" ng-show="pmViewMapReady" >
+			<ui-gmap-google-map id="7" center="pViewMeterMap.center" draggable="true" zoom="pViewMeterMap.zoom" options="pViewMeterMap.options" control="pViewMeterMap.control" bounds="pViewMeterMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+				<ui-gmap-markers models="pViewMetersMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'"
+					<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+                		<p>
+			                Lat: {{coords.latitude}}<br/>
+			                Lng: {{coords.longitude}}<br/>
+			                Codice: <strong>{{title}}</strong>
+			            </p>
+            		</ui-gmap-window>
+        		</ui-gmap-markers>
+        		<ui-gmap-marker idkey="mySpecialMarker.id" coords="mySpecialMarker.coords" options="mySpecialMarker.options" icon="mySpecialMarker.icon">
+					<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+	                	<p>
+				        	Lat: {{mySpecialMarker.coords.latitude}}<br/>
+				            Lng: {{mySpecialMarker.coords.longitude}}<br/>
+				        </p>
+	            	</ui-gmap-window>
+	        	</ui-gmap-marker>
+        		
+			</ui-gmap-google-map>
+		</div>
+		<div class="col-md-6" ng-show="!pmViewMapReady">
+			<div style="text-align: center">
+				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
+				<h3>{{ 'loading_text' | i18n }}...</h3>
 			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-default" width="90%">
+		   		<div class="panel-heading">
+		    		<h3 class="panel-title"><strong>{{ 'view_parkingmeter' | i18n }}</strong></h3>
+		  		</div>
+		  		<div class="panel-body">	
+		  			<table width="100%">
+						<tr>
+							<td width="30%"><strong>{{ 'pm_code' | i18n }}:</strong></td>
+							<td width="70%"> {{ parckingMeter.code }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
+							<td> {{ scheda.ente.indirizzo }}</td>
+						</tr>
+						<tr>
+							<td>
+								<strong>{{ 'pm_status' | i18n }}:</strong>
+							</td>
+							<td>	 
+								<span ng-show="parckingMeter.status=='ACTIVE'">Attivo</span>
+								<span ng-show="parckingMeter.status!='ACTIVE'">Disattivo</span>
+							</td>
+						</tr>
+						<tr>	
+							<td>
+								<strong>{{ 'pm_area_name' | i18n }}:</strong>
+							</td>
+							<td>	 
+								{{ myArea.name }} 
+								<span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span>
+							</td>
+						</tr>
+						<tr>
+							<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
+							<td>{{ myGeometry }}</td>
+						</tr>
+			   		</table>
+			   		<hr>
+				   	<table width="95%">			
+						<tr>
+							<td width="50%" align="right">
+								<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>	
+							</td>
+							<td width="50%" align="left">
+								<button type="button" class="btn btn-default btn-lg" ng-click="setPmEdit(parckingMeter)">{{ 'text_btn_edit' | i18n  }}</button>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>		
+</div>	

@@ -39,7 +39,7 @@
 											<th width="5%">{{ 'operations' | i18n }}</th>
 										</tr>
 										<tbody class="animate-repeat"
-											ng-repeat="street in streetWS | filter:q | orderBy:'-name' | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+											ng-repeat="street in streetWS | filter:q | orderBy:'name' | startFrom:currentPage*maxStreets | limitTo:maxStreets">
 				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 											<tr>
 												<td width="40%" align="left">{{street.streetReference}}</td>

@@ -69,6 +69,22 @@ public class WsProxyController {
 		return result;	
 	}
 	
-	
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/allPut")
+	public @ResponseBody
+	String putAll(HttpServletRequest request, @RequestParam String urlWS, @RequestBody Map<String, Object> data){
+		RestTemplate restTemplate = new RestTemplate();
+		logger.error("WS-PUT. Method " + urlWS + ". Passed data : " + data); //Added for log ws calls info in preliminary phase of portal
+		
+		String result = "";
+		try {
+			restTemplate.put(parkingUrl + urlWS, data);
+			result = "OK";
+		} catch (Exception ex){
+			logger.error(String.format("Exception in proxyController put ws. Method: %s. Details: %s", urlWS, ex.getMessage()));
+			//restTemplate.getErrorHandler();
+		}
+		
+		return result;	
+	}
 	
 }

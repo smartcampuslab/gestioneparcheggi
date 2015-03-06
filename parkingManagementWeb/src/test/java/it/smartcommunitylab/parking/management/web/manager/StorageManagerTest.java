@@ -133,25 +133,96 @@ public class StorageManagerTest {
 		area3 = manager.save(area3);
 		
 		// Geo Zone creation
+		PolygonBean polz1 = new PolygonBean();
+		PointBean pbz1 = new PointBean();
+		pbz1.setLat(45.908888);
+		pbz1.setLng(11.040167);
+		PointBean pbz2 = new PointBean();
+		pbz2.setLat(45.907784);
+		pbz2.setLng(11.043772);
+		PointBean pbz3 = new PointBean();
+		pbz3.setLat(45.905036);
+		pbz3.setLng(11.043729);
+		PointBean pbz4 = new PointBean();
+		pbz4.setLat(45.904350);
+		pbz4.setLng(11.040038);
+		PointBean pbz5 = new PointBean();
+		pbz5.setLat(45.907037);
+		pbz5.setLng(11.037979);
+		List<PointBean> pointsz = new ArrayList<PointBean>();
+		pointsz.add(pbz1);
+		pointsz.add(pbz2);
+		pointsz.add(pbz3);
+		pointsz.add(pbz4);
+		pointsz.add(pbz5);
+		polz1.setPoints(pointsz);
+		
 		ZoneBean z = new ZoneBean();
 		z.setId_app(appId);
 		z.setName("Brione");
 		z.setSubmacro("B");
 		z.setColor("33cc66");
+		z.setGeometry(polz1);
 		z = manager.save(z);
+		
+		PolygonBean polz2 = new PolygonBean();
+		PointBean pbz21 = new PointBean();
+		pbz21.setLat(45.903603);
+		pbz21.setLng(11.040811);
+		PointBean pbz22 = new PointBean();
+		pbz22.setLat(45.903842);
+		pbz22.setLng(11.045274);
+		PointBean pbz23 = new PointBean();
+		pbz23.setLat(45.900915);
+		pbz23.setLng(11.046647);
+		PointBean pbz24 = new PointBean();
+		pbz24.setLat(45.900198);
+		pbz24.setLng(11.044201);
+		PointBean pbz25 = new PointBean();
+		pbz25.setLat(45.901542);
+		pbz25.setLng(11.041283);
+		List<PointBean> pointsz2 = new ArrayList<PointBean>();
+		pointsz2.add(pbz21);
+		pointsz2.add(pbz22);
+		pointsz2.add(pbz23);
+		pointsz2.add(pbz24);
+		pointsz2.add(pbz25);
+		polz2.setPoints(pointsz2);
 		
 		ZoneBean z2 = new ZoneBean();
 		z2.setId_app(appId);
 		z2.setName("Brione");
 		z2.setSubmacro("A");
 		z2.setColor("990033");
+		z2.setGeometry(polz2);
 		z2 = manager.save(z2);
+		
+		PolygonBean polz3 = new PolygonBean();
+		PointBean pbz31 = new PointBean();
+		pbz31.setLat(45.902976);
+		pbz31.setLng(11.036777);
+		PointBean pbz32 = new PointBean();
+		pbz32.setLat(45.901990);
+		pbz32.setLng(11.039910);
+		PointBean pbz33 = new PointBean();
+		pbz33.setLat(45.899243);
+		pbz33.setLng(11.041755);
+		PointBean pbz34 = new PointBean();
+		pbz34.setLat(45.900139);
+		pbz34.setLng(11.035961);
+		List<PointBean> pointsz3 = new ArrayList<PointBean>();
+		pointsz3.add(pbz31);
+		pointsz3.add(pbz32);
+		pointsz3.add(pbz33);
+		pointsz3.add(pbz34);
+		polz3.setPoints(pointsz3);
 		
 		ZoneBean z3 = new ZoneBean();
 		z3.setId_app(appId);
 		z3.setName("Stadio");
 		z3.setSubmacro("A");
 		z3.setColor("ffddee");
+		z3.setGeometry(polz3);
 		z3 = manager.save(z3);
 		
 		// Streets Creation
@@ -387,11 +458,11 @@ public class StorageManagerTest {
 		ps2.setName("StazioneFS");
 		ps2.setId_app(appId);
 		ps2.setManagementMode("Libera");
-		ps2.setStreetReference("Via della Vittoria 23");
-		ps2.setSlotNumber(240);
+		ps2.setStreetReference("Via Stazione 1");
+		ps2.setSlotNumber(200);
 		ps2.setHandicappedSlotNumber(10);
 		ps2.setUnusuableSlotNumber(5);
-		ps2.setTimeSlot("05:00 - 00:00");
+		ps2.setTimeSlot("05:00 - 23:45");
 		ps2.setFee("2,5 euro/ora");
 		ps2.setPhoneNumber("0464511233");	
 		PointBean g12 = new PointBean();

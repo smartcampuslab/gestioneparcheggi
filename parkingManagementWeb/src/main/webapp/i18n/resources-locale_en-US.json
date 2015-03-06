@@ -267,10 +267,6 @@
     "value": "Avanti",
     "description": "Testo pulsante 'avanti'"
 },{
-    "key": "text_btn_close",
-    "value": "Chiudi",
-    "description": "Testo pulsante 'chiudi'"
-},{
     "key": "text_btn_next_comp",
     "value": "Seguente",
     "description": "Testo pulsante 'prossimo componente'"
@@ -278,10 +274,6 @@
     "key": "text_btn_save_comp",
     "value": "Salva componente e continua",
     "description": "Testo pulsante 'salva componente'"
-},{
-    "key": "text_btn_save",
-    "value": "Salva",
-    "description": "Testo pulsante 'salva'"
 }, {
     "key": "app_console-title",
     "value": "Console Operatore",
@@ -2874,5 +2866,169 @@
     "key": "no_pm_in_lists",
     "value": "Nessun parchimetro presente nel db",
     "description": "Messaggio nessun parchimetro in db"
+}, {
+    "key": "ps_list",
+    "value": "Lista Strutture",
+    "description": "Titolo tabella lista strutture"
+}, {
+    "key": "ps_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista strutture"
+}, {
+    "key": "ps_address",
+    "value": "Indirizzo",
+    "description": "Intestazione colonna indirizzo in tabella lista strutture"
+}, {
+    "key": "ps_time",
+    "value": "Orario",
+    "description": "Intestazione colonna orario in tabella lista strutture"
+}, {
+    "key": "ps_slots",
+    "value": "Posti",
+    "description": "Intestazione colonna posti in tabella lista strutture"
+}, {
+    "key": "no_ps_in_lists",
+    "value": "Nessuna struttura presente nel db",
+    "description": "Messaggio nessuna struttura in db"
+}, {
+    "key": "zone_list",
+    "value": "Lista Zone",
+    "description": "Titolo tabella lista zone"
+}, {
+    "key": "zone_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista zone"
+}, {
+    "key": "zone_submacro",
+    "value": "Macro",
+    "description": "Intestazione colonna submacro in tabella lista zone"
+}, {
+    "key": "zone_color",
+    "value": "Colore",
+    "description": "Intestazione colonna colore in tabella lista zone"
+}, {
+    "key": "no_zones_in_lists",
+    "value": "Nessuna zona presente nel db",
+    "description": "Messaggio nessuna zona in db"
+}, {
+    "key": "edit_parkingmeter",
+    "value": "Modifica parcometro",
+    "description": "Titolo pagina editing parcometro"
+}, {
+    "key": "pm_status",
+    "value": "Stato",
+    "description": "Label stato parcometro"
+}, {
+    "key": "pm_geometry",
+    "value": "Posizione",
+    "description": "Label geometry parcometro"
+}, {
+    "key": "parkingmeter_code_err_required",
+    "value": "Campo Codice Parcometro obbligatorio",
+    "description": "Messaggio errore campo codice parcometro obbligatorio"
+}, {
+    "key": "parkingmeter_status_select_err_required",
+    "value": "Campo Stato Parcometro obbligatorio",
+    "description": "Messaggio errore campo stato parcometro obbligatorio"
+}, {
+    "key": "parkingmeter_area_select_err_required",
+    "value": "Campo Area di tariffazione obbligatorio",
+    "description": "Messaggio errore campo area di tariffazione obbligatorio"
+}, {
+    "key": "parkingmeter_geometry_select_err_pattern",
+    "value": "Valore posizione lat-lng non corretto",
+    "description": "Messaggio errore campo geometry parcometro non corretto"
+}, {
+    "key": "text_btn_save",
+    "value": "Salva",
+    "description": "Testo pulsante 'salva'"
+}, {
+    "key": "err_in_update_parkingmeter",
+    "value": "Errore nell'aggiornamento del parcometro. DB non pronto.",
+    "description": "Messaggio errore aggiornamento parcometro"
+}, {
+    "key": "view_parkingmeter",
+    "value": "Dettagli parcometro",
+    "description": "Titolo pagina view parcometro"
+},{
+    "key": "text_btn_close",
+    "value": "Chiudi",
+    "description": "Testo pulsante 'chiudi'"
+}, {
+    "key": "text_btn_edit",
+    "value": "Modifica",
+    "description": "Testo pulsante 'modifica'"
+}, {
+    "key": "edit_parkingstructure",
+    "value": "Modifica parcometro",
+    "description": "Titolo pagina editing parcometro"
+}, {
+    "key": "ps_geometry",
+    "value": "Posizione",
+    "description": "Label geometry parcometro"
+}, {
+    "key": "ps_totalslot",
+    "value": "Capienza",
+    "description": "Label geometry parcometro"
+}, {
+    "key": "ps_handicapped_slot",
+    "value": "Posti per disabili",
+    "description": "Label posti per disabili parcometro"
+}, {
+    "key": "ps_unusuable_slot",
+    "value": "Posti non usabili",
+    "description": "Label posti non usabili"
+}, {
+    "key": "ps_payment_mode",
+    "value": "Modalita' di pagamento",
+    "description": "Label modalita' di pagamento"
+}, {
+    "key": "ps_management_mode",
+    "value": "Modalita' di gestione",
+    "description": "Label modalita' di gestione"
+}, {
+    "key": "ps_phone",
+    "value": "Telefono",
+    "description": "Label telefono struttura"
+}, {
+    "key": "ps_fee",
+    "value": "Tariffa sosta",
+    "description": "Label tariffa sosta in struttura"
+}, {
+    "key": "parkingstructure_name_err_required",
+    "value": "Campo Nome Struttura obbligatorio",
+    "description": "Messaggio errore campo nome struttura obbligatorio"
+}, {
+    "key": "parkingstructure_management_mode_select_err_required",
+    "value": "Campo Modalita' di gestione obbligatorio",
+    "description": "Messaggio errore campo gestione obbligatorio"
+}, {
+    "key": "parkingstructure_payment_mode_select_err_required",
+    "value": "Campo Modalita' di pagamento obbligatorio",
+    "description": "Messaggio errore campo modalita' pagamento obbligatorio"
+}, {
+    "key": "parkingstructure_slots_err_required",
+    "value": "Campo Capienza obbligatorio",
+    "description": "Messaggio errore campo capienza obbligatorio"
+}, {
+    "key": "parkingstructure_slots_err_pattern",
+    "value": "Valore non corretto. Inserire un valore numerico",
+    "description": "Messaggio errore campo capienza non corretto"
+}, {
+    "key": "parkingstructure_openingtime_err_pattern",
+    "value": "Campo Orario non corretto. Inserire un valore nel formato hh:mm - hh:mm",
+    "description": "Messaggio errore campo area di tariffazione obbligatorio"
+}, {
+    "key": "parkingstructure_geometry_select_err_pattern",
+    "value": "Valore posizione lat-lng non corretto",
+    "description": "Messaggio errore campo geometry struttura non corretto"
+}, {
+    "key": "err_in_update_parkingstructure",
+    "value": "Errore nell'aggiornamento della struttura. DB non pronto.",
+    "description": "Messaggio errore aggiornamento struttura"
+}, {
+    "key": "view_parkingmeter",
+    "value": "Dettagli parcometro",
+    "description": "Titolo pagina view parcometro"
 }
 ]
