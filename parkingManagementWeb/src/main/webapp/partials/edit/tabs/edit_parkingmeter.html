@@ -43,8 +43,8 @@
 										<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
 										<td width="25%" align="center">{{pmeter.area_name}}</td>
 										<td width="5%" align="left">
-											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!-- {{ 'practice_view' | i18n }} -->
-											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!-- {{ 'practice_view' | i18n }} -->
+											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
 										</td>
 									</tr>
 									<tr class="success" ng-show="pmeter.status=='ACTIVE'">
@@ -54,8 +54,8 @@
 										<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
 										<td width="25%" align="center">{{pmeter.area_name}}</td>
 										<td width="5%" align="left">
-											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!--  ng-click="setPmDetails(pmeter)" {{ 'practice_view' | i18n }} -->
-											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!--  ng-click="setPmDetails(pmeter)" {{ 'practice_view' | i18n }} -->
+											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
 										</td>
 									</tr>
 								</tbody>
@@ -146,7 +146,7 @@
 				   		<td width="32%" align="center"></td>
 				   		<td width="34%" align="right">
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePmeter(form, myStatus, myArea, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePmeter(form, myStatus, myArea, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPmeter(form, myStatus, myArea, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 				</table>
@@ -191,12 +191,12 @@
 		  		<div class="panel-body">	
 		  			<table width="100%">
 						<tr>
-							<td width="30%"><strong>{{ 'pm_code' | i18n }}:</strong></td>
-							<td width="70%"> {{ parckingMeter.code }}</td>
+							<td width="40%"><strong>{{ 'pm_code' | i18n }}:</strong></td>
+							<td width="60%"> {{ parckingMeter.code }}</td>
 						</tr>
 						<tr>	
 							<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
-							<td> {{ scheda.ente.indirizzo }}</td>
+							<td> {{ parckingMeter.note }}</td>
 						</tr>
 						<tr>
 							<td>

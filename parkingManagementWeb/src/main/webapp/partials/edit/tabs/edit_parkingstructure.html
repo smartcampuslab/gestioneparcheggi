@@ -22,7 +22,7 @@
 				<div class="col-md-6">
 							<div class="panel panel-primary" align="center">
 								<div class="panel-heading">
-									<h5 class="panel-title">{{ 'ps_list' | i18n }}</h5>
+									<h5 class="panel-title">{{ 'ps_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setPsEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 								</div>
 								<div class="panel-body">
 									<table class="table table-striped" style="width: 100%">
@@ -41,8 +41,8 @@
 												<td width="40%" align="center">{{pstruct.timeSlot}}</td>
 												<td width="5%" align="center">{{pstruct.slotNumber}}</td>
 												<td width="5%" align="left">
-													<a href ng-click="setPsDetails(pstruct)" alt="{{ 'practice_view' | i18n }}" title="{{ 'practice_view' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-													<a href ng-click="setPsEdit(pstruct)"  alt="{{ 'practice_edit' | i18n }}" title="{{ 'practice_edit' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+													<a href ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+													<a href ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
 												</td>
 											</tr>
 										</tbody>
@@ -70,34 +70,68 @@
 		  		<div class="panel-body">	
 				   	<div class="form-group">
 				    	<label for="name">{{ 'ps_name' | i18n }}</label>
-				    	<input id="name" type="text" class="form-control" name="pName" ng-model="parckingStructure.name" ng-required="true" >
+				    	<input id="name" type="text" class="form-control" name="pName" ng-model="parkingStructure.name" ng-required="true" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.pCode.$error.required">{{ 'parkingstructure_name_err_required' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="address">{{ 'ps_address' | i18n }}</label>
-				    	<input id="address" type="text" class="form-control" name="pAddress" ng-model="parckingStructure.streetReference" ng-required="false" ><!-- ng-change="setAlloggioChanged(true)" -->
+				    	<input id="address" type="text" class="form-control" name="pAddress" ng-model="parkingStructure.streetReference" ng-required="false" ><!-- ng-change="setAlloggioChanged(true)" -->
+				   	</div>
+				   	<div class="form-group">
+				    	<label for="fee">{{ 'ps_fee' | i18n }}</label>
+				    	<input id="fee" type="text" class="form-control" name="pFee" ng-model="parkingStructure.fee" ng-required="true" >
+				    	<div class="alert alert-danger" ng-show="!isInit && form.pFee.$error.required">{{ 'parkingstructure_fee_err_required' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="time">{{ 'ps_time' | i18n }}</label>
-				    	<input id="time" type="text" class="form-control" name="pTime" ng-model="parckingStructure.timeSlot" ng-pattern="timePattern" ng-required="false" >
+				    	<input id="time" type="text" class="form-control" name="pTime" ng-model="parkingStructure.timeSlot" ng-pattern="periodPattern" ng-required="false" ><!-- ng-pattern="timePattern" -->
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pTime.$error.pattern">{{ 'parkingstructure_openingtime_err_pattern' | i18n }}</div>
+				   	</div>
+				   	<div class="form-group">
+				    	<label for="phone">{{ 'ps_phone' | i18n }}</label>
+				    	<input id="phone" type="text" class="form-control" name="pPhone" ng-model="parkingStructure.phoneNumber" ng-pattern="phonePattern" ng-required="false" >
+				    	<div class="alert alert-danger" ng-show="!isInit && form.pPhone.$error.pattern">{{ 'parkingstructure_phone_err_pattern' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="managementMode">{{ 'ps_management_mode' | i18n }}</label>
-				    	<input id="managementMode" type="text" class="form-control" name="pTime" ng-model="parckingStructure.managementMode" ng-required="false" >
+				    	<input id="managementMode" type="text" class="form-control" name="pTime" ng-model="parkingStructure.managementMode" ng-required="false" >
 				   	</div>
 				   	<div class="form-group">
-					   	<table width="100%">
-					   		<tr>
-					   			<td colspan="4"><label for="paymentMode">{{ 'ps_payment_mode' | i18n }}</label></td>
-					   		</tr>
-					   		<tr>
-					   			<td width="25%"><label for="cashPayment">{{ listaPagamenti[0].descrizione }}:</label> <input id="cashPayment" type="checkbox" ng-model="myPayment.cash_checked"></td>
-					   			<td width="25%"><label for="automatedPayment">{{ listaPagamenti[1].descrizione }}:</label> <input id="automatedPayment" type="checkbox" ng-model="myPayment.automated_teller_checked"></td>
-					   			<td width="25%"><label for="prepaidPayment">{{ listaPagamenti[2].descrizione }}:</label> <input id="prepaidPayment" type="checkbox" ng-model="myPayment.prepaid_card_checked"></td>
-					   			<td width="25%"><label for="parcometroPayment">{{ listaPagamenti[3].descrizione }}:</label> <input id="parcometroPayment" type="checkbox" ng-model="myPayment.parcometro_checked"></td>
-					   		</tr>
-					   	</table>
+				   		<label for="paymentMode">{{ 'ps_payment_mode' | i18n }}</label>
+				   		<div class="panel panel-default" width="95%">
+				   			<div class="panel-body">
+							   	<table width="100%">
+							   		<tr>
+							   			<td width="25%"><label for="cashPayment">{{ listaPagamenti[0].descrizione }}:</label> <input id="cashPayment" type="checkbox" ng-model="myPayment.cash_checked"></td>
+							   			<td width="25%"><label for="automatedPayment">{{ listaPagamenti[1].descrizione }}:</label> <input id="automatedPayment" type="checkbox" ng-model="myPayment.automated_teller_checked"></td>
+							   			<td width="25%"><label for="prepaidPayment">{{ listaPagamenti[2].descrizione }}:</label> <input id="prepaidPayment" type="checkbox" ng-model="myPayment.prepaid_card_checked"></td>
+							   			<td width="25%"><label for="parcometroPayment">{{ listaPagamenti[3].descrizione }}:</label> <input id="parcometroPayment" type="checkbox" ng-model="myPayment.parcometro_checked"></td>
+							   		</tr>
+							   	</table>
+						   	</div>
 				    	<div class="alert alert-danger" ng-show="!isInit && form.pPayment.$error.required">{{ 'parkingstructure_payment_mode_select_err_required' | i18n }}</div>
+				   		</div>
+				   	</div>
+				   	<label for="totalSlot">{{ 'ps_slots' | i18n }}</label>
+				   	<div class="panel panel-default" width="95%">
+				   		<div class="panel-body">
+						   	<div class="form-group">
+						    	<label for="totalSlot">{{ 'ps_totalslot' | i18n }}</label>
+						    	<input id="totalSlot" type="text" class="form-control" name="pTotalslot" ng-model="parkingStructure.slotNumber" ng-pattern="onlyNumbers" ng-required="true" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.pTotalslot.$error.required">{{ 'parkingstructure_slots_err_required' | i18n }}</div>
+						    	<div class="alert alert-danger" ng-show="!isInit && form.pTotalslot.$error.pattern">{{ 'parkingstructure_slots_err_pattern' | i18n }}</div>
+						   	</div>
+							<div class="form-group">
+						    	<label for="handicappedSlot">{{ 'ps_handicapped_slot' | i18n }}</label>
+						    	<input id="handicappedSlot" type="text" class="form-control" name="pHandicappedslot" ng-model="parkingStructure.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.pHandicappedslot.$error.pattern">{{ 'parkingstructure_slots_err_pattern' | i18n }}</div>
+						   	</div>
+						   	<div class="form-group">
+						    	<label for="unusuableSlot">{{ 'ps_unusuable_slot' | i18n }}</label>
+						    	<input id="unusuableSlot" type="text" class="form-control" name="pUnusuableslot" ng-model="parkingStructure.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.pUnusuableslot.$error.pattern">{{ 'parkingstructure_slots_err_pattern' | i18n }}</div>
+						   	</div>
+				   		</div>
 				   	</div>
 				 
 					<div class="form-group">
@@ -130,14 +164,14 @@
 						</ui-gmap-google-map>
 					</div>
 				</div>
-				<div class="alert alert-danger" ng-show="showUpdatingErrorMessage">{{ 'err_in_update_parkingmeter' | i18n }}</div>
+				<div class="alert alert-danger" ng-show="showUpdatingPSErrorMessage">{{ 'err_in_update_parkingstructure' | i18n }}</div>
 		   		<table width="95%">			
 				   	<tr>
 				   		<td width="34%"></td>
 				   		<td width="32%" align="center"></td>
 				   		<td width="34%" align="right">
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPstruct(form, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 				</table>
@@ -146,9 +180,9 @@
 	   	</form>
 	</div>
 	<div ng-show="viewModePS">	
-		<div class="col-md-6" ng-show="pmViewMapReady" >
-			<ui-gmap-google-map id="7" center="pViewMeterMap.center" draggable="true" zoom="pViewMeterMap.zoom" options="pViewMeterMap.options" control="pViewMeterMap.control" bounds="pViewMeterMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
-				<ui-gmap-markers models="pViewMetersMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'"
+		<div class="col-md-6" ng-show="psViewMapReady" >
+			<ui-gmap-google-map id="11" center="pViewStructMap.center" draggable="true" zoom="pViewStructMap.zoom" options="pViewStructMap.options" control="pViewStructMap.control" bounds="pViewStructMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+				<ui-gmap-markers models="pViewStructMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'"
 					<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
                 		<p>
 			                Lat: {{coords.latitude}}<br/>
@@ -157,18 +191,18 @@
 			            </p>
             		</ui-gmap-window>
         		</ui-gmap-markers>
-        		<ui-gmap-marker idkey="mySpecialMarker.id" coords="mySpecialMarker.coords" options="mySpecialMarker.options" icon="mySpecialMarker.icon">
+        		<ui-gmap-marker idkey="mySpecialPSMarker.id" coords="mySpecialPSMarker.coords" options="mySpecialPSMarker.options" icon="mySpecialPSMarker.icon">
 					<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 	                	<p>
-				        	Lat: {{mySpecialMarker.coords.latitude}}<br/>
-				            Lng: {{mySpecialMarker.coords.longitude}}<br/>
+				        	Lat: {{mySpecialPSMarker.coords.latitude}}<br/>
+				            Lng: {{mySpecialPSMarker.coords.longitude}}<br/>
 				        </p>
 	            	</ui-gmap-window>
 	        	</ui-gmap-marker>
         		
 			</ui-gmap-google-map>
 		</div>
-		<div class="col-md-6" ng-show="!pmViewMapReady">
+		<div class="col-md-6" ng-show="!psViewMapReady">
 			<div style="text-align: center">
 				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
 				<h3>{{ 'loading_text' | i18n }}...</h3>
@@ -177,35 +211,49 @@
 		<div class="col-md-6">
 			<div class="panel panel-default" width="90%">
 		   		<div class="panel-heading">
-		    		<h3 class="panel-title"><strong>{{ 'view_parkingmeter' | i18n }}</strong></h3>
+		    		<h3 class="panel-title"><strong>{{ 'view_parkingstructure' | i18n }}</strong></h3>
 		  		</div>
 		  		<div class="panel-body">	
 		  			<table width="100%">
 						<tr>
-							<td width="30%"><strong>{{ 'pm_code' | i18n }}:</strong></td>
-							<td width="70%"> {{ parckingMeter.code }}</td>
+							<td width="45%"><strong>{{ 'ps_name' | i18n }}:</strong></td>
+							<td width="55%">{{ parkingStructure.name }}</td>
 						</tr>
 						<tr>	
-							<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
-							<td> {{ scheda.ente.indirizzo }}</td>
+							<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
+							<td>{{ parkingStructure.streetReference }}</td>
 						</tr>
 						<tr>
-							<td>
-								<strong>{{ 'pm_status' | i18n }}:</strong>
-							</td>
-							<td>	 
-								<span ng-show="parckingMeter.status=='ACTIVE'">Attivo</span>
-								<span ng-show="parckingMeter.status!='ACTIVE'">Disattivo</span>
-							</td>
+							<td><strong>{{ 'ps_fee' | i18n }}:</strong></td>
+							<td>{{ parkingStructure.fee }}</td>
 						</tr>
 						<tr>	
-							<td>
-								<strong>{{ 'pm_area_name' | i18n }}:</strong>
-							</td>
-							<td>	 
-								{{ myArea.name }} 
-								<span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span>
-							</td>
+							<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
+							<td>{{ parkingStructure.timeSlot }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
+							<td>{{ parkingStructure.phoneNumber }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
+							<td>{{ parkingStructure.managementMode }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
+							<td>{{ myPaymentMode }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
+							<td>{{ parkingStructure.slotNumber }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
+							<td>{{ parkingStructure.handicappedSlotNumber }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'ps_unusuable_slot' | i18n }}</strong></td>
+							<td>{{ parkingStructure.unusuableSlotNumber }}</td>
 						</tr>
 						<tr>
 							<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
@@ -216,10 +264,10 @@
 				   	<table width="95%">			
 						<tr>
 							<td width="50%" align="right">
-								<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>	
+								<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
 							<td width="50%" align="left">
-								<button type="button" class="btn btn-default btn-lg" ng-click="setPmEdit(parckingMeter)">{{ 'text_btn_edit' | i18n  }}</button>
+								<button type="button" class="btn btn-default btn-lg" ng-click="setPsEdit(parkingStructure)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>

@@ -207,6 +207,9 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
 	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
 	
+	$scope.authHeaders = {
+	    'Accept': 'application/json;charset=UTF-8'
+	};
 	
 	$scope.mapCenter = {
 		latitude: 45.88875357753771,

@@ -26,8 +26,9 @@
 <!-- <script src="js/controllers.js"></script> -->
 <script src="js/controllers/ctrl.js?1001"></script>
 <script src="js/controllers/ctrl_login.js?1000"></script>
-<script src="js/controllers/ctrl_main.js?1000"></script>
-<script src="js/controllers/ctrl_park.js?1001"></script>
+<script src="js/controllers/ctrl_main.js"></script>
+<script src="js/controllers/ctrl_park.js"></script>
+<script src="js/controllers/ctrl_bike.js"></script>
 <script src="js/controllers/ctrl_view.js"></script>
 
 <script src="js/filters.js?1001"></script>

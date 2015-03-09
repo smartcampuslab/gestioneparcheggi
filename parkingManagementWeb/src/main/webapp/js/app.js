@@ -46,8 +46,8 @@ pm.config(['$routeProvider', '$locationProvider',
     	})
     	.when('/edit/bike', {
     		templateUrl: 'partials/edit/bikeediting.html',
-    		controller: 'ParkCtrl',
-    		controllerAs: 'park_ctrl'
+    		controller: 'BikeCtrl',
+    		controllerAs: 'bike_ctrl'
     	})
     	.when('/view', {
     		templateUrl: 'partials/view/viewall.html',
