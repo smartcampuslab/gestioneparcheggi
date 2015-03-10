@@ -27,7 +27,7 @@
 				<div class="col-md-6">
 							<div class="panel panel-primary" align="center">
 								<div class="panel-heading">
-									<h5 class="panel-title">{{ 'bp_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setPsEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+									<h5 class="panel-title">{{ 'bp_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setBpEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 								</div>
 								<div class="panel-body">
 									<table class="table table-striped" style="width: 100%">
@@ -73,18 +73,18 @@
 				  		<div class="panel-body">	
 						   	<div class="form-group">
 						    	<label for="name">{{ 'bp_name' | i18n }}</label>
-						    	<input id="name" type="text" class="form-control" name="pName" ng-model="parkingStructure.name" ng-required="true" >
+						    	<input id="name" type="text" class="form-control" name="pName" ng-model="bikePoint.name" ng-required="true" >
 						   		<div class="alert alert-danger" ng-show="!isInit && form.pName.$error.required">{{ 'bikepoint_name_err_required' | i18n }}</div>
 						   	</div>
 						   	<div class="form-group">
 						    	<label for="slots">{{ 'bp_slots' | i18n }}</label>
-						    	<input id="slots" type="text" class="form-control" name="pSlots" ng-model="parkingStructure.streetReference" ng-required="false" ng-pattern="onlyNumbers" ><!-- ng-change="setAlloggioChanged(true)" -->
+						    	<input id="slots" type="text" class="form-control" name="pSlots" ng-model="bikePoint.slotNumber" ng-required="false" ng-pattern="onlyNumbers" ><!-- ng-change="setAlloggioChanged(true)" -->
 						   		<div class="alert alert-danger" ng-show="!isInit && form.pSlots.$error.pattern">{{ 'bikepoint_slots_err_pattern' | i18n }}</div>
 						   	</div>
 						   	<div class="form-group">
 						    	<label for="bikes">{{ 'bp_bikes' | i18n }}</label>
-						    	<input id="bikes" type="text" class="form-control" name="pBikes" ng-model="parkingStructure.bikes" ng-required="false" ng-pattern="onlyNumbers">
-						    	<div class="alert alert-danger" ng-show="!isInit && form.pFee.$error.required">{{ 'bikepoint_bikes_err_pattern' | i18n }}</div>
+						    	<input id="bikes" type="text" class="form-control" name="pBikes" ng-model="bikePoint.bikeNumber" ng-required="false" ng-pattern="onlyNumbers">
+						    	<div class="alert alert-danger" ng-show="!isInit && form.pBikes.$error.required">{{ 'bikepoint_bikes_err_pattern' | i18n }}</div>
 						   	</div>
 						 
 							<div class="form-group">
@@ -93,38 +93,38 @@
 						   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.pattern">{{ 'bikepoint_geometry_select_err_pattern' | i18n }}</div>
 							</div>
 							<div class="col-md-12" ng-show="isEditing"><!-- id="map_canvas" -->
-								<ui-gmap-google-map id="5" center="psEditMap.center" draggable="true" zoom="psEditMap.zoom" options="psEditMap.options" control="psEditMap.control" bounds="psEditMap.bounds">
-										<ui-gmap-marker idkey="myPs.id" coords="myPs.coords" options="myPs.options" icon="myPs.icon" events="myPs.events">
+								<ui-gmap-google-map id="5" center="bpEditMap.center" draggable="true" zoom="bpEditMap.zoom" options="bpEditMap.options" control="bpEditMap.control" bounds="bpEditMap.bounds">
+										<ui-gmap-marker idkey="myBp.id" coords="myBp.coords" options="myBp.options" icon="myBp.icon" events="myBp.events">
 											<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 			                					<p>
-						                        	Lat: {{myPs.coords.latitude}}<br/>
-						                        	Lng: {{myPs.coords.longitude}}<br/>
+						                        	Lat: {{myBp.coords.latitude}}<br/>
+						                        	Lng: {{myBp.coords.longitude}}<br/>
 						                    	</p>
 			            					</ui-gmap-window>
 			        					</ui-gmap-marker>
 								</ui-gmap-google-map>
 							</div>
 							<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-								<ui-gmap-google-map id="6" center="psCreateMap.center" draggable="true" zoom="psCreateMap.zoom" options="psCreateMap.options" control="psCreateMap.control" bounds="psCreateMap.bounds" events="psCreateMap.events">
-										<ui-gmap-marker idkey="myNewPs.id" coords="myNewPs.coords" options="myNewPs.options" icon="myNewPs.icon" events="myNewPs.events"><!-- click="'onClick'" -->
+								<ui-gmap-google-map id="6" center="bpCreateMap.center" draggable="true" zoom="bpCreateMap.zoom" options="bpCreateMap.options" control="bpCreateMap.control" bounds="bpCreateMap.bounds" events="bpCreateMap.events">
+										<ui-gmap-marker idkey="myNewBp.id" coords="myNewBp.coords" options="myNewBp.options" icon="myNewBp.icon" events="myNewBp.events"><!-- click="'onClick'" -->
 											<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 			                					<p>
-						                        	Lat: {{myNewPs.coords.latitude}}<br/>
-						                        	Lng: {{myNewPs.coords.longitude}}<br/>
+						                        	Lat: {{myNewBp.coords.latitude}}<br/>
+						                        	Lng: {{myNewBp.coords.longitude}}<br/>
 						                    	</p>
 			            					</ui-gmap-window>
 			        					</ui-gmap-marker>
 								</ui-gmap-google-map>
 							</div>
 						</div>
-						<div class="alert alert-danger" ng-show="showUpdatingPSErrorMessage">{{ 'err_in_update_bikepoint' | i18n }}</div>
+						<div class="alert alert-danger" ng-show="showUpdatingBPErrorMessage">{{ 'err_in_update_bikepoint' | i18n }}</div>
 				   		<table width="95%">			
 						   	<tr>
 						   		<td width="34%"></td>
 						   		<td width="32%" align="center"></td>
 						   		<td width="34%" align="right">
-						   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-						   			<button type="button" class="btn btn-default btn-lg" ng-click="createPstruct(form, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+						   			<button type="button" class="btn btn-default btn-lg" ng-click="updateBpoint(form, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+						   			<button type="button" class="btn btn-default btn-lg" ng-click="createBpoint(form, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 						   		</td>
 							</tr>
 						</table>
@@ -133,9 +133,9 @@
 			   	</form>
 			</div>
 			<div ng-show="viewModeBP">	
-				<div class="col-md-6" ng-show="psViewMapReady" >
-					<ui-gmap-google-map id="11" center="pViewStructMap.center" draggable="true" zoom="pViewStructMap.zoom" options="pViewStructMap.options" control="pViewStructMap.control" bounds="pViewStructMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
-						<ui-gmap-markers models="pViewStructMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'"
+				<div class="col-md-6" ng-show="bpViewMapReady" >
+					<ui-gmap-google-map id="11" center="pViewBikeMap.center" draggable="true" zoom="pViewBikeMap.zoom" options="pViewBikeMap.options" control="pViewBikeMap.control" bounds="pViewBikeMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+						<ui-gmap-markers models="pViewBikeMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'"
 							<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 		                		<p>
 					                Lat: {{coords.latitude}}<br/>
@@ -144,18 +144,18 @@
 					            </p>
 		            		</ui-gmap-window>
 		        		</ui-gmap-markers>
-		        		<ui-gmap-marker idkey="mySpecialPSMarker.id" coords="mySpecialPSMarker.coords" options="mySpecialPSMarker.options" icon="mySpecialPSMarker.icon">
+		        		<ui-gmap-marker idkey="mySpecialBPMarker.id" coords="mySpecialBPMarker.coords" options="mySpecialBPMarker.options" icon="mySpecialBPMarker.icon">
 							<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 			                	<p>
-						        	Lat: {{mySpecialPSMarker.coords.latitude}}<br/>
-						            Lng: {{mySpecialPSMarker.coords.longitude}}<br/>
+						        	Lat: {{mySpecialBPMarker.coords.latitude}}<br/>
+						            Lng: {{mySpecialBPMarker.coords.longitude}}<br/>
 						        </p>
 			            	</ui-gmap-window>
 			        	</ui-gmap-marker>
 		        		
 					</ui-gmap-google-map>
 				</div>
-				<div class="col-md-6" ng-show="!psViewMapReady">
+				<div class="col-md-6" ng-show="!bpViewMapReady">
 					<div style="text-align: center">
 						<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
 						<h3>{{ 'loading_text' | i18n }}...</h3>
@@ -164,49 +164,21 @@
 				<div class="col-md-6">
 					<div class="panel panel-default" width="90%">
 				   		<div class="panel-heading">
-				    		<h3 class="panel-title"><strong>{{ 'view_parkingstructure' | i18n }}</strong></h3>
+				    		<h3 class="panel-title"><strong>{{ 'view_bikepoint' | i18n }}</strong></h3>
 				  		</div>
 				  		<div class="panel-body">	
 				  			<table width="100%">
 								<tr>
-									<td width="45%"><strong>{{ 'ps_name' | i18n }}:</strong></td>
-									<td width="55%">{{ parkingStructure.name }}</td>
+									<td width="45%"><strong>{{ 'bp_name' | i18n }}:</strong></td>
+									<td width="55%">{{ bikePoint.name }}</td>
 								</tr>
 								<tr>	
-									<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
-									<td>{{ parkingStructure.streetReference }}</td>
-								</tr>
-								<tr>
-									<td><strong>{{ 'ps_fee' | i18n }}:</strong></td>
-									<td>{{ parkingStructure.fee }}</td>
+									<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
+									<td>{{ bikePoint.slotNumber }}</td>
 								</tr>
 								<tr>	
-									<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
-									<td>{{ parkingStructure.timeSlot }}</td>
-								</tr>
-								<tr>	
-									<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
-									<td>{{ parkingStructure.phoneNumber }}</td>
-								</tr>
-								<tr>	
-									<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
-									<td>{{ parkingStructure.managementMode }}</td>
-								</tr>
-								<tr>	
-									<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
-									<td>{{ myPaymentMode }}</td>
-								</tr>
-								<tr>	
-									<td><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
-									<td>{{ parkingStructure.slotNumber }}</td>
-								</tr>
-								<tr>	
-									<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
-									<td>{{ parkingStructure.handicappedSlotNumber }}</td>
-								</tr>
-								<tr>	
-									<td><strong>{{ 'ps_unusuable_slot' | i18n }}</strong></td>
-									<td>{{ parkingStructure.unusuableSlotNumber }}</td>
+									<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
+									<td>{{ bikePoint.bikeNumber }}</td>
 								</tr>
 								<tr>
 									<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
@@ -217,10 +189,10 @@
 						   	<table width="95%">			
 								<tr>
 									<td width="50%" align="right">
-										<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>	
+										<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>	
 									</td>
 									<td width="50%" align="left">
-										<button type="button" class="btn btn-default btn-lg" ng-click="setPsEdit(parkingStructure)">{{ 'text_btn_edit' | i18n  }}</button>
+										<button type="button" class="btn btn-default btn-lg" ng-click="setBpEdit(bikePoint)">{{ 'text_btn_edit' | i18n  }}</button>
 									</td>
 								</tr>
 							</table>

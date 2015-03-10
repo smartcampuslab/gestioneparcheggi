@@ -370,5 +370,81 @@
     "key": "err_in_update_bikepoint",
     "value": "Errore nell'aggiornamento dell punto bici. DB non pronto.",
     "description": "Messaggio errore aggiornamento punto bici"
+}, {
+    "key": "bikepoint_name_err_required",
+    "value": "Campo 'nome punto bici' obbligatorio.",
+    "description": "Messaggio errore campo nome punto bici obbligatorio"
+}, {
+    "key": "bikepoint_slots_err_pattern",
+    "value": "Valore non corretto per il Campo 'posti bici'. Inserire un valore numerico.",
+    "description": "Messaggio errore campo posti punto bici non corretto"
+}, {
+    "key": "bikepoint_bikes_err_pattern",
+    "value": "Valore non corretto per il Campo 'numero bici'. Inserire un valore numerico.",
+    "description": "Messaggio errore campo bici in punto bici non corretto"
+}, {
+    "key": "bikepoint_geometry_select_err_pattern",
+    "value": "Valore non corretto per il Campo 'posizione' punto bici. Inserire un valore lat-lng.",
+    "description": "Messaggio errore campo posizione punto bici non corretto"
+}, {
+    "key": "view_bikepoint",
+    "value": "Dettagli punto bici",
+    "description": "Titolo pagina view punto bici"
+}, {
+    "key": "edit_street",
+    "value": "Modifica Strada",
+    "description": "Titolo pagina editing strade"
+}, {
+    "key": "street_address",
+    "value": "Via di riferimento",
+    "description": "Label campo strada di riferimento per oggetto strada"
+}, {
+    "key": "street_handicapped_slot",
+    "value": "Posti riservati ai disabili",
+    "description": "Label campo posti disabili per oggetto strada"
+}, {
+    "key": "street_timedpark_slot",
+    "value": "Posti disco orario",
+    "description": "Label campo posti disco orario per oggetto strada"
+}, {
+    "key": "street_freepark_slot",
+    "value": "Posti sosta libera",
+    "description": "Label campo posti sosta libera per oggetto strada"
+}, {
+    "key": "street_totalslot",
+    "value": "Posti totali",
+    "description": "Label campo posti totali per oggetto strada"
+}, {
+    "key": "street_unusuable_slot",
+    "value": "Posti inutilizzabili",
+    "description": "Label campo posti non usabili per oggetto strada"
+}, {
+    "key": "street_zone",
+    "value": "Zona",
+    "description": "Label campo zona per oggetto strada"
+}, {
+    "key": "street_geometry",
+    "value": "Posizione",
+    "description": "Label geometry per strada"
+}, {
+    "key": "street_slots_err_required",
+    "value": "Campo posti totali obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_slots_err_pattern",
+    "value": "Valore non corretto, inserire un valore numerico.",
+    "description": "Messaggio errore campo posti in strada non corretto"
+}, {
+    "key": "street_area_select_err_required",
+    "value": "Campo Area di tariffazione obbligatorio.",
+    "description": "Messaggio errore campo area per strada obbligatorio"
+}, {
+    "key": "street_geometry_select_err_pattern",
+    "value": "Campo Posizione strada obbligatorio.",
+    "description": "Messaggio errore posizione strada non corretto"
+}, {
+    "key": "street_reference_err_required",
+    "value": "Campo indirizzo strada obbligatorio.",
+    "description": "Messaggio errore indirizzo strada obbligatorio"
 }
 ]

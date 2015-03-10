@@ -1,71 +1,166 @@
-<div class="row" ><!-- ng-init="getStreetsFromDb()" -->
-				<div class="col-md-6" ng-show="streetMapReady" ><!-- id="map_canvas" -->
-					<ui-gmap-google-map id="3" center="streetMap.center" draggable="true" zoom="streetMap.zoom" options="options" control="streetMap.control" bounds="streetMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
-<!--         					<ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'"> -->
-<!--         						<ui-gmap-window show="'show'" ng-cloak> -->
-<!--                 					<p> -->
-<!-- 			                        	Latitude: {{coords.latitude}}<br/> -->
-<!-- 			                        	Longitude: {{coords.longitude}}<br/> -->
-<!-- 			                        	Codice: <strong>{{title}}</strong> -->
-<!-- 			                    	</p> -->
-<!--             					</ui-gmap-window> -->
-<!--         					</ui-gmap-markers>		 -->
-<!-- 						<ui-gmap-polygon static="true" ng-repeat="p in polygons track by p.id" path="p.path" stroke="p.stroke" visible="p.visible" geodesic="p.geodesic" fill="p.fill" fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polygon> -->
-					
-					<ui-gmap-polyline ng-repeat="p in geoStreets" path="p.path" stroke="p.stroke" visible='p.visible'
-                  geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polyline>
-					
-					</ui-gmap-google-map>
-				</div>
-				<div class="col-md-6" ng-show="!streetMapReady">
-					<div style="text-align: center">
-							<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
-							<h3>{{ 'loading_text' | i18n }}...</h3>
+<div class="row" >
+	<div ng-show="!editModeS && !viewModeS">
+		<div class="col-md-6" ng-show="streetMapReady" ><!-- id="map_canvas" -->
+			<ui-gmap-google-map id="3" center="streetMap.center" draggable="true" zoom="streetMap.zoom" options="options" control="streetMap.control" bounds="streetMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+	<!--        					<ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'"> -->
+	<!--         						<ui-gmap-window show="'show'" ng-cloak> -->
+	<!--                 					<p> -->
+	<!-- 			                        	Latitude: {{coords.latitude}}<br/> -->
+	<!-- 			                        	Longitude: {{coords.longitude}}<br/> -->
+	<!-- 			                        	Codice: <strong>{{title}}</strong> -->
+	<!-- 			                    	</p> -->
+	<!--             					</ui-gmap-window> -->
+	<!--         					</ui-gmap-markers>		 -->
+	<!-- 						<ui-gmap-polygon static="true" ng-repeat="p in polygons track by p.id" path="p.path" stroke="p.stroke" visible="p.visible" geodesic="p.geodesic" fill="p.fill" fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polygon> -->
+						
+				<ui-gmap-polyline ng-repeat="p in geoStreets" path="p.path" stroke="p.stroke" visible='p.visible'
+	              geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polyline>		
+			</ui-gmap-google-map>
+		</div>
+		<div class="col-md-6" ng-show="!streetMapReady">
+			<div style="text-align: center">
+				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
+				<h3>{{ 'loading_text' | i18n }}...</h3>
+			</div>
+		</div>
+		<div class="col-md-6">
+			<div class="panel panel-primary">
+				<div class="panel-body">
+					<div class="panel panel-primary" align="center">
+						<div class="panel-heading">
+							<h5 class="panel-title">{{ 'street_list' | i18n }}</h5>
 						</div>
-				</div>
-				<div class="col-md-6">
-					<div class="panel panel-primary">
 						<div class="panel-body">
-							<div class="panel panel-primary" align="center">
-								<div class="panel-heading">
-									<h5 class="panel-title">{{ 'street_list' | i18n }}</h5>
-								</div>
-								<div class="panel-body">
-									<table class="table table-striped" style="width: 100%">
-										<tr ng-show="streetWS.length != 0">
-											<th width="40%">{{ 'street_name' | i18n }}</th>
-											<th width="15%">{{ 'street_slots' | i18n }}</th>
-											<th width="40%" colspan="2">{{ 'street_area_name' | i18n }}</th>
-											<th width="5%">{{ 'operations' | i18n }}</th>
-										</tr>
-										<tbody class="animate-repeat"
-											ng-repeat="street in streetWS | filter:q | orderBy:'name' | startFrom:currentPage*maxStreets | limitTo:maxStreets">
-				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
-											<tr>
-												<td width="40%" align="left">{{street.streetReference}}</td>
-												<td width="15%" align="left">{{street.totalSlots}}</td>
-												<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
-												<td width="35%" align="center">{{street.area_name}}</td>
-												<td width="5%" align="left">
-													<a href="#/street/view/{{ street.id }}" ng-click="setViewTabs()" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!-- {{ 'practice_view' | i18n }} -->
-													<a href="#/street/edit/{{ street.id }}" ng-click="setClassTabs()"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
-												</td>
-											</tr>
-										</tbody>
-										<tr ng-show="areaWS.length == 0">
-											<td colspan="5"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
-										</tr>
-									</table>
-									<button class="btn btn-primary"
-											ng-disabled="currentPage == 0"
-											ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-										{{currentPage+1}}/{{numberOfPages(2)}}
-									<button class="btn btn-primary"
-											ng-disabled="currentPage >= streetWS.length/maxStreets - 1"
-											ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
-								</div>
-							</div>
+							<table class="table table-striped" style="width: 100%">
+								<tr ng-show="streetWS.length != 0">
+									<th width="40%">{{ 'street_name' | i18n }}</th>
+									<th width="15%">{{ 'street_slots' | i18n }}</th>
+									<th width="40%" colspan="2">{{ 'street_area_name' | i18n }}</th>
+									<th width="5%">{{ 'operations' | i18n }}</th>
+								</tr>
+								<tbody class="animate-repeat"
+									ng-repeat="street in streetWS | filter:q | orderBy:'name' | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+									<tr>
+										<td width="40%" align="left">{{street.streetReference}}</td>
+										<td width="15%" align="left">{{street.totalSlots}}</td>
+										<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
+										<td width="35%" align="center">{{street.area_name}}</td>
+										<td width="5%" align="left">
+											<a href ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+											<a href ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+										</td>
+									</tr>
+								</tbody>
+								<tr ng-show="areaWS.length == 0">
+									<td colspan="5"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+								</tr>
+							</table>
+							<button class="btn btn-primary"
+								ng-disabled="currentPage == 0"
+								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+								{{currentPage+1}}/{{numberOfPages(2)}}
+							<button class="btn btn-primary"
+								ng-disabled="currentPage >= streetWS.length/maxStreets - 1"
+								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 						</div>
 					</div>
 				</div>
 			</div>
+		</div>
+	</div>
+	<div ng-show="editModeS">
+		<form role="form" name="form">
+			<div class="panel panel-default" width="90%">
+		   		<div class="panel-heading">
+		    		<h3 class="panel-title"><strong>{{ 'edit_street' | i18n }}</strong></h3>
+		  		</div>
+		  		<div class="panel-body">
+				   	<div class="form-group">
+				    	<label for="address">{{ 'street_address' | i18n }}</label>
+				    	<input id="address" type="text" class="form-control" name="sAddress" ng-model="street.streetReference" ng-required="true" ><!-- ng-change="setAlloggioChanged(true)" -->
+				   		<div class="alert alert-danger" ng-show="!isInit && form.sAddress.$error.required">{{ 'street_reference_err_required' | i18n }}</div>
+				   	</div>
+				   	<label for="totalSlot">{{ 'street_slots' | i18n }}</label>
+				   	<div class="panel panel-default" width="95%">
+				   		<div class="panel-body">
+						   	<div class="form-group">
+						    	<label for="totalSlot">{{ 'street_totalslot' | i18n }}</label>
+						    	<input id="totalSlot" type="text" class="form-control" name="sTotalslot" ng-model="street.slotNumber" ng-pattern="onlyNumbers" ng-required="true" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sTotalslot.$error.required">{{ 'street_slots_err_required' | i18n }}</div>
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sTotalslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+						   	</div>
+							<div class="form-group">
+						    	<label for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
+						    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="street.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+						   	</div>
+						   	<div class="form-group">
+						    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
+						    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="street.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+						   	</div>
+						   	<div class="form-group">
+						    	<label for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
+						    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="street.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+						   	</div>
+						   	<div class="form-group">
+						    	<label for="unusuableSlot">{{ 'street_unusuable_slot' | i18n }}</label>
+						    	<input id="unusuableSlot" type="text" class="form-control" name="sUnusuableslot" ng-model="parkingStructure.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sUnusuableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+						   	</div>
+				   		</div>
+				   	</div>
+				 	<div class="form-group">
+				    	<label for="area">{{ 'street_area_name' | i18n }}</label>
+				    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="true">
+				    	</select>
+				   		<div class="alert alert-danger" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
+					</div>
+					<div class="form-group">
+				    	<label for="zone">{{ 'street_zone' | i18n }}</label>
+				    	<select id="zone" name="sZone" class="form-control" ng-options="a as a.name for a in allZones" ng-model="myZones" ng-required="false">
+				    	</select>
+					</div>
+					<div class="form-group">
+				    	<label for="geometry">{{ 'street_geometry' | i18n }}</label>
+				    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myLineGeometry" ng-required="false" ><!-- ng-pattern="gpsPos" -->
+				   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
+					</div>
+					<div class="col-md-12" ng-show="isEditing">
+						<ui-gmap-google-map id="15" center="sEditMap.center" draggable="true" zoom="sEditMap.zoom" options="sEditMap.options" control="sEditMap.control" bounds="sEditMap.bounds">
+								<ui-gmap-polyline path="editStreet.path" stroke="editStreet.stroke" visible='editStreet.visible'
+	              					geodesic='editStreet.geodesic' fit="false" editable="editStreet.editable" draggable="editStreet.draggable" events="editStreet.events"></ui-gmap-polyline>	
+						</ui-gmap-google-map>
+					</div>
+					<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
+						<ui-gmap-google-map id="16" center="psCreateMap.center" draggable="true" zoom="psCreateMap.zoom" options="psCreateMap.options" control="psCreateMap.control" bounds="psCreateMap.bounds" events="psCreateMap.events">
+								<ui-gmap-marker idkey="myNewPs.id" coords="myNewPs.coords" options="myNewPs.options" icon="myNewPs.icon" events="myNewPs.events"><!-- click="'onClick'" -->
+									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
+	                					<p>
+				                        	Lat: {{myNewPs.coords.latitude}}<br/>
+				                        	Lng: {{myNewPs.coords.longitude}}<br/>
+				                    	</p>
+	            					</ui-gmap-window>
+	        					</ui-gmap-marker>
+						</ui-gmap-google-map>
+					</div>
+				</div>
+				<div class="alert alert-danger" ng-show="showUpdatingPSErrorMessage">{{ 'err_in_update_parkingstructure' | i18n }}</div>
+		   		<table width="95%">			
+				   	<tr>
+				   		<td width="34%"></td>
+				   		<td width="32%" align="center"></td>
+				   		<td width="34%" align="right">
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPstruct(form, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   		</td>
+					</tr>
+				</table>
+		   	</div>
+	   	</form>
+	</div>
+	<div ng-show="viewModeS">
+	</div>
+</div>

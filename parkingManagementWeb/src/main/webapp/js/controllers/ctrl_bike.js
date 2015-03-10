@@ -156,14 +156,14 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	// View management
 	// BikePoints
 	$scope.setBpDetails = function(bikePoint){
-		$scope.psViewMapReady = false;
+		$scope.bpViewMapReady = false;
 		
-		$scope.parkingStructure = parkingStructure;
+		$scope.bikePoint = bikePoint;
 		
 		var toRemLat = 0;
 		var toRemLng = 0;
-		var sLat = "" + $scope.parkingStructure.geometry.lat;
-		var sLng = "" + $scope.parkingStructure.geometry.lng;
+		var sLat = "" + $scope.bikePoint.geometry.lat;
+		var sLng = "" + $scope.bikePoint.geometry.lng;
 		if(sLat.length > $scope.gpsLength){
 			toRemLat = sLat.length - $scope.gpsLength;
 		}
@@ -173,7 +173,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
 		
 		// Init the map for view
-		$scope.pViewStructMap = {
+		$scope.pViewBikeMap = {
 			control: {},
 			center: $scope.mapCenter,
 			zoom: 14,
@@ -183,37 +183,35 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 		};
 		
-		$scope.myPaymentMode = $scope.castMyPaymentModeToString(parkingStructure.paymentMode);
-		
-		$scope.pViewStructMarkers = $scope.parkingStructureMarkers;
-		for(var i = 0; i < $scope.pViewStructMarkers.length; i++){
-			if($scope.pViewStructMarkers[i].title == $scope.parkingStructure.id){
-				$scope.pViewStructMarkers.splice(i, 1);
+		$scope.pViewBikeMarkers = $scope.bikePointMarkers;
+		for(var i = 0; i < $scope.pViewBikeMarkers.length; i++){
+			if($scope.pViewBikeMarkers[i].title == $scope.bikePoint.id){
+				$scope.pViewBikeMarkers.splice(i, 1);
 			};
 		}
 		
-		$scope.mySpecialPSMarker = {
+		$scope.mySpecialBPMarker = {
 			id: 0,
 			coords: {
-				latitude: $scope.parkingStructure.geometry.lat,
-				longitude: $scope.parkingStructure.geometry.lng
+				latitude: $scope.bikePoint.geometry.lat,
+				longitude: $scope.bikePoint.geometry.lng
 			},
 			options: { 
 				draggable: false,
 				animation: 1
 			},
-			icon: $scope.psMarkerIcon
+			icon: $scope.bpMarkerIcon
 		};
 		
-		$scope.viewModePS = true;
-		$scope.editModePS = false;
-		$scope.psViewMapReady = true;
+		$scope.viewModeBP = true;
+		$scope.editModeBP = false;
+		$scope.bpViewMapReady = true;
 	};
 	
-	$scope.closePSView = function(){
-		$scope.getParkingStructuresFromDb();	// to refresh the data on page
-		$scope.viewModePS = false;
-		$scope.editModePS = false;
+	$scope.closeBPView = function(){
+		$scope.getBikePointsFromDb();	// to refresh the data on page
+		$scope.viewModeBP = false;
+		$scope.editModeBP = false;
 	};
 	
 	// Edit management
@@ -331,45 +329,38 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Object Update methods
 	// Update ParkingStructure Object
-	$scope.updatePstruct = function(form, paymode, geo){
+	$scope.updateBpoint = function(form, geo){
 		if(!form.$valid){
 			$scope.isInit=false;
 		} else {
 			$scope.isInit=true;
-			$scope.showUpdatingPSErrorMessage = false;
+			$scope.showUpdatingBPErrorMessage = false;
 			
-			var id = $scope.parkingStructure.id;
+			var id = $scope.bikePoint.id;
 			var method = 'PUT';
-			var ps = $scope.parkingStructure;
+			var bp = $scope.bikePoint;
 			
 			var data = {
-				id: ps.id,
-				id_app: ps.id_app,
-				name: ps.name,
-				streetReference: ps.streetReference,
-				fee: ps.fee,
-				timeSlot : ps.timeSlot,
-				managementMode: ps.managementMode,
-				phoneNumber: ps.phoneNumber,
-				paymentMode: $scope.correctMyPaymentMode(paymode),
-				slotNumber: ps.slotNumber,
-				handicappedSlotNumber: ps.handicappedSlotNumber,
-				unusuableSlotNumber: ps.unusuableSlotNumber,
+				id: bp.id,
+				id_app: bp.id_app,
+				name: bp.name,
+				slotNumber: bp.slotNumber,
+				bikeNumber: bp.bikeNumber,
 				geometry: $scope.correctMyGeometry(geo)
 			};
 			
 		    var value = JSON.stringify(data);
-		    if($scope.showLog) console.log("Parkingmeter data : " + value);
+		    if($scope.showLog) console.log("Bikepoint data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
-		    	console.log("Updated parkingStructure: " + result);
+		    	console.log("Updated bikepoint: " + result);
 		    	if(result == "OK"){
-		    		$scope.getParkingStructuresFromDb();
-					$scope.editModePS = false;
+		    		$scope.getBikePointsFromDb();
+					$scope.editModeBP = false;
 		    	} else {
-		    		$scope.editModePS = true;
-		    		$scope.showUpdatingPSErrorMessage = true;
+		    		$scope.editModeBP = true;
+		    		$scope.showUpdatingBPErrorMessage = true;
 		    	}
 		    });
 		}
@@ -378,43 +369,36 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Object Creation Methods
 	// BikePoint
-	$scope.createPstruct = function(form, paymode, geo){
+	$scope.createBpoint = function(form, geo){
 		if(!form.$valid){
 			$scope.isInit=false;
 		} else {
 			$scope.isInit=true;
-			$scope.showUpdatingPSErrorMessage = false;
+			$scope.showUpdatingBPErrorMessage = false;
 			
 			var method = 'POST';
-			var ps = $scope.parkingStructure;
+			var bp = $scope.bikePoint;
 			
 			var data = {
 				id_app: $scope.myAppId,
-				name: ps.name,
-				streetReference: ps.streetReference,
-				fee: ps.fee,
-				timeSlot : ps.timeSlot,
-				managementMode: ps.managementMode,
-				phoneNumber: ps.phoneNumber,
-				paymentMode: $scope.correctMyPaymentMode(paymode),
-				slotNumber: ps.slotNumber,
-				handicappedSlotNumber: ps.handicappedSlotNumber,
-				unusuableSlotNumber: ps.unusuableSlotNumber,
+				name: bp.name,
+				slotNumber: bp.slotNumber,
+				bikeNumber: bp.bikeNumber,
 				geometry: $scope.correctMyGeometry(geo)
 			};
 			
 		    var value = JSON.stringify(data);
-		    if($scope.showLog) console.log("Parkingmeter data : " + value);
+		    if($scope.showLog) console.log("Bikepoint data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
-		    	console.log("Updated parkingStructure: " + JSON.stringify(result));
+		    	console.log("Create bikePoint: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
-		    		$scope.getParkingStructuresFromDb();
-					$scope.editModePS = false;
+		    		$scope.getBikePointsFromDb();
+					$scope.editModeBP = false;
 		    	} else {
-		    		$scope.editModePS = true;
-		    		$scope.showUpdatingPSErrorMessage = true;
+		    		$scope.editModeBP = true;
+		    		$scope.showUpdatingBPErrorMessage = true;
 		    	}
 		    });
 			
@@ -476,6 +460,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				break;
 			case 3 :
 				myIcon = $scope.bpMarkerIcon;
+				title = marker.id;
 		}
 		
 		var ret = {

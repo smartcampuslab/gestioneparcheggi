@@ -131,7 +131,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
      
     // for next and prev in practice list
     $scope.currentPage = 0;
-    $scope.currentClassPage = 0;	// for classification
     $scope.numberOfPages = function(type){
        	if(type == 1){
        		if($scope.areaWS != null){
@@ -160,12 +159,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	} else if(type == 5){
        		if($scope.zoneWS != null){
        			return Math.ceil($scope.zoneWS.length/$scope.maxZones);
-       		} else {
-       			return 0;
-     		}
-       	} else {
-       		if($scope.finalClass != null){
-       			return Math.ceil($scope.finalClass.length/$scope.maxClassPractices);
        		} else {
        			return 0;
      		}
@@ -512,6 +505,138 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// Edit management
+	// Streets
+	$scope.setSEdit = function(street){
+		// Case create
+		$scope.isEditing = false;
+		$scope.isInit = true;
+		
+		$scope.allArea = sharedDataService.getSharedLocalAreas();
+		
+		$scope.street = {
+			id: null,
+			id_app: null,
+			streetReference: null,
+			slotNumber: null,
+			handicappedSlotNumber: null,
+			timedParkSlotNumber: null,
+			freeParkSlotNumber: null,
+			unusuableSlotNumber: null,
+			color: null,
+			rateAreaId: null,
+			zoneBeanToZone: null,
+			geometry: null
+		};
+		
+		// Case edit
+		if(street != null){
+			$scope.isEditing = true;
+			$scope.isInit = false;
+			$scope.street = street;
+		
+			for(var i = 0; i < $scope.allArea.length; i++){
+				if($scope.street.rateAreaId == $scope.allArea[i].id){
+					$scope.myArea = $scope.allArea[i];
+				}
+			}
+			
+			$scope.sEditMap = {
+				control: {},
+				center: $scope.mapCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				}
+			};
+			
+			if(street.geometry != null){
+				var tmpLine = "";
+				var poligons = {};
+				for(var i = 0; i < $scope.street.geometry.points.length; i++){
+					var tmpPoint = $scope.street.geometry.points[i].lat + "," + $scope.street.geometry.points[i].lng;
+					tmpLine = tmpLine + tmpPoint + ",";
+				}
+				tmpLine = tmpLine.substring(0, tmpLine.length-1);
+				$scope.setMyLineGeometry(tmpLine);
+			
+				poligons = street.geometry;
+				$scope.editStreet = {
+					id: i,
+					path: $scope.correctPoints(poligons.points),
+					stroke: {
+					    color: $scope.correctColor(street.color),
+					    weight: 3
+					},
+					editable: true,
+					draggable: true,
+					geodesic: false,
+					visible: true,
+					events: {
+					    dragend: function (polyline, eventName, args) {
+					    	var path = polyline.getPath();
+					    	console.log('polyline dragend: ' + path);
+					    	$scope.setMyLineGeometry(path);
+					    },
+					    drag: function (polyline, eventName, args) {
+					    	var path = polyline.getPath();
+					    	console.log('polyline drag: ' + path);
+					    	$scope.setMyLineGeometry(path);
+					    },
+					    click: function (polyline, eventName, args) {
+					    	var path = polyline.getPath();
+					    	console.log('polyline click: ' + path);
+					    	$scope.setMyLineGeometry(path);
+					    },
+					    mouseup: function (polyline, eventName, args) {
+					    	var path = args.path;
+					    	
+					    	var tmpLine = "";
+							for(var i = 0; i < path.length; i++){
+								var tmpPoint = path[i].latitude + "," + path[i].longitude;
+								tmpLine = tmpLine + tmpPoint + ",";
+							}
+							tmpLine = tmpLine.substring(0, tmpLine.length-1);
+							$scope.setMyLineGeometry(tmpLine);
+					    	
+					    	console.log('polyline mouse up: ' + tmpLine);
+					    }
+					}
+				};
+			}	
+		} else {
+			$scope.setMyGeometry("0,0");
+			
+			$scope.sCreateMap = {
+				control: {},
+				center: $scope.mapCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				},
+				events: {
+					click: function(map, eventName, args){
+						var e = args[0];
+		            	console.log("I am in click event function" + e.latLng);
+		            	var latLngString = "" + e.latLng;
+		            	var pos = latLngString.split(",");
+		            	var lat = pos[0].substring(1, pos[0].length);
+		            	var lng = pos[1].substring(1, pos[1].length-1);
+		            	var tmppos = {
+		            			lat: lat,
+		            			lng: lng
+		            	};
+		            	$scope.setMyGeometry(lat + "," + lng);
+		            	$scope.addMyNewMarker(tmppos, map);
+					}
+				}
+			};
+		}
+		$scope.viewModeS = false;
+		$scope.editModeS = true;
+	};
+	
 	// ParkingMeters
 	$scope.setPmEdit = function(parkingMeter){
 		// Case create
@@ -735,6 +860,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	$scope.setMyGeometry = function(value){
 		$scope.myGeometry = value;
+	};
+	
+	$scope.setMyLineGeometry = function(value){
+		$scope.myLineGeometry = value;
 	};
 	
 	$scope.addMyNewMarker = function(pos, map){
