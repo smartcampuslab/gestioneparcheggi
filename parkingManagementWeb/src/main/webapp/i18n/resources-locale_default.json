@@ -446,5 +446,9 @@
     "key": "street_reference_err_required",
     "value": "Campo indirizzo strada obbligatorio.",
     "description": "Messaggio errore indirizzo strada obbligatorio"
+}, {
+    "key": "view_street",
+    "value": "Dettagli via",
+    "description": "Titolo pagina dettagli via"
 }
 ]

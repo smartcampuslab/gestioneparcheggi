@@ -265,7 +265,8 @@ public class StorageManager {
 
 		if (area.getStreets() != null) {
 			for (Street tmp : area.getStreets()) {
-				StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
+				StreetBean s = ModelConverter.toStreetBean(area, tmp);
+				//StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
 				s.setRateAreaId(ab.getId());
 				s.setColor(area.getColor());
 				result.add(s);

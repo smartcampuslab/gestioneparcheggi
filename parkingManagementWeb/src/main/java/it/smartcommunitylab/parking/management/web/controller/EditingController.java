@@ -58,7 +58,7 @@ public class EditingController {
 		return storage.removeStreet(aid, sid);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/street/{vid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/street/{sid}")
 	public @ResponseBody
 	StreetBean editStreet(@PathVariable("sid") String vid, @RequestBody StreetBean street)
 			throws DatabaseException {
