@@ -8,6 +8,7 @@
 <link href="css/bootstrap-theme.min.css" rel="stylesheet">
 <link href="css/xeditable.css" rel="stylesheet">
 <link href="css/modaldialog.css" rel="stylesheet">
+<link href="css/colorpicker.css" rel="stylesheet">
 <link href="img/myweb.ico" rel="shortcut icon" type="image/x-icon" />
 
 <!-- required libraries -->
@@ -50,10 +51,11 @@
 <script src="lib/angular-route.min.js"></script>
 <script src="lib/xeditable.min.js"></script>
 <script src="lib/angular-base64.min.js"></script>
+<script src="lib/bootstrap-colorpicker-module.js"></script>
 
 <script src="lib/lodash.js"></script>
 <script src="lib/angular-google-maps.js"></script>
-<!-- <script src="http://maps.google.com/maps/api/js?sensor=false"></script> -->
+<script src="http://maps.google.com/maps/api/js?sensor=false"></script>
 <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script> -->
 <!-- <script src="lib/ng-map.min.js"></script> -->
 

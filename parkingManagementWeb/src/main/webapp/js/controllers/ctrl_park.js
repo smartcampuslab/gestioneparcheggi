@@ -10,8 +10,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.showLog = true;
     $scope.showLogDates = false;
     $scope.showDialogsSucc = false;
-
-    var cod_ente = "24";
     
     $scope.maxAreas = 10;
     $scope.maxStreets = 10;
@@ -132,6 +130,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.pmeterWS = [];
     $scope.pstructWS = [];
     $scope.zoneWS = [];
+    
+    $scope.myNewArea;
      
     // for next and prev in practice list
     $scope.currentPage = 0;
@@ -410,6 +410,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return correctedZones;
 	};
 	
+//	$scope.setMyArea = function(area){
+//		$scope.myNewArea = area;
+//	};
+	
 	$scope.initStreetsObjects = function(streets){
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
@@ -633,6 +637,60 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.editModePS = false;
 	};
 	
+	// Street
+	$scope.setZDetails = function(zone){
+		$scope.zViewMapReady = false;
+		
+		$scope.zone = zone;
+		
+		// Init the map for view
+		$scope.viewZoneMap = {
+			control: {},
+			center: $scope.mapCenter,
+			zoom: 13,
+			bounds: {},
+			options: {
+				scrollwheel: true
+			}
+		};
+		
+		$scope.viewZonePolygons = $scope.zone_polygons;
+		for(var i = 0; i < $scope.viewZonePolygons.length; i++){
+			if($scope.viewZonePolygons[i].id == $scope.zone.id){
+				$scope.viewZonePolygons.splice(i, 1);
+			};
+		};
+		
+		if($scope.zone.geometry != null){
+			$scope.myZonePol = {
+				id: zone.id,
+				path: $scope.correctPoints(zone.geometry.points),
+				stroke: {
+				    color: $scope.correctColor(zone.color),
+				    weight: 10
+				},
+				editable: false,
+				draggable: false,
+				geodesic: false,
+				visible: true,
+				fill: {
+				    color: $scope.correctColor(zone.color),
+				    opacity: 0.9
+				}
+			};
+		}
+		
+		$scope.viewModeZ = true;
+		$scope.editModeZ = false;
+		$scope.zViewMapReady = true;
+	};
+	
+	$scope.closeZView = function(){
+		$scope.getZonesFromDb();	// to refresh the data on page
+		$scope.viewModeZ = false;
+		$scope.editModeZ = false;
+	};
+	
 	// Edit management
 	// Streets
 	$scope.setSEdit = function(street){
@@ -658,6 +716,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			rateAreaId: null,
 			zones: null,
 			geometry: null
+		};
+		
+		// Polyline void object
+		$scope.newStreet = {
+				path: null,
+				stroke: {
+				    color: '#000000',
+				    weight: 3
+				},
+				editable: true,
+				draggable: true,
+				visible: true,
+				geodesic: false
 		};
 		
 		// Case edit
@@ -750,7 +821,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				};
 			}	
 		} else {
-			$scope.setMyGeometry("0,0");
+			//$scope.setMyGeometry("0,0");
+			var tmppath = [];
 			
 			$scope.sCreateMap = {
 				control: {},
@@ -769,11 +841,36 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		            	var lat = pos[0].substring(1, pos[0].length);
 		            	var lng = pos[1].substring(1, pos[1].length-1);
 		            	var tmppos = {
-		            			lat: lat,
-		            			lng: lng
+		            			latitude: lat,
+		            			longitude: lng
 		            	};
-		            	$scope.setMyGeometry(lat + "," + lng);
-		            	$scope.addMyNewMarker(tmppos, map);
+		            	tmppath.push(tmppos);
+		            	$scope.newStreet = $scope.updateMyNewStreet(tmppath);
+		            	$scope.refreshMap($scope.sCreateMap);
+		            	
+		            	var tmpLine = "";
+						for(var i = 0; i < tmppath.length; i++){
+							var tmpPoint = tmppath[i].latitude + "," + tmppath[i].longitude;
+							tmpLine = tmpLine + tmpPoint + ",";
+						}
+						tmpLine = tmpLine.substring(0, tmpLine.length-1);
+						$scope.setMyNewLineGeometry(tmpLine);
+				    	console.log('New street route: ' + tmpLine);
+		            	
+				    	//$scope.addMyNewMarker(tmppos, map);
+					},
+					dblclick: function(map, eventName, args){
+						var e = args[0];
+		            	console.log("I am in double click event function" + e.latLng);
+		            	//var latLngString = "" + e.latLng;
+		            	
+		            	var geocoder = new google.maps.Geocoder();
+		    			geocoder.geocode({location:e.latLng}, function(response) {
+		    				var result = response[0].formatted_address;
+		    				if (result != undefined && result != null) {
+		    					$scope.street.streetReference = result.substring(0, result.indexOf(','));
+		    				}
+		    			});
 					}
 				}
 			};
@@ -1003,12 +1100,186 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.editModePS = true;
 	};
 	
+	$scope.setZEdit = function(zone){
+		// Case create
+		$scope.isEditing = false;
+		$scope.isInit = true;
+		
+		$scope.zone = {
+			id: null,
+			id_app: null,
+			nome: null,
+			submacro: null,
+			color: null,
+			note: null,
+			type: null,
+			geometry: null
+		};
+		
+		$scope.myColor = "";
+		
+		// Polyline void object
+		$scope.newZone = {
+				path: null,
+				stroke: {
+				    color: '#000000',
+				    weight: 3
+				},
+				editable: true,
+				draggable: true,
+				visible: true,
+				geodesic: false
+		};
+		
+		// Case edit
+		if(zone != null){
+			$scope.isEditing = true;
+			$scope.isInit = false;
+			$scope.zone = zone;
+			
+			$scope.myColor = $scope.correctColor(zone.color);
+			var zoneCenter = {
+				latitude: $scope.zone.geometry.points[0].lat,
+				longitude: $scope.zone.geometry.points[0].lng
+			};
+			
+			$scope.zEditMap = {
+				control: {},
+				center: zoneCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				}
+			};
+			
+			if(zone.geometry != null){
+				var tmpPol = "";
+				var poligons = {};
+				for(var i = 0; i < $scope.zone.geometry.points.length; i++){
+					var tmpPoint = $scope.zone.geometry.points[i].lat + "," + $scope.zone.geometry.points[i].lng;
+					tmpPol = tmpPol + tmpPoint + ",";
+				}
+				tmpPol = tmpPol.substring(0, tmpPol.length-1);
+				$scope.setMyPolGeometry(tmpPol);
+			
+				poligons = zone.geometry;
+				$scope.editZone = {
+					id: 0,
+					path: $scope.correctPoints(poligons.points),
+					stroke: {
+					    color: $scope.correctColor(zone.color),
+					    weight: 3
+					},
+					editable: true,
+					draggable: true,
+					visible: true,
+					fill: {
+					    color: $scope.correctColor(zone.color),
+					    opacity: 0.7
+					},
+					events: {
+					    dragend: function (polygon, eventName, args) {
+					    	var path = args.path;
+					    	
+					    	console.log('polygon dragend: ' + JSON.stringify(path));
+					    	$scope.setMyPolGeometry(path);
+					    },
+					    click: function (polygon, eventName, args) {
+					    	var path = args.path;
+					    	
+					    	console.log('polygon click: ' + JSON.stringify(path));
+					    	$scope.setMyPolGeometry(path);
+					    },
+					    mouseup: function (polygon, eventName, args) {
+					    	var path = args.path;
+					    	
+					    	var tmpPol = "";
+							for(var i = 0; i < path.length; i++){
+								var tmpPoint = path[i].latitude + "," + path[i].longitude;
+								tmpPol = tmpPol + tmpPoint + ",";
+							}
+							tmpPol = tmpPol.substring(0, tmpPol.length-1);
+							$scope.setMyPolGeometry(tmpPol);
+					    	
+					    	console.log('polygon mouse up: ' + tmpPol);
+					    }
+					}
+				};
+			}	
+		} else {
+			//$scope.setMyGeometry("0,0");
+			var tmppath = [];
+			
+			$scope.zCreateMap = {
+				control: {},
+				center: $scope.mapCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				},
+				events: {
+					click: function(map, eventName, args){
+						var e = args[0];
+		            	console.log("I am in click event function" + e.latLng);
+		            	var latLngString = "" + e.latLng;
+		            	var pos = latLngString.split(",");
+		            	var lat = pos[0].substring(1, pos[0].length);
+		            	var lng = pos[1].substring(1, pos[1].length-1);
+		            	var tmppos = {
+		            			latitude: lat,
+		            			longitude: lng
+		            	};
+		            	tmppath.push(tmppos);
+		            	$scope.newZone = $scope.updateMyNewZone(tmppath);
+		            	$scope.refreshMap($scope.zCreateMap);
+		            	
+		            	var tmpLine = "";
+						for(var i = 0; i < tmppath.length; i++){
+							var tmpPoint = tmppath[i].latitude + "," + tmppath[i].longitude;
+							tmpLine = tmpLine + tmpPoint + ",";
+						}
+						tmpLine = tmpLine.substring(0, tmpLine.length-1);
+						$scope.setMyNewLineGeometry(tmpLine);
+				    	console.log('New street route: ' + tmpLine);
+		            	
+				    	//$scope.addMyNewMarker(tmppos, map);
+					},
+					dblclick: function(map, eventName, args){
+						var e = args[0];
+		            	console.log("I am in double click event function" + e.latLng);
+		            	//var latLngString = "" + e.latLng;
+		            	
+		            	//var geocoder = new google.maps.Geocoder();
+		    			//geocoder.geocode({location:e.latLng}, function(response) {
+		    			//	var result = response[0].formatted_address;
+		    			//	if (result != undefined && result != null) {
+		    			//		$scope.street.streetReference = result.substring(0, result.indexOf(','));
+		    			//	}
+		    			//});
+					}
+				}
+			};
+		}
+		$scope.viewModeZ = false;
+		$scope.editModeZ = true;
+	};
+	
 	$scope.setMyGeometry = function(value){
 		$scope.myGeometry = value;
 	};
 	
 	$scope.setMyLineGeometry = function(value){
 		$scope.myLineGeometry = value;
+	};
+	
+	$scope.setMyNewLineGeometry = function(value){
+		$scope.myNewLineGeometry = value;
+	};
+	
+	$scope.setMyPolGeometry = function(value){
+		$scope.myPolGeometry = value;
 	};
 	
 	$scope.addMyNewMarker = function(pos, map){
@@ -1035,6 +1306,52 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// Object Update methods
+	// Street
+	$scope.updateStreet = function(form, area, zones, polyline){
+		if(!form.$valid){
+			$scope.isInit=false;
+		} else {
+			$scope.isInit=true;
+			$scope.showUpdatingSErrorMessage = false;
+			
+			var id = $scope.street.id;
+			var method = 'PUT';
+			var s = $scope.street;
+			
+			var data = {
+				id: s.id,
+				id_app: s.id_app,
+				streetReference: s.streetReference,
+				slotNumber: s.slotNumber,
+				handicappedSlotNumber: s.handicappedSlotNumber,
+				timedParkSlotNumber:s.timedParkSlotNumber,
+				paidSlotNumber:s.paidSlotNumber,
+				freeParkSlotNumber: s.freeParkSlotNumber,
+				unusuableSlotNumber: s.unusuableSlotNumber,
+				color: area.color,
+				rateAreaId: area.id,
+				zoneBeans: $scope.correctMyZones(zones),
+				geometry: $scope.correctMyGeometryPolyline(polyline.path)
+			};
+			
+		    var value = JSON.stringify(data);
+		    if($scope.showLog) console.log("Street data : " + value);
+			
+		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
+		    myDataPromise.then(function(result){
+		    	console.log("Updated street: " + result);
+		    	if(result == "OK"){
+		    		$scope.getStreetsFromDb();
+					$scope.editModeS = false;
+		    	} else {
+		    		$scope.editModeS = true;
+		    		$scope.showUpdatingSErrorMessage = true;
+		    	}
+		    });
+		}
+	};
+	
+	
 	// Update parkingMeter Object
 	$scope.updatePmeter = function(form, status, area, geometry){
 		if(!form.$valid){
@@ -1119,21 +1436,62 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	
+	// Update Zone Object
+	$scope.updateZone = function(form, myColor, polygon){
+		if(!form.$valid){
+			$scope.isInit=false;
+		} else {
+			$scope.isInit=true;
+			$scope.showUpdatingZErrorMessage = false;
+			
+			var id = $scope.zone.id;
+			var method = 'PUT';
+			var z = $scope.zone;
+			
+			var data = {
+				id: z.id,
+				id_app: z.id_app,
+				name: z.name,
+				submacro: z.submacro,
+				color: myColor.substring(1, myColor.length),	// I have to remove '#' char
+				note: z.note,
+				type: z.type,
+				geometry: $scope.correctMyGeometryPolyline(polygon.path)
+			};
+			
+		    var value = JSON.stringify(data);
+		    if($scope.showLog) console.log("Zone data : " + value);
+			
+		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + id, null, $scope.authHeaders, value);
+		    myDataPromise.then(function(result){
+		    	console.log("Updated Zone: " + result);
+		    	if(result == "OK"){
+		    		$scope.getZonesFromDb();
+					$scope.editModeZ = false;
+		    	} else {
+		    		$scope.editModeZ = true;
+		    		$scope.showUpdatingZErrorMessage = true;
+		    	}
+		    });
+		}
+	};
+	
+	
+	// Object Creation Methods
 	// Street
-	$scope.updateStreet = function(form, area, zones, polyline){
+	$scope.createStreet = function(form, area, zones, polyline){
 		if(!form.$valid){
 			$scope.isInit=false;
 		} else {
 			$scope.isInit=true;
 			$scope.showUpdatingSErrorMessage = false;
 			
-			var id = $scope.street.id;
-			var method = 'PUT';
+			var method = 'POST';
 			var s = $scope.street;
 			
 			var data = {
-				id: s.id,
-				id_app: s.id_app,
+				id_app: $scope.myAppId,
 				streetReference: s.streetReference,
 				slotNumber: s.slotNumber,
 				handicappedSlotNumber: s.handicappedSlotNumber,
@@ -1150,22 +1508,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Street data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
-		    	console.log("Updated street: " + result);
-		    	if(result == "OK"){
+		    	console.log("Updated street: " + JSON.stringify(result));
+		    	if(result != null && result != ""){
 		    		$scope.getStreetsFromDb();
 					$scope.editModeS = false;
 		    	} else {
 		    		$scope.editModeS = true;
 		    		$scope.showUpdatingSErrorMessage = true;
 		    	}
-		    });
+		    });	
 		}
 	};
 	
 	
-	// Object Creation Methods
 	// ParkingMeter
 	$scope.createPmeter = function(form, status, area, geometry){
 		if(!form.$valid){
@@ -1242,10 +1599,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    		$scope.editModePS = true;
 		    		$scope.showUpdatingPSErrorMessage = true;
 		    	}
-		    });
-			
-			
-			
+		    });	
 		}
 	};
 	
@@ -1257,6 +1611,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
 	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
 	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
+	
+	$scope.refreshMap = function(map) {
+        //optional param if you want to refresh you can pass null undefined or false or empty arg
+        map.control.refresh(map.center);
+        //$scope.map.control.refresh(null);
+        map.control.getGMap().setZoom(5);
+        map.control.getGMap().setZoom(map.zoom);
+    };
 	
 	$scope.mapCenter = {
 		latitude: 45.88875357753771,
@@ -1293,7 +1655,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.zoneMap = {
 			control: {},
 			center: $scope.mapCenter,
-		    zoom: 10,
+		    zoom: 13,
 		    bounds: {}
 		};
 			
@@ -1363,12 +1725,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.initZonesOnMap = function(zones){
 		var zone = {};
 		var poligons = {};
+		$scope.zone_polygons = [];
 		
 		for(var i = 0; i < zones.length; i++){
 			if(zones[i].geometry != null){
 				poligons = zones[i].geometry;
 				zone = {
-					id: i,
+					id: zones[i].id,
 					path: $scope.correctPoints(poligons.points),
 					stroke: {
 					    color: $scope.correctColor(zones[i].color),
@@ -1412,6 +1775,50 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				};
 				break;
 		}
+	};
+	
+	$scope.updateMyNewStreet = function(path){
+		var color = "000000";
+		if($scope.myNewArea != null){
+			color = $scope.myNewArea.color;
+		}
+		var newStreet = {
+			id: 0,
+			path: path,
+			stroke: {
+			    color: $scope.correctColor(color),
+			    weight: 3
+			},
+			editable: true,
+			draggable: true,
+			geodesic: false,
+			visible: true,	
+		};
+		return newStreet;
+	};
+	
+	$scope.updateMyNewZone = function(path){
+		var color = "000000";
+		if($scope.myColor != null){
+			color = $scope.myColor;
+		}
+		var newZone = {
+			id: 0,
+			path: path,
+			stroke: {
+			    color: $scope.correctColor(color),
+			    weight: 3
+			},
+			editable: true,
+			draggable: true,
+			geodesic: false,
+			visible: true,
+			fill: {
+			    color: $scope.correctColor(color),
+			    opacity: 0.7
+			}
+		};
+		return newZone;
 	};
 	
 	

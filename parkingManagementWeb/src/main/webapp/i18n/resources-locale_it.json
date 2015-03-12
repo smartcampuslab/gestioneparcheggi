@@ -368,7 +368,7 @@
     "description": "Label geometry punto bici"
 }, {
     "key": "err_in_update_bikepoint",
-    "value": "Errore nell'aggiornamento dell punto bici. DB non pronto.",
+    "value": "Errore nell'aggiornamento del punto bici. DB non pronto.",
     "description": "Messaggio errore aggiornamento punto bici"
 }, {
     "key": "bikepoint_name_err_required",
@@ -450,5 +450,49 @@
     "key": "view_street",
     "value": "Dettagli via",
     "description": "Titolo pagina dettagli via"
+}, {
+    "key": "err_in_update_street",
+    "value": "Errore nell'aggiornamento della via. DB non pronto.",
+    "description": "Messaggio errore aggiornamento via"
+}, {
+    "key": "edit_zone",
+    "value": "Modifica Zona",
+    "description": "Titolo pagina editing zona"
+}, {
+    "key": "zone_type",
+    "value": "Tipo",
+    "description": "Campo tipo zona"
+}, {
+    "key": "zone_note",
+    "value": "Note",
+    "description": "Campo note zona"
+}, {
+    "key": "zone_geometry",
+    "value": "Posizione",
+    "description": "Campo posizione di una zona"
+}, {
+    "key": "zone_name_err_required",
+    "value": "Campo 'nome zona' obbligatorio",
+    "description": "Errore Campo nome zona obbligatorio"
+}, {
+    "key": "zone_submacro_err_required",
+    "value": "Campo 'sottozona' obbligatorio",
+    "description": "Errore Campo sottozona obbligatorio"
+}, {
+    "key": "zone_color_err_required",
+    "value": "Campo 'colore' obbligatorio",
+    "description": "Errore Campo colore zona obbligatorio"
+}, {
+    "key": "zone_geometry_err_pattern",
+    "value": "Campo 'posizione' non corretto",
+    "description": "Errore Campo posizione non corretto"
+}, {
+    "key": "err_in_update_zone",
+    "value": "Errore nell'aggiornamento della zona. DB non pronto.",
+    "description": "Messaggio errore aggiornamento zona"
+}, {
+    "key": "view_zone",
+    "value": "Dttagli Zona",
+    "description": "Titolo pagina dettagli zona"
 }
 ]

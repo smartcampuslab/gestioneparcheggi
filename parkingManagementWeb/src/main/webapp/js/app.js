@@ -6,6 +6,7 @@ var pm = angular.module('pm', [
 	'localization',
 	'ngRoute',
 	'ngSanitize',
+	'colorpicker.module',
 	'uiGmapgoogle-maps',
 	/*'ngMap',*/
 	

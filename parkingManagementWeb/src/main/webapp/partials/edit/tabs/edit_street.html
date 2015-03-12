@@ -15,7 +15,7 @@
 		<div class="col-md-6">
 			<div class="panel panel-primary" align="center">
 				<div class="panel-heading">
-					<h5 class="panel-title">{{ 'street_list' | i18n }}</h5>
+					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 				</div>
 				<div class="panel-body">
 					<table class="table table-striped" style="width: 100%">
@@ -61,6 +61,31 @@
 		    		<h3 class="panel-title"><strong>{{ 'edit_street' | i18n }}</strong></h3>
 		  		</div>
 		  		<div class="panel-body">
+		  			<div class="form-group" ng-show="!isEditing">
+				    	<label for="area1">{{ 'street_area_name' | i18n }}</label>
+				    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myNewArea" ng-required="!isEditing"><!-- ng-change="setMyArea(myNewArea)" -->
+				    	</select>
+				   		<div class="alert alert-danger" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
+					</div>
+		  			<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
+						<ui-gmap-google-map id="16" center="sCreateMap.center" draggable="true" zoom="sCreateMap.zoom" options="sCreateMap.options" control="sCreateMap.control" bounds="sCreateMap.bounds" events="sCreateMap.events">
+<!-- 								<ui-gmap-marker idkey="myNewS.id" coords="myNewS.coords" options="myNewS.options" icon="myNewS.icon" events="myNewS.events">click="'onClick'" -->
+<!-- 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
+<!-- 	                					<p> -->
+<!-- 				                        	Lat: {{myNewS.coords.latitude}}<br/> -->
+<!-- 				                        	Lng: {{myNewS.coords.longitude}}<br/> -->
+<!-- 				                    	</p> -->
+<!-- 	            					</ui-gmap-window> -->
+<!-- 	        					</ui-gmap-marker> -->
+							<ui-gmap-polyline path="newStreet.path" stroke="newStreet.stroke" visible="newStreet.visible"
+	              					geodesic='newStreet.geodesic' fit="false" editable="newStreet.editable" draggable="newStreet.draggable" events="newStreet.events"></ui-gmap-polyline>
+						</ui-gmap-google-map>
+					</div>
+					<div class="form-group" ng-show="!isEditing">
+				    	<label for="geometry">{{ 'street_geometry' | i18n }}</label>
+				    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myNewLineGeometry" ng-required="false" ><!-- ng-pattern="gpsPos" -->
+				   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
+					</div>
 				   	<div class="form-group">
 				    	<label for="address">{{ 'street_address' | i18n }}</label>
 				    	<input id="address" type="text" class="form-control" name="sAddress" ng-model="street.streetReference" ng-required="true" ><!-- ng-change="setAlloggioChanged(true)" -->
@@ -97,9 +122,9 @@
 						   	</div>
 				   		</div>
 				   	</div>
-				 	<div class="form-group">
+				 	<div class="form-group" ng-show="isEditing">
 				    	<label for="area">{{ 'street_area_name' | i18n }}</label>
-				    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="true">
+				    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="isEditing">
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 					</div>
@@ -108,7 +133,7 @@
 				    	<select id="zone" multiple ng-multiple="true" name="sZone" class="form-control" ng-options="z as z.name + '-' + z.submacro for z in allZones" ng-model="myZones" ng-required="false">
 				    	</select>
 					</div>
-					<div class="form-group">
+					<div class="form-group" ng-show="isEditing">
 				    	<label for="geometry">{{ 'street_geometry' | i18n }}</label>
 				    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myLineGeometry" ng-required="false" ><!-- ng-pattern="gpsPos" -->
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
@@ -119,27 +144,15 @@
 	              					geodesic='editStreet.geodesic' fit="false" editable="editStreet.editable" draggable="editStreet.draggable" events="editStreet.events"></ui-gmap-polyline>	
 						</ui-gmap-google-map>
 					</div>
-					<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="16" center="psCreateMap.center" draggable="true" zoom="psCreateMap.zoom" options="psCreateMap.options" control="psCreateMap.control" bounds="psCreateMap.bounds" events="psCreateMap.events">
-								<ui-gmap-marker idkey="myNewPs.id" coords="myNewPs.coords" options="myNewPs.options" icon="myNewPs.icon" events="myNewPs.events"><!-- click="'onClick'" -->
-									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
-	                					<p>
-				                        	Lat: {{myNewPs.coords.latitude}}<br/>
-				                        	Lng: {{myNewPs.coords.longitude}}<br/>
-				                    	</p>
-	            					</ui-gmap-window>
-	        					</ui-gmap-marker>
-						</ui-gmap-google-map>
-					</div>
 				</div>
-				<div class="alert alert-danger" ng-show="showUpdatingPSErrorMessage">{{ 'err_in_update_parkingstructure' | i18n }}</div>
+				<div class="alert alert-danger" ng-show="showUpdatingSErrorMessage">{{ 'err_in_update_street' | i18n }}</div>
 		   		<table width="95%">			
 				   	<tr>
 				   		<td width="34%"></td>
 				   		<td width="32%" align="center"></td>
 				   		<td width="34%" align="right">
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 				</table>
