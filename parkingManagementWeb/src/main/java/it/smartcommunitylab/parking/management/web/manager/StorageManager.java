@@ -283,16 +283,17 @@ public class StorageManager {
 	public List<StreetBean> getAllStreets(ZoneBean z) {
 		//RateArea area = mongodb.findById(ab.getId(), RateArea.class);
 		List<RateArea> areas = mongodb.findAll(RateArea.class);
+		//List<Zone> zones = mongodb.findAll(Zone.class);
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		
 		for(RateArea area : areas){
 			if (area.getStreets() != null) {
 				for (Street tmp : area.getStreets()) {
-					List<Zone> zones = tmp.getZones();
+					List<String> myZones = tmp.getZones();
 					StreetBean s = ModelConverter.toStreetBean(area, tmp);
 					//StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
-					for(Zone zona : zones){
-						if((zona.getId().compareTo(z.getId()) == 0) && (zona.getId_app().compareTo(z.getId_app()) == 0)){
+					for(String zone : myZones){
+						if((zone.compareTo(z.getId()) == 0) && (tmp.getId_app().compareTo(z.getId_app()) == 0)){
 							s.setColor(z.getColor());
 							result.add(s);
 						}
@@ -316,10 +317,10 @@ public class StorageManager {
 		
 		if (area.getStreets() != null) {
 			for (Street tmp : area.getStreets()) {
-				List<Zone> zones = tmp.getZones();
+				List<String> zones = tmp.getZones();
 				StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
-				for(Zone zona : zones){
-					if((zona.getId().compareTo(z.getId()) == 0) && (zona.getId_app().compareTo(z.getId_app()) == 0)){
+				for(String zona : zones){
+					if((zona.compareTo(z.getId()) == 0) && (tmp.getId_app().compareTo(z.getId_app()) == 0)){
 						s.setColor(z.getColor());
 						result.add(s);
 					}
@@ -390,7 +391,7 @@ public class StorageManager {
 					for (PointBean pb : sb.getGeometry().getPoints()) {
 						temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
 					}
-					temp.setZones(sb.getZoneBeanToZone());
+					temp.setZones(sb.getZones());
 					temp.setRateAreaId(sb.getRateAreaId());
 					mongodb.save(area);
 					founded = true;
@@ -439,7 +440,7 @@ public class StorageManager {
 	public StreetBean save(StreetBean s) throws DatabaseException {
 		Street street = ModelConverter.convert(s, Street.class);
 		street = processId(street, Street.class);
-		street.setZones(s.getZoneBeanToZone());
+		street.setZones(s.getZones());
 		try {
 			RateArea area = findById(s.getRateAreaId(), RateArea.class);
 			if (area.getStreets() == null) {
@@ -694,10 +695,10 @@ public class StorageManager {
 		
 		List<StreetBean> streets = getAllStreets(z);
 		for(StreetBean s : streets){
-			List<ZoneBean> zones = s.getZoneBeans();
-			for(ZoneBean zb : zones){
+			List<String> zones = s.getZones();
+			for(String zb : zones){
 				//logger.info(String.format("Finded zona: %s", zb.toString()));
-				if(zb.getId() == zonaId){
+				if(zb.compareTo(zonaId) == 0){
 					zones.remove(zb);
 				}
 			}

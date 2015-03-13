@@ -264,9 +264,9 @@ public class StorageManagerTest {
 		s.setColor(area.getColor());
 		s.setRateAreaId(area.getId());
 		s.setGeometry(line1);
-		List<ZoneBean> zones = new ArrayList<ZoneBean>();
-		zones.add(z);
-		s.setZoneBeans(zones);
+		List<String> zones = new ArrayList<String>();
+		zones.add(z.getId());
+		s.setZones(zones);
 		
 		StreetBean s2 = new StreetBean();
 		s2.setStreetReference("Via Monte Nero");
@@ -281,7 +281,7 @@ public class StorageManagerTest {
 		s2.setSubscritionAllowedPark(false);
 		s2.setColor(area.getColor());
 		s2.setRateAreaId(area.getId());
-		s2.setZoneBeans(zones);
+		s2.setZones(zones);
 		
 		StreetBean s3 = new StreetBean();
 		s3.setStreetReference("Viale della Vittoria");
@@ -296,9 +296,9 @@ public class StorageManagerTest {
 		s3.setSubscritionAllowedPark(true);
 		s3.setColor(area2.getColor());
 		s3.setRateAreaId(area2.getId());
-		List<ZoneBean> zones2 = new ArrayList<ZoneBean>();
-		zones2.add(z2);
-		s3.setZoneBeans(zones2);
+		List<String> zones2 = new ArrayList<String>();
+		zones2.add(z2.getId());
+		s3.setZones(zones2);
 		
 		StreetBean s4 = new StreetBean();
 		s4.setStreetReference("Via Macerie1");
@@ -313,7 +313,7 @@ public class StorageManagerTest {
 		s4.setSubscritionAllowedPark(true);
 		s4.setColor(area3.getColor());
 		s4.setRateAreaId(area3.getId());
-		s4.setZoneBeans(zones2);
+		s4.setZones(zones2);
 		
 		StreetBean s5 = new StreetBean();
 		s5.setStreetReference("Via Macerie2");
@@ -328,9 +328,9 @@ public class StorageManagerTest {
 		s5.setSubscritionAllowedPark(false);
 		s5.setColor(area3.getColor());
 		s5.setRateAreaId(area3.getId());
-		List<ZoneBean> zones3 = new ArrayList<ZoneBean>();
-		zones3.add(z3);
-		s5.setZoneBeans(zones3);
+		List<String> zones3 = new ArrayList<String>();
+		zones3.add(z3.getId());
+		s5.setZones(zones3);
 		
 		// ParkingMeters Creation
 		ParkingMeterBean p = new ParkingMeterBean();

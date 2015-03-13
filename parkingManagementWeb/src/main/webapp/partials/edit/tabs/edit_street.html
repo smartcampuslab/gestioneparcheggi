@@ -221,7 +221,7 @@
 							</td>
 							<td>
 								<table width="100%">
-									<tr ng-repeat="z in street.zoneBeans">
+									<tr ng-repeat="z in street.myZones track by z.id">
 										<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
 										<td width="80%">{{ z.name }} - {{ z.submacro }}</td>
 									</tr>

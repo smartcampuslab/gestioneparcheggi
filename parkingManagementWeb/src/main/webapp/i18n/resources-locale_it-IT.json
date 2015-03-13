@@ -494,5 +494,49 @@
     "key": "view_zone",
     "value": "Dttagli Zona",
     "description": "Titolo pagina dettagli zona"
+}, {
+    "key": "edit_area",
+    "value": "Modifica Area",
+    "description": "Titolo pagina editing area"
+}, {
+    "key": "area_geometry",
+    "value": "Posizione",
+    "description": "Campo posizione in mappa area"
+}, {
+    "key": "area_sms",
+    "value": "servizio telepark - cod.area",
+    "description": "Campo codice sms telepark area"
+}, {
+    "key": "area_name_err_required",
+    "value": "Campo 'nome Area' obbligatorio",
+    "description": "Errore Campo nome area obbligatorio"
+}, {
+    "key": "area_fee_err_required",
+    "value": "Campo 'tariffa oraria area' obbligatorio",
+    "description": "Errore Campo tariffa area obbligatorio"
+}, {
+    "key": "area_fee_err_pattern",
+    "value": "Valore non corretto. Inserire un valore decimale del tipo '0,00'",
+    "description": "Errore Campo tariffa area non corretto"
+}, {
+    "key": "area_openingtime_err_pattern",
+    "value": "Campo 'orario area' non corretto. Inserire un valore nel formato hh:mm - hh:mm",
+    "description": "Errore Campo rariffa area non corretto"
+}, {
+    "key": "area_color_err_required",
+    "value": "Campo 'colore' area obbligatorio",
+    "description": "Errore Campo colore area"
+}, {
+    "key": "err_in_update_area",
+    "value": "Errore nell'aggiornamento dell' area. DB non pronto.",
+    "description": "Errore aggiornamento area"
+}, {
+    "key": "view_area",
+    "value": "Dettagli Area",
+    "description": "Titolo pagina visualizza area"
+}, {
+    "key": "area_geometry_err_pattern",
+    "value": "Campo 'posizione' non corretto",
+    "description": "Errore pattern campo geometry area"
 }
 ]

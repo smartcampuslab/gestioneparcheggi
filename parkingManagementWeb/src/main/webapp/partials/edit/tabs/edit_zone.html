@@ -1,7 +1,7 @@
 <div class="row">
 	<div ng-show="!editModeZ && !viewModeZ">
 		<div class="col-md-6" ng-show="zoneMapReady" >
-			<ui-gmap-google-map id="21" center="zoneMap.center" draggable="true" zoom="zoneMap.zoom" options="options" control="zoneMap.control" bounds="zoneMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+			<ui-gmap-google-map id="30" center="zoneMap.center" draggable="true" zoom="zoneMap.zoom" options="options" control="zoneMap.control" bounds="zoneMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
 	<!--         <ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'"> -->
 	<!--         	<ui-gmap-window show="'show'" ng-cloak> -->
 	<!--                 <p> -->
@@ -69,7 +69,7 @@
 		  		</div>
 		  		<div class="panel-body">
 		  			<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="22" center="zCreateMap.center" draggable="true" zoom="zCreateMap.zoom" options="zCreateMap.options" control="zCreateMap.control" bounds="zCreateMap.bounds" events="zCreateMap.events">
+						<ui-gmap-google-map id="31" center="zCreateMap.center" draggable="true" zoom="zCreateMap.zoom" options="zCreateMap.options" control="zCreateMap.control" bounds="zCreateMap.bounds" events="zCreateMap.events">
 <!-- 								<ui-gmap-marker idkey="myNewS.id" coords="myNewS.coords" options="myNewS.options" icon="myNewS.icon" events="myNewS.events">click="'onClick'" -->
 <!-- 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
 <!-- 	                					<p> -->
@@ -106,7 +106,7 @@
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="color">{{ 'zone_color' | i18n }}</label>
-				    	<input id="color" colorpicker type="text" class="form-control" name="zColor" ng-model="myColor" ng-required="true" >
+				    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="zColor" ng-model="myColor" ng-required="true" >
 				    	<div class="alert alert-danger" ng-show="!isInit && form.zColor.$error.required">{{ 'zone_color_err_required' | i18n }}</div>
 				   	</div>
 				   	
@@ -116,7 +116,7 @@
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div>
 					</div>
 					<div class="col-md-12" ng-show="isEditing">
-						<ui-gmap-google-map id="23" center="zEditMap.center" draggable="true" zoom="zEditMap.zoom" options="zEditMap.options" control="zEditMap.control" bounds="zEditMap.bounds">
+						<ui-gmap-google-map id="32" center="zEditMap.center" draggable="true" zoom="zEditMap.zoom" options="zEditMap.options" control="zEditMap.control" bounds="zEditMap.bounds">
 								<ui-gmap-polygon  static="false" path="editZone.path" stroke="editZone.stroke" visible="editZone.visible" fill="editZone.fill"
 	              					geodesic='editZone.geodesic' fit="false" editable="editZone.editable" draggable="editZone.draggable" events="editZone.events"></ui-gmap-polygon>	
 						</ui-gmap-google-map>
@@ -138,7 +138,7 @@
 	</div>
 	<div ng-show="viewModeZ">
 		<div class="col-md-6" ng-show="zViewMapReady" ><!-- id="map_canvas" -->
-			<ui-gmap-google-map id="31" center="viewZoneMap.center" draggable="true" zoom="viewZoneMap.zoom" options="options" control="viewZoneMap.control" bounds="viewZoneMap.bounds">	
+			<ui-gmap-google-map id="33" center="viewZoneMap.center" draggable="true" zoom="viewZoneMap.zoom" options="options" control="viewZoneMap.control" bounds="viewZoneMap.bounds">	
 				<ui-gmap-polygon ng-repeat="z in viewZonePolygons" path="z.path" stroke="z.stroke" fill="z.fill" visible="z.visible"
 	              geodesic="z.geodesic" fit="false" editable="false" draggable="false"></ui-gmap-polygon>
 	            <ui-gmap-polygon path="myZonePol.path" stroke="myZonePol.stroke" fill="myZonePol.fill" visible="myZonePol.visible"

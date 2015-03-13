@@ -103,10 +103,10 @@ public class DynamicManager {
 		for(RateArea area : areas){
 			if (area.getStreets() != null) {
 				for (Street tmp : area.getStreets()) {
-					List<Zone> zones = tmp.getZones();
+					List<String> zones = tmp.getZones();
 					StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
-					for(Zone zona : zones){
-						if((zona.getId().compareTo(z.getId()) == 0) && (zona.getId_app().compareTo(z.getId_app()) == 0)){
+					for(String zona : zones){
+						if((zona.compareTo(z.getId()) == 0) && (tmp.getId_app().compareTo(z.getId_app()) == 0)){
 							s.setColor(z.getColor());
 							if(timestamp == null){
 								result.add(s);
@@ -138,10 +138,10 @@ public class DynamicManager {
 		
 		if (area.getStreets() != null) {
 			for (Street tmp : area.getStreets()) {
-				List<Zone> zones = tmp.getZones();
+				List<String> zones = tmp.getZones();
 				StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
-				for(Zone zona : zones){
-					if((zona.getId().compareTo(z.getId()) == 0) && (zona.getId_app().compareTo(z.getId_app()) == 0)){
+				for(String zona : zones){
+					if((zona.compareTo(z.getId()) == 0) && (tmp.getId_app().compareTo(z.getId_app()) == 0)){
 						s.setColor(z.getColor());
 						if(timestamp == null){
 							result.add(s);

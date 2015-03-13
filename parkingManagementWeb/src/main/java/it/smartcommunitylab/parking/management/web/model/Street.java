@@ -23,7 +23,8 @@ public class Street {
 	private boolean subscritionAllowedPark;
 	private String rateAreaId;				// I need this field in data log
 	private Line geometry;
-	private List<Zone> zones;
+	//private List<Zone> zones;
+	private List<String> zones;
 	private Long lastChange;
 
 	public String getId() {
@@ -180,11 +181,19 @@ public class Street {
 		this.rateAreaId = rateAreaId;
 	}
 
-	public List<Zone> getZones() {
+//	public List<Zone> getZones() {
+//		return zones;
+//	}
+	
+	public List<String> getZones() {
 		return zones;
 	}
 
-	public void setZones(List<Zone> zones) {
+//	public void setZones(List<Zone> zones) {
+//		this.zones = zones;
+//	}
+	
+	public void setZones(List<String> zones) {
 		this.zones = zones;
 	}
 
