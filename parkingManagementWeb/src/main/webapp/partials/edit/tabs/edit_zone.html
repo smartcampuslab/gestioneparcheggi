@@ -26,23 +26,25 @@
 					<h5 class="panel-title">{{ 'zone_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setZEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 				</div>
 				<div class="panel-body">
+					<div class="alert alert-danger" ng-show="showDeletingZErrorMessage">{{ 'err_in_delete_zone' | i18n }}</div>
 					<table class="table table-striped" style="width: 100%">
 						<tr ng-show="zoneWS.length != 0">
-							<th width="50%">{{ 'zone_name' | i18n }}</th>
-							<th width="30%">{{ 'zone_submacro' | i18n }}</th>
-							<th width="10%">{{ 'zone_color' | i18n }}</th>
-							<th width="10%">{{ 'operations' | i18n }}</th>
+							<th width="45%">{{ 'zone_name' | i18n }}</th>
+							<th width="20%">{{ 'zone_submacro' | i18n }}</th>
+							<th width="15%">{{ 'zone_color' | i18n }}</th>
+							<th width="20%">{{ 'operations' | i18n }}</th>
 						</tr>
 						<tbody class="animate-repeat"
 							ng-repeat="zone in zoneWS | filter:q | orderBy: ['name', 'submacro'] |  startFrom:currentPage*maxZones | limitTo:maxZones">
 			<!--			ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 							<tr>
-								<td width="50%" align="left">{{zone.name}}</td>
-								<td width="30%" align="left">{{zone.submacro}}</td>
-								<td width="10%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(zone.color)}"></div></td><!-- {{area.color}} -->
-								<td width="10%" align="left">
+								<td width="45%" align="left">{{zone.name}}</td>
+								<td width="20%" align="left">{{zone.submacro}}</td>
+								<td width="15%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(zone.color)}"></div></td><!-- {{area.color}} -->
+								<td width="20%" align="left">
 									<a href ng-click="setZDetails(zone)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-									<a href ng-click="setZEdit(zone)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+									<a href ng-click="setZEdit(zone)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+									<a href ng-click="setZRemove(zone)"  alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 								</td>
 							</tr>
 						</tbody>
@@ -126,7 +128,9 @@
 		   		<table width="95%">			
 				   	<tr>
 				   		<td width="34%"></td>
-				   		<td width="32%" align="center"></td>
+				   		<td width="32%" align="center">
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="closeZView()">{{ 'text_btn_close' | i18n  }}</button>
+				   		</td>
 				   		<td width="34%" align="right">
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateZone(form, myColor, editZone)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createZone(form, myColor, newZone)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>

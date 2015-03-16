@@ -407,6 +407,37 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	// Prepare Delete Methods
+	$scope.setBpRemove = function(bPoint){
+		var delBike = $dialogs.confirm("Attenzione", "Vuoi cancellare il punto bici '" + bPoint.name + "'?");
+			delBike.result.then(function(btn){
+				// yes case
+				$scope.deleteBPoint(bPoint);
+				// Call the delete method
+			},function(btn){
+				// no case
+				// do nothing
+        });
+	};
+	
+	// Object Deleting Methods
+	$scope.deleteBPoint = function(bPoint){
+		$scope.showDeletingBPErrorMessage = false;
+		var method = 'DELETE';
+		
+	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	console.log("Deleted bikePoint: " + JSON.stringify(result));
+	    	if(result != null && result != ""){
+	    		$scope.getBikePointsFromDb();
+	    		//$scope.editModeA = false;
+	    	} else {
+	    		//$scope.editModeA = true;
+	    		$scope.showDeletingBPErrorMessage = true;
+	    	}
+	    });
+	};
+	
 	// Maps management
 	$scope.bikePointMarkers = [];
 	

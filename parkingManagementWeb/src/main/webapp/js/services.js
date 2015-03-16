@@ -1573,10 +1573,25 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				method : method,
 				url : 'rest/allPut',
 				params : {
-					"urlWS" : urlWS,
+					"urlWS" : urlWS
 				},
 				headers : headers,
 				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else if(method == 'DELETE'){
+			$http({
+				method : method,
+				url : 'rest/allDelete',
+				params : {
+					"urlWS" : urlWS	// quela mer.. de ie el cacheava tut e con sta modifica el funzia
+				},
+				headers : headers
 			}).success(function(data) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);

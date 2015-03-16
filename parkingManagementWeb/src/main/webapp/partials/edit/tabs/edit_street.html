@@ -18,24 +18,26 @@
 					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 				</div>
 				<div class="panel-body">
+					<div class="alert alert-danger" ng-show="showDeletingSErrorMessage">{{ 'err_in_delete_street' | i18n }}</div>
 					<table class="table table-striped" style="width: 100%">
 						<tr ng-show="streetWS.length != 0">
-							<th width="40%">{{ 'street_name' | i18n }}</th>
+							<th width="35%">{{ 'street_name' | i18n }}</th>
 							<th width="15%">{{ 'street_slots' | i18n }}</th>
-							<th width="40%" colspan="2">{{ 'street_area_name' | i18n }}</th>
-							<th width="5%">{{ 'operations' | i18n }}</th>
+							<th width="30%" colspan="2">{{ 'street_area_name' | i18n }}</th>
+							<th width="20%">{{ 'operations' | i18n }}</th>
 						</tr>
 						<tbody class="animate-repeat"
 							ng-repeat="street in streetWS | filter:q | orderBy:'name' | startFrom:currentPage*maxStreets | limitTo:maxStreets">
 				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 							<tr>
-								<td width="40%" align="left">{{street.streetReference}}</td>
+								<td width="35%" align="left">{{street.streetReference}}</td>
 								<td width="15%" align="left">{{street.slotNumber}}</td>
 								<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
-								<td width="35%" align="center">{{street.area_name}}</td>
-								<td width="5%" align="left">
+								<td width="25%" align="center">{{street.area_name}}</td>
+								<td width="20%" align="left">
 									<a href ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-									<a href ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+									<a href ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+									<a href ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 								</td>
 							</tr>
 						</tbody>
@@ -64,6 +66,7 @@
 		  			<div class="form-group" ng-show="!isEditing">
 				    	<label for="area1">{{ 'street_area_name' | i18n }}</label>
 				    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myNewArea" ng-required="!isEditing"><!-- ng-change="setMyArea(myNewArea)" -->
+				    		<option value="">{{ 'street_area_placeholder' | i18n }}</option>
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 					</div>
@@ -88,7 +91,7 @@
 					</div>
 				   	<div class="form-group">
 				    	<label for="address">{{ 'street_address' | i18n }}</label>
-				    	<input id="address" type="text" class="form-control" name="sAddress" ng-model="street.streetReference" ng-required="true" ><!-- ng-change="setAlloggioChanged(true)" -->
+				    	<input id="address" type="text" class="form-control" name="sAddress" ng-model="street.streetReference" ng-required="true" placeholder="{{ 'street_address_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sAddress.$error.required">{{ 'street_reference_err_required' | i18n }}</div>
 				   	</div>
 				   	<label for="totalSlot">{{ 'street_slots' | i18n }}</label>
@@ -96,32 +99,37 @@
 				   		<div class="panel-body">
 						   	<div class="form-group">
 						    	<label for="totalSlot">{{ 'street_totalslot' | i18n }}</label>
-						    	<input id="totalSlot" type="text" class="form-control" name="sTotalslot" ng-model="street.slotNumber" ng-pattern="onlyNumbers" ng-required="true" >
+						    	<input id="totalSlot" type="text" class="form-control" name="sTotalslot" ng-model="street.slotNumber" ng-pattern="onlyNumbers" ng-required="true" placeholder="{{ 'street_totalslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sTotalslot.$error.required">{{ 'street_slots_err_required' | i18n }}</div>
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sTotalslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 						   	</div>
 							<div class="form-group">
 						    	<label for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
-						    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="street.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="street.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="false" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 						   	</div>
 						   	<div class="form-group">
 						    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
-						    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="street.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="street.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="false" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 						   	</div>
 						   	<div class="form-group">
 						    	<label for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
-						    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="street.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="street.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="false" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 						   	</div>
 						   	<div class="form-group">
 						    	<label for="unusuableSlot">{{ 'street_unusuable_slot' | i18n }}</label>
-						    	<input id="unusuableSlot" type="text" class="form-control" name="sUnusuableslot" ng-model="street.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<input id="unusuableSlot" type="text" class="form-control" name="sUnusuableslot" ng-model="street.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="false" placeholder="{{ 'street_unusuableslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sUnusuableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 						   	</div>
 				   		</div>
 				   	</div>
+				   	<div class="form-group" ng-show="isEditing">
+				    	<label for="subscription">{{ 'street_subscription_allowed' | i18n }}</label>
+				    	<select id="subscription" name="sSubscription" class="form-control" ng-options="s.value as s.desc for s in subscriptions" ng-model="street.subscritionAllowedPark">
+				    	</select>
+					</div>
 				 	<div class="form-group" ng-show="isEditing">
 				    	<label for="area">{{ 'street_area_name' | i18n }}</label>
 				    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="isEditing">
@@ -149,7 +157,9 @@
 		   		<table width="95%">			
 				   	<tr>
 				   		<td width="34%"></td>
-				   		<td width="32%" align="center"></td>
+				   		<td width="32%" align="center">
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>
+				   		</td>
 				   		<td width="34%" align="right">
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
@@ -199,12 +209,16 @@
 							<td>{{ street.timedParkSlotNumber }}</td>
 						</tr>
 						<tr>	
-							<td><strong>{{ 'street_freepark_slot' | i18n }}</strong></td>
+							<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
 							<td>{{ street.freeParkSlotNumber }}</td>
 						</tr>
 						<tr>	
-							<td><strong>{{ 'street_unusuable_slot' | i18n }}</strong></td>
+							<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
 							<td>{{ street.unusuableSlotNumber }}</td>
+						</tr>
+						<tr>	
+							<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
+							<td>{{ street.subscritionAllowedPark | boolToString}}</td>
 						</tr>
 						<tr>	
 							<td>

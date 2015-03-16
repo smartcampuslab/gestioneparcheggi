@@ -19,10 +19,12 @@ import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.Zone;
+import it.smartcommunitylab.parking.management.web.model.geo.Line;
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -379,6 +381,8 @@ public class StorageManager {
 		if (area.getStreets() != null) {
 			for (Street temp : area.getStreets()) {
 				if (temp.getId().equals(sb.getId())) {
+					List<Point> points = new ArrayList<Point>();
+					Line line = new Line();
 					temp.setSlotNumber(sb.getSlotNumber());
 					temp.setFreeParkSlotNumber(sb.getFreeParkSlotNumber());
 					temp.setFreeParkSlotSignNumber(sb.getFreeParkSlotSignNumber());
@@ -387,10 +391,15 @@ public class StorageManager {
 					temp.setStreetReference(sb.getStreetReference());
 					temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());
 					temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());
-					temp.getGeometry().getPoints().clear();
-					for (PointBean pb : sb.getGeometry().getPoints()) {
-						temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
+					if(temp.getGeometry() != null && temp.getGeometry().getPoints().size() > 0){
+						temp.getGeometry().getPoints().clear();
 					}
+					for (PointBean pb : sb.getGeometry().getPoints()) {
+						points.add(ModelConverter.convert(pb, Point.class));
+						//temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
+					}
+					line.setPoints(points);
+					temp.setGeometry(line);
 					temp.setZones(sb.getZones());
 					temp.setRateAreaId(sb.getRateAreaId());
 					mongodb.save(area);
@@ -696,11 +705,25 @@ public class StorageManager {
 		List<StreetBean> streets = getAllStreets(z);
 		for(StreetBean s : streets){
 			List<String> zones = s.getZones();
-			for(String zb : zones){
-				//logger.info(String.format("Finded zona: %s", zb.toString()));
-				if(zb.compareTo(zonaId) == 0){
-					zones.remove(zb);
-				}
+//			for(String zb : zones){
+//				logger.info(String.format("Finded zona: %s", zb));
+//				if(zb.compareTo(zonaId) == 0){
+//					logger.info(String.format("Try to remove zona: %s", zb));
+//					zones.remove(zb);
+//				}
+//			}
+			for (Iterator<String> iterator = zones.iterator(); iterator.hasNext(); ) {
+			    String value = iterator.next();
+			    if(value.compareTo(zonaId) == 0){
+			    	logger.info(String.format("Finded zona: %s", value));
+			    	iterator.remove();
+			    	try {
+						editStreet(s);
+					} catch (DatabaseException e) {
+						// TODO Auto-generated catch block
+						logger.error(String.format("Error in update street: %s", e.getMessage()));
+					}
+			    }
 			}
 		}
 		

@@ -87,4 +87,22 @@ public class WsProxyController {
 		return result;	
 	}
 	
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/allDelete")
+	public @ResponseBody
+	String deAll(HttpServletRequest request, @RequestParam String urlWS){
+		RestTemplate restTemplate = new RestTemplate();
+		logger.error("WS-DELETE. Method " + urlWS + "."); //Added for log ws calls info in preliminary phase of portal
+		
+		String result = "";
+		try {
+			restTemplate.delete(parkingUrl + urlWS);
+			result = "OK";
+		} catch (Exception ex){
+			logger.error(String.format("Exception in proxyController delete ws. Method: %s. Details: %s", urlWS, ex.getMessage()));
+			//restTemplate.getErrorHandler();
+		}
+		
+		return result;	
+	}
+	
 }

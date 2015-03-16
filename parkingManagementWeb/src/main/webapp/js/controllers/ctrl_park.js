@@ -125,6 +125,17 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	];
     
+    $scope.subscriptions = [
+        {
+        	value: true,
+        	desc: "Si'"
+        },
+        {
+        	value: false,
+        	desc: "No"
+        }
+    ];
+    
     $scope.areaWS = [];
     $scope.streetWS = [];
     $scope.pmeterWS = [];
@@ -844,6 +855,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.isEditing = true;
 			$scope.isInit = false;
 			$scope.area = area;
+			$scope.area.fee = $scope.correctDecimal(area.fee, 2);	// Here I cast the fee value to string and I change the '.' char in ',' char
 			
 			var areaCenter = $scope.mapCenter;
 			
@@ -1611,11 +1623,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var method = 'PUT';
 			var a = $scope.area;
 			
+			var decimalFee = $scope.correctDecimal(a.fee, 1);
+			
 			var data = {
 				id: a.id,
 				id_app: a.id_app,
 				name: a.name,
-				fee: a.fee,
+				fee: parseFloat(decimalFee),
 				timeSlot: a.timeSlot,
 				smsCode: a.smsCode,
 				color: a.color,
@@ -1661,6 +1675,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				paidSlotNumber:s.paidSlotNumber,
 				freeParkSlotNumber: s.freeParkSlotNumber,
 				unusuableSlotNumber: s.unusuableSlotNumber,
+				subscritionAllowedPark: s.subscritionAllowedPark,
 				color: area.color,
 				rateAreaId: area.id,
 				zones: $scope.correctMyZonesForStreet(zones),
@@ -1810,6 +1825,164 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	// Prepare Delete Methods
+	// Area
+	$scope.setARemove = function(area){
+		var delArea = $dialogs.confirm("Attenzione", "Vuoi cancellare l'area '" + area.name + "'? La cancellazione dell'area comportera' la rimozione di 'vie' e 'parcometri' ad essa associati. Continuare?");
+			delArea.result.then(function(btn){
+				// yes case
+				$scope.deleteArea(area);
+				// Call the delete method
+			},function(btn){
+				// no case
+				// do nothing
+        });
+	};
+	
+	// Street
+	$scope.setSRemove = function(street){
+		var delStreet = $dialogs.confirm("Attenzione", "Vuoi cancellare la via '" + street.streetReference + "'?");
+			delStreet.result.then(function(btn){
+				// yes case
+				$scope.deleteSMeter(street);
+				// Call the delete method
+			},function(btn){
+				// no case
+				// do nothing
+        });
+	};
+	
+	// ParkingMeter
+	$scope.setPmRemove = function(pMeter){
+		var delParking = $dialogs.confirm("Attenzione", "Vuoi cancellare il parchimetro con codice '" + pMeter.code + "'?");
+			delParking.result.then(function(btn){
+				// yes case
+				$scope.deletePMeter(pMeter);
+				// Call the delete method
+			},function(btn){
+				// no case
+				// do nothing
+        });
+	};
+	
+	// ParkingStructure
+	$scope.setPsRemove = function(pStruct){
+		var delStruct = $dialogs.confirm("Attenzione", "Vuoi cancellare la struttura '" + pStruct.name + "'?");
+			delStruct.result.then(function(btn){
+				// yes case
+				$scope.deletePStruct(pStruct);
+				// Call the delete method
+			},function(btn){
+				// no case
+				// do nothing
+        });
+	};
+	
+	// Zone
+	$scope.setZRemove = function(zone){
+		var delZone = $dialogs.confirm("Attenzione", "Vuoi cancellare la zona '" + zone.name + "-" + zone.submacro + "'?");
+			delZone.result.then(function(btn){
+				// yes case
+				$scope.deleteZone(zone);
+				
+				// Call the delete method
+			},function(btn){
+				// no case
+				// do nothing
+        });
+	};
+	
+	// Object Deleting Methods
+	//Area
+	$scope.deleteArea = function(area){
+		$scope.showDeletingAErrorMessage = false;
+		var method = 'DELETE';
+		
+	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	console.log("Deleted area: " + JSON.stringify(result));
+	    	if(result != null && result != ""){
+	    		$scope.getAreasFromDb();
+	    		//$scope.editModeA = false;
+	    	} else {
+	    		//$scope.editModeA = true;
+	    		$scope.showDeletingAErrorMessage = true;
+	    	}
+	    });
+	};
+	
+	// Street
+	$scope.deleteSMeter = function(street){
+		$scope.showDeletingSErrorMessage = false;
+		var method = 'DELETE';
+		
+	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + street.rateAreaId + "/" + street.id , null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	console.log("Deleted street: " + JSON.stringify(result));
+	    	if(result != null && result != ""){
+	    		$scope.getStreetsFromDb();
+	    		//$scope.editModeA = false;
+	    	} else {
+	    		//$scope.editModeA = true;
+	    		$scope.showDeletingSErrorMessage = true;
+	    	}
+	    });
+	};
+	
+	// ParkingMeter
+	$scope.deletePMeter = function(pMeter){
+		$scope.showDeletingPMErrorMessage = false;
+		var method = 'DELETE';
+		
+	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	console.log("Deleted parkingmeter: " + JSON.stringify(result));
+	    	if(result != null && result != ""){
+	    		$scope.getParkingMetersFromDb();
+	    		//$scope.editModeA = false;
+	    	} else {
+	    		//$scope.editModeA = true;
+	    		$scope.showDeletingPMErrorMessage = true;
+	    	}
+	    });
+	};
+	
+	// ParkingStructure
+	$scope.deletePStruct = function(pStruct){
+		$scope.showDeletingPSErrorMessage = false;
+		var method = 'DELETE';
+		
+	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + pStruct.id, null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	console.log("Deleted struct: " + JSON.stringify(result));
+	    	if(result != null && result != ""){
+	    		$scope.getParkingStructuresFromDb();
+	    		//$scope.editModeA = false;
+	    	} else {
+	    		//$scope.editModeA = true;
+	    		$scope.showDeletingPSErrorMessage = true;
+	    	}
+	    });
+	};
+	
+	// Zone
+	$scope.deleteZone = function(zone){
+		$scope.showDeletingZErrorMessage = false;
+		var method = 'DELETE';
+		
+	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + zone.id, null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	console.log("Deleted zone: " + JSON.stringify(result));
+	    	if(result != null && result != ""){
+	    		$scope.getZonesFromDb();
+	    		//$scope.editModeA = false;
+	    	} else {
+	    		//$scope.editModeA = true;
+	    		$scope.showDeletingZErrorMessage = true;
+	    	}
+	    });
+	};
+	
 	
 	// Object Creation Methods
 	// Area
@@ -1873,6 +2046,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				paidSlotNumber:s.paidSlotNumber,
 				freeParkSlotNumber: s.freeParkSlotNumber,
 				unusuableSlotNumber: s.unusuableSlotNumber,
+				subscritionAllowedPark: s.subscritionAllowedPark,
 				color: area.color,
 				rateAreaId: area.id,
 				zones: $scope.correctMyZonesForStreet(zones),

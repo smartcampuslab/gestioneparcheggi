@@ -30,22 +30,24 @@
 									<h5 class="panel-title">{{ 'bp_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setBpEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 								</div>
 								<div class="panel-body">
+									<div class="alert alert-danger" ng-show="showDeletingBPErrorMessage">{{ 'err_in_delete_bikepoint' | i18n }}</div>
 									<table class="table table-striped" style="width: 100%">
 										<tr ng-show="bpointWS.length != 0">
-											<th width="50%">{{ 'bp_name' | i18n }}</th>
-											<th width="20%">{{ 'bp_slots' | i18n }}</th>
-											<th width="20%">{{ 'bp_bikes' | i18n }}</th>
-											<th width="10%">{{ 'operations' | i18n }}</th>
+											<th width="43%">{{ 'bp_name' | i18n }}</th>
+											<th width="22%">{{ 'bp_slots' | i18n }}</th>
+											<th width="15%">{{ 'bp_bikes' | i18n }}</th>
+											<th width="20%">{{ 'operations' | i18n }}</th>
 										</tr>
 										<tbody class="animate-repeat"
 											ng-repeat="bpoint in bpointWS | filter:q | orderBy:'name' | startFrom:currentPage*maxBPoints | limitTo:maxBPoints">
 											<tr>
-												<td width="50%" align="left">{{bpoint.name}}</td>
-												<td width="20%" align="left">{{bpoint.slotNumber}}</td>
-												<td width="20%" align="center">{{bpoint.bikeNumber}}</td>
-												<td width="10%" align="left">
+												<td width="43%" align="left">{{bpoint.name}}</td>
+												<td width="22%" align="left">{{bpoint.slotNumber}}</td>
+												<td width="15%" align="center">{{bpoint.bikeNumber}}</td>
+												<td width="20%" align="left">
 													<a href ng-click="setBpDetails(bpoint)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-													<a href ng-click="setBpEdit(bpoint)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+													<a href ng-click="setBpEdit(bpoint)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+													<a href ng-click="setBpRemove(bpoint)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 												</td>
 											</tr>
 										</tbody>

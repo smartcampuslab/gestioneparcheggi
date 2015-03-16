@@ -25,24 +25,26 @@
 									<h5 class="panel-title">{{ 'ps_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setPsEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 								</div>
 								<div class="panel-body">
+									<div class="alert alert-danger" ng-show="showDeletingPSErrorMessage">{{ 'err_in_delete_parkingstructure' | i18n }}</div>
 									<table class="table table-striped" style="width: 100%">
 										<tr ng-show="pstructWS.length != 0">
-											<th width="25%">{{ 'ps_name' | i18n }}</th>
-											<th width="25%">{{ 'ps_address' | i18n }}</th>
-											<th width="40%">{{ 'ps_time' | i18n }}</th>
+											<th width="35%">{{ 'ps_name' | i18n }}</th>
+											<th width="40%">{{ 'ps_address' | i18n }}</th>
+<!-- 											<th width="35%">{{ 'ps_time' | i18n }}</th> -->
 											<th width="5%">{{ 'ps_slots' | i18n }}</th>
-											<th width="5%">{{ 'operations' | i18n }}</th>
+											<th width="20%">{{ 'operations' | i18n }}</th>
 										</tr>
 										<tbody class="animate-repeat"
 											ng-repeat="pstruct in pstructWS | filter:q | orderBy:'name' | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
 											<tr>
-												<td width="25%" align="left">{{pstruct.name}}</td>
-												<td width="25%" align="left">{{pstruct.streetReference}}</td>
-												<td width="40%" align="center">{{pstruct.timeSlot}}</td>
+												<td width="35%" align="left">{{pstruct.name}}</td>
+												<td width="40%" align="left">{{pstruct.streetReference}}</td>
+<!-- 												<td width="35%" align="center">{{pstruct.timeSlot}}</td> -->
 												<td width="5%" align="center">{{pstruct.slotNumber}}</td>
-												<td width="5%" align="left">
+												<td width="20%" align="left">
 													<a href ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-													<a href ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+													<a href ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+													<a href ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 												</td>
 											</tr>
 										</tbody>
@@ -168,7 +170,9 @@
 		   		<table width="95%">			
 				   	<tr>
 				   		<td width="34%"></td>
-				   		<td width="32%" align="center"></td>
+				   		<td width="32%" align="center">
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>
+				   		</td>
 				   		<td width="34%" align="right">
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPstruct(form, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>

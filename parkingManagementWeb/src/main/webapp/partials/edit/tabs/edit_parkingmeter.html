@@ -25,37 +25,40 @@
 							<h5 class="panel-title">{{ 'pm_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setPmEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 						</div>
 						<div class="panel-body">
+							<div class="alert alert-danger" ng-show="showDeletingPMErrorMessage">{{ 'err_in_delete_parkingmeter' | i18n }}</div>
 							<table class="table table-striped" style="width: 100%">
 								<tr ng-show="pmeterWS.length != 0">
-									<th width="40%">{{ 'pm_code' | i18n }}</th>
-									<th width="15%">{{ 'pm_note' | i18n }}</th>
-									<th width="10%">{{ 'pm_status' | i18n }}</th>
-									<th width="30%" colspan="2">{{ 'pm_area_name' | i18n }}</th>
-									<th width="5%">{{ 'operations' | i18n }}</th>
+									<th width="22%">{{ 'pm_code' | i18n }}</th>
+									<th width="20%">{{ 'pm_note' | i18n }}</th>
+									<th width="8%">{{ 'pm_status' | i18n }}</th>
+									<th width="22%" colspan="2">{{ 'pm_area_name' | i18n }}</th>
+									<th width="28%">{{ 'operations' | i18n }}</th>
 								</tr>
 								<tbody class="animate-repeat"
 									ng-repeat="pmeter in pmeterWS | filter:q | orderBy:'code' | startFrom:currentPage*maxPmeters | limitTo:maxPmeters">
 				<!--						ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 									<tr ng-show="pmeter.status=='INACTIVE'">
-										<td width="40%" align="left">{{pmeter.code}}</td>
-										<td width="15%" align="left">{{pmeter.note}}</td>
-										<td width="10%" align="center">OFF</td>
-										<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
-										<td width="25%" align="center">{{pmeter.area_name}}</td>
-										<td width="5%" align="left">
-											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!-- {{ 'practice_view' | i18n }} -->
-											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+										<td width="22%" align="left">{{pmeter.code}}</td>
+										<td width="20%" align="left">{{pmeter.note}}</td>
+										<td width="8%" align="center">OFF</td>
+										<td width="3%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
+										<td width="19%" align="center">{{pmeter.area_name}}</td>
+										<td width="28%" align="left">
+											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+											<a href ng-click="setPmRemove(pmeter)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 										</td>
 									</tr>
 									<tr class="success" ng-show="pmeter.status=='ACTIVE'">
-										<td width="40%" align="left">{{pmeter.code}}</td>
-										<td width="15%" align="left">{{pmeter.note}}</td>
-										<td width="10%" align="center">ON</td>
-										<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
-										<td width="25%" align="center">{{pmeter.area_name}}</td>
-										<td width="5%" align="left">
-											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;<!--  ng-click="setPmDetails(pmeter)" {{ 'practice_view' | i18n }} -->
-											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>
+										<td width="22%" align="left">{{pmeter.code}}</td>
+										<td width="20%" align="left">{{pmeter.note}}</td>
+										<td width="8%" align="center">ON</td>
+										<td width="3%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
+										<td width="19%" align="center">{{pmeter.area_name}}</td>
+										<td width="28%" align="left">
+											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+											<a href ng-click="setPmRemove(pmeter)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 										</td>
 									</tr>
 								</tbody>
@@ -143,7 +146,9 @@
 		   		<table width="95%">			
 				   	<tr>
 				   		<td width="34%"></td>
-				   		<td width="32%" align="center"></td>
+				   		<td width="32%" align="center">
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>
+				   		</td>
 				   		<td width="34%" align="right">
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePmeter(form, myStatus, myArea, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPmeter(form, myStatus, myArea, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>

@@ -71,6 +71,10 @@
 	"value": "Visualizza",
 	"description": "Title link visualizza"
 }, {
+	"key": "link_remove_title",
+	"value": "Elimina",
+	"description": "Title link elimina"
+}, {
     "key": "view_areas",
     "value": "Aree di tariffazione",
     "description": "Label checkbox aree di tariffazione"
@@ -239,6 +243,10 @@
     "value": "Errore nell'aggiornamento del parcometro. DB non pronto.",
     "description": "Messaggio errore aggiornamento parcometro"
 }, {
+    "key": "err_in_delete_parkingmeter",
+    "value": "Errore nella cancellazione del parcometro. DB non pronto.",
+    "description": "Messaggio errore cancellazione parcometro"
+}, {
     "key": "view_parkingmeter",
     "value": "Dettagli parcometro",
     "description": "Titolo pagina view parcometro"
@@ -335,6 +343,10 @@
     "value": "Errore nell'aggiornamento della struttura. DB non pronto.",
     "description": "Messaggio errore aggiornamento struttura"
 }, {
+    "key": "err_in_delete_parkingstructure",
+    "value": "Errore nella cancellazione della struttura. DB non pronto.",
+    "description": "Messaggio errore cancellazione struttura"
+}, {
     "key": "view_parkingstructure",
     "value": "Dettagli struttura parcheggio",
     "description": "Titolo pagina view struttura"
@@ -370,6 +382,10 @@
     "key": "err_in_update_bikepoint",
     "value": "Errore nell'aggiornamento del punto bici. DB non pronto.",
     "description": "Messaggio errore aggiornamento punto bici"
+}, {
+    "key": "err_in_delete_bikepoint",
+    "value": "Errore nella cancellazione del punto bici. DB non pronto.",
+    "description": "Messaggio errore cancellazione punto bici"
 }, {
     "key": "bikepoint_name_err_required",
     "value": "Campo 'nome punto bici' obbligatorio.",
@@ -419,6 +435,10 @@
     "value": "Posti inutilizzabili",
     "description": "Label campo posti non usabili per oggetto strada"
 }, {
+    "key": "street_subscription_allowed",
+    "value": "Sosta con abbonamento",
+    "description": "Label campo sosta con abbonamento per oggetto strada"
+}, {
     "key": "street_zone",
     "value": "Zona",
     "description": "Label campo zona per oggetto strada"
@@ -455,6 +475,10 @@
     "value": "Errore nell'aggiornamento della via. DB non pronto.",
     "description": "Messaggio errore aggiornamento via"
 }, {
+    "key": "err_in_delete_street",
+    "value": "Errore nella cancellazione della via. DB non pronto.",
+    "description": "Messaggio errore cancellazione via"
+}, {
     "key": "edit_zone",
     "value": "Modifica Zona",
     "description": "Titolo pagina editing zona"
@@ -490,6 +514,10 @@
     "key": "err_in_update_zone",
     "value": "Errore nell'aggiornamento della zona. DB non pronto.",
     "description": "Messaggio errore aggiornamento zona"
+}, {
+    "key": "err_in_delete_zone",
+    "value": "Errore nella cancellazione della zona. DB non pronto.",
+    "description": "Messaggio errore cancellazione zona"
 }, {
     "key": "view_zone",
     "value": "Dttagli Zona",
@@ -531,6 +559,10 @@
     "value": "Errore nell'aggiornamento dell' area. DB non pronto.",
     "description": "Errore aggiornamento area"
 }, {
+    "key": "err_in_delete_area",
+    "value": "Errore nella cancellazione dell' area. DB non pronto.",
+    "description": "Errore cancellazione area"
+}, {
     "key": "view_area",
     "value": "Dettagli Area",
     "description": "Titolo pagina visualizza area"
@@ -538,5 +570,53 @@
     "key": "area_geometry_err_pattern",
     "value": "Campo 'posizione' non corretto",
     "description": "Errore pattern campo geometry area"
+}, {
+    "key": "area_name_placeholder",
+    "value": "Inserire il nome dell'area",
+    "description": "Testo placeholder campo nome area"
+}, {
+    "key": "area_fee_placeholder",
+    "value": "Inserire la tariffa oraria dell'area (euro/ora) nel formato decimale (es: 0,50)",
+    "description": "Testo placeholder campo tariffa oraria area"
+}, {
+    "key": "area_time_placeholder",
+    "value": "Inserire l'orario in cui l'area e' a pagamento (da - a) nel formato hh:mm",
+    "description": "Testo placeholder campo orario area"
+}, {
+    "key": "area_sms_placeholder",
+    "value": "Inserire il codice del serivzio telepark",
+    "description": "Testo placeholder campo telepark area"
+}, {
+    "key": "area_color_placeholder",
+    "value": "Scegliere il colore dell'area",
+    "description": "Testo placeholder campo telepark area"
+}, {
+    "key": "street_area_placeholder",
+    "value": "Scegliere l'area tariffaria a cui la via appartiene",
+    "description": "Testo placeholder campo area tariffaria via"
+}, {
+    "key": "street_address_placeholder",
+    "value": "Inserire l'indirizzo di riferimento della via",
+    "description": "Testo placeholder campo indirizzo via"
+}, {
+    "key": "street_totalslot_placeholder",
+    "value": "Inserire il numero totale di posti della via",
+    "description": "Testo placeholder campo posti totali via"
+}, {
+    "key": "street_handicappedslot_placeholder",
+    "value": "Inserire il numero di posti riservati ai disabili",
+    "description": "Testo placeholder campo posti disabili via"
+}, {
+    "key": "street_timedslot_placeholder",
+    "value": "Inserire il numero di posti a disco-orario",
+    "description": "Testo placeholder campo posti disco orario via"
+}, {
+    "key": "street_freeparkslot_placeholder",
+    "value": "Inserire il numero di posti gratuiti",
+    "description": "Testo placeholder campo posti gratuiti via"
+}, {
+    "key": "street_unusuableslot_placeholder",
+    "value": "Inserire il numero di posti inutilizzabili",
+    "description": "Testo placeholder campo posti inutilizzabili via"
 }
 ]
