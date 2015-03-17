@@ -1,7 +1,7 @@
 <div class="row" >
 	<div ng-show="!editModeS && !viewModeS">
 		<div class="col-md-6" ng-show="streetMapReady" ><!-- id="map_canvas" -->
-			<ui-gmap-google-map id="3" center="streetMap.center" draggable="true" zoom="streetMap.zoom" options="options" control="streetMap.control" bounds="streetMap.bounds">			
+			<ui-gmap-google-map id="40" center="streetMap.center" draggable="true" zoom="streetMap.zoom" options="options" control="streetMap.control" bounds="streetMap.bounds">			
 				<ui-gmap-polyline ng-repeat="p in geoStreets" path="p.path" stroke="p.stroke" visible='p.visible'
 	              geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polyline>		
 			</ui-gmap-google-map>
@@ -13,9 +13,9 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="panel panel-primary" align="center">
+			<div class="panel panel-success" align="center">
 				<div class="panel-heading">
-					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 				</div>
 				<div class="panel-body">
 					<div class="alert alert-danger" ng-show="showDeletingSErrorMessage">{{ 'err_in_delete_street' | i18n }}</div>
@@ -45,11 +45,11 @@
 							<td colspan="5"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
 						</tr>
 					</table>
-					<button class="btn btn-primary"
+					<button class="btn btn-success"
 						ng-disabled="currentPage == 0"
 						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 						{{currentPage+1}}/{{numberOfPages(2)}}
-					<button class="btn btn-primary"
+					<button class="btn btn-success"
 						ng-disabled="currentPage >= streetWS.length/maxStreets - 1"
 						ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 				</div>
@@ -65,13 +65,13 @@
 		  		<div class="panel-body">
 		  			<div class="form-group" ng-show="!isEditing">
 				    	<label for="area1">{{ 'street_area_name' | i18n }}</label>
-				    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myNewArea" ng-required="!isEditing"><!-- ng-change="setMyArea(myNewArea)" -->
+				    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myNewArea" ng-required="!isEditing">
 				    		<option value="">{{ 'street_area_placeholder' | i18n }}</option>
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 					</div>
 		  			<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="16" center="sCreateMap.center" draggable="true" zoom="sCreateMap.zoom" options="sCreateMap.options" control="sCreateMap.control" bounds="sCreateMap.bounds" events="sCreateMap.events">
+						<ui-gmap-google-map id="41" center="sCreateMap.center" draggable="true" zoom="sCreateMap.zoom" options="sCreateMap.options" control="sCreateMap.control" bounds="sCreateMap.bounds" events="sCreateMap.events">
 <!-- 								<ui-gmap-marker idkey="myNewS.id" coords="myNewS.coords" options="myNewS.options" icon="myNewS.icon" events="myNewS.events">click="'onClick'" -->
 <!-- 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
 <!-- 	                					<p> -->
@@ -147,7 +147,7 @@
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
 					</div>
 					<div class="col-md-12" ng-show="isEditing">
-						<ui-gmap-google-map id="15" center="sEditMap.center" draggable="true" zoom="sEditMap.zoom" options="sEditMap.options" control="sEditMap.control" bounds="sEditMap.bounds">
+						<ui-gmap-google-map id="42" center="sEditMap.center" draggable="true" zoom="sEditMap.zoom" options="sEditMap.options" control="sEditMap.control" bounds="sEditMap.bounds">
 								<ui-gmap-polyline path="editStreet.path" stroke="editStreet.stroke" visible='editStreet.visible'
 	              					geodesic='editStreet.geodesic' fit="false" editable="editStreet.editable" draggable="editStreet.draggable" events="editStreet.events"></ui-gmap-polyline>	
 						</ui-gmap-google-map>

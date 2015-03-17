@@ -1,18 +1,34 @@
 [{
     "key": "app_tab-title",
-    "value": "Gestione Parcheggi",
+    "value": "App Parcheggi",
     "description": "Titolo tab browser"
 }, {
     "key": "app_home-title",
-    "value": "Gestione Parcheggi",
+    "value": "App Parcheggi",
     "description": "Titolo pagina home app"
 }, {
     "key": "app_home_info",
     "value": "Descrizione App",
     "description": "Titolo sezione info pagina home app"
 }, {
+    "key": "app_home_park_info",
+    "value": "Descrizione App Gestione Parcheggi",
+    "description": "Titolo sezione info pagina home park app"
+}, {
+    "key": "app_home_aux_info",
+    "value": "Descrizione App Parcheggi Ausiliari",
+    "description": "Titolo sezione info pagina home aux app"
+}, {
     "key": "app_home_info_text",
+    "value": "L'applicazione per i parcheggi si compone di due differenti app e cioe' 'gestione parcheggi' e 'parcheggi ausiliari'. La prima e' pensata per raccogliere tutti i dati di parcheggi di un centro urbano (vie, strutture, aree tariffarie, zone, ecc). La seconda è invece usata per raccogliere informazioni dinamiche sull'utilizzo dei parcheggi nella citta'. Utilizza il menu' in alto per accedere all'app desiderata.",
+    "description": "Titolo sezione info pagina home app"
+}, {
+    "key": "app_home_park_info_text",
     "value": "L'applicazione 'gestione parcheggi' e' stata pensata per gestire i parcheggi di un centro urbano. Nello specifico e' possibile aggiungere e modificare parcheggi, strade, parcometri e punti bici raggruppandoli in diverse aree tariffarie o in diverse zone tematiche. L'app permette di rappresentare quanto descritto su mappa in modo da avere traccia chiara della localizzazione degli elementi all'interno della citta'.",
+    "description": "Titolo sezione info pagina home app"
+}, {
+    "key": "app_home_aux_info_text",
+    "value": "L'applicazione 'parcheggi ausiliari' e' stata pensata per reperire informazioni utili sull'utilizzo dei parcheggi di un centro urbano. Nello specifico e' possibile visualizzare l'occupazione dei parcheggi di strade o strutture in una specifica fascia oraria, visualizzare l'utilizzo delle biciclette in un punto bici ecc. L'app e' completa di mappe iterattive in modo da avere traccia chiara della localizzazione degli elementi all'interno della citta'.",
     "description": "Titolo sezione info pagina home app"
 }, {
     "key": "menu_bar-home",
@@ -22,6 +38,18 @@
     "key": "usefull_link",
     "value": "Contatti",
     "description": "Valore link menu per Contatti"
+}, {
+    "key": "menu_bar-homepark",
+    "value": "Gestione Parcheggi",
+    "description": "Valore link menu per editing parcheggi"
+}, {
+    "key": "menu_bar-homeaux",
+    "value": "Parcheggi Ausiliari",
+    "description": "Valore link menu per editing punti bici"
+}, {
+    "key": "park_menu_list",
+    "value": "Funzionalita'",
+    "description": "Titolo menu app gestione parcheggi"
 }, {
     "key": "menu_bar-parkediting",
     "value": "Editing parcheggi",
@@ -312,12 +340,16 @@
     "description": "Messaggio errore campo gestione obbligatorio"
 }, {
     "key": "parkingstructure_payment_mode_select_err_required",
-    "value": "Campo Modalita' di pagamento obbligatorio",
+    "value": "Campo Modalita' di pagamento obbligatorio. Selezionare almeno uno strumento di pagamento.",
     "description": "Messaggio errore campo modalita' pagamento obbligatorio"
 }, {
     "key": "parkingstructure_fee_err_required",
     "value": "Campo Tariffa sosta obbligatorio",
     "description": "Messaggio errore campo tariffa obbligatorio"
+}, {
+    "key": "parkingstructure_fee_err_pattern",
+    "value": "Campo Tariffa sosta non corretto. Inserire un valore decimale",
+    "description": "Messaggio errore pattern campo tariffa"
 }, {
     "key": "parkingstructure_slots_err_required",
     "value": "Campo Capienza obbligatorio",
@@ -395,9 +427,17 @@
     "value": "Valore non corretto per il Campo 'posti bici'. Inserire un valore numerico.",
     "description": "Messaggio errore campo posti punto bici non corretto"
 }, {
+    "key": "bikepoint_slots_err_required",
+    "value": "Campo 'posti bici' obbligatorio.",
+    "description": "Messaggio errore campo posti punto bici obbligatorio"
+}, {
     "key": "bikepoint_bikes_err_pattern",
     "value": "Valore non corretto per il Campo 'numero bici'. Inserire un valore numerico.",
     "description": "Messaggio errore campo bici in punto bici non corretto"
+}, {
+    "key": "bikepoint_bikes_err_required",
+    "value": "Campo 'numero bici' obbligatorio.",
+    "description": "Messaggio errore campo bici in punto bici obbligatorio"
 }, {
     "key": "bikepoint_geometry_select_err_pattern",
     "value": "Valore non corretto per il Campo 'posizione' punto bici. Inserire un valore lat-lng.",
@@ -618,5 +658,101 @@
     "key": "street_unusuableslot_placeholder",
     "value": "Inserire il numero di posti inutilizzabili",
     "description": "Testo placeholder campo posti inutilizzabili via"
+}, {
+    "key": "pm_code_placeholder",
+    "value": "Inserire il codice del parcometro",
+    "description": "Testo placeholder campo codice parcometro"
+}, {
+    "key": "pm_note_placeholder",
+    "value": "Inserire eventuali note relative al parcometro",
+    "description": "Testo placeholder campo note parcometro"
+}, {
+    "key": "pm_status_placeholder",
+    "value": "Settare lo stato del parcometro (attivo o disattivo)",
+    "description": "Testo placeholder campo stato parcometro"
+}, {
+    "key": "pm_area_placeholder",
+    "value": "Settare l'area di appartenenza del parcometro",
+    "description": "Testo placeholder campo area parcometro"
+}, {
+    "key": "pm_geo_placeholder",
+    "value": "Scegliere la posizione del parcometro (click sulla mappa)",
+    "description": "Testo placeholder campo posizione parcometro"
+}, {
+    "key": "ps_name_placeholder",
+    "value": "Inserire il nome della struttura",
+    "description": "Testo placeholder campo nome struttura"
+}, {
+    "key": "ps_address_placeholder",
+    "value": "Inserire l'indirizzo della struttura",
+    "description": "Testo placeholder campo indirizzo struttura"
+}, {
+    "key": "ps_fee_placeholder",
+    "value": "Inserire la tariffa oraria della struttura (euro/ora) nel formato decimale (es: 0,50)",
+    "description": "Testo placeholder campo tariffa oraria struttura"
+}, {
+    "key": "ps_time_placeholder",
+    "value": "Inserire l'orario di apertura della struttura (da - a) nel formato hh:mm",
+    "description": "Testo placeholder campo orario struttura"
+}, {
+    "key": "ps_phone_placeholder",
+    "value": "Inserire il numero di telefono della struttura",
+    "description": "Testo placeholder campo telefono struttura"
+}, {
+    "key": "ps_mmode_placeholder",
+    "value": "Indicare la modalita' di gestione della struttura",
+    "description": "Testo placeholder campo modalita' gestione struttura"
+}, {
+    "key": "ps_totalslot_placeholder",
+    "value": "Inserire il numero totale di posti della struttura",
+    "description": "Testo placeholder campo posti totali struttura"
+}, {
+    "key": "ps_handicappedslot_placeholder",
+    "value": "Inserire il numero di posti riservati ai disabili",
+    "description": "Testo placeholder campo posti disabili struttura"
+}, {
+    "key": "ps_unusuableslot_placeholder",
+    "value": "Inserire il numero di posti non utilizzabili",
+    "description": "Testo placeholder campo posti non utilizzabili struttura"
+}, {
+    "key": "ps_geo_placeholder",
+    "value": "Scegliere la posizione della struttura (click sulla mappa)",
+    "description": "Testo placeholder campo posti disco orario via"
+}, {
+    "key": "zone_name_placeholder",
+    "value": "Inserire il nome della zona",
+    "description": "Testo placeholder campo nome zona"
+}, {
+    "key": "zone_submacro_placeholder",
+    "value": "Inserire il codice della sottozona",
+    "description": "Testo placeholder campo submacro zona"
+}, {
+    "key": "zone_type_placeholder",
+    "value": "Inserire il tipo/categoria si suddivisione in zone",
+    "description": "Testo placeholder campo tipo zona"
+}, {
+    "key": "zone_note_placeholder",
+    "value": "Inserire eventuali note relative alla zona",
+    "description": "Testo placeholder campo note zona"
+}, {
+    "key": "zone_color_placeholder",
+    "value": "Scegliere il colore della zona",
+    "description": "Testo placeholder campo colore zona"
+}, {
+    "key": "bp_name_placeholder",
+    "value": "Inserire il nome del punto bici",
+    "description": "Testo placeholder campo nome punto bici"
+}, {
+    "key": "bp_slotnumber_placeholder",
+    "value": "Inserire il numero totale di posti bici",
+    "description": "Testo placeholder campo posti bici punto bici"
+}, {
+    "key": "bp_bikenumber_placeholder",
+    "value": "Inserire il numero di bici presenti nel punto bici",
+    "description": "Testo placeholder campo numero bici punto bici"
+}, {
+    "key": "bp_geo_placeholder",
+    "value": "Scegliere la posizione del punto bici (click sulla mappa)",
+    "description": "Testo placeholder campo posizione punto bici"
 }
 ]

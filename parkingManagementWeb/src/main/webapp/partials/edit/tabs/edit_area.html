@@ -21,9 +21,9 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="panel panel-primary" align="center">
+			<div class="panel panel-success" align="center">
 				<div class="panel-heading">
-					<h5 class="panel-title">{{ 'area_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setAEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+					<h5 class="panel-title">{{ 'area_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success" ng-click="setAEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 				</div>
 				<div class="panel-body">
 					<div class="alert alert-danger" ng-show="showDeletingAErrorMessage">{{ 'err_in_delete_area' | i18n }}</div>
@@ -54,11 +54,11 @@
 							<td colspan="5"><strong>{{ 'no_areas_in_lists' | i18n }}</strong></td>
 						</tr>
 					</table>
-					<button class="btn btn-primary"
+					<button class="btn btn-success"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 						{{currentPage+1}}/{{numberOfPages(1)}}
-					<button class="btn btn-primary"
+					<button class="btn btn-success"
 							ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 				</div>

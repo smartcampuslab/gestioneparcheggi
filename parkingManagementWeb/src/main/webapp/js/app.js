@@ -40,6 +40,16 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'MainCtrl',
     		controllerAs: 'main'
     	})
+    	.when('/park/home', {
+    		templateUrl: 'partials/park/home.html',
+    		controller: 'MainCtrl',
+    		controllerAs: 'main'
+    	})
+    	.when('/aux/home', {
+    		templateUrl: 'partials/aux/home.html',
+    		controller: 'MainCtrl',
+    		controllerAs: 'main'
+    	})
     	.when('/edit/park', {
     		templateUrl: 'partials/edit/parkediting.html',
     		controller: 'ParkCtrl',

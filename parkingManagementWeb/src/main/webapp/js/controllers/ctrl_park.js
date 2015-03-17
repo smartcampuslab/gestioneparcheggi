@@ -103,6 +103,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.automated_teller_mode = "AUTOMATED_TELLER";
     $scope.prepaid_card_mode = "PREPAID_CARD";
     $scope.parcometro = "PARCOMETRO";
+    $scope.noPaymentChecked = false;
     $scope.gpsLength = 9;
     $scope.myAppId = "rv";
     
@@ -409,6 +410,22 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return correctedPm;
 	};
 	
+	$scope.checkCorrectPaymode = function(myPm){
+		var correctedPm = true;
+		if(!myPm.cash_checked && !myPm.automated_teller_checked && !myPm.prepaid_card_checked && !myPm.parcometro_checked){
+			correctedPm = false;
+		}
+		return correctedPm;
+	};
+	
+	$scope.checkIfPaymentChecked = function(){
+		if($scope.myPayment.cash_checked || $scope.myPayment.automated_teller_checked || $scope.myPayment.prepaid_card_checked || $scope.myPayment.parcometro_checked){
+			$scope.setMyPaymentoErrMode(false);
+		} else {
+			$scope.setMyPaymentoErrMode(true);
+		}
+	};
+	
 	$scope.castMyPaymentModeToString = function(myPm){
 		var correctedPm = "";
 		for(var i = 0; i < myPm.length; i++){
@@ -474,6 +491,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 //	$scope.setMyArea = function(area){
 //		$scope.myNewArea = area;
 //	};
+	
+	$scope.setMyPaymentoErrMode = function(value){
+		$scope.noPaymentChecked = value;
+	};
 	
 	$scope.initStreetsObjects = function(streets){
 		var myStreets = [];
@@ -996,9 +1017,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.isInit = true;
 		
 		$scope.myZones = [];
+		$scope.myArea = null;
+		$scope.myNewArea = null;
 		
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
 		$scope.allZones = sharedDataService.getSharedLocalZones();
+		$scope.setMyLineGeometry(null);
 		
 		$scope.street = {
 			id: null,
@@ -1192,6 +1216,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		];
 		
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
+		$scope.myArea = {};
 		
 		$scope.parckingMeter = {
 			id: null,
@@ -1252,7 +1277,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			// animation: 1 to set the marker bounce
 			
 		} else {
-			$scope.setMyGeometry("0,0");
+			$scope.setMyGeometry(null);
 			
 			$scope.pmCreateMap = {
 				control: {},
@@ -1365,7 +1390,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			};
 			
 		} else {
-			$scope.setMyGeometry("0,0");
+			$scope.setMyGeometry(null);
 			
 			$scope.psCreateMap = {
 				control: {},
@@ -1743,45 +1768,56 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.updatePstruct = function(form, paymode, geo){
 		if(!form.$valid){
 			$scope.isInit=false;
+			if(!$scope.checkCorrectPaymode(paymode)){
+				$scope.setMyPaymentoErrMode(true);
+			} else {
+				$scope.setMyPaymentoErrMode(false);
+			}
 		} else {
-			$scope.isInit=true;
-			$scope.showUpdatingPSErrorMessage = false;
-			
-			var id = $scope.parkingStructure.id;
-			var method = 'PUT';
-			var ps = $scope.parkingStructure;
-			
-			var data = {
-				id: ps.id,
-				id_app: ps.id_app,
-				name: ps.name,
-				streetReference: ps.streetReference,
-				fee: ps.fee,
-				timeSlot : ps.timeSlot,
-				managementMode: ps.managementMode,
-				phoneNumber: ps.phoneNumber,
-				paymentMode: $scope.correctMyPaymentMode(paymode),
-				slotNumber: ps.slotNumber,
-				handicappedSlotNumber: ps.handicappedSlotNumber,
-				unusuableSlotNumber: ps.unusuableSlotNumber,
-				geometry: $scope.correctMyGeometry(geo)
-			};
-			
-		    var value = JSON.stringify(data);
-		    if($scope.showLog) console.log("Parkingmeter data : " + value);
-			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + id, null, $scope.authHeaders, value);
-		    myDataPromise.then(function(result){
-		    	console.log("Updated parkingStructure: " + result);
-		    	if(result == "OK"){
-		    		$scope.getParkingStructuresFromDb();
-					$scope.editModePS = false;
-		    	} else {
-		    		$scope.editModePS = true;
-		    		$scope.showUpdatingPSErrorMessage = true;
-		    	}
-		    });
-		}
+			if(!$scope.checkCorrectPaymode(paymode)){
+				$scope.isInit=false;
+				$scope.setMyPaymentoErrMode(true);
+			} else {
+				$scope.isInit=true;
+				$scope.showUpdatingPSErrorMessage = false;
+				$scope.setMyPaymentoErrMode(false);
+				
+				var id = $scope.parkingStructure.id;
+				var method = 'PUT';
+				var ps = $scope.parkingStructure;
+				
+				var data = {
+					id: ps.id,
+					id_app: ps.id_app,
+					name: ps.name,
+					streetReference: ps.streetReference,
+					fee: ps.fee,
+					timeSlot : ps.timeSlot,
+					managementMode: ps.managementMode,
+					phoneNumber: ps.phoneNumber,
+					paymentMode: $scope.correctMyPaymentMode(paymode),
+					slotNumber: ps.slotNumber,
+					handicappedSlotNumber: ps.handicappedSlotNumber,
+					unusuableSlotNumber: ps.unusuableSlotNumber,
+					geometry: $scope.correctMyGeometry(geo)
+				};
+				
+			    var value = JSON.stringify(data);
+			    if($scope.showLog) console.log("Parkingmeter data : " + value);
+				
+			   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + id, null, $scope.authHeaders, value);
+			    myDataPromise.then(function(result){
+			    	console.log("Updated parkingStructure: " + result);
+			    	if(result == "OK"){
+			    		$scope.getParkingStructuresFromDb();
+						$scope.editModePS = false;
+			    	} else {
+			    		$scope.editModePS = true;
+			    		$scope.showUpdatingPSErrorMessage = true;
+			    	}
+			    });
+			}
+		}	
 	};
 	
 	
@@ -2066,6 +2102,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    		$scope.editModeS = true;
 		    		$scope.showUpdatingSErrorMessage = true;
 		    	}
+		    	// Here I try to clear the area and the polyline values
+		    	area = null;
+		    	polyline = null;
 		    });	
 		}
 	};
@@ -2112,42 +2151,53 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.createPstruct = function(form, paymode, geo){
 		if(!form.$valid){
 			$scope.isInit=false;
+			if(!$scope.checkCorrectPaymode(paymode)){
+				$scope.setMyPaymentoErrMode(true);
+			} else {
+				$scope.setMyPaymentoErrMode(false);
+			}
 		} else {
-			$scope.isInit=true;
-			$scope.showUpdatingPSErrorMessage = false;
-			
-			var method = 'POST';
-			var ps = $scope.parkingStructure;
-			
-			var data = {
-				id_app: $scope.myAppId,
-				name: ps.name,
-				streetReference: ps.streetReference,
-				fee: ps.fee,
-				timeSlot : ps.timeSlot,
-				managementMode: ps.managementMode,
-				phoneNumber: ps.phoneNumber,
-				paymentMode: $scope.correctMyPaymentMode(paymode),
-				slotNumber: ps.slotNumber,
-				handicappedSlotNumber: ps.handicappedSlotNumber,
-				unusuableSlotNumber: ps.unusuableSlotNumber,
-				geometry: $scope.correctMyGeometry(geo)
-			};
-			
-		    var value = JSON.stringify(data);
-		    if($scope.showLog) console.log("Parkingmeter data : " + value);
-			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, value);
-		    myDataPromise.then(function(result){
-		    	console.log("Created parkingStructure: " + JSON.stringify(result));
-		    	if(result != null && result != ""){
-		    		$scope.getParkingStructuresFromDb();
-					$scope.editModePS = false;
-		    	} else {
-		    		$scope.editModePS = true;
-		    		$scope.showUpdatingPSErrorMessage = true;
-		    	}
-		    });	
+			if(!$scope.checkCorrectPaymode(paymode)){
+				$scope.isInit=false;
+				$scope.setMyPaymentoErrMode(true);
+			} else {
+				$scope.isInit=true;
+				$scope.showUpdatingPSErrorMessage = false;
+				$scope.setMyPaymentoErrMode(false);
+				
+				var method = 'POST';
+				var ps = $scope.parkingStructure;
+				
+				var data = {
+					id_app: $scope.myAppId,
+					name: ps.name,
+					streetReference: ps.streetReference,
+					fee: ps.fee,
+					timeSlot : ps.timeSlot,
+					managementMode: ps.managementMode,
+					phoneNumber: ps.phoneNumber,
+					paymentMode: $scope.correctMyPaymentMode(paymode),
+					slotNumber: ps.slotNumber,
+					handicappedSlotNumber: ps.handicappedSlotNumber,
+					unusuableSlotNumber: ps.unusuableSlotNumber,
+					geometry: $scope.correctMyGeometry(geo)
+				};
+				
+			    var value = JSON.stringify(data);
+			    if($scope.showLog) console.log("Parkingmeter data : " + value);
+				
+			   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, value);
+			    myDataPromise.then(function(result){
+			    	console.log("Created parkingStructure: " + JSON.stringify(result));
+			    	if(result != null && result != ""){
+			    		$scope.getParkingStructuresFromDb();
+						$scope.editModePS = false;
+			    	} else {
+			    		$scope.editModePS = true;
+			    		$scope.showUpdatingPSErrorMessage = true;
+			    	}
+			    });	
+			}
 		}
 	};
 	

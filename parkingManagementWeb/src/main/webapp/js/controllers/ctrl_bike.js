@@ -268,7 +268,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			};
 			
 		} else {
-			$scope.setMyGeometry("0,0");
+			$scope.setMyGeometry(null);
 			
 			$scope.bpCreateMap = {
 				control: {},
@@ -401,9 +401,6 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    		$scope.showUpdatingBPErrorMessage = true;
 		    	}
 		    });
-			
-			
-			
 		}
 	};
 	
@@ -518,7 +515,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    		var e = args[0];
 			    		console.log("I am in marker mouseover event function " + e);
 			    		marker.show = true;
-//			    	 	$scope.$apply();
+			    		//$scope.$apply();
 			    	},
 			    	click: function (marker, eventName, args){
 		            	var e = args[0];

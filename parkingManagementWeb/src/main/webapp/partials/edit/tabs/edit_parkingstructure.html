@@ -1,7 +1,7 @@
 <div class="row">
 	<div ng-show="!editModePS && !viewModePS">
 				<div class="col-md-6" ng-show="psMapReady" >
-					<ui-gmap-google-map center="pStructureMap.center" draggable="true" zoom="pStructureMap.zoom" options="options" control="pStructureMap.control" bounds="pStructureMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+					<ui-gmap-google-map id="30" center="pStructureMap.center" draggable="true" zoom="pStructureMap.zoom" options="options" control="pStructureMap.control" bounds="pStructureMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
         					<ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'">
         						<ui-gmap-window show="'show'" ng-cloak>
                 					<p>
@@ -20,9 +20,9 @@
 						</div>
 				</div>
 				<div class="col-md-6">
-							<div class="panel panel-primary" align="center">
+							<div class="panel panel-success" align="center">
 								<div class="panel-heading">
-									<h5 class="panel-title">{{ 'ps_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setPsEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+									<h5 class="panel-title">{{ 'ps_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success" ng-click="setPsEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 								</div>
 								<div class="panel-body">
 									<div class="alert alert-danger" ng-show="showDeletingPSErrorMessage">{{ 'err_in_delete_parkingstructure' | i18n }}</div>
@@ -52,11 +52,11 @@
 											<td colspan="5"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
 										</tr>
 									</table>
-									<button class="btn btn-primary"
+									<button class="btn btn-success"
 											ng-disabled="currentPage == 0"
 											ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 										{{currentPage+1}}/{{numberOfPages(4)}}
-									<button class="btn btn-primary"
+									<button class="btn btn-success"
 											ng-disabled="currentPage >= pstructWS.length/maxPStructs - 1"
 											ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 								</div>
@@ -72,31 +72,32 @@
 		  		<div class="panel-body">	
 				   	<div class="form-group">
 				    	<label for="name">{{ 'ps_name' | i18n }}</label>
-				    	<input id="name" type="text" class="form-control" name="pName" ng-model="parkingStructure.name" ng-required="true" >
+				    	<input id="name" type="text" class="form-control" name="pName" ng-model="parkingStructure.name" ng-required="true" placeholder="{{ 'ps_name_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.pCode.$error.required">{{ 'parkingstructure_name_err_required' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="address">{{ 'ps_address' | i18n }}</label>
-				    	<input id="address" type="text" class="form-control" name="pAddress" ng-model="parkingStructure.streetReference" ng-required="false" ><!-- ng-change="setAlloggioChanged(true)" -->
+				    	<input id="address" type="text" class="form-control" name="pAddress" ng-model="parkingStructure.streetReference" ng-required="false" placeholder="{{ 'ps_address_placeholder' | i18n }}" >
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="fee">{{ 'ps_fee' | i18n }}</label>
-				    	<input id="fee" type="text" class="form-control" name="pFee" ng-model="parkingStructure.fee" ng-required="true" >
+				    	<input id="fee" type="text" class="form-control" name="pFee" ng-model="parkingStructure.fee" ng-required="true" placeholder="{{ 'ps_fee_placeholder' | i18n }}" ng-pattern="decimalNumbers" >
 				    	<div class="alert alert-danger" ng-show="!isInit && form.pFee.$error.required">{{ 'parkingstructure_fee_err_required' | i18n }}</div>
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pFee.$error.pattern">{{ 'parkingstructure_fee_err_pattern' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="time">{{ 'ps_time' | i18n }}</label>
-				    	<input id="time" type="text" class="form-control" name="pTime" ng-model="parkingStructure.timeSlot" ng-pattern="periodPattern" ng-required="false" ><!-- ng-pattern="timePattern" -->
+				    	<input id="time" type="text" class="form-control" name="pTime" ng-model="parkingStructure.timeSlot" ng-pattern="periodPattern" ng-required="false" placeholder="{{ 'ps_time_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.pTime.$error.pattern">{{ 'parkingstructure_openingtime_err_pattern' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="phone">{{ 'ps_phone' | i18n }}</label>
-				    	<input id="phone" type="text" class="form-control" name="pPhone" ng-model="parkingStructure.phoneNumber" ng-pattern="phonePattern" ng-required="false" >
+				    	<input id="phone" type="text" class="form-control" name="pPhone" ng-model="parkingStructure.phoneNumber" ng-pattern="phonePattern" ng-required="false" placeholder="{{ 'ps_phone_placeholder' | i18n }}" >
 				    	<div class="alert alert-danger" ng-show="!isInit && form.pPhone.$error.pattern">{{ 'parkingstructure_phone_err_pattern' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="managementMode">{{ 'ps_management_mode' | i18n }}</label>
-				    	<input id="managementMode" type="text" class="form-control" name="pTime" ng-model="parkingStructure.managementMode" ng-required="false" >
+				    	<input id="managementMode" type="text" class="form-control" name="pTime" ng-model="parkingStructure.managementMode" ng-required="false" placeholder="{{ 'ps_mmode_placeholder' | i18n }}" >
 				   	</div>
 				   	<div class="form-group">
 				   		<label for="paymentMode">{{ 'ps_payment_mode' | i18n }}</label>
@@ -104,14 +105,14 @@
 				   			<div class="panel-body">
 							   	<table width="100%">
 							   		<tr>
-							   			<td width="25%"><label for="cashPayment">{{ listaPagamenti[0].descrizione }}:</label> <input id="cashPayment" type="checkbox" ng-model="myPayment.cash_checked"></td>
-							   			<td width="25%"><label for="automatedPayment">{{ listaPagamenti[1].descrizione }}:</label> <input id="automatedPayment" type="checkbox" ng-model="myPayment.automated_teller_checked"></td>
-							   			<td width="25%"><label for="prepaidPayment">{{ listaPagamenti[2].descrizione }}:</label> <input id="prepaidPayment" type="checkbox" ng-model="myPayment.prepaid_card_checked"></td>
-							   			<td width="25%"><label for="parcometroPayment">{{ listaPagamenti[3].descrizione }}:</label> <input id="parcometroPayment" type="checkbox" ng-model="myPayment.parcometro_checked"></td>
+							   			<td width="25%"><label for="cashPayment">{{ listaPagamenti[0].descrizione }}:</label> <input id="cashPayment" type="checkbox" ng-model="myPayment.cash_checked" ng-change="checkIfPaymentChecked()"></td>
+							   			<td width="25%"><label for="automatedPayment">{{ listaPagamenti[1].descrizione }}:</label> <input id="automatedPayment" type="checkbox" ng-model="myPayment.automated_teller_checked" ng-change="checkIfPaymentChecked()"></td>
+							   			<td width="25%"><label for="prepaidPayment">{{ listaPagamenti[2].descrizione }}:</label> <input id="prepaidPayment" type="checkbox" ng-model="myPayment.prepaid_card_checked" ng-change="checkIfPaymentChecked()"></td>
+							   			<td width="25%"><label for="parcometroPayment">{{ listaPagamenti[3].descrizione }}:</label> <input id="parcometroPayment" type="checkbox" ng-model="myPayment.parcometro_checked" ng-change="checkIfPaymentChecked()"></td>
 							   		</tr>
 							   	</table>
 						   	</div>
-				    	<div class="alert alert-danger" ng-show="!isInit && form.pPayment.$error.required">{{ 'parkingstructure_payment_mode_select_err_required' | i18n }}</div>
+				    	<div class="alert alert-danger" ng-show="noPaymentChecked">{{ 'parkingstructure_payment_mode_select_err_required' | i18n }}</div>
 				   		</div>
 				   	</div>
 				   	<label for="totalSlot">{{ 'ps_slots' | i18n }}</label>
@@ -119,18 +120,18 @@
 				   		<div class="panel-body">
 						   	<div class="form-group">
 						    	<label for="totalSlot">{{ 'ps_totalslot' | i18n }}</label>
-						    	<input id="totalSlot" type="text" class="form-control" name="pTotalslot" ng-model="parkingStructure.slotNumber" ng-pattern="onlyNumbers" ng-required="true" >
+						    	<input id="totalSlot" type="text" class="form-control" name="pTotalslot" ng-model="parkingStructure.slotNumber" ng-pattern="onlyNumbers" ng-required="true" placeholder="{{ 'ps_totalslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.pTotalslot.$error.required">{{ 'parkingstructure_slots_err_required' | i18n }}</div>
 						    	<div class="alert alert-danger" ng-show="!isInit && form.pTotalslot.$error.pattern">{{ 'parkingstructure_slots_err_pattern' | i18n }}</div>
 						   	</div>
 							<div class="form-group">
 						    	<label for="handicappedSlot">{{ 'ps_handicapped_slot' | i18n }}</label>
-						    	<input id="handicappedSlot" type="text" class="form-control" name="pHandicappedslot" ng-model="parkingStructure.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<input id="handicappedSlot" type="text" class="form-control" name="pHandicappedslot" ng-model="parkingStructure.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="false" placeholder="{{ 'ps_handicappedslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.pHandicappedslot.$error.pattern">{{ 'parkingstructure_slots_err_pattern' | i18n }}</div>
 						   	</div>
 						   	<div class="form-group">
 						    	<label for="unusuableSlot">{{ 'ps_unusuable_slot' | i18n }}</label>
-						    	<input id="unusuableSlot" type="text" class="form-control" name="pUnusuableslot" ng-model="parkingStructure.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="false" >
+						    	<input id="unusuableSlot" type="text" class="form-control" name="pUnusuableslot" ng-model="parkingStructure.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="false" placeholder="{{ 'ps_unusuableslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.pUnusuableslot.$error.pattern">{{ 'parkingstructure_slots_err_pattern' | i18n }}</div>
 						   	</div>
 				   		</div>
@@ -138,11 +139,11 @@
 				 
 					<div class="form-group">
 				    	<label for="geometry">{{ 'pm_geometry' | i18n }}</label>
-				    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="false" ng-pattern="gpsPos" >
+				    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="false" ng-pattern="gpsPos" placeholder="{{ 'ps_geo_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.pArea.$error.pattern">{{ 'parkingmeter_geometry_select_err_pattern' | i18n }}</div>
 					</div>
 					<div class="col-md-12" ng-show="isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="5" center="psEditMap.center" draggable="true" zoom="psEditMap.zoom" options="psEditMap.options" control="psEditMap.control" bounds="psEditMap.bounds">
+						<ui-gmap-google-map id="31" center="psEditMap.center" draggable="true" zoom="psEditMap.zoom" options="psEditMap.options" control="psEditMap.control" bounds="psEditMap.bounds">
 								<ui-gmap-marker idkey="myPs.id" coords="myPs.coords" options="myPs.options" icon="myPs.icon" events="myPs.events">
 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 	                					<p>
@@ -154,7 +155,7 @@
 						</ui-gmap-google-map>
 					</div>
 					<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="6" center="psCreateMap.center" draggable="true" zoom="psCreateMap.zoom" options="psCreateMap.options" control="psCreateMap.control" bounds="psCreateMap.bounds" events="psCreateMap.events">
+						<ui-gmap-google-map id="32" center="psCreateMap.center" draggable="true" zoom="psCreateMap.zoom" options="psCreateMap.options" control="psCreateMap.control" bounds="psCreateMap.bounds" events="psCreateMap.events">
 								<ui-gmap-marker idkey="myNewPs.id" coords="myNewPs.coords" options="myNewPs.options" icon="myNewPs.icon" events="myNewPs.events"><!-- click="'onClick'" -->
 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 	                					<p>
@@ -185,7 +186,7 @@
 	</div>
 	<div ng-show="viewModePS">	
 		<div class="col-md-6" ng-show="psViewMapReady" >
-			<ui-gmap-google-map id="11" center="pViewStructMap.center" draggable="true" zoom="pViewStructMap.zoom" options="pViewStructMap.options" control="pViewStructMap.control" bounds="pViewStructMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+			<ui-gmap-google-map id="33" center="pViewStructMap.center" draggable="true" zoom="pViewStructMap.zoom" options="pViewStructMap.options" control="pViewStructMap.control" bounds="pViewStructMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
 				<ui-gmap-markers models="pViewStructMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'"
 					<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
                 		<p>

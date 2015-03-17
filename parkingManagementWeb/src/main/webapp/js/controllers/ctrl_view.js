@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeWSServiceProxy', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
-                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeWSServiceProxy, uiGmapGoogleMapApi, uiGmapIsReady, $location, $filter) { // , $location 
+pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
+                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
 
 //	uiGmapGoogleMapApi.then(function (maps) {
 //		
@@ -225,6 +225,23 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 			bikepoints : true
 		};
 	};
+	
+	// --------------------------------------- Map direct code js -----------------------------------
+	var map;
+	
+	function initialize() {
+		var mapOptions = {
+				zoom: 14,
+				center: new google.maps.LatLng($scope.mapCenter.latitude, $scope.mapCenter.longitude)
+		};
+		map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions);
+		
+		$scope.mapReady = true;
+			
+	}
+
+	google.maps.event.addDomListener(window, 'load', initialize);
+	// ----------------------------------------------------------------------------------------------
 	
 	$scope.initMap = function(pmMarkers, psMarkers, bpMarkers){
 		

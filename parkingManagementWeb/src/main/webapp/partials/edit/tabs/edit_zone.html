@@ -1,7 +1,7 @@
 <div class="row">
 	<div ng-show="!editModeZ && !viewModeZ">
 		<div class="col-md-6" ng-show="zoneMapReady" >
-			<ui-gmap-google-map id="30" center="zoneMap.center" draggable="true" zoom="zoneMap.zoom" options="options" control="zoneMap.control" bounds="zoneMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+			<ui-gmap-google-map id="50" center="zoneMap.center" draggable="true" zoom="zoneMap.zoom" options="options" control="zoneMap.control" bounds="zoneMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
 	<!--         <ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'"> -->
 	<!--         	<ui-gmap-window show="'show'" ng-cloak> -->
 	<!--                 <p> -->
@@ -21,9 +21,9 @@
 			</div>
 		</div>
 		<div class="col-md-6">
-			<div class="panel panel-primary" align="center">
+			<div class="panel panel-success" align="center">
 				<div class="panel-heading">
-					<h5 class="panel-title">{{ 'zone_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setZEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+					<h5 class="panel-title">{{ 'zone_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success" ng-click="setZEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 				</div>
 				<div class="panel-body">
 					<div class="alert alert-danger" ng-show="showDeletingZErrorMessage">{{ 'err_in_delete_zone' | i18n }}</div>
@@ -52,11 +52,11 @@
 							<td colspan="5"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 						</tr>
 					</table>
-					<button class="btn btn-primary"
+					<button class="btn btn-success"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 						{{currentPage+1}}/{{numberOfPages(5)}}
-					<button class="btn btn-primary"
+					<button class="btn btn-success"
 							ng-disabled="currentPage >= zoneWS.length/maxZones - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 				</div>
@@ -71,7 +71,7 @@
 		  		</div>
 		  		<div class="panel-body">
 		  			<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="31" center="zCreateMap.center" draggable="true" zoom="zCreateMap.zoom" options="zCreateMap.options" control="zCreateMap.control" bounds="zCreateMap.bounds" events="zCreateMap.events">
+						<ui-gmap-google-map id="51" center="zCreateMap.center" draggable="true" zoom="zCreateMap.zoom" options="zCreateMap.options" control="zCreateMap.control" bounds="zCreateMap.bounds" events="zCreateMap.events">
 <!-- 								<ui-gmap-marker idkey="myNewS.id" coords="myNewS.coords" options="myNewS.options" icon="myNewS.icon" events="myNewS.events">click="'onClick'" -->
 <!-- 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
 <!-- 	                					<p> -->
@@ -85,30 +85,30 @@
 					</div>
 					<div class="form-group" ng-show="!isEditing">
 				    	<label for="geometryN">{{ 'zone_geometry' | i18n }}</label>
-				    	<input id="geometryN" type="text" class="form-control" name="zGeometry" ng-model="myNewPolGeometry" ng-required="false" ><!-- ng-pattern="gpsPos" -->
+				    	<input id="geometryN" type="text" class="form-control" name="zGeometry" ng-model="myNewPolGeometry" ng-required="false" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div>
 					</div>
 				   	<div class="form-group">
 				    	<label for="name">{{ 'zone_name' | i18n }}</label>
-				    	<input id="name" type="text" class="form-control" name="zName" ng-model="zone.name" ng-required="true" ><!-- ng-change="setAlloggioChanged(true)" -->
+				    	<input id="name" type="text" class="form-control" name="zName" ng-model="zone.name" ng-required="true" placeholder="{{ 'zone_name_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zName.$error.required">{{ 'zone_name_err_required' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="submacro">{{ 'zone_submacro' | i18n }}</label>
-				    	<input id="submacro" type="text" class="form-control" name="zSub" ng-model="zone.submacro" ng-required="true" >
+				    	<input id="submacro" type="text" class="form-control" name="zSub" ng-model="zone.submacro" ng-required="true" placeholder="{{ 'zone_submacro_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zSub.$error.required">{{ 'zone_submacro_err_required' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="type">{{ 'zone_type' | i18n }}</label>
-				    	<input id="type" type="text" class="form-control" name="zType" ng-model="zone.type" ng-required="false" >
+				    	<input id="type" type="text" class="form-control" name="zType" ng-model="zone.type" ng-required="false" placeholder="{{ 'zone_type_placeholder' | i18n }}" >
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="note">{{ 'zone_note' | i18n }}</label>
-				    	<input id="note" type="text" class="form-control" name="zNote" ng-model="zone.note" ng-required="false" >
+				    	<input id="note" type="text" class="form-control" name="zNote" ng-model="zone.note" ng-required="false" placeholder="{{ 'zone_note_placeholder' | i18n }}" >
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="color">{{ 'zone_color' | i18n }}</label>
-				    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="zColor" ng-model="myColor" ng-required="true" >
+				    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="zColor" ng-model="myColor" ng-required="true" placeholder="{{ 'zone_color_placeholder' | i18n }}" >
 				    	<div class="alert alert-danger" ng-show="!isInit && form.zColor.$error.required">{{ 'zone_color_err_required' | i18n }}</div>
 				   	</div>
 				   	
@@ -118,7 +118,7 @@
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div>
 					</div>
 					<div class="col-md-12" ng-show="isEditing">
-						<ui-gmap-google-map id="32" center="zEditMap.center" draggable="true" zoom="zEditMap.zoom" options="zEditMap.options" control="zEditMap.control" bounds="zEditMap.bounds">
+						<ui-gmap-google-map id="52" center="zEditMap.center" draggable="true" zoom="zEditMap.zoom" options="zEditMap.options" control="zEditMap.control" bounds="zEditMap.bounds">
 								<ui-gmap-polygon  static="false" path="editZone.path" stroke="editZone.stroke" visible="editZone.visible" fill="editZone.fill"
 	              					geodesic='editZone.geodesic' fit="false" editable="editZone.editable" draggable="editZone.draggable" events="editZone.events"></ui-gmap-polygon>	
 						</ui-gmap-google-map>
@@ -142,7 +142,7 @@
 	</div>
 	<div ng-show="viewModeZ">
 		<div class="col-md-6" ng-show="zViewMapReady" ><!-- id="map_canvas" -->
-			<ui-gmap-google-map id="33" center="viewZoneMap.center" draggable="true" zoom="viewZoneMap.zoom" options="options" control="viewZoneMap.control" bounds="viewZoneMap.bounds">	
+			<ui-gmap-google-map id="53" center="viewZoneMap.center" draggable="true" zoom="viewZoneMap.zoom" options="options" control="viewZoneMap.control" bounds="viewZoneMap.bounds">	
 				<ui-gmap-polygon ng-repeat="z in viewZonePolygons" path="z.path" stroke="z.stroke" fill="z.fill" visible="z.visible"
 	              geodesic="z.geodesic" fit="false" editable="false" draggable="false"></ui-gmap-polygon>
 	            <ui-gmap-polygon path="myZonePol.path" stroke="myZonePol.stroke" fill="myZonePol.fill" visible="myZonePol.visible"

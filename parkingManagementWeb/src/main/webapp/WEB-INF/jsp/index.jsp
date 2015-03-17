@@ -167,9 +167,11 @@
         <div class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
             <li class="{{ isHomeActive() }}"><a href="#/" ng-click="home()">{{ 'menu_bar-home' | i18n }}</a></li>
-            <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li>
-            <li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li>
-          	<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
+            <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
+            <li class="{{ isHomeAuxActive() }}"><a href="#/aux/home" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li>
+<!--             <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li> -->
+<!--             <li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li> -->
+<!--           	<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li> -->
           </ul>
           <ul class="nav navbar-nav navbar-right" >
 <!--           	<li class="dropdown"> -->
@@ -195,7 +197,7 @@
 				<div class="panel panel-default" style="margin-top:65px;">
 			  		<div class="panel-body">
 			  			<div style="margin:5px 15px;">
-							<div class="row" align="center" style="height: 80px"><!-- ; margin-top: 20px; -->
+							<div class="row" align="center" style="height: 100px"><!-- ; margin-top: 20px; -->
 								<div><!-- "text-align: center" -->
 									<table>
 										<tr>
@@ -242,7 +244,22 @@
 <!-- 								    </div> -->
 <!-- 							    </div>     -->
 <!-- 							</div> -->
-							<div class="row" style="height: 30px;" ng-show="!frameOpened">&nbsp;</div>
+							<div class="row" ng-show="isHomeParkActive() == 'active'"><!-- style="height: 150px;" -->
+								<div class="panel panel-primary" align="left">
+									<div class="panel-heading">
+										<h5 class="panel-title">{{ 'park_menu_list' | i18n }}</h5>
+									</div>
+									<div class="panel-body">
+										<ul class="nav nav-pills nav-stacked" style="font-size: 14px">
+											<li class="{{ isHomeSubParkActive() }}"><a href="#/park/home" ng-click="setHomeSubParkActive()">{{ 'menu_bar-home' | i18n }}</a></li>
+											<li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li>
+					            			<li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li>
+					          				<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
+										</ul>
+									</div>
+								</div>
+							</div>
+<!-- 							<div class="row" style="height: 30px;" ng-show="!frameOpened">&nbsp;</div> -->
 							<div ng-view class="row" ng-hide="isNewPractice()" >{{ 'loading_text'| i18n }}...</div>
 						</div>
 						</div>

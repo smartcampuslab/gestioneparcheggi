@@ -1,7 +1,7 @@
 <div class="row"><!-- ng-init="getParkingMetersFromDb()" -->
 	<div ng-show="!editModePM && !viewModePM">			
 				<div class="col-md-6" ng-show="pmMapReady" ><!-- id="map_canvas" -->
-					<ui-gmap-google-map id="4"center="pMeterMap.center" draggable="true" zoom="pMeterMap.zoom" options="options" control="pMeterMap.control" bounds="pMeterMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+					<ui-gmap-google-map id="20"center="pMeterMap.center" draggable="true" zoom="pMeterMap.zoom" options="options" control="pMeterMap.control" bounds="pMeterMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
 							<ui-gmap-markers models="parkingMetersMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'"><!-- click="'onClick'" -->
 								<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
                 					<p>
@@ -20,9 +20,9 @@
 						</div>
 				</div>
 				<div class="col-md-6">
-					<div class="panel panel-primary" align="center">
+					<div class="panel panel-success" align="center">
 						<div class="panel-heading">
-							<h5 class="panel-title">{{ 'pm_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-primary" ng-click="setPmEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+							<h5 class="panel-title">{{ 'pm_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success" ng-click="setPmEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 						</div>
 						<div class="panel-body">
 							<div class="alert alert-danger" ng-show="showDeletingPMErrorMessage">{{ 'err_in_delete_parkingmeter' | i18n }}</div>
@@ -66,11 +66,11 @@
 									<td colspan="5"><strong>{{ 'no_pm_in_lists' | i18n }}</strong></td>
 								</tr>
 							</table>
-							<button class="btn btn-primary"
+							<button class="btn btn-success"
 									ng-disabled="currentPage == 0"
 									ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 								{{currentPage+1}}/{{numberOfPages(3)}}
-							<button class="btn btn-primary"
+							<button class="btn btn-success"
 									ng-disabled="currentPage >= pmeterWS.length/maxPmeters - 1"
 									ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 						</div>
@@ -86,39 +86,34 @@
 		  		<div class="panel-body">	
 				   	<div class="form-group">
 				    	<label for="code">{{ 'pm_code' | i18n }}</label>
-				    	<input id="code" type="text" class="form-control" name="pCode" ng-model="parckingMeter.code" ng-required="true" ><!-- ng-change="setAlloggioChanged(true)" -->
+				    	<input id="code" type="text" class="form-control" name="pCode" ng-model="parckingMeter.code" ng-required="true" placeholder="{{ 'pm_code_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.pCode.$error.required">{{ 'parkingmeter_code_err_required' | i18n }}</div>
 				   	</div>
-		<!-- 		   	<div class="form-group" ng-show="alloggioOccupato.comuneAlloggio != null"> -->
-		<!-- 		    	<label for="municipality">{{ 'municipality_select_label_details' | i18n }}</label> -->
-		<!-- 		    	<select id="municipality" name="pMunicipality" class="form-control" ng-options="l.idObj as l.descrizione for l in listaComuniVallagarina" ng-model="alloggioOccupato.comuneAlloggio" ng-required="getFamilyAllowaces()==true"> -->
-		<!-- 		    		<option value="">{{ myAlloggio.descrizione }}</option> -->
-		<!-- 		    	</select> -->
-		<!-- 		   		<div class="alert alert-danger" ng-show="!initForm() && form.pMunicipality.$error.required">{{ 'municipality_select_err_required_details' | i18n }}</div> -->
-		<!-- 		   	</div> -->
 				   	<div class="form-group">
 				    	<label for="note">{{ 'pm_note' | i18n }}</label>
-				    	<input id="note" type="text" class="form-control" name="pNote" ng-model="parckingMeter.note" ng-required="false" ><!-- ng-change="setAlloggioChanged(true)" -->
+				    	<input id="note" type="text" class="form-control" name="pNote" ng-model="parckingMeter.note" ng-required="false" placeholder="{{ 'pm_note_placeholder' | i18n }}" >
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="status">{{ 'pm_status' | i18n }}</label>
 				    	<select id="status" name="pStatus" class="form-control" ng-options="s as s.descrizione for s in listaStati" ng-model="myStatus" ng-required="true">
+				    		<option value="">{{ 'pm_status_placeholder' | i18n }}</option>
 				    	</select>
 				    	<div class="alert alert-danger" ng-show="!isInit && form.pStatus.$error.required">{{ 'parkingmeter_status_select_err_required' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group">
 				    	<label for="area">{{ 'pm_area_name' | i18n }}</label>
 				    	<select id="area" name="pArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="true">
+				    		<option value="">{{ 'pm_area_placeholder' | i18n }}</option>
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.pArea.$error.required">{{ 'parkingmeter_area_select_err_required' | i18n }}</div>
 					</div>
 					<div class="form-group">
 				    	<label for="geometry">{{ 'pm_geometry' | i18n }}</label>
-				    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="false" ng-pattern="gpsPos" >
+				    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="false" ng-pattern="gpsPos" placeholder="{{ 'pm_geo_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.pArea.$error.pattern">{{ 'parkingmeter_geometry_select_err_pattern' | i18n }}</div>
 					</div>
 					<div class="col-md-12" ng-show="isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="5" center="pmEditMap.center" draggable="true" zoom="pmEditMap.zoom" options="pmEditMap.options" control="pmEditMap.control" bounds="pmEditMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+						<ui-gmap-google-map id="21" center="pmEditMap.center" draggable="true" zoom="pmEditMap.zoom" options="pmEditMap.options" control="pmEditMap.control" bounds="pmEditMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
 								<ui-gmap-marker idkey="myPm.id" coords="myPm.coords" options="myPm.options" icon="myPm.icon" events="myPm.events"><!-- click="'onClick'" -->
 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 	                					<p>
@@ -130,7 +125,7 @@
 						</ui-gmap-google-map>
 					</div>
 					<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="6" center="pmCreateMap.center" draggable="true" zoom="pmCreateMap.zoom" options="pmCreateMap.options" control="pmCreateMap.control" bounds="pmCreateMap.bounds" events="pmCreateMap.events"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+						<ui-gmap-google-map id="22" center="pmCreateMap.center" draggable="true" zoom="pmCreateMap.zoom" options="pmCreateMap.options" control="pmCreateMap.control" bounds="pmCreateMap.bounds" events="pmCreateMap.events"><!-- refresh="map.refresh"  options="map.options" events="events" -->
 								<ui-gmap-marker idkey="myNewPm.id" coords="myNewPm.coords" options="myNewPm.options" icon="myNewPm.icon" events="myNewPm.events"><!-- click="'onClick'" -->
 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
 	                					<p>
@@ -161,7 +156,7 @@
 	</div>
 	<div ng-show="viewModePM">	
 		<div class="col-md-6" ng-show="pmViewMapReady" ><!-- id="map_canvas" -->
-			<ui-gmap-google-map id="7" center="pViewMeterMap.center" draggable="true" zoom="pViewMeterMap.zoom" options="pViewMeterMap.options" control="pViewMeterMap.control" bounds="pViewMeterMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
+			<ui-gmap-google-map id="23" center="pViewMeterMap.center" draggable="true" zoom="pViewMeterMap.zoom" options="pViewMeterMap.options" control="pViewMeterMap.control" bounds="pViewMeterMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
 				<ui-gmap-markers models="pViewMetersMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'"
 					<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak>
                 		<p>
