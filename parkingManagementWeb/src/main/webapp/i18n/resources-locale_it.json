@@ -116,7 +116,7 @@
     "description": "Label checkbox parcometri"
 }, {
     "key": "view_parkingstructs",
-    "value": "Parcheggi in strutture",
+    "value": "Strutture parcheggio",
     "description": "Label checkbox parcheggi in strutture"
 }, {
     "key": "view_bikepoints",
@@ -560,8 +560,12 @@
     "description": "Messaggio errore cancellazione zona"
 }, {
     "key": "view_zone",
-    "value": "Dttagli Zona",
+    "value": "Dettagli Zona",
     "description": "Titolo pagina dettagli zona"
+}, {
+    "key": "view_zones",
+    "value": "Zone",
+    "description": "Label zone in pagina visualizza/nascondi elementi"
 }, {
     "key": "edit_area",
     "value": "Modifica Area",
