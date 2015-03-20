@@ -1,0 +1,67 @@
+<div class="panel panel-danger">
+	<div class="panel-heading">
+		<h4 class="panel-title">{{ 'viewAllPanelTitle' | i18n }}</h4>
+	</div>
+	<div class="panel-body">
+		<!--<form name="viewForm"  > ng-init="initWs()" -->
+			<div class="row" ng-controller="ViewCtrlGmap">
+				<div class="col-md-9"><!--   ng-show="mapReady"-->
+<!-- 					<div id="map_canvas" ></div> -->
+					<map center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" style="height: 500px">
+						
+					
+					
+					
+					
+					</map>
+				</div>
+<!-- 				<div class="col-md-9" ng-show="mapReady" id="map-canvas">	 -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-9" ng-show="!mapReady"> -->
+<!-- 					<div style="text-align: center"> -->
+<!-- 							<img src="imgs/ajax-loader.gif" width="40" height="40" /><br> -->
+<!-- 							<h3>{{ 'loading_text' | i18n }}...</h3> -->
+<!-- 						</div> -->
+<!-- 				</div> -->
+				<div class="col-md-3">
+					<div class="panel panel-danger">
+						<div class="panel-heading">
+							<h5 class="panel-title">{{ 'view_hide_block_title' | i18n }}</h5>
+						</div>
+						<div class="panel-body">
+							<table width="100%">
+<!-- 								<tr> -->
+<!-- 									<th colspan="2">{{ 'view_hide_block_title' | i18n }}</th> -->
+<!-- 								</tr> -->
+								<tr>
+									<td align="center" width="15%"><input id="rateArea" type="checkbox" ng-model="mapelements.rateareas" ng-click="changeAreaPolygons()"></td>
+									<td align="left" width="85%"><label for="rateArea">{{ 'view_areas' | i18n }}</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="streets" type="checkbox" ng-model="mapelements.streets" ng-click="changeStreetPolylines()"></td>
+									<td align="left"><label for="streets">{{ 'view_streets' | i18n }}</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="pMeters" type="checkbox" ng-model="mapelements.parkingmeters" ng-click="changeParkingMetersMarkers()"></td>
+									<td align="left"><label for="pMeters">{{ 'view_parkingmeters' | i18n }}</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="pStruct" type="checkbox" ng-model="mapelements.parkingstructs" ng-click="changeParkingStructuresMarkers()"></td>
+									<td align="left"><label for="pStruct">{{ 'view_parkingstructs' | i18n }}</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="bikePoint" type="checkbox" ng-model="mapelements.bikepoints" ng-click="changeBikePointsMarkers()"></td>
+									<td align="left"><label for="bikePoint">{{ 'view_bikepoints' | i18n }}</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="zones" type="checkbox" ng-model="mapelements.zones" ng-click="changeZonePolygons()"></td>
+									<td align="left"><label for="zones">{{ 'view_zones' | i18n }}</label></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+<!-- 		</form> -->
+	</div>
+</div>
