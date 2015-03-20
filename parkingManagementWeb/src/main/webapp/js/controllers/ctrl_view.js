@@ -325,7 +325,7 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 			$scope.mapBikePointMarkers = [];
 		}
 		$scope.addMarkerToMap($scope.map);
-		//$scope.mapReady = true;
+		$scope.mapReady = true;
 		//$scope.$apply();
 	};
 	
@@ -497,7 +497,7 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 		}
 		
 		var ret = {
-			title: marker.code,
+			data: marker,
 			id: i	
 		};
 		if(marker.geometry != null){
@@ -512,43 +512,33 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 			    	visible: true,
 			    	map: null
 			    },
-				title: marker.code,
+				data: marker,
 				icon: myIcon,
-				showWindow: false,
-			    events: {
-			    	mouseover: function(marker, eventName, args) {
-			    		var e = args[0];
-			    		console.log("I am in marker mouseover event function " + e);
-			    		marker.show = true;
-//			    	 	$scope.$apply();
-			    	},
-			    	click: function (marker, eventName, args){
-		            	var e = args[0];
-		            	console.log("I am in marker click event function " + e.latLng);
-		            	//$scope.$apply();
-		            }	
-			    }
+				showWindow: false
+//			    events: {
+//			    	mouseover: function(marker, eventName, args) {
+//			    		var e = args[0];
+//			    		console.log("I am in marker mouseover event function " + e);
+//			    		marker.show = true;
+////			    	 	$scope.$apply();
+//			    	},
+//			    	click: function (marker, eventName, args){
+//		            	var e = args[0];
+//		            	console.log("I am in marker click event function " + e.latLng);
+//		            	//$scope.$apply();
+//		            }	
+//			    }
 			};
 			ret.closeClick = function () {
 		        ret.showWindow = false;
-		        $scope.$apply();
+		        //$scope.$apply();
 		    };
-		    ret.click = function (marker, eventName, model, args) {
-		        $scope.onMarkerClicked(ret);
+		    ret.onClick = function () {
+		    	console.log("I am in ret marker click event function: " + ret.data.code);
+		    	ret.showWindow = !ret.showWindow;
 		    };
 		}
 		return ret;
-	};
-	
-	
-	$scope.onMarkerClicked = function (marker) {
-//	    if (markerToClose) {
-//	      markerToClose.showWindow = false;
-//	    }
-	    var markerToClose = marker; // for next go around
-	    marker.showWindow = true;
-	    $scope.$apply();
-	    //window.alert("Marker: lat: " + marker.latitude + ", lon: " + marker.longitude + " clicked!!")
 	};
 	  
 	$scope.initAreasOnMap = function(areas, visible){
@@ -736,7 +726,6 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	    	
 	    	$scope.streetWS = $scope.initStreetsObjects(allStreet);
 	    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true);
-	    	$scope.mapReady = true;
 	    });
 	};
 		    
@@ -756,8 +745,6 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 		    }
 	    	angular.copy(markers, $scope.parkingMetersMarkers);
 	    	$scope.getParkingStructuresFromDb();
-	    	//$scope.initMap(markers, null);
-		    //$scope.randomMarkers = markers;	
 	    });
 	};
 	
@@ -770,7 +757,6 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allParkingStructures);
 	    	console.log("Parking Structures retrieved from db: " + JSON.stringify(result));
-	    	//$scope.addParkingMetersMarkers(allParkingMeters);
 	    	for (var i = 0; i <  allParkingStructures.length; i++) {
 	    		markers.push(createMarkers(i, allParkingStructures[i], 2));
 		    }
@@ -788,15 +774,13 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allBikePoints);
 	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
-	    	//$scope.addParkingMetersMarkers(allParkingMeters);
 	    	for (var i = 0; i <  allBikePoints.length; i++) {
 	    		markers.push(createMarkers(i, allBikePoints[i], 3));
 		    }
 	    	angular.copy(markers, $scope.bikePointMarkers);
-	    	$scope.initMap($scope.parkingMetersMarkers, $scope.parkingStructureMarkers, $scope.bikePointMarkers);
-	    	//$scope.initMap($scope.parkingMetersMarkers, null, null);
+	    	//$scope.initMap($scope.parkingMetersMarkers, $scope.parkingStructureMarkers, $scope.bikePointMarkers);
+	    	$scope.initMap($scope.parkingMetersMarkers, null, null);
 	    	$scope.getAreasFromDb();
-		    //$scope.randomMarkers = markers;	
 	    });   	
 	};
 	
