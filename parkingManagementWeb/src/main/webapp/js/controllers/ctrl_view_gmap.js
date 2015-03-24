@@ -19,6 +19,30 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	    'Accept': 'application/json;charset=UTF-8'
 	};
 	
+	$scope.cash_mode = "CASH";
+    $scope.automated_teller_mode = "AUTOMATED_TELLER";
+    $scope.prepaid_card_mode = "PREPAID_CARD";
+    $scope.parcometro = "PARCOMETRO";
+    
+	$scope.listaPagamenti = [
+	    {
+	         idObj: $scope.cash_mode,
+	         descrizione: "Contanti"
+	    },
+	    {
+	         idObj: $scope.automated_teller_mode,
+	         descrizione: "Cassa automatica"
+	    },
+	    {
+	         idObj: $scope.prepaid_card_mode,
+	         descrizione: "Carta prepagata"
+	    },
+	    {
+	         idObj: $scope.parcometro,
+	         descrizione: "Parcometro"
+	    }
+	];
+	
 	$scope.mapCenter = {
 		latitude: 45.88875357753771,
 	    longitude: 11.037440299987793
@@ -42,9 +66,13 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		
 	};
 	
-	// Utility methods
+	// ------------------------------- Utility methods ----------------------------------------
 	$scope.correctColor = function(value){
 		return "#" + value;
+	};
+	
+	$scope.correctPointGoogle = function(point){
+		return point.lat + "," + point.lng;
 	};
 	
 	$scope.correctPoints = function(points){
@@ -56,6 +84,17 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			};
 			corr_points.push(point);
 		}
+		return corr_points;
+	};
+	
+	$scope.correctPointsGoogle = function(points){
+		var corr_points = "[";
+		for(var i = 0; i < points.length; i++){
+			var point = "[ " + points[i].lat + "," + points[i].lng + "]";
+			corr_points = corr_points +point + ",";
+		}
+		corr_points = corr_points.substring(0, corr_points.length-1);
+		corr_points = corr_points + "]";
 		return corr_points;
 	};
 	
@@ -92,17 +131,41 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		return correctedZones;
 	};
 	
-	// ----------------------------------------------------------------------------------------------
+	$scope.castMyPaymentModeToString = function(myPm){
+		var correctedPm = "";
+		for(var i = 0; i < myPm.length; i++){
+			var stringVal = "";
+			switch (myPm[i]){
+				case $scope.cash_mode : 
+					stringVal = $scope.listaPagamenti[0].descrizione;
+					break;
+				case $scope.automated_teller_mode: 
+					stringVal = $scope.listaPagamenti[1].descrizione;
+					break;
+				case $scope.prepaid_card_mode: 
+					stringVal = $scope.listaPagamenti[2].descrizione;
+					break;
+				case $scope.parcometro: 
+					stringVal = $scope.listaPagamenti[3].descrizione;
+					break;
+				default: break;
+			}
+			correctedPm = correctedPm + stringVal + ",";
+		}
+		correctedPm = correctedPm.substring(0, correctedPm.length-1);
+		return correctedPm;
+	};
 	
+	// ----------------------------------------------------------------------------------------------
 	
 	$scope.initMap = function(pmMarkers, psMarkers, bpMarkers){
 		
-		$scope.map = {
-			control: {},
-			center: $scope.mapCenter,
-		   zoom: 14,
-		    bounds: {}
-		};
+//		$scope.map = {
+//			control: {},
+//			center: $scope.mapCenter,
+//		   zoom: 14,
+//		    bounds: {}
+//		};
 		
 		$scope.options = {
 		    scrollwheel: true
@@ -123,7 +186,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		} else {
 			$scope.mapBikePointMarkers = [];
 		}
-		$scope.addMarkerToMap($scope.map);
+		//$scope.addMarkerToMap($scope.map);
 		$scope.mapReady = true;
 		//$scope.$apply();
 	};
@@ -161,7 +224,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     };
     
     $scope.hideParkingMetersMarkers = function() {
-    	$scope.mapParkingMetersMarkers = [];//$scope.setAllMarkersMap($scope.parkingMetersMarkers, null, false);
+    	$scope.mapParkingMetersMarkers = []; //$scope.setAllMarkersMap($scope.parkingMetersMarkers, null, false);
         //$scope.refreshMap();
         //$scope.$apply();
     };
@@ -181,7 +244,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     };
     
     $scope.hideParkingStructuresMarkers = function() {
-    	$scope.mapParkingStructureMarkers = [];//$scope.setAllMarkersMap($scope.parkingMetersMarkers, null, false);
+    	$scope.mapParkingStructureMarkers = []; //$scope.setAllMarkersMap($scope.parkinStructureMarkers, null, false);
         //$scope.refreshMap();
         //$scope.$apply();
     };
@@ -222,6 +285,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     
     $scope.hideAreaPolygons = function() {
     	$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, false);
+    	$scope.hideAllAreas();
         //$scope.refreshMap();
         //$scope.$apply();
     };
@@ -242,6 +306,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     
     $scope.hideZonePolygons = function() {
     	$scope.mapZones = $scope.initZonesOnMap($scope.zoneWS, false);
+    	$scope.hideAllZones();
         //$scope.refreshMap();
         //$scope.$apply();
     };
@@ -262,8 +327,30 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     
     $scope.hideStreetPolylines = function() {
     	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, false);
+    	$scope.hideAllStreets();
         //$scope.refreshMap();
         //$scope.$apply();
+    };
+    
+    $scope.hideAllStreets = function(){
+    	var toDelStreet = $scope.map.shapes;
+    	for(var i = 0; i < $scope.mapStreets.length; i++){
+    		toDelStreet[$scope.mapStreets[i].id].setMap(null);		// I can access dinamically the value of the object shapes for street
+    	}
+    };
+    
+    $scope.hideAllZones = function(){
+    	var toDelZones = $scope.map.shapes;
+    	for(var i = 0; i < $scope.mapZones.length; i++){
+    		toDelZones[$scope.mapZones[i].id].setMap(null);		// I can access dinamically the value of the object shapes for zones
+    	}
+    };
+    
+    $scope.hideAllAreas = function(){
+    	var toDelAreas = $scope.map.shapes;
+    	for(var i = 0; i < $scope.mapAreas.length; i++){
+    		toDelAreas[$scope.mapAreas[i].id].setMap(null);		// I can access dinamically the value of the object shapes for zones
+    	}
     };
     
     $scope.setAllMarkersMap = function(markers, map, visible){
@@ -284,9 +371,11 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	
 	var createMarkers = function(i, marker, type) {
 		var myIcon = "";
+		var myAreaPm = {};
 		switch(type){
 			case 1 : 
 				myIcon = $scope.pmMarkerIcon; 
+				myAreaPm = $scope.getLocalAreaById(marker.areaId);
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon; 
@@ -302,6 +391,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		if(marker.geometry != null){
 			ret = {
 				id: i,
+				position: marker.geometry.lat + "," + marker.geometry.lng,
 			    coords: { 
 			        latitude: marker.geometry.lat,
 			        longitude: marker.geometry.lng
@@ -312,6 +402,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			    	map: null
 			    },
 				data: marker,
+				area: myAreaPm,
 				icon: myIcon,
 				showWindow: false
 //			    events: {
@@ -352,10 +443,14 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 					area = {
 						id: areas[i].id,
 						path: $scope.correctPoints(poligons[0].points),
+						gpath: $scope.correctPointsGoogle(poligons[0].points),
 						stroke: {
 						    color: $scope.correctColor(areas[i].color),
 						    weight: 3
 						},
+						data: areas[i],
+						info_windows_pos: $scope.correctPointGoogle(poligons[0].points[1]),
+						info_windows_cod: "a" + areas[i].id,
 						editable: true,
 						draggable: true,
 						geodesic: false,
@@ -378,21 +473,34 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var tmpStreets = [];
 		
 		for(var i = 0; i < streets.length; i++){
+			var myAreaS = $scope.getLocalAreaById(streets[i].rateAreaId);
+			var myZones = [];
+			for(var j = 0; j < streets[i].zones.length; j++){
+				var zone = $scope.getLocalZoneById(streets[i].zones[j]);
+				myZones.push(zone);
+			}
 			if(streets[i].geometry != null){
 				poligons = streets[i].geometry;
 				street = {
 					id: streets[i].id,
 					path: $scope.correctPoints(poligons.points),
+					gpath: $scope.correctPointsGoogle(poligons.points),
 					stroke: {
 					    color: $scope.correctColor(streets[i].color),
-					    weight: 3
+					    weight: (visible) ? 3 : 0
 					},
+					data: streets[i],
+					area: myAreaS,
+					zones: myZones,
+					info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
+					info_windows_cod: "s" + streets[i].id,
 					editable: false,
 					draggable: false,
 					geodesic: false,
-					visible: visible,
+					visible: visible
 					//icons:
 				};
+				//street.setMap($scope.map);
 				tmpStreets.push(street);
 			}
 		}
@@ -410,10 +518,14 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 				zone = {
 					id: zones[i].id,
 					path: $scope.correctPoints(poligons.points),
+					gpath: $scope.correctPointsGoogle(poligons.points),
 					stroke: {
 					    color: $scope.correctColor(zones[i].color),
 					    weight: 3
 					},
+					data: zones[i],
+					info_windows_cod: "z" + zones[i].id,
+					info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
 					editable: true,
 					draggable: true,
 					geodesic: false,
@@ -491,7 +603,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		$scope.parkingStructureMarkers = [];
 	   	$scope.initPage();
 		$scope.mapReady = false;
-		$scope.getParkingMetersFromDb();
+		$scope.getAreasFromDb();
 	};
 	
 	 $scope.getAreasFromDb = function(){
@@ -506,10 +618,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		    	
 		   	$scope.areaWS = allAreas;
 		    $scope.initAreasOnMap($scope.areaWS, false);
-		   	$scope.hideAreaPolygons();
+		   	//$scope.hideAreaPolygons();
 		   	
 		    sharedDataService.setSharedLocalAreas($scope.areaWS);
-		    $scope.getZonesFromDb();
+		    $scope.getParkingMetersFromDb();
 		});
 	};
 	
@@ -543,6 +655,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	    		markers.push(createMarkers(i, allParkingMeters[i], 1));
 		    }
 	    	angular.copy(markers, $scope.parkingMetersMarkers);
+	    	//$scope.parkingMetersMarkers = $scope.initPMObjects(allPmeters);
 	    	$scope.getParkingStructuresFromDb();
 	    });
 	};
@@ -579,7 +692,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	    	angular.copy(markers, $scope.bikePointMarkers);
 	    	//$scope.initMap($scope.parkingMetersMarkers, $scope.parkingStructureMarkers, $scope.bikePointMarkers);
 	    	$scope.initMap($scope.parkingMetersMarkers, null, null);
-	    	$scope.getAreasFromDb();
+	    	$scope.getZonesFromDb();
 	    });   	
 	};
 	

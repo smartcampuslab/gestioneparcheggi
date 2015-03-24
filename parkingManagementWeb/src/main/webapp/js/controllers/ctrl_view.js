@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
-                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
+pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeWSServiceProxy', 'uiGmapGoogleMapApi', 'uiGmapIsReady',
+                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeWSServiceProxy, uiGmapGoogleMapApi, uiGmapIsReady, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
 
 //	uiGmapGoogleMapApi.then(function (maps) {
 //		

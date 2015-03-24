@@ -30,6 +30,8 @@
 <script src="js/controllers/ctrl_main.js"></script>
 <script src="js/controllers/ctrl_park.js"></script>
 <script src="js/controllers/ctrl_bike.js"></script>
+<script src="js/controllers/ctrl_view.js"></script>
+<script src="js/controllers/ctrl_view_gcode.js"></script>
 <script src="js/controllers/ctrl_view_gmap.js"></script>
 
 <script src="js/filters.js?1001"></script>
@@ -54,7 +56,7 @@
 <script src="lib/bootstrap-colorpicker-module.js"></script>
 
 <script src="lib/lodash.js"></script>
-<!-- <script src="lib/angular-google-maps.js"></script> -->
+<script src="lib/angular-google-maps.js"></script>
 <script src="http://maps.google.com/maps/api/js?key=AIzaSyBAyoQGPbpu84FQoIw_nfxaodL3vDYUgGA&sensor=false&v=3.exp"></script>
 <!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script> -->
 <script src="lib/ng-map.min.js"></script>

@@ -7,7 +7,7 @@ var pm = angular.module('pm', [
 	'ngRoute',
 	'ngSanitize',
 	'colorpicker.module',
-	//'uiGmapgoogle-maps',
+	'uiGmapgoogle-maps',
 	'ngMap',
 	
 	'pmServices',
@@ -60,16 +60,21 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'BikeCtrl',
     		controllerAs: 'bike_ctrl'
     	})
-    	.when('/view', {
-    		templateUrl: 'partials/view/viewall.html',
-    		controller: 'ViewCtrl',
-    		controllerAs: 'view_ctrl'
-    	})
+//    	.when('/view', {
+//    		templateUrl: 'partials/view/viewall.html',
+//    		controller: 'ViewCtrl',
+//    		controllerAs: 'view_ctrl'
+//    	})
     	.when('/view', {
     		templateUrl: 'partials/view/viewallgmap.html',
     		controller: 'ViewCtrlGmap',
     		controllerAs: 'view_ctrl_gmap'
     	})
+//    	.when('/view', {
+//    		templateUrl: 'partials/view/viewallgcode.html',
+//    		controller: 'ViewCtrlGCode',
+//    		controllerAs: 'view_ctrl_gcode'
+//    	})
     	.when('/PracticeList/ass/:type', {
     		templateUrl: 'partials/practice_ass_list.html',
     		controller: 'PracticeCtrl',
@@ -130,11 +135,11 @@ pm.config(['$routeProvider', '$locationProvider',
 //    		controller: 'ConsoleCtrl',
 //    		controllerAs: 'console_ctrl'
 //    	})
-    	.when('/Console/classification/provv/:id', {
-    		templateUrl: 'partials/console/classification/provv_classification.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
+//    	.when('/Console/classification/provv/:id', {
+//    		templateUrl: 'partials/console/classification/provv_classification.html',
+//    		controller: 'ConsoleCtrl',
+//    		controllerAs: 'console_ctrl'
+//    	})
     	.when('/Console/classification/final/:id', {
     		templateUrl: 'partials/console/classification/final_classification.html',
     		controller: 'ConsoleCtrl',
@@ -178,13 +183,13 @@ pm.config(['$compileProvider',
         // Angular before v1.2 uses $compileProvider.urlSanitizationWhitelist(...)
     }
 ]);
-//pm.config(function(uiGmapGoogleMapApiProvider) {
-//    uiGmapGoogleMapApiProvider.configure({
-//        key: 'AIzaSyBAyoQGPbpu84FQoIw_nfxaodL3vDYUgGA',
-//        v: '3.17',
-//        libraries: 'weather,geometry,visualization'
-//    });
-//});
+pm.config(function(uiGmapGoogleMapApiProvider) {
+    uiGmapGoogleMapApiProvider.configure({
+        key: 'AIzaSyBAyoQGPbpu84FQoIw_nfxaodL3vDYUgGA',
+        v: '3.17',
+        libraries: 'weather,geometry,visualization'
+    });
+});
 pm.run(function(editableOptions) {
 	 editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 });
