@@ -191,14 +191,16 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		
 		$scope.mySpecialBPMarker = {
-			id: 0,
+			id: bikePoint.id,
 			coords: {
 				latitude: $scope.bikePoint.geometry.lat,
 				longitude: $scope.bikePoint.geometry.lng
 			},
+			pos: $scope.bikePoint.geometry.lat + "," + $scope.bikePoint.geometry.lng,
+			data: bikePoint,
 			options: { 
 				draggable: false,
-				animation: 1
+				//animation: BOUNCE	//1
 			},
 			icon: $scope.bpMarkerIcon
 		};
@@ -209,6 +211,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	$scope.closeBPView = function(){
+		$scope.mySpecialBPMarker = {};
 		$scope.getBikePointsFromDb();	// to refresh the data on page
 		$scope.viewModeBP = false;
 		$scope.editModeBP = false;
@@ -217,9 +220,13 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	// Edit management
 	// ParkingStructure
 	$scope.setBpEdit = function(bikePoint){
+		$scope.editBikePointMarkers = [];
+		$scope.newBikePointMarkers = [];
 		// Case create
 		$scope.isEditing = false;
 		$scope.isInit = true;
+		
+		//$scope.resizeMap();
 		
 		$scope.bikePoint = {
 			id: null,
@@ -254,9 +261,11 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					latitude: $scope.bikePoint.geometry.lat,
 					longitude: $scope.bikePoint.geometry.lng
 				},
+				pos:$scope.bikePoint.geometry.lat + "," + $scope.bikePoint.geometry.lng,
 				options: { 
 					draggable: true
 				},
+				icon: $scope.bpMarkerIcon,
 				events: {
 				    dragend: function (marker, eventName, args) {
 				    	var lat = marker.getPosition().lat();
@@ -266,35 +275,38 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				    }
 				}
 			};
+			$scope.editBikePointMarkers.push($scope.myBp);
+			
+			
 			
 		} else {
 			$scope.setMyGeometry(null);
 			
-			$scope.bpCreateMap = {
-				control: {},
-				center: $scope.mapCenter,
-				zoom: 15,
-				bounds: {},
-				options: {
-					scrollwheel: true
-				},
-				events: {
-					click: function(map, eventName, args){
-						var e = args[0];
-		            	console.log("I am in click event function" + e.latLng);
-		            	var latLngString = "" + e.latLng;
-		            	var pos = latLngString.split(",");
-		            	var lat = pos[0].substring(1, pos[0].length);
-		            	var lng = pos[1].substring(1, pos[1].length-1);
-		            	var tmppos = {
-		            			lat: lat,
-		            			lng: lng
-		            	};
-		            	$scope.setMyGeometry(lat + "," + lng);
-		            	$scope.addMyNewMarker(tmppos, map);
-					}
-				}
-			};
+//			$scope.bpCreateMap = {
+//				control: {},
+//				center: $scope.mapCenter,
+//				zoom: 15,
+//				bounds: {},
+//				options: {
+//					scrollwheel: true
+//				},
+//				events: {
+//					click: function(map, eventName, args){
+//						var e = args[0];
+//		            	console.log("I am in click event function" + e.latLng);
+//		            	var latLngString = "" + e.latLng;
+//		            	var pos = latLngString.split(",");
+//		            	var lat = pos[0].substring(1, pos[0].length);
+//		            	var lng = pos[1].substring(1, pos[1].length-1);
+//		            	var tmppos = {
+//		            			lat: lat,
+//		            			lng: lng
+//		            	};
+//		            	$scope.setMyGeometry(lat + "," + lng);
+//		            	$scope.addMyNewMarker(tmppos, map);
+//					}
+//				}
+//			};
 		}
 		$scope.viewModeBP = false;
 		$scope.editModeBP = true;
@@ -437,6 +449,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Maps management
 	$scope.bikePointMarkers = [];
+	$scope.newBikePointMarkers = [];
 	
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
 	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
@@ -446,6 +459,72 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		latitude: 45.88875357753771,
 		longitude: 11.037440299987793
 	};
+	
+	//$scope.map = {};
+	
+	$scope.mapOption = {
+		center : "[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
+		zoom : 14
+	};
+	
+	// I need this to resize the map (gray map problem on load)
+    $scope.resizeMap = function(){
+        google.maps.event.trigger($scope.map, 'resize');
+        $scope.map.setCenter({lat: $scope.mapCenter.latitude,lng:$scope.mapCenter.longitude});
+        $scope.map.setZoom(14);
+        return true;
+    };
+	
+	$scope.addNewMarker = function(event) {
+		if(!$scope.isEditing){
+			$scope.newBikePointMarkers = []; 	// I permit only one marker a time
+	        var pos = event.latLng;
+	        var i = 0;
+	        //$scope.positions.push({lat:pos.lat(), lng: pos.lng()});
+	        
+	    	var ret = {
+	    		id: i,
+	    		pos: pos.lat() + "," + pos.lng(),
+	    		options: { 
+	    		   	draggable: true,
+	    		   	visible: true
+	    		},
+	    		icon: $scope.bpMarkerIcon,
+	    		//showWindow: false
+	//    		events: {
+	//    		   	mouseover: function(marker, eventName, args) {
+	//    		   		var e = args[0];
+	//    		   		console.log("I am in marker mouseover event function " + e);
+	//    		   		marker.show = true;
+	//    		   		//$scope.$apply();
+	//    		   	},
+	//    		   	click: function (marker, eventName, args){
+	//    		       	var e = args[0];
+	//    		       	console.log("I am in marker click event function " + e.latLng);
+	//    		       	//$scope.$apply();
+	//    		    }	
+	//    		}
+	    	};
+	    	$scope.myGeometry = ret.pos;
+	    	return $scope.newBikePointMarkers.push(ret);
+		}
+    };
+    
+    $scope.updatePos = function(event){
+    	var pos = event.latLng;
+    	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    };
+    
+    $scope.moveMarker = function(val){
+    	if($scope.newBikePointMarkers!=null && $scope.newBikePointMarkers.length > 0){
+    		$scope.newBikePointMarkers[0].pos = val;
+    	}
+    };
+    
+    //$scope.reload = function(){
+        //google.maps.event.trigger($scope.map,'resize');
+    	//$scope.map = new google.maps.Map();
+    //};
 	
 	$scope.addMarkerToMap = function(map, type){
 		switch(type){
@@ -502,13 +581,16 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			        latitude: marker.geometry.lat,
 			        longitude: marker.geometry.lng
 			    },
+			    position: "[" + marker.geometry.lat + "," + marker.geometry.lng + "]",
 			    options: { 
 			    	draggable: true,
 			    	visible: true,
 			    	map: null
 			    },
 				title: title,
+				data: marker,
 				icon: myIcon,
+				animation: "",
 				showWindow: false,
 			    events: {
 			    	mouseover: function(marker, eventName, args) {
@@ -554,6 +636,17 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		$scope.addMarkerToMap($scope.bPointMap, 3);
 		
+		$scope.mySpecialBPMarker = {};
+	};
+	
+	$scope.underlineViewMarker = function(id){
+		for(var i = 0; i < $scope.bikePointMarkers.length; i++){
+			if($scope.bikePointMarkers[i].id == id){
+				$scope.bikePointMarkers[i].animation="DROP";
+			} else {
+				$scope.bikePointMarkers[i].animation="";
+			}
+		}
 	};
 	
 	$scope.initMap = function(pmMarkers, psMarkers, bpMarkers){

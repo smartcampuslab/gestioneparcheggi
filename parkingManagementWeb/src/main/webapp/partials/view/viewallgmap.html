@@ -7,7 +7,7 @@
 			<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
 				<div class="col-md-9"><!--   ng-show="mapReady"-->
 <!-- 					<div id="map_canvas" ></div> -->
-					<map center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" style="height: 500px">
+					<map id="viewMap" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" style="height: 500px">
 						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pmMarkerIcon }}" on-click="showInfoWindow(event, 'pm')" >
 							<info-window id="pm" visible-on-marker="{{ pm.id }}">
 						        <div ng-non-bindable="">
@@ -149,7 +149,7 @@
 						<shape name="polyline" ng-repeat="s in mapStreets" id="{{ s.id }}" path="{{ s.gpath }}" 
          					geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showInfoWindow(event, s.info_windows_cod)">
      						<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
-						        <div ng-non-bindable>
+						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
 						          	<h4 id="firstHeading" class="firstHeading">{{ s.data.streetReference }}</h4>
 							        <div id="bodyContent">
@@ -209,7 +209,7 @@
          					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
          					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
      						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
-						        <div ng-non-bindable>
+						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
 						          	<h4 id="firstHeading" class="firstHeading">{{ z.data.name }}</h4>
 							        <div id="bodyContent">
@@ -235,7 +235,7 @@
          					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ a.stroke.weight }}"
          					fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showInfoWindow(event, a.info_windows_cod)">
      						<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
-						        <div ng-non-bindable>
+						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
 						          	<h4 id="firstHeading" class="firstHeading">{{ a.data.name }}</h4>
 							        <div id="bodyContent">

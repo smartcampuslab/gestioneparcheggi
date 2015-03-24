@@ -2244,6 +2244,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.parkingStructureMarkers = [];
 	$scope.bikePointMarkers = [];
 	
+	$scope.map = {};
+	
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
 	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
 	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
@@ -2259,6 +2261,36 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.mapCenter = {
 		latitude: 45.88875357753771,
 		longitude: 11.037440299987793
+	};
+	
+	$scope.mapOption = {
+		center : "[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
+		zoom : 14
+	};
+	
+	// I need this to resize the map (gray map problem on load)
+    $scope.resizeMap = function(){
+        google.maps.event.trigger($scope.map, 'resize');
+        $scope.map.setCenter({lat: $scope.mapCenter.latitude,lng:$scope.mapCenter.longitude});
+        $scope.map.setZoom(14);
+        return true;
+    };
+	
+	//For Street
+    var poly = poly = new google.maps.Polyline({
+        strokeColor: '#000000',
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+        editable:true,
+        visible:true
+    });
+    $scope.$on('mapInitialized', function(evt, map) {
+        poly.setMap(map);
+    });
+	
+	$scope.addPath = function(event) {
+	   var path = poly.getPath();
+	   path.push(event.latLng);
 	};
 	
 	$scope.initAreaMap = function(){

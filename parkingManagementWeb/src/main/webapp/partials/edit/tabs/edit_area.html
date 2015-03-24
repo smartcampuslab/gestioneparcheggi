@@ -1,16 +1,7 @@
 <div class="row" >
 	<div ng-show="!editModeA && !viewModeA">
 		<div class="col-md-6" ng-show="areaMapReady" ><!-- id="map_canvas" -->
-			<ui-gmap-google-map id="10" center="areaMap.center" draggable="true" zoom="areaMap.zoom" options="options" control="areaMap.control" bounds="areaMap.bounds"><!-- refresh="map.refresh"  options="map.options" events="events" -->
-	<!--         <ui-gmap-markers models="parkingStructureMarkers" coords="'coords'" option="'options'" icon="'icon'" events="'events'"> -->
-	<!--         	<ui-gmap-window show="'show'" ng-cloak> -->
-	<!--                 <p> -->
-	<!-- 			         Latitude: {{coords.latitude}}<br/> -->
-	<!-- 			       	 Longitude: {{coords.longitude}}<br/> -->
-	<!-- 			         Codice: <strong>{{title}}</strong> -->
-	<!-- 			     </p> -->
-	<!--            </ui-gmap-window> -->
-	<!--         </ui-gmap-markers>		 -->
+			<ui-gmap-google-map id="10" center="areaMap.center" draggable="true" zoom="areaMap.zoom" options="options" control="areaMap.control" bounds="areaMap.bounds">
 				<ui-gmap-polygon static="true" ng-repeat="p in polygons track by p.id" path="p.path" stroke="p.stroke" visible="p.visible" geodesic="p.geodesic" fill="p.fill" fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polygon>
 			</ui-gmap-google-map>
 		</div>

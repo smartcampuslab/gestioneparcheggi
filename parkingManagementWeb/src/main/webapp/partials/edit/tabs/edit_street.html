@@ -70,19 +70,17 @@
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 					</div>
-		  			<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="41" center="sCreateMap.center" draggable="true" zoom="sCreateMap.zoom" options="sCreateMap.options" control="sCreateMap.control" bounds="sCreateMap.bounds" events="sCreateMap.events">
-<!-- 								<ui-gmap-marker idkey="myNewS.id" coords="myNewS.coords" options="myNewS.options" icon="myNewS.icon" events="myNewS.events">click="'onClick'" -->
-<!-- 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
-<!-- 	                					<p> -->
-<!-- 				                        	Lat: {{myNewS.coords.latitude}}<br/> -->
-<!-- 				                        	Lng: {{myNewS.coords.longitude}}<br/> -->
-<!-- 				                    	</p> -->
-<!-- 	            					</ui-gmap-window> -->
-<!-- 	        					</ui-gmap-marker> -->
-							<ui-gmap-polyline path="newStreet.path" stroke="newStreet.stroke" visible="newStreet.visible"
-	              					geodesic='newStreet.geodesic' fit="false" editable="newStreet.editable" draggable="newStreet.draggable" events="newStreet.events"></ui-gmap-polyline>
-						</ui-gmap-google-map>
+		  			<div class="col-md-12" ><!-- id="map_canvas" ng-show="!isEditing" -->
+<!-- 						<ui-gmap-google-map id="41" center="sCreateMap.center" draggable="true" zoom="sCreateMap.zoom" options="sCreateMap.options" control="sCreateMap.control" bounds="sCreateMap.bounds" events="sCreateMap.events"> -->
+<!-- 							<ui-gmap-polyline path="newStreet.path" stroke="newStreet.stroke" visible="newStreet.visible" -->
+<!-- 	              					geodesic='newStreet.geodesic' fit="false" editable="newStreet.editable" draggable="newStreet.draggable" events="newStreet.events"></ui-gmap-polyline> -->
+<!-- 						</ui-gmap-google-map> -->
+
+						<map id="editStreet" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addPath()" ng-show="resizeMap()" >
+<!-- 							<shape name="newPolyline" id="newPolyline" path="{{ path }}"  -->
+<!--          						stroke-color="{{ poly.strokeColor }}" stroke-opacity="{{ poly.strokeOpacity }}" stroke-weight="{{ poly.strokeWeight }}" >on-click="showInfoWindow(event, s.info_windows_cod)" -->
+<!--          					</shape> -->
+						</map>
 					</div>
 					<div class="form-group" ng-show="!isEditing">
 				    	<label for="geometry">{{ 'street_geometry' | i18n }}</label>
@@ -146,12 +144,12 @@
 				    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myLineGeometry" ng-required="false" ><!-- ng-pattern="gpsPos" -->
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
 					</div>
-					<div class="col-md-12" ng-show="isEditing">
-						<ui-gmap-google-map id="42" center="sEditMap.center" draggable="true" zoom="sEditMap.zoom" options="sEditMap.options" control="sEditMap.control" bounds="sEditMap.bounds">
-								<ui-gmap-polyline path="editStreet.path" stroke="editStreet.stroke" visible='editStreet.visible'
-	              					geodesic='editStreet.geodesic' fit="false" editable="editStreet.editable" draggable="editStreet.draggable" events="editStreet.events"></ui-gmap-polyline>	
-						</ui-gmap-google-map>
-					</div>
+<!-- 					<div class="col-md-12" ng-show="isEditing"> -->
+<!-- 						<ui-gmap-google-map id="42" center="sEditMap.center" draggable="true" zoom="sEditMap.zoom" options="sEditMap.options" control="sEditMap.control" bounds="sEditMap.bounds"> -->
+<!-- 								<ui-gmap-polyline path="editStreet.path" stroke="editStreet.stroke" visible='editStreet.visible' -->
+<!-- 	              					geodesic='editStreet.geodesic' fit="false" editable="editStreet.editable" draggable="editStreet.draggable" events="editStreet.events"></ui-gmap-polyline>	 -->
+<!-- 						</ui-gmap-google-map> -->
+<!-- 					</div> -->
 				</div>
 				<div class="alert alert-danger" ng-show="showUpdatingSErrorMessage">{{ 'err_in_update_street' | i18n }}</div>
 		   		<table width="95%">			
