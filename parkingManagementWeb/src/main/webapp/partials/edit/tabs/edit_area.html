@@ -1,16 +1,50 @@
-<div class="row" >
+<div class="row">
 	<div ng-show="!editModeA && !viewModeA">
-		<div class="col-md-6" ng-show="areaMapReady" ><!-- id="map_canvas" -->
-			<ui-gmap-google-map id="10" center="areaMap.center" draggable="true" zoom="areaMap.zoom" options="options" control="areaMap.control" bounds="areaMap.bounds">
-				<ui-gmap-polygon static="true" ng-repeat="p in polygons track by p.id" path="p.path" stroke="p.stroke" visible="p.visible" geodesic="p.geodesic" fill="p.fill" fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polygon>
-			</ui-gmap-google-map>
+		<div class="col-md-6" ><!-- id="map_canvas" ng-show="areaMapReady" -->
+<!-- 			<ui-gmap-google-map id="10" center="areaMap.center" draggable="true" zoom="areaMap.zoom" options="options" control="areaMap.control" bounds="areaMap.bounds"> -->
+<!-- 				<ui-gmap-polygon static="true" ng-repeat="p in polygons track by p.id" path="p.path" stroke="p.stroke" visible="p.visible" geodesic="p.geodesic" fill="p.fill" fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polygon> -->
+<!-- 			</ui-gmap-google-map> -->
+
+			<map id="viewArea" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 500px" ><!-- ng-show="resizeMap()" -->
+				<shape name="polygon" ng-repeat="a in polygons" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
+         			geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ a.stroke.weight }}"
+         			fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showInfoWindow(event, a.info_windows_cod)">
+     				<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
+				        <div ng-non-bindable="">
+				          	<div id="siteNotice"></div>
+				          	<h4 id="firstHeading" class="firstHeading">{{ a.data.name }}</h4>
+					        <div id="bodyContent">
+					        	<table>
+									<tr>	
+										<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
+										<td width="55%">{{ a.data.fee }}</td>
+									</tr>
+									<tr>	
+										<td><strong>{{ 'area_time' | i18n }}:</strong></td>
+										<td>{{ a.data.timeSlot }}</td>
+									</tr>
+									<tr>	
+										<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
+										<td>{{ a.data.smsCode }}</td>
+									</tr>
+									<tr>	
+										<td><strong>{{ 'area_color' | i18n }}</strong></td>
+										<td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
+									</tr>
+					        	</table>
+					        </div>
+				        </div>
+				    </info-window>
+    			</shape>
+			</map>	
+
 		</div>
-		<div class="col-md-6" ng-show="!areaMapReady">
-			<div style="text-align: center">
-				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
-				<h3>{{ 'loading_text' | i18n }}...</h3>
-			</div>
-		</div>
+<!-- 		<div class="col-md-6" ng-show="!areaMapReady"> -->
+<!-- 			<div style="text-align: center"> -->
+<!-- 				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br> -->
+<!-- 				<h3>{{ 'loading_text' | i18n }}...</h3> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 		<div class="col-md-6">
 			<div class="panel panel-success" align="center">
 				<div class="panel-heading">
@@ -64,9 +98,9 @@
 		  		</div>
 		  		<div class="panel-body">
 		  			<div class="col-md-12" ng-show="!isEditing"><!-- id="map_canvas" -->
-						<ui-gmap-google-map id="11" center="aCreateMap.center" draggable="true" zoom="aCreateMap.zoom" options="aCreateMap.options" control="aCreateMap.control" bounds="aCreateMap.bounds" events="aCreateMap.events">
-							<ui-gmap-polygon static="false" path="newArea.path" stroke="newArea.stroke" visible="newArea.visible" geodesic="newArea.geodesic" fill="newArea.fill" fit="false" editable="newArea.editable" draggable="newArea.draggable"></ui-gmap-polygon>
-						</ui-gmap-google-map>
+<!-- 						<ui-gmap-google-map id="11" center="aCreateMap.center" draggable="true" zoom="aCreateMap.zoom" options="aCreateMap.options" control="aCreateMap.control" bounds="aCreateMap.bounds" events="aCreateMap.events"> -->
+<!-- 							<ui-gmap-polygon static="false" path="newArea.path" stroke="newArea.stroke" visible="newArea.visible" geodesic="newArea.geodesic" fill="newArea.fill" fit="false" editable="newArea.editable" draggable="newArea.draggable"></ui-gmap-polygon> -->
+<!-- 						</ui-gmap-google-map> -->
 					</div>
 					<div class="form-group" ng-show="!isEditing">
 				    	<label for="geometryN">{{ 'area_geometry' | i18n }}</label>
@@ -105,10 +139,10 @@
 				   		<div class="alert alert-danger" ng-show="!isInit && form.aGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div>
 					</div>
 					<div class="col-md-12" ng-show="isEditing">
-						<ui-gmap-google-map id="12" center="aEditMap.center" draggable="true" zoom="aEditMap.zoom" options="aEditMap.options" control="aEditMap.control" bounds="aEditMap.bounds">
-							<ui-gmap-polygon  static="false" path="editArea.path" stroke="editArea.stroke" visible="editArea.visible" fill="editArea.fill"
-	              				geodesic="editArea.geodesic" fit="false" editable="editArea.editable" draggable="editArea.draggable" events="editArea.events"></ui-gmap-polygon>	
-						</ui-gmap-google-map>
+<!-- 						<ui-gmap-google-map id="12" center="aEditMap.center" draggable="true" zoom="aEditMap.zoom" options="aEditMap.options" control="aEditMap.control" bounds="aEditMap.bounds"> -->
+<!-- 							<ui-gmap-polygon  static="false" path="editArea.path" stroke="editArea.stroke" visible="editArea.visible" fill="editArea.fill" -->
+<!-- 	              				geodesic="editArea.geodesic" fit="false" editable="editArea.editable" draggable="editArea.draggable" events="editArea.events"></ui-gmap-polygon>	 -->
+<!-- 						</ui-gmap-google-map> -->
 					</div>
 				</div>
 				<div class="alert alert-danger" ng-show="showUpdatingAErrorMessage">{{ 'err_in_update_area' | i18n }}</div>
@@ -129,12 +163,12 @@
 	</div>
 	<div ng-show="viewModeA">
 		<div class="col-md-6" ng-show="aViewMapReady" >
-			<ui-gmap-google-map id="13" center="viewAreaMap.center" draggable="true" zoom="viewAreaMap.zoom" options="options" control="viewAreaMap.control" bounds="viewAreaMap.bounds">	
-				<ui-gmap-polygon ng-repeat="a in viewAreaPolygons" path="a.path" stroke="a.stroke" fill="a.fill" visible="a.visible"
-	              geodesic="a.geodesic" fit="false" editable="false" draggable="false"></ui-gmap-polygon>
-	            <ui-gmap-polygon path="myAreaPol.path" stroke="myAreaPol.stroke" fill="myAreaPol.fill" visible="myAreaPol.visible"
-	              geodesic="myAreaPol.geodesic" fit="false" editable="myAreaPol.editable" draggable="myAreaPol.draggable"></ui-gmap-polygon>  	
-			</ui-gmap-google-map>
+<!-- 			<ui-gmap-google-map id="13" center="viewAreaMap.center" draggable="true" zoom="viewAreaMap.zoom" options="options" control="viewAreaMap.control" bounds="viewAreaMap.bounds">	 -->
+<!-- 				<ui-gmap-polygon ng-repeat="a in viewAreaPolygons" path="a.path" stroke="a.stroke" fill="a.fill" visible="a.visible" -->
+<!-- 	              geodesic="a.geodesic" fit="false" editable="false" draggable="false"></ui-gmap-polygon> -->
+<!-- 	            <ui-gmap-polygon path="myAreaPol.path" stroke="myAreaPol.stroke" fill="myAreaPol.fill" visible="myAreaPol.visible" -->
+<!-- 	              geodesic="myAreaPol.geodesic" fit="false" editable="myAreaPol.editable" draggable="myAreaPol.draggable"></ui-gmap-polygon>  	 -->
+<!-- 			</ui-gmap-google-map> -->
 			
 		</div>
 		<div class="col-md-6" ng-show="!aViewMapReady">

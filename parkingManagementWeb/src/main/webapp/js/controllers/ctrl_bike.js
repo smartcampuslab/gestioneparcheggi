@@ -157,6 +157,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	// BikePoints
 	$scope.setBpDetails = function(bikePoint){
 		$scope.bpViewMapReady = false;
+		$scope.mySpecialBPMarkers = [];
 		
 		$scope.bikePoint = bikePoint;
 		
@@ -187,10 +188,11 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		for(var i = 0; i < $scope.pViewBikeMarkers.length; i++){
 			if($scope.pViewBikeMarkers[i].title == $scope.bikePoint.id){
 				$scope.pViewBikeMarkers.splice(i, 1);
+				//$scope.bikePointMarkers[i].animation = "BOUNCE";
 			};
 		}
 		
-		$scope.mySpecialBPMarker = {
+		var mySpecialBPMarker = {
 			id: bikePoint.id,
 			coords: {
 				latitude: $scope.bikePoint.geometry.lat,
@@ -198,12 +200,14 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			},
 			pos: $scope.bikePoint.geometry.lat + "," + $scope.bikePoint.geometry.lng,
 			data: bikePoint,
+			visible: true,
 			options: { 
 				draggable: false,
-				//animation: BOUNCE	//1
+				animation: "BOUNCE"	//1
 			},
 			icon: $scope.bpMarkerIcon
 		};
+		$scope.mySpecialBPMarkers.push(mySpecialBPMarker);
 		
 		$scope.viewModeBP = true;
 		$scope.editModeBP = false;
@@ -211,7 +215,8 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	$scope.closeBPView = function(){
-		$scope.mySpecialBPMarker = {};
+		//$scope.mySpecialBPMarker.visible = false;
+		$scope.mySpecialBPMarkers = [];
 		$scope.getBikePointsFromDb();	// to refresh the data on page
 		$scope.viewModeBP = false;
 		$scope.editModeBP = false;
@@ -590,7 +595,6 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				title: title,
 				data: marker,
 				icon: myIcon,
-				animation: "",
 				showWindow: false,
 			    events: {
 			    	mouseover: function(marker, eventName, args) {
@@ -636,7 +640,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		$scope.addMarkerToMap($scope.bPointMap, 3);
 		
-		$scope.mySpecialBPMarker = {};
+		$scope.mySpecialBPMarkers = [];
 	};
 	
 	$scope.underlineViewMarker = function(id){

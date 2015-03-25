@@ -87,14 +87,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        			$scope.getZonesFromDb();
        		}
        		$scope.getStreetsFromDb();
+       		//$timeout(function(){ 
+       		//	$scope.map = new google.maps.Map(document.getElementById("streetMap"), $scope.mapOptionGmap);
+       		//	$scope.resizeMap();
+       		//}, 1000);
        	}
        	if($index == 2){
+       		//$scope.resizeMap();
        		$scope.getParkingMetersFromDb();
        	}
        	if($index == 3){
+       		//$scope.resizeMap();
        		$scope.getParkingStructuresFromDb();
        	}
        	if($index == 4){
+       		//$scope.resizeMap();
        		$scope.getZonesFromDb();
        	}
     };  
@@ -106,6 +113,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.noPaymentChecked = false;
     $scope.gpsLength = 9;
     $scope.myAppId = "rv";
+    $scope.myPath = [];
+    
+    // global variable used to store the map objects istances (with ng-map is the only way to manage more maps in an html page) 
+    $scope.vAreaMap = null;
+    $scope.eAreaMap = null;
+    $scope.vStreetMap = null;
+    $scope.eStreetMap = null;
+    $scope.vPmMap = null;
+    $scope.ePmMap = null;
+    $scope.vPsMap = null;
+    $scope.ePsMap = null;
+    $scope.vZonaMap = null;
+    $scope.eZonaMap = null;
     
     $scope.listaPagamenti = [
 	    {
@@ -243,6 +263,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	
 	    	$scope.streetWS = $scope.initStreetsObjects(allStreet);
 	    	$scope.initStreetMap();
+	    	$scope.resizeMap("viewStreet");
 	    	$scope.initStreetsOnMap($scope.streetWS);
 	    	$scope.streetMapReady = true;
 	    });
@@ -316,6 +337,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return "#" + value;
 	};
 	
+	$scope.correctPointGoogle = function(point){
+		return point.lat + "," + point.lng;
+	};
+	
+	$scope.getPointFromLatLng = function(latLng){
+		var point = "" + latLng;
+		var pointCoord = point.split(",");
+		var lat = pointCoord[0].substring(1, pointCoord[0].length);
+		var lng = pointCoord[1].substring(0, pointCoord[1].length - 1);
+		return {
+			latitude: lat,
+			longitude: lng
+		};
+	};
+	
 	$scope.correctPoints = function(points){
 		var corr_points = [];
 		for(var i = 0; i < points.length; i++){
@@ -325,6 +361,17 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			};
 			corr_points.push(point);
 		}
+		return corr_points;
+	};
+	
+	$scope.correctPointsGoogle = function(points){
+		var corr_points = "[";
+		for(var i = 0; i < points.length; i++){
+			var point = "[ " + points[i].lat + "," + points[i].lng + "]";
+			corr_points = corr_points +point + ",";
+		}
+		corr_points = corr_points.substring(0, corr_points.length-1);
+		corr_points = corr_points + "]";
 		return corr_points;
 	};
 	
@@ -1012,6 +1059,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Streets
 	$scope.setSEdit = function(street){
+		
 		// Case create
 		$scope.isEditing = false;
 		$scope.isInit = true;
@@ -1102,8 +1150,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.editStreet = {
 					id: i,
 					path: $scope.correctPoints(poligons.points),
+					gpath: $scope.correctPointsGoogle(poligons.points),
 					stroke: {
 					    color: $scope.correctColor(street.color),
+					    opacity: 1.0,
 					    weight: 3
 					},
 					editable: true,
@@ -1198,6 +1248,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		$scope.viewModeS = false;
 		$scope.editModeS = true;
+		$scope.resizeMapTimed("editStreet");
+		//$scope.resizeMap("editStreet");
 	};
 	
 	// ParkingMeters
@@ -1683,6 +1735,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(!form.$valid){
 			$scope.isInit=false;
 		} else {
+			var newCorrectedPath = [];
+			var updatedPath = $scope.map.shapes.editPolyline.getPath();
+			
+			for(var i = 0; i < updatedPath.length; i++){
+				var point = $scope.getPointFromLatLng(updatedPath.j[i]);
+				newCorrectedPath.push(point);
+			};
+			
 			$scope.isInit=true;
 			$scope.showUpdatingSErrorMessage = false;
 			
@@ -1704,7 +1764,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				color: area.color,
 				rateAreaId: area.id,
 				zones: $scope.correctMyZonesForStreet(zones),
-				geometry: $scope.correctMyGeometryPolyline(polyline.path)
+				geometry: $scope.correctMyGeometryPolyline(newCorrectedPath)
+				//geometry: $scope.correctMyGeometryPolyline(polyline.path)
 			};
 			
 		    var value = JSON.stringify(data);
@@ -2086,7 +2147,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				color: area.color,
 				rateAreaId: area.id,
 				zones: $scope.correctMyZonesForStreet(zones),
-				geometry: $scope.correctMyGeometryPolyline(polyline.path)
+				geometry: $scope.correctMyGeometryPolyline(polyline)
+				//geometry: $scope.correctMyGeometryPolyline(polyline.path)
 			};
 			
 		    var value = JSON.stringify(data);
@@ -2244,7 +2306,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.parkingStructureMarkers = [];
 	$scope.bikePointMarkers = [];
 	
-	$scope.map = {};
+	//$scope.map = {};
 	
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
 	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
@@ -2268,29 +2330,141 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		zoom : 14
 	};
 	
+	$scope.mapOptionGmap = {
+		center : new google.maps.LatLng($scope.mapCenter.latitude,$scope.mapCenter.longitude),
+		zoom : 14
+	};
+	
+	$scope.getCorrectMap = function(type){
+		var map = null;
+		
+		switch(type){
+			case "viewArea":
+				map = $scope.vAreaMap;
+				break;
+			case "editArea":
+				map = $scope.eAreaMap;
+				break;
+			case "viewStreet":
+				map = $scope.vStreetMap;
+				break;
+			case "editStreet":
+				map = $scope.eStreetMap;
+				break;
+			case "viewPm":
+				map = $scope.vPmMap;
+				break;
+			case "editPm":
+				map = $scope.ePmMap;
+				break;
+			case "viewPs":
+				map = $scope.vPsMap;
+				break;
+			case "editPs":
+				map = $scope.ePsMap;	
+				break;
+			case "viewZone":
+				map = $scope.vZoneMap;
+				break;
+			case "editZone":
+				map = $scope.eZoneMap;	
+				break;	
+			default:
+				break;
+		}
+		return map;
+	};
+	
 	// I need this to resize the map (gray map problem on load)
-    $scope.resizeMap = function(){
-        google.maps.event.trigger($scope.map, 'resize');
-        $scope.map.setCenter({lat: $scope.mapCenter.latitude,lng:$scope.mapCenter.longitude});
-        $scope.map.setZoom(14);
+    $scope.resizeMap = function(type){
+    	
+    	$scope.map = $scope.getCorrectMap(type);
+	    google.maps.event.trigger($scope.map, 'resize');
+	    $scope.map.setCenter({lat: $scope.mapCenter.latitude,lng:$scope.mapCenter.longitude});
+	    $scope.map.setZoom(14);
         return true;
+    };
+    
+    $scope.resizeMapTimed = function(type){
+    	
+    	$scope.map = $scope.getCorrectMap(type);
+    	$timeout(function(){ 
+    		google.maps.event.trigger($scope.map, 'resize');
+    		$scope.map.setCenter({lat: $scope.mapCenter.latitude,lng:$scope.mapCenter.longitude});
+    		$scope.map.setZoom(14);
+    	}, 1000);
     };
 	
 	//For Street
     var poly = poly = new google.maps.Polyline({
-        strokeColor: '#000000',
+        strokeColor: ($scope.myNewArea != null)?$scope.correctColor($scope.myNewArea.color):'#000000',
         strokeOpacity: 1.0,
         strokeWeight: 3,
         editable:true,
+        draggable:true,
         visible:true
+//        events: {
+//        	dblclick:function(evt){
+//				//var e = args[0];
+//	        	console.log("I am in double click event function" + e.latLng);
+//	        	//var latLngString = "" + e.latLng;
+//	        	
+//	        	var geocoder = new google.maps.Geocoder();
+//				geocoder.geocode({location:evt.latLng}, function(response) {
+//					var result = response[0].formatted_address;
+//					if (result != undefined && result != null) {
+//						$scope.street.streetReference = result.substring(0, result.indexOf(','));
+//					}
+//				});
+//        	}
+//        }
     });
     $scope.$on('mapInitialized', function(evt, map) {
-        poly.setMap(map);
+    	switch(map.id){
+	    	case "viewArea":
+	    		$scope.vAreaMap = map;
+	    		break;
+	    	case "editArea":
+	    		$scope.eAreaMap = map;
+	    		break;	
+	    	case "viewStreet":
+	    		$scope.vStreetMap = map;
+	    		break;
+	    	case "editStreet":
+	    		$scope.eStreetMap = map;
+	    		poly.setMap(map);
+	    		break;
+	    	default: break;
+    	}
+    	
+        //$scope.map = map;
+        //$scope.newPoly = poly;
+        //google.maps.event.addListener(map, 'dblclick', $scope.getStreetAddress());
+        //google.maps.event.addListener(poly, 'dblclick', $scope.getStreetAddress());
     });
 	
-	$scope.addPath = function(event) {
+	$scope.addPath = function(event){
 	   var path = poly.getPath();
+	   if(path.length == 0){
+		   $scope.getStreetAddress(event);	// Retrieve the street address from the map
+		   $scope.myPath = [];
+	   }
 	   path.push(event.latLng);
+	   var myPoint = $scope.getPointFromLatLng(event.latLng);
+	   $scope.myPath.push(myPoint);
+	   $scope.setMyLineGeometry($scope.myPath);
+	   poly.setMap($scope.map);
+	};
+	
+	$scope.getStreetAddress = function(event){
+		console.log("I am in get address function" + event.latLng);
+		var geocoder = new google.maps.Geocoder();
+		geocoder.geocode({location:event.latLng}, function(response) {
+			var result = response[0].formatted_address;
+			if (result != undefined && result != null) {
+				$scope.street.streetReference = result.substring(0, result.indexOf(','));
+			}
+		});
 	};
 	
 	$scope.initAreaMap = function(){
@@ -2347,12 +2521,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				area = {
 					id: areas[i].id,
 					path: $scope.correctPoints(poligons[0].points),
+					gpath: $scope.correctPointsGoogle(poligons[0].points),
 					stroke: {
 					    color: $scope.correctColor(areas[i].color),
 					    weight: 3
 					},
-					editable: true,
-					draggable: true,
+					data: areas[i],
+					info_windows_pos: $scope.correctPointGoogle(poligons[0].points[1]),
+					info_windows_cod: "a" + areas[i].id,
+					editable: false,
+					draggable: false,
 					geodesic: false,
 					visible: true,
 					fill: {
@@ -2373,13 +2551,25 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		for(var i = 0; i < streets.length; i++){
 			if(streets[i].geometry != null){
 				poligons = streets[i].geometry;
+				var myAreaS = $scope.getLocalAreaById(streets[i].rateAreaId);
+				var myZones = [];
+				for(var j = 0; j < streets[i].zones.length; j++){
+					var zone = $scope.getLocalZoneById(streets[i].zones[j]);
+					myZones.push(zone);
+				}
 				street = {
 					id: streets[i].id,
 					path: $scope.correctPoints(poligons.points),
+					gpath: $scope.correctPointsGoogle(poligons.points),
 					stroke: {
 					    color: $scope.correctColor(streets[i].color),
 					    weight: 3
 					},
+					data: streets[i],
+					area: myAreaS,
+					zones: myZones,
+					info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
+					info_windows_cod: "s" + streets[i].id,
 					editable: false,
 					draggable: false,
 					geodesic: false,

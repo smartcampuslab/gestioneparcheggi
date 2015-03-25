@@ -1,4 +1,4 @@
-<div class="panel panel-info">
+<div class="panel panel-info" ng-controller="BikeCtrl">
 	<div class="panel-heading">
 		<h4 class="panel-title">{{ 'bikeEditingPanelTitle' | i18n }}</h4>
 	</div>
@@ -18,7 +18,7 @@
 <!--         					</ui-gmap-markers>		 -->
 <!-- 					</ui-gmap-google-map> -->
 					<map id="viewBike" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 500px" >
-						<marker ng-repeat="bp in bikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" animation="{{ bp.animation }}" on-click="showInfoWindow(event, 'bp')" >
+						<marker ng-repeat="bp in bikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')" >
 							<info-window id="bp" visible-on-marker="{{ bp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
@@ -38,20 +38,20 @@
 						        </div>
 						    </info-window>
 						</marker>
-						<marker id="{{ mySpecialBPMarker.id }}" position="{{ mySpecialBPMarker.pos }}" icon="{{ bpMarkerIcon }}" animation="BOUNCE" on-click="showInfoWindow(event, 'bps')" >
-							<info-window id="bps" visible-on-marker="{{ mySpecialBPMarker.id }}">
+						<marker ng-repeat="sbp in mySpecialBPMarkers" id="{{ sbp.id }}" position="{{ sbp.pos }}" icon="{{ bpMarkerIcon }}" visible="{{ sbp.visible }}" animation="{{ sbp.options.animation }}" on-click="showInfoWindow(event, 'sbp')" >
+							<info-window id="sbp" visible-on-marker="{{ sbp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading">{{ mySpecialBPMarker.data.name }}</h4>
+						          	<h4 id="firstHeading" class="firstHeading">{{ sbp.data.name }}</h4>
 							        <div id="bodyContent">
 							        	<table>
 											<tr>
 							        			<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ mySpecialBPMarker.data.slotNumber }}</td>
+							        			<td>&nbsp;{{ sbp.data.slotNumber }}</td>
 							        		</tr>
 							        		<tr>
 							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ mySpecialBPMarker.data.bikeNumber }}</td>
+							        			<td>&nbsp;{{ sbp.data.bikeNumber }}</td>
 							        		</tr>
 							        	</table>
 							        </div>
@@ -199,7 +199,7 @@
 <!-- 			            					</ui-gmap-window> -->
 <!-- 			        					</ui-gmap-marker> -->
 <!-- 								</ui-gmap-google-map> -->
-								<map id="editBike" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewMarker()" ng-show="resizeMap()" >
+								<map id="editBike" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewMarker()" ng-show="resizeMap()" ><!-- ng-show="resizeMap()" -->
 									<marker ng-repeat="bp in newBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
 									</marker>
 									<marker ng-repeat="bp in editBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->

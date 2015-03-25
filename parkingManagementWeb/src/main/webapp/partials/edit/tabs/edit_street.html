@@ -1,17 +1,79 @@
 <div class="row" >
 	<div ng-show="!editModeS && !viewModeS">
-		<div class="col-md-6" ng-show="streetMapReady" ><!-- id="map_canvas" -->
-			<ui-gmap-google-map id="40" center="streetMap.center" draggable="true" zoom="streetMap.zoom" options="options" control="streetMap.control" bounds="streetMap.bounds">			
-				<ui-gmap-polyline ng-repeat="p in geoStreets" path="p.path" stroke="p.stroke" visible='p.visible'
-	              geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polyline>		
-			</ui-gmap-google-map>
+		<div class="col-md-6"  ><!-- id="map_canvas" ng-show="streetMapReady" -->
+<!-- 			<ui-gmap-google-map id="40" center="streetMap.center" draggable="true" zoom="streetMap.zoom" options="options" control="streetMap.control" bounds="streetMap.bounds">			 -->
+<!-- 				<ui-gmap-polyline ng-repeat="p in geoStreets" path="p.path" stroke="p.stroke" visible='p.visible' -->
+<!-- 	              geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polyline>		 -->
+<!-- 			</ui-gmap-google-map> -->
+			
+			<map id="viewStreet" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 500px" ><!-- ng-show="resizeMap()" -->
+				<shape name="polyline" ng-repeat="s in geoStreets" id="{{ s.id }}" path="{{ s.gpath }}" 
+         			geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showInfoWindow(event, s.info_windows_cod)">
+     				<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
+						<div ng-non-bindable="">
+							<div id="siteNotice"></div>
+						    <h4 id="firstHeading" class="firstHeading">{{ s.data.streetReference }}</h4>
+							<div id="bodyContent">
+							    <table>
+							        <tr>
+							        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
+							        	<td>&nbsp;{{ s.data.slotNumber }}</td>
+							   		</tr>
+									<tr>
+							    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
+							    	</tr>
+							    	<tr>
+							    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
+							    	</tr>
+							    	<tr>
+							    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
+							    	</tr>
+							    	<tr>
+							    		<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
+							    	</tr>
+							    	<tr>
+							    		<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
+							    	</tr>
+							    	<tr>	
+										<td>
+											<strong>{{ 'street_area_name' | i18n }}:</strong>
+										</td>
+										<td>	 
+											{{ s.area.name }} 
+											<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span>
+										</td>
+									</tr>
+									<tr>	
+										<td>
+											<strong>{{ 'street_zone' | i18n }}:</strong>
+										</td>
+										<td>
+											<table width="100%">
+												<tr ng-repeat="z in s.zones track by z.id">
+													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
+													<td width="80%">{{ z.name }} - {{ z.submacro }}</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+							    </table>
+							</div>
+						</div>
+					</info-window>
+     			</shape>
+			</map>
 		</div>
-		<div class="col-md-6" ng-show="!streetMapReady">
-			<div style="text-align: center">
-				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
-				<h3>{{ 'loading_text' | i18n }}...</h3>
-			</div>
-		</div>
+<!-- 		<div class="col-md-6" ng-show="!streetMapReady"> -->
+<!-- 			<div style="text-align: center"> -->
+<!-- 				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br> -->
+<!-- 				<h3>{{ 'loading_text' | i18n }}...</h3> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 		<div class="col-md-6">
 			<div class="panel panel-success" align="center">
 				<div class="panel-heading">
@@ -70,21 +132,21 @@
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 					</div>
-		  			<div class="col-md-12" ><!-- id="map_canvas" ng-show="!isEditing" -->
+		  			<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing"  -->
 <!-- 						<ui-gmap-google-map id="41" center="sCreateMap.center" draggable="true" zoom="sCreateMap.zoom" options="sCreateMap.options" control="sCreateMap.control" bounds="sCreateMap.bounds" events="sCreateMap.events"> -->
 <!-- 							<ui-gmap-polyline path="newStreet.path" stroke="newStreet.stroke" visible="newStreet.visible" -->
 <!-- 	              					geodesic='newStreet.geodesic' fit="false" editable="newStreet.editable" draggable="newStreet.draggable" events="newStreet.events"></ui-gmap-polyline> -->
 <!-- 						</ui-gmap-google-map> -->
 
-						<map id="editStreet" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addPath()" ng-show="resizeMap()" >
-<!-- 							<shape name="newPolyline" id="newPolyline" path="{{ path }}"  -->
-<!--          						stroke-color="{{ poly.strokeColor }}" stroke-opacity="{{ poly.strokeOpacity }}" stroke-weight="{{ poly.strokeWeight }}" >on-click="showInfoWindow(event, s.info_windows_cod)" -->
-<!--          					</shape> -->
+						<map id="editStreet" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addPath()" ><!-- ng-show="resizeMap()" -->
+							<shape name="polyline" id="editPolyline" path="{{ editStreet.gpath }}" draggable="{{ editStreet.draggable }}" editable="{{ editStreet.editable }}"
+         						stroke-color="{{ editStreet.stroke.color }}" stroke-opacity="{{ editStreet.stroke.opacity }}" stroke-weight="{{ editStreet.stroke.weight }}" on- >
+         					</shape>
 						</map>
 					</div>
 					<div class="form-group" ng-show="!isEditing">
 				    	<label for="geometry">{{ 'street_geometry' | i18n }}</label>
-				    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myNewLineGeometry" ng-required="false" ><!-- ng-pattern="gpsPos" -->
+				    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myLineGeometry" ng-required="false" ><!-- ng-pattern="gpsPos" -->
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
 					</div>
 				   	<div class="form-group">
@@ -144,11 +206,16 @@
 				    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myLineGeometry" ng-required="false" ><!-- ng-pattern="gpsPos" -->
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
 					</div>
-<!-- 					<div class="col-md-12" ng-show="isEditing"> -->
+<!--  					<div class="col-md-12" ng-show="isEditing"> -->
 <!-- 						<ui-gmap-google-map id="42" center="sEditMap.center" draggable="true" zoom="sEditMap.zoom" options="sEditMap.options" control="sEditMap.control" bounds="sEditMap.bounds"> -->
 <!-- 								<ui-gmap-polyline path="editStreet.path" stroke="editStreet.stroke" visible='editStreet.visible' -->
 <!-- 	              					geodesic='editStreet.geodesic' fit="false" editable="editStreet.editable" draggable="editStreet.draggable" events="editStreet.events"></ui-gmap-polyline>	 -->
 <!-- 						</ui-gmap-google-map> -->
+<!-- 						<map id="editStreet" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addPath()" >ng-show="resizeMap()" -->
+<!-- 							<shape name="editPolyline" id="editPolyline" path="{{ editStreet.gpath }}" draggable="{{ editStreet.draggable }}" editable="{{ editStreet.editable }}" -->
+<!--          						stroke-color="{{ editStreet.stroke.color }}" stroke-opacity="{{ editStreet.stroke.opacity }}" stroke-weight="{{ editStreet.stroke.weight }}" > -->
+<!--          					</shape> -->
+<!-- 						</map> -->
 <!-- 					</div> -->
 				</div>
 				<div class="alert alert-danger" ng-show="showUpdatingSErrorMessage">{{ 'err_in_update_street' | i18n }}</div>
@@ -159,8 +226,10 @@
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>
 				   		</td>
 				   		<td width="34%" align="right">
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
+<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, myLineGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, myLineGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 				</table>
@@ -169,12 +238,12 @@
 	</div>
 	<div ng-show="viewModeS">
 		<div class="col-md-6" ng-show="sViewMapReady" ><!-- id="map_canvas" -->
-			<ui-gmap-google-map id="13" center="viewStreetMap.center" draggable="true" zoom="viewStreetMap.zoom" options="options" control="viewStreetMap.control" bounds="viewStreetMap.bounds">	
-				<ui-gmap-polyline ng-repeat="s in viewStreetLines" path="s.path" stroke="s.stroke" visible='s.visible'
-	              geodesic='s.geodesic' fit="false" editable="s.editable" draggable="s.draggable"></ui-gmap-polyline>
-	            <ui-gmap-polyline path="myStreetLine.path" stroke="myStreetLine.stroke" visible='myStreetLine.visible'
-	              geodesic='myStreetLine.geodesic' fit="false" editable="myStreetLine.editable" draggable="myStreetLine.draggable"></ui-gmap-polyline>  	
-			</ui-gmap-google-map>
+<!-- 			<ui-gmap-google-map id="13" center="viewStreetMap.center" draggable="true" zoom="viewStreetMap.zoom" options="options" control="viewStreetMap.control" bounds="viewStreetMap.bounds">	 -->
+<!-- 				<ui-gmap-polyline ng-repeat="s in viewStreetLines" path="s.path" stroke="s.stroke" visible='s.visible' -->
+<!-- 	              geodesic='s.geodesic' fit="false" editable="s.editable" draggable="s.draggable"></ui-gmap-polyline> -->
+<!-- 	            <ui-gmap-polyline path="myStreetLine.path" stroke="myStreetLine.stroke" visible='myStreetLine.visible' -->
+<!-- 	              geodesic='myStreetLine.geodesic' fit="false" editable="myStreetLine.editable" draggable="myStreetLine.draggable"></ui-gmap-polyline>  	 -->
+<!-- 			</ui-gmap-google-map> -->
 			
 		</div>
 		<div class="col-md-6" ng-show="!sViewMapReady">
