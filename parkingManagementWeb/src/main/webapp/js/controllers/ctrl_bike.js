@@ -282,8 +282,6 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			};
 			$scope.editBikePointMarkers.push($scope.myBp);
 			
-			
-			
 		} else {
 			$scope.setMyGeometry(null);
 			
