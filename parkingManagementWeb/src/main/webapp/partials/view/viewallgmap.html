@@ -8,7 +8,9 @@
 				<div class="col-md-9"><!--   ng-show="mapReady"-->
 <!-- 					<div id="map_canvas" ></div> -->
 					<map id="viewMap" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" style="height: 500px">
-						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pmMarkerIcon }}" on-click="showInfoWindow(event, 'pm')" >
+<!-- 						<shape ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.cid }}" name="circle" fill-color="{{ correctColor(pm.area.color) }}" stroke-color="{{ correctColor(pm.area.color) }}" stroke-opacity="1" stroke-weight="2" center="{{ pm.position }}" radius="100" editable="false" > -->
+<!-- 					    </shape> -->
+						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showInfoWindow(event, 'pm')" >
 							<info-window id="pm" visible-on-marker="{{ pm.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>

@@ -370,12 +370,21 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     };
 	
 	var createMarkers = function(i, marker, type) {
+		//------ To be configured in external conf file!!!!!------
+		var company = "amr";
+		var baseUrl = "http://localhost:8080/parking-management";
+		var defaultMarkerColor = "FF0000";
+		//--------------------------------------------------------
+		
 		var myIcon = "";
 		var myAreaPm = {};
+		var cid = "";
 		switch(type){
 			case 1 : 
-				myIcon = $scope.pmMarkerIcon; 
+				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
+				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				cid = "c" + marker.id;
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon; 
@@ -401,6 +410,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			    	visible: true,
 			    	map: null
 			    },
+			    cid : cid,
 				data: marker,
 				area: myAreaPm,
 				icon: myIcon,

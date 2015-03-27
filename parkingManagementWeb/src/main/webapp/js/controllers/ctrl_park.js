@@ -120,6 +120,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.mySpecialStreets = [];
     $scope.mySpecialAreas = [];
     $scope.mySpecialZones = [];
+    $scope.mySpecialPMMarkers = [];
+    $scope.mySpecialPSMarkers = [];
     
     // global variable used to store the map objects istances (with ng-map is the only way to manage more maps in an html page) 
     $scope.vAreaMap = null;
@@ -316,6 +318,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    }
 	    	
 	    	$scope.pstructWS = allPstructs;
+	    	$scope.resizeMap("viewPs");
 	    	$scope.initPStructMap(markers);
 	    	$scope.psMapReady = true;
 	    });
@@ -724,8 +727,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// ParkingMeters
 	$scope.setPmDetails = function(parkingMeter){
+		//------ To be configured in external conf file!!!!!------
+		var company = "amr";
+		var baseUrl = "http://localhost:8080/parking-management";
+		var defaultMarkerColor = "FF0000";
+		//--------------------------------------------------------
 		$scope.pmViewMapReady = false;
-		$scope.myspecialPmMarkers = [];
+		$scope.mySpecialPMMarkers = [];
 		
 		$scope.parckingMeter = parkingMeter;
 		
@@ -759,6 +767,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 		};
 		
+		var myAreaP = $scope.getLocalAreaById(parkingMeter.areaId);
+		
 		$scope.pViewMetersMarkers = $scope.parkingMetersMarkers;
 		for(var i = 0; i < $scope.pViewMetersMarkers.length; i++){
 			if($scope.pViewMetersMarkers[i].title == $scope.parckingMeter.code){
@@ -769,18 +779,20 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.mySpecialMarker = {
 			id: 0,
 			coords: {
-				latitude: $scope.parckingMeter.geometry.lat,
-				longitude: $scope.parckingMeter.geometry.lng
+				latitude: parkingMeter.geometry.lat,
+				longitude: parkingMeter.geometry.lng
 			},
-			pos: $scope.parckingMeter.geometry.lat + "," + $scope.parckingMeter.geometry.lng,
+			position: parkingMeter.geometry.lat + "," + parkingMeter.geometry.lng,
 			data: parkingMeter,
+			area: myAreaP,
+			visible:true,
 			options: { 
 				draggable: false,
 				animation: "BOUNCE"	//1
 			},
-			icon: $scope.pmMarkerIcon
+			icon: baseUrl+'/marker/'+company+'/parcometro/'+((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor)	//$scope.pmMarkerIcon
 		};
-		$scope.myspecialPmMarkers.push($scope.mySpecialMarker);
+		$scope.mySpecialPMMarkers.push($scope.mySpecialMarker);
 		
 		$scope.viewModePM = true;
 		$scope.editModePM = false;
@@ -788,6 +800,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	$scope.closeView = function(){
+		$scope.mySpecialPMMarkers = [];
 		$scope.getParkingMetersFromDb();	// to refresh the data on page
 		$scope.viewModePM = false;
 		$scope.editModePM = false;
@@ -796,6 +809,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	// ParkingStructures
 	$scope.setPsDetails = function(parkingStructure){
 		$scope.psViewMapReady = false;
+		$scope.mySpecialPSMarkers = [];
 		
 		$scope.parkingStructure = parkingStructure;
 		
@@ -834,15 +848,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.mySpecialPSMarker = {
 			id: 0,
 			coords: {
-				latitude: $scope.parkingStructure.geometry.lat,
-				longitude: $scope.parkingStructure.geometry.lng
+				latitude: parkingStructure.geometry.lat,
+				longitude: parkingStructure.geometry.lng
 			},
+			position: parkingStructure.geometry.lat + "," + parkingStructure.geometry.lng,
+			data: parkingStructure,
+			visible: true,
 			options: { 
 				draggable: false,
-				animation: 1
+				animation: 	"BOUNCE"  //1
 			},
 			icon: $scope.psMarkerIcon
 		};
+		$scope.mySpecialPSMarkers.push($scope.mySpecialPSMarker);
 		
 		$scope.viewModePS = true;
 		$scope.editModePS = false;
@@ -850,6 +868,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	$scope.closePSView = function(){
+		$scope.mySpecialPSMarkers = [];
 		$scope.getParkingStructuresFromDb();	// to refresh the data on page
 		$scope.viewModePS = false;
 		$scope.editModePS = false;
@@ -1364,19 +1383,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			};
 			
-			$scope.setMyGeometry($scope.parckingMeter.geometry.lat + "," + $scope.parckingMeter.geometry.lng);
+			$scope.setMyGeometry(parkingMeter.geometry.lat + "," + parkingMeter.geometry.lng);
 			
 			$scope.myPm = {
 				id: 0,
 				coords: {
-					latitude: $scope.parckingMeter.geometry.lat,
-					longitude: $scope.parckingMeter.geometry.lng
+					latitude: parkingMeter.geometry.lat,
+					longitude: parkingMeter.geometry.lng
 				},
-				pos:$scope.parckingMeter.geometry.lat + "," + $scope.parckingMeter.geometry.lng,
+				pos:parkingMeter.geometry.lat + "," + parkingMeter.geometry.lng,
 				options: { 
 					draggable: true
 				},
-				icon: $scope.pmMarkerIcon,
+				icon: $scope.pmMarkerIcon
 //				events: {
 //				    dragend: function (marker, eventName, args) {
 //				    	var lat = marker.getPosition().lat();
@@ -1386,7 +1405,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 //				    }
 //				}
 			};
-			// animation: 1 to set the marker bounce
 			$scope.editPmMarkers.push($scope.myPm);
 			
 		} else {
@@ -1420,6 +1438,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		$scope.viewModePM = false;
 		$scope.editModePM = true;
+		$scope.resizeMapTimed("editPm", false);
 	};
 	
 	// ParkingStructure
@@ -1427,6 +1446,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		// Case create
 		$scope.isEditing = false;
 		$scope.isInit = true;
+		
+		$scope.editPsMarkers = [];
+		$scope.newPsMarkers = [];
 		
 		$scope.parkingStructure = {
 			name: null,
@@ -1481,58 +1503,28 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			};
 			
-			$scope.setMyGeometry($scope.parkingStructure.geometry.lat + "," + $scope.parkingStructure.geometry.lng);
+			$scope.setMyGeometry(parkingStruct.geometry.lat + "," + parkingStruct.geometry.lng);
 			
 			$scope.myPs = {
 				id: 0,
 				coords: {
-					latitude: $scope.parkingStructure.geometry.lat,
-					longitude: $scope.parkingStructure.geometry.lng
+					latitude: parkingStruct.geometry.lat,
+					longitude: parkingStruct.geometry.lng
 				},
+				pos:parkingStruct.geometry.lat + "," + parkingStruct.geometry.lng,
 				options: { 
 					draggable: true
 				},
-				events: {
-				    dragend: function (marker, eventName, args) {
-				    	var lat = marker.getPosition().lat();
-				    	var lng = marker.getPosition().lng();
-				    	console.log('marker dragend: ' + lat + "," + lng);
-				    	$scope.setMyGeometry(lat + "," + lng);
-				    }
-				}
+				icon: $scope.psMarkerIcon
 			};
+			$scope.editPsMarkers.push($scope.myPs);
 			
 		} else {
 			$scope.setMyGeometry(null);
-			
-			$scope.psCreateMap = {
-				control: {},
-				center: $scope.mapCenter,
-				zoom: 15,
-				bounds: {},
-				options: {
-					scrollwheel: true
-				},
-				events: {
-					click: function(map, eventName, args){
-						var e = args[0];
-		            	console.log("I am in click event function" + e.latLng);
-		            	var latLngString = "" + e.latLng;
-		            	var pos = latLngString.split(",");
-		            	var lat = pos[0].substring(1, pos[0].length);
-		            	var lng = pos[1].substring(1, pos[1].length-1);
-		            	var tmppos = {
-		            			lat: lat,
-		            			lng: lng
-		            	};
-		            	$scope.setMyGeometry(lat + "," + lng);
-		            	$scope.addMyNewMarker(tmppos, map);
-					}
-				}
-			};
 		}
 		$scope.viewModePS = false;
 		$scope.editModePS = true;
+		$scope.resizeMapTimed("editPs", false);
 	};
 	
 	$scope.setZEdit = function(zone){
@@ -1758,6 +1750,56 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 		};
 	};
+	
+	$scope.addNewPmMarker = function(event) {
+		if(!$scope.isEditing){
+			$scope.newPmMarkers = []; 	// I permit only one marker a time
+	        var pos = event.latLng;
+	        var i = 0;
+	        
+	    	var ret = {
+	    		id: i,
+	    		pos: pos.lat() + "," + pos.lng(),
+	    		options: { 
+	    		   	draggable: true,
+	    		   	visible: true
+	    		},
+	    		icon: $scope.pmMarkerIcon
+	    	};
+	    	$scope.myGeometry = ret.pos;
+	    	return $scope.newPmMarkers.push(ret);
+		}
+    };
+    
+    $scope.addNewPsMarker = function(event) {
+		if(!$scope.isEditing){
+			$scope.newPsMarkers = []; 	// I permit only one marker a time
+	        var pos = event.latLng;
+	        var i = 0;
+	        
+	    	var ret = {
+	    		id: i,
+	    		pos: pos.lat() + "," + pos.lng(),
+	    		options: { 
+	    		   	draggable: true,
+	    		   	visible: true
+	    		},
+	    		icon: $scope.psMarkerIcon
+	    	};
+	    	$scope.myGeometry = ret.pos;
+	    	return $scope.newPsMarkers.push(ret);
+		}
+    };
+	
+	$scope.updatePmPos = function(event){
+    	var pos = event.latLng;
+    	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    };
+    
+    $scope.updatePsPos = function(event){
+    	var pos = event.latLng;
+    	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    };
 	
 	// Object Update methods
 	// Area
@@ -2579,7 +2621,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	case "editPm":
 	    		$scope.ePmMap = map;
 	    		break;	
-	    	case "viewPS":
+	    	case "viewPs":
 	    		$scope.vPsMap = map;
 	    		break;
 	    	case "editPs":
@@ -2925,12 +2967,20 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	
 	var createMarkers = function(i, marker, type) {
+		//------ To be configured in external conf file!!!!!------
+		var company = "amr";
+		var baseUrl = "http://localhost:8080/parking-management";
+		var defaultMarkerColor = "FF0000";
+		//--------------------------------------------------------
 		var myIcon = "";
 		var title = "";
+		var myAreaPm = {};
 		switch(type){
 			case 1 : 
-				myIcon = $scope.pmMarkerIcon;
+				//myIcon = $scope.pmMarkerIcon;
+				myAreaPm = $scope.getLocalAreaById(marker.areaId);
 				title = marker.code;
+				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon;
@@ -2951,27 +3001,30 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			        latitude: marker.geometry.lat,
 			        longitude: marker.geometry.lng
 			    },
+			    position: "[" + marker.geometry.lat + "," + marker.geometry.lng + "]",
 			    options: { 
 			    	draggable: true,
 			    	visible: true,
 			    	map: null
 			    },
+			    data: marker,
+			    area: myAreaPm,
+			    showWindow: false,
 				title: title,
-				icon: myIcon,
-				showWindow: false,
-			    events: {
-			    	mouseover: function(marker, eventName, args) {
-			    		var e = args[0];
-			    		console.log("I am in marker mouseover event function " + e);
-			    		marker.show = true;
-//			    	 	$scope.$apply();
-			    	},
-			    	click: function (marker, eventName, args){
-		            	var e = args[0];
-		            	console.log("I am in marker click event function " + e.latLng);
-		            	//$scope.$apply();
-		            }	
-			    }
+				icon: myIcon
+//			    events: {
+//			    	mouseover: function(marker, eventName, args) {
+//			    		var e = args[0];
+//			    		console.log("I am in marker mouseover event function " + e);
+//			    		marker.show = true;
+////			    	 	$scope.$apply();
+//			    	},
+//			    	click: function (marker, eventName, args){
+//		            	var e = args[0];
+//		            	console.log("I am in marker click event function " + e.latLng);
+//		            	//$scope.$apply();
+//		            }	
+//			    }
 			};
 			ret.closeClick = function () {
 		        ret.showWindow = false;

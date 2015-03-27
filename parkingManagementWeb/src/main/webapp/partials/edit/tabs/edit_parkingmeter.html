@@ -13,7 +13,7 @@
 <!--         					</ui-gmap-markers> -->
 <!-- 					</ui-gmap-google-map> -->
 					<map id="viewPm" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 500px" >
-						<marker ng-repeat="pm in parkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pmMarkerIcon }}" on-click="showInfoWindow(event, 'pm')" >
+						<marker ng-repeat="pm in parkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showInfoWindow(event, 'pm')" >
 							<info-window id="pm" visible-on-marker="{{ pm.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
@@ -67,20 +67,54 @@
 						        </div>
 						    </info-window>
 						</marker>
-						<marker ng-repeat="sbp in mySpecialBPMarkers" id="{{ sbp.id }}" position="{{ sbp.pos }}" icon="{{ bpMarkerIcon }}" visible="{{ sbp.visible }}" animation="{{ sbp.options.animation }}" on-click="showInfoWindow(event, 'sbp')" >
-							<info-window id="sbp" visible-on-marker="{{ sbp.id }}">
+						<marker ng-repeat="spm in mySpecialPMMarkers" id="{{ spm.id }}" position="{{ spm.position }}" icon="{{ spm.icon }}" visible="{{ spm.visible }}" animation="{{ spm.options.animation }}" on-click="showInfoWindow(event, 'spm')" >
+							<info-window id="spm" visible-on-marker="{{ spm.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading">{{ sbp.data.name }}</h4>
+						          	<h4 id="firstHeading" class="firstHeading">{{ spm.data.code }}</h4>
 							        <div id="bodyContent">
 							        	<table>
+							        		<tr>
+							        			<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
+							        			<td>&nbsp;{{ spm.data.note }}</td>
+							        		</tr>
 											<tr>
-							        			<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ sbp.data.slotNumber }}</td>
+							        			<td><strong>{{ 'pm_status' | i18n }}:</strong></td>
+							        			<td>
+							        				<span ng-show="spm.data.status=='ACTIVE'">Attivo</span>
+													<span ng-show="spm.data.status!='ACTIVE'">Disattivo</span>
+												</td>	
 							        		</tr>
 							        		<tr>
-							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ sbp.data.bikeNumber }}</td>
+							        			<td colspan="2">
+							        				<strong>{{ 'pm_area_name' | i18n }}:</strong>
+							        				<div class="panel panel-default">
+														<div class="panel-body">
+															<table width="100%">
+																<tr>
+																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
+																	<td width="55%">{{ spm.area.name }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+																	<td>{{ spm.area.fee }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
+																	<td>{{ spm.area.timeSlot }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
+																	<td>{{ spm.area.smsCode }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>{{ 'area_color' | i18n }}</strong></td>
+																	<td><span class="colorBox" ng-style="{'background-color': correctColor(spm.area.color)}"></span></td>
+																</tr>
+													   		</table>
+														</div>
+													</div>	
+							        			</td>
 							        		</tr>
 							        	</table>
 							        </div>
@@ -264,9 +298,9 @@
 <!-- 	        					</ui-gmap-marker> -->
 <!-- 						</ui-gmap-google-map> -->
 						<map id="editPm" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPmMarker()" >
-							<marker ng-repeat="pm in newBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
+							<marker ng-repeat="pm in newPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{{ pm.icon }}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()" ><!-- on-drag="updatePos()" -->
 							</marker>
-							<marker ng-repeat="pm in editBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
+							<marker ng-repeat="pm in editPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{{ pm.icon }}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()" ><!-- on-drag="updatePos()" -->
 							</marker>
 						</map>
 					</div>

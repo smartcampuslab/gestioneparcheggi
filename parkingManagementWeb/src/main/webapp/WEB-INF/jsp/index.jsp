@@ -55,10 +55,9 @@
 <script src="lib/angular-base64.min.js"></script>
 <script src="lib/bootstrap-colorpicker-module.js"></script>
 
-<script src="lib/lodash.js"></script>
+<!-- <script src="lib/lodash.js"></script> -->
 <!-- <script src="lib/angular-google-maps.js"></script> -->
 <script src="http://maps.google.com/maps/api/js?key=AIzaSyBAyoQGPbpu84FQoIw_nfxaodL3vDYUgGA&sensor=false&v=3.exp"></script>
-<!-- <script src="https://maps.googleapis.com/maps/api/js?v=3.exp"></script> -->
 <script src="lib/ng-map.min.js"></script>
 
 <base href="/parking-management/" />
@@ -191,7 +190,7 @@
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
     </div><!-- /.navbar -->
-	<div class="container">
+	<div class="container-fluid">
 <!-- 		<div class="row" style="margin-top:70px;"> -->
 		<div class="row">
 			<div class="col-md-1"></div>
@@ -247,22 +246,28 @@
 <!-- 							    </div>     -->
 <!-- 							</div> -->
 							<div class="row" ng-show="isHomeParkActive() == 'active'"><!-- style="height: 150px;" -->
-								<div class="panel panel-primary" align="left">
-									<div class="panel-heading">
-										<h5 class="panel-title">{{ 'park_menu_list' | i18n }}</h5>
-									</div>
-									<div class="panel-body">
-										<ul class="nav nav-pills nav-stacked" style="font-size: 14px">
-											<li class="{{ isHomeSubParkActive() }}"><a href="#/park/home" ng-click="setHomeSubParkActive()">{{ 'menu_bar-home' | i18n }}</a></li>
-											<li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li>
-					            			<li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li>
-					          				<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
-										</ul>
+								<div class="col-md-2" >
+									<div class="panel panel-primary" align="left">
+										<div class="panel-heading">
+											<h5 class="panel-title">{{ 'park_menu_list' | i18n }}</h5>
+										</div>
+										<div class="panel-body">
+											<ul class="nav nav-pills nav-stacked" style="font-size: 14px">
+												<li class="{{ isHomeSubParkActive() }}"><a href="#/park/home" ng-click="setHomeSubParkActive()">{{ 'menu_bar-home' | i18n }}</a></li>
+												<li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li>
+						            			<li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li>
+						          				<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
+											</ul>
+										</div>
 									</div>
 								</div>
+								<div class="col-md-10">
+									<div ng-view class="row" ng-hide="isNewPractice()" >{{ 'loading_text'| i18n }}...</div>
+								</div>
 							</div>
-<!-- 							<div class="row" style="height: 30px;" ng-show="!frameOpened">&nbsp;</div> -->
-							<div ng-view class="row" ng-hide="isNewPractice()" >{{ 'loading_text'| i18n }}...</div>
+							<div ng-show="isHomeParkActive() != 'active'">
+								<div ng-view class="row" ng-hide="isNewPractice()" >{{ 'loading_text'| i18n }}...</div>
+							</div>
 						</div>
 						</div>
 					</div>
