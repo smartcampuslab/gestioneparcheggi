@@ -25,17 +25,12 @@ var pm = angular.module('pm', [
 pm.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
   	$routeProvider
-//	  	.when('/index_it', {
-//			templateUrl: 'index.jsp',
-//			controller: 'MainCtrl',
-//			controllerAs: 'main'
-//		})
-//		.when('/index_en', {
-//			templateUrl: 'index_en.jsp',
-//			controller: 'MainCtrl',
-//			controllerAs: 'main'
-//		})
   		.when('/', {
+    		templateUrl: 'partials/home.html',
+    		controller: 'MainCtrl',
+    		controllerAs: 'main'
+    	})
+    	.when('/home', {
     		templateUrl: 'partials/home.html',
     		controller: 'MainCtrl',
     		controllerAs: 'main'
@@ -67,6 +62,11 @@ pm.config(['$routeProvider', '$locationProvider',
 //    	})
     	.when('/view', {
     		templateUrl: 'partials/view/viewallgmap.html',
+    		controller: 'ViewCtrlGmap',
+    		controllerAs: 'view_ctrl_gmap'
+    	})
+    	.when('/viewall', {
+    		templateUrl: 'partials/view/viewallgmapnosec.html',
     		controller: 'ViewCtrlGmap',
     		controllerAs: 'view_ctrl_gmap'
     	})
@@ -110,36 +110,11 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'PracticeCtrl',
     		controllerAs: 'practice_ctrl'
     	})
-    	.when('/console/', {
-    		templateUrl: 'partials/console/home.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
-    	.when('/console/home', {
-    		templateUrl: 'partials/console/home.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
-//    	.when('/console/next_state/:id', {
-//    		templateUrl: 'partials/console/home.html',
-//    		controller: 'ConsoleCtrl',
-//    		controllerAs: 'console_ctrl'
-//    	})
     	.when('/Console/search', {
     		templateUrl: 'partials/console/search.html',
     		controller: 'ConsoleCtrl',
     		controllerAs: 'console_ctrl'
     	})
-//    	.when('/Console/classification', {
-//    		templateUrl: 'partials/console/classification.html',
-//    		controller: 'ConsoleCtrl',
-//    		controllerAs: 'console_ctrl'
-//    	})
-//    	.when('/Console/classification/provv/:id', {
-//    		templateUrl: 'partials/console/classification/provv_classification.html',
-//    		controller: 'ConsoleCtrl',
-//    		controllerAs: 'console_ctrl'
-//    	})
     	.when('/Console/classification/final/:id', {
     		templateUrl: 'partials/console/classification/final_classification.html',
     		controller: 'ConsoleCtrl',
@@ -165,11 +140,6 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'ConsoleCtrl',
     		controllerAs: 'console_ctrl'
     	})
-//    	.when('/Console/view/:id', {
-//    		templateUrl: 'partials/console/view.html',
-//    		controller: 'ConsoleCtrl',
-//    		controllerAs: 'console_ctrl'
-//    	})
     	.otherwise({
     		redirectTo:'/'
     	});

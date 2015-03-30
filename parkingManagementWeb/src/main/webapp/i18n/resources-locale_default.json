@@ -35,6 +35,10 @@
     "value": "Home",
     "description": "Valore link menu per Home page"
 }, {
+    "key": "menu_bar-logout",
+    "value": "Logout",
+    "description": "Valore link menu per Logout"
+}, {
     "key": "usefull_link",
     "value": "Contatti",
     "description": "Valore link menu per Contatti"

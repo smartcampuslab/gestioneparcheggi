@@ -45,143 +45,143 @@ public class EditingController {
 		markerIconStorage = new MarkerIconStorage();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/street")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/street")
 	public @ResponseBody
 	StreetBean createStreet(@RequestBody StreetBean street) throws DatabaseException {
 		return storage.save(street);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/street/{aid}/{sid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/street/{aid}/{sid}")
 	public @ResponseBody
 	boolean deleteStreet(@PathVariable("aid") String aid,
 			@PathVariable("sid") String sid) throws DatabaseException {
 		return storage.removeStreet(aid, sid);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/street/{sid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/street/{sid}")
 	public @ResponseBody
 	StreetBean editStreet(@PathVariable("sid") String vid, @RequestBody StreetBean street)
 			throws DatabaseException {
 		return storage.editStreet(street);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/street")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/street")
 	public @ResponseBody
 	List<StreetBean> getAllStreets() {
 		return storage.getAllStreets();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/parkingmeter")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/parkingmeter")
 	public @ResponseBody
 	ParkingMeterBean createParkingMeter(@RequestBody ParkingMeterBean parkingMeter)
 			throws DatabaseException {
 		return storage.save(parkingMeter);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/parkingmeter")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingmeter")
 	public @ResponseBody
 	List<ParkingMeterBean> getAllParkingMeters() {
 		return storage.getAllParkingMeters();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/parkingmeter/{aid}/{pid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/parkingmeter/{aid}/{pid}")
 	public @ResponseBody
 	boolean deleteParkingMeter(@PathVariable("aid") String aid,
 			@PathVariable("pid") String pid) {
 		return storage.removeParkingMeter(aid, pid);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/parkingmeter/{pid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/parkingmeter/{pid}")
 	public @ResponseBody
 	ParkingMeterBean editParkingMeter(@PathVariable("pid") String pid,
 			@RequestBody ParkingMeterBean parkingMeter) throws DatabaseException {
 		return storage.editParkingMeter(parkingMeter);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/area")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/area")
 	public @ResponseBody
 	RateAreaBean createRateArea(@RequestBody RateAreaBean area) {
 		return storage.save(area);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/area/{aid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/area/{aid}")
 	public @ResponseBody
 	RateAreaBean editRateArea(@PathVariable("aid") String aid,
 			@RequestBody RateAreaBean area) throws NotFoundException {
 		return storage.editArea(area);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/area/{aid}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/area/{aid}")
 	public @ResponseBody
 	RateAreaBean getRateArea(@PathVariable("aid") String aid,
 			@RequestBody RateAreaBean area) throws NotFoundException {
 		return storage.getAreaById(aid);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/area")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/area")
 	public @ResponseBody
 	List<RateAreaBean> getAllRateArea() {
 		return storage.getAllArea();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/area/{aid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/area/{aid}")
 	public @ResponseBody
 	boolean deleteRateArea(@PathVariable("aid") String aid) {
 		return storage.removeArea(aid);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/zone")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/zone")
 	public @ResponseBody
 	ZoneBean createZone(@RequestBody ZoneBean zone) throws DatabaseException {
 		return storage.save(zone);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/zone")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/zone")
 	public @ResponseBody
 	List<ZoneBean> getAllZone() {
 		return storage.getAllZone();
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/zone/{zid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/zone/{zid}")
 	public @ResponseBody
 	ZoneBean editZone(@PathVariable("zid") String zid,
 			@RequestBody ZoneBean zone) throws NotFoundException {
 		return storage.editZone(zone);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/zone/{zid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/zone/{zid}")
 	public @ResponseBody
 	boolean deleteZone(@PathVariable("zid") String zid) {
 		return storage.removeZone(zid);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/bikepoint")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/bikepoint")
 	public @ResponseBody
 	BikePointBean createBikePoint(@RequestBody BikePointBean puntobici)
 			throws DatabaseException {
 		return storage.save(puntobici);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/bikepoint")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/bikepoint")
 	public @ResponseBody
 	List<BikePointBean> getAllBikePoints() {
 		return storage.getAllBikePoints();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/bikepoint/{pbid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/bikepoint/{pbid}")
 	public @ResponseBody
 	boolean deleteBikePoint(@PathVariable("pbid") String pbid) {
 		return storage.removeBikePoint(pbid);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/bikepoint/{pbid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/bikepoint/{pbid}")
 	public @ResponseBody
 	BikePointBean editBikePoint(@PathVariable("pbid") String pbid,
 			@RequestBody BikePointBean bici) throws NotFoundException {
 		return storage.editBikePoint(bici);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/parkingstructure")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/parkingstructure")
 	public @ResponseBody
 	ParkingStructureBean createParkingStructure(
 			@RequestBody ParkingStructureBean entityBean)
@@ -189,19 +189,19 @@ public class EditingController {
 		return storage.save(entityBean);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/parkingstructure")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingstructure")
 	public @ResponseBody
 	List<ParkingStructureBean> getAllParkingStructure() {
 		return storage.getAllParkingStructure();
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/parkingstructure/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/parkingstructure/{id}")
 	public @ResponseBody
 	boolean deleteParkingStructure(@PathVariable String id) {
 		return storage.removeParkingStructure(id);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/parkingstructure/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/parkingstructure/{id}")
 	public @ResponseBody
 	ParkingStructureBean editParkingStructure(@PathVariable String id,
 			@RequestBody ParkingStructureBean entityBean)
@@ -209,13 +209,13 @@ public class EditingController {
 		return storage.editParkingStructure(entityBean);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/data")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/data")
 	public @ResponseBody
 	byte[] exportData() throws ExportException {
 		return storage.exportData();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/export")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/export")
 	public @ResponseBody
 	void export(HttpServletResponse response) throws ExportException,
 			IOException {
@@ -228,7 +228,7 @@ public class EditingController {
 		response.getOutputStream().flush();
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/marker/{company}/{entity}/{color}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/marker/{company}/{entity}/{color}")
 	public void getMarkerIcon(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable("color") String color,
 			@PathVariable String entity, @PathVariable String company)
@@ -238,7 +238,7 @@ public class EditingController {
 				.getRealPath("/"), company, entity, color);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/marker/{company}/{entity}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/marker/{company}/{entity}")
 	public void getMarkerIconNoColor(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable String entity,
 			@PathVariable String company) throws IOException {

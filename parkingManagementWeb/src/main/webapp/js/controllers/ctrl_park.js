@@ -215,7 +215,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var allAreas = [];
 		var method = 'GET';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "area", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allAreas);
 	    	console.log("rateAreas retrieved from db: " + JSON.stringify(result));
@@ -232,7 +233,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.getAreaByIdFromDb = function(id){
 		var method = 'GET';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/"+ id, null, $scope.authHeaders, null);
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/"+ id, null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "area/"+ id, null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("rateArea by id retrieved from db: " + JSON.stringify(result));
 	    	return result;
@@ -266,7 +268,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var allStreet = [];
 		var method = 'GET';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSService.getProxy(method, "street", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allStreet);
 	    	console.log("streets retrieved from db: " + JSON.stringify(result));
@@ -286,7 +289,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var allPmeters = [];
 		var method = 'GET';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allPmeters);
 	    	console.log("ParkingMeters retrieved from db: " + JSON.stringify(result));
@@ -308,7 +312,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var allPstructs = [];
 		var method = 'GET';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allPstructs);
 	    	console.log("ParkingStructures retrieved from db: " + JSON.stringify(result));
@@ -329,7 +334,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var allZones = [];
 		var method = 'GET';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "zone", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allZones);
 	    	console.log("Zone retrieved from db: " + JSON.stringify(result));
@@ -1838,10 +1844,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Area data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + id, null, $scope.authHeaders, value);
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "area/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated street: " + result);
-		    	if(result == "OK"){
+		    	if(result != null){ // == "OK"){
 		    		$scope.getAreasFromDb();
 					$scope.editModeA = false;
 		    	} else {
@@ -1892,10 +1899,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Street data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
+		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated street: " + result);
-		    	if(result == "OK"){
+		    	if(result != null){ // == "OK"){
 		    		$scope.getStreetsFromDb();
 					$scope.editModeS = false;
 		    	} else {
@@ -1932,10 +1940,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Parkingmeter data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter/" + id, null, $scope.authHeaders, value);
+		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated parkinMeter: " + result);
-		    	if(result == "OK"){
+		    	if(result != null){ // == "OK"){
 		    		$scope.getParkingMetersFromDb();
 		    		$scope.editModePM = false;
 		    	} else {
@@ -1987,10 +1996,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    var value = JSON.stringify(data);
 			    if($scope.showLog) console.log("Parkingmeter data : " + value);
 				
-			   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + id, null, $scope.authHeaders, value);
+				//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + id, null, $scope.authHeaders, value);
+			   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure/" + id, null, $scope.authHeaders, value);
 			    myDataPromise.then(function(result){
 			    	console.log("Updated parkingStructure: " + result);
-			    	if(result == "OK"){
+			    	if(result != null){ // == "OK"){
 			    		$scope.getParkingStructuresFromDb();
 						$scope.editModePS = false;
 			    	} else {
@@ -2037,10 +2047,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Zone data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + id, null, $scope.authHeaders, value);
+		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "zone/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated Zone: " + result);
-		    	if(result == "OK"){
+		    	if(result != null){ // == "OK"){
 		    		$scope.getZonesFromDb();
 					$scope.editModeZ = false;
 		    	} else {
@@ -2130,7 +2141,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		toDelArea[area.id].setMap(null);
     	}
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted area: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2154,7 +2166,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		toDelStreet[street.id].setMap(null);
     	}
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + street.rateAreaId + "/" + street.id , null, $scope.authHeaders, null);
+    	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + street.rateAreaId + "/" + street.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "street/" + street.rateAreaId + "/" + street.id , null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted street: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2172,7 +2185,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.showDeletingPMErrorMessage = false;
 		var method = 'DELETE';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , null, $scope.authHeaders, null);
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted parkingmeter: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2190,7 +2204,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.showDeletingPSErrorMessage = false;
 		var method = 'DELETE';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + pStruct.id, null, $scope.authHeaders, null);
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + pStruct.id, null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure/" + pStruct.id, null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted struct: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2214,7 +2229,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		toDelZone[zone.id].setMap(null);
     	}
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + zone.id, null, $scope.authHeaders, null);
+    	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + zone.id, null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "zone/" + zone.id, null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted zone: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2263,7 +2279,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Area data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, value);
+		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "area", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Created area: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -2316,7 +2333,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Street data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "street", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Created street: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -2357,7 +2375,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Parkingmeter data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, value);
+		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Created parkinMeter: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -2410,7 +2429,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    var value = JSON.stringify(data);
 			    if($scope.showLog) console.log("Parkingmeter data : " + value);
 				
-			   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, value);
+			   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, value);
+			   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure", null, $scope.authHeaders, value);
 			    myDataPromise.then(function(result){
 			    	console.log("Created parkingStructure: " + JSON.stringify(result));
 			    	if(result != null && result != ""){
@@ -2457,7 +2477,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Zone data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, value);
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "zone", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Created zone: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -2969,7 +2990,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	var createMarkers = function(i, marker, type) {
 		//------ To be configured in external conf file!!!!!------
 		var company = "amr";
-		var baseUrl = "http://localhost:8080/parking-management";
+		var baseUrl = "http://localhost:8080/parking-management/rest";
 		var defaultMarkerColor = "FF0000";
 		//--------------------------------------------------------
 		var myIcon = "";
@@ -3012,19 +3033,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    showWindow: false,
 				title: title,
 				icon: myIcon
-//			    events: {
-//			    	mouseover: function(marker, eventName, args) {
-//			    		var e = args[0];
-//			    		console.log("I am in marker mouseover event function " + e);
-//			    		marker.show = true;
-////			    	 	$scope.$apply();
-//			    	},
-//			    	click: function (marker, eventName, args){
-//		            	var e = args[0];
-//		            	console.log("I am in marker click event function " + e.latLng);
-//		            	//$scope.$apply();
-//		            }	
-//			    }
 			};
 			ret.closeClick = function () {
 		        ret.showWindow = false;
@@ -3111,46 +3119,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.mapReady = true;
 		//$scope.$apply();
 	};
-	
-//	$scope.polygons = [
-//	    {
-//	       id: 1,
-//	       path: [
-//	           {
-//	               latitude: 45.893244,
-//	               longitude: 11.024332
-//	           },
-//	           {
-//	               latitude: 45.894140,
-//	               longitude: 11.029181
-//	           },
-//	           {
-//	               latitude: 45.891063,
-//	               longitude: 11.034288
-//	           },
-//	           {
-//	               latitude: 45.886493,
-//	               longitude: 11.032700
-//	           },
-//	           {
-//	               latitude: 45.884671,
-//	               longitude: 11.026263
-//	           }
-//	       ],
-//	       stroke: {
-//	          color: '#29ea30',
-//	          weight: 3
-//	       },
-//	       editable: true,
-//	       draggable: true,
-//	       geodesic: false,
-//	       visible: true,
-//	       fill: {
-//	          color: '#29ea30',
-//	          opacity: 0.7
-//	       }
-//	    }
-//	];
 	   
     // --------------------------- End Section for Anni Residenza, Anzianità lavorativa e Disabilità -------------------------
             

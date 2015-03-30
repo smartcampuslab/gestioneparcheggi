@@ -1485,7 +1485,7 @@ pm.factory('getMyMessages', function($http, $q) {
 // Proxy Methods section
 pm.factory('invokeWSService', function($http, $q) {
 	
-	var url = '/service.epu/';
+	var url = 'rest/';
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
 		$http({
@@ -1625,5 +1625,4 @@ pm.factory('invokePdfServiceProxy', function($http, $q) {
 		return deferred.promise;
 	};
 	return {getProxy : getProxy};
-	
 });

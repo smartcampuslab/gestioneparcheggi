@@ -1,0 +1,312 @@
+<div class="panel panel-danger">
+	<div class="panel-heading">
+		<h4 class="panel-title">Visualizza</h4>
+	</div>
+	<div class="panel-body">
+		<!--<form name="viewForm"  > ng-init="initWs()" -->
+			<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
+				<div class="col-md-9"><!--   ng-show="mapReady"-->
+<!-- 					<div id="map_canvas" ></div> -->
+					<map id="viewMap" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" style="height: 500px">
+<!-- 						<shape ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.cid }}" name="circle" fill-color="{{ correctColor(pm.area.color) }}" stroke-color="{{ correctColor(pm.area.color) }}" stroke-opacity="1" stroke-weight="2" center="{{ pm.position }}" radius="100" editable="false" > -->
+<!-- 					    </shape> -->
+						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showInfoWindow(event, 'pm')" >
+							<info-window id="pm" visible-on-marker="{{ pm.id }}">
+						        <div ng-non-bindable="">
+						          	<div id="siteNotice"></div>
+						          	<h4 id="firstHeading" class="firstHeading">{{ pm.data.code }}</h4>
+							        <div id="bodyContent">
+							        	<table>
+							        		<tr>
+							        			<td><strong>Note:</strong></td>
+							        			<td>&nbsp;{{ pm.data.note }}</td>
+							        		</tr>
+											<tr>
+							        			<td><strong>Stato:</strong></td>
+							        			<td>
+							        				<span ng-show="pm.data.status=='ACTIVE'">Attivo</span>
+													<span ng-show="pm.data.status!='ACTIVE'">Disattivo</span>
+												</td>	
+							        		</tr>
+							        		<tr>
+							        			<td colspan="2">
+							        				<strong>Area:</strong>
+							        				<div class="panel panel-default">
+														<div class="panel-body">
+															<table width="100%">
+																<tr>
+																	<td width="45%"><strong>Nome:</strong></td>
+																	<td width="55%">{{ pm.area.name }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Tariffa:</strong></td>
+																	<td>{{ pm.area.fee }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Orario:</strong></td>
+																	<td>{{ pm.area.timeSlot }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Servizio telepark - cod.area:</strong></td>
+																	<td>{{ pm.area.smsCode }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Colore:</strong></td>
+																	<td><span class="colorBox" ng-style="{'background-color': correctColor(pm.area.color)}"></span></td>
+																</tr>
+													   		</table>
+														</div>
+													</div>	
+							        			</td>
+							        		</tr>
+							        	</table>
+							        </div>
+						        </div>
+						    </info-window>
+						</marker>
+						<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ psMarkerIcon }}" on-click="showInfoWindow(event, 'ps')" >
+							<info-window id="ps" visible-on-marker="{{ ps.id }}">
+						        <div ng-non-bindable="">
+						          	<div id="siteNotice"></div>
+						          	<h4 id="firstHeading" class="firstHeading">{{ ps.data.name }}</h4>
+							        <div id="bodyContent">
+							        	<table>
+							        		<tr>
+							        			<td><strong>Indirizzo:</strong></td>
+							        			<td>&nbsp;{{ ps.data.streetReference }}</td>
+							        		</tr>
+											<tr>
+							        			<td><strong>Tariffa sosta (euro/ora):</strong></td>
+							        			<td>&nbsp;{{ ps.data.fee }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Orario:</strong></td>
+							        			<td>&nbsp;{{ ps.data.timeSlot }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Telefono:</strong></td>
+							        			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Modalita' di gestione:</strong></td>
+							        			<td>&nbsp;{{ ps.data.managementMode }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Modalita' di pagamento:</strong></td>
+							        			<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td>
+							        		</tr>
+											<tr>
+												<td colspan="2">
+													<strong>Posti</strong>:
+													<div class="panel panel-default">
+														<div class="panel-body">
+															<table width="100%">
+																<tr>
+																	<td width="45%"><strong>Capienza:</strong></td>
+																	<td width="55%">{{ ps.data.slotNumber }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Posti per disabili:</strong></td>
+																	<td>{{ ps.data.handicappedSlotNumber }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Posti non usabili:</strong></td>
+																	<td>{{ ps.data.unusuableSlotNumber }}</td>
+																</tr>
+															</table>
+														</div>
+													</div>
+												</td>
+											</tr>
+							        	</table>
+							        </div>
+						        </div>
+						    </info-window>
+						</marker>
+						<marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')" >
+							<info-window id="bp" visible-on-marker="{{ bp.id }}">
+						        <div ng-non-bindable="">
+						          	<div id="siteNotice"></div>
+						          	<h4 id="firstHeading" class="firstHeading">{{ bp.data.name }}</h4>
+							        <div id="bodyContent">
+							        	<table>
+											<tr>
+							        			<td><strong>Posti bici:</strong></td>
+							        			<td>&nbsp;{{ bp.data.slotNumber }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Bici:</strong></td>
+							        			<td>&nbsp;{{ bp.data.bikeNumber }}</td>
+							        		</tr>
+							        	</table>
+							        </div>
+						        </div>
+						    </info-window>
+						</marker>
+						<shape name="polyline" ng-repeat="s in mapStreets" id="{{ s.id }}" path="{{ s.gpath }}" 
+         					geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showInfoWindow(event, s.info_windows_cod)">
+     						<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
+						        <div ng-non-bindable="">
+						          	<div id="siteNotice"></div>
+						          	<h4 id="firstHeading" class="firstHeading">{{ s.data.streetReference }}</h4>
+							        <div id="bodyContent">
+							        	<table>
+							        		<tr>
+							        			<td><strong>Posti totali:</strong></td>
+							        			<td>&nbsp;{{ s.data.slotNumber }}</td>
+							        		</tr>
+											<tr>
+							        			<td><strong>Posti riservati ai disabili:</strong></td>
+							        			<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Posti disco orario:</strong></td>
+							        			<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Posti sosta libera:</strong></td>
+							        			<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Posti inutilizzabili:</strong></td>
+							        			<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
+							        		</tr>
+							        		<tr>
+							        			<td><strong>Sosta con abbonamento:</strong></td>
+							        			<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
+							        		</tr>
+							        		<tr>	
+												<td>
+													<strong>Area:</strong>
+												</td>
+												<td>	 
+													{{ s.area.name }} 
+													<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span>
+												</td>
+											</tr>
+											<tr>	
+												<td>
+													<strong>Zona:</strong>
+												</td>
+												<td>
+													<table width="100%">
+														<tr ng-repeat="z in s.zones track by z.id">
+															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
+															<td width="80%">{{ z.name }} - {{ z.submacro }}</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+							        	</table>
+							        </div>
+						        </div>
+						    </info-window>
+     					</shape>
+						<shape name="polygon" ng-repeat="z in mapZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
+         					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
+     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
+						        <div ng-non-bindable="">
+						          	<div id="siteNotice"></div>
+						          	<h4 id="firstHeading" class="firstHeading">{{ z.data.name }}</h4>
+							        <div id="bodyContent">
+							        	<table>
+							        		<tr>
+							        			<td><strong>Tipo:</strong></td>
+							        			<td>&nbsp;{{ z.data.type }}</td>
+							        		</tr>
+											<tr>
+							        			<td><strong>Note:</strong></td>
+							        			<td>&nbsp;{{ z.data.note }}</td>
+							        		</tr>
+							        		<tr>	
+												<td><strong>Colore:</strong></td>
+												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+											</tr>
+							        	</table>
+							        </div>
+						        </div>
+						    </info-window>
+     					</shape>
+     					<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
+         					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ a.stroke.weight }}"
+         					fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showInfoWindow(event, a.info_windows_cod)">
+     						<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
+						        <div ng-non-bindable="">
+						          	<div id="siteNotice"></div>
+						          	<h4 id="firstHeading" class="firstHeading">{{ a.data.name }}</h4>
+							        <div id="bodyContent">
+							        	<table>
+											<tr>	
+												<td width="45%"><strong>Tariffa:</strong></td>
+												<td width="55%">{{ a.data.fee }}</td>
+											</tr>
+											<tr>	
+												<td><strong>Orario:</strong></td>
+												<td>{{ a.data.timeSlot }}</td>
+											</tr>
+											<tr>	
+												<td><strong>Servizio telepark-cod.area:</strong></td>
+												<td>{{ a.data.smsCode }}</td>
+											</tr>
+											<tr>	
+												<td><strong>Colore:</strong></td>
+												<td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
+											</tr>
+							        	</table>
+							        </div>
+						        </div>
+						    </info-window>
+     					</shape>
+					</map>
+				</div>
+<!-- 				<div class="col-md-9" ng-show="mapReady" id="map-canvas">	 -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-9" ng-show="!mapReady"> -->
+<!-- 					<div style="text-align: center"> -->
+<!-- 							<img src="imgs/ajax-loader.gif" width="40" height="40" /><br> -->
+<!-- 							<h3>{{ 'loading_text' | i18n }}...</h3> -->
+<!-- 						</div> -->
+<!-- 				</div> -->
+				<div class="col-md-3">
+					<div class="panel panel-danger">
+						<div class="panel-heading">
+							<h5 class="panel-title">Mostra/Nascondi</h5>
+						</div>
+						<div class="panel-body">
+							<table width="100%">
+<!-- 								<tr> -->
+<!-- 									<th colspan="2">{{ 'view_hide_block_title' | i18n }}</th> -->
+<!-- 								</tr> -->
+								<tr>
+									<td align="center" width="15%"><input id="rateArea" type="checkbox" ng-model="mapelements.rateareas" ng-click="changeAreaPolygons()"></td>
+									<td align="left" width="85%"><label for="rateArea">Aree di tariffazione</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="streets" type="checkbox" ng-model="mapelements.streets" ng-click="changeStreetPolylines()"></td>
+									<td align="left"><label for="streets">Vie</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="pMeters" type="checkbox" ng-model="mapelements.parkingmeters" ng-click="changeParkingMetersMarkers()"></td>
+									<td align="left"><label for="pMeters">Parcometri</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="pStruct" type="checkbox" ng-model="mapelements.parkingstructs" ng-click="changeParkingStructuresMarkers()"></td>
+									<td align="left"><label for="pStruct">Strutture parcheggio</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="bikePoint" type="checkbox" ng-model="mapelements.bikepoints" ng-click="changeBikePointsMarkers()"></td>
+									<td align="left"><label for="bikePoint">Punti bici</label></td>
+								</tr>
+								<tr>
+									<td align="center"><input id="zones" type="checkbox" ng-model="mapelements.zones" ng-click="changeZonePolygons()"></td>
+									<td align="left"><label for="zones">Zone</label></td>
+								</tr>
+							</table>
+						</div>
+					</div>
+				</div>
+			</div>
+<!-- 		</form> -->
+	</div>
+</div>

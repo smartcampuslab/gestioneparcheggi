@@ -42,7 +42,7 @@ pm.controller('LoginCtrl',['$scope', '$route', '$routeParams', '$rootScope', 'lo
     };
     
     $scope.getConsoleLogin = function(){
-    	window.location.href = "./console_login";
+    	window.location.href = "./login";
     };
     
     $scope.getIframeLogin = function(){

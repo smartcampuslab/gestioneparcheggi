@@ -18,8 +18,8 @@
 	<mvc:annotation-driven />
 
 	<!-- Scan controllers in this package -->
-	<context:component-scan base-package="it.smartcommunitylab.parking.management.web" />
 	<context:property-placeholder location="classpath:tm.properties" />
+	<context:component-scan base-package="it.smartcommunitylab.parking.management.web" />
 	
 	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
@@ -27,14 +27,5 @@
 		<property name="suffix" value=".jsp" />
 	</bean>
 
-    <mongo:mongo host="${mongo.host}" port="${mongo.port}" />
-
-	<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
-		<constructor-arg ref="mongo" />
-		<constructor-arg name="databaseName"
-			value="${mongo.db}" />
-	</bean>	
-	
-	 <!-- Base package to scan the mongo repositories, where we create de DAOS to access data and domain objects -->
-     <mongo:repositories base-package="it.smartcommunitylab.parking.management.web.repository" />
+    
 </beans>

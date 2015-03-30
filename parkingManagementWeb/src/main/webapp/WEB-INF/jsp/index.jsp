@@ -4,11 +4,11 @@
 <meta charset="utf-8">
 <title>{{ 'app_tab-title' | i18n }}</title>
 
-<link href="css/bootstrap.min.css" rel="stylesheet">
-<link href="css/bootstrap-theme.min.css" rel="stylesheet">
-<link href="css/xeditable.css" rel="stylesheet">
-<link href="css/modaldialog.css" rel="stylesheet">
-<link href="css/colorpicker.css" rel="stylesheet">
+<link href="css/bootstrap.min.css" rel="stylesheet" />
+<link href="css/bootstrap-theme.min.css" rel="stylesheet" />
+<link href="css/xeditable.css" rel="stylesheet" />
+<link href="css/modaldialog.css" rel="stylesheet" />
+<link href="css/colorpicker.css" rel="stylesheet" />
 <link href="img/myweb.ico" rel="shortcut icon" type="image/x-icon" />
 
 <!-- required libraries -->
@@ -31,7 +31,6 @@
 <script src="js/controllers/ctrl_park.js"></script>
 <script src="js/controllers/ctrl_bike.js"></script>
 <script src="js/controllers/ctrl_view.js"></script>
-<script src="js/controllers/ctrl_view_gcode.js"></script>
 <script src="js/controllers/ctrl_view_gmap.js"></script>
 
 <script src="js/filters.js?1001"></script>
@@ -44,10 +43,6 @@
 <!-- <script type="text/javascript" src="js/ui.datepicker-it.js" ></script> -->
 
 <!-- optional libraries -->
-<!-- <script src="lib/underscore-min.js"></script> -->
-<!-- <script src="lib/moment.min.js"></script> -->
-<!-- <script src="lib/fastclick.min.js"></script> -->
-<!-- <script src="lib/prettify.js"></script> -->
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-cookies.min.js"></script>
 <script src="lib/angular-route.min.js"></script>
@@ -65,8 +60,8 @@
 <script>
 <%-- var token="<%=request.getAttribute("token")%>"; --%>
 <%-- var userId="<%=request.getAttribute("user_id")%>"; --%>
-<%-- var user_name="<%=request.getAttribute("user_name")%>"; --%>
-<%-- var user_surname="<%=request.getAttribute("user_surname")%>"; --%>
+var user_name="<%=request.getAttribute("user_name")%>";
+var user_surname="<%=request.getAttribute("user_surname")%>";
 <%-- var user_mail="<%=request.getAttribute("e_mail")%>"; --%>
 <%-- var nome="<%=request.getAttribute("nome")%>"; --%>
 <%-- var cognome="<%=request.getAttribute("cognome")%>"; --%>
@@ -185,7 +180,7 @@
           	<li><a href="mailto:myweb.edilizia@comunitadellavallagarina.tn.it?Subject=Info%20MyWeb" target="_top" alt="myweb.edilizia@comunitadellavallagarina.tn.it" title="myweb.edilizia@comunitadellavallagarina.tn.it">{{ 'usefull_link'| i18n }}</a></li>
           	<li class="{{ isActiveItaLang() }}"><a href ng-click="setItalianLanguage()">IT</a></li>
           	<li class="{{ isActiveEngLang() }}"><a href ng-click="setEnglishLanguage()">EN</a></li>
-            <!-- <li><a href="logout" ng-click="logout()">{{ 'menu_bar-logout' | i18n }}</a></li> -->
+            <li><a href="logout" ng-click="logout()">{{ 'menu_bar-logout' | i18n }}</a></li>
           </ul>
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->

@@ -82,8 +82,9 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var allAreas = [];
 		var method = 'GET';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSService.getProxy(method, "area", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
 	    	angular.copy(result, allAreas);
 	    	console.log("rateAreas retrieved from db: " + JSON.stringify(result));
 	    	
@@ -112,8 +113,9 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var allBpoints = [];
 		var method = 'GET';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
 	    	angular.copy(result, allBpoints);
 	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
 	    	
@@ -284,32 +286,6 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 		} else {
 			$scope.setMyGeometry(null);
-			
-//			$scope.bpCreateMap = {
-//				control: {},
-//				center: $scope.mapCenter,
-//				zoom: 15,
-//				bounds: {},
-//				options: {
-//					scrollwheel: true
-//				},
-//				events: {
-//					click: function(map, eventName, args){
-//						var e = args[0];
-//		            	console.log("I am in click event function" + e.latLng);
-//		            	var latLngString = "" + e.latLng;
-//		            	var pos = latLngString.split(",");
-//		            	var lat = pos[0].substring(1, pos[0].length);
-//		            	var lng = pos[1].substring(1, pos[1].length-1);
-//		            	var tmppos = {
-//		            			lat: lat,
-//		            			lng: lng
-//		            	};
-//		            	$scope.setMyGeometry(lat + "," + lng);
-//		            	$scope.addMyNewMarker(tmppos, map);
-//					}
-//				}
-//			};
 		}
 		$scope.viewModeBP = false;
 		$scope.editModeBP = true;
@@ -367,10 +343,11 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Bikepoint data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated bikepoint: " + result);
-		    	if(result == "OK"){
+		    	if(result != null){//== "OK"){
 		    		$scope.getBikePointsFromDb();
 					$scope.editModeBP = false;
 		    	} else {
@@ -405,7 +382,8 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Bikepoint data : " + value);
 			
-		   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Create bikePoint: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -437,8 +415,9 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.showDeletingBPErrorMessage = false;
 		var method = 'DELETE';
 		
-	   	var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
+	   	myDataPromise.then(function(result){
 	    	console.log("Deleted bikePoint: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
 	    		$scope.getBikePointsFromDb();
