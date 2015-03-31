@@ -129,82 +129,10 @@ pm.service('sharedDataService', function(){
     this.static_ambiti = [];
     this.static_comuni = [];
     this.static_edizioni = [];
-	
-    this.jobs = [ 
-         {value:'COLLOCAMENTO', title:'Iscrizione al Collocamento'},
-         {value:'LAVORO', title:'Costanza di Lavoro'}
-    ];
-            
-    this.permissions = [
-         {value:'SOGGIORNO', title:'Permesso di Soggiorno'},
-         {value:'CE', title:'Permesso Ce o Carta di Soggiorno'}
-    ];
-            
-    this.rtypes = [ 
-         {value:'NORMALE', title:'Normale'},
-         {value:'ALLOGGIO_IMPROPRIAMENTE_ADIBITO', title:'Impropriamente Adibito da almeno 2 anni (soffitti, cantine, sottoscale, auto)'},
-         {value:'ALLOGGIO_PRIVO_SERVIZI', title:'Privo di Servizi Igienici o con Servizi Igienici Esterni'}
-    ];
-            
-    this.rtypes_inidoneo = [ 
-         {value:'ALLOGGIO_INIDONEO', title:'Inidoneo per numero di stanze da letto'}
-    ];
-            
-    this.rtypes_all = [ 
-         {value:'NORMALE', title:'Normale'},              
-         {value:'ALLOGGIO_INIDONEO', title:'Inidoneo per numero di stanze da letto'},          
-         {value:'ALLOGGIO_IMPROPRIAMENTE_ADIBITO', title:'Impropriamente Adibito da almeno 2 anni (soffitti, cantine, sottoscale, auto)'},
-         {value:'ALLOGGIO_PRIVO_SERVIZI', title:'Privo di Servizi Igienici o con Servizi Igienici Esterni'}
-    ];
             
     this.genders = [
          'Femminile',
          'Maschile'
-    ];
-            
-    this.municipalities = [
-         {code: 1, name: 'Ala'},
-         {code: 2, name: 'Avio'},
-         {code: 3, name: 'Besenello'},
-         {code: 4, name: 'Calliano'},
-         {code: 5, name: 'Isera'},
-         {code: 6, name: 'Mori'},
-         {code: 7, name: 'Nogaredo'},
-         {code: 8, name: 'Nomi'},
-         {code: 9, name: 'Pomarolo'},
-         {code: 10, name: 'Rovereto'},
-         {code: 11, name: 'Villa Lagarina'},
-         {code: 12, name: 'Volano'},
-    ];
-            
-    this.contracts = [
-         {value: 'CANONE_LIBERO', title:'Canone libero (4 anni + 4 anni)'},
-         {value: 'CANONE_CONCORDATO', title:'Canone concordato (3 anni + 2 anni)'}
-    ];
-            
-    this.disabilities_under18 = [
-         {value: "CATEGORIA_INVALIDA_1", name: '01'},
-         {value: "CATEGORIA_INVALIDA_2", name: '05 e 06'},
-         {value: "CATEGORIA_INVALIDA_3", name: '07'}
-    ];
-            
-    this.disabilities_over65 = [
-         {value: "CATEGORIA_INVALIDA_1", name: '01'},
-         {value: "CATEGORIA_INVALIDA_2", name: '05 e 06'},
-         {value: "CATEGORIA_INVALIDA_4", name: '08'}
-    ];
-            
-    this.disabilities_all = [
-         {value: "CATEGORIA_INVALIDA_1", name: '01'},
-         {value: "CATEGORIA_INVALIDA_2", name: '05 e 06'},
-         {value: "CATEGORIA_INVALIDA_3", name: '07'},
-         {value: "CATEGORIA_INVALIDA_4", name: '08'}
-    ];
-            
-    this.citizenships = [
-         {code: 1, name: 'Italiana'},
-         {code: 2, name: 'Europea'},
-         {code: 3, name: 'Extra UE'},
     ];
             
     this.yes_no = [
@@ -216,62 +144,6 @@ pm.service('sharedDataService', function(){
          {value: true , title: 'Si'},
          {value: false , title: 'No'}
     ];
-            
-    this.affinities = [
-         {value: 'ALTRO_CONVIVENTE', name: 'Altro convivente'},
-         {value: 'PARENTE_34_GRADO', name: 'Parentela 3/4 grado'},
-         {value: 'PARENTE_2_GRADO', name: 'Parentela 2 grado'},
-         {value: 'PARENTE_1_GRADO', name: 'Parentela 1 grado'},
-         {value: 'FIGLIO', name: 'Figlio'},
-         {value: 'CONVIVENTE_MORE_UXORIO', name: 'Convivente More Uxorio'},
-         {value: 'CONIUGE_NON_SEPARATO', name: 'Coniuge non separato'}          
-    ];
-            
-    this.maritals = [
-         {value: 'GIA_CONIUGATO_A', name: 'Gia coniugato/a'},
-         {value: 'CONIUGATO_A', name: 'Coniugato/a'},
-         {value: 'VEDOVO_A', name: 'Vedovo/a'},
-         {value: 'NUBILE_CELIBE', name: 'Nubile/Celibe'}
-    ];
-    
-    this.vallagarinaMunicipality = [
-         'ALA',
-         'AVIO',
-         'BESENELLO',
-         'BRENTONICO',
-         'CALLIANO',
-         'ISERA',
-         'MORI',
-         'NOGAREDO',
-         'NOMI',
-         'POMAROLO',
-         'RONZO-CHIENIS',
-         'ROVERETO',
-         'TERRAGNOLO',
-         'TRAMBILENO',
-         'VALLARSA',
-         'VILLA LAGARINA',
-         'VOLANO'
-    ];
-    
-    this.userClassList = [];
-    this.classPubblicationData = "";
-    
-    this.getUserClassList = function(){
-    	return this.userClassList;
-    };
-    
-    this.setUserClassList = function(list){
-    	this.userClassList = list;
-    };
-    
-    this.getClassPubblicationData = function(){
-    	return this.classPubblicationData;
-    };
-    
-    this.setClassPubblicationData = function(data){
-    	this.classPubblicationData = data;
-    };
 	
 	// Get and Set methods
 	this.getUsedLanguage = function(){
@@ -300,22 +172,6 @@ pm.service('sharedDataService', function(){
 		this.surname = value;
 	};
 	
-	this.getUeCitizen = function(){
-		return this.ueCitizen;
-	};
-	
-	this.setUeCitizen = function(value){
-		this.ueCitizen = value;
-	};
-	
-	this.isFamilyAllowances = function(){
-		return this.familyAllowances;
-	};
-	
-	this.setFamilyAllowances = function(value){
-		this.familyAllowances = value;
-	};
-	
 	this.isLoading = function(){
 		return this.loading;
 	};
@@ -329,33 +185,6 @@ pm.service('sharedDataService', function(){
 		this.utente.codiceFiscale;
 	};
 	
-	this.getVallagarinaMunicipality = function(){
-		return this.vallagarinaMunicipality;
-	};
-	
-	this.getStaticAmbiti = function(){
-		return this.static_ambiti;
-	};
-	
-	this.getStaticComuni = function(){
-		return this.static_comuni;
-	};
-	
-	this.getStaticEdizioni = function(){
-		return this.static_edizioni;
-	};
-	
-	this.setStaticAmbiti = function(value){
-		this.static_ambiti = value;
-	};
-	
-	this.setStaticComuni = function(value){
-		this.static_comuni = value;
-	};
-	
-	this.setStaticEdizioni = function(value){
-		this.static_edizioni = value;
-	};
 	
 //	this.getUserIdentity = function(){
 //		return this.utente.codiceFiscale;
@@ -423,35 +252,7 @@ pm.service('sharedDataService', function(){
 		return this.utente;
 	};
 	
-	this.setIdDomanda = function(value){
-		this.idDomanda = value;
-	};
-	
-	this.getIdDomanda = function(){
-		return this.idDomanda;
-	};
-	
 	// Lists getters
-	this.getJobs = function(){
-		return this.jobs;
-	};
-	
-	this.getPermissions = function(){
-		return this.permissions;
-	};
-	
-	this.getRtypes = function(){
-		return this.rtypes;
-	};
-	
-	this.getRtypesInidoneo = function(){
-		return this.rtypes_inidoneo;
-	};
-	
-	this.getRtypesAll = function(){
-		return this.rtypes_all;
-	};
-	
 	this.getGenders = function(){
 		return this.genders;
 	};
@@ -1484,8 +1285,28 @@ pm.factory('getMyMessages', function($http, $q) {
 
 // Proxy Methods section
 pm.factory('invokeWSService', function($http, $q) {
-	
 	var url = 'rest/';
+	var getProxy = function(method, funcName, params, headers, data){
+		var deferred = $q.defer();
+		$http({
+			method : method,
+			url : url + funcName,
+			params : params,
+			headers : headers,
+			data : data
+		}).success(function(data) {
+			//console.log("Returned data ok: " + JSON.stringify(data));
+			deferred.resolve(data);
+		}).error(function(data) {
+			console.log("Returned data FAIL: " + JSON.stringify(data));
+			deferred.resolve(data);
+		});
+		return deferred.promise;
+	};
+	return {getProxy : getProxy};
+});
+pm.factory('invokeWSServiceNS', function($http, $q) {
+	var url = 'rest/nosec/';
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
 		$http({

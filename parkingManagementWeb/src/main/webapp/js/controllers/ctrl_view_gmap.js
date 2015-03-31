@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeWSService', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
-                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeWSService, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
+pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeWSService', 'invokeWSServiceNS', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
+                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeWSService, invokeWSServiceNS, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
 
 	
 	$scope.parkingMetersMarkers = [];
@@ -159,13 +159,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	// ----------------------------------------------------------------------------------------------
 	
 	$scope.initMap = function(pmMarkers, psMarkers, bpMarkers){
-		
-//		$scope.map = {
-//			control: {},
-//			center: $scope.mapCenter,
-//		   zoom: 14,
-//		    bounds: {}
-//		};
 		
 		$scope.options = {
 		    scrollwheel: true
@@ -372,7 +365,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	var createMarkers = function(i, marker, type) {
 		//------ To be configured in external conf file!!!!!------
 		var company = "amr";
-		var baseUrl = "http://localhost:8080/parking-management/rest/";
+		var baseUrl = "http://localhost:8080/parking-management/rest/nosec/";
 		var defaultMarkerColor = "FF0000";
 		//--------------------------------------------------------
 		
@@ -415,19 +408,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 				area: myAreaPm,
 				icon: myIcon,
 				showWindow: false
-//			    events: {
-//			    	mouseover: function(marker, eventName, args) {
-//			    		var e = args[0];
-//			    		console.log("I am in marker mouseover event function " + e);
-//			    		marker.show = true;
-////			    	 	$scope.$apply();
-//			    	},
-//			    	click: function (marker, eventName, args){
-//		            	var e = args[0];
-//		            	console.log("I am in marker click event function " + e.latLng);
-//		            	//$scope.$apply();
-//		            }	
-//			    }
 			};
 			ret.closeClick = function () {
 		        ret.showWindow = false;
@@ -549,24 +529,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			}
 		}
 		return tmpZones;
-	};	
-		    
-	// Get the bounds from the map once it's loaded
-//	$scope.$watch(function() {
-//		return $scope.map.bounds;
-//	}, function(nv, ov) {
-//	
-//	// Only need to regenerate once
-//	if (!ov.southwest && nv.southwest) {
-////		var markers = [];
-////		    for (var i = 0; i < 50; i++) {
-////		        markers.push(createRandomMarker(i, $scope.map.bounds))
-////		    }
-////		    $scope.randomMarkers = markers;
-//			$scope.getParkingMetersFromDb();
-////			$scope.$apply();
-//		}
-//	}, true);
+	};
 	
 	$scope.initStreetsObjects = function(streets){
 		var myStreets = [];
@@ -622,7 +585,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var method = 'GET';
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSService.getProxy(method, "area", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSServiceNS.getProxy(method, "area", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allAreas);
 			console.log("rateAreas retrieved from db: " + JSON.stringify(result));
@@ -642,7 +605,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var method = 'GET';
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "street", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "street", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allStreet);
 	    	console.log("streets retrieved from db: " + JSON.stringify(result));
@@ -658,7 +621,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var method = 'GET';
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allParkingMeters);
 	    	console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
@@ -679,7 +642,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var method = 'GET';
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allParkingStructures);
 	    	console.log("Parking Structures retrieved from db: " + JSON.stringify(result));
@@ -697,7 +660,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var method = 'GET';
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allBikePoints);
 	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
@@ -717,7 +680,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var method = 'GET';
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "zone", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "zone", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allZones);
 	    	console.log("Zone retrieved from db: " + JSON.stringify(result));

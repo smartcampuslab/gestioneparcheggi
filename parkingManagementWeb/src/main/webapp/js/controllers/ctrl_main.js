@@ -226,10 +226,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
         sharedDataService.setSurname(null);
         sharedDataService.setBase64(null);
         $scope.user_token = null;
-        //token = null;
-        //userId = null;
-        //user_name = null;
-        //user_surname = null;
         
     	window.location.href = "parking-management/logout";
     };

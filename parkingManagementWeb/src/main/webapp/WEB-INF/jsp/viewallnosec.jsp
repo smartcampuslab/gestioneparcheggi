@@ -110,29 +110,24 @@ var user_surname="<%=request.getAttribute("user_surname")%>";
 
 <body>
 	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()">
-	<div class="container-fluid">
-<!-- 		<div class="row" style="margin-top:70px;"> -->
-		<div class="row">
-			<div class="col-md-1"></div>
-			<div class="col-md-10">
-				<div class="panel panel-default" style="margin-top:65px;">
-			  		<div class="panel-body">
-				  			<div style="margin:5px 15px;">
-	<!-- 							<div class="row" align="center" style="height: 100px">; margin-top: 20px; -->
-	<!-- 								<div> -->
-	<!-- 									<table> -->
-	<!-- 										<tr> -->
-	<!-- 											<td width="100%" align="center" valign="middle"><h1>Dati Parcheggi</h1></td> -->
-	<!-- 										</tr> -->
-	<!-- 									</table> -->
-										
-	<!-- 								</div> -->
-	<!-- 							</div> -->
-								
-								<div ng-view class="row" >Caricamento in corso...</div>
-								
-							</div>
-						</div>
+		<div class="container-fluid">
+	<!-- 		<div class="row" style="margin-top:70px;"> -->
+			<div class="row">
+				<div class="col-md-1"></div>
+				<div class="col-md-10">
+					<div style="margin:5px 15px;">
+	<!-- 				<div class="row" align="center" style="height: 100px">; margin-top: 20px; -->
+	<!-- 					<div> -->
+	<!-- 						<table> -->
+	<!-- 							<tr> -->
+	<!-- 								<td width="100%" align="center" valign="middle"><h1>Dati Parcheggi</h1></td> -->
+	<!-- 							</tr> -->
+	<!-- 						</table> -->
+							
+	<!-- 					</div> -->
+	<!-- 				</div> -->
+									
+						<div ng-view class="row" >Caricamento in corso...</div>			
 					</div>
 				</div>
 				<div class="col-md-1"></div>

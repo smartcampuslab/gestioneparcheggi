@@ -23,6 +23,9 @@ public class MongoUserDetailsService implements UserDetailsService {
     @Autowired
     private UserRepositoryDao userRepositoryDao;
     
+    @Autowired
+	private ProviderSetup appSetup;
+    
     private static final Logger logger = Logger.getLogger(MongoUserDetailsService.class);
     
 private org.springframework.security.core.userdetails.User userdetails;
@@ -34,10 +37,12 @@ private org.springframework.security.core.userdetails.User userdetails;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
         it.smartcommunitylab.parking.management.web.repository.User user = getUserDetail(username);
-        System.out.println(username);
-         System.out.println(user.getPassword());
-          System.out.println(user.getUsername());
-           System.out.println(user.getRole());
+        //System.out.println(username);
+        //System.out.println(user.getPassword());
+        System.out.println(user.getUsername());
+        System.out.println(user.getRole());
+           
+        System.out.println(appSetup.findProviderById(username).toString());
             
             userdetails = new User(user.getUsername(), 
             					   user.getPassword(),

@@ -37,6 +37,7 @@ import eu.trentorise.smartcampus.aac.AACException;
 import it.smartcommunitylab.parking.management.web.model.UserCS;
 import it.smartcommunitylab.parking.management.web.repository.User;
 import it.smartcommunitylab.parking.management.web.repository.UserRepositoryDao;
+import it.smartcommunitylab.parking.management.web.security.CustomAuthenticationProvider;
 import it.smartcommunitylab.parking.management.web.security.MongoUserDetailsService;
 
 @Controller
@@ -56,11 +57,13 @@ public class PortalController extends SCController{
 		if(model !=null && model.containsKey("mailMessage")){
 			mailMessages = model.get("mailMessage").toString();
 		}
+		
 		User user = mongoUserDetailsService.getUserDetail(name);
 		logger.error("I am in get root console. User id: " + name);
 		logger.error("I am in get root console. mailMessages: " + mailMessages);
 		model.addAttribute("user_name", user.getName());
 		model.addAttribute("user_surname", user.getSurname());
+		
 		//model.addAttribute("mailMessage", "test messaggio successo");
 		return new ModelAndView("index", model);
 	}

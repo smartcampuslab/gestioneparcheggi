@@ -70,6 +70,13 @@ public class EditingController {
 	List<StreetBean> getAllStreets() {
 		return storage.getAllStreets();
 	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/street")
+	public @ResponseBody
+	List<StreetBean> getAllStreetsNS() {
+		return storage.getAllStreets();
+	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/parkingmeter")
 	public @ResponseBody
@@ -81,6 +88,13 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingmeter")
 	public @ResponseBody
 	List<ParkingMeterBean> getAllParkingMeters() {
+		return storage.getAllParkingMeters();
+	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/parkingmeter")
+	public @ResponseBody
+	List<ParkingMeterBean> getAllParkingMetersNS() {
 		return storage.getAllParkingMeters();
 	}
 
@@ -123,6 +137,13 @@ public class EditingController {
 	List<RateAreaBean> getAllRateArea() {
 		return storage.getAllArea();
 	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/area")
+	public @ResponseBody
+	List<RateAreaBean> getAllRateAreaNS() {
+		return storage.getAllArea();
+	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/area/{aid}")
 	public @ResponseBody
@@ -139,6 +160,13 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/zone")
 	public @ResponseBody
 	List<ZoneBean> getAllZone() {
+		return storage.getAllZone();
+	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/zone")
+	public @ResponseBody
+	List<ZoneBean> getAllZoneNS() {
 		return storage.getAllZone();
 	}
 
@@ -167,6 +195,13 @@ public class EditingController {
 	List<BikePointBean> getAllBikePoints() {
 		return storage.getAllBikePoints();
 	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/bikepoint")
+	public @ResponseBody
+	List<BikePointBean> getAllBikePointsNS() {
+		return storage.getAllBikePoints();
+	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/bikepoint/{pbid}")
 	public @ResponseBody
@@ -192,6 +227,13 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingstructure")
 	public @ResponseBody
 	List<ParkingStructureBean> getAllParkingStructure() {
+		return storage.getAllParkingStructure();
+	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/parkingstructure")
+	public @ResponseBody
+	List<ParkingStructureBean> getAllParkingStructureNS() {
 		return storage.getAllParkingStructure();
 	}
 
@@ -230,6 +272,17 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/marker/{company}/{entity}/{color}")
 	public void getMarkerIcon(HttpServletRequest request,
+			HttpServletResponse response, @PathVariable("color") String color,
+			@PathVariable String entity, @PathVariable String company)
+			throws IOException {
+
+		getMarkerIcon(response, request.getSession().getServletContext()
+				.getRealPath("/"), company, entity, color);
+	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/marker/{company}/{entity}/{color}")
+	public void getMarkerIconNS(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable("color") String color,
 			@PathVariable String entity, @PathVariable String company)
 			throws IOException {

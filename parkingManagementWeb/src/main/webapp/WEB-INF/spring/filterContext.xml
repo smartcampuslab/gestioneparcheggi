@@ -31,6 +31,8 @@
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/img/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
+		pattern="/imgs/markerIcons/**" security="none" />
+	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/js/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/lib/**" security="none" />
@@ -40,8 +42,8 @@
         pattern="/login" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
         pattern="/viewall" security="none" />
-<!-- 	<http xmlns="http://www.springframework.org/schema/security" -->
-<!-- 		pattern="/rest/**" security="none" /> -->
+	<http xmlns="http://www.springframework.org/schema/security"
+		pattern="/rest/nosec/**" security="none" />
 	
 <!-- 	<sec:http pattern="/rest/**" entry-point-ref="forbEntryPoint" -->
 <!-- 		use-expressions="true" create-session="stateless">ifRequired  -->
@@ -49,17 +51,17 @@
 <!-- 		<sec:intercept-url pattern="/**" access="isFullyAuthenticated()" /> -->
 <!-- 	</sec:http> -->
 
-	<sec:http pattern="/rest/**" use-expressions="true" create-session="stateless"
+	<!-- Rest WS security configuration -->
+	<sec:http pattern="/rest/**" use-expressions="true"
 	    authentication-manager-ref="mongoAuthenticationManager">
     	<sec:http-basic />
-    	<sec:intercept-url pattern="/**" access="hasAnyRole('ROLE_ADMIN')"/>
+    	<sec:intercept-url pattern="/**" access="isFullyAuthenticated()"/>
 	</sec:http>
 	
-	<!-- Console login configuration -->
+	<!-- App login configuration -->
 	<sec:http pattern="/**" use-expressions="true"
 	    auto-config="false" authentication-manager-ref="mongoAuthenticationManager"><!-- authentication-manager-ref="mongoAuthenticationManager" -->
 		<sec:http-basic />
-<!-- 		<sec:intercept-url pattern="/rest/**" access="permitAll" /> -->
 		<sec:intercept-url pattern="/login" access="permitAll" />
 		<sec:intercept-url pattern="/logout" access="permitAll" />
 		<sec:intercept-url pattern="/j_spring_security_check" access="permitAll" />
