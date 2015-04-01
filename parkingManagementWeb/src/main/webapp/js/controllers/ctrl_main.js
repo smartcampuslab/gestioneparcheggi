@@ -56,10 +56,10 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	//$locale.id = "en-US";
     	localize.setLanguage('en-US');
     	sharedDataService.setUsedLanguage('eng');
-    	var myDataMsg = getMyMessages.promiseToHaveData('eng');
-    	myDataMsg.then(function(result){
-    		sharedDataService.inithializeAllMessages(result);
-    	});
+    	//var myDataMsg = getMyMessages.promiseToHaveData('eng');
+    	//myDataMsg.then(function(result){
+    	//	sharedDataService.inithializeAllMessages(result);
+    	//});
     };
     
     $scope.setItalianLanguage = function(){
@@ -70,10 +70,10 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	//$locale.id = "it-IT";
     	localize.setLanguage('it-IT');
     	sharedDataService.setUsedLanguage('ita');
-    	var myDataMsg = getMyMessages.promiseToHaveData('ita');
-    	myDataMsg.then(function(result){
-    	    sharedDataService.inithializeAllMessages(result);
-    	});
+    	//var myDataMsg = getMyMessages.promiseToHaveData('ita');
+    	//myDataMsg.then(function(result){
+    	//    sharedDataService.inithializeAllMessages(result);
+    	//});
     };
     
     $scope.setUserLocale = function(lan){
@@ -264,6 +264,83 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	sharedDataService.setName(user_name);
     	sharedDataService.setSurname(user_surname);
     }
+    
+    sharedDataService.setConfAppId(conf_app_id);
+    sharedDataService.setConfMapCenter(conf_map_center);
+    sharedDataService.setConfMapZoom(conf_map_zoom);
+ 
+    $scope.loadConfObject = function(data){
+    	var visibleObjList = [];
+    	var allObjs = data.split("}]}");
+    	for(var i = 0; i < allObjs.length - 1; i++){
+    		var objFields = allObjs[i].split(", attributes=[{");
+    		var ids = objFields[0].split("=");
+    		var showedObj = {
+    				id : ids[1],
+    				attributes: $scope.correctAtributes(objFields[1])
+    		};
+    		visibleObjList.push(showedObj);
+    	}
+    	sharedDataService.setVisibleObjList(visibleObjList);
+    };
+    
+    $scope.correctAtributes = function(data){
+    	var corrAttribList = [];
+    	var attribList = data.split("}, {");
+    	for(var i = 0; i < attribList.length; i++){
+    		var attribObj = attribList[i].split(", ");
+    		var code = "";
+    		var editable = "";
+    		var visible = "";
+    		var required = "";
+    		for(var j = 0; j < attribObj.length; j++){
+    			var rec = attribObj[j].split("=");
+    			if(rec[0].indexOf("code") > -1){
+    				code = rec[1];
+    			}
+    			if(rec[0].indexOf("editable") > -1){
+    				editable = (rec[1] === 'true');
+    			}
+    			if(rec[0].indexOf("visible") > -1){
+    				visible = (rec[1] === 'true');
+    			}
+    			if(rec[0].indexOf("required") > -1){
+    				required = (rec[1] === 'true');
+    			}
+    		}
+    		var attrib = {
+    			code: code,
+    			visible: visible,
+    			required: required,
+    			editable: editable
+    		};
+    		corrAttribList.push(attrib);
+    	}
+    	return corrAttribList;
+    };
+    
+    $scope.loadConfObject(object_to_show);
+    
+    $scope.setAppId = function(){
+			
+		var method = 'POST';
+		var value = sharedDataService.getConfAppId();
+		if($scope.showLog) console.log("Area data : " + value);
+			
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, value);
+		var myDataPromise = invokeWSService.getProxy(method, "appid", null, $scope.authHeaders, value);
+		myDataPromise.then(function(result){
+			if(result != null && result != ""){
+				//console.log("App Id Ok: " + result);
+			} else {
+				console.log("App Id KO. Not Set. " + result);	
+			}
+		});
+	};
+	
+	$scope.setAppId();
+    
+    //console.log("Conf data " + object_to_show);
     //sharedDataService.setBase64(base64);
     //sharedDataService.setBase64('MIIE6TCCA9GgAwIBAgIDBzMlMA0GCSqGSIb3DQEBBQUAMIGBMQswCQYDVQQGEwJJVDEYMBYGA1UECgwPUG9zdGVjb20gUy5wLkEuMSIwIAYDVQQLDBlTZXJ2aXppIGRpIENlcnRpZmljYXppb25lMTQwMgYDVQQDDCtQcm92aW5jaWEgQXV0b25vbWEgZGkgVHJlbnRvIC0gQ0EgQ2l0dGFkaW5pMB4XDTExMTEyMzAwMjQ0MloXDTE3MTEyMjAwNTk1OVowgY4xCzAJBgNVBAYTAklUMQ8wDQYDVQQKDAZUUy1DTlMxJTAjBgNVBAsMHFByb3ZpbmNpYSBBdXRvbm9tYSBkaSBUcmVudG8xRzBFBgNVBAMMPkJSVE1UVDg1TDAxTDM3OFMvNjA0MjExMDE5NzU3MTAwNy53aTRldjVNeCtFeWJtWnJkTllhMVA3ZUtkY1U9MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsF81BDJjAQat9Lfo/1weA0eePTsEbwTe/0QqlArfOTG3hfLEiSd+mDNsBUJo+cRXZMp677y9a1kYlB+IDY3LGH36Bs1QxM14KA6WB67KX4ZaXENew6Qm7NnkMRboKQiIOUmw1l4OiTETfqKWyFqfAtnyLHd8ZZ6qfjgSsJoSHoQIDAQABo4IB3TCCAdkwge0GA1UdIASB5TCB4jCBrAYFK0wQAgEwgaIwgZ8GCCsGAQUFBwICMIGSDIGPSWRlbnRpZmllcyBYLjUwOSBhdXRoZW50aWNhdGlvbiBjZXJ0aWZpY2F0ZXMgaXNzdWVkIGZvciB0aGUgaXRhbGlhbiBOYXRpb25hbCBTZXJ2aWNlIENhcmQgKENOUykgcHJvamVjdCBpbiBhY2NvcmRpbmcgdG8gdGhlIGl0YWxpYW4gcmVndWxhdGlvbiAwMQYGK0wLAQMBMCcwJQYIKwYBBQUHAgEWGWh0dHA6Ly9wb3N0ZWNlcnQucG9zdGUuaXQwOgYIKwYBBQUHAQEELjAsMCoGCCsGAQUFBzABhh5odHRwOi8vcG9zdGVjZXJ0LnBvc3RlLml0L29jc3AwDgYDVR0PAQH/BAQDAgeAMBMGA1UdJQQMMAoGCCsGAQUFBwMCMB8GA1UdIwQYMBaAFO5h8R6jQnz/4EeFe3FeW6ksaogHMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9wb3N0ZWNlcnQucG9zdGUuaXQvY25zL3Byb3ZpbmNpYXRyZW50by9jcmwuY3JsMB0GA1UdDgQWBBRF3Z13QZAmn85HIYPyIg3QE8WM2DANBgkqhkiG9w0BAQUFAAOCAQEAErn/asyA6AhJAwOBmxu90umMNF9ti9SX5X+3+pcqLbvKOgCNfjhGJZ02ruuTMO9uIi0DIDvR/9z8Usyf1aDktYvyrMeDZER+TyjviA3ntYpFWWIh1DiRnAxuGYf6Pt6HNehodf1lhR7TP+iejH24kS2LkqUyiP4J/45sTK6JNMXPVT3dk/BAGE1cFCO9FI3QyckstPp64SEba2+LTunEEA4CKPbTQe7iG4FKpuU6rqxLQlSXiPVWZkFK57bAUpVL/CLc7unlFzIccjG/MMvjWcym9L3LaU//46AV2hR8pUfZevh440wAP/WYtomffkITrMNYuD1nWxL7rUTUMkvykw==');
     //sharedDataService.setMail(user_mail);

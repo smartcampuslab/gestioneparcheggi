@@ -1,12 +1,15 @@
 package it.smartcommunitylab.parking.management.web.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ProviderSetting implements Serializable {
 	
 	private static final long serialVersionUID = 8983355436454920646L;
 	private String id;
+	private String user;
     private String password;
     private String appId;
   	private String mapCenter;
@@ -29,6 +32,20 @@ public class ProviderSetting implements Serializable {
 	}
 	
 	/**
+	 * @return the user
+	 */
+	public String getUser() {
+		return user;
+	}
+	
+	/**
+	 * @param user: the user to set
+	 */
+	public void setUser(String user) {
+		this.user = user;
+	}
+	
+	/**
 	 * @return the password
 	 */
 	public String getPassword() {
@@ -36,7 +53,7 @@ public class ProviderSetting implements Serializable {
 	}
 	
 	/**
-	 * @param password the password to set
+	 * @param password: the password to set
 	 */
 	public void setPassword(String password) {
 		this.password = password;
@@ -56,6 +73,27 @@ public class ProviderSetting implements Serializable {
 
 	public List<AppComponent> getShowObjects() {
 		return showObjects;
+	}
+	
+	public String getShowObjectsString() {
+		String objToShow = "{";
+		for(int i = 0; i < showObjects.size(); i++){
+			if(i < showObjects.size() - 1){
+				objToShow += showObjects.get(i).toJson() + ",";
+			} else {
+				objToShow += showObjects.get(i).toJson();
+			}
+		}
+		objToShow += "}";
+		return objToShow;
+	}
+	
+	public List<Map> getShowObjectsMap() {
+		List<Map> showObjs = new ArrayList<Map>();
+		for(int i = 0; i < showObjects.size(); i++){
+			showObjs.add(showObjects.get(i).toMap());
+		}
+		return showObjs;
 	}
 
 	public void setAppId(String appId) {

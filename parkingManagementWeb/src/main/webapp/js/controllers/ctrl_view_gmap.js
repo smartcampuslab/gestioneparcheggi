@@ -49,8 +49,8 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
 	
 	$scope.mapOption = {
-		center : $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude,
-		zoom : 14
+		center : sharedDataService.getConfMapCenter(),	//"[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
+		zoom : parseInt(sharedDataService.getConfMapZoom())
 	};
 	
 	

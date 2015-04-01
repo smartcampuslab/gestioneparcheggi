@@ -62,6 +62,10 @@
 <%-- var userId="<%=request.getAttribute("user_id")%>"; --%>
 var user_name="<%=request.getAttribute("user_name")%>";
 var user_surname="<%=request.getAttribute("user_surname")%>";
+var conf_app_id="<%=request.getAttribute("app_id")%>";
+var conf_map_center="<%=request.getAttribute("map_center")%>";
+var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
+var object_to_show="<%=request.getAttribute("object_showed")%>";
 <%-- var user_mail="<%=request.getAttribute("e_mail")%>"; --%>
 <%-- var nome="<%=request.getAttribute("nome")%>"; --%>
 <%-- var cognome="<%=request.getAttribute("cognome")%>"; --%>

@@ -1,7 +1,5 @@
 package it.smartcommunitylab.parking.management.web.controller;
 
-import it.smartcommunitylab.parking.management.web.model.AppConf;
-
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,22 +23,6 @@ public class WsProxyController {
 	@Autowired
 	@Value("${smartcommunity.urlws.parking}")
 	private String parkingUrl;
-	
-	@Autowired
-	@Value("${smartcommunity.parking.appId}")
-	private String appId;
-	
-	@Autowired
-	@Value("${smartcommunity.parking.mapCenter}")
-	private String mapCenter;
-	
-	@Autowired
-	@Value("${smartcommunity.parking.zoom}")
-	private String zoom;
-	
-	@Autowired
-	@Value("${smartcommunity.parking.objects}")
-	private String showObjects;
 	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/allGet")
@@ -114,15 +96,6 @@ public class WsProxyController {
 		}
 		
 		return result;	
-	}
-	
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/appconf")
-	public @ResponseBody
-	String getConf(HttpServletRequest request, @RequestParam String urlWS){
-		AppConf conf = new AppConf(appId, mapCenter, zoom, showObjects);
-		
-		logger.info(String.format("Conf element founded: %s.", conf.toString()));
-		return conf.toJSON();
 	}
 	
 }

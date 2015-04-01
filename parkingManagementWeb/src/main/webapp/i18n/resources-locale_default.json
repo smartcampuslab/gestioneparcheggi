@@ -597,7 +597,15 @@
 }, {
     "key": "area_openingtime_err_pattern",
     "value": "Campo 'orario area' non corretto. Inserire un valore nel formato hh:mm - hh:mm",
-    "description": "Errore Campo rariffa area non corretto"
+    "description": "Errore Campo orario area non corretto"
+}, {
+    "key": "area_openingtime_err_required",
+    "value": "Campo 'orario area' obbligatorio",
+    "description": "Errore Campo orario area obbligatorio"
+}, {
+    "key": "area_smscode_err_required",
+    "value": "Campo 'codice telepark' area obbligatorio",
+    "description": "Errore Campo sms code area obbligatorio"
 }, {
     "key": "area_color_err_required",
     "value": "Campo 'colore' area obbligatorio",

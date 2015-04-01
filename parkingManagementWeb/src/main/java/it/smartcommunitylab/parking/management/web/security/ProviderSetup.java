@@ -29,6 +29,7 @@ public class ProviderSetup {
 	}
 	
 	private List<ProviderSetting> providers;
+	private String app_id;
 	private Map<String,ProviderSetting> providersMap;
 
 
@@ -45,17 +46,37 @@ public class ProviderSetup {
 	public void setProviders(List<ProviderSetting> providers) {
 		this.providers = providers;
 	}
+	
+	
+
+	public String getApp_id() {
+		return app_id;
+	}
+
+	public void setApp_id(String app_id) {
+		this.app_id = app_id;
+	}
 
 	@Override
 	public String toString() {
 		return "ProviderSetup [providers=" + providers + "]";
 	}
 
-	public ProviderSetting findProviderById(String username) {
+	public ProviderSetting findProviderById(String id) {
 		if (providersMap == null) {
 			providersMap = new HashMap<String, ProviderSetting>();
 			for (ProviderSetting provider : providers) {
 				providersMap.put(provider.getId(), provider);
+			}
+		}
+		return providersMap.get(id);
+	}
+	
+	public ProviderSetting findProviderByUsername(String username) {
+		if (providersMap == null) {
+			providersMap = new HashMap<String, ProviderSetting>();
+			for (ProviderSetting provider : providers) {
+				providersMap.put(provider.getUser(), provider);
 			}
 		}
 		return providersMap.get(username);

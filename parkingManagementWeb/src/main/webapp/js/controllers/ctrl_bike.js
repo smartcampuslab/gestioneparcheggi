@@ -135,6 +135,29 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return "#" + value;
 	};
 	
+	$scope.getPointFromLatLng = function(latLng, type){
+		var point = "" + latLng;
+		var pointCoord = point.split(",");
+		var res;
+		if(type == 1){
+			var lat = pointCoord[0].substring(1, pointCoord[0].length);
+			var lng = pointCoord[1].substring(0, pointCoord[1].length - 1);
+		
+			res = {
+				latitude: lat,
+				longitude: lng
+			};
+		} else {
+			var lat = Number(pointCoord[0]);
+			var lng = Number(pointCoord[1]);
+			res = {
+				lat: lat,
+				lng: lng
+			};
+		}
+		return res;
+	};
+	
 	$scope.correctPoints = function(points){
 		var corr_points = [];
 		for(var i = 0; i < points.length; i++){
@@ -445,15 +468,16 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	//$scope.map = {};
 	
 	$scope.mapOption = {
-		center : "[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
-		zoom : 14
+		center : sharedDataService.getConfMapCenter(),	//"[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
+		zoom : parseInt(sharedDataService.getConfMapZoom())
 	};
 	
 	// I need this to resize the map (gray map problem on load)
     $scope.resizeMap = function(){
         google.maps.event.trigger($scope.map, 'resize');
-        $scope.map.setCenter({lat: $scope.mapCenter.latitude,lng:$scope.mapCenter.longitude});
-        $scope.map.setZoom(14);
+        $scope.map.setCenter($scope.getPointFromLatLng($scope.mapOption.center, 2));
+        //$scope.map.setCenter({lat: $scope.mapCenter.latitude,lng:$scope.mapCenter.longitude});
+        $scope.map.setZoom($scope.mapOption.zoom);
         return true;
     };
 	

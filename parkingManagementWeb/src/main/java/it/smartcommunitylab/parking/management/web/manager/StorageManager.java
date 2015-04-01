@@ -13,6 +13,7 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.model.ProviderSetting;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
@@ -22,6 +23,7 @@ import it.smartcommunitylab.parking.management.web.model.Zone;
 import it.smartcommunitylab.parking.management.web.model.geo.Line;
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
+import it.smartcommunitylab.parking.management.web.security.ProviderSetup;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -45,10 +47,21 @@ public class StorageManager {
 	@Autowired
 	private MongoTemplate mongodb;
 
+	private String appId = "";
+	
+	public String getAppId() {
+		return appId;
+	}
+
+	public void setAppId(String appId) {
+		this.appId = appId;
+	}
+
 	// RateArea Methods
 	public RateAreaBean save(RateAreaBean a) {
 		RateArea area = ModelConverter.convert(a, RateArea.class);
 		area = processId(area, RateArea.class);
+		area.setId_app(appId);
 		mongodb.save(area);	
 		a.setId(area.getId());
 		return a;
@@ -77,8 +90,11 @@ public class StorageManager {
 
 	public List<RateAreaBean> getAllArea() {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
+		//logger.error(String.format("Area app id: %s", appId));
 		for (RateArea a : mongodb.findAll(RateArea.class)) {
-			result.add(ModelConverter.convert(a, RateAreaBean.class));
+			if(a != null && a.getId_app().compareTo(appId) == 0){
+				result.add(ModelConverter.convert(a, RateAreaBean.class));
+			}
 		}
 		return result;
 	}
@@ -116,7 +132,9 @@ public class StorageManager {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 
 		for (RateAreaBean temp : getAllArea()) {
-			result.addAll(getAllParkingMeters(temp));
+			if(temp != null && temp.getId_app().compareTo(appId) == 0){
+				result.addAll(getAllParkingMeters(temp));
+			}
 		}
 
 		return result;
@@ -128,11 +146,13 @@ public class StorageManager {
 
 		if (area.getParkingMeters() != null) {
 			for (ParkingMeter tmp : area.getParkingMeters()) {
+				if(tmp.getId_app() != null && tmp.getId_app().compareTo(appId) == 0){
 				ParkingMeterBean p = ModelConverter.convert(tmp,
 						ParkingMeterBean.class);
-				p.setAreaId(ab.getId());
-				p.setColor(area.getColor());
-				result.add(p);
+					p.setAreaId(ab.getId());
+					p.setColor(area.getColor());
+					result.add(p);
+				}
 			}
 		}
 		return result;
@@ -228,6 +248,7 @@ public class StorageManager {
 	public ParkingMeterBean save(ParkingMeterBean p) throws DatabaseException {
 		ParkingMeter parcometro = ModelConverter.convert(p, ParkingMeter.class);
 		parcometro = processId(parcometro, ParkingMeter.class);
+		parcometro.setId_app(appId);
 		try {
 			RateArea area = findById(p.getAreaId(), RateArea.class);
 			if (area.getParkingMeters() == null) {
@@ -250,7 +271,9 @@ public class StorageManager {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 
 		for (RateAreaBean temp : getAllArea()) {
-			result.addAll(getAllStreets(temp));
+			if(temp != null && temp.getId_app().compareTo(appId) == 0){
+				result.addAll(getAllStreets(temp));
+			}
 		}
 
 		return result;
@@ -267,11 +290,13 @@ public class StorageManager {
 
 		if (area.getStreets() != null) {
 			for (Street tmp : area.getStreets()) {
-				StreetBean s = ModelConverter.toStreetBean(area, tmp);
-				//StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
-				s.setRateAreaId(ab.getId());
-				s.setColor(area.getColor());
-				result.add(s);
+				if(tmp != null && tmp.getId_app().compareTo(appId) == 0){
+					StreetBean s = ModelConverter.toStreetBean(area, tmp);
+					//StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
+					s.setRateAreaId(ab.getId());
+					s.setColor(area.getColor());
+					result.add(s);
+				}
 			}
 		}
 		return result;
@@ -291,13 +316,15 @@ public class StorageManager {
 		for(RateArea area : areas){
 			if (area.getStreets() != null) {
 				for (Street tmp : area.getStreets()) {
-					List<String> myZones = tmp.getZones();
-					StreetBean s = ModelConverter.toStreetBean(area, tmp);
-					//StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
-					for(String zone : myZones){
-						if((zone.compareTo(z.getId()) == 0) && (tmp.getId_app().compareTo(z.getId_app()) == 0)){
-							s.setColor(z.getColor());
-							result.add(s);
+					if(tmp != null && tmp.getId_app().compareTo(appId) == 0){
+						List<String> myZones = tmp.getZones();
+						StreetBean s = ModelConverter.toStreetBean(area, tmp);
+						//StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
+						for(String zone : myZones){
+							if((zone.compareTo(z.getId()) == 0) && (tmp.getId_app().compareTo(z.getId_app()) == 0)){
+								s.setColor(z.getColor());
+								result.add(s);
+							}
 						}
 					}
 				}
@@ -319,12 +346,14 @@ public class StorageManager {
 		
 		if (area.getStreets() != null) {
 			for (Street tmp : area.getStreets()) {
-				List<String> zones = tmp.getZones();
-				StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
-				for(String zona : zones){
-					if((zona.compareTo(z.getId()) == 0) && (tmp.getId_app().compareTo(z.getId_app()) == 0)){
-						s.setColor(z.getColor());
-						result.add(s);
+				if(tmp != null && tmp.getId_app().compareTo(appId) == 0){
+					List<String> zones = tmp.getZones();
+					StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
+					for(String zona : zones){
+						if((zona.compareTo(z.getId()) == 0) && (tmp.getId_app().compareTo(z.getId_app()) == 0)){
+							s.setColor(z.getColor());
+							result.add(s);
+						}
 					}
 				}
 			}
@@ -450,6 +479,7 @@ public class StorageManager {
 		Street street = ModelConverter.convert(s, Street.class);
 		street = processId(street, Street.class);
 		street.setZones(s.getZones());
+		street.setId_app(appId);
 		try {
 			RateArea area = findById(s.getRateAreaId(), RateArea.class);
 			if (area.getStreets() == null) {
@@ -514,6 +544,7 @@ public class StorageManager {
 	public BikePointBean save(BikePointBean bp) {
 		BikePoint puntoBici = ModelConverter.convert(bp, BikePoint.class);
 		puntoBici = processId(puntoBici, BikePoint.class);
+		puntoBici.setId_app(appId);
 		mongodb.save(puntoBici);
 		bp.setId(puntoBici.getId());
 		
@@ -539,9 +570,11 @@ public class StorageManager {
 
 	public List<BikePointBean> getAllBikePoints() {
 		List<BikePointBean> result = new ArrayList<BikePointBean>();
-		for (BikePoint pb : mongodb.findAll(BikePoint.class)) {
-			logger.info(String.format("Bike point found : %s", pb.toString()));
-			result.add(ModelConverter.convert(pb, BikePointBean.class));
+		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
+			if(bp != null && bp.getId_app().compareTo(appId) == 0){
+			//logger.info(String.format("Bike point found : %s", pb.toString()));
+				result.add(ModelConverter.convert(bp, BikePointBean.class));
+			}
 		}
 		return result;
 	}
@@ -554,8 +587,10 @@ public class StorageManager {
 	public List<BikePointBean> getBikePointsByName(String name) {
 		List<BikePointBean> result = new ArrayList<BikePointBean>();
 		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
-			if(bp.getName().compareToIgnoreCase(name) == 0){
-				result.add(ModelConverter.convert(bp, BikePointBean.class));
+			if(bp != null && bp.getId_app().compareTo(appId) == 0){
+				if(bp.getName().compareToIgnoreCase(name) == 0){
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				}
 			}
 		}
 		return result;
@@ -583,6 +618,7 @@ public class StorageManager {
 		ParkingStructure entity = ModelConverter.convert(entityBean,
 				ParkingStructure.class);
 		entity = processId(entity, ParkingStructure.class);
+		entity.setId_app(appId);
 		mongodb.save(entity);
 		entityBean.setId(entity.getId());
 		
@@ -609,7 +645,9 @@ public class StorageManager {
 	public List<ParkingStructureBean> getAllParkingStructure() {
 		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
 		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
-			result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+			if(entity != null && entity.getId_app().compareTo(appId) == 0){
+				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+			}
 		}
 		return result;
 	}
@@ -622,8 +660,10 @@ public class StorageManager {
 	public List<ParkingStructureBean> getParkingStructureByName(String name) {
 		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
 		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
-			if(entity.getName().compareToIgnoreCase(name) == 0){
-				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+			if(entity != null && entity.getId_app().compareTo(appId) == 0){
+				if(entity.getName().compareToIgnoreCase(name) == 0){
+					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+				}
 			}
 		}
 		return result;
@@ -654,6 +694,7 @@ public class StorageManager {
 	public ZoneBean save(ZoneBean z) {
 		Zone zona = ModelConverter.convert(z, Zone.class);
 		zona = processId(zona, Zone.class);
+		zona.setId_app(appId);
 		mongodb.save(zona);
 		z.setId(zona.getId());
 		return z;
@@ -662,7 +703,9 @@ public class StorageManager {
 	public List<ZoneBean> getAllZone() {
 		List<ZoneBean> result = new ArrayList<ZoneBean>();
 		for (Zone z : mongodb.findAll(Zone.class)) {
-			result.add(ModelConverter.convert(z, ZoneBean.class));
+			if(z != null && z.getId_app().compareTo(appId) == 0){
+				result.add(ModelConverter.convert(z, ZoneBean.class));
+			}
 		}
 		return result;
 	}
@@ -674,8 +717,10 @@ public class StorageManager {
 	public List<ZoneBean> getZoneByName(String name) {
 		List<ZoneBean> result = new ArrayList<ZoneBean>();
 		for (Zone z : mongodb.findAll(Zone.class)) {
-			if(z.getName().compareToIgnoreCase(name) == 0){
-				result.add(ModelConverter.convert(z, ZoneBean.class));
+			if(z != null && z.getId_app().compareTo(appId) == 0){
+				if(z.getName().compareToIgnoreCase(name) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
 			}
 		}	
 		return result;

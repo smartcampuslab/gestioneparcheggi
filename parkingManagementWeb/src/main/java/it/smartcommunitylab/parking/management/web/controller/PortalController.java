@@ -33,6 +33,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
 import eu.trentorise.smartcampus.aac.AACException;
+import it.smartcommunitylab.parking.management.web.model.ProviderSetting;
 //import eu.trentorise.smartcampus.citizenportal.models.SubjectDn;
 import it.smartcommunitylab.parking.management.web.model.UserCS;
 import it.smartcommunitylab.parking.management.web.repository.User;
@@ -53,16 +54,27 @@ public class PortalController extends SCController{
 	public ModelAndView index_console(ModelMap model, Principal principal) {
 		
 		String name = principal.getName();
-		String mailMessages = "";
-		if(model !=null && model.containsKey("mailMessage")){
-			mailMessages = model.get("mailMessage").toString();
-		}
+		//String mailMessages = "";
+		//if(model !=null && model.containsKey("mailMessage")){
+		//	mailMessages = model.get("mailMessage").toString();
+		//}
 		
-		User user = mongoUserDetailsService.getUserDetail(name);
+		//User user = mongoUserDetailsService.getUserDetail(name);
+		//model.addAttribute("user_name", user.getName());
+		//model.addAttribute("user_surname", user.getSurname());
+		
+		ProviderSetting prov = mongoUserDetailsService.getProvDetails(name);
 		logger.error("I am in get root console. User id: " + name);
-		logger.error("I am in get root console. mailMessages: " + mailMessages);
-		model.addAttribute("user_name", user.getName());
-		model.addAttribute("user_surname", user.getSurname());
+		
+		model.addAttribute("user_name", prov.getUser());
+		model.addAttribute("user_surname", prov.getId());
+		model.addAttribute("app_id", prov.getAppId());
+		model.addAttribute("map_center", prov.getMapCenter());
+		model.addAttribute("map_zoom", prov.getMapZoom());
+		model.addAttribute("object_showed", prov.getShowObjectsMap());
+		
+		logger.error("I am in get root console. object_showed: " + prov.getShowObjectsMap());
+		//model.addAttribute("prov", prov);
 		
 		//model.addAttribute("mailMessage", "test messaggio successo");
 		return new ModelAndView("index", model);
@@ -72,30 +84,18 @@ public class PortalController extends SCController{
 	@RequestMapping(method = RequestMethod.GET, value = "/login")
 	public ModelAndView secureConsole(ModelMap model) {
 		logger.error(String.format("I am in get login console"));
-		//To use the basic autentication I think is necessary to
-		// 1 - change the redirect Uri to a page with a login form
-		// 2 - in the login form invoke a new metho that check the user credential
-		// 3 - if success redirect to home_console else show the error
 		return new ModelAndView("login");
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/logout")
 	public ModelAndView secureLogout(ModelMap model) {
 		logger.error(String.format("I am in logout console"));
-		//To use the basic autentication I think is necessary to
-		// 1 - change the redirect Uri to a page with a login form
-		// 2 - in the login form invoke a new metho that check the user credential
-		// 3 - if success redirect to home_console else show the error
 		return new ModelAndView("redirect:/logout");
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/viewall")
 	public ModelAndView viewAllElements(ModelMap model) {
 		logger.error(String.format("I am in get viewAll"));
-		//To use the basic autentication I think is necessary to
-		// 1 - change the redirect Uri to a page with a login form
-		// 2 - in the login form invoke a new metho that check the user credential
-		// 3 - if success redirect to home_console else show the error
 		return new ModelAndView("viewallnosec");
 	}
 
