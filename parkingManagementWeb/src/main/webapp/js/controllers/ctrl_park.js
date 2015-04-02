@@ -63,9 +63,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.initDate = new Date();
     $scope.formats = ['shortDate', 'dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy'];
     $scope.format = $scope.formats[0];
-       
-           
+            
     $scope.tabIndex = 0;
+    
+    var showArea = false;
+    var showStreets = false;
+    var showPm = false;
+    var showPs = false;
+    var showZones = false;
     
     $scope.initComponents = function(){
     	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
@@ -74,19 +79,28 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	$scope.showedObjects = sharedDataService.getVisibleObjList();
 	    	for(var i = 0; i < $scope.showedObjects.length; i++){
 	    		if($scope.showedObjects[i].id == 'Area'){
+	    			showArea = true;
 	    			$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
 	    			parktabs.push({ title:'Area', index: 1, content:"partials/edit/tabs/edit_area.html" });
 	    		}
 	    		if($scope.showedObjects[i].id == 'Street'){
+	    			showStreets = true;
+	    			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
 	    			parktabs.push({ title:'Via', index: 2, content:"partials/edit/tabs/edit_street.html" });
 	    		}
 	    		if($scope.showedObjects[i].id == 'Pm'){
+	    			showPm = true;
+	    			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
 	    			parktabs.push({ title:'Parcometro', index: 3, content:"partials/edit/tabs/edit_parkingmeter.html" });
 	    		}
 	    		if($scope.showedObjects[i].id == 'Ps'){
+	    			showPs = true;
+	    			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
 	    			parktabs.push({ title:'Parcheggio in struttura', index: 4, content:"partials/edit/tabs/edit_parkingstructure.html" });
 	    		}
 	    		if($scope.showedObjects[i].id == 'Zone'){
+	    			showZones = true;
+	    			$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
 	    			parktabs.push({ title:'Zona', index: 5, content:"partials/edit/tabs/edit_zone.html" });
 	    		}
 	    	}
@@ -117,6 +131,129 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			$scope.a_geometry = attributes[i];
     		}
     		
+    	}
+    };
+    
+    //Street Component settings
+    $scope.loadStreetAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'streetReference'){
+    			$scope.s_streetRef = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.s_slotNum = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			$scope.s_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'timedParkSlotNumber'){
+    			$scope.s_timedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotNumber'){
+    			$scope.s_freeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			$scope.s_unusuableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'subscritionAllowedPark'){
+    			$scope.s_subscrition = attributes[i];
+    		}
+    		if(attributes[i].code == 'rateAreaId'){
+    			$scope.s_areaId = attributes[i];
+    		}
+    		if(attributes[i].code == 'zones'){
+    			$scope.s_zones = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.s_geometry = attributes[i];
+    		}
+    	}
+    };
+    
+    //Pm Component settings
+    $scope.loadPmAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'code'){
+    			$scope.pm_code = attributes[i];
+    		}
+    		if(attributes[i].code == 'note'){
+    			$scope.pm_note = attributes[i];
+    		}
+    		if(attributes[i].code == 'status'){
+    			$scope.pm_status = attributes[i];
+    		}
+    		if(attributes[i].code == 'rateArea'){
+    			$scope.pm_rateArea = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.pm_geometry = attributes[i];
+    		}
+    	}
+    };
+    
+    //Ps Component settings
+    $scope.loadPsAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.ps_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'streetReference'){
+    			$scope.ps_address = attributes[i];
+    		}
+    		if(attributes[i].code == 'managementMode'){
+    			$scope.ps_management = attributes[i];
+    		}
+    		if(attributes[i].code == 'paymentMode'){
+    			$scope.ps_payment = attributes[i];
+    		}
+    		if(attributes[i].code == 'fee'){
+    			$scope.ps_fee = attributes[i];
+    		}
+    		if(attributes[i].code == 'timeSlot'){
+    			$scope.ps_timeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.ps_slotNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			$scope.ps_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			$scope.ps_unusuableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'phoneNumber'){
+    			$scope.ps_phoneNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.ps_geometry = attributes[i];
+    		}
+    	}
+    };
+    
+    //Zones Component settings
+    $scope.loadZoneAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.zone_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'submacro'){
+    			$scope.zone_submacro = attributes[i];
+    		}
+    		if(attributes[i].code == 'note'){
+    			$scope.zone_note = attributes[i];
+    		}
+    		if(attributes[i].code == 'status'){
+    			$scope.zone_status = attributes[i];
+    		}
+    		if(attributes[i].code == 'type'){
+    			$scope.zone_type = attributes[i];
+    		}
+    		if(attributes[i].code == 'color'){
+    			$scope.zone_color = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.zone_geometry = attributes[i];
+    		}
     	}
     };
     
@@ -272,7 +409,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	
 	    	$scope.areaWS = allAreas;
 	    	//$scope.initAreaMap();
-	    	$scope.resizeMap("viewArea");
+	    	if(showArea)$scope.resizeMap("viewArea");
 	    	$scope.initAreasOnMap($scope.areaWS);
 	    	sharedDataService.setSharedLocalAreas($scope.areaWS);
 	    	$scope.areaMapReady = true;
@@ -325,7 +462,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	
 	    	$scope.streetWS = $scope.initStreetsObjects(allStreet);
 	    	//$scope.initStreetMap();
-	    	$scope.resizeMap("viewStreet");
+	    	if(showStreets)$scope.resizeMap("viewStreet");
 	    	$scope.initStreetsOnMap($scope.streetWS);
 	    	$scope.streetMapReady = true;
 	    });
@@ -349,7 +486,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    }
 	    	
 	    	$scope.pmeterWS = $scope.initPMObjects(allPmeters);
-	    	$scope.resizeMap("viewPm");
+	    	if(showPm)$scope.resizeMap("viewPm");
 	    	$scope.initPMeterMap(markers);
 	    	$scope.pmMapReady = true;
 	    });
@@ -372,7 +509,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    }
 	    	
 	    	$scope.pstructWS = allPstructs;
-	    	$scope.resizeMap("viewPs");
+	    	if(showPs)$scope.resizeMap("viewPs");
 	    	$scope.initPStructMap(markers);
 	    	$scope.psMapReady = true;
 	    });
@@ -391,7 +528,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	
 	    	$scope.zoneWS = $scope.correctMyZones(allZones);
 	    	//$scope.initZoneMap();
-	    	$scope.resizeMap("viewZone");
+	    	if(showZones)$scope.resizeMap("viewZone");
 	    	$scope.initZonesOnMap($scope.zoneWS);
 	    	sharedDataService.setSharedLocalZones($scope.zoneWS);
 	    	$scope.zoneMapReady = true;
@@ -543,11 +680,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return correctedPm;
 	};
 	
-	$scope.checkIfPaymentChecked = function(){
-		if($scope.myPayment.cash_checked || $scope.myPayment.automated_teller_checked || $scope.myPayment.prepaid_card_checked || $scope.myPayment.parcometro_checked){
-			$scope.setMyPaymentoErrMode(false);
+	$scope.checkIfPaymentChecked = function(value){
+		if(value){
+			if($scope.myPayment.cash_checked || $scope.myPayment.automated_teller_checked || $scope.myPayment.prepaid_card_checked || $scope.myPayment.parcometro_checked){
+				$scope.setMyPaymentoErrMode(false);
+			} else {
+				$scope.setMyPaymentoErrMode(true);
+			}
 		} else {
-			$scope.setMyPaymentoErrMode(true);
+			$scope.setMyPaymentoErrMode(false);
 		}
 	};
 	
@@ -681,6 +822,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		toHide[area.id].setMap(null);
 		
 		if(area.geometry != null){
+			var tmpPol = "";
+			for(var i = 0; i < $scope.area.geometry[0].points.length; i++){
+				var tmpPoint = $scope.area.geometry[0].points[i].lat + "," + $scope.area.geometry[0].points[i].lng;
+				tmpPol = tmpPol + tmpPoint + ",";
+			}
+			tmpPol = tmpPol.substring(0, tmpPol.length-1);
+			$scope.setMyPolGeometry(tmpPol);
+			
 			$scope.myAreaPol = {
 				id: area.id,
 				path: $scope.correctPoints(area.geometry[0].points),
@@ -752,6 +901,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		toHide[street.id].setMap(null);
 		
 		if(street.geometry != null){
+			for(var i = 0; i < $scope.street.geometry.points.length; i++){
+				var tmpPoint = $scope.street.geometry.points[i].lat + "," + $scope.street.geometry.points[i].lng;
+				tmpLine = tmpLine + tmpPoint + ",";
+			}
+			tmpLine = tmpLine.substring(0, tmpLine.length-1);
+			$scope.setMyLineGeometry(tmpLine);
+			
 			var myAreaS = $scope.getLocalAreaById(street.rateAreaId);
 			var myZones = [];
 			for(var j = 0; j < street.zones.length; j++){
@@ -1133,58 +1289,46 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			if($scope.editGArea != null){
 				$scope.editGArea.visible = false;					// and hide the edit polygon
 			}
-			var tmppol = [];
+			$scope.setMyPolGeometry("");
 			
-			$scope.aCreateMap = {
-				control: {},
-				center: $scope.mapCenter,
-				zoom: 15,
-				bounds: {},
-				options: {
-					scrollwheel: true
-				},
-				events: {
-					click: function(map, eventName, args){
-						var e = args[0];
-		            	console.log("I am in click event function" + e.latLng);
-		            	var latLngString = "" + e.latLng;
-		            	var pos = latLngString.split(",");
-		            	var lat = pos[0].substring(1, pos[0].length);
-		            	var lng = pos[1].substring(1, pos[1].length-1);
-		            	var tmppos = {
-		            			latitude: lat,
-		            			longitude: lng
-		            	};
-		            	tmppol.push(tmppos);
-		            	$scope.newArea = $scope.updateMyNewArea(tmppol);
-		            	$scope.refreshMap($scope.aCreateMap);
-		            	
-		            	var tmpPol = "";
-						for(var i = 0; i < tmppol.length; i++){
-							var tmpPoint = tmppol[i].latitude + "," + tmppol[i].longitude;
-							tmpPol = tmpPol + tmpPoint + ",";
-						}
-						tmpPol = tmpPol.substring(0, tmpPol.length-1);
-						$scope.setMyNewPolGeometry(tmpPol);
-				    	console.log('New pol route: ' + tmpPol);
-		            	
-				    	//$scope.addMyNewMarker(tmppos, map);
-					}
-//					dblclick: function(map, eventName, args){
+//			var tmppol = [];
+//			$scope.aCreateMap = {
+//				control: {},
+//				center: $scope.mapCenter,
+//				zoom: 15,
+//				bounds: {},
+//				options: {
+//					scrollwheel: true
+//				},
+//				events: {
+//					click: function(map, eventName, args){
 //						var e = args[0];
-//		            	console.log("I am in double click event function" + e.latLng);
-		            	//var latLngString = "" + e.latLng;
-		            	
-//		            	var geocoder = new google.maps.Geocoder();
-//		    			geocoder.geocode({location:e.latLng}, function(response) {
-//		    				var result = response[0].formatted_address;
-//		    				if (result != undefined && result != null) {
-//		    					$scope.street.streetReference = result.substring(0, result.indexOf(','));
-//		    				}
-//		    			});
+//		            	console.log("I am in click event function" + e.latLng);
+//		            	var latLngString = "" + e.latLng;
+//		            	var pos = latLngString.split(",");
+//		            	var lat = pos[0].substring(1, pos[0].length);
+//		            	var lng = pos[1].substring(1, pos[1].length-1);
+//		            	var tmppos = {
+//		            			latitude: lat,
+//		            			longitude: lng
+//		            	};
+//		            	tmppol.push(tmppos);
+//		            	$scope.newArea = $scope.updateMyNewArea(tmppol);
+//		            	$scope.refreshMap($scope.aCreateMap);
+//		            	
+//		            	var tmpPol = "";
+//						for(var i = 0; i < tmppol.length; i++){
+//							var tmpPoint = tmppol[i].latitude + "," + tmppol[i].longitude;
+//							tmpPol = tmpPol + tmpPoint + ",";
+//						}
+//						tmpPol = tmpPol.substring(0, tmpPol.length-1);
+//						$scope.setMyNewPolGeometry(tmpPol);
+//				    	console.log('New pol route: ' + tmpPol);
+//		            	
+//				    	//$scope.addMyNewMarker(tmppos, map);
 //					}
-				}
-			};
+//				}
+//			};
 		}
 		$scope.resizeMapTimed("editArea", false);
 		$scope.viewModeA = false;
@@ -1335,58 +1479,58 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 			//$scope.eStreetMap.shapes.editPolyline.setMap(false);	// and hide the edit polyline
 			//$scope.setMyGeometry("0,0");
-			var tmppath = [];
+			//var tmppath = [];
 			
-			$scope.sCreateMap = {
-				control: {},
-				center: $scope.mapCenter,
-				zoom: 15,
-				bounds: {},
-				options: {
-					scrollwheel: true
-				},
-				events: {
-					click: function(map, eventName, args){
-						var e = args[0];
-		            	console.log("I am in click event function" + e.latLng);
-		            	var latLngString = "" + e.latLng;
-		            	var pos = latLngString.split(",");
-		            	var lat = pos[0].substring(1, pos[0].length);
-		            	var lng = pos[1].substring(1, pos[1].length-1);
-		            	var tmppos = {
-		            			latitude: lat,
-		            			longitude: lng
-		            	};
-		            	tmppath.push(tmppos);
-		            	$scope.newStreet = $scope.updateMyNewStreet(tmppath);
-		            	$scope.refreshMap($scope.sCreateMap);
-		            	
-		            	var tmpLine = "";
-						for(var i = 0; i < tmppath.length; i++){
-							var tmpPoint = tmppath[i].latitude + "," + tmppath[i].longitude;
-							tmpLine = tmpLine + tmpPoint + ",";
-						}
-						tmpLine = tmpLine.substring(0, tmpLine.length-1);
-						$scope.setMyNewLineGeometry(tmpLine);
-				    	console.log('New street route: ' + tmpLine);
-		            	
-				    	//$scope.addMyNewMarker(tmppos, map);
-					},
-					dblclick: function(map, eventName, args){
-						var e = args[0];
-		            	console.log("I am in double click event function" + e.latLng);
-		            	//var latLngString = "" + e.latLng;
-		            	
-		            	var geocoder = new google.maps.Geocoder();
-		    			geocoder.geocode({location:e.latLng}, function(response) {
-		    				var result = response[0].formatted_address;
-		    				if (result != undefined && result != null) {
-		    					$scope.street.streetReference = result.substring(0, result.indexOf(','));
-		    				}
-		    			});
-					}
-				}
-			};
+//			$scope.sCreateMap = {
+//				control: {},
+//				center: $scope.mapCenter,
+//				zoom: 15,
+//				bounds: {},
+//				options: {
+//					scrollwheel: true
+//				},
+//				events: {
+//					click: function(map, eventName, args){
+//						var e = args[0];
+//		            	console.log("I am in click event function" + e.latLng);
+//		            	var latLngString = "" + e.latLng;
+//		            	var pos = latLngString.split(",");
+//		            	var lat = pos[0].substring(1, pos[0].length);
+//		            	var lng = pos[1].substring(1, pos[1].length-1);
+//		            	var tmppos = {
+//		            			latitude: lat,
+//		            			longitude: lng
+//		            	};
+//		            	tmppath.push(tmppos);
+//		            	$scope.newStreet = $scope.updateMyNewStreet(tmppath);
+//		            	$scope.refreshMap($scope.sCreateMap);
+//		            	
+//		            	var tmpLine = "";
+//						for(var i = 0; i < tmppath.length; i++){
+//							var tmpPoint = tmppath[i].latitude + "," + tmppath[i].longitude;
+//							tmpLine = tmpLine + tmpPoint + ",";
+//						}
+//						tmpLine = tmpLine.substring(0, tmpLine.length-1);
+//						$scope.setMyNewLineGeometry(tmpLine);
+//				    	console.log('New street route: ' + tmpLine);
+//		            	
+//				    	//$scope.addMyNewMarker(tmppos, map);
+//					},
+//					dblclick: function(map, eventName, args){
+//						var e = args[0];
+//		            	console.log("I am in double click event function" + e.latLng);
+//		            	//var latLngString = "" + e.latLng;
+//		            	
+//		            	var geocoder = new google.maps.Geocoder();
+//		    			geocoder.geocode({location:e.latLng}, function(response) {
+//		    				var result = response[0].formatted_address;
+//		    				if (result != undefined && result != null) {
+//		    					$scope.street.streetReference = result.substring(0, result.indexOf(','));
+//		    				}
+//		    			});
+//					}
+//				}
+//			};
 		}
 		$scope.viewModeS = false;
 		$scope.editModeS = true;

@@ -259,6 +259,10 @@
     "value": "Campo Codice Parcometro obbligatorio",
     "description": "Messaggio errore campo codice parcometro obbligatorio"
 }, {
+    "key": "parkingmeter_note_err_required",
+    "value": "Campo Note Parcometro obbligatorio",
+    "description": "Messaggio errore campo note parcometro obbligatorio"
+}, {
     "key": "parkingmeter_status_select_err_required",
     "value": "Campo Stato Parcometro obbligatorio",
     "description": "Messaggio errore campo stato parcometro obbligatorio"
@@ -270,6 +274,10 @@
     "key": "parkingmeter_geometry_select_err_pattern",
     "value": "Valore posizione lat-lng non corretto",
     "description": "Messaggio errore campo geometry parcometro non corretto"
+}, {
+    "key": "parkingmeter_geometry_select_err_required",
+    "value": "Valore posizione lat-lng obbligatorio",
+    "description": "Messaggio errore campo geometry parcometro obblilgatorio"
 }, {
     "key": "err_in_update_parkingmeter",
     "value": "Errore nell'aggiornamento del parcometro. DB non pronto.",
@@ -339,6 +347,10 @@
     "value": "Campo Nome Struttura obbligatorio",
     "description": "Messaggio errore campo nome struttura obbligatorio"
 }, {
+    "key": "parkingstructure_address_err_required",
+    "value": "Campo Indirizzo Struttura obbligatorio",
+    "description": "Messaggio errore campo indirizzo struttura obbligatorio"
+}, {
     "key": "parkingstructure_management_mode_select_err_required",
     "value": "Campo Modalita' di gestione obbligatorio",
     "description": "Messaggio errore campo gestione obbligatorio"
@@ -363,17 +375,41 @@
     "value": "Valore non corretto. Inserire un valore numerico",
     "description": "Messaggio errore campo capienza non corretto"
 }, {
+    "key": "parkingstructure_handicapped_slots_err_required",
+    "value": "Campo Posti per disabili obbligatorio",
+    "description": "Messaggio errore campo capienza obbligatorio"
+}, {
+    "key": "parkingstructure_unusuable_slots_err_required",
+    "value": "Campo Posti non utilizzabili obbligatorio",
+    "description": "Messaggio errore campo capienza obbligatorio"
+}, {
     "key": "parkingstructure_openingtime_err_pattern",
     "value": "Campo Orario non corretto. Inserire un valore nel formato hh:mm - hh:mm",
-    "description": "Messaggio errore campo area di tariffazione obbligatorio"
+    "description": "Messaggio errore campo orario struttura non corretto"
+}, {
+    "key": "parkingstructure_openingtime_err_required",
+    "value": "Campo Orario Struttura obbligatorio",
+    "description": "Messaggio errore campo orario struttura obbligatorio"
+}, {
+    "key": "parkingstructure_management_err_required",
+    "value": "Campo modalita' di gestione Struttura obbligatorio",
+    "description": "Messaggio errore campo gestione struttura obbligatorio"
 }, {
     "key": "parkingstructure_phone_err_pattern",
     "value": "Campo Telefono non corretto.",
     "description": "Messaggio errore telefono struttura non corretto"
 }, {
+    "key": "parkingstructure_phone_err_required",
+    "value": "Campo Telefono struttura obbligatorio.",
+    "description": "Messaggio errore telefono struttura obbligatorio"
+}, {
     "key": "parkingstructure_geometry_select_err_pattern",
     "value": "Valore posizione lat-lng non corretto",
     "description": "Messaggio errore campo geometry struttura non corretto"
+}, {
+    "key": "parkingstructure_geometry_select_err_required",
+    "value": "Valore posizione lat-lng obbligatorio",
+    "description": "Messaggio errore campo geometry struttura obbligatorio"
 }, {
     "key": "err_in_update_parkingstructure",
     "value": "Errore nell'aggiornamento della struttura. DB non pronto.",
@@ -447,6 +483,10 @@
     "value": "Valore non corretto per il Campo 'posizione' punto bici. Inserire un valore lat-lng.",
     "description": "Messaggio errore campo posizione punto bici non corretto"
 }, {
+    "key": "bikepoint_geometry_select_err_required",
+    "value": "Valore campo 'posizione' punto bici obbligatorio.",
+    "description": "Messaggio errore campo posizione punto bici obbligatorio"
+}, {
     "key": "view_bikepoint",
     "value": "Dettagli punto bici",
     "description": "Titolo pagina view punto bici"
@@ -495,6 +535,22 @@
     "value": "Campo posti totali obbligatorio.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
+    "key": "street_handicapped_slots_err_required",
+    "value": "Campo posti per disabili obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_timedpark_slots_err_required",
+    "value": "Campo posti 'disco orario' obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_freepark_slots_err_required",
+    "value": "Campo posti gratuiti obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_unusuable_slots_err_required",
+    "value": "Campo posti inutilizzabili obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
     "key": "street_slots_err_pattern",
     "value": "Valore non corretto, inserire un valore numerico.",
     "description": "Messaggio errore campo posti in strada non corretto"
@@ -503,9 +559,17 @@
     "value": "Campo Area di tariffazione obbligatorio.",
     "description": "Messaggio errore campo area per strada obbligatorio"
 }, {
+    "key": "street_zone_select_err_required",
+    "value": "Campo Zona di appartenenza obbligatorio.",
+    "description": "Messaggio errore campo zona per strada obbligatorio"
+}, {
     "key": "street_geometry_select_err_pattern",
-    "value": "Campo Posizione strada obbligatorio.",
+    "value": "Campo Posizione strada non corretto.",
     "description": "Messaggio errore posizione strada non corretto"
+}, {
+    "key": "street_geometry_select_err_required",
+    "value": "Campo Posizione strada obbligatorio.",
+    "description": "Messaggio errore posizione strada obbligatorio"
 }, {
     "key": "street_reference_err_required",
     "value": "Campo indirizzo strada obbligatorio.",
@@ -554,6 +618,10 @@
     "key": "zone_geometry_err_pattern",
     "value": "Campo 'posizione' non corretto",
     "description": "Errore Campo posizione non corretto"
+}, {
+    "key": "zone_geometry_err_required",
+    "value": "Campo 'geometria' zona obbligatorio",
+    "description": "Errore Campo geometria zona obbligatorio"
 }, {
     "key": "err_in_update_zone",
     "value": "Errore nell'aggiornamento della zona. DB non pronto.",
@@ -624,8 +692,12 @@
     "description": "Titolo pagina visualizza area"
 }, {
     "key": "area_geometry_err_pattern",
-    "value": "Campo 'posizione' non corretto",
+    "value": "Campo 'geometria' area non corretto",
     "description": "Errore pattern campo geometry area"
+}, {
+    "key": "area_geometry_err_required",
+    "value": "Campo 'geometria' area obbligatorio",
+    "description": "Errore campo geometry area obbligatorio"
 }, {
     "key": "area_name_placeholder",
     "value": "Inserire il nome dell'area",

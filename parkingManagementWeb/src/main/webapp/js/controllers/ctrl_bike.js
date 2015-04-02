@@ -77,6 +77,33 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	}
     };
     
+    $scope.initComponents = function(){
+	    $scope.showedObjects = sharedDataService.getVisibleObjList();
+	    	for(var i = 0; i < $scope.showedObjects.length; i++){
+	    	if($scope.showedObjects[i].id == 'Bp'){
+	    		$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
+	    	}
+	    }
+    };
+    
+    //BikePoint Component settings
+    $scope.loadBikeAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.bp_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'bikeNumber'){
+    			$scope.bp_bikeNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.bp_slotNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.bp_geometry = attributes[i];
+    		}
+    	}
+    };
+    
     $scope.getAreasFromDb = function(){
     	$scope.areaMapReady = false;
 		var allAreas = [];
@@ -125,6 +152,9 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	
 	    	$scope.bpointWS = allBpoints;
 	    	$scope.initBPointMap(markers);
+	    	
+	    	$scope.initComponents();
+	    	
 	    	$scope.bpMapReady = true;
 	    });
 	};

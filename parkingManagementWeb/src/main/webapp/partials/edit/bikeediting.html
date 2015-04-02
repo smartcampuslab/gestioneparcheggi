@@ -22,14 +22,14 @@
 							<info-window id="bp" visible-on-marker="{{ bp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading">{{ bp.data.name }}</h4>
+						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bp_name.visible">{{ bp.data.name }}</span></h4>
 							        <div id="bodyContent">
 							        	<table>
-											<tr>
+											<tr ng-show="bp_slotNumber.visible">
 							        			<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ bp.data.slotNumber }}</td>
 							        		</tr>
-							        		<tr>
+							        		<tr ng-show="bp_bikeNumber.visible">
 							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ bp.data.bikeNumber }}</td>
 							        		</tr>
@@ -42,14 +42,14 @@
 							<info-window id="sbp" visible-on-marker="{{ sbp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading">{{ sbp.data.name }}</h4>
+						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bp_name.visible">{{ sbp.data.name }}</span></h4>
 							        <div id="bodyContent">
 							        	<table>
-											<tr>
+											<tr ng-show="bp_slotNumber.visible">
 							        			<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ sbp.data.slotNumber }}</td>
 							        		</tr>
-							        		<tr>
+							        		<tr ng-show="bp_bikeNumber.visible">
 							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ sbp.data.bikeNumber }}</td>
 							        		</tr>
@@ -75,17 +75,17 @@
 									<div class="alert alert-danger" ng-show="showDeletingBPErrorMessage">{{ 'err_in_delete_bikepoint' | i18n }}</div>
 									<table class="table table-striped" style="width: 100%">
 										<tr ng-show="bpointWS.length != 0">
-											<th width="43%">{{ 'bp_name' | i18n }}</th>
-											<th width="22%">{{ 'bp_slots' | i18n }}</th>
-											<th width="15%">{{ 'bp_bikes' | i18n }}</th>
+											<th width="43%"><span ng-show="bp_name.visible">{{ 'bp_name' | i18n }}</span></th>
+											<th width="22%"><span ng-show="bp_slotNumber.visible">{{ 'bp_slots' | i18n }}</span></th>
+											<th width="15%"><span ng-show="bp_bikeNumber.visible">{{ 'bp_bikes' | i18n }}</span></th>
 											<th width="20%">{{ 'operations' | i18n }}</th>
 										</tr>
 										<tbody class="animate-repeat"
 											ng-repeat="bpoint in bpointWS | filter:q | orderBy:'name' | startFrom:currentPage*maxBPoints | limitTo:maxBPoints">
 											<tr>
-												<td width="43%" align="left">{{bpoint.name}}</td>
-												<td width="22%" align="left">{{bpoint.slotNumber}}</td>
-												<td width="15%" align="center">{{bpoint.bikeNumber}}</td>
+												<td width="43%" align="left"><span ng-show="bp_name.visible">{{bpoint.name}}</span></td>
+												<td width="22%" align="left"><span ng-show="bp_slotNumber.visible">{{bpoint.slotNumber}}</span></td>
+												<td width="15%" align="center"><span ng-show="bp_bikeNumber.visible">{{bpoint.bikeNumber}}</span></td>
 												<td width="20%" align="left">
 													<a href ng-click="setBpDetails(bpoint)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 													<a href ng-click="setBpEdit(bpoint)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
@@ -114,19 +114,19 @@
 				  		</div>
 				  		<div class="panel-body">	
 				  			<table width="100%">
-								<tr>
+								<tr ng-show="bp_name.visible">
 									<td width="45%"><strong>{{ 'bp_name' | i18n }}:</strong></td>
 									<td width="55%">{{ bikePoint.name }}</td>
 								</tr>
-								<tr>	
+								<tr ng-show="bp_slotNumber.visible">	
 									<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
 									<td>{{ bikePoint.slotNumber }}</td>
 								</tr>
-								<tr>	
+								<tr ng-show="bp_bikeNumber.visible">	
 									<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
 									<td>{{ bikePoint.bikeNumber }}</td>
 								</tr>
-								<tr>
+								<tr ng-show="bp_geometry.visible">
 									<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
 									<td>{{ myGeometry }}</td>
 								</tr>
@@ -153,41 +153,30 @@
 				    		<h3 class="panel-title"><strong>{{ 'edit_bikepoint' | i18n }}</strong></h3>
 				  		</div>
 				  		<div class="panel-body">	
-						   	<div class="form-group">
+						   	<div class="form-group" ng-show="bp_name.visible">
 						    	<label for="name">{{ 'bp_name' | i18n }}</label>
-						    	<input id="name" type="text" class="form-control" name="pName" ng-model="bikePoint.name" ng-required="true" placeholder="{{ 'bp_name_placeholder' | i18n }}" >
+						    	<input id="name" type="text" class="form-control" name="pName" ng-model="bikePoint.name" ng-required="bp_name.required" placeholder="{{ 'bp_name_placeholder' | i18n }}" >
 						   		<div class="alert alert-danger" ng-show="!isInit && form.pName.$error.required">{{ 'bikepoint_name_err_required' | i18n }}</div>
 						   	</div>
-						   	<div class="form-group">
+						   	<div class="form-group" ng-show="bp_slotNumber.visible">
 						    	<label for="slots">{{ 'bp_slots' | i18n }}</label>
-						    	<input id="slots" type="text" class="form-control" name="pSlots" ng-model="bikePoint.slotNumber" ng-required="true" ng-pattern="onlyNumbers" placeholder="{{ 'bp_slotnumber_placeholder' | i18n }}" >
+						    	<input id="slots" type="text" class="form-control" name="pSlots" ng-model="bikePoint.slotNumber" ng-required="bp_slotNumber.required" ng-pattern="onlyNumbers" placeholder="{{ 'bp_slotnumber_placeholder' | i18n }}" >
 						   		<div class="alert alert-danger" ng-show="!isInit && form.pSlots.$error.pattern">{{ 'bikepoint_slots_err_pattern' | i18n }}</div>
 						   		<div class="alert alert-danger" ng-show="!isInit && form.pSlots.$error.required">{{ 'bikepoint_slots_err_required' | i18n }}</div>
 						   	</div>
-						   	<div class="form-group">
+						   	<div class="form-group" ng-show="bp_bikeNumber.visible">
 						    	<label for="bikes">{{ 'bp_bikes' | i18n }}</label>
-						    	<input id="bikes" type="text" class="form-control" name="pBikes" ng-model="bikePoint.bikeNumber" ng-required="true" ng-pattern="onlyNumbers" placeholder="{{ 'bp_bikenumber_placeholder' | i18n }}" >
+						    	<input id="bikes" type="text" class="form-control" name="pBikes" ng-model="bikePoint.bikeNumber" ng-required="bp_bikeNumber.required" ng-pattern="onlyNumbers" placeholder="{{ 'bp_bikenumber_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.pBikes.$error.pattern">{{ 'bikepoint_bikes_err_pattern' | i18n }}</div>
 						    	<div class="alert alert-danger" ng-show="!isInit && form.pBikes.$error.required">{{ 'bikepoint_bikes_err_required' | i18n }}</div>
 						   	</div>
 						 
 							<div class="form-group">
-						    	<label for="geometry">{{ 'bp_geometry' | i18n }}</label>
-						    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="false" ng-pattern="gpsPos" placeholder="{{ 'bp_geo_placeholder' | i18n }}" ng-blur="moveMarker(myGeometry)" >
+						    	<label for="geometry" ng-show="bp_geometry.visible">{{ 'bp_geometry' | i18n }}</label>
+						    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="bp_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'bp_geo_placeholder' | i18n }}" ng-blur="moveMarker(myGeometry)" ng-show="bp_geometry.visible" >
 						   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.pattern">{{ 'bikepoint_geometry_select_err_pattern' | i18n }}</div>
+						   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.required">{{ 'bikepoint_geometry_select_err_required' | i18n }}</div>
 							</div>
-<!-- 							<div class="col-md-12" ng-show="isEditing"  > -->
-<!-- 								<ui-gmap-google-map id="5" center="bpEditMap.center" draggable="true" zoom="bpEditMap.zoom" options="bpEditMap.options" control="bpEditMap.control" bounds="bpEditMap.bounds"> -->
-<!-- 										<ui-gmap-marker idkey="myBp.id" coords="myBp.coords" options="myBp.options" icon="myBp.icon" events="myBp.events"> -->
-<!-- 											<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
-<!-- 			                					<p> -->
-<!-- 						                        	Lat: {{myBp.coords.latitude}}<br/> -->
-<!-- 						                        	Lng: {{myBp.coords.longitude}}<br/> -->
-<!-- 						                    	</p> -->
-<!-- 			            					</ui-gmap-window> -->
-<!-- 			        					</ui-gmap-marker> -->
-<!-- 								</ui-gmap-google-map> -->
-<!-- 							</div> -->
 							<div class="col-md-12"  ><!-- id="map_canvas" ng-show="!isEditing"  -->
 <!-- 								<ui-gmap-google-map id="6" center="bpCreateMap.center" draggable="true" zoom="bpCreateMap.zoom" options="bpCreateMap.options" control="bpCreateMap.control" bounds="bpCreateMap.bounds" events="bpCreateMap.events"> -->
 <!-- 										<ui-gmap-marker idkey="myNewBp.id" coords="myNewBp.coords" options="myNewBp.options" icon="myNewBp.icon" events="myNewBp.events">click="'onClick'" -->
@@ -224,74 +213,54 @@
 				   	
 			   	</form>
 			</div>
-			<div ng-show="false"><!-- ng-show="viewModeBP" -->	
-				<div class="col-md-6" ng-show="bpViewMapReady" >
-<!-- 					<ui-gmap-google-map id="11" center="pViewBikeMap.center" draggable="true" zoom="pViewBikeMap.zoom" options="pViewBikeMap.options" control="pViewBikeMap.control" bounds="pViewBikeMap.bounds">refresh="map.refresh"  options="map.options" events="events" -->
-<!-- 						<ui-gmap-markers models="pViewBikeMarkers" coords="'coords'" option="'options'" click="'click'" icon="'icon'" events="'events'">click="'onClick'" -->
-<!-- 							<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
-<!-- 		                		<p> -->
-<!-- 					                Lat: {{coords.latitude}}<br/> -->
-<!-- 					                Lng: {{coords.longitude}}<br/> -->
-<!-- 					                Codice: <strong>{{title}}</strong> -->
-<!-- 					            </p> -->
-<!-- 		            		</ui-gmap-window> -->
-<!-- 		        		</ui-gmap-markers> -->
-<!-- 		        		<ui-gmap-marker idkey="mySpecialBPMarker.id" coords="mySpecialBPMarker.coords" options="mySpecialBPMarker.options" icon="mySpecialBPMarker.icon"> -->
-<!-- 							<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
-<!-- 			                	<p> -->
-<!-- 						        	Lat: {{mySpecialBPMarker.coords.latitude}}<br/> -->
-<!-- 						            Lng: {{mySpecialBPMarker.coords.longitude}}<br/> -->
-<!-- 						        </p> -->
-<!-- 			            	</ui-gmap-window> -->
-<!-- 			        	</ui-gmap-marker> -->
-		        		
-<!-- 					</ui-gmap-google-map> -->
-				</div>
-				<div class="col-md-6" ng-show="!bpViewMapReady">
-					<div style="text-align: center">
-						<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
-						<h3>{{ 'loading_text' | i18n }}...</h3>
-					</div>
-				</div>
-				<div class="col-md-6">
-					<div class="panel panel-default" width="90%">
-				   		<div class="panel-heading">
-				    		<h3 class="panel-title"><strong>{{ 'view_bikepoint' | i18n }}</strong></h3>
-				  		</div>
-				  		<div class="panel-body">	
-				  			<table width="100%">
-								<tr>
-									<td width="45%"><strong>{{ 'bp_name' | i18n }}:</strong></td>
-									<td width="55%">{{ bikePoint.name }}</td>
-								</tr>
-								<tr>	
-									<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
-									<td>{{ bikePoint.slotNumber }}</td>
-								</tr>
-								<tr>	
-									<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
-									<td>{{ bikePoint.bikeNumber }}</td>
-								</tr>
-								<tr>
-									<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
-									<td>{{ myGeometry }}</td>
-								</tr>
-					   		</table>
-					   		<hr>
-						   	<table width="95%">			
-								<tr>
-									<td width="50%" align="right">
-										<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>	
-									</td>
-									<td width="50%" align="left">
-										<button type="button" class="btn btn-default btn-lg" ng-click="setBpEdit(bikePoint)">{{ 'text_btn_edit' | i18n  }}</button>
-									</td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-			</div>		
+<!-- 			<div ng-show="false"> -->
+<!-- 				<div class="col-md-6" ng-show="bpViewMapReady" > -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-6" ng-show="!bpViewMapReady"> -->
+<!-- 					<div style="text-align: center"> -->
+<!-- 						<img src="imgs/ajax-loader.gif" width="40" height="40" /><br> -->
+<!-- 						<h3>{{ 'loading_text' | i18n }}...</h3> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 				<div class="col-md-6"> -->
+<!-- 					<div class="panel panel-default" width="90%"> -->
+<!-- 				   		<div class="panel-heading"> -->
+<!-- 				    		<h3 class="panel-title"><strong>{{ 'view_bikepoint' | i18n }}</strong></h3> -->
+<!-- 				  		</div> -->
+<!-- 				  		<div class="panel-body">	 -->
+<!-- 				  			<table width="100%"> -->
+<!-- 								<tr> -->
+<!-- 									<td width="45%"><strong>{{ 'bp_name' | i18n }}:</strong></td> -->
+<!-- 									<td width="55%">{{ bikePoint.name }}</td> -->
+<!-- 								</tr> -->
+<!-- 								<tr>	 -->
+<!-- 									<td><strong>{{ 'bp_slots' | i18n }}:</strong></td> -->
+<!-- 									<td>{{ bikePoint.slotNumber }}</td> -->
+<!-- 								</tr> -->
+<!-- 								<tr>	 -->
+<!-- 									<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td> -->
+<!-- 									<td>{{ bikePoint.bikeNumber }}</td> -->
+<!-- 								</tr> -->
+<!-- 								<tr> -->
+<!-- 									<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td> -->
+<!-- 									<td>{{ myGeometry }}</td> -->
+<!-- 								</tr> -->
+<!-- 					   		</table> -->
+<!-- 					   		<hr> -->
+<!-- 						   	<table width="95%">			 -->
+<!-- 								<tr> -->
+<!-- 									<td width="50%" align="right"> -->
+<!-- 										<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>	 -->
+<!-- 									</td> -->
+<!-- 									<td width="50%" align="left"> -->
+<!-- 										<button type="button" class="btn btn-default btn-lg" ng-click="setBpEdit(bikePoint)">{{ 'text_btn_edit' | i18n  }}</button> -->
+<!-- 									</td> -->
+<!-- 								</tr> -->
+<!-- 							</table> -->
+<!-- 						</div> -->
+<!-- 					</div> -->
+<!-- 				</div> -->
+<!-- 			</div>		 -->
 		</div>
 	</div>
 </div>

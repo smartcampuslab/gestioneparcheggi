@@ -12,24 +12,24 @@
      				<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
 				        <div ng-non-bindable="">
 				          	<div id="siteNotice"></div>
-				          	<h4 id="firstHeading" class="firstHeading">{{ a.data.name }}</h4>
+				          	<h4 id="firstHeading" class="firstHeading"><span ng-show="a_name.visible">{{ a.data.name }}</span></h4>
 					        <div id="bodyContent">
 					        	<table>
-									<tr>	
+									<tr ng-show="a_fee.visible">	
 										<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
 										<td width="55%">{{ a.data.fee }}</td>
 									</tr>
-									<tr>	
-										<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-										<td>{{ a.data.timeSlot }}</td>
+									<tr ng-show="a_timeSlot.visible">	
+										<td width="45%"><strong>{{ 'area_time' | i18n }}:</strong></td>
+										<td width="55%">{{ a.data.timeSlot }}</td>
 									</tr>
-									<tr>	
-										<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-										<td>{{ a.data.smsCode }}</td>
+									<tr ng-show="a_smsCode.visible">	
+										<td width="45%"><strong>{{ 'area_sms' | i18n }}:</strong></td>
+										<td width="55%">{{ a.data.smsCode }}</td>
 									</tr>
-									<tr>	
-										<td><strong>{{ 'area_color' | i18n }}</strong></td>
-										<td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
+									<tr ng-show="a_color.visible">	
+										<td width="45%"><strong>{{ 'area_color' | i18n }}</strong></td>
+										<td width="55%"><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
 									</tr>
 					        	</table>
 					        </div>
@@ -42,24 +42,24 @@
      				<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
 				        <div ng-non-bindable="">
 				          	<div id="siteNotice"></div>
-				          	<h4 id="firstHeading" class="firstHeading">{{ a.data.name }}</h4>
+				          	<h4 id="firstHeading" class="firstHeading"><span ng-show="a_name.visible">{{ a.data.name }}</span></h4>
 					        <div id="bodyContent">
 					        	<table>
-									<tr>	
+									<tr ng-show="a_fee.visible">	
 										<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
 										<td width="55%">{{ a.data.fee }}</td>
 									</tr>
-									<tr>	
-										<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-										<td>{{ a.data.timeSlot }}</td>
+									<tr ng-show="a_timeSlot.visible">	
+										<td width="45%"><strong>{{ 'area_time' | i18n }}:</strong></td>
+										<td width="55%">{{ a.data.timeSlot }}</td>
 									</tr>
-									<tr>	
-										<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-										<td>{{ a.data.smsCode }}</td>
+									<tr ng-show="a_smsCode.visible">	
+										<td width="45%"><strong>{{ 'area_sms' | i18n }}:</strong></td>
+										<td width="55%">{{ a.data.smsCode }}</td>
 									</tr>
-									<tr>	
-										<td><strong>{{ 'area_color' | i18n }}</strong></td>
-										<td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
+									<tr ng-show="a_color.visible">	
+										<td width="45%"><strong>{{ 'area_color' | i18n }}</strong></td>
+										<td width="55%"><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
 									</tr>
 					        	</table>
 					        </div>
@@ -83,20 +83,20 @@
 					<div class="alert alert-danger" ng-show="showDeletingAErrorMessage">{{ 'err_in_delete_area' | i18n }}</div>
 					<table class="table table-striped" style="width: 100%">
 						<tr ng-show="areaWS.length != 0">
-							<th width="25%">{{ 'area_name' | i18n }}</th>
-							<th width="14%">{{ 'area_rate' | i18n }}</th>
-							<th width="31%">{{ 'area_time' | i18n }}</th>
-							<th width="5%">{{ 'area_color' | i18n }}</th>
+							<th width="25%"><span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span></th>
+							<th width="14%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+							<th width="31%"><span ng-show="a_timeSlot.visible">{{ 'area_time' | i18n }}</span></th>
+							<th width="5%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
 							<th width="25%">{{ 'operations' | i18n }}</th>
 						</tr>
 						<tbody class="animate-repeat"
 							ng-repeat="area in areaWS | filter:q | orderBy:'name' | startFrom:currentPage*maxAreas | limitTo:maxAreas">
 		<!-- 					ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 							<tr>
-								<td width="25%" align="left">{{area.name}}</td>
-								<td width="14%" align="left">{{area.fee}}</td>
-								<td width="31%" align="center">{{area.timeSlot}}</td>
-								<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(area.color)}"></div></td><!-- {{area.color}} -->
+								<td width="25%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
+								<td width="14%" align="left"><span ng-show="a_fee.visible">{{area.fee}}</span></td>
+								<td width="31%" align="center"><span ng-show="a_timeSlot.visible">{{area.timeSlot}}</span></td>
+								<td width="5%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 								<td width="25%" align="left">
 									<a href ng-click="setADetails(area)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 									<a href ng-click="setAEdit(area)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
@@ -125,25 +125,29 @@
 		  		</div>
 		  		<div class="panel-body">	
 		  			<table width="100%">
-						<tr>
+						<tr ng-show="a_name.visible">
 							<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
 							<td width="55%">{{ area.name }}</td>
 						</tr>
-						<tr>	
+						<tr ng-show="a_fee.visible">	
 							<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
 							<td>{{ area.fee }}</td>
 						</tr>
-						<tr>	
+						<tr ng-show="a_timeSlot.visible">	
 							<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 							<td>{{ area.timeSlot }}</td>
 						</tr>
-						<tr>	
+						<tr ng-show="a_smsCode.visible">	
 							<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 							<td>{{ area.smsCode }}</td>
 						</tr>
-						<tr>	
+						<tr ng-show="a_color.visible">	
 							<td><strong>{{ 'area_color' | i18n }}</strong></td>
 							<td><span class="colorBox" ng-style="{'background-color': correctColor(area.color)}"></span></td>
+						</tr>
+						<tr ng-show="a_geometry.visible">	
+							<td><strong>{{ 'area_geometry' | i18n }}</strong></td>
+							<td>{{ myPolGeometry }}</td>
 						</tr>
 			   		</table>
 			   		<hr>
@@ -179,10 +183,11 @@
 			    			</shape>
 						</map>
 					</div>
-					<div class="form-group" ng-show="a_geometry.visible" >
-				    	<label for="geometryN">{{ 'area_geometry' | i18n }}</label>
-				    	<input id="geometryN" type="text" class="form-control" name="aGeometry" ng-model="myPolGeometry" ng-required="a_geometry.required" >
+					<div class="form-group" >
+				    	<label for="geometryN" ng-show="a_geometry.visible">{{ 'area_geometry' | i18n }}</label>
+				    	<input id="geometryN" type="text" class="form-control" name="aGeometry" ng-model="myPolGeometry" ng-required="a_geometry.required" ng-show="a_geometry.visible" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.aGeometry.$error.pattern">{{ 'area_geometry_err_pattern' | i18n }}</div>
+				   		<div class="alert alert-danger" ng-show="!isInit && form.aGeometry.$error.required">{{ 'area_geometry_err_required' | i18n }}</div>
 					</div>
 				   	<div class="form-group" ng-show="a_name.visible">
 				    	<label for="name">{{ 'area_name' | i18n }}</label>

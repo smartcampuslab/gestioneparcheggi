@@ -60,7 +60,7 @@ providers:
           visible: true
         - code: subscritionAllowedPark
           editable: true
-          required: true
+          required: false
           visible: true
         - code: rateAreaId
           editable: true
@@ -72,8 +72,8 @@ providers:
           visible: false
         - code: zones
           editable: true
-          required: true
-          visible: false          
+          required: false
+          visible: true          
      - id: Pm
        attributes:
         - code: code
@@ -193,6 +193,32 @@ providers:
     mapCenter: 46.071691, 11.120545
     mapZoom: 14
     showObjects:
+     - id: Area
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: fee
+          editable: true
+          required: true
+          visible: true
+        - code: timeSlot
+          editable: true
+          required: false
+          visible: true
+        - code: smsCode
+          editable: true
+          required: false
+          visible: true
+        - code: color
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: true
+          visible: false    
      - id: Street
        attributes:
         - code: streetReference
@@ -232,32 +258,6 @@ providers:
           required: true
           visible: false
         - code: zones
-          editable: true
-          required: true
-          visible: false
-     - id: Area
-       attributes:
-        - code: name
-          editable: true
-          required: true
-          visible: true
-        - code: fee
-          editable: true
-          required: true
-          visible: true
-        - code: timeSlot
-          editable: true
-          required: false
-          visible: true
-        - code: smsCode
-          editable: true
-          required: false
-          visible: true
-        - code: color
-          editable: true
-          required: true
-          visible: true
-        - code: geometry
           editable: true
           required: true
           visible: false

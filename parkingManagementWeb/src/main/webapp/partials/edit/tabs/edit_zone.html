@@ -12,18 +12,22 @@
      				<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
 						<div ng-non-bindable="">
 						   	<div id="siteNotice"></div>
-						   	<h4 id="firstHeading" class="firstHeading">{{ z.data.name }}</h4>
+						   	<h4 id="firstHeading" class="firstHeading"><span ng-show="zone_name.visible">{{ z.data.name }}</span></h4>
 					        <div id="bodyContent">
 					        	<table>
-					        		<tr>
+					        		<tr ng-show="zone_submacro.visible">
+					        			<td><strong>{{ 'zone_submacro' | i18n }}:</strong></td>
+					        			<td>&nbsp;{{ z.data.submacro }}</td>
+					        		</tr>
+					        		<tr ng-show="zone_type.visible">
 					        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
 					        			<td>&nbsp;{{ z.data.type }}</td>
 					        		</tr>
-									<tr>
+									<tr ng-show="zone_note.visible">
 					        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
 					        			<td>&nbsp;{{ z.data.note }}</td>
 					        		</tr>
-					        		<tr>	
+					        		<tr ng-show="zone_color.visible">	
 										<td><strong>{{ 'zone_color' | i18n }}</strong></td>
 										<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
 									</tr>
@@ -38,18 +42,22 @@
      				<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
 						<div ng-non-bindable="">
 						   	<div id="siteNotice"></div>
-						   	<h4 id="firstHeading" class="firstHeading">{{ z.data.name }}</h4>
+						   	<h4 id="firstHeading" class="firstHeading"><span ng-show="zone_name.visible">{{ z.data.name }}</span></h4>
 					        <div id="bodyContent">
 					        	<table>
-					        		<tr>
+					        		<tr ng-show="zone_submacro.visible">
+					        			<td><strong>{{ 'zone_submacro' | i18n }}:</strong></td>
+					        			<td>&nbsp;{{ z.data.submacro }}</td>
+					        		</tr>
+					        		<tr ng-show="zone_type.visible">
 					        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
 					        			<td>&nbsp;{{ z.data.type }}</td>
 					        		</tr>
-									<tr>
+									<tr ng-show="zone_note.visible">
 					        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
 					        			<td>&nbsp;{{ z.data.note }}</td>
 					        		</tr>
-					        		<tr>	
+					        		<tr ng-show="zone_color.visible">	
 										<td><strong>{{ 'zone_color' | i18n }}</strong></td>
 										<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
 									</tr>
@@ -75,18 +83,18 @@
 					<div class="alert alert-danger" ng-show="showDeletingZErrorMessage">{{ 'err_in_delete_zone' | i18n }}</div>
 					<table class="table table-striped" style="width: 100%">
 						<tr ng-show="zoneWS.length != 0">
-							<th width="45%">{{ 'zone_name' | i18n }}</th>
-							<th width="20%">{{ 'zone_submacro' | i18n }}</th>
-							<th width="15%">{{ 'zone_color' | i18n }}</th>
+							<th width="45%"><span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span></th>
+							<th width="20%"><span ng-show="zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
+							<th width="15%"><span ng-show="zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 							<th width="20%">{{ 'operations' | i18n }}</th>
 						</tr>
 						<tbody class="animate-repeat"
 							ng-repeat="zone in zoneWS | filter:q | orderBy: ['name', 'submacro'] |  startFrom:currentPage*maxZones | limitTo:maxZones">
 			<!--			ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 							<tr>
-								<td width="45%" align="left">{{zone.name}}</td>
-								<td width="20%" align="left">{{zone.submacro}}</td>
-								<td width="15%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(zone.color)}"></div></td><!-- {{area.color}} -->
+								<td width="45%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
+								<td width="20%" align="left"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
+								<td width="15%" align="center"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 								<td width="20%" align="left">
 									<a href ng-click="setZDetails(zone)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 									<a href ng-click="setZEdit(zone)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
@@ -115,23 +123,23 @@
 		  		</div>
 		  		<div class="panel-body">	
 		  			<table width="100%">
-						<tr>
+						<tr ng-show="zone_name.visible">
 							<td width="45%"><strong>{{ 'zone_name' | i18n }}:</strong></td>
 							<td width="55%">{{ zone.name }}</td>
 						</tr>
-						<tr>	
+						<tr ng-show="zone_submacro.visible">	
 							<td><strong>{{ 'zone_submacro' | i18n }}:</strong></td>
 							<td>{{ zone.submacro }}</td>
 						</tr>
-						<tr>	
+						<tr ng-show="zone_type.visible">	
 							<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
 							<td>{{ zone.type }}</td>
 						</tr>
-						<tr>	
+						<tr ng-show="zone_note.visible">	
 							<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
 							<td>{{ zone.note }}</td>
 						</tr>
-						<tr>	
+						<tr ng-show="zone_color.visible">	
 							<td><strong>{{ 'zone_color' | i18n }}</strong></td>
 							<td><span class="colorBox" ng-style="{'background-color': correctColor(zone.color)}"></span></td>
 						</tr>
@@ -169,10 +177,11 @@
 			    			</shape>
 						</map>
 					</div>
-					<div class="form-group"><!-- ng-show="!isEditing" -->
-				    	<label for="geometryN">{{ 'zone_geometry' | i18n }}</label>
-				    	<input id="geometryN" type="text" class="form-control" name="zGeometry" ng-model="myPolGeometry" ng-required="false" ><!-- myNewPolGeometry -->
+					<div class="form-group">
+				    	<label for="geometryN" ng-show="zone_geometry.visible">{{ 'zone_geometry' | i18n }}</label>
+				    	<input id="geometryN" type="text" class="form-control" name="zGeometry" ng-model="myPolGeometry" ng-show="zone_geometry.visible" ng-required="zone_geometry.required" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div>
+				   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.required">{{ 'zone_geometry_err_required' | i18n }}</div>
 					</div>
 				   	<div class="form-group">
 				    	<label for="name">{{ 'zone_name' | i18n }}</label>
@@ -226,63 +235,4 @@
 		   	</div>
 	   	</form>
 	</div>
-<!-- 	<div ng-show="viewModeZ"> -->
-<!-- 		<div class="col-md-6" ng-show="zViewMapReady" >id="map_canvas" -->
-<!-- 			<ui-gmap-google-map id="53" center="viewZoneMap.center" draggable="true" zoom="viewZoneMap.zoom" options="options" control="viewZoneMap.control" bounds="viewZoneMap.bounds">	 -->
-<!-- 				<ui-gmap-polygon ng-repeat="z in viewZonePolygons" path="z.path" stroke="z.stroke" fill="z.fill" visible="z.visible" -->
-<!-- 	              geodesic="z.geodesic" fit="false" editable="false" draggable="false"></ui-gmap-polygon> -->
-<!-- 	            <ui-gmap-polygon path="myZonePol.path" stroke="myZonePol.stroke" fill="myZonePol.fill" visible="myZonePol.visible" -->
-<!-- 	              geodesic="myZonePol.geodesic" fit="false" editable="myZonePol.editable" draggable="myZonePol.draggable"></ui-gmap-polygon>  	 -->
-<!-- 			</ui-gmap-google-map> -->
-			
-<!-- 		</div> -->
-<!-- 		<div class="col-md-6" ng-show="!zViewMapReady"> -->
-<!-- 			<div style="text-align: center"> -->
-<!-- 				<img src="imgs/ajax-loader.gif" width="40" height="40" /><br> -->
-<!-- 				<h3>{{ 'loading_text' | i18n }}...</h3> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 		<div class="col-md-6"> -->
-<!-- 			<div class="panel panel-default" width="90%"> -->
-<!-- 		   		<div class="panel-heading"> -->
-<!-- 		    		<h3 class="panel-title"><strong>{{ 'view_zone' | i18n }}</strong></h3> -->
-<!-- 		  		</div> -->
-<!-- 		  		<div class="panel-body">	 -->
-<!-- 		  			<table width="100%"> -->
-<!-- 						<tr> -->
-<!-- 							<td width="45%"><strong>{{ 'zone_name' | i18n }}:</strong></td> -->
-<!-- 							<td width="55%">{{ zone.name }}</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr>	 -->
-<!-- 							<td><strong>{{ 'zone_submacro' | i18n }}:</strong></td> -->
-<!-- 							<td>{{ zone.submacro }}</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr>	 -->
-<!-- 							<td><strong>{{ 'zone_type' | i18n }}:</strong></td> -->
-<!-- 							<td>{{ zone.type }}</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr>	 -->
-<!-- 							<td><strong>{{ 'zone_note' | i18n }}:</strong></td> -->
-<!-- 							<td>{{ zone.note }}</td> -->
-<!-- 						</tr> -->
-<!-- 						<tr>	 -->
-<!-- 							<td><strong>{{ 'zone_color' | i18n }}</strong></td> -->
-<!-- 							<td><span class="colorBox" ng-style="{'background-color': correctColor(zone.color)}"></span></td> -->
-<!-- 						</tr> -->
-<!-- 			   		</table> -->
-<!-- 			   		<hr> -->
-<!-- 				   	<table width="95%">			 -->
-<!-- 						<tr> -->
-<!-- 							<td width="50%" align="right"> -->
-<!-- 								<button type="button" class="btn btn-default btn-lg" ng-click="closeZView()">{{ 'text_btn_close' | i18n  }}</button>	 -->
-<!-- 							</td> -->
-<!-- 							<td width="50%" align="left"> -->
-<!-- 								<button type="button" class="btn btn-default btn-lg" ng-click="setZEdit(zone)">{{ 'text_btn_edit' | i18n  }}</button> -->
-<!-- 							</td> -->
-<!-- 						</tr> -->
-<!-- 					</table> -->
-<!-- 				</div> -->
-<!-- 			</div> -->
-<!-- 		</div> -->
-<!-- 	</div> -->
 </div>

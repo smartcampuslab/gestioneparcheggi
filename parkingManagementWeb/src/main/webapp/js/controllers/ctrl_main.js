@@ -339,6 +339,19 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	};
 	
 	$scope.setAppId();
+	
+	$scope.initComponents = function(){
+	    $scope.showedObjects = sharedDataService.getVisibleObjList();
+	    for(var i = 0; i < $scope.showedObjects.length; i++){
+	    	if($scope.showedObjects[i].id == 'Bp'){
+	    		$scope.showBikeMenuLink = true;
+	    	} else {
+	    		$scope.showBikeMenuLink = false;
+	    	}
+	    }
+    };
+    
+    $scope.initComponents();
     
     //console.log("Conf data " + object_to_show);
     //sharedDataService.setBase64(base64);
