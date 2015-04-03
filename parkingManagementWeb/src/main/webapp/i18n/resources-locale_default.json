@@ -611,6 +611,14 @@
     "value": "Campo 'sottozona' obbligatorio",
     "description": "Errore Campo sottozona obbligatorio"
 }, {
+    "key": "zone_type_err_required",
+    "value": "Campo 'tipo zona' obbligatorio",
+    "description": "Errore Campo tipo zona obbligatorio"
+}, {
+    "key": "zone_note_err_required",
+    "value": "Campo 'note' obbligatorio",
+    "description": "Errore Campo note zona obbligatorio"
+}, {
     "key": "zone_color_err_required",
     "value": "Campo 'colore' obbligatorio",
     "description": "Errore Campo colore zona obbligatorio"

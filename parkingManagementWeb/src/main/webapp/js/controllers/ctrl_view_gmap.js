@@ -19,6 +19,246 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	    'Accept': 'application/json;charset=UTF-8'
 	};
 	
+	// ----------------------- Block to read conf params and show/hide elements -----------------------
+    var showArea = false;
+    var showStreets = false;
+    var showPm = false;
+    var showPs = false;
+    var showBp = false;
+    var showZones = false;
+    
+    $scope.isAreaVisible = function(){
+    	return showArea;
+    };
+    
+    $scope.isStreetVisible = function(){
+    	return showStreets;
+    };
+
+    $scope.isPmVisible = function(){
+    	return showPm;
+    };
+
+    $scope.isPsVisible = function(){
+    	return showPs;
+    };
+    
+    $scope.isBpVisible = function(){
+    	return showBp;
+    };
+
+    $scope.isZonesVisible = function(){
+    	return showZones;
+    };
+    
+    $scope.initComponents = function(value){
+    	if(value){
+    		showArea = true;
+    		showStreets = true;
+    		showPm = true;
+    		showPs = true;
+    		showBp = true;
+    		showZones = true;
+    	} else {
+	    	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
+		    	$scope.showedObjects = sharedDataService.getVisibleObjList();
+		    	for(var i = 0; i < $scope.showedObjects.length; i++){
+		    		if($scope.showedObjects[i].id == 'Area'){
+		    			showArea = true;
+		    			$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
+		    		}
+		    		if($scope.showedObjects[i].id == 'Street'){
+		    			showStreets = true;
+		    			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
+		    		}
+		    		if($scope.showedObjects[i].id == 'Pm'){
+		    			showPm = true;
+		    			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
+		    		}
+		    		if($scope.showedObjects[i].id == 'Ps'){
+		    			showPs = true;
+		    			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
+		    		}
+		    		if($scope.showedObjects[i].id == 'Bp'){
+		    			showBp = true;
+			    		$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
+			    	}
+		    		if($scope.showedObjects[i].id == 'Zone'){
+		    			showZones = true;
+		    			$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
+		    		}
+		    	}
+	    	}
+    	}
+    };
+    
+    //Area Component settings
+    $scope.loadAreaAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.a_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'fee'){
+    			$scope.a_fee = attributes[i];
+    		}
+    		if(attributes[i].code == 'timeSlot'){
+    			$scope.a_timeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'smsCode'){
+    			$scope.a_smsCode = attributes[i];
+    		}
+    		if(attributes[i].code == 'color'){
+    			$scope.a_color = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.a_geometry = attributes[i];
+    		}
+    		
+    	}
+    };
+    
+    //Street Component settings
+    $scope.loadStreetAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'streetReference'){
+    			$scope.s_streetRef = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.s_slotNum = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			$scope.s_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'timedParkSlotNumber'){
+    			$scope.s_timedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotNumber'){
+    			$scope.s_freeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			$scope.s_unusuableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'subscritionAllowedPark'){
+    			$scope.s_subscrition = attributes[i];
+    		}
+    		if(attributes[i].code == 'rateAreaId'){
+    			$scope.s_areaId = attributes[i];
+    		}
+    		if(attributes[i].code == 'zones'){
+    			$scope.s_zones = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.s_geometry = attributes[i];
+    		}
+    	}
+    };
+    
+    //Pm Component settings
+    $scope.loadPmAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'code'){
+    			$scope.pm_code = attributes[i];
+    		}
+    		if(attributes[i].code == 'note'){
+    			$scope.pm_note = attributes[i];
+    		}
+    		if(attributes[i].code == 'status'){
+    			$scope.pm_status = attributes[i];
+    		}
+    		if(attributes[i].code == 'rateArea'){
+    			$scope.pm_rateArea = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.pm_geometry = attributes[i];
+    		}
+    	}
+    };
+    
+    //Ps Component settings
+    $scope.loadPsAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.ps_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'streetReference'){
+    			$scope.ps_address = attributes[i];
+    		}
+    		if(attributes[i].code == 'managementMode'){
+    			$scope.ps_management = attributes[i];
+    		}
+    		if(attributes[i].code == 'paymentMode'){
+    			$scope.ps_payment = attributes[i];
+    		}
+    		if(attributes[i].code == 'fee'){
+    			$scope.ps_fee = attributes[i];
+    		}
+    		if(attributes[i].code == 'timeSlot'){
+    			$scope.ps_timeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.ps_slotNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			$scope.ps_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			$scope.ps_unusuableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'phoneNumber'){
+    			$scope.ps_phoneNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.ps_geometry = attributes[i];
+    		}
+    	}
+    };
+    
+    //BikePoint Component settings
+    $scope.loadBikeAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.bp_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'bikeNumber'){
+    			$scope.bp_bikeNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.bp_slotNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.bp_geometry = attributes[i];
+    		}
+    	}
+    };
+    
+    //Zones Component settings
+    $scope.loadZoneAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.zone_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'submacro'){
+    			$scope.zone_submacro = attributes[i];
+    		}
+    		if(attributes[i].code == 'note'){
+    			$scope.zone_note = attributes[i];
+    		}
+    		if(attributes[i].code == 'status'){
+    			$scope.zone_status = attributes[i];
+    		}
+    		if(attributes[i].code == 'type'){
+    			$scope.zone_type = attributes[i];
+    		}
+    		if(attributes[i].code == 'color'){
+    			$scope.zone_color = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.zone_geometry = attributes[i];
+    		}
+    	}
+    };
+    // ---------------------- End Block to read conf params and show/hide elements ---------------------
+	
 	$scope.cash_mode = "CASH";
     $scope.automated_teller_mode = "AUTOMATED_TELLER";
     $scope.prepaid_card_mode = "PREPAID_CARD";
@@ -571,125 +811,148 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		}
 	};
 	
-	$scope.initWs = function(){
+	$scope.initWs = function(value){
 		$scope.parkingMetersMarkers = [];
 		$scope.parkingStructureMarkers = [];
 	   	$scope.initPage();
+	   	$scope.initComponents(value);
 		$scope.mapReady = false;
 		$scope.getAreasFromDb();
 	};
 	
 	 $scope.getAreasFromDb = function(){
-	    $scope.areaMapReady = false;
-		var allAreas = [];
-		var method = 'GET';
-			
-		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSServiceNS.getProxy(method, "area", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			angular.copy(result, allAreas);
-			console.log("rateAreas retrieved from db: " + JSON.stringify(result));
-		    	
-		   	$scope.areaWS = allAreas;
-		    $scope.initAreasOnMap($scope.areaWS, false);
-		   	//$scope.hideAreaPolygons();
-		   	
-		    sharedDataService.setSharedLocalAreas($scope.areaWS);
-		    $scope.getParkingMetersFromDb();
-		});
+		if(showArea){
+		    $scope.areaMapReady = false;
+			var allAreas = [];
+			var method = 'GET';
+				
+			//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
+			var myDataPromise = invokeWSServiceNS.getProxy(method, "area", null, $scope.authHeaders, null);
+			myDataPromise.then(function(result){
+				angular.copy(result, allAreas);
+				console.log("rateAreas retrieved from db: " + JSON.stringify(result));
+			    	
+			   	$scope.areaWS = allAreas;
+			    $scope.initAreasOnMap($scope.areaWS, false);
+			   	//$scope.hideAreaPolygons();
+			   	
+			    sharedDataService.setSharedLocalAreas($scope.areaWS);
+			    $scope.getParkingMetersFromDb();
+			});
+		} else {
+			$scope.getParkingMetersFromDb();
+		}
 	};
 	
 	$scope.getStreetsFromDb = function(){
-		$scope.streetMapReady = false;
-		var allStreet = [];
-		var method = 'GET';
-		
-	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "street", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	angular.copy(result, allStreet);
-	    	console.log("streets retrieved from db: " + JSON.stringify(result));
-	    	
-	    	$scope.streetWS = $scope.initStreetsObjects(allStreet);
-	    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true);
-	    });
+		if(showStreets){
+			$scope.streetMapReady = false;
+			var allStreet = [];
+			var method = 'GET';
+			
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
+		   	var myDataPromise = invokeWSServiceNS.getProxy(method, "street", null, $scope.authHeaders, null);
+		    myDataPromise.then(function(result){
+		    	angular.copy(result, allStreet);
+		    	console.log("streets retrieved from db: " + JSON.stringify(result));
+		    	
+		    	$scope.streetWS = $scope.initStreetsObjects(allStreet);
+		    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true);
+		    });
+		}
 	};
 		    
     $scope.getParkingMetersFromDb = function(){
-    	var markers = [];
-		var allParkingMeters = [];
-		var method = 'GET';
-		
-	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	angular.copy(result, allParkingMeters);
-	    	console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
-	    	//$scope.addParkingMetersMarkers(allParkingMeters);
-	    	
-	    	for (var i = 0; i <  allParkingMeters.length; i++) {
-	    		markers.push(createMarkers(i, allParkingMeters[i], 1));
-		    }
-	    	angular.copy(markers, $scope.parkingMetersMarkers);
-	    	//$scope.parkingMetersMarkers = $scope.initPMObjects(allPmeters);
-	    	$scope.getParkingStructuresFromDb();
-	    });
+    	if(showPm){
+	    	var markers = [];
+			var allParkingMeters = [];
+			var method = 'GET';
+			
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
+		   	var myDataPromise = invokeWSServiceNS.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
+		    myDataPromise.then(function(result){
+		    	angular.copy(result, allParkingMeters);
+		    	console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
+		    	//$scope.addParkingMetersMarkers(allParkingMeters);
+		    	
+		    	for (var i = 0; i <  allParkingMeters.length; i++) {
+		    		markers.push(createMarkers(i, allParkingMeters[i], 1));
+			    }
+		    	angular.copy(markers, $scope.parkingMetersMarkers);
+		    	//$scope.parkingMetersMarkers = $scope.initPMObjects(allPmeters);
+		    	$scope.getParkingStructuresFromDb();
+		    });
+    	} else {
+    		$scope.getParkingStructuresFromDb();
+    	}
 	};
 	
 	$scope.getParkingStructuresFromDb = function(){
-		var markers = [];
-		var allParkingStructures = [];
-		var method = 'GET';
-		
-	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	angular.copy(result, allParkingStructures);
-	    	console.log("Parking Structures retrieved from db: " + JSON.stringify(result));
-	    	for (var i = 0; i <  allParkingStructures.length; i++) {
-	    		markers.push(createMarkers(i, allParkingStructures[i], 2));
-		    }
-	    	angular.copy(markers, $scope.parkingStructureMarkers);
-	    	$scope.getBikePointFromDb();
-	    });   	
+		if(showPs){
+			var markers = [];
+			var allParkingStructures = [];
+			var method = 'GET';
+			
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+		   	var myDataPromise = invokeWSServiceNS.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+		    myDataPromise.then(function(result){
+		    	angular.copy(result, allParkingStructures);
+		    	console.log("Parking Structures retrieved from db: " + JSON.stringify(result));
+		    	for (var i = 0; i <  allParkingStructures.length; i++) {
+		    		markers.push(createMarkers(i, allParkingStructures[i], 2));
+			    }
+		    	angular.copy(markers, $scope.parkingStructureMarkers);
+		    	$scope.getBikePointFromDb();
+		    });
+		} else {
+			$scope.getBikePointFromDb();
+		}
 	};
 	
 	$scope.getBikePointFromDb = function(){
-		var markers = [];
-		var allBikePoints = [];
-		var method = 'GET';
-		
-		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	angular.copy(result, allBikePoints);
-	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
-	    	for (var i = 0; i <  allBikePoints.length; i++) {
-	    		markers.push(createMarkers(i, allBikePoints[i], 3));
-		    }
-	    	angular.copy(markers, $scope.bikePointMarkers);
-	    	//$scope.initMap($scope.parkingMetersMarkers, $scope.parkingStructureMarkers, $scope.bikePointMarkers);
-	    	$scope.initMap($scope.parkingMetersMarkers, null, null);
-	    	$scope.getZonesFromDb();
-	    });   	
+		if(showBp){
+			var markers = [];
+			var allBikePoints = [];
+			var method = 'GET';
+			
+			//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+		   	var myDataPromise = invokeWSServiceNS.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+		    myDataPromise.then(function(result){
+		    	angular.copy(result, allBikePoints);
+		    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
+		    	for (var i = 0; i <  allBikePoints.length; i++) {
+		    		markers.push(createMarkers(i, allBikePoints[i], 3));
+			    }
+		    	angular.copy(markers, $scope.bikePointMarkers);
+		    	//$scope.initMap($scope.parkingMetersMarkers, $scope.parkingStructureMarkers, $scope.bikePointMarkers);
+		    	$scope.initMap($scope.parkingMetersMarkers, null, null);
+		    	$scope.getZonesFromDb();
+		    });
+		} else {
+			$scope.getZonesFromDb();
+		}
 	};
 	
 	$scope.getZonesFromDb = function(){
-		$scope.zoneMapReady = false;
-		var allZones = [];
-		var method = 'GET';
-		
-		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "zone", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	angular.copy(result, allZones);
-	    	console.log("Zone retrieved from db: " + JSON.stringify(result));
-	    	
-	    	$scope.zoneWS = $scope.correctMyZones(allZones);
-	    	sharedDataService.setSharedLocalZones($scope.zoneWS);
-	    	$scope.initZonesOnMap($scope.zoneWS, false);
-	    	$scope.getStreetsFromDb();
-	    });
+		if(showZones){
+			$scope.zoneMapReady = false;
+			var allZones = [];
+			var method = 'GET';
+			
+			//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
+		   	var myDataPromise = invokeWSServiceNS.getProxy(method, "zone", null, $scope.authHeaders, null);
+		    myDataPromise.then(function(result){
+		    	angular.copy(result, allZones);
+		    	console.log("Zone retrieved from db: " + JSON.stringify(result));
+		    	
+		    	$scope.zoneWS = $scope.correctMyZones(allZones);
+		    	sharedDataService.setSharedLocalZones($scope.zoneWS);
+		    	$scope.initZonesOnMap($scope.zoneWS, false);
+		    	$scope.getStreetsFromDb();
+		    });
+		} else {
+			$scope.getStreetsFromDb();
+		}
 	};
 	
 	

@@ -107,7 +107,8 @@
 													<td align="right"><input value="Login" name="submit" type="submit" class="btn btn-primary">&nbsp;</td>
 													<td>
 														<input value="Cancella" name="reset" type="reset" class="btn btn-default">&nbsp;
-														<a id="btn_login_test" href="viewall" class="btn btn-primary" role="button">Visualizza Mappa</a>
+														<a id="btn_viewrv" href="viewallrv" class="btn btn-primary" role="button">Mappa Rv</a>&nbsp;
+														<a id="btn_viewtn" href="viewalltn" class="btn btn-primary" role="button">Mappa Tn</a>
 													</td>
 												</tr>
 											</table>

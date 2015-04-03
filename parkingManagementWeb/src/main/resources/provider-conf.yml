@@ -167,7 +167,7 @@ providers:
         - code: geometry
           editable: true
           required: true
-          visible: false          
+          visible: false       
      - id: Bp
        attributes:
         - code: name
@@ -259,7 +259,7 @@ providers:
           visible: false
         - code: zones
           editable: true
-          required: true
+          required: false
           visible: false
      - id: Pm
        attributes:

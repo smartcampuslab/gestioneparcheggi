@@ -68,6 +68,7 @@ public class PortalController extends SCController{
 		
 		model.addAttribute("user_name", prov.getUser());
 		model.addAttribute("user_surname", prov.getId());
+		model.addAttribute("no_sec", "false");
 		model.addAttribute("app_id", prov.getAppId());
 		model.addAttribute("map_center", prov.getMapCenter());
 		model.addAttribute("map_zoom", prov.getMapZoom());
@@ -93,9 +94,23 @@ public class PortalController extends SCController{
 		return new ModelAndView("redirect:/logout");
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/viewall")
-	public ModelAndView viewAllElements(ModelMap model) {
-		logger.error(String.format("I am in get viewAll"));
+	@RequestMapping(method = RequestMethod.GET, value = "/viewallrv")
+	public ModelAndView viewAllElementsRv(ModelMap model) {
+		model.addAttribute("no_sec", "true");
+		model.addAttribute("app_id", "rv");
+		model.addAttribute("map_center", "45.88875357753771,11.037440299987793");
+		model.addAttribute("map_zoom", 14);
+		logger.error(String.format("I am in get viewAll Rv"));
+		return new ModelAndView("viewallnosec");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/viewalltn")
+	public ModelAndView viewAllElementsTn(ModelMap model) {
+		model.addAttribute("no_sec", "true");
+		model.addAttribute("app_id", "tn");
+		model.addAttribute("map_center", "46.071691, 11.120545");
+		model.addAttribute("map_zoom", 14);
+		logger.error(String.format("I am in get viewAll Tn"));
 		return new ModelAndView("viewallnosec");
 	}
 

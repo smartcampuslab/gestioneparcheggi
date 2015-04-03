@@ -255,7 +255,31 @@
 		   		<div class="panel-heading">
 		    		<h3 class="panel-title"><strong>{{ 'edit_parkingstructure' | i18n }}</strong></h3>
 		  		</div>
-		  		<div class="panel-body">	
+		  		<div class="panel-body">
+					<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing" -->
+<!-- 						<ui-gmap-google-map id="32" center="psCreateMap.center" draggable="true" zoom="psCreateMap.zoom" options="psCreateMap.options" control="psCreateMap.control" bounds="psCreateMap.bounds" events="psCreateMap.events"> -->
+<!-- 								<ui-gmap-marker idkey="myNewPs.id" coords="myNewPs.coords" options="myNewPs.options" icon="myNewPs.icon" events="myNewPs.events">click="'onClick'" -->
+<!-- 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
+<!-- 	                					<p> -->
+<!-- 				                        	Lat: {{myNewPs.coords.latitude}}<br/> -->
+<!-- 				                        	Lng: {{myNewPs.coords.longitude}}<br/> -->
+<!-- 				                    	</p> -->
+<!-- 	            					</ui-gmap-window> -->
+<!-- 	        					</ui-gmap-marker> -->
+<!-- 						</ui-gmap-google-map> -->
+						<map id="editPs" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPsMarker()" >
+							<marker ng-repeat="ps in newPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->
+							</marker>
+							<marker ng-repeat="ps in editPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->
+							</marker>
+						</map>
+					</div>
+					<div class="form-group" ng-show="ps_geometry.visible">
+				    	<label for="geometry">{{ 'pm_geometry' | i18n }}</label>
+				    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="ps_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'ps_geo_placeholder' | i18n }}" >
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.pattern">{{ 'parkingstructure_geometry_select_err_pattern' | i18n }}</div>
+				   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.required">{{ 'parkingstructure_geometry_select_err_required' | i18n }}</div>
+					</div>	
 				   	<div class="form-group" ng-show="ps_name.visible">
 				    	<label for="name">{{ 'ps_name' | i18n }}</label>
 				    	<input id="name" type="text" class="form-control" name="pName" ng-model="parkingStructure.name" ng-required="ps_name.required" placeholder="{{ 'ps_name_placeholder' | i18n }}" >
@@ -329,30 +353,6 @@
 				   		</div>
 				   	</div>
 				 
-					<div class="form-group" ng-show="ps_geometry.visible">
-				    	<label for="geometry">{{ 'pm_geometry' | i18n }}</label>
-				    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="ps_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'ps_geo_placeholder' | i18n }}" >
-				   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.pattern">{{ 'parkingstructure_geometry_select_err_pattern' | i18n }}</div>
-				   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.required">{{ 'parkingstructure_geometry_select_err_required' | i18n }}</div>
-					</div>
-					<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing" -->
-<!-- 						<ui-gmap-google-map id="32" center="psCreateMap.center" draggable="true" zoom="psCreateMap.zoom" options="psCreateMap.options" control="psCreateMap.control" bounds="psCreateMap.bounds" events="psCreateMap.events"> -->
-<!-- 								<ui-gmap-marker idkey="myNewPs.id" coords="myNewPs.coords" options="myNewPs.options" icon="myNewPs.icon" events="myNewPs.events">click="'onClick'" -->
-<!-- 									<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
-<!-- 	                					<p> -->
-<!-- 				                        	Lat: {{myNewPs.coords.latitude}}<br/> -->
-<!-- 				                        	Lng: {{myNewPs.coords.longitude}}<br/> -->
-<!-- 				                    	</p> -->
-<!-- 	            					</ui-gmap-window> -->
-<!-- 	        					</ui-gmap-marker> -->
-<!-- 						</ui-gmap-google-map> -->
-						<map id="editPs" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPsMarker()" >
-							<marker ng-repeat="ps in newPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->
-							</marker>
-							<marker ng-repeat="ps in editPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->
-							</marker>
-						</map>
-					</div>
 				</div>
 				<div class="alert alert-danger" ng-show="showUpdatingPSErrorMessage">{{ 'err_in_update_parkingstructure' | i18n }}</div>
 		   		<table width="95%">			

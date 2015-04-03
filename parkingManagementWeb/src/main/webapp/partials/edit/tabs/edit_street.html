@@ -338,7 +338,8 @@
 					</div>
 					<div class="form-group" ng-show="s_zones.visible" >
 				    	<label for="zone">{{ 'street_zone' | i18n }}</label>
-				    	<select id="zone" multiple ng-multiple="true" name="sZone" class="form-control" ng-options="z as z.name + '-' + z.submacro for z in allZones" ng-model="myZones" ng-required="s_zones.required">
+<!-- 				    	<div ng-dropdown-multiselect="" options="allZones" selected-model="myZones" extra-settings="multiSelSettings"></div> -->
+				    	<select id="zone" multiple ng-multiple="true" name="sZone" class="form-control" ng-options="z.name + '-' + z.submacro for z in allZones" ng-model="myZones" ng-required="s_zones.required">
 				    	</select>
 				    	<div class="alert alert-danger" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>
 					</div>

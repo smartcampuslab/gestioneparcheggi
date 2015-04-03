@@ -17,6 +17,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.maxPStructs = 10;
     $scope.maxZones = 10;
     
+    $scope.multiSelSettings = {displayProp: 'name'-'submacro'};
+    
     $scope.authHeaders = {
         'Accept': 'application/json;charset=UTF-8'
     };
@@ -66,6 +68,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
             
     $scope.tabIndex = 0;
     
+    // ----------------------- Block to read conf params and show/hide elements -----------------------
     var showArea = false;
     var showStreets = false;
     var showPm = false;
@@ -256,6 +259,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     	}
     };
+    // ---------------------- End Block to read conf params and show/hide elements ---------------------
     
     // The tab directive will use this data
     //$scope.editparktabs = [ 
@@ -868,7 +872,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.setSDetails = function(street){
 		$scope.sViewMapReady = false;
 		$scope.mySpecialStreets = [];
-		
 		$scope.street = street;
 		
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
@@ -1405,6 +1408,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				};
 				$scope.myZones.push(tmpZone);
 			}
+			//angular.copy(street.myZones, $scope.myZones);
 			
 			$scope.sEditMap = {
 				control: {},
@@ -1998,6 +2002,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		icon: $scope.psMarkerIcon
 	    	};
 	    	$scope.myGeometry = ret.pos;
+	    	$scope.getStructAddress(event);
 	    	return $scope.newPsMarkers.push(ret);
 		}
     };
@@ -2010,6 +2015,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.updatePsPos = function(event){
     	var pos = event.latLng;
     	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    	$scope.getStructAddress(event);
     };
 	
 	// Object Update methods
@@ -2900,12 +2906,23 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	$scope.getStreetAddress = function(event){
-		console.log("I am in get address function" + event.latLng);
+		console.log("I am in get street address function" + event.latLng);
 		var geocoder = new google.maps.Geocoder();
 		geocoder.geocode({location:event.latLng}, function(response) {
 			var result = response[0].formatted_address;
 			if (result != undefined && result != null) {
 				$scope.street.streetReference = result.substring(0, result.indexOf(','));
+			}
+		});
+	};
+	
+	$scope.getStructAddress = function(event){
+		console.log("I am in get struct address function" + event.latLng);
+		var geocoder = new google.maps.Geocoder();
+		geocoder.geocode({location:event.latLng}, function(response) {
+			var result = response[0].formatted_address;
+			if (result != undefined && result != null) {
+				$scope.parkingStructure.streetReference = result.substring(0, result.indexOf(','));
 			}
 		});
 	};

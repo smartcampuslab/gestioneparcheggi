@@ -4,7 +4,7 @@
 	</div>
 	<div class="panel-body">
 		<!--<form name="viewForm"  > ng-init="initWs()" -->
-			<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
+			<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs(true)">
 				<div class="col-md-9"><!--   ng-show="mapReady"-->
 <!-- 					<div id="map_canvas" ></div> -->
 					<map id="viewMap" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" style="height: 500px">

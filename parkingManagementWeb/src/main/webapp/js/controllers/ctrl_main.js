@@ -322,13 +322,16 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     $scope.loadConfObject(object_to_show);
     
     $scope.setAppId = function(){
-			
+		var url = "appid";
+		if(no_sec == "true"){
+			url = "nosec/appid";
+		}
 		var method = 'POST';
 		var value = sharedDataService.getConfAppId();
-		if($scope.showLog) console.log("Area data : " + value);
+		if($scope.showLog) console.log("App id data : " + value);
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, value);
-		var myDataPromise = invokeWSService.getProxy(method, "appid", null, $scope.authHeaders, value);
+		var myDataPromise = invokeWSService.getProxy(method, url, null, $scope.authHeaders, value);
 		myDataPromise.then(function(result){
 			if(result != null && result != ""){
 				//console.log("App Id Ok: " + result);

@@ -70,6 +70,16 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'ViewCtrlGmap',
     		controllerAs: 'view_ctrl_gmap'
     	})
+    	.when('/viewallrv', {
+    		templateUrl: 'partials/view/viewallgmapnosec.html',
+    		controller: 'ViewCtrlGmap',
+    		controllerAs: 'view_ctrl_gmap'
+    	})
+    	.when('/viewalltn', {
+    		templateUrl: 'partials/view/viewallgmapnosec.html',
+    		controller: 'ViewCtrlGmap',
+    		controllerAs: 'view_ctrl_gmap'
+    	})
 //    	.when('/view', {
 //    		templateUrl: 'partials/view/viewallgcode.html',
 //    		controller: 'ViewCtrlGCode',

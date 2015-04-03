@@ -51,6 +51,13 @@ public class EditingController {
 		storage.setAppId(appId);
 		return storage.getAppId();
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/nosec/appid")
+	public @ResponseBody
+	String setNSAppId(@RequestBody String appId) throws DatabaseException {
+		storage.setAppId(appId);
+		return storage.getAppId();
+	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/street")
 	public @ResponseBody

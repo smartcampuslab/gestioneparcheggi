@@ -31,6 +31,8 @@
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/img/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
+		pattern="/i18n/**" security="none" />
+	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/imgs/markerIcons/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/js/**" security="none" />
@@ -41,7 +43,9 @@
 	<http xmlns="http://www.springframework.org/schema/security"
         pattern="/login" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
-        pattern="/viewall" security="none" />
+        pattern="/viewallrv" security="none" />
+	<http xmlns="http://www.springframework.org/schema/security"
+        pattern="/viewalltn" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/rest/nosec/**" security="none" />
 	

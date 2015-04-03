@@ -183,27 +183,29 @@
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.required">{{ 'zone_geometry_err_required' | i18n }}</div>
 					</div>
-				   	<div class="form-group">
+				   	<div class="form-group" ng-show="zone_name.visible">
 				    	<label for="name">{{ 'zone_name' | i18n }}</label>
-				    	<input id="name" type="text" class="form-control" name="zName" ng-model="zone.name" ng-required="true" placeholder="{{ 'zone_name_placeholder' | i18n }}" >
+				    	<input id="name" type="text" class="form-control" name="zName" ng-model="zone.name" ng-required="zone_name.required" placeholder="{{ 'zone_name_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zName.$error.required">{{ 'zone_name_err_required' | i18n }}</div>
 				   	</div>
-				   	<div class="form-group">
+				   	<div class="form-group" ng-show="zone_submacro.visible">
 				    	<label for="submacro">{{ 'zone_submacro' | i18n }}</label>
-				    	<input id="submacro" type="text" class="form-control" name="zSub" ng-model="zone.submacro" ng-required="true" placeholder="{{ 'zone_submacro_placeholder' | i18n }}" >
+				    	<input id="submacro" type="text" class="form-control" name="zSub" ng-model="zone.submacro" ng-required="zone_submacro.required" placeholder="{{ 'zone_submacro_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.zSub.$error.required">{{ 'zone_submacro_err_required' | i18n }}</div>
 				   	</div>
-				   	<div class="form-group">
+				   	<div class="form-group" ng-show="zone_type.visible">
 				    	<label for="type">{{ 'zone_type' | i18n }}</label>
-				    	<input id="type" type="text" class="form-control" name="zType" ng-model="zone.type" ng-required="false" placeholder="{{ 'zone_type_placeholder' | i18n }}" >
+				    	<input id="type" type="text" class="form-control" name="zType" ng-model="zone.type" ng-required="zone_type.required" placeholder="{{ 'zone_type_placeholder' | i18n }}" >
+				   		<div class="alert alert-danger" ng-show="!isInit && form.zType.$error.required">{{ 'zone_type_err_required' | i18n }}</div>
 				   	</div>
-				   	<div class="form-group">
+				   	<div class="form-group" ng-show="zone_note.visible">
 				    	<label for="note">{{ 'zone_note' | i18n }}</label>
-				    	<input id="note" type="text" class="form-control" name="zNote" ng-model="zone.note" ng-required="false" placeholder="{{ 'zone_note_placeholder' | i18n }}" >
+				    	<input id="note" type="text" class="form-control" name="zNote" ng-model="zone.note" ng-required="zone_note.required" placeholder="{{ 'zone_note_placeholder' | i18n }}" >
+				   		<div class="alert alert-danger" ng-show="!isInit && form.zNote.$error.required">{{ 'zone_note_err_required' | i18n }}</div>
 				   	</div>
-				   	<div class="form-group">
+				   	<div class="form-group" ng-show="zone_color.visible">
 				    	<label for="color">{{ 'zone_color' | i18n }}</label>
-				    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="zColor" ng-model="myColor" ng-required="true" placeholder="{{ 'zone_color_placeholder' | i18n }}" >
+				    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="zColor" ng-model="myColor" ng-required="zone_color.required" placeholder="{{ 'zone_color_placeholder' | i18n }}" >
 				    	<div class="alert alert-danger" ng-show="!isInit && form.zColor.$error.required">{{ 'zone_color_err_required' | i18n }}</div>
 				   	</div>
 				   	
