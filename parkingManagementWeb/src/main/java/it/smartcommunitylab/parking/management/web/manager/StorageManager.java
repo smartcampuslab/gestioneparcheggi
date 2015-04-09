@@ -495,7 +495,7 @@ public class StorageManager {
 			dl.setType("street");
 			dl.setVersion(new Integer(1));
 			dl.setUpdateTime(System.currentTimeMillis());
-			if(street.getGeometry() != null){
+			if(street.getGeometry() != null && street.getGeometry().getPointBeans().size() > 0){
 				dl.setLocation(street.getGeometry().getPointBeans().get(0));	// I get the first element of the line
 			}
 			dl.setDeleted(false);

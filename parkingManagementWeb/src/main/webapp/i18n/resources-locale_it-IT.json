@@ -850,5 +850,13 @@
     "key": "bp_geo_placeholder",
     "value": "Scegliere la posizione del punto bici (click sulla mappa)",
     "description": "Testo placeholder campo posizione punto bici"
+}, {
+    "key": "filter_area_title",
+    "value": "Filtra per Area",
+    "description": "Title icona filtro per area"
+}, {
+    "key": "filter_status_title",
+    "value": "Filtra per Stato",
+    "description": "Title icona filtro per stato"
 }
 ]

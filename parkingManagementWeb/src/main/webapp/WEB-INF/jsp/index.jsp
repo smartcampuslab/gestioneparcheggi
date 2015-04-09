@@ -19,7 +19,6 @@
 <script src="js/dialogs.min.js" type="text/javascript"></script>
 <script src="lib/angular-route.js"></script>
 <script src="lib/angular-sanitize.js"></script>
-<script src="lib/angularjs-dropdown-multiselect.js"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
 <!-- <script src="i18n/angular-locale_en-EN.js"></script> -->

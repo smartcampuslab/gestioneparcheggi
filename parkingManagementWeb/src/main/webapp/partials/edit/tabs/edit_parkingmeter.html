@@ -132,34 +132,46 @@
 							<div class="alert alert-danger" ng-show="showDeletingPMErrorMessage">{{ 'err_in_delete_parkingmeter' | i18n }}</div>
 							<table class="table table-striped" style="width: 100%">
 								<tr ng-show="pmeterWS.length != 0">
-									<th width="22%"><span ng-show="pm_code.visible">{{ 'pm_code' | i18n }}</span></th>
+									<th width="15%"><span ng-show="pm_code.visible">{{ 'pm_code' | i18n }}</span></th>
 									<th width="20%"><span ng-show="pm_note.visible">{{ 'pm_note' | i18n }}</span></th>
-									<th width="8%"><span ng-show="pm_status.visible">{{ 'pm_status' | i18n }}</span></th>
-									<th width="22%" colspan="2"><span ng-show="pm_rateArea.visible">{{ 'pm_area_name' | i18n }}</span></th>
-									<th width="28%"><span>{{ 'operations' | i18n }}</span></th>
+									<th width="18%">
+										<span ng-show="pm_status.visible">{{ 'pm_status' | i18n }}</span> 
+										<a href ng-click="showPmStatusFilter()" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+										<a href ng-click="hidePmStatusFilter()" ng-show="showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+										<select id="f_pm_status" ng-show="showStatusPmFilter" class="form-control" ng-options="s.idObj as s.descrizione for s in allPmStatusFilter" ng-model="pmStatusFilter">
+				    					</select>
+									</th>
+									<th width="22%" colspan="2">
+										<span ng-show="pm_rateArea.visible">{{ 'pm_area_name' | i18n }}</span>&nbsp;
+										<a href ng-click="showPmAreaFilter()" ng-show="!showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+										<a href ng-click="hidePmAreaFilter()" ng-show="showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+										<select id="f_pm_area" ng-show="showAreaPmFilter" class="form-control" ng-model="pmAreaFilter" ng-options="a.id as a.name for a in allPmAreaFilter">
+					    				</select></th>
+									</th>
+									<th width="25%"><span>{{ 'operations' | i18n }}</span></th>
 								</tr>
 								<tbody class="animate-repeat"
-									ng-repeat="pmeter in pmeterWS | filter:q | orderBy:'code' | startFrom:currentPage*maxPmeters | limitTo:maxPmeters">
+									ng-repeat="pmeter in filtered = (pmeterWS | filter:q | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:'code' | startFrom:currentPage*maxPmeters | limitTo:maxPmeters">
 				<!--						ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
-									<tr ng-show="pmeter.status!='ACTIVE'">
-										<td width="22%" align="left"><span ng-show="pm_code.visible">{{pmeter.code}}</span></td>
-										<td width="20%" align="left"><span ng-show="pm_note.visible">{{pmeter.note}}</span></td>
-										<td width="8%" align="center"><span ng-show="pm_status.visible">OFF</span></td>
-										<td width="3%" align="center"><div class="colorBox" ng-show="pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
-										<td width="19%" align="center"><span ng-show="pm_rateArea.visible">{{pmeter.area_name}}</span></td>
-										<td width="28%" align="left">
+									<tr ng-show="pmeter.status!='ACTIVE' && pmStatusFilter!='ACTIVE'">
+										<td align="left"><span ng-show="pm_code.visible">{{pmeter.code}}</span></td>
+										<td align="left"><span ng-show="pm_note.visible">{{pmeter.note}}</span></td>
+										<td align="center"><span ng-show="pm_status.visible">OFF</span></td>
+										<td align="center"><div class="colorBox" ng-show="pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
+										<td align="center"><span ng-show="pm_rateArea.visible">{{pmeter.area_name}}</span></td>
+										<td align="left">
 											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
 											<a href ng-click="setPmRemove(pmeter)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 										</td>
 									</tr>
 									<tr class="success" ng-show="pmeter.status=='ACTIVE'">
-										<td width="22%" align="left"><span ng-show="pm_code.visible">{{pmeter.code}}</span></td>
-										<td width="20%" align="left"><span ng-show="pm_note.visible">{{pmeter.note}}</span></td>
-										<td width="8%" align="center"><span ng-show="pm_status.visible">ON</span></td>
-										<td width="3%" align="center"><div class="colorBox" ng-show="pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
-										<td width="19%" align="center"><span ng-show="pm_rateArea.visible">{{pmeter.area_name}}</span></td>
-										<td width="28%" align="left">
+										<td align="left"><span ng-show="pm_code.visible">{{pmeter.code}}</span></td>
+										<td align="left"><span ng-show="pm_note.visible">{{pmeter.note}}</span></td>
+										<td align="center"><span ng-show="pm_status.visible">ON</span></td>
+										<td align="center"><div class="colorBox" ng-show="pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
+										<td align="center"><span ng-show="pm_rateArea.visible">{{pmeter.area_name}}</span></td>
+										<td align="left">
 											<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 											<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
 											<a href ng-click="setPmRemove(pmeter)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
@@ -173,9 +185,9 @@
 							<button class="btn btn-success"
 									ng-disabled="currentPage == 0"
 									ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-								{{currentPage+1}}/{{numberOfPages(3)}}
+								{{currentPage+1}}/{{numberOfPages(3, filtered)}}
 							<button class="btn btn-success"
-									ng-disabled="currentPage >= pmeterWS.length/maxPmeters - 1"
+									ng-disabled="currentPage >= filtered.length/maxPmeters - 1"
 									ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 						</div>
 					</div>

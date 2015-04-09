@@ -75,6 +75,36 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     var showPs = false;
     var showZones = false;
     
+    // Methods to show/hide street area filter
+    $scope.showAreaFilter = function(){
+    	$scope.showAreaStreetFilter = true;
+    };
+    
+    $scope.hideAreaFilter = function(){
+    	$scope.streetAreaFilter = '';
+    	$scope.showAreaStreetFilter = false;
+    };
+    
+    // Methods to show/hide pm area filter
+    $scope.showPmAreaFilter = function(){
+    	$scope.showAreaPmFilter = true;
+    };
+    
+    $scope.hidePmAreaFilter = function(){
+    	$scope.pmAreaFilter = '';
+    	$scope.showAreaPmFilter = false;
+    };
+    
+    // Methods to show/hide pm status filter
+    $scope.showPmStatusFilter = function(){
+    	$scope.showStatusPmFilter = true;
+    };
+    
+    $scope.hidePmStatusFilter = function(){
+    	$scope.pmStatusFilter = '';
+    	$scope.showStatusPmFilter = false;
+    };
+    
     $scope.initComponents = function(){
     	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
 	    	$scope.editparktabs = [];
@@ -296,6 +326,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	}
     };  
     
+    $scope.listaStati = [{
+			idObj: "ACTIVE",
+			descrizione: "Attivo"
+		},
+		{
+			idObj: "INACTIVE",
+			descrizione: "Disattivo"
+		}
+	];
+    
     $scope.cash_mode = "CASH";
     $scope.automated_teller_mode = "AUTOMATED_TELLER";
     $scope.prepaid_card_mode = "PREPAID_CARD";
@@ -366,7 +406,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
      
     // for next and prev in practice list
     $scope.currentPage = 0;
-    $scope.numberOfPages = function(type){
+    $scope.numberOfPages = function(type, list){
        	if(type == 1){
        		if($scope.areaWS != null){
        			return Math.ceil($scope.areaWS.length/$scope.maxAreas);
@@ -375,13 +415,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
       		}
        	} else if(type == 2) {
        		if($scope.streetWS != null){
-       			return Math.ceil($scope.streetWS.length/$scope.maxStreets);
+       			return Math.ceil(list.length/$scope.maxStreets);
        		} else {
        			return 0;
      		}
        	} else if(type == 3){
        		if($scope.pmeterWS != null){
-       			return Math.ceil($scope.pmeterWS.length/$scope.maxPmeters);
+       			return Math.ceil(list.length/$scope.maxPmeters);
        		} else {
        			return 0;
      		}
@@ -742,6 +782,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.correctMyZonesForStreet = function(zones){
 		var correctedZones = [];
 		for(var i = 0; i < zones.length; i++){
+			if(zones[i].selected){
 //			var correctZone = {
 //					id: zones[i].id,
 //					id_app: zones[i].id_app,
@@ -753,7 +794,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 //					geometry: $scope.correctMyGeometryPolygon(zones[i].geometry)
 //			};
 //			correctedZones.push(correctZone);
-			correctedZones.push(zones[i].id);
+				correctedZones.push(zones[i].id);
+			}
 		}
 		return correctedZones;
 	};
@@ -785,6 +827,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	$scope.initPMObjects = function(pmeters){
+		
+		$scope.allPmAreaFilter = sharedDataService.getSharedLocalAreas();
+		if($scope.allPmAreaFilter != null && $scope.allPmAreaFilter.length > 0 && $scope.allPmAreaFilter[0].id != ''){
+			$scope.allPmAreaFilter.splice(0,0,{id:'', name: "Tutte"});
+		}
+		$scope.pmAreaFilter = $scope.allPmAreaFilter[0].id;
+		
+		$scope.allPmStatusFilter = $scope.listaStati;
+		if($scope.allPmStatusFilter != null && $scope.allPmStatusFilter.length > 0 && $scope.allPmStatusFilter[0].idObj != ''){
+			$scope.allPmStatusFilter.splice(0, 0, {idObj:"", descrizione: "Tutti"});
+		}
+		$scope.pmStatusFilter = $scope.allPmStatusFilter[0].idObj;
+		
 		var myPms = [];
 		for(var i = 0; i < pmeters.length; i++){
 			var area = $scope.getLocalAreaById(pmeters[i].areaId);
@@ -822,10 +877,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		//	};
 		//};
 		
-		var toHide = $scope.vAreaMap.shapes;
-		toHide[area.id].setMap(null);
-		
-		if(area.geometry != null){
+		if(area.geometry != null && area.geometry[0].points.length > 0){
+			// Move this code in the if blok to preserve from the udefined map exception
+			var toHide = $scope.vAreaMap.shapes;
+			toHide[area.id].setMap(null);
+			
 			var tmpPol = "";
 			for(var i = 0; i < $scope.area.geometry[0].points.length; i++){
 				var tmpPoint = $scope.area.geometry[0].points[i].lat + "," + $scope.area.geometry[0].points[i].lng;
@@ -892,18 +948,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 		};
 		
-		//$scope.viewStreetLines = $scope.geoStreets;
-		//for(var i = 0; i < $scope.viewStreetLines.length; i++){
-		//	if($scope.viewStreetLines[i].id == street.id){
-		//		$scope.viewStreetLines.splice(i, 1);
-				//$scope.geoStreets[i].stroke.weight = 10;
-		//	};
-		//};
-		
-		var toHide = $scope.vStreetMap.shapes;
-		toHide[street.id].setMap(null);
-		
-		if(street.geometry != null){
+		if(street.geometry != null && street.geometry.points.length > 0){
+			var toHide = $scope.vStreetMap.shapes;
+			toHide[street.id].setMap(null);
+			
+			var tmpLine = "";
 			for(var i = 0; i < $scope.street.geometry.points.length; i++){
 				var tmpPoint = $scope.street.geometry.points[i].lat + "," + $scope.street.geometry.points[i].lng;
 				tmpLine = tmpLine + tmpPoint + ",";
@@ -1125,10 +1174,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		//	};
 		//};
 		
-		var toHide = $scope.vZoneMap.shapes;
-		toHide[zone.id].setMap(null);
-		
-		if($scope.zone.geometry != null){
+		if($scope.zone.geometry != null && $scope.zone.geometry.points.length > 0){
+			
+			var toHide = $scope.vZoneMap.shapes;
+			toHide[zone.id].setMap(null);
+			
 			$scope.myZonePol = {
 				id: zone.id,
 				path: $scope.correctPoints(zone.geometry.points),
@@ -1202,8 +1252,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		
 		// Case edit
 		if(area != null){
-			garea.visible = false;		// here I hide the polygon for creation
-			garea.setPath([]);			// and clear the path
+			if(area.geometry == null || area.geometry[0].points.length == 0){
+				garea.visible = true;					// here I show the polygon for creation
+				if($scope.editGArea != null){
+					$scope.editGArea.visible = false;	// and hide the edit polygon
+				}
+			} else {
+				garea.visible = false;		// here I hide the polygon for creation
+			}
+			garea.setPath([]);				// and clear the path
 			
 			$scope.isEditing = true;
 			$scope.isInit = false;
@@ -1213,7 +1270,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var areaCenter = $scope.mapCenter;
 			
 			$scope.myColor = $scope.correctColor(area.color);
-			if(area.geometry != null){
+			if(area.geometry != null && area.geometry[0].points.length > 0){
 				areaCenter = {
 					latitude: $scope.area.geometry[0].points[0].lat,
 					longitude: $scope.area.geometry[0].points[0].lng
@@ -1230,7 +1287,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			};
 			
-			if(area.geometry != null){
+			if(area.geometry != null && area.geometry[0].points.length > 0){
 				var tmpPol = "";
 				var poligons = {};
 				for(var i = 0; i < $scope.area.geometry[0].points.length; i++){
@@ -1351,6 +1408,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
 		$scope.allZones = sharedDataService.getSharedLocalZones();
 		$scope.setMyLineGeometry(null);
+		angular.copy($scope.allZones, $scope.myZones);
 		
 		$scope.street = {
 			id: null,
@@ -1395,19 +1453,29 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 			
-			for(var i = 0; i < street.myZones.length; i++){
-				var tmpZone = {
-					id: street.myZones[i].id,
-					id_app: street.myZones[i].id_app,
-					name: street.myZones[i].name,
-					color: street.myZones[i].color,
-					submacro: street.myZones[i].submacro,
-					type: street.myZones[i].type,
-					note: street.myZones[i].note,
-					geometry: street.myZones[i].geometry
-				};
-				$scope.myZones.push(tmpZone);
+			for(var j = 0; j < $scope.myZones.length; j++){
+				$scope.myZones[j].selected = false;
+				for(var i = 0; i < street.myZones.length; i++){
+					if($scope.myZones[j].id ==  street.myZones[i].id){
+						$scope.myZones[j].selected = true;
+					}
+				}
 			}
+			
+//			for(var i = 0; i < street.myZones.length; i++){
+//				var tmpZone = {
+//					id: street.myZones[i].id,
+//					id_app: street.myZones[i].id_app,
+//					name: street.myZones[i].name,
+//					color: street.myZones[i].color,
+//					submacro: street.myZones[i].submacro,
+//					type: street.myZones[i].type,
+//					note: street.myZones[i].note,
+//					geometry: street.myZones[i].geometry
+//				};
+//				$scope.myZones.push(tmpZone);
+//				
+//			}
 			//angular.copy(street.myZones, $scope.myZones);
 			
 			$scope.sEditMap = {
@@ -1420,7 +1488,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			};
 			
-			if(street.geometry != null){
+			if(street.geometry != null && street.geometry.points.length > 0){
 				var tmpLine = "";
 				var poligons = {};
 				for(var i = 0; i < $scope.street.geometry.points.length; i++){
@@ -1474,7 +1542,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 //					    }
 //					}
 				};
-			}	
+			} else {
+				// case of street with geografic object not created
+				poly.visible = true;					// here I show the polyline for creation
+				if($scope.editGStreet != null){
+					$scope.editGStreet.visible = false;	// and hide the edit polyline
+				}
+			}
 		} else {
 			poly.setPath([]);										// here I clear the old path
 			poly.visible = true;									// here I show the polyline for creation
@@ -1549,15 +1623,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		// Case create
 		$scope.isEditing = false;
 		$scope.isInit = true;
-		$scope.listaStati = [{
-				idObj: "ACTIVE",
-				descrizione: "Attivo"
-			},
-			{
-				idObj: "INACTIVE",
-				descrizione: "Disattivo"
-			}
-		];
 		
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
 		$scope.myArea = {};
@@ -1775,8 +1840,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		
 		// Case edit
 		if(zone != null){
-			gzone.setPath([]);										// here I clear the old path
-			gzone.visible = false;
+			
+			gzone.setPath([]);						// here I clear the old path
 			
 			$scope.isEditing = true;
 			$scope.isInit = false;
@@ -1785,11 +1850,17 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var zoneCenter = $scope.mapCenter;
 			
 			$scope.myColor = $scope.correctColor(zone.color);
-			if(zone.geometry != null){
+			if(zone.geometry != null && zone.geometry.points.length > 0){
 				zoneCenter = {
 					latitude: $scope.zone.geometry.points[0].lat,
 					longitude: $scope.zone.geometry.points[0].lng
 				};
+				gzone.visible = false;
+			} else {
+				gzone.visible = true;					// here I show the creation polygon
+				if($scope.editGZone != null){			
+					$scope.editGZone.visible = false;	// and hide the edit polygon
+				}
 			}
 			
 			$scope.zEditMap = {
@@ -1802,7 +1873,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			};
 			
-			if(zone.geometry != null){
+			if(zone.geometry != null && zone.geometry.points.length > 0){
 				var tmpPol = "";
 				var poligons = {};
 				for(var i = 0; i < $scope.zone.geometry.points.length; i++){
@@ -2029,10 +2100,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			var editCorrectedPath = [];
 			var updatedPath = $scope.map.shapes.editAPolygon.getPath();
-			for(var i = 0; i < updatedPath.length; i++){
-				var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
-				editCorrectedPath.push(point);
-			};
+			if(updatedPath != null && updatedPath.length > 0){
+				for(var i = 0; i < updatedPath.length; i++){
+					var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
+					editCorrectedPath.push(point);
+				}
+			} else {
+				// Case of creating geografic object in area editing
+				var createdPath = garea.getPath();
+				for(var i = 0; i < createdPath.length; i++){
+					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+					editCorrectedPath.push(point);
+				}
+			}
 			
 			var id = $scope.area.id;
 			var method = 'PUT';
@@ -2080,10 +2160,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			var editCorrectedPath = [];
 			var updatedPath = $scope.map.shapes.editPolyline.getPath();
+			if(updatedPath != null && updatedPath.length > 0){
 			for(var i = 0; i < updatedPath.length; i++){
 				var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
 				editCorrectedPath.push(point);
-			};
+			}
+			} else {
+				var createdPath = poly.getPath();
+				for(var i = 0; i < createdPath.length; i++){
+					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+					editCorrectedPath.push(point);
+				}
+			}
 			
 			var id = $scope.street.id;
 			var method = 'PUT';
@@ -2234,10 +2322,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			var editCorrectedPath = [];
 			var updatedPath = $scope.map.shapes.editZPolygon.getPath();
-			for(var i = 0; i < updatedPath.length; i++){
-				var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
-				editCorrectedPath.push(point);
-			};
+			if(updatedPath != null && updatedPath.length > 0){
+				for(var i = 0; i < updatedPath.length; i++){
+					var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
+					editCorrectedPath.push(point);
+				}
+			} else {
+				var createdPath = gzone.getPath();
+				for(var i = 0; i < createdPath.length; i++){
+					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+					editCorrectedPath.push(point);
+				}
+			}
 			
 			var id = $scope.zone.id;
 			var method = 'PUT';
@@ -2979,7 +3075,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		
 		for(var i = 0; i < areas.length; i++){
-			if(areas[i].geometry != null){
+			if(areas[i].geometry != null && areas[i].geometry[0].points.length > 0){
 				poligons = areas[i].geometry;
 				area = {
 					id: areas[i].id,
@@ -3023,8 +3119,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.geoStreets = [];
 		}
 		
+		$scope.allAreaFilter = sharedDataService.getSharedLocalAreas();
+		if($scope.allAreaFilter != null && $scope.allAreaFilter.length > 0 && $scope.allAreaFilter[0].id != ''){
+			$scope.allAreaFilter.splice(0,0,{id:'', name: "Tutte"});
+		}
+		$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
+		
 		for(var i = 0; i < streets.length; i++){
-			if(streets[i].geometry != null){
+			if(streets[i].geometry != null && streets[i].geometry.points.length > 0){
 				poligons = streets[i].geometry;
 				var myAreaS = $scope.getLocalAreaById(streets[i].rateAreaId);
 				var myZones = [];
@@ -3074,7 +3176,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		
 		for(var i = 0; i < zones.length; i++){
-			if(zones[i].geometry != null){
+			if(zones[i].geometry != null && zones[i].geometry.points.length > 0){
 				poligons = zones[i].geometry;
 				zone = {
 					id: zones[i].id,

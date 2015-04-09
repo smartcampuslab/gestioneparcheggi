@@ -144,11 +144,19 @@
 						<tr ng-show="streetWS.length != 0">
 							<th width="35%">{{ 'street_name' | i18n }}</th>
 							<th width="15%">{{ 'street_slots' | i18n }}</th>
-							<th width="30%" colspan="2">{{ 'street_area_name' | i18n }}</th>
+							<th width="30%" colspan="2">
+								{{ 'street_area_name' | i18n }}&nbsp;
+								<a href ng-click="showAreaFilter()" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+								<a href ng-click="hideAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+								<div ng-show="showAreaStreetFilter">
+									<select id="f_street_area" class="form-control" ng-model="streetAreaFilter" ng-options="a.id as a.name for a in allAreaFilter">
+					    			</select>
+					    		</div>	
+					    	</th>
 							<th width="20%">{{ 'operations' | i18n }}</th>
 						</tr>
 						<tbody class="animate-repeat"
-							ng-repeat="street in streetWS | filter:q | orderBy:'name' | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+							ng-repeat="street in filtered = (streetWS | filter:q | filter:streetAreaFilter) | orderBy:['name', 'area_name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
 				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 							<tr>
 								<td width="35%" align="left">{{street.streetReference}}</td>
@@ -169,9 +177,9 @@
 					<button class="btn btn-success"
 						ng-disabled="currentPage == 0"
 						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-						{{currentPage+1}}/{{numberOfPages(2)}}
+						{{currentPage+1}}/{{numberOfPages(2, filtered)}}
 					<button class="btn btn-success"
-						ng-disabled="currentPage >= streetWS.length/maxStreets - 1"
+						ng-disabled="currentPage >= filtered.length/maxStreets - 1"
 						ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 				</div>
 			</div>
@@ -337,10 +345,23 @@
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 					</div>
 					<div class="form-group" ng-show="s_zones.visible" >
-				    	<label for="zone">{{ 'street_zone' | i18n }}</label>
-<!-- 				    	<div ng-dropdown-multiselect="" options="allZones" selected-model="myZones" extra-settings="multiSelSettings"></div> -->
-				    	<select id="zone" multiple ng-multiple="true" name="sZone" class="form-control" ng-options="z.name + '-' + z.submacro for z in allZones" ng-model="myZones" ng-required="s_zones.required">
-				    	</select>
+				    	<label for="dropdownZ1">{{ 'street_zone' | i18n }}</label>
+<!-- 				    	<select id="zone" multiple ng-multiple="true" name="sZone" class="form-control" ng-options="z.name + '-' + z.submacro for z in allZones" ng-model="myZones" ng-required="s_zones.required"> -->
+<!-- 				    	</select> -->
+				    	<script type="text/javascript">
+							$('ul.dropdown-menu, .dropdown-menu input, .dropdown-menu label').click(function(e) {
+							e.stopPropagation();
+							});
+						</script>
+						<div class="dropdown">
+							<button class="btn btn-default dropdown-toggle" type="button" id="dropdownZ1" data-toggle="dropdown" aria-expanded="true">
+							Seleziona Zone
+							<span class="caret"></span>
+	 						</button>
+					    	<ul class="dropdown-menu scrollable-menu" role="menu" aria-labelledby="dropdownZ1">
+					    		<li ng-repeat="z in myZones"><input type="checkbox" id="{{ z.id }}" name="zones" ng-model=z.selected value="{{ z.id }}" /><span> - </span><label for="{{ z.id }}">{{ z.name }} {{ z.submacro }}</label></li>
+					    	</ul>
+				    	</div>
 				    	<div class="alert alert-danger" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>
 					</div>
 <!-- 					<div class="form-group" ng-show="isEditing"> -->
