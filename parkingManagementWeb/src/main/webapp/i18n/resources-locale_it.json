@@ -659,6 +659,10 @@
     "value": "servizio telepark - cod.area",
     "description": "Campo codice sms telepark area"
 }, {
+    "key": "area_note",
+    "value": "note",
+    "description": "Campo note area"
+}, {
     "key": "area_name_err_required",
     "value": "Campo 'nome Area' obbligatorio",
     "description": "Errore Campo nome area obbligatorio"
@@ -682,6 +686,10 @@
     "key": "area_smscode_err_required",
     "value": "Campo 'codice telepark' area obbligatorio",
     "description": "Errore Campo sms code area obbligatorio"
+}, {
+    "key": "area_note_err_required",
+    "value": "Campo 'note' area obbligatorio",
+    "description": "Errore Campo note area obbligatorio"
 }, {
     "key": "area_color_err_required",
     "value": "Campo 'colore' area obbligatorio",
@@ -722,6 +730,10 @@
     "key": "area_sms_placeholder",
     "value": "Inserire il codice del serivzio telepark",
     "description": "Testo placeholder campo telepark area"
+}, {
+    "key": "area_note_placeholder",
+    "value": "Inserire eventuali note",
+    "description": "Testo placeholder campo note area"
 }, {
     "key": "area_color_placeholder",
     "value": "Scegliere il colore dell'area",

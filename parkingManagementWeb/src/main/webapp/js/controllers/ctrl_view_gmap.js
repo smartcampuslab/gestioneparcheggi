@@ -343,9 +343,11 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			points: null,
 		};
 		var points = [];
-		for(var i = 0; i < geo.points.length; i++){
-			var tmpPoint = geo.points[i];
-			points.push(tmpPoint);
+		if(geo != null && geo.length > 0){
+			for(var i = 0; i < geo.points.length; i++){
+				var tmpPoint = geo.points[i];
+				points.push(tmpPoint);
+			}
 		}
 		
 		tmpPolygon.points = points;
@@ -668,7 +670,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		
 		if(areas != null){
 			for(var i = 0; i < areas.length; i++){
-				if(areas[i].geometry != null){
+				if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0 ){
 					poligons = areas[i].geometry;
 					area = {
 						id: areas[i].id,
@@ -743,7 +745,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var tmpZones = [];
 		
 		for(var i = 0; i < zones.length; i++){
-			if(zones[i].geometry != null){
+			if(zones[i].geometry != null && zones[i].geometry.length > 0 && zones[i].geometry.points > 0){
 				poligons = zones[i].geometry;
 				zone = {
 					id: zones[i].id,

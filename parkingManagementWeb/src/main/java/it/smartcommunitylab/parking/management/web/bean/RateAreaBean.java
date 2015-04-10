@@ -12,6 +12,7 @@ public class RateAreaBean implements Serializable {
 	private String timeSlot;
 	private String smsCode;
 	private String color;
+	private String note;
 	private List<PolygonBean> geometry;
 
 	public String getId() {
@@ -76,6 +77,14 @@ public class RateAreaBean implements Serializable {
 
 	public void setGeometry(List<PolygonBean> geometry) {
 		this.geometry = geometry;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 }

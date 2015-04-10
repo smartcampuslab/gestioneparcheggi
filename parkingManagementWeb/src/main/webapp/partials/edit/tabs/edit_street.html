@@ -359,7 +359,7 @@
 							<span class="caret"></span>
 	 						</button>
 					    	<ul class="dropdown-menu scrollable-menu" role="menu" aria-labelledby="dropdownZ1">
-					    		<li ng-repeat="z in myZones"><input type="checkbox" id="{{ z.id }}" name="zones" ng-model=z.selected value="{{ z.id }}" /><span> - </span><label for="{{ z.id }}">{{ z.name }} {{ z.submacro }}</label></li>
+					    		<li ng-repeat="z in myZones | orderBy:['name', 'submacro']"><input type="checkbox" id="{{ z.id }}" name="zones" ng-model=z.selected value="{{ z.id }}" /><span> - </span><label for="{{ z.id }}">{{ z.name }} {{ z.submacro }}</label></li>
 					    	</ul>
 				    	</div>
 				    	<div class="alert alert-danger" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>

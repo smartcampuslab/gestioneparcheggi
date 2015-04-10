@@ -27,6 +27,10 @@
 										<td width="45%"><strong>{{ 'area_sms' | i18n }}:</strong></td>
 										<td width="55%">{{ a.data.smsCode }}</td>
 									</tr>
+									<tr ng-show="a_note.visible">	
+										<td><strong>{{ 'area_note' | i18n }}:</strong></td>
+										<td>{{ a.data.note }}</td>
+									</tr>
 									<tr ng-show="a_color.visible">	
 										<td width="45%"><strong>{{ 'area_color' | i18n }}</strong></td>
 										<td width="55%"><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
@@ -56,6 +60,10 @@
 									<tr ng-show="a_smsCode.visible">	
 										<td width="45%"><strong>{{ 'area_sms' | i18n }}:</strong></td>
 										<td width="55%">{{ a.data.smsCode }}</td>
+									</tr>
+									<tr ng-show="a_note.visible">	
+										<td><strong>{{ 'area_note' | i18n }}:</strong></td>
+										<td>{{ a.data.note }}</td>
 									</tr>
 									<tr ng-show="a_color.visible">	
 										<td width="45%"><strong>{{ 'area_color' | i18n }}</strong></td>
@@ -141,6 +149,10 @@
 							<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 							<td>{{ area.smsCode }}</td>
 						</tr>
+						<tr ng-show="a_note.visible">	
+							<td><strong>{{ 'area_note' | i18n }}:</strong></td>
+							<td>{{ area.note }}</td>
+						</tr>
 						<tr ng-show="a_color.visible">	
 							<td><strong>{{ 'area_color' | i18n }}</strong></td>
 							<td><span class="colorBox" ng-style="{'background-color': correctColor(area.color)}"></span></td>
@@ -210,6 +222,11 @@
 				    	<label for="sms">{{ 'area_sms' | i18n }}</label>
 				    	<input id="sms" type="text" class="form-control" name="aSms" ng-model="area.smsCode" ng-required="a_smsCode.required"  placeholder="{{ 'area_sms_placeholder' | i18n }}" >
 				   		<div class="alert alert-danger" ng-show="!isInit && form.aSms.$error.required">{{ 'area_smscode_err_required' | i18n }}</div>
+				   	</div>
+				   	<div class="form-group" ng-show="a_note.visible">
+				    	<label for="note">{{ 'area_note' | i18n }}</label>
+				    	<input id="note" type="text" class="form-control" name="aNote" ng-model="area.note" ng-required="a_note.required"  placeholder="{{ 'area_note_placeholder' | i18n }}" >
+				   		<div class="alert alert-danger" ng-show="!isInit && form.aNote.$error.required">{{ 'area_note_err_required' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group" ng-show="a_color.visible">
 				    	<label for="color">{{ 'area_color' | i18n }}</label>

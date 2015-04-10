@@ -32,7 +32,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.datePattern2=/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/i;
     $scope.datePattern3=/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/i;
     $scope.timePattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
-    $scope.periodPattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d) - (?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
+    $scope.periodPattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d) - (?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)?([\s])?([\/])?([\s])?(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)?([\s])?([-])?([\s])?(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
     $scope.phonePattern=/^[(]{0,1}[0-9]{3}[)\.\- ]{0,1}[0-9]{3}[\.\- ]{0,1}[0-9]{4}$/;
 
     // ------------------ Start datetimepicker section -----------------------
@@ -156,6 +156,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     		if(attributes[i].code == 'smsCode'){
     			$scope.a_smsCode = attributes[i];
+    		}
+    		if(attributes[i].code == 'note'){
+    			$scope.a_note = attributes[i];
     		}
     		if(attributes[i].code == 'color'){
     			$scope.a_color = attributes[i];
@@ -669,9 +672,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			points: null,
 		};
 		var points = [];
-		for(var i = 0; i < geo.points.length; i++){
-			var tmpPoint = geo.points[i];
-			points.push(tmpPoint);
+		if(geo != null && geo.length > 0){
+			for(var i = 0; i < geo.points.length; i++){
+				var tmpPoint = geo.points[i];
+				points.push(tmpPoint);
+			}
 		}
 		
 		tmpPolygon.points = points;
@@ -877,7 +882,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		//	};
 		//};
 		
-		if(area.geometry != null && area.geometry[0].points.length > 0){
+		if(area.geometry != null && area.geometry.length > 0 && area.geometry[0].points.length > 0){
 			// Move this code in the if blok to preserve from the udefined map exception
 			var toHide = $scope.vAreaMap.shapes;
 			toHide[area.id].setMap(null);
@@ -1004,7 +1009,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.setPmDetails = function(parkingMeter){
 		//------ To be configured in external conf file!!!!!------
 		var company = "amr";
-		var baseUrl = "http://localhost:8080/parking-management";
+		var baseUrl = "http://localhost:8080/parking-management/rest";
 		var defaultMarkerColor = "FF0000";
 		//--------------------------------------------------------
 		$scope.pmViewMapReady = false;
@@ -1252,7 +1257,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		
 		// Case edit
 		if(area != null){
-			if(area.geometry == null || area.geometry[0].points.length == 0){
+			if(area.geometry == null || area.geometry.length == 0 || area.geometry[0].points.length == 0){
 				garea.visible = true;					// here I show the polygon for creation
 				if($scope.editGArea != null){
 					$scope.editGArea.visible = false;	// and hide the edit polygon
@@ -1270,7 +1275,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var areaCenter = $scope.mapCenter;
 			
 			$scope.myColor = $scope.correctColor(area.color);
-			if(area.geometry != null && area.geometry[0].points.length > 0){
+			if(area.geometry != null && area.geometry.length > 0 && area.geometry[0].points.length > 0){
 				areaCenter = {
 					latitude: $scope.area.geometry[0].points[0].lat,
 					longitude: $scope.area.geometry[0].points[0].lng
@@ -1287,7 +1292,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			};
 			
-			if(area.geometry != null && area.geometry[0].points.length > 0){
+			if(area.geometry != null && area.geometry.length > 0 && area.geometry[0].points.length > 0){
 				var tmpPol = "";
 				var poligons = {};
 				for(var i = 0; i < $scope.area.geometry[0].points.length; i++){
@@ -2128,6 +2133,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				timeSlot: a.timeSlot,
 				smsCode: a.smsCode,
 				color: color.substring(1, color.length),
+				note: a.note,
 				geometry: $scope.correctMyGeometryPolygonForArea(editCorrectedPath)
 				//geometry: $scope.correctMyGeometryPolygonForArea(polygon.path)
 			};
@@ -2579,6 +2585,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				timeSlot: a.timeSlot,
 				smsCode: a.smsCode,
 				color: myColor.substring(1, myColor.length),	// I have to remove '#' char
+				note: a.note,
 				geometry: $scope.correctMyGeometryPolygonForArea(newCorrectedPath)
 				//geometry: $scope.correctMyGeometryPolygonForArea(polygon.path)
 			};
@@ -3075,7 +3082,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		
 		for(var i = 0; i < areas.length; i++){
-			if(areas[i].geometry != null && areas[i].geometry[0].points.length > 0){
+			if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
 				poligons = areas[i].geometry;
 				area = {
 					id: areas[i].id,

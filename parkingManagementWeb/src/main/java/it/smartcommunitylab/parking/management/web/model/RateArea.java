@@ -12,6 +12,7 @@ public class RateArea {
 	private String timeSlot;
 	private String smsCode;
 	private String color;
+	private String note;
 	private List<Polygon> geometry;
 
 	private List<Street> streets;
@@ -63,6 +64,14 @@ public class RateArea {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public String getNote() {
+		return note;
+	}
+
+	public void setNote(String note) {
+		this.note = note;
 	}
 
 	public List<Street> getStreets() {

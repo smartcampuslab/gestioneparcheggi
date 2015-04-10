@@ -24,13 +24,17 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true          
         - code: color
           editable: true
           required: true
           visible: true
         - code: geometry
           editable: true
-          required: true
+          required: false
           visible: false
      - id: Street
        attributes:
@@ -68,7 +72,7 @@ providers:
           visible: true
         - code: geometry
           editable: true
-          required: true
+          required: false
           visible: false
         - code: zones
           editable: true
@@ -166,7 +170,7 @@ providers:
           visible: true
         - code: geometry
           editable: true
-          required: true
+          required: false
           visible: false       
      - id: Bp
        attributes:
@@ -211,6 +215,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true  
         - code: color
           editable: true
           required: true
