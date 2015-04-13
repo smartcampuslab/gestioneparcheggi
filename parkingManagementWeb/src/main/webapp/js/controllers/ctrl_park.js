@@ -101,8 +101,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
     
     $scope.hidePmStatusFilter = function(){
-    	$scope.pmStatusFilter = '';
+    	//$scope.pmStatusFilter = '';
     	$scope.showStatusPmFilter = false;
+    };
+    
+    $scope.checkStatusClass = function(status){
+    	if(status == 'ACTIVE'){
+    		return "success";
+    	} else {
+    		return "danger";
+    	}
     };
     
     $scope.initComponents = function(){
@@ -303,27 +311,31 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     //    { title:'Zona', index: 5, content:"partials/edit/tabs/edit_zone.html" }
     //];
            
-    $scope.setIndex = function($index){
+    $scope.setIndex = function($index, tab){
        	$scope.tabIndex = $index;
-       	if($index == 0){
+       	if(tab.index == 1){
        		$scope.getAreasFromDb();
        	}
-       	if($index == 1){
+       	if(tab.index == 2){
        		var zones = sharedDataService.getSharedLocalZones;
        		if(zones == null || zones.length == 0){
        			$scope.getZonesFromDb();
        		}
+       		var pms = sharedDataService.getSharedLocalPms;
+       		if(pms == null || pms.length == 0){
+       			$scope.getParkingMetersFromDb();
+       		}
        		$scope.getStreetsFromDb();
        	}
-       	if($index == 2){
+       	if(tab.index == 3){
        		//$scope.resizeMap();
        		$scope.getParkingMetersFromDb();
        	}
-       	if($index == 3){
+       	if(tab.index == 4){
        		//$scope.resizeMap();
        		$scope.getParkingStructuresFromDb();
        	}
-       	if($index == 4){
+       	if(tab.index == 5){
        		//$scope.resizeMap();
        		$scope.getZonesFromDb();
        	}
@@ -331,11 +343,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     $scope.listaStati = [{
 			idObj: "ACTIVE",
-			descrizione: "Attivo"
+			descrizione: "Attivo",
+			filter: "ON-ACTIVE"
 		},
 		{
 			idObj: "INACTIVE",
-			descrizione: "Disattivo"
+			descrizione: "Disattivo",
+			filter: "OFF-INACTIVE"
 		}
 	];
     
@@ -496,6 +510,17 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	$scope.getLocalPmByCode = function(code){
+		var find = false;
+		var myPms = sharedDataService.getSharedLocalPms();
+		for(var i = 0; i < myPms.length && !find; i++){
+			if(myPms[i].code == code){
+				find = true;
+				return myPms[i];
+			}
+		}
+	};
+	
 	$scope.getStreetsFromDb = function(){
 		$scope.streetMapReady = false;
 		var allStreet = [];
@@ -533,6 +558,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    }
 	    	
 	    	$scope.pmeterWS = $scope.initPMObjects(allPmeters);
+	    	sharedDataService.setSharedLocalPms($scope.pmeterWS);
 	    	if(showPm)$scope.resizeMap("viewPm");
 	    	$scope.initPMeterMap(markers);
 	    	$scope.pmMapReady = true;
@@ -672,7 +698,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			points: null,
 		};
 		var points = [];
-		if(geo != null && geo.length > 0){
+		if(geo != null && geo.points != null && geo.points.length > 0){
 			for(var i = 0; i < geo.points.length; i++){
 				var tmpPoint = geo.points[i];
 				points.push(tmpPoint);
@@ -805,6 +831,27 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return correctedZones;
 	};
 	
+	$scope.correctMyPmsForStreet = function(pms){
+		var correctedPms = [];
+		for(var i = 0; i < pms.length; i++){
+			if(pms[i].selected){
+//			var correctZone = {
+//					id: zones[i].id,
+//					id_app: zones[i].id_app,
+//					color: zones[i].color,
+//					name: zones[i].name,
+//					submacro: zones[i].submacro,
+//					type: zones[i].type,
+//					note: zones[i].note,
+//					geometry: $scope.correctMyGeometryPolygon(zones[i].geometry)
+//			};
+//			correctedZones.push(correctZone);
+				correctedPms.push(pms[i].code);
+			}
+		}
+		return correctedPms;
+	};
+	
 //	$scope.setMyArea = function(area){
 //		$scope.myNewArea = area;
 //	};
@@ -821,11 +868,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var zone = $scope.getLocalZoneById(streets[i].zones[j]);
 				zones.push(zone);
 			}
+			var pms = [];
+			if(streets[i].parkingMeters != null){
+				for(var x = 0; x < streets[i].parkingMeters.length; x++){
+					var pm = $scope.getLocalPmByCode();
+					pms.push(pm);
+				}
+			}
 			var area = $scope.getLocalAreaById(streets[i].rateAreaId);
 			var mystreet = streets[i];
 			mystreet.area_name = area.name;
 			mystreet.area_color= area.color;
 			mystreet.myZones = zones;
+			mystreet.myPms = pms;
 			myStreets.push(mystreet);
 		}
 		return myStreets;
@@ -843,12 +898,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if($scope.allPmStatusFilter != null && $scope.allPmStatusFilter.length > 0 && $scope.allPmStatusFilter[0].idObj != ''){
 			$scope.allPmStatusFilter.splice(0, 0, {idObj:"", descrizione: "Tutti"});
 		}
-		$scope.pmStatusFilter = $scope.allPmStatusFilter[0].idObj;
+		$scope.pmStatusFilter = $scope.allPmStatusFilter[0].filter;
 		
 		var myPms = [];
 		for(var i = 0; i < pmeters.length; i++){
 			var area = $scope.getLocalAreaById(pmeters[i].areaId);
 			var myPmeter = pmeters[i];
+			myPmeter.myStatus = (pmeters[i].status == 'ACTIVE')?"ON-ACTIVE":"OFF-INACTIVE";
 			myPmeter.area_name = area.name,
 			myPmeter.area_color= area.color;
 			myPms.push(myPmeter);
@@ -1008,8 +1064,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	// ParkingMeters
 	$scope.setPmDetails = function(parkingMeter){
 		//------ To be configured in external conf file!!!!!------
-		var company = "amr";
-		var baseUrl = "http://localhost:8080/parking-management/rest";
+		var company = "";
+		var appId = sharedDataService.getConfAppId();
+		if(appId == 'rv'){ 
+			company = "amr";
+		} else {
+			company = "tm";
+		}
+		//var baseUrl = "http://localhost:8080/parking-management/rest";
+		//var baseUrl = sharedDataService.getConfUrlWs();
+		var baseUrl = "rest";
 		var defaultMarkerColor = "FF0000";
 		//--------------------------------------------------------
 		$scope.pmViewMapReady = false;
@@ -1400,6 +1464,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.editModeA = true;
 	};
 	
+	$scope.getPmsFromArea = function(list, area){
+		var myPmsInArea = [];
+		for(var i = 0; i < list.length; i++){
+			if(list[i].areaId == area.id){
+				myPmsInArea.push(list[i]);
+			}
+		}
+		return myPmsInArea;
+	};
+	
 	// Streets
 	$scope.setSEdit = function(street){
 		// Case create
@@ -1407,11 +1481,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.isInit = true;
 		
 		$scope.myZones = [];
+		$scope.myPms = [];
 		$scope.myArea = null;
 		$scope.myNewArea = null;
 		
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
 		$scope.allZones = sharedDataService.getSharedLocalZones();
+		$scope.allPms = sharedDataService.getSharedLocalPms();
 		$scope.setMyLineGeometry(null);
 		angular.copy($scope.allZones, $scope.myZones);
 		
@@ -1427,6 +1503,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			color: null,
 			rateAreaId: null,
 			zones: null,
+			parkingMeters: null,
 			geometry: null
 		};
 		
@@ -1463,6 +1540,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				for(var i = 0; i < street.myZones.length; i++){
 					if($scope.myZones[j].id ==  street.myZones[i].id){
 						$scope.myZones[j].selected = true;
+					}
+				}
+			}
+			
+			// I show only the pms in the same area of the street
+			$scope.myPms = $scope.getPmsFromArea($scope.allPms, $scope.myArea);
+			
+			for(var j = 0; j < $scope.myPms.length; j++){
+				$scope.myPms[j].selected = false;
+				for(var i = 0; i < street.myPms.length; i++){
+					if($scope.myPms[j].code ==  street.myPms[i].code){
+						$scope.myPms[j].selected = true;
 					}
 				}
 			}
@@ -2157,7 +2246,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// Street
-	$scope.updateStreet = function(form, area, zones){
+	$scope.updateStreet = function(form, area, zones, pms){
 		if(!form.$valid){
 			$scope.isInit=false;
 		} else {
@@ -2197,6 +2286,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				color: area.color,
 				rateAreaId: area.id,
 				zones: $scope.correctMyZonesForStreet(zones),
+				parkingMeters: $scope.correctMyPmsForStreet(pms),
 				geometry: $scope.correctMyGeometryPolyline(editCorrectedPath)
 				//geometry: $scope.correctMyGeometryPolyline(polyline.path)
 			};
@@ -2610,7 +2700,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	
 	// Street
-	$scope.createStreet = function(form, area, zones){
+	$scope.createStreet = function(form, area, zones, pms){
 		if(!form.$valid){
 			$scope.isInit=false;
 		} else {
@@ -2640,6 +2730,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				color: area.color,
 				rateAreaId: area.id,
 				zones: $scope.correctMyZonesForStreet(zones),
+				parkingMeters: $scope.correctMyPmsForStreet(pms),
 				geometry: $scope.correctMyGeometryPolyline(newCorrectedPath)
 				//geometry: $scope.correctMyGeometryPolyline(polyline.path)
 			};
@@ -3316,8 +3407,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	var createMarkers = function(i, marker, type) {
 		//------ To be configured in external conf file!!!!!------
-		var company = "amr";
-		var baseUrl = "http://localhost:8080/parking-management/rest";
+		var company = "";
+		var appId = sharedDataService.getConfAppId();
+		if(appId == 'rv'){ 
+			company = "amr";
+		} else {
+			company = "tm";
+		}
+		//var baseUrl = "http://localhost:8080/parking-management/rest";
+		//var baseUrl = sharedDataService.getConfUrlWs();
+		var baseUrl = "rest";
 		var defaultMarkerColor = "FF0000";
 		//--------------------------------------------------------
 		var myIcon = "";

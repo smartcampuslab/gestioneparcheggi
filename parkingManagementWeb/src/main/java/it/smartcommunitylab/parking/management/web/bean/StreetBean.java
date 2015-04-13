@@ -27,6 +27,7 @@ public class StreetBean {
 	private String color;
 	//private List<ZoneBean> zones;	//List with the id of the associated zone
 	private List<String> zones;	//List with the id of the associated zone
+	private List<String> parkingmeters;	//List with the id of the associated pms (optional)
 	private Long lastChange;
 
 	public String getId() {
@@ -148,6 +149,10 @@ public class StreetBean {
 		return zones;
 	}
 
+	public List<String> getParkingmeters() {
+		return parkingmeters;
+	}
+
 	public Long getLastChange() {
 		return lastChange;
 	}
@@ -192,10 +197,13 @@ public class StreetBean {
 		this.zones = zones;
 	}
 
+	public void setParkingmeters(List<String> parkingmeters) {
+		this.parkingmeters = parkingmeters;
+	}
+
 	public void setLastChange(Long lastChange) {
 		this.lastChange = lastChange;
 	}
-	
 	
 	public Integer getUnusuableSlotNumber() {
 		return unusuableSlotNumber;
@@ -240,8 +248,8 @@ public class StreetBean {
 				+ ", unusuableSlotNumber=" + unusuableSlotNumber
 				+ ", subscritionAllowedPark=" + subscritionAllowedPark
 				+ ", rateAreaId=" + rateAreaId + ", geometry=" + geometry
-				+ ", color=" + color + ", zones=" + zones + ", lastChange="
-				+ lastChange + "]";
+				+ ", color=" + color + ", zones=" + zones + ", parkingmeters="
+				+ parkingmeters + ", lastChange=" + lastChange + "]";
 	}
 	
 	public String toJSON(){
@@ -265,7 +273,8 @@ public class StreetBean {
 		json += "\"subscritionAllowedPark\":\"" + isSubscritionAllowedPark() + "\",";
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";
-		json += "\"zones\":\"" + getZones() + "\"";
+		json += "\"zones\":\"" + getZones() + "\",";
+		json += "\"parkingmeters\":\"" + getParkingmeters() + "\"";
 		json += "}";
 		return json;
 	}

@@ -343,7 +343,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			points: null,
 		};
 		var points = [];
-		if(geo != null && geo.length > 0){
+		if(geo != null && geo.points != null && geo.points.length > 0){
 			for(var i = 0; i < geo.points.length; i++){
 				var tmpPoint = geo.points[i];
 				points.push(tmpPoint);
@@ -606,8 +606,16 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	
 	var createMarkers = function(i, marker, type) {
 		//------ To be configured in external conf file!!!!!------
-		var company = "amr";
-		var baseUrl = "http://localhost:8080/parking-management/rest/nosec/";
+		var company = "";
+		var appId = sharedDataService.getConfAppId();
+		if(appId == 'rv'){ 
+			company = "amr";
+		} else {
+			company = "tm";
+		}
+		//var baseUrl = "http://localhost:8080/parking-management/rest/nosec/";
+		//var baseUrl = sharedDataService.getConfUrlWs() + "/nosec/";
+		var baseUrl = "rest/nosec";
 		var defaultMarkerColor = "FF0000";
 		//--------------------------------------------------------
 		
@@ -745,7 +753,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var tmpZones = [];
 		
 		for(var i = 0; i < zones.length; i++){
-			if(zones[i].geometry != null && zones[i].geometry.length > 0 && zones[i].geometry.points > 0){
+			if(zones[i].geometry != null && zones[i].geometry.points != null && zones[i].geometry.points.length > 0){
 				poligons = zones[i].geometry;
 				zone = {
 					id: zones[i].id,

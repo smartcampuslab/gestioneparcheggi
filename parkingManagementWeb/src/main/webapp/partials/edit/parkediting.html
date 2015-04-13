@@ -4,7 +4,7 @@
 	</div>
 	<div class="panel-body" ng-controller="ParkCtrl" ng-init="initComponents()">
 		<tabset ><!-- ng-show="!isLoading" -->
-			<tab  ng-repeat="tab in editparktabs" heading="{{ tab.title }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index)">
+			<tab  ng-repeat="tab in editparktabs" heading="{{ tab.title }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index, tab)">
 				<br>
 				<div ng-include="tab.content"></div>
 			</tab>

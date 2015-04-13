@@ -175,15 +175,15 @@
 							        			<td><strong>Sosta con abbonamento:</strong></td>
 							        			<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
 							        		</tr>
-							        		<tr>	
-												<td>
-													<strong>Area:</strong>
-												</td>
-												<td>	 
-													{{ s.area.name }} 
-													<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span>
-												</td>
-											</tr>
+<!-- 							        		<tr>	 -->
+<!-- 												<td> -->
+<!-- 													<strong>Area:</strong> -->
+<!-- 												</td> -->
+<!-- 												<td>	  -->
+<!-- 													{{ s.area.name }}  -->
+<!-- 													<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span> -->
+<!-- 												</td> -->
+<!-- 											</tr> -->
 											<tr>	
 												<td>
 													<strong>Zona:</strong>
@@ -197,6 +197,37 @@
 													</table>
 												</td>
 											</tr>
+											<tr>
+									        	<td colspan="2">
+									        		<strong>Area:</strong>
+									        		<div class="panel panel-default">
+														<div class="panel-body">
+															<table width="100%">
+																<tr>
+																	<td width="45%"><strong>Nome:</strong></td>
+																	<td width="55%">{{ s.area.name }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Tariffa:</strong></td>
+																	<td>{{ s.area.fee }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Orario:</strong></td>
+																	<td>{{ s.area.timeSlot }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Codice Telepark:</strong></td>
+																	<td>{{ s.area.smsCode }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>Colore:</strong></td>
+																	<td><span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span></td>
+																</tr>
+															</table>
+														</div>
+													</div>	
+									        	</td>
+									        </tr>
 							        	</table>
 							        </div>
 						        </div>

@@ -12,6 +12,7 @@ pm.service('sharedDataService', function(){
 	
 	// Shared field app conf
 	this.conf_app_id;
+	this.conf_url_ws;
 	this.conf_map_zoom;
 	this.conf_map_center;
 	this.conf_visible_obj_list = [];
@@ -24,6 +25,7 @@ pm.service('sharedDataService', function(){
 	
 	this.sharedLocalAreas = [];
 	this.sharedLocalZones = [];
+	this.sharedLocalPms = [];
 	
 	this.allFamilyUpdated = false;
 	this.isTest = false;
@@ -190,6 +192,14 @@ pm.service('sharedDataService', function(){
 		this.conf_app_id = value;
 	};
 	
+	this.getConfUrlWs = function(){
+		return this.conf_url_ws;
+	};
+	
+	this.setConfUrlWs = function(value){
+		this.conf_url_ws = value;
+	};
+	
 	this.getConfMapZoom = function(){
 		return this.conf_map_zoom;
 	};
@@ -277,6 +287,14 @@ pm.service('sharedDataService', function(){
 	
 	this.setSharedLocalZones = function(list){
 		this.sharedLocalZones = list;
+	};
+	
+	this.getSharedLocalPms = function(){
+		return this.sharedLocalPms;
+	};
+	
+	this.setSharedLocalPms = function(list){
+		this.sharedLocalPms = list;
 	};
 	
 	

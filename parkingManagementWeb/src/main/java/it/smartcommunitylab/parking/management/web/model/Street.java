@@ -25,6 +25,7 @@ public class Street {
 	private Line geometry;
 	//private List<Zone> zones;
 	private List<String> zones;
+	private List<String> parkingMeters;
 	private Long lastChange;
 
 	public String getId() {
@@ -196,6 +197,14 @@ public class Street {
 	public void setZones(List<String> zones) {
 		this.zones = zones;
 	}
+	
+	public List<String> getParkingMeters() {
+		return parkingMeters;
+	}
+
+	public void setParkingMeters(List<String> parkingMeters) {
+		this.parkingMeters = parkingMeters;
+	}
 
 	public Long getLastChange() {
 		return lastChange;
@@ -225,8 +234,9 @@ public class Street {
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
 		json += "\"subscritionAllowedPark\":\"" + isSubscritionAllowedPark() + "\",";
 		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";
-		json += "\"lastChange\":\"" + getLastChange() + "\"";
-		json += "\"zones\":\"" + getZones() + "\"";
+		json += "\"lastChange\":\"" + getLastChange() + "\",";
+		json += "\"zones\":\"" + getZones() + "\",";
+		json += "\"parkingmeters\":\"" + getParkingMeters() + "\"";
 		json += "}";
 		return json;
 	}

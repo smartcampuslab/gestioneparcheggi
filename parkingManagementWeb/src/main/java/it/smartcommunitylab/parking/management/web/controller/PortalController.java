@@ -70,6 +70,7 @@ public class PortalController extends SCController{
 		model.addAttribute("user_surname", prov.getId());
 		model.addAttribute("no_sec", "false");
 		model.addAttribute("app_id", prov.getAppId());
+		//model.addAttribute("url_ws", prov.getUrlWS());
 		model.addAttribute("map_center", prov.getMapCenter());
 		model.addAttribute("map_zoom", prov.getMapZoom());
 		model.addAttribute("object_showed", prov.getShowObjectsMap());

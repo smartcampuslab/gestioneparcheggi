@@ -266,6 +266,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     }
     
     sharedDataService.setConfAppId(conf_app_id);
+    //sharedDataService.setConfUrlWs(conf_url_ws);
     sharedDataService.setConfMapCenter(conf_map_center);
     sharedDataService.setConfMapZoom(conf_map_zoom);
  

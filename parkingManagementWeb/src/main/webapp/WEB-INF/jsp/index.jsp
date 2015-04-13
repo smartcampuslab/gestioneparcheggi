@@ -64,6 +64,7 @@ var user_name="<%=request.getAttribute("user_name")%>";
 var user_surname="<%=request.getAttribute("user_surname")%>";
 var no_sec="<%=request.getAttribute("no_sec")%>";
 var conf_app_id="<%=request.getAttribute("app_id")%>";
+<%-- var conf_url_ws="<%=request.getAttribute("url_ws")%>"; --%>
 var conf_map_center="<%=request.getAttribute("map_center")%>";
 var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";

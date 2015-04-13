@@ -527,6 +527,10 @@
     "value": "Zona",
     "description": "Label campo zona per oggetto strada"
 }, {
+    "key": "street_pm",
+    "value": "Parcometro",
+    "description": "Label campo parcometro per oggetto strada"
+}, {
     "key": "street_geometry",
     "value": "Posizione",
     "description": "Label geometry per strada"
@@ -562,6 +566,10 @@
     "key": "street_zone_select_err_required",
     "value": "Campo Zona di appartenenza obbligatorio.",
     "description": "Messaggio errore campo zona per strada obbligatorio"
+}, {
+    "key": "street_pm_select_err_required",
+    "value": "Campo Parcometro associato alla strada obbligatorio.",
+    "description": "Messaggio errore campo pm per strada obbligatorio"
 }, {
     "key": "street_geometry_select_err_pattern",
     "value": "Campo Posizione strada non corretto.",

@@ -175,15 +175,15 @@
 							        			<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
 							        		</tr>
-							        		<tr ng-show="s_areaId.visible">	
-												<td>
-													<strong>{{ 'street_area_name' | i18n }}:</strong>
-												</td>
-												<td>	 
-													{{ s.area.name }} 
-													<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span>
-												</td>
-											</tr>
+<!-- 							        		<tr ng-show="s_areaId.visible">	 -->
+<!-- 												<td> -->
+<!-- 													<strong>{{ 'street_area_name' | i18n }}:</strong> -->
+<!-- 												</td> -->
+<!-- 												<td>	  -->
+<!-- 													{{ s.area.name }}  -->
+<!-- 													<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span> -->
+<!-- 												</td> -->
+<!-- 											</tr> -->
 											<tr ng-show="s_zones.visible">	
 												<td>
 													<strong>{{ 'street_zone' | i18n }}:</strong>
@@ -197,6 +197,37 @@
 													</table>
 												</td>
 											</tr>
+											<tr ng-show="s_areaId.visible">
+									        	<td colspan="2">
+									        		<strong>{{ 'street_area_name' | i18n }}:</strong>
+									        		<div class="panel panel-default">
+														<div class="panel-body">
+															<table width="100%">
+																<tr>
+																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
+																	<td width="55%">{{ s.area.name }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+																	<td>{{ s.area.fee }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
+																	<td>{{ s.area.timeSlot }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
+																	<td>{{ s.area.smsCode }}</td>
+																</tr>
+																<tr>	
+																	<td><strong>{{ 'area_color' | i18n }}</strong></td>
+																	<td><span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span></td>
+																</tr>
+															</table>
+														</div>
+													</div>	
+									        	</td>
+									        </tr>
 							        	</table>
 							        </div>
 						        </div>
@@ -286,7 +317,7 @@
 									<td align="center"><input id="streets" type="checkbox" ng-model="mapelements.streets" ng-click="changeStreetPolylines()"></td>
 									<td align="left"><label for="streets">{{ 'view_streets' | i18n }}</label></td>
 								</tr>
-								<tr ng-show="isPsVisible()">
+								<tr ng-show="isPmVisible()">
 									<td align="center"><input id="pMeters" type="checkbox" ng-model="mapelements.parkingmeters" ng-click="changeParkingMetersMarkers()"></td>
 									<td align="left"><label for="pMeters">{{ 'view_parkingmeters' | i18n }}</label></td>
 								</tr>

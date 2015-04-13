@@ -2,6 +2,7 @@ providers:
   - id: ComuneRovereto
     user: rovereto
     password: rovereto
+#    urlWS: http://localhost:8080/parking-management/rest
     appId: rv
     mapCenter: 45.88875357753771,11.037440299987793
     mapZoom: 14
@@ -76,8 +77,8 @@ providers:
           visible: false
         - code: zones
           editable: true
-          required: false
-          visible: true          
+          required: true
+          visible: true
      - id: Pm
        attributes:
         - code: code
@@ -193,6 +194,7 @@ providers:
   - id: ComuneTrento
     user: trento
     password: trento
+#    urlWS: http://localhost:8080/parking-management/rest
     appId: tn
     mapCenter: 46.071691, 11.120545
     mapZoom: 14
@@ -225,7 +227,7 @@ providers:
           visible: true
         - code: geometry
           editable: true
-          required: true
+          required: false
           visible: false    
      - id: Street
        attributes:
@@ -268,7 +270,7 @@ providers:
         - code: zones
           editable: true
           required: false
-          visible: false
+          visible: true
      - id: Pm
        attributes:
         - code: code
@@ -291,7 +293,7 @@ providers:
           editable: true
           required: true
           visible: true  		
-     - id: Ps
+     - id: XPs
        attributes:
         - code: name
           editable: true
@@ -337,6 +339,32 @@ providers:
           editable: true
           required: true
           visible: true
+     - id: Zone
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: submacro
+          editable: true
+          required: false
+          visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true
+        - code: type
+          editable: true
+          required: false
+          visible: true
+        - code: color
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: false
+          visible: false          
      - id: Bp
        attributes:
         - code: name

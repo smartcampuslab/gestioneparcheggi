@@ -11,6 +11,7 @@ public class ProviderSetting implements Serializable {
 	private String id;
 	private String user;
     private String password;
+    //private String urlWS;
     private String appId;
   	private String mapCenter;
   	private String mapZoom;
@@ -58,6 +59,15 @@ public class ProviderSetting implements Serializable {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+	
+
+//	public String getUrlWS() {
+//		return urlWS;
+//	}
+//
+//	public void setUrlWS(String urlWS) {
+//		this.urlWS = urlWS;
+//	}
 
 	public String getAppId() {
 		return appId;
