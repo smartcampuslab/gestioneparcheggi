@@ -430,6 +430,7 @@ public class StorageManager {
 					line.setPoints(points);
 					temp.setGeometry(line);
 					temp.setZones(sb.getZones());
+					temp.setParkingMeters(sb.getParkingMeters());
 					temp.setRateAreaId(sb.getRateAreaId());
 					mongodb.save(area);
 					founded = true;
@@ -479,6 +480,7 @@ public class StorageManager {
 		Street street = ModelConverter.convert(s, Street.class);
 		street = processId(street, Street.class);
 		street.setZones(s.getZones());
+		street.setParkingMeters(s.getParkingMeters());
 		street.setId_app(appId);
 		try {
 			RateArea area = findById(s.getRateAreaId(), RateArea.class);

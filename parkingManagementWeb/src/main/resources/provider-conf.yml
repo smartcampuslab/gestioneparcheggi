@@ -79,6 +79,10 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: pms
+          editable: true
+          required: false
+          visible: true         
      - id: Pm
        attributes:
         - code: code
@@ -271,6 +275,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: pms
+          editable: true
+          required: false
+          visible: false          
      - id: Pm
        attributes:
         - code: code

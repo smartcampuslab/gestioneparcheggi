@@ -51,14 +51,368 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     	return showZones;
     };
     
+    // Methods used only in view pages no-sec
+    // Area fields method
+    $scope.showAreaFields = function(list){
+    	//[name,fee,timeSlot,smsCode,color,note]
+    	list = list.substring(1, list.length-1); //I clear the '[' ']'
+    	var elements = list.split(",");
+    	$scope.a_name = {
+			visible: false
+		};
+    	$scope.a_fee = {
+			visible: false
+		};
+    	$scope.a_timeSlot = {
+			visible: false
+		};
+    	$scope.a_smsCode = {
+			visible: false
+		};
+    	$scope.a_color = {
+			visible: false
+		};
+    	$scope.a_note = {
+			visible: false
+		};
+    	$scope.a_geometry = {
+			visible: false
+		};
+    	for(var i = 0; i < elements.length-1; i++){
+    		if(elements[i] == 'name'){
+    			$scope.a_name.visible = true;
+    		}
+    		if(elements[i] == 'fee'){
+    			$scope.a_fee.visible = true;
+    		}
+    		if(elements[i] == 'timeSlot'){
+    			$scope.a_timeSlot.visible = true;
+    		}
+    		if(elements[i] == 'smsCode'){
+    			$scope.a_smsCode.visible = true;
+    		}
+    		if(elements[i] == 'color'){
+    			$scope.a_color.visible = true;
+    		}
+    		if(elements[i] == 'note'){
+    			$scope.a_note.visible = true;
+    		}
+    		if(elements[i] == 'geo'){
+    			$scope.a_geometry.visible = true;
+    		}
+    	}
+    };
+    
+    // Street fields method
+    $scope.showStreetFields = function(list){
+    	//[streetReference,slotNumber,handicappedSlot,timedSlot,freeSlot,unusuableSlot,subscritionAllowed,parkingMeter,zone,area]
+    	list = list.substring(1, list.length-1); //I clear the '[' ']'
+    	var elements = list.split(",");
+    	$scope.s_streetRef = {
+			visible: false
+		};
+    	$scope.s_slotNum = {
+			visible: false
+		};
+    	$scope.s_handicappedSlot = {
+			visible: false
+		};
+    	$scope.s_timedSlot = {
+			visible: false
+		};
+    	$scope.s_freeSlot = {
+			visible: false
+		};
+    	$scope.s_unusuableSlot = {
+			visible: false
+		};
+    	$scope.s_subscrition = {
+			visible: false
+		};
+    	$scope.s_areaId = {
+			visible: false
+		};
+    	$scope.s_zones = {
+			visible: false
+		};
+    	$scope.s_pms = {
+			visible: false
+		};
+    	$scope.s_geometry = {
+			visible: false
+		};
+    	for(var i = 0; i < elements.length; i++){
+    		if(elements[i] == 'streetReference'){
+    			$scope.s_streetRef.visible = true;
+    		}
+    		if(elements[i] == 'slotNumber'){
+    			$scope.s_slotNum.visible = true;
+    		}
+    		if(elements[i] == 'handicappedSlot'){
+    			$scope.s_handicappedSlot.visible = true;
+    		}
+    		if(elements[i] == 'timedSlot'){
+    			$scope.s_timedSlot.visible = true;
+    		}
+    		if(elements[i] == 'freSlot'){
+    			$scope.s_freeSlot.visible = true;
+    		}
+    		if(elements[i] == 'unusuableSlot'){
+    			$scope.s_unusuableSlot.visible = true;
+    		}
+    		if(elements[i] == 'subscritionAllowed'){
+    			$scope.s_subscrition.visible = true;
+    		}
+    		if(elements[i] == 'area'){
+    			showArea = true;
+    			$scope.s_areaId.visible = true;
+    		}
+    		if(elements[i] == 'zone'){
+    			showZones = true;
+    			$scope.s_zones.visible = true;
+    		}
+    		if(elements[i] == 'parkingMeter'){
+    			showPm = true;
+    			$scope.s_pms.visible = true;
+    			
+    		}
+    		if(elements[i] == 'geo'){
+    			$scope.s_geometry.visible = true;
+    		}
+    	}
+    };
+    
+    // Pm fields method
+    $scope.showPmFields = function(list){
+    	//[code,note,status,area]
+    	list = list.substring(1, list.length -1); //I clear the '[' ']'
+    	var elements = list.split(",");
+    	$scope.pm_code = {
+			visible: false
+		};
+    	$scope.pm_note = {
+			visible: false
+		};
+    	$scope.pm_status = {
+			visible: false
+		};
+    	$scope.pm_rateArea = {
+			visible: false
+		};
+    	$scope.pm_geometry = {
+			visible: false
+		};
+    	for(var i = 0; i < elements.length; i++){
+    		if(elements[i] == 'code'){
+    			$scope.pm_code.visible = true;
+    		}
+    		if(elements[i] == 'note'){
+    			$scope.pm_note.visible = true;
+    		}
+    		if(elements[i] == 'status'){
+    			$scope.pm_status.visible = true;
+    		}
+    		if(elements[i] == 'area'){
+    			showArea = true;
+    			$scope.pm_rateArea.visible = true;
+    		}
+    		if(elements[i] == 'geo'){
+    			$scope.pm_geometry.visible = true;
+    		}
+    	}
+    };
+    
+    // Ps fields method
+    $scope.showPsFields = function(list){
+    	//[name,streetReference,managementMode,fee,timeSlot,slotNumber,handicappedSlot,unusuableSlot,paymentMode,phoneNumber]
+    	list = list.substring(1, list.length-1); //I clear the '[' ']'
+    	var elements = list.split(",");
+    	$scope.ps_name = {
+			visible: false
+		};
+    	$scope.ps_address = {
+			visible: false
+		};
+    	$scope.ps_management = {
+			visible: false
+		};
+    	$scope.ps_payment = {
+			visible: false
+		};
+    	$scope.ps_fee = {
+			visible: false
+		};
+    	$scope.ps_timeSlot = {
+			visible: false
+		};
+    	$scope.ps_slotNumber = {
+			visible: false
+		};
+    	$scope.ps_handicappedSlot = {
+			visible: false
+		};
+    	$scope.ps_unusuableSlot = {
+			visible: false
+		};
+    	$scope.ps_phoneNumber = {
+			visible: false
+		};
+    	$scope.ps_geometry = {
+			visible: false
+		};
+    	for(var i = 0; i < elements.length; i++){
+    		if(elements[i] == 'name'){
+    			$scope.ps_name.visible = true;
+    		}
+    		if(elements[i] == 'streetReference'){
+    			$scope.ps_address.visible = true;
+    		}
+    		if(elements[i] == 'managementMode'){
+    			$scope.ps_management.visible = true;
+    		}
+    		if(elements[i] == 'paymentMode'){
+    			$scope.ps_payment.visible = true;
+    		}
+    		if(elements[i] == 'fee'){
+    			$scope.ps_fee.visible = true;
+    		}
+    		if(elements[i] == 'timeSlot'){
+    			$scope.ps_timeSlot.visible = true;
+    		}
+    		if(elements[i] == 'slotNumber'){
+    			$scope.ps_slotNumber.visible = true;
+    		}
+    		if(elements[i] == 'handicappedSlot'){
+    			$scope.ps_handicappedSlot.visible = true;
+    		}
+    		if(elements[i] == 'unusuableSlot'){
+    			$scope.ps_unusuableSlot.visible = true;
+    		}
+    		if(elements[i] == 'phoneNumber'){
+    			$scope.ps_phoneNumber.visible = true;
+    		}
+    		if(elements[i] == 'geo'){
+    			$scope.ps_geometry.visible = true;
+    		}
+    	}
+    };
+    
+    // Bp fields method
+    $scope.showBpFields = function(list){
+    	//[name,bikeNumber,slotNumber]
+    	list = list.substring(1, list.length-1); //I clear the '[' ']'
+    	var elements = list.split(",");
+    	$scope.bp_name = {
+			visible: false
+		};
+    	$scope.bp_bikeNumber = {
+			visible: false
+		};
+    	$scope.bp_slotNumber= {
+			visible: false
+		};
+    	$scope.bp_geometry= {
+			visible: false
+		};
+    	for(var i = 0; i < elements.length; i++){
+    		if(elements[i] == 'name'){
+    			$scope.bp_name.visible = true;
+    		}
+    		if(elements[i] == 'bikeNumber'){
+    			$scope.bp_bikeNumber.visible = true;
+    		}
+    		if(elements[i] == 'slotNumber'){
+    			$scope.bp_slotNumber.visible = true;
+    		}
+    		if(elements[i] == 'geo'){
+    			$scope.bp_geometry.visible = true;
+    		}
+    	}
+    };
+    
+    // Zone fields method
+    $scope.showZoneFields = function(list){
+    	//[name,bikeNumber,slotNumber]
+    	list = list.substring(1, list.length-1); //I clear the '[' ']'
+    	var elements = list.split(",");
+    	$scope.zone_name = {
+			visible: false
+		};
+    	$scope.zone_submacro = {
+			visible: false
+		};
+    	$scope.zone_note = {
+			visible: false
+		};
+    	$scope.zone_status = {
+			visible: false
+		};
+    	$scope.zone_type = {
+			visible: false
+		};
+    	$scope.zone_color = {
+			visible: false
+		};
+    	$scope.zone_geometry = {
+			visible: false
+		};
+    	for(var i = 0; i < elements.length; i++){
+    		if(elements[i] == 'name'){
+    			$scope.zone_name.visible = true;
+    		}
+    		if(elements[i] == 'submacro'){
+    			$scope.zone_submacro.visible = true;
+    		}
+    		if(elements[i] == 'note'){
+    			$scope.zone_note.visible = true;
+    		}
+    		if(elements[i] == 'status'){
+    			$scope.zone_status.visible = true;
+    		}
+    		if(elements[i] == 'type'){
+    			$scope.zone_type.visible = true;
+    		}
+    		if(elements[i] == 'color'){
+    			$scope.zone_color.visible = true;
+    		}
+    		if(elements[i] == 'geo'){
+    			$scope.zone_geometry.visible = true;
+    		}
+    	}
+    };
+    
     $scope.initComponents = function(value){
     	if(value){
-    		showArea = true;
-    		showStreets = true;
-    		showPm = true;
-    		showPs = true;
-    		showBp = true;
-    		showZones = true;
+    		var showAreaService = sharedDataService.getShowArea();
+    		$scope.showAreaFields(showAreaService);
+    		if(showAreaService != "[]"){
+    			showArea = true;
+    		}
+    		var showStreetService = sharedDataService.getShowStreet();
+    		$scope.showStreetFields(showStreetService);
+    		if( showStreetService != "[]"){
+    			showStreets = true;
+    		}
+    		var showPmService = sharedDataService.getShowPm();
+    		$scope.showPmFields(showPmService);
+    		if( showPmService != "[]"){
+    			showPm = true;
+    		}
+    		var showPsService = sharedDataService.getShowPs();
+    		$scope.showPsFields(showPsService);
+    		if(showPsService != "[]"){
+    			showPs = true;
+    		}
+    		var showBpService = sharedDataService.getShowBp();
+    		$scope.showBpFields(showBpService);
+    		if(showBpService != "[]"){
+    			showBp = true;
+    		}
+    		var showZoneService = sharedDataService.getShowZone();
+    		$scope.showZoneFields(showZoneService);
+    		if( showZoneService != "[]"){
+    			showZones = true;
+    		}
     	} else {
 	    	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
 		    	$scope.showedObjects = sharedDataService.getVisibleObjList();
@@ -113,7 +467,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'geometry'){
     			$scope.a_geometry = attributes[i];
     		}
-    		
     	}
     };
     
@@ -146,6 +499,9 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		}
     		if(attributes[i].code == 'zones'){
     			$scope.s_zones = attributes[i];
+    		}
+    		if(attributes[i].code == 'pms'){
+    			$scope.s_pms = attributes[i];
     		}
     		if(attributes[i].code == 'geometry'){
     			$scope.s_geometry = attributes[i];
@@ -732,6 +1088,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 					data: streets[i],
 					area: myAreaS,
 					zones: myZones,
+					pms: streets[i].myPms,
 					info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
 					info_windows_cod: "s" + streets[i].id,
 					editable: false,
@@ -781,6 +1138,18 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		return tmpZones;
 	};
 	
+	$scope.getLocalPmByCode = function(code){
+		var find = false;
+		var myPms = sharedDataService.getSharedLocalPms();
+		for(var i = 0; i < myPms.length && !find; i++){
+			var pmCodeString = String(myPms[i].code);
+			if(pmCodeString.localeCompare(code) == 0){
+				find = true;
+				return myPms[i];
+			}
+		}
+	};
+	
 	$scope.initStreetsObjects = function(streets){
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
@@ -789,11 +1158,19 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 				var zone = $scope.getLocalZoneById(streets[i].zones[j]);
 				zones.push(zone);
 			}
+			var pms = [];
+			if(streets[i].parkingMeters != null){
+				for(var x = 0; x < streets[i].parkingMeters.length; x++){
+					var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
+					pms.push(pm);
+				}
+			}
 			var area = $scope.getLocalAreaById(streets[i].rateAreaId);
 			var mystreet = streets[i];
 			mystreet.area_name = area.name;
 			mystreet.area_color= area.color;
 			mystreet.myZones = zones;
+			mystreet.myPms = pms;
 			myStreets.push(mystreet);
 		}
 		return myStreets;
@@ -890,6 +1267,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			    }
 		    	angular.copy(markers, $scope.parkingMetersMarkers);
 		    	//$scope.parkingMetersMarkers = $scope.initPMObjects(allPmeters);
+		    	sharedDataService.setSharedLocalPms(allParkingMeters);
 		    	$scope.getParkingStructuresFromDb();
 		    });
     	} else {

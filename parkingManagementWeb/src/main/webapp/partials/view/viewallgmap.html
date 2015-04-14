@@ -184,6 +184,19 @@
 <!-- 													<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span> -->
 <!-- 												</td> -->
 <!-- 											</tr> -->
+											<tr ng-show="s_pms.visible">	
+												<td>
+													<strong>{{ 'street_pm' | i18n }}:</strong>
+												</td>
+												<td>
+													<table width="100%">
+														<tr ng-repeat="p in s.pms track by p.code">
+															<td width="30%">{{ p.code }}</td>
+															<td width="70%">{{ p.note }}</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
 											<tr ng-show="s_zones.visible">	
 												<td>
 													<strong>{{ 'street_zone' | i18n }}:</strong>
@@ -283,6 +296,10 @@
 											<tr ng-show="a_color.visible">	
 												<td><strong>{{ 'area_color' | i18n }}</strong></td>
 												<td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
+											</tr>
+											<tr ng-show="a_note.visible">	
+												<td><strong>{{ 'area_note' | i18n }}:</strong></td>
+												<td>{{ a.data.note }}</td>
 											</tr>
 							        	</table>
 							        </div>

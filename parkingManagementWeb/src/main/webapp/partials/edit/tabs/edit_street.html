@@ -48,6 +48,19 @@
 <!-- 											<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span> -->
 <!-- 										</td> -->
 <!-- 									</tr> -->
+									<tr ng-show="s_pms.visible">	
+										<td valign="top">
+											<strong>{{ 'street_pm' | i18n }}:</strong>
+										</td>
+										<td>
+											<table width="100%">
+												<tr ng-repeat="p in s.pms track by p.code">
+													<td width="30%">{{ p.code }}</td>
+													<td width="70%">{{ p.note }}</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
 									<tr ng-show="s_zones.visible">	
 										<td>
 											<strong>{{ 'street_zone' | i18n }}:</strong>
@@ -138,6 +151,19 @@
 <!-- 											<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span> -->
 <!-- 										</td> -->
 <!-- 									</tr> -->
+									<tr ng-show="s_pms.visible">	
+										<td valign="top">
+											<strong>{{ 'street_pm' | i18n }}:</strong>
+										</td>
+										<td>
+											<table width="100%">
+												<tr ng-repeat="p in s.pms track by p.code">
+													<td width="30%">{{ p.code }}</td>
+													<td width="70%">{{ p.note }}</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
 									<tr ng-show="s_zones.visible">	
 										<td>
 											<strong>{{ 'street_zone' | i18n }}:</strong>
@@ -290,8 +316,21 @@
 <!-- 								<span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span> -->
 <!-- 							</td> -->
 <!-- 						</tr> -->
-						<tr ng-show="s_zones.visible">	
+						<tr ng-show="s_pms.visible">	
+							<td valign="top">
+								<strong>{{ 'street_pm' | i18n }}:</strong>
+							</td>
 							<td>
+								<table width="100%">
+									<tr ng-repeat="p in street.myPms track by p.code">
+										<td width="30%">{{ p.code }}</td>
+										<td width="70%">{{ p.note }}</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr ng-show="s_zones.visible">	
+							<td valign="top">
 								<strong>{{ 'street_zone' | i18n }}:</strong>
 							</td>
 							<td>
@@ -457,7 +496,7 @@
 				    	</div>
 				    	<div class="alert alert-danger" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>
 					</div>
-					<div class="form-group" ng-show="s_zones.visible" >
+					<div class="form-group" ng-show="s_pms.visible" >
 				    	<label for="dropdownPm1">{{ 'street_pm' | i18n }}</label>
 <!-- 				    	<select id="zone" multiple ng-multiple="true" name="sZone" class="form-control" ng-options="z.name + '-' + z.submacro for z in allZones" ng-model="myZones" ng-required="s_zones.required"> -->
 <!-- 				    	</select> -->

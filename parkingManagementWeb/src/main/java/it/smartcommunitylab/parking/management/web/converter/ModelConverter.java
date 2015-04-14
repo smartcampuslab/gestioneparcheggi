@@ -99,6 +99,7 @@ public class ModelConverter {
 		//}
 		//sb.setZoneBeans(zoneBeans);
 		sb.setZones(s.getZones());
+		sb.setParkingMeters(s.getParkingMeters());
 		return sb;
 	}
 

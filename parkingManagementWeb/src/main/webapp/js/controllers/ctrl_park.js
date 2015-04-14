@@ -208,6 +208,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		if(attributes[i].code == 'zones'){
     			$scope.s_zones = attributes[i];
     		}
+    		if(attributes[i].code == 'pms'){
+    			$scope.s_pms = attributes[i];
+    		}
     		if(attributes[i].code == 'geometry'){
     			$scope.s_geometry = attributes[i];
     		}
@@ -466,7 +469,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	   	var myDataPromise = invokeWSService.getProxy(method, "area", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allAreas);
-	    	console.log("rateAreas retrieved from db: " + JSON.stringify(result));
+	    	//console.log("rateAreas retrieved from db: " + JSON.stringify(result));
 	    	
 	    	$scope.areaWS = allAreas;
 	    	//$scope.initAreaMap();
@@ -514,7 +517,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var find = false;
 		var myPms = sharedDataService.getSharedLocalPms();
 		for(var i = 0; i < myPms.length && !find; i++){
-			if(myPms[i].code == code){
+			var pmCodeString = String(myPms[i].code);
+			if(pmCodeString.localeCompare(code) == 0){
 				find = true;
 				return myPms[i];
 			}
@@ -530,7 +534,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var myDataPromise = invokeWSService.getProxy(method, "street", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allStreet);
-	    	console.log("streets retrieved from db: " + JSON.stringify(result));
+	    	//console.log("streets retrieved from db: " + JSON.stringify(result));
 	    	
 	    	$scope.streetWS = $scope.initStreetsObjects(allStreet);
 	    	//$scope.initStreetMap();
@@ -551,7 +555,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allPmeters);
-	    	console.log("ParkingMeters retrieved from db: " + JSON.stringify(result));
+	    	//console.log("ParkingMeters retrieved from db: " + JSON.stringify(result));
 	    	
 	    	for (var i = 0; i <  allPmeters.length; i++) {
 	    		markers.push(createMarkers(i, allPmeters[i], 1));
@@ -575,7 +579,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allPstructs);
-	    	console.log("ParkingStructures retrieved from db: " + JSON.stringify(result));
+	    	//console.log("ParkingStructures retrieved from db: " + JSON.stringify(result));
 	    	
 	    	for (var i = 0; i <  allPstructs.length; i++) {
 	    		markers.push(createMarkers(i, allPstructs[i], 2));
@@ -597,7 +601,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	   	var myDataPromise = invokeWSService.getProxy(method, "zone", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allZones);
-	    	console.log("Zone retrieved from db: " + JSON.stringify(result));
+	    	//console.log("Zone retrieved from db: " + JSON.stringify(result));
 	    	
 	    	$scope.zoneWS = $scope.correctMyZones(allZones);
 	    	//$scope.initZoneMap();
@@ -846,7 +850,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 //					geometry: $scope.correctMyGeometryPolygon(zones[i].geometry)
 //			};
 //			correctedZones.push(correctZone);
-				correctedPms.push(pms[i].code);
+				correctedPms.push(String(pms[i].code));
 			}
 		}
 		return correctedPms;
@@ -871,7 +875,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var pms = [];
 			if(streets[i].parkingMeters != null){
 				for(var x = 0; x < streets[i].parkingMeters.length; x++){
-					var pm = $scope.getLocalPmByCode();
+					var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
 					pms.push(pm);
 				}
 			}
@@ -998,6 +1002,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 		}
 		
+		$scope.allPms = sharedDataService.getSharedLocalPms();
+		// I show only the pms in the same area of the street
+		$scope.myPms = $scope.getPmsFromArea($scope.allPms, $scope.myArea);
+		var myStreetPms = [];
+		for(var j = 0; j < $scope.myPms.length; j++){
+			$scope.myPms[j].selected = false;
+			for(var i = 0; i < street.myPms.length; i++){
+				if($scope.myPms[j].code ==  street.myPms[i].code){
+					myStreetPms.push($scope.myPms[j]);
+				}
+			}
+		}
+		
 		// Init the map for view
 		$scope.viewStreetMap = {
 			control: {},
@@ -1039,6 +1056,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				data: street,
 				area: myAreaS,
 				zones: myZones,
+				pms: myStreetPms,
 				info_windows_pos: $scope.correctPointGoogle(street.geometry.points[1]),
 				info_windows_cod: "ms" + street.id,
 				editable: false,
@@ -3232,6 +3250,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					var zone = $scope.getLocalZoneById(streets[i].zones[j]);
 					myZones.push(zone);
 				}
+				
 				street = {
 					id: streets[i].id,
 					path: $scope.correctPoints(poligons.points),
@@ -3243,6 +3262,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					data: streets[i],
 					area: myAreaS,
 					zones: myZones,
+					pms: streets[i].myPms,
 					info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
 					info_windows_cod: "s" + streets[i].id,
 					editable: false,

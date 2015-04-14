@@ -236,7 +236,7 @@ public class Street {
 		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"zones\":\"" + getZones() + "\",";
-		json += "\"parkingmeters\":\"" + getParkingMeters() + "\"";
+		json += "\"parkingMeters\":\"" + getParkingMeters() + "\"";
 		json += "}";
 		return json;
 	}

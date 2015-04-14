@@ -17,6 +17,13 @@ pm.service('sharedDataService', function(){
 	this.conf_map_center;
 	this.conf_visible_obj_list = [];
 	
+	this.conf_show_area;
+	this.conf_show_street;
+	this.conf_show_pm;
+	this.conf_show_ps;
+	this.conf_show_bp;
+	this.conf_show_zone;
+	
 	this.ueCitizen = false;
 	this.familyAllowances = false;
 	this.loading = false;
@@ -222,6 +229,54 @@ pm.service('sharedDataService', function(){
 	
 	this.getVisibleObjList = function(){
 		return this.conf_visible_obj_list;
+	};
+	
+	this.setShowArea = function(value){
+		this.conf_show_area = value;
+	};
+	
+	this.getShowArea = function(){
+		return this.conf_show_area;
+	};
+	
+	this.setShowStreet = function(value){
+		this.conf_show_street = value;
+	};
+	
+	this.getShowStreet = function(){
+		return this.conf_show_street;
+	};
+	
+	this.setShowPm = function(value){
+		this.conf_show_pm = value;
+	};
+	
+	this.getShowPm = function(){
+		return this.conf_show_pm;
+	};
+	
+	this.setShowPs = function(value){
+		this.conf_show_ps = value;
+	};
+	
+	this.getShowPs = function(){
+		return this.conf_show_ps;
+	};
+	
+	this.setShowBp = function(value){
+		this.conf_show_bp = value;
+	};
+	
+	this.getShowBp = function(){
+		return this.conf_show_bp;
+	};
+	
+	this.setShowZone = function(value){
+		this.conf_show_zone = value;
+	};
+	
+	this.getShowZone = function(){
+		return this.conf_show_zone;
 	};
 	
 	this.getYesNoVal = function(){
