@@ -15,7 +15,9 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
+import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
 import it.smartcommunitylab.parking.management.web.model.ProviderSetting;
+import it.smartcommunitylab.parking.management.web.model.UserSetting;
 import it.smartcommunitylab.parking.management.web.repository.UserRepositoryDao;
 
 @Component
@@ -26,6 +28,12 @@ public class MongoUserDetailsService implements UserDetailsService {
     
     @Autowired
 	private ProviderSetup appSetup;
+    
+    @Autowired
+	private ObjectShowSetup objectShowSetup;
+    
+    @Autowired
+	private UserSetup userSetup;
     
     private static final Logger logger = Logger.getLogger(MongoUserDetailsService.class);
     private static final Integer role = 1;
@@ -50,6 +58,21 @@ private org.springframework.security.core.userdetails.User userdetails;
             
             userdetails = new User(prov.getUser(), 
             				prov.getPassword(),
+     			   			enabled,
+     			   			accountNonExpired,
+     			   			credentialsNonExpired,
+     			   			accountNonLocked,
+     			   			getAuthorities(role));
+        }
+        
+        UserSetting myUser = userSetup.findUserByUsername(username);
+        if(myUser != null){
+        	objectShowSetup.setApp_id(myUser.getAppId());
+        	System.out.println(myUser.getUsername());
+            System.out.println(myUser.getPassword());
+            
+            userdetails = new User(myUser.getUsername(), 
+            				myUser.getPassword(),
      			   			enabled,
      			   			accountNonExpired,
      			   			credentialsNonExpired,
@@ -89,6 +112,19 @@ private org.springframework.security.core.userdetails.User userdetails;
     
     public ProviderSetting getProvDetails(String username){
     	return appSetup.findProviderByUsername(username);
+    }
+    
+    public UserSetting getUserDetails(String username){
+    	return userSetup.findUserByUsername(username);
+    }
+    
+    public ObjectShowSetting getObjectShowDetails(String username){
+    	UserSetting user = userSetup.findUserByUsername(username);
+    	return objectShowSetup.findProviderByAppId(user.getAppId());
+    }
+    
+    public ObjectShowSetting getObjectShowDetailsByAppId(String appId){
+    	return objectShowSetup.findProviderByAppId(appId);
     }
 
    

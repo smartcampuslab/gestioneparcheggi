@@ -1,7 +1,5 @@
 providers:
   - id: ComuneRovereto
-    user: rovereto
-    password: rovereto
     appId: rv
     mapCenter: 45.88875357753771,11.037440299987793
     mapZoom: 14
@@ -195,8 +193,6 @@ providers:
           required: true
           visible: true
   - id: ComuneTrento
-    user: trento
-    password: trento
     appId: tn
     mapCenter: 46.071691, 11.120545
     mapZoom: 14
