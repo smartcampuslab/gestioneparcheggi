@@ -262,7 +262,7 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	
 	$scope.correctMyGeometryPolygon = function(geo){
 		var tmpPolygon = {
-			points: null,
+			points: null
 		};
 		var points = [];
 		for(var i = 0; i < geo.points.length; i++){
@@ -591,7 +591,7 @@ pm.controller('ViewCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 					editable: false,
 					draggable: false,
 					geodesic: false,
-					visible: visible,
+					visible: visible
 					//icons:
 				};
 				tmpStreets.push(street);

@@ -34,6 +34,10 @@ providers:
           editable: true
           required: false
           visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
      - id: Street
        attributes:
         - code: streetReference
@@ -79,7 +83,11 @@ providers:
         - code: pms
           editable: true
           required: false
-          visible: true         
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true          
      - id: Pm
        attributes:
         - code: code
@@ -101,7 +109,11 @@ providers:
         - code: geometry
           editable: true
           required: true
-          visible: true  		
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true          
      - id: Ps
        attributes:
         - code: name
@@ -148,6 +160,10 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true          
      - id: Zone
        attributes:
         - code: name
@@ -173,7 +189,11 @@ providers:
         - code: geometry
           editable: true
           required: false
-          visible: false       
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: false
      - id: Bp
        attributes:
         - code: name
@@ -191,6 +211,10 @@ providers:
         - code: geometry
           editable: true
           required: true
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
           visible: true
   - id: ComuneTrento
     appId: tn
@@ -226,7 +250,11 @@ providers:
         - code: geometry
           editable: true
           required: false
-          visible: false    
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: false
      - id: Street
        attributes:
         - code: streetReference
@@ -272,7 +300,11 @@ providers:
         - code: pms
           editable: true
           required: false
-          visible: false          
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
      - id: Pm
        attributes:
         - code: code
@@ -294,7 +326,11 @@ providers:
         - code: geometry
           editable: true
           required: true
-          visible: true  		
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
      - id: XPs
        attributes:
         - code: name
@@ -341,6 +377,10 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
      - id: Zone
        attributes:
         - code: name
@@ -366,7 +406,11 @@ providers:
         - code: geometry
           editable: true
           required: false
-          visible: false          
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
      - id: Bp
        attributes:
         - code: name
@@ -384,4 +428,8 @@ providers:
         - code: geometry
           editable: true
           required: true
-          visible: true          
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true             

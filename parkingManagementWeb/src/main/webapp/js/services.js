@@ -402,19 +402,49 @@ pm.factory('invokeWSService', function($http, $q) {
 	var url = 'rest/';
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
-		$http({
-			method : method,
-			url : url + funcName,
-			params : params,
-			headers : headers,
-			data : data
-		}).success(function(data) {
-			//console.log("Returned data ok: " + JSON.stringify(data));
-			deferred.resolve(data);
-		}).error(function(data) {
-			console.log("Returned data FAIL: " + JSON.stringify(data));
-			deferred.resolve(data);
-		});
+		if(method == 'GET' && params == null){
+			$http({
+				method : method,
+				url : url + funcName + '?noCache=' + new Date().getTime(),
+				params : params,
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else if(method == 'GET' && params != null){
+			$http({
+				method : method,
+				url : url + funcName,
+				params : params + '&noCache=' + new Date().getTime(),
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else {
+			$http({
+				method : method,
+				url : url + funcName,
+				params : params,
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		}
 		return deferred.promise;
 	};
 	return {getProxy : getProxy};
@@ -423,19 +453,49 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 	var url = 'rest/nosec/';
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
-		$http({
-			method : method,
-			url : url + funcName,
-			params : params,
-			headers : headers,
-			data : data
-		}).success(function(data) {
-			//console.log("Returned data ok: " + JSON.stringify(data));
-			deferred.resolve(data);
-		}).error(function(data) {
-			console.log("Returned data FAIL: " + JSON.stringify(data));
-			deferred.resolve(data);
-		});
+		if(method == 'GET' && params == null){
+			$http({
+				method : method,
+				url : url + funcName + '?noCache=' + new Date().getTime(),
+				params : params,
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else if(method == 'GET' && params != null){
+			$http({
+				method : method,
+				url : url + funcName,
+				params : params + '&noCache=' + new Date().getTime(),
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else {
+			$http({
+				method : method,
+				url : url + funcName,
+				params : params,
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		}
 		return deferred.promise;
 	};
 	return {getProxy : getProxy};
@@ -492,7 +552,7 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				method : method,
 				url : 'rest/allPost',
 				params : {
-					"urlWS" : urlWS,
+					"urlWS" : urlWS
 				},
 				headers : headers,
 				data : data

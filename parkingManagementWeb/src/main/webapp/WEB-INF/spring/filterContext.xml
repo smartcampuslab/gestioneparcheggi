@@ -48,6 +48,8 @@
         pattern="/viewalltn" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/rest/nosec/**" security="none" />
+	<http xmlns="http://www.springframework.org/schema/security"
+		pattern="/rest/appid/**" security="none" />
 	
 <!-- 	<sec:http pattern="/rest/**" entry-point-ref="forbEntryPoint" -->
 <!-- 		use-expressions="true" create-session="stateless">ifRequired  -->

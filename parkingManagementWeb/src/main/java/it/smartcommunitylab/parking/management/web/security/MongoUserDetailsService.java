@@ -16,7 +16,6 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Component;
 
 import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
-import it.smartcommunitylab.parking.management.web.model.ProviderSetting;
 import it.smartcommunitylab.parking.management.web.model.UserSetting;
 import it.smartcommunitylab.parking.management.web.repository.UserRepositoryDao;
 
@@ -25,9 +24,6 @@ public class MongoUserDetailsService implements UserDetailsService {
 
     @Autowired
     private UserRepositoryDao userRepositoryDao;
-    
-    @Autowired
-	private ProviderSetup appSetup;
     
     @Autowired
 	private ObjectShowSetup objectShowSetup;
@@ -49,21 +45,6 @@ private org.springframework.security.core.userdetails.User userdetails;
         //it.smartcommunitylab.parking.management.web.repository.User user = getUserDetail(username);
         //System.out.println(user.getUsername());
         //System.out.println(user.getRole());
-           
-        ProviderSetting prov = appSetup.findProviderByUsername(username);
-        if(prov != null){
-        	appSetup.setApp_id(prov.getAppId());
-        	System.out.println(prov.getUser());
-            System.out.println(prov.getPassword());
-            
-            userdetails = new User(prov.getUser(), 
-            				prov.getPassword(),
-     			   			enabled,
-     			   			accountNonExpired,
-     			   			credentialsNonExpired,
-     			   			accountNonLocked,
-     			   			getAuthorities(role));
-        }
         
         UserSetting myUser = userSetup.findUserByUsername(username);
         if(myUser != null){
@@ -108,10 +89,6 @@ private org.springframework.security.core.userdetails.User userdetails;
     	it.smartcommunitylab.parking.management.web.repository.User user = userRepositoryDao.findByUsername(username);
         //System.out.println(user.toString());
         return user;
-    }
-    
-    public ProviderSetting getProvDetails(String username){
-    	return appSetup.findProviderByUsername(username);
     }
     
     public UserSetting getUserDetails(String username){

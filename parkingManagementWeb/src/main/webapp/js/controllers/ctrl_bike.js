@@ -301,7 +301,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(bikePoint != null){
 			$scope.isEditing = true;
 			$scope.isInit = false;
-			$scope.bikePoint = bikePoint;
+			angular.copy(bikePoint, $scope.bikePoint);
 			
 			$scope.bpEditMap = {
 				control: {},
@@ -525,7 +525,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		   	draggable: true,
 	    		   	visible: true
 	    		},
-	    		icon: $scope.bpMarkerIcon,
+	    		icon: $scope.bpMarkerIcon
 	    		//showWindow: false
 	//    		events: {
 	//    		   	mouseover: function(marker, eventName, args) {

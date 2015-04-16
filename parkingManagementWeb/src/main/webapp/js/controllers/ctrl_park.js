@@ -678,7 +678,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.correctMyGeometryPolyline = function(geo){
 		//var corrected = [];
 		var tmpLine = {
-			points: null,
+			points: null
 			//pointObjs: null
 		};
 		var points = [];
@@ -699,7 +699,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	$scope.correctMyGeometryPolygon = function(geo){
 		var tmpPolygon = {
-			points: null,
+			points: null
 		};
 		var points = [];
 		if(geo != null && geo.points != null && geo.points.length > 0){
@@ -717,7 +717,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.correctMyGeometryPolygonForArea = function(geo){
 		var corrected = [];
 		var tmpPol = {
-			points: null,
+			points: null
 		};
 		var points = [];
 		for(var i = 0; i < geo.length; i++){
@@ -891,14 +891,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	$scope.initPMObjects = function(pmeters){
-		
-		$scope.allPmAreaFilter = sharedDataService.getSharedLocalAreas();
+		$scope.allPmAreaFilter = [];
+		angular.copy(sharedDataService.getSharedLocalAreas(),$scope.allPmAreaFilter);
 		if($scope.allPmAreaFilter != null && $scope.allPmAreaFilter.length > 0 && $scope.allPmAreaFilter[0].id != ''){
 			$scope.allPmAreaFilter.splice(0,0,{id:'', name: "Tutte"});
 		}
 		$scope.pmAreaFilter = $scope.allPmAreaFilter[0].id;
 		
-		$scope.allPmStatusFilter = $scope.listaStati;
+		$scope.allPmStatusFilter = [];
+		angular.copy($scope.listaStati, $scope.allPmStatusFilter);
 		if($scope.allPmStatusFilter != null && $scope.allPmStatusFilter.length > 0 && $scope.allPmStatusFilter[0].idObj != ''){
 			$scope.allPmStatusFilter.splice(0, 0, {idObj:"", descrizione: "Tutti"});
 		}
@@ -1062,7 +1063,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				editable: false,
 				draggable: false,
 				geodesic: false,
-				visible: true,
+				visible: true
 			};
 			
 			$scope.mySpecialStreets.push($scope.myStreetLine);
@@ -1351,7 +1352,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			$scope.isEditing = true;
 			$scope.isInit = false;
-			$scope.area = area;
+			angular.copy(area, $scope.area);
 			$scope.area.fee = $scope.correctDecimal(area.fee, 2);	// Here I cast the fee value to string and I change the '.' char in ',' char
 			
 			var areaCenter = $scope.mapCenter;
@@ -1545,7 +1546,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			$scope.isEditing = true;
 			$scope.isInit = false;
-			$scope.street = street;
+			angular.copy(street, $scope.street);
 		
 			for(var i = 0; i < $scope.allArea.length; i++){
 				if($scope.street.rateAreaId == $scope.allArea[i].id){
@@ -1747,13 +1748,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			areaId: null,
 			geometry: null
 		};
-		$scope.mystatus = "Seleziona lo stato del parcometro";
+		//$scope.mystatus = "Seleziona lo stato del parcometro";
 		
 		// Case edit
 		if(parkingMeter != null){
 			$scope.isEditing = true;
 			$scope.isInit = false;
-			$scope.parckingMeter = parkingMeter;
+			angular.copy(parkingMeter, $scope.parckingMeter);
 			if(parkingMeter.status == "ACTIVE"){
 				$scope.myStatus = $scope.listaStati[0];
 			} else {
@@ -1867,7 +1868,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(parkingStruct != null){
 			$scope.isEditing = true;
 			$scope.isInit = false;
-			$scope.parkingStructure = parkingStruct;
+			angular.copy(parkingStruct, $scope.parkingStructure);
 			for(var i = 0; i < parkingStruct.paymentMode.length; i++){
 				switch(parkingStruct.paymentMode[i]){
 					case $scope.cash_mode:
@@ -3235,7 +3236,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.geoStreets = [];
 		}
 		
-		$scope.allAreaFilter = sharedDataService.getSharedLocalAreas();
+		$scope.allAreaFilter = [];
+		angular.copy(sharedDataService.getSharedLocalAreas(), $scope.allAreaFilter);
 		if($scope.allAreaFilter != null && $scope.allAreaFilter.length > 0 && $scope.allAreaFilter[0].id != ''){
 			$scope.allAreaFilter.splice(0,0,{id:'', name: "Tutte"});
 		}
@@ -3268,7 +3270,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					editable: false,
 					draggable: false,
 					geodesic: false,
-					visible: true,
+					visible: true
 					//icons:
 				};
 				$scope.geoStreets.push(street);
@@ -3395,7 +3397,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			editable: true,
 			draggable: true,
 			geodesic: false,
-			visible: true,	
+			visible: true
 		};
 		return newStreet;
 	};

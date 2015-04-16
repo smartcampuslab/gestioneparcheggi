@@ -21,7 +21,7 @@
 <script src="lib/angular-sanitize.js"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
-<!-- <script src="i18n/angular-locale_en-EN.js"></script> -->
+<script src="i18n/angular-locale_en-EN.js"></script>
 
 <script src="js/app.js?1001"></script>
 <!-- <script src="js/controllers.js"></script> -->
@@ -64,15 +64,8 @@ var user_name="<%=request.getAttribute("user_name")%>";
 var user_surname="<%=request.getAttribute("user_surname")%>";
 var no_sec="<%=request.getAttribute("no_sec")%>";
 var conf_app_id="<%=request.getAttribute("app_id")%>";
-<%-- var conf_url_ws="<%=request.getAttribute("url_ws")%>"; --%>
 var conf_map_center="<%=request.getAttribute("map_center")%>";
 var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
-var conf_area_show="<%=request.getAttribute("show_area")%>";
-var conf_street_show="<%=request.getAttribute("show_street")%>";
-var conf_pm_show="<%=request.getAttribute("show_pm")%>";
-var conf_ps_show="<%=request.getAttribute("show_ps")%>";
-var conf_bp_show="<%=request.getAttribute("show_bp")%>";
-var conf_zone_show="<%=request.getAttribute("show_zone")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
 <%-- var user_mail="<%=request.getAttribute("e_mail")%>"; --%>
 <%-- var nome="<%=request.getAttribute("nome")%>"; --%>

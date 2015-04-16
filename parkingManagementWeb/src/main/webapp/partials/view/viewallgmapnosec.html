@@ -1,10 +1,10 @@
 <div class="panel panel-danger">
 	<div class="panel-heading">
-		<h4 class="panel-title">Visualizza</h4>
+		<h4 class="panel-title">{{ 'viewAllPanelTitle' | i18n }}</h4>
 	</div>
 	<div class="panel-body">
 		<!--<form name="viewForm"  > ng-init="initWs()" -->
-			<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs(true)">
+			<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
 				<div class="col-md-9"><!--   ng-show="mapReady"-->
 <!-- 					<div id="map_canvas" ></div> -->
 					<map id="viewMap" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" style="height: 500px">
@@ -18,11 +18,11 @@
 							        <div id="bodyContent">
 							        	<table>
 							        		<tr ng-show="pm_note.visible">
-							        			<td><strong>Note:</strong></td>
+							        			<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ pm.data.note }}</td>
 							        		</tr>
 											<tr ng-show="pm_status.visible">
-							        			<td><strong>Stato:</strong></td>
+							        			<td><strong>{{ 'pm_status' | i18n }}:</strong></td>
 							        			<td>
 							        				<span ng-show="pm.data.status=='ACTIVE'">Attivo</span>
 													<span ng-show="pm.data.status!='ACTIVE'">Disattivo</span>
@@ -30,28 +30,28 @@
 							        		</tr>
 							        		<tr ng-show="pm_rateArea.visible">
 							        			<td colspan="2">
-							        				<strong>Area:</strong>
+							        				<strong>{{ 'pm_area_name' | i18n }}:</strong>
 							        				<div class="panel panel-default">
 														<div class="panel-body">
 															<table width="100%">
 																<tr>
-																	<td width="45%"><strong>Nome:</strong></td>
+																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
 																	<td width="55%">{{ pm.area.name }}</td>
 																</tr>
 																<tr>	
-																	<td><strong>Tariffa:</strong></td>
+																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
 																	<td>{{ pm.area.fee }}</td>
 																</tr>
 																<tr>	
-																	<td><strong>Orario:</strong></td>
+																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 																	<td>{{ pm.area.timeSlot }}</td>
 																</tr>
 																<tr>	
-																	<td><strong>Servizio telepark - cod.area:</strong></td>
+																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 																	<td>{{ pm.area.smsCode }}</td>
 																</tr>
 																<tr>	
-																	<td><strong>Colore:</strong></td>
+																	<td><strong>{{ 'area_color' | i18n }}:</strong></td>
 																	<td><span class="colorBox" ng-style="{'background-color': correctColor(pm.area.color)}"></span></td>
 																</tr>
 													   		</table>
@@ -72,27 +72,27 @@
 							        <div id="bodyContent">
 							        	<table>
 							        		<tr ng-show="ps_address.visible">
-							        			<td><strong>Indirizzo:</strong></td>
+							        			<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.streetReference }}</td>
 							        		</tr>
 											<tr ng-show="ps_fee.visible">
-							        			<td><strong>Tariffa sosta (euro/ora):</strong></td>
+							        			<td><strong>{{ 'ps_fee' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.fee }}</td>
 							        		</tr>
 							        		<tr ng-show="ps_timeSlot.visible">
-							        			<td><strong>Orario:</strong></td>
+							        			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.timeSlot }}</td>
 							        		</tr>
 							        		<tr ng-show="ps_phoneNumber.visible">
-							        			<td><strong>Telefono:</strong></td>
+							        			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
 							        		</tr>
 							        		<tr ng-show="ps_management.visible">
-							        			<td><strong>Modalita' di gestione:</strong></td>
+							        			<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.managementMode }}</td>
 							        		</tr>
 							        		<tr ng-show="ps_payment.visible">
-							        			<td><strong>Modalita' di pagamento:</strong></td>
+							        			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td>
 							        		</tr>
 											<tr>
@@ -102,15 +102,15 @@
 														<div class="panel-body">
 															<table width="100%">
 																<tr ng-show="ps_slotNumber.visible">
-																	<td width="45%"><strong>Capienza:</strong></td>
+																	<td width="45%"><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
 																	<td width="55%">{{ ps.data.slotNumber }}</td>
 																</tr>
 																<tr ng-show="ps_handicappedSlot.visible">	
-																	<td><strong>Posti per disabili:</strong></td>
+																	<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
 																	<td>{{ ps.data.handicappedSlotNumber }}</td>
 																</tr>
 																<tr ng-show="ps_unusuableSlot.visible">	
-																	<td><strong>Posti non usabili:</strong></td>
+																	<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td>
 																	<td>{{ ps.data.unusuableSlotNumber }}</td>
 																</tr>
 															</table>
@@ -131,11 +131,11 @@
 							        <div id="bodyContent">
 							        	<table>
 											<tr ng-show="bp_slotNumber.visible">
-							        			<td><strong>Posti bici:</strong></td>
+							        			<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ bp.data.slotNumber }}</td>
 							        		</tr>
 							        		<tr ng-show="bp_bikeNumber.visible">
-							        			<td><strong>Bici:</strong></td>
+							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ bp.data.bikeNumber }}</td>
 							        		</tr>
 							        	</table>
@@ -152,27 +152,27 @@
 							        <div id="bodyContent">
 							        	<table>
 							        		<tr ng-show="s_slotNum.visible">
-							        			<td><strong>Posti totali:</strong></td>
+							        			<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.slotNumber }}</td>
 							        		</tr>
 											<tr ng-show="s_handicappedSlot.visible">
-							        			<td><strong>Posti riservati ai disabili:</strong></td>
+							        			<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
 							        		</tr>
 							        		<tr ng-show="s_timedSlot.visible">
-							        			<td><strong>Posti disco orario:</strong></td>
+							        			<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
 							        		</tr>
 							        		<tr ng-show="s_freeSlot.visible">
-							        			<td><strong>Posti sosta libera:</strong></td>
+							        			<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
 							        		</tr>
 							        		<tr ng-show="s_unusuableSlot.visible">
-							        			<td><strong>Posti inutilizzabili:</strong></td>
+							        			<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
 							        		</tr>
 							        		<tr ng-show="s_subscrition.visible">
-							        			<td><strong>Sosta con abbonamento:</strong></td>
+							        			<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
 							        		</tr>
 <!-- 							        		<tr>	 -->
@@ -186,7 +186,7 @@
 <!-- 											</tr> -->
 											<tr ng-show="s_pms.visible">	
 												<td>
-													<strong>Parcometro:</strong>
+													<strong>{{ 'street_pm' | i18n }}:</strong>
 												</td>
 												<td>
 													<table width="100%">
@@ -199,7 +199,7 @@
 											</tr>
 											<tr ng-show="s_zones.visible">	
 												<td>
-													<strong>Zona:</strong>
+													<strong>{{ 'street_zone' | i18n }}:</strong>
 												</td>
 												<td>
 													<table width="100%">
@@ -212,28 +212,28 @@
 											</tr>
 											<tr ng-show="s_areaId.visible">
 									        	<td colspan="2">
-									        		<strong>Area:</strong>
+									        		<strong>{{ 'street_area_name' | i18n }}:</strong>
 									        		<div class="panel panel-default">
 														<div class="panel-body">
 															<table width="100%">
 																<tr>
-																	<td width="45%"><strong>Nome:</strong></td>
+																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
 																	<td width="55%">{{ s.area.name }}</td>
 																</tr>
 																<tr>	
-																	<td><strong>Tariffa:</strong></td>
+																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
 																	<td>{{ s.area.fee }}</td>
 																</tr>
 																<tr>	
-																	<td><strong>Orario:</strong></td>
+																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 																	<td>{{ s.area.timeSlot }}</td>
 																</tr>
 																<tr>	
-																	<td><strong>Codice Telepark:</strong></td>
+																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 																	<td>{{ s.area.smsCode }}</td>
 																</tr>
 																<tr>	
-																	<td><strong>Colore:</strong></td>
+																	<td><strong>{{ 'area_color' | i18n }}:</strong></td>
 																	<td><span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span></td>
 																</tr>
 															</table>
@@ -256,15 +256,15 @@
 							        <div id="bodyContent">
 							        	<table>
 							        		<tr ng-show="zone_type.visible">
-							        			<td><strong>Tipo:</strong></td>
+							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ z.data.type }}</td>
 							        		</tr>
 											<tr ng-show="zone_note.visible">
-							        			<td><strong>Note:</strong></td>
+							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ z.data.note }}</td>
 							        		</tr>
 							        		<tr ng-show="zone_color.visible">	
-												<td><strong>Colore:</strong></td>
+												<td><strong>{{ 'zone_color' | i18n }}:</strong></td>
 												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
 											</tr>
 							        	</table>
@@ -282,23 +282,23 @@
 							        <div id="bodyContent">
 							        	<table>
 											<tr ng-show="a_fee.visible">	
-												<td width="45%"><strong>Tariffa:</strong></td>
+												<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
 												<td width="55%">{{ a.data.fee }}</td>
 											</tr>
 											<tr ng-show="a_timeSlot.visible">	
-												<td><strong>Orario:</strong></td>
+												<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 												<td>{{ a.data.timeSlot }}</td>
 											</tr>
 											<tr ng-show="a_smsCode.visible">	
-												<td><strong>Servizio telepark-cod.area:</strong></td>
+												<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 												<td>{{ a.data.smsCode }}</td>
 											</tr>
 											<tr ng-show="a_color.visible">	
-												<td><strong>Colore:</strong></td>
+												<td><strong>{{ 'area_color' | i18n }}:</strong></td>
 												<td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
 											</tr>
 											<tr ng-show="a_note.visible">	
-												<td><strong>Note:</strong></td>
+												<td><strong>{{ 'area_note' | i18n }}:</strong></td>
 												<td>{{ a.data.note }}</td>
 											</tr>
 							        	</table>
@@ -319,7 +319,7 @@
 				<div class="col-md-3">
 					<div class="panel panel-danger">
 						<div class="panel-heading">
-							<h5 class="panel-title">Mostra/Nascondi</h5>
+							<h5 class="panel-title">{{ 'view_hide_block_title' | i18n }}</h5>
 						</div>
 						<div class="panel-body">
 							<table width="100%">
@@ -328,27 +328,27 @@
 <!-- 								</tr> -->
 								<tr ng-show="isAreaVisible()">
 									<td align="center" width="15%"><input id="rateArea" type="checkbox" ng-model="mapelements.rateareas" ng-click="changeAreaPolygons()"></td>
-									<td align="left" width="85%"><label for="rateArea">Aree di tariffazione</label></td>
+									<td align="left" width="85%"><label for="rateArea">{{ 'view_areas' | i18n }}</label></td>
 								</tr>
 								<tr ng-show="isStreetVisible()">
 									<td align="center"><input id="streets" type="checkbox" ng-model="mapelements.streets" ng-click="changeStreetPolylines()"></td>
-									<td align="left"><label for="streets">Vie</label></td>
+									<td align="left"><label for="streets">{{ 'view_streets' | i18n }}</label></td>
 								</tr>
 								<tr ng-show="isPmVisible()">
 									<td align="center"><input id="pMeters" type="checkbox" ng-model="mapelements.parkingmeters" ng-click="changeParkingMetersMarkers()"></td>
-									<td align="left"><label for="pMeters">Parcometri</label></td>
+									<td align="left"><label for="pMeters">{{ 'view_parkingmeters' | i18n }}</label></td>
 								</tr>
 								<tr ng-show="isPsVisible()">
 									<td align="center"><input id="pStruct" type="checkbox" ng-model="mapelements.parkingstructs" ng-click="changeParkingStructuresMarkers()"></td>
-									<td align="left"><label for="pStruct">Strutture parcheggio</label></td>
+									<td align="left"><label for="pStruct">{{ 'view_parkingstructs' | i18n }}</label></td>
 								</tr>
 								<tr ng-show="isBpVisible()">
 									<td align="center"><input id="bikePoint" type="checkbox" ng-model="mapelements.bikepoints" ng-click="changeBikePointsMarkers()"></td>
-									<td align="left"><label for="bikePoint">Punti bici</label></td>
+									<td align="left"><label for="bikePoint">{{ 'view_bikepoints' | i18n }}</label></td>
 								</tr>
 								<tr ng-show="isZonesVisible()">
 									<td align="center"><input id="zones" type="checkbox" ng-model="mapelements.zones" ng-click="changeZonePolygons()"></td>
-									<td align="left"><label for="zones">Zone</label></td>
+									<td align="left"><label for="zones">{{ 'view_zones' | i18n }}</label></td>
 								</tr>
 							</table>
 						</div>

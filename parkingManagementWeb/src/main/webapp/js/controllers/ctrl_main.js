@@ -322,14 +322,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     
     $scope.loadConfObject(object_to_show);
     
-    // new for view pages
-    sharedDataService.setShowArea(conf_area_show);
-    sharedDataService.setShowStreet(conf_street_show);
-    sharedDataService.setShowPm(conf_pm_show);
-    sharedDataService.setShowPs(conf_ps_show);
-    sharedDataService.setShowBp(conf_bp_show);
-    sharedDataService.setShowZone(conf_zone_show);
-    
     $scope.setAppId = function(){
 		var url = "appid";
 		if(no_sec == "true"){

@@ -55,11 +55,6 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'BikeCtrl',
     		controllerAs: 'bike_ctrl'
     	})
-//    	.when('/view', {
-//    		templateUrl: 'partials/view/viewall.html',
-//    		controller: 'ViewCtrl',
-//    		controllerAs: 'view_ctrl'
-//    	})
     	.when('/view', {
     		templateUrl: 'partials/view/viewallgmap.html',
     		controller: 'ViewCtrlGmap',
@@ -79,77 +74,7 @@ pm.config(['$routeProvider', '$locationProvider',
     		templateUrl: 'partials/view/viewallgmapnosec.html',
     		controller: 'ViewCtrlGmap',
     		controllerAs: 'view_ctrl_gmap'
-    	})
-//    	.when('/view', {
-//    		templateUrl: 'partials/view/viewallgcode.html',
-//    		controller: 'ViewCtrlGCode',
-//    		controllerAs: 'view_ctrl_gcode'
-//    	})
-    	.when('/PracticeList/ass/:type', {
-    		templateUrl: 'partials/practice_ass_list.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
-    	})
-    	.when('/Practice/edit/:id', {
-    		templateUrl: 'partials/edit_practice.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
-    	})
-    	.when('/Practice/submit/:id', {
-    		templateUrl: 'partials/submit_practice.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
-    	})
-    	.when('/Practice/class/view/ass/ue/:phase', {
-    		templateUrl: 'partials/class/class_eu_ass.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
-    	})
-    	.when('/Practice/class/view/ass/extraue/:phase', {
-    		templateUrl: 'partials/class/class_extra_eu_ass.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
-    	})
-    	.when('/Practice/class/view/edil/ue/:phase', {
-    		templateUrl: 'partials/class/class_eu_edil.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
-    	})
-    	.when('/Practice/class/view/edil/extraue/:phase', {
-    		templateUrl: 'partials/class/class_extra_eu_edil.html',
-    		controller: 'PracticeCtrl',
-    		controllerAs: 'practice_ctrl'
-    	})
-    	.when('/Console/search', {
-    		templateUrl: 'partials/console/search.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
-    	.when('/Console/classification/final/:id', {
-    		templateUrl: 'partials/console/classification/final_classification.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
-    	.when('/Console/classification/uploadfile/:cat/:type/:id', {
-    		templateUrl: 'partials/console/upload/upload_file.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
-    	.when('/Console/classification/benefits', {
-    		templateUrl: 'partials/console/classification/benefits_classification.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
-    	.when('/Console/classification/notifics', {
-    		templateUrl: 'partials/console/classification/notifics_classification.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
-    	.when('/Console/report', {
-    		templateUrl: 'partials/console/report.html',
-    		controller: 'ConsoleCtrl',
-    		controllerAs: 'console_ctrl'
-    	})
+    	})  	
     	.otherwise({
     		redirectTo:'/'
     	});

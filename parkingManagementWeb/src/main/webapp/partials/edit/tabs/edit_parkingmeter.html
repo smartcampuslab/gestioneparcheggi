@@ -298,7 +298,7 @@
 				   	</div>
 				   	<div class="form-group" ng-show="pm_status.visible">
 				    	<label for="status">{{ 'pm_status' | i18n }}</label>
-				    	<select id="status" name="pStatus" class="form-control" ng-options="s as s.descrizione for s in listaStati" ng-model="myStatus" ng-required="pm_status.required">
+				    	<select id="status" name="pStatus" class="form-control" ng-options="s.descrizione for s in listaStati" ng-model="myStatus" ng-required="pm_status.required">
 				    		<option value="">{{ 'pm_status_placeholder' | i18n }}</option>
 				    	</select>
 				    	<div class="alert alert-danger" ng-show="!isInit && form.pStatus.$error.required">{{ 'parkingmeter_status_select_err_required' | i18n }}</div>
