@@ -43,7 +43,7 @@
 
 <!-- <script src="lib/lodash.js"></script> -->
 <!-- <script src="lib/angular-google-maps.js"></script> -->
-<script src="http://maps.google.com/maps/api/js?key=AIzaSyBAyoQGPbpu84FQoIw_nfxaodL3vDYUgGA&sensor=false&v=3.exp"></script>
+<script src="http://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
 <script src="lib/ng-map.min.js"></script>
 
 <base href="/parking-management/" />
