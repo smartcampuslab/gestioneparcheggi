@@ -32,7 +32,7 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
-import eu.trentorise.smartcampus.aac.AACException;
+//import eu.trentorise.smartcampus.aac.AACException;
 import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
 import it.smartcommunitylab.parking.management.web.model.UserSetting;
 //import eu.trentorise.smartcampus.citizenportal.models.SubjectDn;
