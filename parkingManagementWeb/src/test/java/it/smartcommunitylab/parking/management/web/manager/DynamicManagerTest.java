@@ -24,8 +24,11 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/spring/applicationContext.xml" })
+@ContextConfiguration(locations = { "/spring/filterContext.xml" })
 public class DynamicManagerTest {
+	
+	private static final String appId="rv";
+	private static final String appIdTn="tn";
 
 	private static final Long NOW = System.currentTimeMillis();
 	
@@ -40,6 +43,8 @@ public class DynamicManagerTest {
 	public void edit() throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException {
+		
+		manager.setAppId(appId);
 		
 //		RateAreaBean area = new RateAreaBean();
 //		area.setId_app(appId);
@@ -177,7 +182,7 @@ public class DynamicManagerTest {
 //			pb.setName("StazioneFS");
 //			PointBean geo = new PointBean();
 //			geo.setLat(45.889315);
-//			geo.setLng(11.033718);
+//			geo.setLng(11.033718);		Assert.assertTrue(manager.getParkingStructureByName("stazionefs").get(0).getSlotOccupied() == 145);
 //			pb.setGeometry(geo);
 		
 			// Dynamic data
@@ -198,6 +203,115 @@ public class DynamicManagerTest {
 		Assert.assertTrue(dynManager.getAllStreets(NOW + 3000).size() == 0);
 		
 		Assert.assertTrue(manager.getParkingStructureByName("stazionefs").get(0).getSlotOccupied() == 145);
+		
+		Assert.assertTrue(manager.getBikePointsByName("stazionefs").get(0).getBikeNumber() == 10);
+		
+	}
+	
+	// If this test fails try to run the saveTn() test in the storageManagerTest
+	@Test
+	public void editTn() throws SecurityException, NoSuchFieldException,
+			IllegalArgumentException, IllegalAccessException,
+			NoSuchMethodException, InvocationTargetException {
+		
+		manager.setAppId(appIdTn);
+		
+//		RateAreaBean area = new RateAreaBean();
+//		area.setId_app(appId);
+//		area.setName("Pasubio");
+//		area.setColor("29ea30");
+//		area.setFee(new Float(0.50));
+//		area.setTimeSlot("08:00 - 18:00");
+//		area.setSmsCode("567");
+//		
+//		ZoneBean z = new ZoneBean();
+//		z.setId_app(appId);
+//		z.setName("Brione");
+//		z.setSubmacro("B");
+//		z.setColor("33cc66");
+		
+		List<ZoneBean> zones = manager.getZoneByName("Zona a Traffico Limitato");
+		ZoneBean z = null;
+		for(ZoneBean zon : zones){
+			//if(zon.getSubmacro().compareTo("B") == 0){
+				z = zon;
+			//}
+		}
+		
+		// Streets Editing
+		List<StreetBean> streets = manager.findStreetByName("Malvasia nord");
+		if(streets!=null && streets.size() > 0){
+			StreetBean s = streets.get(0);
+			
+			// Dynamic field
+			s.setFreeParkSlotOccupied(0);
+			s.setFreeParkSlotSignOccupied(0);
+			s.setPaidSlotOccupied(6);
+			s.setTimedParkSlotOccupied(4);
+			s.setHandicappedSlotOccupied(0);
+			
+			ObjectMapper mapper = new ObjectMapper();
+			try {
+				System.out.println(mapper.writeValueAsString(s));
+			} catch (JsonGenerationException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (JsonMappingException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
+			try {
+				dynManager.editStreet(s, NOW);
+			} catch (DatabaseException e3) {
+				// TODO Auto-generated catch block
+				e3.printStackTrace();
+			}
+		}
+		
+		streets = manager.findStreetByName("Brennero Centro");
+		if(streets!=null && streets.size() > 0){
+			StreetBean s2 = streets.get(0);
+		
+			// Dynamic field
+			s2.setFreeParkSlotOccupied(0);
+			s2.setFreeParkSlotSignOccupied(1);
+			s2.setPaidSlotOccupied(3);
+			s2.setTimedParkSlotOccupied(2);
+			s2.setHandicappedSlotOccupied(0);
+	
+			try {
+				dynManager.editStreet(s2, NOW);
+			} catch (DatabaseException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
+		}	
+		
+		// BikePoints Update
+		List<BikePointBean> bps = manager.getBikePointsByName("Stazionefs");
+		if(bps != null && bps.size() > 0){
+			BikePointBean pb = bps.get(0);
+		
+			// Dynamic data
+			pb.setSlotNumber(24);
+			pb.setBikeNumber(10);
+		
+		
+			try {
+				dynManager.editBikePoint(pb, NOW);
+			} catch (NotFoundException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+			
+		Assert.assertTrue(manager.findStreetByName("Malvasia nord").get(0).getTimedParkSlotOccupied() == 4);
+		Assert.assertTrue(dynManager.getAllStreets(z, NOW - 60000).size() == 2);
+		Assert.assertTrue(dynManager.getAllStreets(NOW + 3000).size() == 0);
 		
 		Assert.assertTrue(manager.getBikePointsByName("stazionefs").get(0).getBikeNumber() == 10);
 		

@@ -9,7 +9,7 @@
 <link href="css/xeditable.css" rel="stylesheet" />
 <link href="css/modaldialog.css" rel="stylesheet" />
 <link href="css/colorpicker.css" rel="stylesheet" />
-<link href="img/myweb.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
 
 <!-- required libraries -->
 <script src="js/jquery.min.js"></script>

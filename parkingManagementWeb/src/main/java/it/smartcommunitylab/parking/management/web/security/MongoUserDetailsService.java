@@ -22,8 +22,8 @@ import it.smartcommunitylab.parking.management.web.repository.UserRepositoryDao;
 @Component
 public class MongoUserDetailsService implements UserDetailsService {
 
-    @Autowired
-    private UserRepositoryDao userRepositoryDao;
+    //@Autowired
+    //private UserRepositoryDao userRepositoryDao;
     
     @Autowired
 	private ObjectShowSetup objectShowSetup;
@@ -85,11 +85,11 @@ private org.springframework.security.core.userdetails.User userdetails;
         return authList;
     }
 
-    public it.smartcommunitylab.parking.management.web.repository.User getUserDetail(String username) {
-    	it.smartcommunitylab.parking.management.web.repository.User user = userRepositoryDao.findByUsername(username);
+    //public it.smartcommunitylab.parking.management.web.repository.User getUserDetail(String username) {
+    //	it.smartcommunitylab.parking.management.web.repository.User user = userRepositoryDao.findByUsername(username);
         //System.out.println(user.toString());
-        return user;
-    }
+    //    return user;
+    //}
     
     public UserSetting getUserDetails(String username){
     	return userSetup.findUserByUsername(username);

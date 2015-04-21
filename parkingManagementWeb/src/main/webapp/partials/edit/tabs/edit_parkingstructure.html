@@ -191,27 +191,27 @@
 		  			<table width="100%">
 						<tr ng-show="ps_name.visible">
 							<td width="45%"><strong>{{ 'ps_name' | i18n }}:</strong></td>
-							<td width="55%">{{ parkingStructure.name }}</td>
+							<td width="55%">{{ viewParkingStructure.name }}</td>
 						</tr>
 						<tr ng-show="ps_address.visible">	
 							<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
-							<td>{{ parkingStructure.streetReference }}</td>
+							<td>{{ viewParkingStructure.streetReference }}</td>
 						</tr>
 						<tr ng-show="ps_fee.visible">
 							<td><strong>{{ 'ps_fee' | i18n }}:</strong></td>
-							<td>{{ parkingStructure.fee }}</td>
+							<td>{{ viewParkingStructure.fee }}</td>
 						</tr>
 						<tr ng-show="ps_timeSlot.visible">	
 							<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
-							<td>{{ parkingStructure.timeSlot }}</td>
+							<td>{{ viewParkingStructure.timeSlot }}</td>
 						</tr>
 						<tr ng-show="ps_phone.visible">	
 							<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
-							<td>{{ parkingStructure.phoneNumber }}</td>
+							<td>{{ viewParkingStructure.phoneNumber }}</td>
 						</tr>
 						<tr ng-show="ps_management.visible">	
 							<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
-							<td>{{ parkingStructure.managementMode }}</td>
+							<td>{{ viewParkingStructure.managementMode }}</td>
 						</tr>
 						<tr ng-show="ps_payment.visible">	
 							<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
@@ -219,15 +219,15 @@
 						</tr>
 						<tr ng-show="ps_slotNumber.visible">	
 							<td><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
-							<td>{{ parkingStructure.slotNumber }}</td>
+							<td>{{ viewParkingStructure.slotNumber }}</td>
 						</tr>
 						<tr ng-show="ps_handicappedSlot.visible">	
 							<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
-							<td>{{ parkingStructure.handicappedSlotNumber }}</td>
+							<td>{{ viewParkingStructure.handicappedSlotNumber }}</td>
 						</tr>
 						<tr ng-show="ps_unusuableSlot.visible">	
 							<td><strong>{{ 'ps_unusuable_slot' | i18n }}</strong></td>
-							<td>{{ parkingStructure.unusuableSlotNumber }}</td>
+							<td>{{ viewParkingStructure.unusuableSlotNumber }}</td>
 						</tr>
 						<tr ng-show="ps_geometry.visible">
 							<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
@@ -241,7 +241,7 @@
 								<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
 							<td width="50%" align="left">
-								<button type="button" class="btn btn-default btn-lg" ng-click="setPsEdit(parkingStructure)">{{ 'text_btn_edit' | i18n  }}</button>
+								<button type="button" class="btn btn-default btn-lg" ng-click="setPsEdit(viewParkingStructure)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>
@@ -362,8 +362,8 @@
 				   			<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>
 				   		</td>
 				   		<td width="34%" align="right">
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPstruct(form, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, parkingStructure, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 				</table>

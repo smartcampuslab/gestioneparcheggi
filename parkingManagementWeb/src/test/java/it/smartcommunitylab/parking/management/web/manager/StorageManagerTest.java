@@ -33,16 +33,19 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/spring/applicationContext.xml" })
+//@ContextConfiguration(locations = { "classpath*:/spring/filterContext*.xml", "classpath*:/spring/SpringAppDispatcher-servlet*.xml" })
+@ContextConfiguration(locations = { "/spring/filterContext.xml", "/spring/SpringAppDispatcher-servlet.xml" })
 public class StorageManagerTest {
 
 	private static final String appId="rv";
+	private static final String appIdTn="tn";
 	
 	@Autowired
 	private StorageManager manager;
 
 	@Test
 	public void getParcometri() {
+		manager.setAppId(appId);
 		Assert.assertTrue(manager.getAllParkingMeters().size() > 0);
 	}
 
@@ -50,6 +53,8 @@ public class StorageManagerTest {
 	public void save() throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException {
+		
+		manager.setAppId(appId);
 		
 		// Rate Area Creation
 		
@@ -560,10 +565,270 @@ public class StorageManagerTest {
 	}
 	
 	@Test
+	public void saveTn() throws SecurityException, NoSuchFieldException,
+			IllegalArgumentException, IllegalAccessException,
+			NoSuchMethodException, InvocationTargetException {
+		manager.setAppId(appIdTn);
+		
+		// Rate Area Creation
+		
+		//Polygon List 1;
+		List<PolygonBean> areaGeo = new ArrayList<PolygonBean>();
+		PolygonBean pol1 = new PolygonBean();
+		PointBean pbe1 = new PointBean();
+		pbe1.setLat(46.080177);
+		pbe1.setLng(11.121920);
+		PointBean pbe2 = new PointBean();
+		pbe2.setLat(46.078554);
+		pbe2.setLng(11.127177);
+		PointBean pbe3 = new PointBean();
+		pbe3.setLat(46.074863);
+		pbe3.setLng(11.127520);
+		PointBean pbe4 = new PointBean();
+		pbe4.setLat(46.074476);
+		pbe4.setLng(11.125267);
+		PointBean pbe5 = new PointBean();
+		pbe5.setLat(46.075339);
+		pbe5.setLng(11.124688);
+		PointBean pbe6 = new PointBean();
+		pbe6.setLat(46.075190);
+		pbe6.setLng(11.123636);
+		PointBean pbe7 = new PointBean();
+		pbe7.setLat(46.075845);
+		pbe7.setLng(11.122649);
+		PointBean pbe8 = new PointBean();
+		pbe8.setLat(46.076262);
+		pbe8.setLng(11.122006);
+		List<PointBean> points = new ArrayList<PointBean>();
+		points.add(pbe1);
+		points.add(pbe2);
+		points.add(pbe3);
+		points.add(pbe4);
+		points.add(pbe5);
+		points.add(pbe6);
+		points.add(pbe7);
+		points.add(pbe8);
+		pol1.setPoints(points);
+		areaGeo.add(pol1);
+		
+		RateAreaBean area = new RateAreaBean();
+		area.setId_app(appIdTn);
+		area.setName("Area di 2a corona - zona blu");
+		area.setColor("2032e4");
+		area.setFee(new Float(1.00));
+		area.setTimeSlot("08:00 - 19:30");
+		area.setSmsCode("726");
+		area.setGeometry(areaGeo);
+		area = manager.save(area);
+		
+		// Geo Zone creation
+		PolygonBean polz1 = new PolygonBean();
+		PointBean pbz1 = new PointBean();
+		pbz1.setLat(46.070159);
+		pbz1.setLng(11.118186);
+		PointBean pbz2 = new PointBean();
+		pbz2.setLat(46.072153);
+		pbz2.setLng(11.124752);
+		PointBean pbz3 = new PointBean();
+		pbz3.setLat(46.069861);
+		pbz3.setLng(11.127971);
+		PointBean pbz4 = new PointBean();
+		pbz4.setLat(46.065544);
+		pbz4.setLng(11.125353);
+		PointBean pbz5 = new PointBean();
+		pbz5.setLat(46.064859);
+		pbz5.setLng(11.119388);
+		List<PointBean> pointsz = new ArrayList<PointBean>();
+		pointsz.add(pbz1);
+		pointsz.add(pbz2);
+		pointsz.add(pbz3);
+		pointsz.add(pbz4);
+		pointsz.add(pbz5);
+		polz1.setPoints(pointsz);
+		
+		ZoneBean z = new ZoneBean();
+		z.setId_app(appIdTn);
+		z.setName("Zona a Traffico Limitato");
+		//z.setSubmacro("B");
+		z.setColor("e3e427");
+		z.setType("zona tm trento");
+		z.setGeometry(polz1);
+		z = manager.save(z);
+		
+		
+		// Streets Creation
+		PointBean pbes1 = new PointBean();
+		pbes1.setLat(46.077721);
+		pbes1.setLng(11.123872);
+		PointBean pbes2 = new PointBean();
+		pbes2.setLat(46.077177);
+		pbes2.setLng(11.124462);
+		PointBean pbes3 = new PointBean();
+		pbes3.setLat(46.076426);
+		pbes3.setLng(11.124870);
+		List<PointBean> pointsS = new ArrayList<PointBean>();
+		pointsS.add(pbes1);
+		pointsS.add(pbes2);
+		pointsS.add(pbes3);
+		LineBean line1 = new LineBean();
+		line1.setPoints(pointsS);
+		
+		StreetBean s = new StreetBean();
+		s.setStreetReference("Malvasia nord");
+		s.setId_app(appIdTn);
+		s.setSlotNumber(15);
+		s.setFreeParkSlotNumber(0);
+		s.setFreeParkSlotSignNumber(0);
+		s.setPaidSlotNumber(0);
+		s.setTimedParkSlotNumber(0);
+		s.setHandicappedSlotNumber(0);
+		s.setFreeParkSlotNumber(0);
+		s.setSubscritionAllowedPark(false);
+		s.setColor(area.getColor());
+		s.setRateAreaId(area.getId());
+		s.setGeometry(line1);
+		List<String> zones = new ArrayList<String>();
+		zones.add(z.getId());
+		s.setZones(zones);
+		
+		PointBean pbes12 = new PointBean();
+		pbes12.setLat(46.077185);
+		pbes12.setLng(11.123615);
+		PointBean pbes22 = new PointBean();
+		pbes22.setLat(46.076054);
+		pbes22.setLng(11.124259);
+		List<PointBean> pointsS2 = new ArrayList<PointBean>();
+		pointsS2.add(pbes12);
+		pointsS2.add(pbes22);
+		LineBean line2 = new LineBean();
+		line2.setPoints(pointsS2);
+		
+		StreetBean s2 = new StreetBean();
+		s2.setStreetReference("Brennero Centro");
+		s2.setId_app(appIdTn);
+		s2.setSlotNumber(18);
+		s2.setFreeParkSlotNumber(0);
+		s2.setFreeParkSlotSignNumber(0);
+		s2.setPaidSlotNumber(0);
+		s2.setTimedParkSlotNumber(3);
+		s2.setHandicappedSlotNumber(0);
+		s2.setFreeParkSlotNumber(0);
+		s2.setSubscritionAllowedPark(false);
+		s2.setColor(area.getColor());
+		s2.setRateAreaId(area.getId());
+		s.setGeometry(line2);
+		s2.setZones(zones);
+		
+		
+		// ParkingMeters Creation
+		ParkingMeterBean p = new ParkingMeterBean();
+		p.setId_app(appIdTn);
+		p.setAreaId(area.getId());
+		p.setCode(35);
+		p.setStatus(Status.ACTIVE);
+		PointBean g1 = new PointBean();
+		g1.setLat(46.076962);
+		g1.setLng(11.123947);
+		p.setGeometry(g1);
+		
+		ParkingMeterBean p2 = new ParkingMeterBean();
+		p2.setId_app(appIdTn);
+		p2.setAreaId(area.getId());
+		p2.setCode(51);
+		p2.setStatus(Status.INACTIVE);
+		PointBean g2 = new PointBean();
+		g2.setLat(46.076524);
+		g2.setLng(11.124894);
+		p2.setGeometry(g2);
+		
+		ParkingMeterBean p3 = new ParkingMeterBean();
+		p3.setId_app(appIdTn);
+		p3.setAreaId(area.getId());
+		p3.setCode(53);
+		p3.setStatus(Status.ACTIVE);
+		PointBean g3 = new PointBean();
+		g3.setLat(46.076217);
+		g3.setLng(11.123674);
+		p3.setGeometry(g3);
+		
+		
+		// BikePoints Creation
+		BikePointBean pb = new BikePointBean();
+		pb.setId_app(appIdTn);
+		pb.setName("StazioneFS");
+		pb.setSlotNumber(24);
+		pb.setBikeNumber(20);
+		PointBean geo = new PointBean();
+		geo.setLat(46.071984);
+		geo.setLng(11.119766);
+		pb.setGeometry(geo);
+		
+		BikePointBean pb2 = new BikePointBean();
+		pb2.setId_app(appIdTn);
+		pb2.setName("Staz. Autocorriere");
+		pb2.setSlotNumber(12);
+		pb2.setBikeNumber(12);
+		PointBean geo2 = new PointBean();
+		geo2.setLat(46.070164);
+		geo2.setLng(11.119793);
+		pb2.setGeometry(geo2);
+		
+		BikePointBean pb3 = new BikePointBean();
+		pb3.setId_app(appIdTn);
+		pb3.setName("APT");
+		pb3.setSlotNumber(8);
+		pb3.setBikeNumber(8);
+		PointBean geo3 = new PointBean();
+		geo3.setLat(46.070529);
+		geo3.setLng(11.121263);
+		pb3.setGeometry(geo3);
+		
+		try {
+			manager.save(s);
+			manager.save(s2);
+			manager.save(p);
+			manager.save(p2);
+			manager.save(p3);
+			manager.save(pb);
+			manager.save(pb2);
+			manager.save(pb3);
+		} catch (DatabaseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		ObjectMapper mapper = new ObjectMapper();
+		try {
+			System.out.println(mapper.writeValueAsString(s));
+			System.out.println(mapper.writeValueAsString(s2));
+			System.out.println(mapper.writeValueAsString(z));
+		} catch (JsonGenerationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (JsonMappingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		Assert.assertTrue(manager.getAllStreets(area).size() == 2);
+		Assert.assertTrue(manager.getAllParkingMeters(area).size() == 3);
+		Assert.assertTrue(manager.getAllBikePoints().size() == 3);
+		// Filter street for zone
+		Assert.assertTrue(manager.getAllStreets(z).size() == 2);
+		
+	}
+	
+	
+	@Test
 	public void delete() throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException,
 			JsonGenerationException, JsonMappingException, IOException {
+		
+		manager.setAppId(appId);
 		
 		List<ZoneBean> zones = manager.getAllZone();
 		for(ZoneBean z : zones){
@@ -597,12 +862,51 @@ public class StorageManagerTest {
 		Assert.assertTrue(manager.getAllBikePoints().size() == 0);
 		
 	}
+	
+	@Test
+	public void deleteTn() throws SecurityException, NoSuchFieldException,
+			IllegalArgumentException, IllegalAccessException,
+			NoSuchMethodException, InvocationTargetException,
+			JsonGenerationException, JsonMappingException, IOException {
+		
+		manager.setAppId(appIdTn);
+		
+		List<ZoneBean> zones = manager.getAllZone();
+		for(ZoneBean z : zones){
+			manager.removeZone(z.getId());
+		}
+		
+		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters();
+		for(ParkingMeterBean pm : parkingMeters){
+			manager.removeParkingMeter(pm.getAreaId(), pm.getId());
+		}
+		
+		List<BikePointBean> bikePoints = manager.getAllBikePoints();
+		for(BikePointBean bp : bikePoints){
+			manager.removeBikePoint(bp.getId());
+		}
+		
+		List<RateAreaBean> areas = manager.getAllArea();
+		for(RateAreaBean area : areas){
+			manager.removeArea(area.getId());
+		}
+		
+		Assert.assertTrue(manager.getAllArea().size() == 0);
+		Assert.assertTrue(manager.getAllParkingMeters().size() == 0);
+		Assert.assertTrue(manager.getAllParkingStructure().size() == 0);
+		Assert.assertTrue(manager.getAllZone().size() == 0);
+		Assert.assertTrue(manager.getAllBikePoints().size() == 0);
+		
+	}
 
 	@Test
 	public void json() throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException,
 			JsonGenerationException, JsonMappingException, IOException {
+		
+		manager.setAppId(appId);
+		
 		ParkingMeterBean p = new ParkingMeterBean();
 		p.setAreaId("tt");
 		p.setCode(3939);

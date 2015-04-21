@@ -89,7 +89,7 @@
 		</sec:authentication-provider>
 	</sec:authentication-manager>
 	
-    <context:component-scan base-package="it.smartcommunitylab.parking.management.web.security" />
+    <context:component-scan base-package="it.smartcommunitylab.parking.management.web" />
 	
 	<!-- MyWeb Portal login configuration -->
 <!-- 	<sec:http pattern="/**" disable-url-rewriting="true" auto-config="false"> -->
@@ -104,5 +104,16 @@
 <!-- 			delete-cookies="true" -->
 <!-- 			logout-success-url="/prelogin" /> -->
 <!-- 	</sec:http> -->
+
+		<mongo:mongo host="${mongo.host}" port="${mongo.port}" />
+
+		<bean id="mongoTemplate" class="org.springframework.data.mongodb.core.MongoTemplate">
+			<constructor-arg ref="mongo" />
+ 			<constructor-arg name="databaseName"
+				value="${mongo.db}" />
+		</bean>	
+	
+	 	<!-- Base package to scan the mongo repositories, where we create de DAOS to access data and domain objects -->
+     	<mongo:repositories base-package="it.smartcommunitylab.parking.management.web.repository" />
 
 </beans>

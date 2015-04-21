@@ -135,27 +135,27 @@
 		  			<table width="100%">
 						<tr ng-show="a_name.visible">
 							<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-							<td width="55%">{{ area.name }}</td>
+							<td width="55%">{{ viewArea.name }}</td>
 						</tr>
 						<tr ng-show="a_fee.visible">	
 							<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-							<td>{{ area.fee }}</td>
+							<td>{{ viewArea.fee }}</td>
 						</tr>
 						<tr ng-show="a_timeSlot.visible">	
 							<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-							<td>{{ area.timeSlot }}</td>
+							<td>{{ viewArea.timeSlot }}</td>
 						</tr>
 						<tr ng-show="a_smsCode.visible">	
 							<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-							<td>{{ area.smsCode }}</td>
+							<td>{{ viewArea.smsCode }}</td>
 						</tr>
 						<tr ng-show="a_note.visible">	
 							<td><strong>{{ 'area_note' | i18n }}:</strong></td>
-							<td>{{ area.note }}</td>
+							<td>{{ viewArea.note }}</td>
 						</tr>
 						<tr ng-show="a_color.visible">	
 							<td><strong>{{ 'area_color' | i18n }}</strong></td>
-							<td><span class="colorBox" ng-style="{'background-color': correctColor(area.color)}"></span></td>
+							<td><span class="colorBox" ng-style="{'background-color': correctColor(viewArea.color)}"></span></td>
 						</tr>
 						<tr ng-show="a_geometry.visible">	
 							<td><strong>{{ 'area_geometry' | i18n }}</strong></td>
@@ -169,7 +169,7 @@
 								<button type="button" class="btn btn-default btn-lg" ng-click="closeAView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
 							<td width="50%" align="left">
-								<button type="button" class="btn btn-default btn-lg" ng-click="setAEdit(area)">{{ 'text_btn_edit' | i18n  }}</button>
+								<button type="button" class="btn btn-default btn-lg" ng-click="setAEdit(viewArea)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>
@@ -242,8 +242,8 @@
 							<button type="button" class="btn btn-default btn-lg" ng-click="closeAView()">{{ 'text_btn_close' | i18n  }}</button>	
 						</td>
 				   		<td width="34%" align="right">
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateArea(form, myColor)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- , editArea -->
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="createArea(form, myColor)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateArea(form, area, myColor)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- , editArea -->
+				   			<button type="button" class="btn btn-default btn-lg" ng-click="createArea(form, area, myColor)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 				</table>

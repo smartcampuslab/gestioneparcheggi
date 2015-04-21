@@ -53,6 +53,7 @@ public class StorageManager {
 
 	public void setAppId(String appId) {
 		this.appId = appId;
+		System.out.println("Manager App id = " + this.appId);
 	}
 
 	// RateArea Methods
@@ -418,12 +419,14 @@ public class StorageManager {
 					temp.setStreetReference(sb.getStreetReference());
 					temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());
 					temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());
-					if(temp.getGeometry() != null && temp.getGeometry().getPoints().size() > 0){
+					if(temp.getGeometry() != null && temp.getGeometry().getPoints() != null && temp.getGeometry().getPoints().size() > 0){
 						temp.getGeometry().getPoints().clear();
 					}
-					for (PointBean pb : sb.getGeometry().getPoints()) {
-						points.add(ModelConverter.convert(pb, Point.class));
-						//temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
+					if(sb.getGeometry() != null){
+						for (PointBean pb : sb.getGeometry().getPoints()) {
+							points.add(ModelConverter.convert(pb, Point.class));
+							//temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
+						}
 					}
 					line.setPoints(points);
 					temp.setGeometry(line);
@@ -732,10 +735,12 @@ public class StorageManager {
 		zona.setColor(z.getColor());
 		zona.setType(z.getType());
 		zona.setNote(z.getNote());
-		zona.getGeometry().getPoints().clear();
-		for (PointBean pb : z.getGeometry().getPoints()) {
-			zona.getGeometry().getPoints()
-					.add(ModelConverter.convert(pb, Point.class));
+		if(zona.getGeometry() != null && zona.getGeometry().getPoints().size() > 0){
+			zona.getGeometry().getPoints().clear();
+			for (PointBean pb : z.getGeometry().getPoints()) {
+				zona.getGeometry().getPoints()
+						.add(ModelConverter.convert(pb, Point.class));
+			}
 		}
 		mongodb.save(zona);
 		return z;
