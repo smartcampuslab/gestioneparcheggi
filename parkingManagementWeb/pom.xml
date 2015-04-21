@@ -228,8 +228,9 @@
     <profile>
       <id>dev</id>
       <properties>
-        <baseUrl>http://localhost:8080/${app.name}</baseUrl>
-        <gmap.key>AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs</gmap.key>
+<!--         <baseUrl>http://localhost:8080/${app.name}</baseUrl> -->
+         <baseUrl>https://dev.smartcommunitylab.it/${app.name}</baseUrl>
+        <gmap.key>AIzaSyBAyoQGPbpu84FQoIw_nfxaodL3vDYUgGA</gmap.key>
       </properties>
     </profile>
     <profile>
