@@ -145,8 +145,11 @@
 										<span ng-show="pm_rateArea.visible">{{ 'pm_area_name' | i18n }}</span>&nbsp;
 										<a href ng-click="showPmAreaFilter()" ng-show="!showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 										<a href ng-click="hidePmAreaFilter()" ng-show="showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
-										<select id="f_pm_area" ng-show="showAreaPmFilter" class="form-control" ng-model="pmAreaFilter" ng-options="a.id as a.name for a in allPmAreaFilter">
-					    				</select></th>
+<!-- 										<select id="f_pm_area" ng-show="showAreaPmFilter" class="form-control" ng-model="pmAreaFilter" ng-options="a.id as a.name for a in allPmAreaFilter"> -->
+<!-- 					    				</select> -->
+					    				<select id="f_pm_area" ng-show="showAreaPmFilter" class="form-control" ng-model="pmAreaFilter">
+					    					<option ng-repeat="a in allPmAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
+					    				</select>
 									</th>
 									<th width="25%"><span>{{ 'operations' | i18n }}</span></th>
 								</tr>

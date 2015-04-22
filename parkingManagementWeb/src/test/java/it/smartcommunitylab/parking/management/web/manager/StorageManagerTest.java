@@ -319,6 +319,9 @@ public class StorageManagerTest {
 		s4.setColor(area3.getColor());
 		s4.setRateAreaId(area3.getId());
 		s4.setZones(zones2);
+		List<String> pms1 = new ArrayList<String>();
+		pms1.add("7");
+		s4.setParkingMeters(pms1);
 		
 		StreetBean s5 = new StreetBean();
 		s5.setStreetReference("Via Macerie2");
@@ -336,6 +339,9 @@ public class StorageManagerTest {
 		List<String> zones3 = new ArrayList<String>();
 		zones3.add(z3.getId());
 		s5.setZones(zones3);
+		List<String> pms2 = new ArrayList<String>();
+		pms2.add("8");
+		s5.setParkingMeters(pms2);
 		
 		// ParkingMeters Creation
 		ParkingMeterBean p = new ParkingMeterBean();
@@ -404,8 +410,8 @@ public class StorageManagerTest {
 		p7.setCode(7);
 		p7.setStatus(Status.ACTIVE);
 		PointBean g7 = new PointBean();
-		g7.setLat(45.88669987887168);
-		g7.setLng(11.028202772140503);
+		g7.setLat(45.8891493690743);
+		g7.setLng(11.04399561882019);
 		p7.setGeometry(g7);
 		
 		ParkingMeterBean p8 = new ParkingMeterBean();
@@ -414,8 +420,8 @@ public class StorageManagerTest {
 		p8.setCode(8);
 		p8.setStatus(Status.ACTIVE);
 		PointBean g8 = new PointBean();
-		g8.setLat(45.88552438375571);
-		g8.setLng(11.029500961303711);
+		g8.setLat(45.887794694672756);
+		g8.setLng(11.044692993164062);
 		p8.setGeometry(g8);
 		
 		ParkingMeterBean p9 = new ParkingMeterBean();
@@ -424,8 +430,8 @@ public class StorageManagerTest {
 		p9.setCode(9);
 		p9.setStatus(Status.INACTIVE);
 		PointBean g9 = new PointBean();
-		g9.setLat(45.883851463705895);
-		g9.setLng(11.026840209960938);
+		g9.setLat(45.8880336693716);
+		g9.setLng(11.04301929473877);
 		p9.setGeometry(g9);
 		
 		ParkingMeterBean p10 = new ParkingMeterBean();
@@ -434,8 +440,8 @@ public class StorageManagerTest {
 		p10.setCode(121);
 		p10.setStatus(Status.INACTIVE);
 		PointBean g10 = new PointBean();
-		g10.setLat(45.883851463705895);
-		g10.setLng(11.026840209960938);
+		g10.setLat(45.889586979854);
+		g10.setLng(11.046624183654785);
 		p10.setGeometry(g10);
 		
 		//ParkingStructure Creation
@@ -716,7 +722,7 @@ public class StorageManagerTest {
 		s2.setSubscritionAllowedPark(false);
 		s2.setColor(area.getColor());
 		s2.setRateAreaId(area.getId());
-		s.setGeometry(line2);
+		s2.setGeometry(line2);
 		s2.setZones(zones);
 		
 		

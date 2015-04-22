@@ -237,7 +237,10 @@
 								<a href ng-click="showAreaFilter()" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 								<a href ng-click="hideAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 								<div ng-show="showAreaStreetFilter">
-									<select id="f_street_area" class="form-control" ng-model="streetAreaFilter" ng-options="a.id as a.name for a in allAreaFilter">
+<!-- 									<select id="f_street_area" class="form-control" ng-model="streetAreaFilter" ng-options="a.id as a.name for a in allAreaFilter"> -->
+<!-- 					    			</select> -->
+					    			<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
+					    				<option ng-repeat="a in allAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
 					    			</select>
 					    		</div>	
 					    	</th>
