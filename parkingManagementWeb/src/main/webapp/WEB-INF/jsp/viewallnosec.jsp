@@ -97,7 +97,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	}
 	
 	.angular-google-map-container {
-		height: 500px; 
+		height: 610px; 
 	}
 	
 	.colorBox {   

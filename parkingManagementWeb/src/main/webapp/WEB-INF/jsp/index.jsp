@@ -67,23 +67,6 @@ var conf_app_id="<%=request.getAttribute("app_id")%>";
 var conf_map_center="<%=request.getAttribute("map_center")%>";
 var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
-<%-- var user_mail="<%=request.getAttribute("e_mail")%>"; --%>
-<%-- var nome="<%=request.getAttribute("nome")%>"; --%>
-<%-- var cognome="<%=request.getAttribute("cognome")%>"; --%>
-<%-- var sesso="<%=request.getAttribute("sesso")%>"; --%>
-<%-- var dataNascita="<%=request.getAttribute("dataNascita")%>"; --%>
-<%-- var provinciaNascita="<%=request.getAttribute("provinciaNascita")%>"; --%>
-<%-- var luogoNascita="<%=request.getAttribute("luogoNascita")%>"; --%>
-<%-- var indirizzoRes="<%=request.getAttribute("indirizzoRes")%>"; --%>
-<%-- var capRes="<%=request.getAttribute("capRes")%>"; --%>
-<%-- var cittaRes="<%=request.getAttribute("cittaRes")%>"; --%>
-<%-- var provinciaRes="<%=request.getAttribute("provinciaRes")%>"; --%>
-<%-- var codiceFiscale="<%=request.getAttribute("codiceFiscale")%>"; --%>
-<%-- var cellulare="<%=request.getAttribute("cellulare")%>"; --%>
-<%-- var email="<%=request.getAttribute("email")%>"; --%>
-<%-- var issuerdn="<%=request.getAttribute("issuerdn")%>"; --%>
-<%-- var subjectdn="<%=request.getAttribute("subjectdn")%>"; --%>
-<%-- var base64="<%=request.getAttribute("base64")%>"; --%>
 
 <%-- Part for google analytics --%>
 
@@ -94,18 +77,6 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 
   ga('create', 'UA-54947160-1', 'auto');
   ga('send', 'pageview');
-  
-// 	var language_script = document.createElement('script');
-// 	language_script.type = 'text/javascript';
-// 	language_script.id = 'lang_script';
-	
-// 	var appElement = document.querySelector('[ng-app=cp]');
-// 	var $scope = angular.element(appElement).scope();
-// 	console.log($scope.used_lang);
-	
-// 	var controllerElement = document.querySelector('html');
-// 	var controllerScope = angular.element(controllerElement).scope();
-// 	console.log(controllerScope);
 
 	<%-- Prevent the backspace key from navigating back. --%>
 	$(document).unbind('keydown').bind('keydown', function (event) {
@@ -143,8 +114,14 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	    border: 0;
 	}
 	
+	div.tablewrapper {
+		height: 490px; 
+		overflow-y: auto;
+		margin-bottom: 10px;
+	}
+	
 	.angular-google-map-container {
-		height: 500px; 
+		height: 610px; 
 	}
 	
 	.colorBox {   

@@ -15,7 +15,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
         'Accept': 'application/json;charset=UTF-8'
     };
     
-    $scope.maxBPoints = 10;
+    $scope.maxBPoints = 11;
     
     // Regex
     $scope.gpsPos = /^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/;

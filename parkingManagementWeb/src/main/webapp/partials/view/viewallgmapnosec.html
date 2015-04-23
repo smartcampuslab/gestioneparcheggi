@@ -7,7 +7,7 @@
 			<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
 				<div class="col-md-9"><!--   ng-show="mapReady"-->
 <!-- 					<div id="map_canvas" ></div> -->
-					<map id="viewMap" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" style="height: 500px">
+					<map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}">
 <!-- 						<shape ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.cid }}" name="circle" fill-color="{{ correctColor(pm.area.color) }}" stroke-color="{{ correctColor(pm.area.color) }}" stroke-opacity="1" stroke-weight="2" center="{{ pm.position }}" radius="100" editable="false" > -->
 <!-- 					    </shape> -->
 						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showInfoWindow(event, 'pm')" >

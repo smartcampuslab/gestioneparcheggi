@@ -11,11 +11,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.showLogDates = false;
     $scope.showDialogsSucc = false;
     
-    $scope.maxAreas = 10;
-    $scope.maxStreets = 10;
-    $scope.maxPmeters = 10;
-    $scope.maxPStructs = 10;
-    $scope.maxZones = 10;
+    $scope.maxAreas = 8;
+    $scope.maxStreets = 8;
+    $scope.maxPmeters = 7;
+    $scope.maxPStructs = 8;
+    $scope.maxZones = 8;
     
     // Variable declaration (without this in ie the edit/view features do not work)
     $scope.eStreet = {};
@@ -530,6 +530,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				return myPms[i];
 			}
 		}
+		return null;
 	};
 	
 	$scope.getStreetsFromDb = function(){
@@ -883,7 +884,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			if(streets[i].parkingMeters != null){
 				for(var x = 0; x < streets[i].parkingMeters.length; x++){
 					var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
-					pms.push(pm);
+					if(pm != null){
+						pms.push(pm);
+					}
 				}
 			}
 			var area = $scope.getLocalAreaById(streets[i].rateAreaId);
@@ -903,7 +906,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if($scope.allPmAreaFilter != null && $scope.allPmAreaFilter.length > 0 && $scope.allPmAreaFilter[0].id != ''){
 			$scope.allPmAreaFilter.splice(0,0,{id:'', name: "Tutte"});
 		}
-		$scope.pmAreaFilter = $scope.allPmAreaFilter[0].id;
+		if($scope.allPmAreaFilter.length > 0){
+			$scope.pmAreaFilter = $scope.allPmAreaFilter[0].id;
+		}
 		
 		$scope.allPmStatusFilter = [];
 		angular.copy($scope.listaStati, $scope.allPmStatusFilter);
@@ -1016,9 +1021,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var myStreetPms = [];
 		for(var j = 0; j < $scope.myPms.length; j++){
 			$scope.myPms[j].selected = false;
-			for(var i = 0; i < street.myPms.length; i++){
-				if($scope.myPms[j].code ==  street.myPms[i].code){
-					myStreetPms.push($scope.myPms[j]);
+			if(street.myPms != null && street.myPms.length > 0){
+				for(var i = 0; i < street.myPms.length; i++){
+					if($scope.myPms[j].code == street.myPms[i].code){
+						myStreetPms.push($scope.myPms[j]);
+					}
 				}
 			}
 		}
@@ -2800,9 +2807,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.resizeMap = function(type){
     	
     	$scope.map = $scope.getCorrectMap(type);
-	    google.maps.event.trigger($scope.map, 'resize');
-	    $scope.map.setCenter($scope.getPointFromLatLng($scope.mapOption.center, 2));
-	    $scope.map.setZoom(parseInt($scope.mapOption.zoom));
+    	if($scope.map != null){ 	// the first time I show the area map it is null
+    		google.maps.event.trigger($scope.map, 'resize');
+    		$scope.map.setCenter($scope.getPointFromLatLng($scope.mapOption.center, 2));
+    	    $scope.map.setZoom(parseInt($scope.mapOption.zoom));
+    	}
         return true;
     };
     
@@ -3260,7 +3269,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
 				title = marker.code;
-				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm != null && myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon;

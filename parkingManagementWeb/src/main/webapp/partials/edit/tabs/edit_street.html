@@ -6,7 +6,7 @@
 <!-- 	              geodesic='p.geodesic' fit="false" editable="p.editable" draggable="p.draggable"></ui-gmap-polyline>		 -->
 <!-- 			</ui-gmap-google-map> -->
 			
-			<map id="viewStreet" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 500px" ><!-- ng-show="resizeMap()" -->
+			<map id="viewStreet" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" ><!-- ng-show="resizeMap()" style="height: 500px" -->
 				<shape name="polyline" ng-repeat="s in geoStreets" id="{{ s.id }}" path="{{ s.gpath }}" 
          			geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showInfoWindow(event, s.info_windows_cod)">
      				<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
@@ -224,47 +224,49 @@
 		<div class="col-md-6" ng-show="!viewModeS">
 			<div class="panel panel-success" align="center">
 				<div class="panel-heading">
-					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
 				</div>
 				<div class="panel-body">
 					<div class="alert alert-danger" ng-show="showDeletingSErrorMessage">{{ 'err_in_delete_street' | i18n }}</div>
-					<table class="table table-striped" style="width: 100%">
-						<tr ng-show="streetWS.length != 0">
-							<th width="35%">{{ 'street_name' | i18n }}</th>
-							<th width="15%">{{ 'street_slots' | i18n }}</th>
-							<th width="30%" colspan="2">
-								{{ 'street_area_name' | i18n }}&nbsp;
-								<a href ng-click="showAreaFilter()" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
-								<a href ng-click="hideAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
-								<div ng-show="showAreaStreetFilter">
-<!-- 									<select id="f_street_area" class="form-control" ng-model="streetAreaFilter" ng-options="a.id as a.name for a in allAreaFilter"> -->
-<!-- 					    			</select> -->
-					    			<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
-					    				<option ng-repeat="a in allAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
-					    			</select>
-					    		</div>	
-					    	</th>
-							<th width="20%">{{ 'operations' | i18n }}</th>
-						</tr>
-						<tbody class="animate-repeat"
-							ng-repeat="street in filtered = (streetWS | filter:q | filter:streetAreaFilter) | orderBy:['name', 'area_name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
-				<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
-							<tr>
-								<td width="35%" align="left">{{street.streetReference}}</td>
-								<td width="15%" align="left">{{street.slotNumber}}</td>
-								<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
-								<td width="25%" align="center">{{street.area_name}}</td>
-								<td width="20%" align="left">
-									<a href ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-									<a href ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-									<a href ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
-								</td>
+					<div class="tablewrapper">
+						<table class="table table-striped" style="width: 100%">
+							<tr ng-show="streetWS.length != 0">
+								<th width="35%">{{ 'street_name' | i18n }}</th>
+								<th width="15%">{{ 'street_slots' | i18n }}</th>
+								<th width="30%" colspan="2">
+									{{ 'street_area_name' | i18n }}&nbsp;
+									<a href ng-click="showAreaFilter()" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="hideAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+									<div ng-show="showAreaStreetFilter">
+	<!-- 									<select id="f_street_area" class="form-control" ng-model="streetAreaFilter" ng-options="a.id as a.name for a in allAreaFilter"> -->
+	<!-- 					    			</select> -->
+						    			<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
+						    				<option ng-repeat="a in allAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
+						    			</select>
+						    		</div>	
+						    	</th>
+								<th width="20%">{{ 'operations' | i18n }}</th>
 							</tr>
-						</tbody>
-						<tr ng-show="areaWS.length == 0">
-							<td colspan="5"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
-						</tr>
-					</table>
+							<tbody class="animate-repeat"
+								ng-repeat="street in filtered = (streetWS | filter:q | filter:streetAreaFilter) | orderBy:['name', 'area_name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+					<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+								<tr>
+									<td width="35%" align="left">{{street.streetReference}}</td>
+									<td width="15%" align="left">{{street.slotNumber}}</td>
+									<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
+									<td width="25%" align="center">{{street.area_name}}</td>
+									<td width="20%" align="left">
+										<a href ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a href ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+									</td>
+								</tr>
+							</tbody>
+							<tr ng-show="areaWS.length == 0">
+								<td colspan="5"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+							</tr>
+						</table>
+					</div>
 					<button class="btn btn-success"
 						ng-disabled="currentPage == 0"
 						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
