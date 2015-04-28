@@ -141,10 +141,11 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 <body>
 	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()">
     <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-      <div class="container">
+      <div class="container-fluid" style="margin-left:160px; margin-right:160px">
         <div class="collapse navbar-collapse">
+          <div class="navbar-brand"><strong>{{ 'app_home-title' | i18n }}&nbsp;&nbsp;&nbsp;</strong></div>
           <ul class="nav navbar-nav">
-            <li class="{{ isHomeActive() }}"><a href="#/" ng-click="home()">{{ 'menu_bar-home' | i18n }}</a></li>
+<!--             <li class="{{ isHomeActive() }}"><a href="#/" ng-click="home()">{{ 'menu_bar-home' | i18n }}</a></li> -->
             <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
             <li class="{{ isHomeAuxActive() }}"><a href="#/aux/home" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li>
 <!--             <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li> -->
@@ -162,7 +163,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
           	<li><a href="mailto:myweb.edilizia@comunitadellavallagarina.tn.it?Subject=Info%20MyWeb" target="_top" alt="myweb.edilizia@comunitadellavallagarina.tn.it" title="myweb.edilizia@comunitadellavallagarina.tn.it">{{ 'usefull_link'| i18n }}</a></li>
           	<li class="{{ isActiveItaLang() }}"><a href ng-click="setItalianLanguage()">IT</a></li>
           	<li class="{{ isActiveEngLang() }}"><a href ng-click="setEnglishLanguage()">EN</a></li>
-            <li><a href="logout" ng-click="logout()">{{ 'menu_bar-logout' | i18n }}</a></li>
+            <li><a href="" ng-click="logout()">{{ 'menu_bar-logout' | i18n }}</a></li> <!-- href="logout" -->
           </ul>
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
@@ -175,52 +176,15 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 				<div class="panel panel-default" style="margin-top:65px;">
 			  		<div class="panel-body">
 			  			<div style="margin:5px 15px;">
-							<div class="row" align="center" style="height: 100px"><!-- ; margin-top: 20px; -->
-								<div><!-- "text-align: center" -->
-									<table>
-										<tr>
-<!-- 											<td width="35%" align="center" valign="middle"><img src="img/myweb4_small.png" alt="Logo myWeb" title="Logo myWeb" /></td> -->
-											<td width="100%" align="center" valign="middle"><h1>{{ 'app_home-title' | i18n }}</h1></td>
-										</tr>
-									</table>
+<!-- 							<div class="row" align="center" style="height: 100px"> -->
+<!-- 								<div> -->
+<!-- 									<table> -->
+<!-- 										<tr> -->
+<!-- 											<td width="100%" align="center" valign="middle"><h1>{{ 'app_home-title' | i18n }}</h1></td> -->
+<!-- 										</tr> -->
+<!-- 									</table> -->
 									
-								</div>
-							</div>
-<!-- 							<div class="row" style="height: 170px; margin-bottom: 10px;" ng-show="!frameOpened"> -->
-<!-- 								<div class="panel panel-primary"> -->
-<!-- 									<div class="panel-body"> -->
-<!-- 										<table width="100%"> -->
-<!-- 											<tr> -->
-<!-- 											<td width="50%" valign="middle" style="padding:0px 10px"> -->
-<!-- 												<div class="panel panel-primary"> -->
-<!-- 													<div class="panel-heading"> -->
-<!-- 														<h4 class="panel-title">{{ 'left_menu-availableServices_eu' | i18n }}</h4> -->
-<!-- 													</div> -->
-<!-- 													<div class="panel-body"> -->
-<!-- 														<ul class="nav nav-pills nav-stacked" style="font-size: 14px"> -->
-<!-- 										            		<li class="{{ isActiveLinkEdil() }}"><a href="#/PracticeList/edil/1" ng-click="showPractices(1, true)">{{ 'left_menu-bildings' | i18n }}</a></li> -->
-<!-- 										            		<li class="{{ isActiveLinkAss() }}"><a href="#/PracticeList/ass/1" ng-click="showPractices(2, true)">{{ 'left_menu-allowances' | i18n }}</a></li> -->
-<!-- 										        		</ul> -->
-<!-- 										        	</div> -->
-<!-- 										        </div> -->
-<!-- 										    </td> -->
-<!-- 										    <td width="50%" valign="middle" style="padding:0px 10px">     -->
-<!-- 										        <div class="panel panel-primary"> -->
-<!-- 													<div class="panel-heading"> -->
-<!-- 														<h4 class="panel-title">{{ 'left_menu-availableServices_extraeu' | i18n }}</h4> -->
-<!-- 													</div> -->
-<!-- 													<div class="panel-body"> -->
-<!-- 														<ul class="nav nav-pills nav-stacked" style="font-size: 14px"> -->
-<!-- 										            		<li class="{{ isActiveLinkEdilExtra() }}"><a href="#/PracticeList/edil/2" ng-click="showPractices(1, false)">{{ 'left_menu-bildings' | i18n }}</a></li> -->
-<!-- 										            		<li class="{{ isActiveLinkAssExtra() }}"><a href="#/PracticeList/ass/2" ng-click="showPractices(2, false)">{{ 'left_menu-allowances' | i18n }}</a></li> -->
-<!-- 										        		</ul> -->
-<!-- 										        	</div> -->
-<!-- 										        </div> -->
-<!-- 										    </td> -->
-<!-- 										    <tr> -->
-<!-- 									    </table> -->
-<!-- 								    </div> -->
-<!-- 							    </div>     -->
+<!-- 								</div> -->
 <!-- 							</div> -->
 							<div class="row" ng-show="isHomeParkActive() == 'active'"><!-- style="height: 150px;" -->
 								<div class="col-md-2" >
@@ -230,7 +194,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 										</div>
 										<div class="panel-body">
 											<ul class="nav nav-pills nav-stacked" style="font-size: 14px">
-												<li class="{{ isHomeSubParkActive() }}"><a href="#/park/home" ng-click="setHomeSubParkActive()">{{ 'menu_bar-home' | i18n }}</a></li>
+<!-- 												<li class="{{ isHomeSubParkActive() }}"><a href="#/park/home" ng-click="setHomeSubParkActive()">{{ 'menu_bar-home' | i18n }}</a></li> -->
 												<li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li>
 						            			<li class="{{ isEditingBikeActive() }}" ng-show="showBikeMenuLink"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li>
 						          				<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>

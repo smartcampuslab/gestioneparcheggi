@@ -1,13 +1,13 @@
-<div class="panel panel-success">
-	<div class="panel-heading">
-		<h4 class="panel-title">{{ 'parkEditingPanelTitle' | i18n }}</h4>
-	</div>
-	<div class="panel-body" ng-controller="ParkCtrl" ng-init="initComponents()">
-		<tabset ><!-- ng-show="!isLoading" -->
+<!-- <div class="panel panel-success"> -->
+<!-- 	<div class="panel-heading"> -->
+<!-- 		<h4 class="panel-title">{{ 'parkEditingPanelTitle' | i18n }}</h4> -->
+<!-- 	</div> -->
+<!-- 	<div class="panel-body"> -->
+		<tabset ng-controller="ParkCtrl" ng-init="initComponents()">
 			<tab  ng-repeat="tab in editparktabs" heading="{{ tab.title }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index, tab)">
 				<br>
 				<div ng-include="tab.content"></div>
 			</tab>
 		</tabset>	
-	</div>
-</div>
+<!-- 	</div> -->
+<!-- </div> -->

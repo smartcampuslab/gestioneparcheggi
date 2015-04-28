@@ -1,9 +1,9 @@
-<div class="panel panel-info" ng-controller="BikeCtrl">
-	<div class="panel-heading">
-		<h4 class="panel-title">{{ 'bikeEditingPanelTitle' | i18n }}</h4>
-	</div>
-	<div class="panel-body" ng-init="getBikePointsFromDb()">
-		<div class="row">
+<!-- <div class="panel panel-info" ng-controller="BikeCtrl"> -->
+<!-- 	<div class="panel-heading"> -->
+<!-- 		<h4 class="panel-title">{{ 'bikeEditingPanelTitle' | i18n }}</h4> -->
+<!-- 	</div> -->
+<!-- 	<div class="panel-body"> -->
+		<div class="row" ng-init="getBikePointsFromDb()">
 			<div ng-show="!editModeBP"><!-- && !viewModeBP -->
 				<div class="col-md-6" ><!-- ng-show="bpMapReady" -->
 <!-- 					<ui-gmap-google-map center="bPointMap.center" draggable="true" zoom="bPointMap.zoom" options="options" control="bPointMap.control" bounds="bPointMap.bounds">refresh="map.refresh"  options="map.options" events="events" -->
@@ -215,54 +215,6 @@
 				   	
 			   	</form>
 			</div>
-<!-- 			<div ng-show="false"> -->
-<!-- 				<div class="col-md-6" ng-show="bpViewMapReady" > -->
-<!-- 				</div> -->
-<!-- 				<div class="col-md-6" ng-show="!bpViewMapReady"> -->
-<!-- 					<div style="text-align: center"> -->
-<!-- 						<img src="imgs/ajax-loader.gif" width="40" height="40" /><br> -->
-<!-- 						<h3>{{ 'loading_text' | i18n }}...</h3> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-<!-- 				<div class="col-md-6"> -->
-<!-- 					<div class="panel panel-default" width="90%"> -->
-<!-- 				   		<div class="panel-heading"> -->
-<!-- 				    		<h3 class="panel-title"><strong>{{ 'view_bikepoint' | i18n }}</strong></h3> -->
-<!-- 				  		</div> -->
-<!-- 				  		<div class="panel-body">	 -->
-<!-- 				  			<table width="100%"> -->
-<!-- 								<tr> -->
-<!-- 									<td width="45%"><strong>{{ 'bp_name' | i18n }}:</strong></td> -->
-<!-- 									<td width="55%">{{ bikePoint.name }}</td> -->
-<!-- 								</tr> -->
-<!-- 								<tr>	 -->
-<!-- 									<td><strong>{{ 'bp_slots' | i18n }}:</strong></td> -->
-<!-- 									<td>{{ bikePoint.slotNumber }}</td> -->
-<!-- 								</tr> -->
-<!-- 								<tr>	 -->
-<!-- 									<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td> -->
-<!-- 									<td>{{ bikePoint.bikeNumber }}</td> -->
-<!-- 								</tr> -->
-<!-- 								<tr> -->
-<!-- 									<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td> -->
-<!-- 									<td>{{ myGeometry }}</td> -->
-<!-- 								</tr> -->
-<!-- 					   		</table> -->
-<!-- 					   		<hr> -->
-<!-- 						   	<table width="95%">			 -->
-<!-- 								<tr> -->
-<!-- 									<td width="50%" align="right"> -->
-<!-- 										<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>	 -->
-<!-- 									</td> -->
-<!-- 									<td width="50%" align="left"> -->
-<!-- 										<button type="button" class="btn btn-default btn-lg" ng-click="setBpEdit(bikePoint)">{{ 'text_btn_edit' | i18n  }}</button> -->
-<!-- 									</td> -->
-<!-- 								</tr> -->
-<!-- 							</table> -->
-<!-- 						</div> -->
-<!-- 					</div> -->
-<!-- 				</div> -->
-<!-- 			</div>		 -->
 		</div>
-	</div>
-</div>
+<!-- 	</div> -->
+<!-- </div> -->

@@ -42,6 +42,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.periodPattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d) - (?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)?([\s])?([\/])?([\s])?(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)?([\s])?([-])?([\s])?(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
     $scope.phonePattern=/^[(]{0,1}[0-9]{3}[)\.\- ]{0,1}[0-9]{3}[\.\- ]{0,1}[0-9]{4}$/;
 
+    $scope.logout = function() {
+    	// Clear some session variables
+    	sharedDataService.setName(null);
+        sharedDataService.setSurname(null);
+        sharedDataService.setBase64(null);
+        $scope.user_token = null;
+        
+    	window.location.href = "parking-management/logout";
+    };
+    
     // ------------------ Start datetimepicker section -----------------------
     $scope.today = function() {
         $scope.dt = new Date();

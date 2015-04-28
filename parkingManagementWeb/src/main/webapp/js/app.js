@@ -25,20 +25,35 @@ var pm = angular.module('pm', [
 pm.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
   	$routeProvider
-  		.when('/', {
-    		templateUrl: 'partials/home.html',
-    		controller: 'MainCtrl',
-    		controllerAs: 'main'
+//  		.when('/', {
+//    		templateUrl: 'partials/home.html',
+//    		controller: 'MainCtrl',
+//    		controllerAs: 'main'
+//    	})
+//    	.when('/home', {
+//    		templateUrl: 'partials/home.html',
+//    		controller: 'MainCtrl',
+//    		controllerAs: 'main'
+//    	})
+    	.when('/', {
+    		templateUrl: 'partials/edit/parkediting.html',
+    		controller: 'ParkCtrl',
+    		controllerAs: 'park_ctrl'
     	})
     	.when('/home', {
-    		templateUrl: 'partials/home.html',
-    		controller: 'MainCtrl',
-    		controllerAs: 'main'
+    		templateUrl: 'partials/edit/parkediting.html',
+    		controller: 'ParkCtrl',
+    		controllerAs: 'park_ctrl'
     	})
+//    	.when('/park/home', {
+//    		templateUrl: 'partials/park/home.html',
+//    		controller: 'MainCtrl',
+//    		controllerAs: 'main'
+//    	})
     	.when('/park/home', {
-    		templateUrl: 'partials/park/home.html',
-    		controller: 'MainCtrl',
-    		controllerAs: 'main'
+    		templateUrl: 'partials/edit/parkediting.html',
+    		controller: 'ParkCtrl',
+    		controllerAs: 'park_ctrl'
     	})
     	.when('/aux/home', {
     		templateUrl: 'partials/aux/home.html',

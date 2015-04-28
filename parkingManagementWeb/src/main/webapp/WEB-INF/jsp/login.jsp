@@ -54,8 +54,8 @@
 		<div class="container"><!-- ng-controller="LoginCtrl" ng-init="checkLogin()" -->
 			<div class="row" style="margin-top: 20px;">
 				<div ng-class="col-md-8">
-					<div class="panel panel-default" >
-		  				<div class="panel-body">
+<!-- 					<div class="panel panel-default" > -->
+<!-- 		  				<div class="panel-body"> -->
 		<!-- 				<div class="row" style="height: 800px"> -->
 							<div style="margin: 10px 10px 10px 10px">
 								<!--[if lt IE 9]>
@@ -116,8 +116,8 @@
 								</div>
 								
 							</div>
-						</div>
-					</div>
+<!-- 						</div> -->
+<!-- 					</div> -->
 				</div>
 			</div>
 			<div class="row">

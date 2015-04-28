@@ -110,12 +110,12 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     // for services selection
     var homeShowed = true;
     // for menu manageing
-    var home = "active";
-    var parkhome = "";
+    var home = "";
+    var parkhome = "active";
     var auxhome = "";
     
     var homeSubPark = "";
-    var editingPark = "";
+    var editingPark = "active";
     var editingBike = "";
     var viewingAll = "";
         
@@ -155,8 +155,10 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	parkhome = "active";
     	auxhome = "";
     	
-    	homeSubPark = "active";
-    	editingPark = "";
+    	//homeSubPark = "active";
+    	//editingPark = "";
+    	homeSubPark = "";
+    	editingPark = "active";
     	editingBike = "";
     	viewingAll = "";
     };
@@ -218,7 +220,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     $scope.isViewAllActive = function(){
         return viewingAll;
     };
-    
     
     $scope.logout = function() {
     	// Clear some session variables
