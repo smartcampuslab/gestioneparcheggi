@@ -1,0 +1,882 @@
+[{
+    "key": "app_tab-title",
+    "value": "App Parcheggi",
+    "description": "Titolo tab browser"
+}, {
+    "key": "app_home-title",
+    "value": "App Parcheggi",
+    "description": "Titolo pagina home app"
+}, {
+    "key": "app_home_info",
+    "value": "Descrizione App",
+    "description": "Titolo sezione info pagina home app"
+}, {
+    "key": "app_home_park_info",
+    "value": "Descrizione App Gestione Parcheggi",
+    "description": "Titolo sezione info pagina home park app"
+}, {
+    "key": "app_home_aux_info",
+    "value": "Descrizione App Parcheggi Ausiliari",
+    "description": "Titolo sezione info pagina home aux app"
+}, {
+    "key": "app_home_info_text",
+    "value": "L'applicazione per i parcheggi si compone di due differenti app e cioe' 'gestione parcheggi' e 'parcheggi ausiliari'. La prima e' pensata per raccogliere tutti i dati di parcheggi di un centro urbano (vie, strutture, aree tariffarie, zone, ecc). La seconda è invece usata per raccogliere informazioni dinamiche sull'utilizzo dei parcheggi nella citta'. Utilizza il menu' in alto per accedere all'app desiderata.",
+    "description": "Titolo sezione info pagina home app"
+}, {
+    "key": "app_home_park_info_text",
+    "value": "L'applicazione 'gestione parcheggi' e' stata pensata per gestire i parcheggi di un centro urbano. Nello specifico e' possibile aggiungere e modificare parcheggi, strade, parcometri e punti bici raggruppandoli in diverse aree tariffarie o in diverse zone tematiche. L'app permette di rappresentare quanto descritto su mappa in modo da avere traccia chiara della localizzazione degli elementi all'interno della citta'.",
+    "description": "Titolo sezione info pagina home app"
+}, {
+    "key": "app_home_aux_info_text",
+    "value": "L'applicazione 'parcheggi ausiliari' e' stata pensata per reperire informazioni utili sull'utilizzo dei parcheggi di un centro urbano. Nello specifico e' possibile visualizzare l'occupazione dei parcheggi di strade o strutture in una specifica fascia oraria, visualizzare l'utilizzo delle biciclette in un punto bici ecc. L'app e' completa di mappe iterattive in modo da avere traccia chiara della localizzazione degli elementi all'interno della citta'.",
+    "description": "Titolo sezione info pagina home app"
+}, {
+    "key": "menu_bar-home",
+    "value": "Home",
+    "description": "Valore link menu per Home page"
+}, {
+    "key": "menu_bar-logout",
+    "value": "Logout",
+    "description": "Valore link menu per Logout"
+}, {
+    "key": "usefull_link",
+    "value": "Contatti",
+    "description": "Valore link menu per Contatti"
+}, {
+    "key": "menu_bar-homepark",
+    "value": "Gestione Parcheggi",
+    "description": "Valore link menu per editing parcheggi"
+}, {
+    "key": "menu_bar-homeaux",
+    "value": "Parcheggi Ausiliari",
+    "description": "Valore link menu per editing punti bici"
+}, {
+    "key": "park_menu_list",
+    "value": "Funzionalita'",
+    "description": "Titolo menu app gestione parcheggi"
+}, {
+    "key": "menu_bar-parkediting",
+    "value": "Editing parcheggi",
+    "description": "Valore link menu per editing parcheggi"
+}, {
+    "key": "menu_bar-bikeediting",
+    "value": "Editing punti bici",
+    "description": "Valore link menu per editing punti bici"
+}, {
+    "key": "menu_bar-parkview",
+    "value": "Visualizza elementi",
+    "description": "Valore link menu per visualizzazione elementi"
+}, {
+    "key": "parkEditingPanelTitle",
+    "value": "Editor parcheggi",
+    "description": "Titolo pannello per editing parcheggi"
+}, {
+    "key": "bikeEditingPanelTitle",
+    "value": "Editor punti bici",
+    "description": "Titolo pannello per editing punti bici"
+}, {
+    "key": "viewAllPanelTitle",
+    "value": "Visualizza",
+    "description": "Titolo pannello per visualizzazione"
+}, {
+    "key": "view_hide_block_title",
+    "value": "Mostra/Nascondi",
+    "description": "Titolo pannello per impostazione di visualizzazione oggetti sulla mappa"
+}, {
+    "key": "loading_text",
+    "value": "Caricamento in corso",
+    "description": "Testo per caricamento dati in corso"
+}, {
+	"key": "previous_label",
+	"value": "Prec",
+	"description": "Label precedente"
+}, {
+	"key": "next_label",
+	"value": "Succ",
+	"description": "Label successivo"
+}, {
+	"key": "link_edit_title",
+	"value": "Modifica",
+	"description": "Title link modifica"
+}, {
+	"key": "link_view_title",
+	"value": "Visualizza",
+	"description": "Title link visualizza"
+}, {
+	"key": "link_remove_title",
+	"value": "Elimina",
+	"description": "Title link elimina"
+}, {
+    "key": "view_areas",
+    "value": "Aree di tariffazione",
+    "description": "Label checkbox aree di tariffazione"
+}, {
+    "key": "view_streets",
+    "value": "Vie",
+    "description": "Label checkbox vie"
+}, {
+    "key": "view_parkingmeters",
+    "value": "Parcometri",
+    "description": "Label checkbox parcometri"
+}, {
+    "key": "view_parkingstructs",
+    "value": "Strutture parcheggio",
+    "description": "Label checkbox parcheggi in strutture"
+}, {
+    "key": "view_bikepoints",
+    "value": "Punti bici",
+    "description": "Label checkbox punti bici"
+}, {
+    "key": "object_list_block_title",
+    "value": "Modifica Componenti",
+    "description": "Titolo pannello per modifica componenti parcheggio"
+}, {
+    "key": "area_list",
+    "value": "Lista Aree",
+    "description": "Titolo tabella lista aree"
+}, {
+    "key": "area_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista aree"
+}, {
+    "key": "area_rate",
+    "value": "Tariffa",
+    "description": "Intestazione colonna tariffa in tabella lista aree"
+}, {
+    "key": "area_time",
+    "value": "Orario",
+    "description": "Intestazione colonna orario in tabella lista aree"
+}, {
+    "key": "area_color",
+    "value": "Colore",
+    "description": "Intestazione colonna colore in tabella lista aree"
+}, {
+    "key": "no_areas_in_lists",
+    "value": "Nessuna area presente nel db",
+    "description": "Messaggio nessuna area in db"
+}, {
+	"key": "operations",
+	"value": "Azioni",
+	"description": "Label operazioni"
+}, {
+    "key": "street_list",
+    "value": "Lista Strade",
+    "description": "Titolo tabella lista strade"
+}, {
+    "key": "street_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista strade"
+}, {
+    "key": "street_slots",
+    "value": "Posti",
+    "description": "Intestazione colonna parcheggi in tabella lista strade"
+}, {
+    "key": "street_area_name",
+    "value": "Area",
+    "description": "Intestazione colonna area in tabella lista strade"
+}, {
+    "key": "no_streets_in_lists",
+    "value": "Nessuna strada presente nel db",
+    "description": "Messaggio nessuna strada in db"
+}, {
+    "key": "pm_list",
+    "value": "Lista Parchimetri",
+    "description": "Titolo tabella lista parchimetri"
+}, {
+    "key": "pm_code",
+    "value": "Codice",
+    "description": "Intestazione colonna codice in tabella lista parchimetri"
+}, {
+    "key": "pm_note",
+    "value": "Note",
+    "description": "Intestazione colonna parcheggi in tabella lista parchimetri"
+}, {
+    "key": "pm_area_name",
+    "value": "Area",
+    "description": "Intestazione colonna area in tabella lista parchimetri"
+}, {
+    "key": "no_pm_in_lists",
+    "value": "Nessun parchimetro presente nel db",
+    "description": "Messaggio nessun parchimetro in db"
+}, {
+    "key": "ps_list",
+    "value": "Lista Strutture",
+    "description": "Titolo tabella lista strutture"
+}, {
+    "key": "ps_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista strutture"
+}, {
+    "key": "ps_address",
+    "value": "Indirizzo",
+    "description": "Intestazione colonna indirizzo in tabella lista strutture"
+}, {
+    "key": "ps_time",
+    "value": "Orario",
+    "description": "Intestazione colonna orario in tabella lista strutture"
+}, {
+    "key": "ps_slots",
+    "value": "Posti",
+    "description": "Intestazione colonna posti in tabella lista strutture"
+}, {
+    "key": "no_ps_in_lists",
+    "value": "Nessuna struttura presente nel db",
+    "description": "Messaggio nessuna struttura in db"
+}, {
+    "key": "zone_list",
+    "value": "Lista Zone",
+    "description": "Titolo tabella lista zone"
+}, {
+    "key": "zone_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista zone"
+}, {
+    "key": "zone_submacro",
+    "value": "Macro",
+    "description": "Intestazione colonna submacro in tabella lista zone"
+}, {
+    "key": "zone_color",
+    "value": "Colore",
+    "description": "Intestazione colonna colore in tabella lista zone"
+}, {
+    "key": "no_zones_in_lists",
+    "value": "Nessuna zona presente nel db",
+    "description": "Messaggio nessuna zona in db"
+}, {
+    "key": "edit_parkingmeter",
+    "value": "Modifica parcometro",
+    "description": "Titolo pagina editing parcometro"
+}, {
+    "key": "pm_status",
+    "value": "Stato",
+    "description": "Label stato parcometro"
+}, {
+    "key": "pm_geometry",
+    "value": "Posizione",
+    "description": "Label geometry parcometro"
+}, {
+    "key": "parkingmeter_code_err_required",
+    "value": "Campo Codice Parcometro obbligatorio",
+    "description": "Messaggio errore campo codice parcometro obbligatorio"
+}, {
+    "key": "parkingmeter_note_err_required",
+    "value": "Campo Note Parcometro obbligatorio",
+    "description": "Messaggio errore campo note parcometro obbligatorio"
+}, {
+    "key": "parkingmeter_status_select_err_required",
+    "value": "Campo Stato Parcometro obbligatorio",
+    "description": "Messaggio errore campo stato parcometro obbligatorio"
+}, {
+    "key": "parkingmeter_area_select_err_required",
+    "value": "Campo Area di tariffazione obbligatorio",
+    "description": "Messaggio errore campo area di tariffazione obbligatorio"
+}, {
+    "key": "parkingmeter_geometry_select_err_pattern",
+    "value": "Valore posizione lat-lng non corretto",
+    "description": "Messaggio errore campo geometry parcometro non corretto"
+}, {
+    "key": "parkingmeter_geometry_select_err_required",
+    "value": "Valore posizione lat-lng obbligatorio",
+    "description": "Messaggio errore campo geometry parcometro obblilgatorio"
+}, {
+    "key": "text_btn_save",
+    "value": "Salva",
+    "description": "Testo pulsante 'salva'"
+}, {
+    "key": "err_in_update_parkingmeter",
+    "value": "Errore nell'aggiornamento del parcometro. DB non pronto.",
+    "description": "Messaggio errore aggiornamento parcometro"
+}, {
+    "key": "err_in_delete_parkingmeter",
+    "value": "Errore nella cancellazione del parcometro. DB non pronto.",
+    "description": "Messaggio errore cancellazione parcometro"
+}, {
+    "key": "view_parkingmeter",
+    "value": "Dettagli parcometro",
+    "description": "Titolo pagina view parcometro"
+},{
+    "key": "text_btn_close",
+    "value": "Chiudi",
+    "description": "Testo pulsante 'chiudi'"
+}, {
+    "key": "text_btn_edit",
+    "value": "Modifica",
+    "description": "Testo pulsante 'modifica'"
+}, {
+    "key": "edit_parkingstructure",
+    "value": "Modifica parcometro",
+    "description": "Titolo pagina editing parcometro"
+}, {
+    "key": "ps_geometry",
+    "value": "Posizione",
+    "description": "Label geometry parcometro"
+}, {
+    "key": "ps_slots",
+    "value": "Posti",
+    "description": "Label posti struttura"
+}, {
+    "key": "ps_totalslot",
+    "value": "Capienza",
+    "description": "Label capienza struttura"
+}, {
+    "key": "ps_handicapped_slot",
+    "value": "Posti per disabili",
+    "description": "Label posti per disabili struttura"
+}, {
+    "key": "ps_unusuable_slot",
+    "value": "Posti non usabili",
+    "description": "Label posti non usabili struttura"
+}, {
+    "key": "ps_payment_mode",
+    "value": "Modalita' di pagamento",
+    "description": "Label modalita' di pagamento struttura"
+}, {
+    "key": "ps_management_mode",
+    "value": "Modalita' di gestione",
+    "description": "Label modalita' di gestione struttura"
+}, {
+    "key": "ps_phone",
+    "value": "Telefono",
+    "description": "Label telefono struttura"
+}, {
+    "key": "ps_fee",
+    "value": "Tariffa sosta (euro/ora)",
+    "description": "Label tariffa sosta in struttura"
+}, {
+    "key": "parkingstructure_name_err_required",
+    "value": "Campo Nome Struttura obbligatorio",
+    "description": "Messaggio errore campo nome struttura obbligatorio"
+}, {
+    "key": "parkingstructure_address_err_required",
+    "value": "Campo Indirizzo Struttura obbligatorio",
+    "description": "Messaggio errore campo indirizzo struttura obbligatorio"
+}, {
+    "key": "parkingstructure_management_mode_select_err_required",
+    "value": "Campo Modalita' di gestione obbligatorio",
+    "description": "Messaggio errore campo gestione obbligatorio"
+}, {
+    "key": "parkingstructure_payment_mode_select_err_required",
+    "value": "Campo Modalita' di pagamento obbligatorio. Selezionare almeno uno strumento di pagamento.",
+    "description": "Messaggio errore campo modalita' pagamento obbligatorio"
+}, {
+    "key": "parkingstructure_fee_err_required",
+    "value": "Campo Tariffa sosta obbligatorio",
+    "description": "Messaggio errore campo tariffa obbligatorio"
+}, {
+    "key": "parkingstructure_fee_err_pattern",
+    "value": "Campo Tariffa sosta non corretto. Inserire un valore decimale",
+    "description": "Messaggio errore pattern campo tariffa"
+}, {
+    "key": "parkingstructure_slots_err_required",
+    "value": "Campo Capienza obbligatorio",
+    "description": "Messaggio errore campo capienza obbligatorio"
+}, {
+    "key": "parkingstructure_slots_err_pattern",
+    "value": "Valore non corretto. Inserire un valore numerico",
+    "description": "Messaggio errore campo capienza non corretto"
+}, {
+    "key": "parkingstructure_handicapped_slots_err_required",
+    "value": "Campo Posti per disabili obbligatorio",
+    "description": "Messaggio errore campo capienza obbligatorio"
+}, {
+    "key": "parkingstructure_unusuable_slots_err_required",
+    "value": "Campo Posti non utilizzabili obbligatorio",
+    "description": "Messaggio errore campo capienza obbligatorio"
+}, {
+    "key": "parkingstructure_openingtime_err_pattern",
+    "value": "Campo Orario non corretto. Inserire un valore nel formato hh:mm - hh:mm",
+    "description": "Messaggio errore campo orario struttura non corretto"
+}, {
+    "key": "parkingstructure_openingtime_err_required",
+    "value": "Campo Orario Struttura obbligatorio",
+    "description": "Messaggio errore campo orario struttura obbligatorio"
+}, {
+    "key": "parkingstructure_management_err_required",
+    "value": "Campo modalita' di gestione Struttura obbligatorio",
+    "description": "Messaggio errore campo gestione struttura obbligatorio"
+}, {
+    "key": "parkingstructure_phone_err_pattern",
+    "value": "Campo Telefono non corretto.",
+    "description": "Messaggio errore telefono struttura non corretto"
+}, {
+    "key": "parkingstructure_phone_err_required",
+    "value": "Campo Telefono struttura obbligatorio.",
+    "description": "Messaggio errore telefono struttura obbligatorio"
+}, {
+    "key": "parkingstructure_geometry_select_err_pattern",
+    "value": "Valore posizione lat-lng non corretto",
+    "description": "Messaggio errore campo geometry struttura non corretto"
+}, {
+    "key": "parkingstructure_geometry_select_err_required",
+    "value": "Valore posizione lat-lng obbligatorio",
+    "description": "Messaggio errore campo geometry struttura obbligatorio"
+}, {
+    "key": "err_in_update_parkingstructure",
+    "value": "Errore nell'aggiornamento della struttura. DB non pronto.",
+    "description": "Messaggio errore aggiornamento struttura"
+}, {
+    "key": "err_in_delete_parkingstructure",
+    "value": "Errore nella cancellazione della struttura. DB non pronto.",
+    "description": "Messaggio errore cancellazione struttura"
+}, {
+    "key": "view_parkingstructure",
+    "value": "Dettagli struttura parcheggio",
+    "description": "Titolo pagina view struttura"
+}, {
+    "key": "no_bp_in_lists",
+    "value": "Nessun punto bici presente nel db",
+    "description": "Messaggio nessun punto bici in db"
+}, {
+    "key": "bp_list",
+    "value": "Lista Punti Bici",
+    "description": "Titolo tabella lista punti bici"
+}, {
+    "key": "bp_name",
+    "value": "Nome",
+    "description": "Intestazione colonna nome in tabella lista punti bici"
+}, {
+    "key": "bp_slots",
+    "value": "Posti bici",
+    "description": "Intestazione colonna posti bici in tabella lista punti bici"
+}, {
+    "key": "bp_bikes",
+    "value": "Bici",
+    "description": "Intestazione colonna bici in tabella lista punti bici"
+}, {
+    "key": "edit_bikepoint",
+    "value": "Modifica punto bici",
+    "description": "Titolo pagina editing punto bici"
+}, {
+    "key": "bp_geometry",
+    "value": "Posizione",
+    "description": "Label geometry punto bici"
+}, {
+    "key": "err_in_update_bikepoint",
+    "value": "Errore nell'aggiornamento del punto bici. DB non pronto.",
+    "description": "Messaggio errore aggiornamento punto bici"
+}, {
+    "key": "err_in_delete_bikepoint",
+    "value": "Errore nella cancellazione del punto bici. DB non pronto.",
+    "description": "Messaggio errore cancellazione punto bici"
+}, {
+    "key": "bikepoint_name_err_required",
+    "value": "Campo 'nome punto bici' obbligatorio.",
+    "description": "Messaggio errore campo nome punto bici obbligatorio"
+}, {
+    "key": "bikepoint_slots_err_pattern",
+    "value": "Valore non corretto per il Campo 'posti bici'. Inserire un valore numerico.",
+    "description": "Messaggio errore campo posti punto bici non corretto"
+}, {
+    "key": "bikepoint_slots_err_required",
+    "value": "Campo 'posti bici' obbligatorio.",
+    "description": "Messaggio errore campo posti punto bici obbligatorio"
+}, {
+    "key": "bikepoint_bikes_err_pattern",
+    "value": "Valore non corretto per il Campo 'numero bici'. Inserire un valore numerico.",
+    "description": "Messaggio errore campo bici in punto bici non corretto"
+}, {
+    "key": "bikepoint_bikes_err_required",
+    "value": "Campo 'numero bici' obbligatorio.",
+    "description": "Messaggio errore campo bici in punto bici obbligatorio"
+}, {
+    "key": "bikepoint_geometry_select_err_pattern",
+    "value": "Valore non corretto per il Campo 'posizione' punto bici. Inserire un valore lat-lng.",
+    "description": "Messaggio errore campo posizione punto bici non corretto"
+}, {
+    "key": "bikepoint_geometry_select_err_required",
+    "value": "Valore campo 'posizione' punto bici obbligatorio.",
+    "description": "Messaggio errore campo posizione punto bici obbligatorio"
+}, {
+    "key": "view_bikepoint",
+    "value": "Dettagli punto bici",
+    "description": "Titolo pagina view punto bici"
+}, {
+    "key": "edit_street",
+    "value": "Modifica Strada",
+    "description": "Titolo pagina editing strade"
+}, {
+    "key": "street_address",
+    "value": "Via di riferimento",
+    "description": "Label campo strada di riferimento per oggetto strada"
+}, {
+    "key": "street_handicapped_slot",
+    "value": "Posti riservati ai disabili",
+    "description": "Label campo posti disabili per oggetto strada"
+}, {
+    "key": "street_timedpark_slot",
+    "value": "Posti disco orario",
+    "description": "Label campo posti disco orario per oggetto strada"
+}, {
+    "key": "street_freepark_slot",
+    "value": "Posti sosta libera",
+    "description": "Label campo posti sosta libera per oggetto strada"
+}, {
+    "key": "street_totalslot",
+    "value": "Posti totali",
+    "description": "Label campo posti totali per oggetto strada"
+}, {
+    "key": "street_unusuable_slot",
+    "value": "Posti inutilizzabili",
+    "description": "Label campo posti non usabili per oggetto strada"
+}, {
+    "key": "street_subscription_allowed",
+    "value": "Sosta con abbonamento",
+    "description": "Label campo sosta con abbonamento per oggetto strada"
+}, {
+    "key": "street_zone",
+    "value": "Zona",
+    "description": "Label campo zona per oggetto strada"
+}, {
+    "key": "street_pm",
+    "value": "Parcometro",
+    "description": "Label campo parcometro per oggetto strada"
+}, {
+    "key": "street_geometry",
+    "value": "Posizione",
+    "description": "Label geometry per strada"
+}, {
+    "key": "street_slots_err_required",
+    "value": "Campo posti totali obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_handicapped_slots_err_required",
+    "value": "Campo posti per disabili obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_timedpark_slots_err_required",
+    "value": "Campo posti 'disco orario' obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_freepark_slots_err_required",
+    "value": "Campo posti gratuiti obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_unusuable_slots_err_required",
+    "value": "Campo posti inutilizzabili obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_slots_err_pattern",
+    "value": "Valore non corretto, inserire un valore numerico.",
+    "description": "Messaggio errore campo posti in strada non corretto"
+}, {
+    "key": "street_area_select_err_required",
+    "value": "Campo Area di tariffazione obbligatorio.",
+    "description": "Messaggio errore campo area per strada obbligatorio"
+}, {
+    "key": "street_zone_select_err_required",
+    "value": "Campo Zona di appartenenza obbligatorio.",
+    "description": "Messaggio errore campo zona per strada obbligatorio"
+}, {
+    "key": "street_pm_select_err_required",
+    "value": "Campo Parcometro associato alla strada obbligatorio.",
+    "description": "Messaggio errore campo pm per strada obbligatorio"
+}, {
+    "key": "street_geometry_select_err_pattern",
+    "value": "Campo Posizione strada non corretto.",
+    "description": "Messaggio errore posizione strada non corretto"
+}, {
+    "key": "street_geometry_select_err_required",
+    "value": "Campo Posizione strada obbligatorio.",
+    "description": "Messaggio errore posizione strada obbligatorio"
+}, {
+    "key": "street_reference_err_required",
+    "value": "Campo indirizzo strada obbligatorio.",
+    "description": "Messaggio errore indirizzo strada obbligatorio"
+}, {
+    "key": "view_street",
+    "value": "Dettagli via",
+    "description": "Titolo pagina dettagli via"
+}, {
+    "key": "err_in_update_street",
+    "value": "Errore nell'aggiornamento della via. DB non pronto.",
+    "description": "Messaggio errore aggiornamento via"
+}, {
+    "key": "err_in_delete_street",
+    "value": "Errore nella cancellazione della via. DB non pronto.",
+    "description": "Messaggio errore cancellazione via"
+}, {
+    "key": "edit_zone",
+    "value": "Modifica Zona",
+    "description": "Titolo pagina editing zona"
+}, {
+    "key": "zone_type",
+    "value": "Tipo",
+    "description": "Campo tipo zona"
+}, {
+    "key": "zone_note",
+    "value": "Note",
+    "description": "Campo note zona"
+}, {
+    "key": "zone_geometry",
+    "value": "Posizione",
+    "description": "Campo posizione di una zona"
+}, {
+    "key": "zone_name_err_required",
+    "value": "Campo 'nome zona' obbligatorio",
+    "description": "Errore Campo nome zona obbligatorio"
+}, {
+    "key": "zone_submacro_err_required",
+    "value": "Campo 'sottozona' obbligatorio",
+    "description": "Errore Campo sottozona obbligatorio"
+}, {
+    "key": "zone_type_err_required",
+    "value": "Campo 'tipo zona' obbligatorio",
+    "description": "Errore Campo tipo zona obbligatorio"
+}, {
+    "key": "zone_note_err_required",
+    "value": "Campo 'note' obbligatorio",
+    "description": "Errore Campo note zona obbligatorio"
+}, {
+    "key": "zone_color_err_required",
+    "value": "Campo 'colore' obbligatorio",
+    "description": "Errore Campo colore zona obbligatorio"
+}, {
+    "key": "zone_geometry_err_pattern",
+    "value": "Campo 'posizione' non corretto",
+    "description": "Errore Campo posizione non corretto"
+}, {
+    "key": "zone_geometry_err_required",
+    "value": "Campo 'geometria' zona obbligatorio",
+    "description": "Errore Campo geometria zona obbligatorio"
+}, {
+    "key": "err_in_update_zone",
+    "value": "Errore nell'aggiornamento della zona. DB non pronto.",
+    "description": "Messaggio errore aggiornamento zona"
+}, {
+    "key": "err_in_delete_zone",
+    "value": "Errore nella cancellazione della zona. DB non pronto.",
+    "description": "Messaggio errore cancellazione zona"
+}, {
+    "key": "view_zone",
+    "value": "Dettagli Zona",
+    "description": "Titolo pagina dettagli zona"
+}, {
+    "key": "view_zones",
+    "value": "Zone",
+    "description": "Label zone in pagina visualizza/nascondi elementi"
+}, {
+    "key": "edit_area",
+    "value": "Modifica Area",
+    "description": "Titolo pagina editing area"
+}, {
+    "key": "area_geometry",
+    "value": "Posizione",
+    "description": "Campo posizione in mappa area"
+}, {
+    "key": "area_sms",
+    "value": "servizio telepark - cod.area",
+    "description": "Campo codice sms telepark area"
+}, {
+    "key": "area_note",
+    "value": "note",
+    "description": "Campo note area"
+}, {
+    "key": "area_name_err_required",
+    "value": "Campo 'nome Area' obbligatorio",
+    "description": "Errore Campo nome area obbligatorio"
+}, {
+    "key": "area_fee_err_required",
+    "value": "Campo 'tariffa oraria area' obbligatorio",
+    "description": "Errore Campo tariffa area obbligatorio"
+}, {
+    "key": "area_fee_err_pattern",
+    "value": "Valore non corretto. Inserire un valore decimale del tipo '0,00'",
+    "description": "Errore Campo tariffa area non corretto"
+}, {
+    "key": "area_openingtime_err_pattern",
+    "value": "Campo 'orario area' non corretto. Inserire un valore nel formato hh:mm - hh:mm",
+    "description": "Errore Campo rariffa area non corretto"
+}, {
+    "key": "area_openingtime_err_required",
+    "value": "Campo 'orario area' obbligatorio",
+    "description": "Errore Campo orario area obbligatorio"
+}, {
+    "key": "area_smscode_err_required",
+    "value": "Campo 'codice telepark' area obbligatorio",
+    "description": "Errore Campo sms code area obbligatorio"
+}, {
+    "key": "area_note_err_required",
+    "value": "Campo 'note' area obbligatorio",
+    "description": "Errore Campo note area obbligatorio"
+}, {
+    "key": "area_color_err_required",
+    "value": "Campo 'colore' area obbligatorio",
+    "description": "Errore Campo colore area"
+}, {
+    "key": "err_in_update_area",
+    "value": "Errore nell'aggiornamento dell' area. DB non pronto.",
+    "description": "Errore aggiornamento area"
+}, {
+    "key": "err_in_delete_area",
+    "value": "Errore nella cancellazione dell' area. DB non pronto.",
+    "description": "Errore cancellazione area"
+}, {
+    "key": "view_area",
+    "value": "Dettagli Area",
+    "description": "Titolo pagina visualizza area"
+}, {
+    "key": "area_geometry_err_pattern",
+    "value": "Campo 'geometria' area non corretto",
+    "description": "Errore pattern campo geometry area"
+}, {
+    "key": "area_geometry_err_required",
+    "value": "Campo 'geometria' area obbligatorio",
+    "description": "Errore campo geometry area obbligatorio"
+}, {
+    "key": "area_name_placeholder",
+    "value": "Inserire il nome dell'area",
+    "description": "Testo placeholder campo nome area"
+}, {
+    "key": "area_fee_placeholder",
+    "value": "Inserire la tariffa oraria dell'area (euro/ora) nel formato decimale (es: 0,50)",
+    "description": "Testo placeholder campo tariffa oraria area"
+}, {
+    "key": "area_time_placeholder",
+    "value": "Inserire l'orario in cui l'area e' a pagamento (da - a) nel formato hh:mm",
+    "description": "Testo placeholder campo orario area"
+}, {
+    "key": "area_sms_placeholder",
+    "value": "Inserire il codice del serivzio telepark",
+    "description": "Testo placeholder campo telepark area"
+}, {
+    "key": "area_note_placeholder",
+    "value": "Inserire eventuali note",
+    "description": "Testo placeholder campo note area"
+}, {
+    "key": "area_color_placeholder",
+    "value": "Scegliere il colore dell'area",
+    "description": "Testo placeholder campo telepark area"
+}, {
+    "key": "street_area_placeholder",
+    "value": "Scegliere l'area tariffaria a cui la via appartiene",
+    "description": "Testo placeholder campo area tariffaria via"
+}, {
+    "key": "street_address_placeholder",
+    "value": "Inserire l'indirizzo di riferimento della via",
+    "description": "Testo placeholder campo indirizzo via"
+}, {
+    "key": "street_totalslot_placeholder",
+    "value": "Inserire il numero totale di posti della via",
+    "description": "Testo placeholder campo posti totali via"
+}, {
+    "key": "street_handicappedslot_placeholder",
+    "value": "Inserire il numero di posti riservati ai disabili",
+    "description": "Testo placeholder campo posti disabili via"
+}, {
+    "key": "street_timedslot_placeholder",
+    "value": "Inserire il numero di posti a disco-orario",
+    "description": "Testo placeholder campo posti disco orario via"
+}, {
+    "key": "street_freeparkslot_placeholder",
+    "value": "Inserire il numero di posti gratuiti",
+    "description": "Testo placeholder campo posti gratuiti via"
+}, {
+    "key": "street_unusuableslot_placeholder",
+    "value": "Inserire il numero di posti inutilizzabili",
+    "description": "Testo placeholder campo posti inutilizzabili via"
+}, {
+    "key": "pm_code_placeholder",
+    "value": "Inserire il codice del parcometro",
+    "description": "Testo placeholder campo codice parcometro"
+}, {
+    "key": "pm_note_placeholder",
+    "value": "Inserire eventuali note relative al parcometro",
+    "description": "Testo placeholder campo note parcometro"
+}, {
+    "key": "pm_status_placeholder",
+    "value": "Settare lo stato del parcometro (attivo o disattivo)",
+    "description": "Testo placeholder campo stato parcometro"
+}, {
+    "key": "pm_area_placeholder",
+    "value": "Settare l'area di appartenenza del parcometro",
+    "description": "Testo placeholder campo area parcometro"
+}, {
+    "key": "pm_geo_placeholder",
+    "value": "Scegliere la posizione del parcometro (click sulla mappa)",
+    "description": "Testo placeholder campo posizione parcometro"
+}, {
+    "key": "ps_name_placeholder",
+    "value": "Inserire il nome della struttura",
+    "description": "Testo placeholder campo nome struttura"
+}, {
+    "key": "ps_address_placeholder",
+    "value": "Inserire l'indirizzo della struttura",
+    "description": "Testo placeholder campo indirizzo struttura"
+}, {
+    "key": "ps_fee_placeholder",
+    "value": "Inserire la tariffa oraria della struttura (euro/ora) nel formato decimale (es: 0,50)",
+    "description": "Testo placeholder campo tariffa oraria struttura"
+}, {
+    "key": "ps_time_placeholder",
+    "value": "Inserire l'orario di apertura della struttura (da - a) nel formato hh:mm",
+    "description": "Testo placeholder campo orario struttura"
+}, {
+    "key": "ps_phone_placeholder",
+    "value": "Inserire il numero di telefono della struttura",
+    "description": "Testo placeholder campo telefono struttura"
+}, {
+    "key": "ps_mmode_placeholder",
+    "value": "Indicare la modalita' di gestione della struttura",
+    "description": "Testo placeholder campo modalita' gestione struttura"
+}, {
+    "key": "ps_totalslot_placeholder",
+    "value": "Inserire il numero totale di posti della struttura",
+    "description": "Testo placeholder campo posti totali struttura"
+}, {
+    "key": "ps_handicappedslot_placeholder",
+    "value": "Inserire il numero di posti riservati ai disabili",
+    "description": "Testo placeholder campo posti disabili struttura"
+}, {
+    "key": "ps_unusuableslot_placeholder",
+    "value": "Inserire il numero di posti non utilizzabili",
+    "description": "Testo placeholder campo posti non utilizzabili struttura"
+}, {
+    "key": "ps_geo_placeholder",
+    "value": "Scegliere la posizione della struttura (click sulla mappa)",
+    "description": "Testo placeholder campo posti disco orario via"
+}, {
+    "key": "zone_name_placeholder",
+    "value": "Inserire il nome della zona",
+    "description": "Testo placeholder campo nome zona"
+}, {
+    "key": "zone_submacro_placeholder",
+    "value": "Inserire il codice della sottozona",
+    "description": "Testo placeholder campo submacro zona"
+}, {
+    "key": "zone_type_placeholder",
+    "value": "Inserire il tipo/categoria si suddivisione in zone",
+    "description": "Testo placeholder campo tipo zona"
+}, {
+    "key": "zone_note_placeholder",
+    "value": "Inserire eventuali note relative alla zona",
+    "description": "Testo placeholder campo note zona"
+}, {
+    "key": "zone_color_placeholder",
+    "value": "Scegliere il colore della zona",
+    "description": "Testo placeholder campo colore zona"
+}, {
+    "key": "bp_name_placeholder",
+    "value": "Inserire il nome del punto bici",
+    "description": "Testo placeholder campo nome punto bici"
+}, {
+    "key": "bp_slotnumber_placeholder",
+    "value": "Inserire il numero totale di posti bici",
+    "description": "Testo placeholder campo posti bici punto bici"
+}, {
+    "key": "bp_bikenumber_placeholder",
+    "value": "Inserire il numero di bici presenti nel punto bici",
+    "description": "Testo placeholder campo numero bici punto bici"
+}, {
+    "key": "bp_geo_placeholder",
+    "value": "Scegliere la posizione del punto bici (click sulla mappa)",
+    "description": "Testo placeholder campo posizione punto bici"
+}, {
+    "key": "filter_area_title",
+    "value": "Filtra per Area",
+    "description": "Title icona filtro per area"
+}, {
+    "key": "filter_status_title",
+    "value": "Filtra per Stato",
+    "description": "Title icona filtro per stato"
+}
+]

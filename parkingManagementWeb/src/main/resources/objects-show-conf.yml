@@ -1,0 +1,435 @@
+providers:
+  - id: ComuneRovereto
+    appId: rv
+    mapCenter: 45.88875357753771,11.037440299987793
+    mapZoom: 14
+    showObjects:
+     - id: Area
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: fee
+          editable: true
+          required: true
+          visible: true
+        - code: timeSlot
+          editable: true
+          required: false
+          visible: true
+        - code: smsCode
+          editable: true
+          required: false
+          visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true          
+        - code: color
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: false
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
+     - id: Street
+       attributes:
+        - code: streetReference
+          editable: true
+          required: true
+          visible: true
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: subscritionAllowedPark
+          editable: true
+          required: false
+          visible: true
+        - code: rateAreaId
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: false
+          visible: false
+        - code: zones
+          editable: true
+          required: true
+          visible: true
+        - code: pms
+          editable: true
+          required: false
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true          
+     - id: Pm
+       attributes:
+        - code: code
+          editable: true
+          required: true
+          visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true
+        - code: status
+          editable: true
+          required: true
+          visible: true
+        - code: rateArea
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: true
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true          
+     - id: Ps
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: streetReference
+          editable: true
+          required: true
+          visible: true
+        - code: managementMode
+          editable: true
+          required: false
+          visible: true
+        - code: paymentMode
+          editable: true
+          required: true
+          visible: true
+        - code: fee
+          editable: true
+          required: true
+          visible: true
+        - code: timeSlot
+          editable: true
+          required: true
+          visible: true
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: phoneNumber
+          editable: true
+          required: false
+          visible: true
+        - code: geometry
+          editable: true
+          required: true
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true          
+     - id: Zone
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: submacro
+          editable: true
+          required: true
+          visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true
+        - code: type
+          editable: true
+          required: false
+          visible: true
+        - code: color
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: false
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: false
+     - id: Bp
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: bikeNumber
+          editable: true
+          required: true
+          visible: true
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: true
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
+  - id: ComuneTrento
+    appId: tn
+    mapCenter: 46.071691, 11.120545
+    mapZoom: 14
+    showObjects:
+     - id: Area
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: fee
+          editable: true
+          required: true
+          visible: true
+        - code: timeSlot
+          editable: true
+          required: false
+          visible: true
+        - code: smsCode
+          editable: true
+          required: false
+          visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true  
+        - code: color
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: false
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: false
+     - id: Street
+       attributes:
+        - code: streetReference
+          editable: true
+          required: true
+          visible: true
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: subscritionAllowedPark
+          editable: true
+          required: true
+          visible: true
+        - code: rateAreaId
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: true
+          visible: false
+        - code: zones
+          editable: true
+          required: false
+          visible: true
+        - code: pms
+          editable: true
+          required: false
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
+     - id: Pm
+       attributes:
+        - code: code
+          editable: true
+          required: true
+          visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true
+        - code: status
+          editable: true
+          required: true
+          visible: true
+        - code: rateArea
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: true
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
+     - id: XPs
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: streetReference
+          editable: true
+          required: true
+          visible: true
+        - code: managementMode
+          editable: true
+          required: false
+          visible: true
+        - code: paymentMode
+          editable: true
+          required: true
+          visible: true
+        - code: fee
+          editable: true
+          required: true
+          visible: true
+        - code: timeSlot
+          editable: true
+          required: true
+          visible: true
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: phoneNumber
+          editable: true
+          required: false
+          visible: true
+        - code: geometry
+          editable: true
+          required: true
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
+     - id: Zone
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: submacro
+          editable: true
+          required: false
+          visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true
+        - code: type
+          editable: true
+          required: false
+          visible: true
+        - code: color
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: false
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
+     - id: Bp
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: bikeNumber
+          editable: true
+          required: true
+          visible: true
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: geometry
+          editable: true
+          required: true
+          visible: true
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true             

@@ -1,0 +1,15 @@
+users: 
+  - id: ComuneRovereto
+    username: rovereto
+    password: rovereto
+    appId: rv
+    name: Comune
+    surname: Rovereto
+    mail: info@comune.rovereto.tn.it
+  - id: ComuneTrento
+    username: trento
+    password: trento
+    appId: tn
+    name: Comune
+    surname: Trento
+    mail: info@comune.trento.tn.it
