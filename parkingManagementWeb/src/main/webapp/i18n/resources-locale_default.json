@@ -43,6 +43,10 @@
     "value": "Contatti",
     "description": "Valore link menu per Contatti"
 }, {
+    "key": "menu_bar-homedashboard",
+    "value": "Dashboard - Soste",
+    "description": "Valore link menu per dashboard - soste"
+}, {
     "key": "menu_bar-homepark",
     "value": "Gestione Parcheggi",
     "description": "Valore link menu per editing parcheggi"
@@ -878,5 +882,37 @@
     "key": "filter_status_title",
     "value": "Filtra per Stato",
     "description": "Title icona filtro per stato"
+}, {
+    "key": "element_details",
+    "value": "Dettagli",
+    "description": "Title panel object details"
+}, {
+    "key": "park_parkSupply",
+    "value": "Offerta di sosta",
+    "description": "Label per check offerta di sosta"
+}, {
+    "key": "park_occupation",
+    "value": "Occupazione",
+    "description": "Label per check occupazione"
+}, {
+    "key": "park_receipts",
+    "value": "Incasso",
+    "description": "Label per check incasso"
+}, {
+    "key": "park_timeCost",
+    "value": "Tempo ricerca",
+    "description": "Label per check tempo ricerca"
+}, {
+    "key": "park_pr",
+    "value": "P&R",
+    "description": "Label per check park and ride"
+}, {
+    "key": "park_budget",
+    "value": "Bilancio",
+    "description": "Label per check bilancio"
+}, {
+	"key": "ps_fee_details",
+	"value": "Tariffa oraria",
+	"description": "Label per tariffa oraria in dettagli oggetto dashboard"
 }
 ]

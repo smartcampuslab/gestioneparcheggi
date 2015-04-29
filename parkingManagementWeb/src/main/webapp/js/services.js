@@ -500,6 +500,108 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 	};
 	return {getProxy : getProxy};
 });
+pm.factory('invokeDashboardWSService', function($http, $q) {
+	var url = 'dashboard/rest/';
+	var getProxy = function(method, funcName, params, headers, data){
+		var deferred = $q.defer();
+		if(method == 'GET' && params == null){
+			$http({
+				method : method,
+				url : url + funcName + '?noCache=' + new Date().getTime(),
+				params : params,
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else if(method == 'GET' && params != null){
+			$http({
+				method : method,
+				url : url + funcName,
+				params : params + '&noCache=' + new Date().getTime(),
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else {
+			$http({
+				method : method,
+				url : url + funcName,
+				params : params,
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		}
+		return deferred.promise;
+	};
+	return {getProxy : getProxy};
+});
+pm.factory('invokeDashboardWSServiceNS', function($http, $q) {
+	var url = 'dashboard/rest/nosec/';
+	var getProxy = function(method, funcName, params, headers, data){
+		var deferred = $q.defer();
+		if(method == 'GET' && params == null){
+			$http({
+				method : method,
+				url : url + funcName + '?noCache=' + new Date().getTime(),
+				params : params,
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else if(method == 'GET' && params != null){
+			$http({
+				method : method,
+				url : url + funcName,
+				params : params + '&noCache=' + new Date().getTime(),
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		} else {
+			$http({
+				method : method,
+				url : url + funcName,
+				params : params,
+				headers : headers,
+				data : data
+			}).success(function(data) {
+				//console.log("Returned data ok: " + JSON.stringify(data));
+				deferred.resolve(data);
+			}).error(function(data) {
+				console.log("Returned data FAIL: " + JSON.stringify(data));
+				deferred.resolve(data);
+			});
+		}
+		return deferred.promise;
+	};
+	return {getProxy : getProxy};
+});
 pm.factory('invokeWSServiceProxy', function($http, $q) {
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();

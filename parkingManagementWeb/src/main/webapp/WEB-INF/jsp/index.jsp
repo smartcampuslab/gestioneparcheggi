@@ -30,8 +30,8 @@
 <script src="js/controllers/ctrl_main.js"></script>
 <script src="js/controllers/ctrl_park.js"></script>
 <script src="js/controllers/ctrl_bike.js"></script>
-<script src="js/controllers/ctrl_view.js"></script>
 <script src="js/controllers/ctrl_view_gmap.js"></script>
+<script src="js/controllers/ctrl_db_viewpark.js"></script>
 
 <script src="js/filters.js?1001"></script>
 <script src="js/services.js?1001"></script>
@@ -146,6 +146,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
           <div class="navbar-brand"><strong>{{ 'app_home-title' | i18n }}&nbsp;&nbsp;&nbsp;</strong></div>
           <ul class="nav navbar-nav">
 <!--             <li class="{{ isHomeActive() }}"><a href="#/" ng-click="home()">{{ 'menu_bar-home' | i18n }}</a></li> -->
+			<li class="{{ isHomeDashboardActive() }}"><a href="#/dashboard/home" ng-click="setHomeDashboardActive()">{{ 'menu_bar-homedashboard' | i18n }}</a></li>
             <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
             <li class="{{ isHomeAuxActive() }}"><a href="#/aux/home" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li>
 <!--             <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li> -->

@@ -49,7 +49,11 @@
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/rest/nosec/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
+		pattern="/dashboard/rest/nosec/**" security="none" />
+	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/rest/appid/**" security="none" />
+	<http xmlns="http://www.springframework.org/schema/security"
+		pattern="/dashboard/rest/appid/**" security="none" />
 	
 <!-- 	<sec:http pattern="/rest/**" entry-point-ref="forbEntryPoint" -->
 <!-- 		use-expressions="true" create-session="stateless">ifRequired  -->
@@ -57,6 +61,13 @@
 <!-- 		<sec:intercept-url pattern="/**" access="isFullyAuthenticated()" /> -->
 <!-- 	</sec:http> -->
 
+	<!-- Dashboard Rest WS security configuration -->
+	<sec:http pattern="/dashboard/rest/**" use-expressions="true"
+	    authentication-manager-ref="mongoAuthenticationManager">
+    	<sec:http-basic />
+    	<sec:intercept-url pattern="/**" access="isFullyAuthenticated()"/>
+	</sec:http>
+	
 	<!-- Rest WS security configuration -->
 	<sec:http pattern="/rest/**" use-expressions="true"
 	    authentication-manager-ref="mongoAuthenticationManager">

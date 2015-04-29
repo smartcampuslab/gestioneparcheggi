@@ -36,14 +36,14 @@ pm.config(['$routeProvider', '$locationProvider',
 //    		controllerAs: 'main'
 //    	})
     	.when('/', {
-    		templateUrl: 'partials/edit/parkediting.html',
-    		controller: 'ParkCtrl',
-    		controllerAs: 'park_ctrl'
+    		templateUrl: 'partials/dashboard/viewpark.html',
+    		controller: 'ViewDashboardCtrlPark',
+    		controllerAs: 'db_view_park_ctrl'
     	})
     	.when('/home', {
-    		templateUrl: 'partials/edit/parkediting.html',
-    		controller: 'ParkCtrl',
-    		controllerAs: 'park_ctrl'
+    		templateUrl: 'partials/dashboard/viewpark.html',
+    		controller: 'ViewDashboardCtrlPark',
+    		controllerAs: 'db_view_park_ctrl'
     	})
 //    	.when('/park/home', {
 //    		templateUrl: 'partials/park/home.html',

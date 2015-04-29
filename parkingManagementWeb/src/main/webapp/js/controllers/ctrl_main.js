@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService','invokeWSServiceProxy','invokePdfServiceProxy','getMyMessages','$timeout',
-    function($scope, $http, $route, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, getMyMessages, $timeout) {
+pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','getMyMessages','$timeout',
+    function($scope, $http, $route, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, getMyMessages, $timeout) {
     
     $scope.setFrameOpened = function(value){
     	$rootScope.frameOpened = value;
@@ -111,13 +111,28 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     var homeShowed = true;
     // for menu manageing
     var home = "";
-    var parkhome = "active";
+    var parkhome = "";
     var auxhome = "";
     
     var homeSubPark = "";
     var editingPark = "active";
     var editingBike = "";
     var viewingAll = "";
+    
+    // ----------------------- Dashboard section ----------------------
+    var dashboard = "active";
+    
+    $scope.setHomeDashboardActive = function(){
+    	home = "";
+    	dashboard = "active";
+    	parkhome = "";
+    	auxhome = "";
+    };
+    
+    $scope.isHomeDashboardActive = function(){
+        return dashboard;
+    };
+    // ------------------- End of Dashboard section -------------------
         
     $scope.hideHome = function(){
     	homeShowed = false;   		
@@ -139,6 +154,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	$scope.setFrameOpened(false);
     	// I refresh all the actived Link
     	home="active";
+    	dashboard = "";	// Used for dashboard
     	parkhome = "";
     	auxhome = "";
     	
@@ -152,6 +168,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     
     $scope.setHomeParkActive = function(){
     	home = "";
+    	dashboard = "";	// Used for dashboard
     	parkhome = "active";
     	auxhome = "";
     	
@@ -169,6 +186,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     
     $scope.setHomeAuxActive = function(){
     	home = "";
+    	dashboard = "";	// Used for dashboard
     	parkhome = "";
     	auxhome = "active";
     };
@@ -343,7 +361,25 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 		});
 	};
 	
+	$scope.setDashboardAppId = function(){
+		var url = "appid";
+		var method = 'POST';
+		var value = sharedDataService.getConfAppId();
+		if($scope.showLog) console.log("App id dashboard data : " + value);
+			
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, value);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, url, null, $scope.authHeaders, value);
+		myDataPromise.then(function(result){
+			if(result != null && result != ""){
+				//console.log("App Id Ok: " + result);
+			} else {
+				console.log("App Id dashboard KO. Not Set. " + result);	
+			}
+		});
+	};
+	
 	$scope.setAppId();
+	$scope.setDashboardAppId();
 	
 	$scope.initComponents = function(){
 	    $scope.showedObjects = sharedDataService.getVisibleObjList();
