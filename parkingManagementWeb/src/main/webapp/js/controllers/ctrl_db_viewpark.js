@@ -11,6 +11,18 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.parkingStructureMarkers = [];
 	$scope.bikePointMarkers = [];
 	
+	$scope.occupancyStreets = [];
+	$scope.occupancyAreas = [];
+	$scope.occupancyZones = [];
+	$scope.occupancyParkingMeterMarkers = [];
+	$scope.occupancyParkingStructureMarkers = [];
+	
+	$scope.green = "#31B404";
+	$scope.yellow = "#F7FE2E";
+	$scope.orange = "#FF8000";
+	$scope.red = "#DF0101";
+	$scope.violet = "#8904B1";
+	
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
 	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
 	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
@@ -322,21 +334,44 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		//};
 		
 		$scope.dashboard_space = {
+			rate_area : false,
 			macrozone : false,
 			microzone : true,
 			parkingmeter : false
 		};
 		
 		
-		$scope.dashboard_topics = {
-			parkSupply : true,
-			occupation : false,
-			receipts : false,
-			timeCost : false,
-			pr : false,
-			budget : false
-		};
+		$scope.dashboard_topics = "parkSupply";
+//		{
+//			parkSupply : true,
+//			occupation : false,
+//			receipts : false,
+//			timeCost : false,
+//			pr : false,
+//			budget : false
+//		};
 		
+	};
+	
+	$scope.changeDashboardView = function(){
+		switch($scope.dashboard_topics){
+			case "parkSupply": 
+				// Show parkingManagement objects
+				$scope.fixAllStreetsSupply();
+				break;
+			case "occupation": 
+				// Show occupation objects (with specifics colors)
+				$scope.fixAllStreetsOccupancy();
+				break;
+			case "receipts": 
+				break;
+			case "timeCost": 
+				break;
+			case "pr": 
+				break;
+			case "budget": 
+				break;
+		}
 	};
 	
 	// ------------------------------- Utility methods ----------------------------------------
@@ -539,7 +574,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // Show/hide areas polygons
     $scope.changeAreaPolygons = function(){
-		if(!$scope.mapelements.rateareas){
+		//if(!$scope.mapelements.rateareas){
+		if(!$scope.dashboard_space.rate_area){
 			$scope.showAreaPolygons();
 		} else {
 			$scope.hideAreaPolygons();
@@ -560,7 +596,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // Show/hide zones polygons
     $scope.changeZonePolygons = function(){
-		if(!$scope.mapelements.zones){
+		//if(!$scope.mapelements.zones){
+    	if(!$scope.dashboard_space.macrozone){
 			$scope.showZonePolygons();
 		} else {
 			$scope.hideZonePolygons();
@@ -866,6 +903,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 			var area = $scope.getLocalAreaById(streets[i].rateAreaId);
 			var mystreet = streets[i];
+			var averageOccupation = Math.floor((Math.random() * 100) + 1);
+			mystreet.averageOccupation1012 = averageOccupation;
 			mystreet.area_name = area.name;
 			mystreet.area_color= area.color;
 			mystreet.myZones = zones;
@@ -1034,84 +1073,168 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.detailsOpened = false;
+	$scope.mapParkingMetersSelectedMarkers = [];
 	$scope.mapParkingStructureSelectedMarkers = [];
 	$scope.mapSelectedStreets = [];
+	$scope.mapSelectedZones = [];
+	$scope.mapSelectedAreas = [];
 	var pMDet = false;
 	var pSDet = false;
 	var streetDet = false;
+	var zoneDet = false;
+	var areaDet = false;
 	
 	$scope.showPMDet = function(){
 		pMDet = true;
 		pSDet = false;
 		streetDet = false;
+		zoneDet = false;
+		areaDet = false;
 	};
 	
 	$scope.showPSDet = function(){
 		pMDet = false;
 		pSDet = true;
 		streetDet = false;
+		zoneDet = false;
+		areaDet = false;
 	};
 	
 	$scope.showStreetDet = function(){
 		pMDet = false;
 		pSDet = false;
 		streetDet = true;
+		zoneDet = false;
+		areaDet = false;
 	};
 	
-	$scope.showDetails = function(event, object, type){
-		$scope.detailsOpened = true;
+	$scope.showZoneDet = function(){
+		pMDet = false;
+		pSDet = false;
+		streetDet = false;
+		zoneDet = true;
+		areaDet = false;
+	};
+	
+	$scope.showAreaDet = function(){
+		pMDet = false;
+		pSDet = false;
+		streetDet = false;
+		zoneDet = false;
+		areaDet = true;
+	};
+	
+	$scope.showDetails = function(event, object, type, theme){
+		$scope.theme = theme;	// used in close details panel
 		switch(type){
 			case 1:
-				for(var i = 0; i < $scope.mapParkingMetersMarkers.length; i++){
-					if($scope.mapParkingMetersMarkers[i].id == object.id){
-						$scope.mapParkingMetersMarkers.splice(i, 1);
+				if(theme == 0){
+					for(var i = 0; i < $scope.mapParkingMetersMarkers.length; i++){
+						if($scope.mapParkingMetersMarkers[i].id == object.id){
+							$scope.mapParkingMetersMarkers.splice(i, 1);
+						}
+					}
+				} else {
+					for(var i = 0; i < $scope.occupancyParkingMeterMarkers.length; i++){
+						if($scope.occupancyParkingMeterMarkers[i].id == object.id){
+							$scope.occupancyParkingMeterMarkers.splice(i, 1);
+						}
 					}
 				}
-				$scope.mapParkingMetersSelectedMarkers = [];
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
 				$scope.showPMDet();
 				object.options.animation = "BOUNCE";
 				$scope.mapParkingMetersSelectedMarkers.push(object);
 				$scope.pmDetails = object;
 				break;
 			case 2:
-				for(var i = 0; i < $scope.mapParkingStructureMarkers.length; i++){
-					if($scope.mapParkingStructureMarkers[i].id == object.id){
-						$scope.mapParkingStructureMarkers.splice(i, 1);
+				if(theme == 0){
+					for(var i = 0; i < $scope.mapParkingStructureMarkers.length; i++){
+						if($scope.mapParkingStructureMarkers[i].id == object.id){
+							$scope.mapParkingStructureMarkers.splice(i, 1);
+						}
 					}
-				}
-				$scope.mapParkingStructureSelectedMarkers = [];
+				} else {
+					for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
+						if($scope.occupancyParkingStructureMarkers[i].id == object.id){
+							$scope.occupancyParkingStructureMarkers.splice(i, 1);
+						}
+					}
+				}	
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
 				$scope.showPSDet();
 				object.options.animation = "BOUNCE";
 				$scope.mapParkingStructureSelectedMarkers.push(object);
 				$scope.psDetails = object;
 				break;
 			case 3:
-				//if(object.stroke.weight == 3){
-					$scope.mapSelectedStreets = [];
-					object.stroke.weight = 10;
-					var toDelStreet = $scope.map.shapes;
-			    	toDelStreet[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
-			    	for(var i = 0; i < $scope.mapStreets.length; i++){
-			    		if($scope.mapStreets[i].id == object.id){
-			    			$scope.mapStreets.splice(i, 1);
-			    		}
-			    	}
-			    	$scope.mapSelectedStreets.push(object);
-			    	$scope.showStreetDet();
-					$scope.sDetails = object;
-				//} else {
-				//	$scope.streetWeight = 3;
-				//	object.stroke.weight = 3;
-				//	$scope.detailsOpened = false;
-				//}
-				//for(var i = 0; i < $scope.mapStreets.length; i++){
-				//	if($scope.mapStreets[i].id == object.id){
-				//		$scope.mapStreets[i] = object;
-				//	}
-				//}
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				object.stroke.weight = 10;
+				var toDelStreet = $scope.map.shapes;
+			    toDelStreet[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+			    if(theme == 0){
+				    for(var i = 0; i < $scope.mapStreets.length; i++){
+				    	if($scope.mapStreets[i].id == object.id){
+				    		$scope.mapStreets.splice(i, 1);
+				    	}
+				    }
+			    } else {
+			    	for(var i = 0; i < $scope.occupancyStreets.length; i++){
+				    	if($scope.occupancyStreets[i].id == object.id){
+				    		$scope.occupancyStreets.splice(i, 1);
+				    	}
+				    }
+			    }
+			    $scope.mapSelectedStreets.push(object);
+			    $scope.showStreetDet();
+				$scope.sDetails = object;
 				break;
+			case 4:
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				object.stroke.weight = 10;
+				var toDelZones = $scope.map.shapes;
+			    toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+			    if(theme == 0){
+				    for(var i = 0; i < $scope.mapZones.length; i++){
+				    	if($scope.mapZones[i].id == object.id){
+				    		$scope.mapZones.splice(i, 1);
+				    	}
+				    }
+			    } else {
+			    	for(var i = 0; i < $scope.occupancyZones.length; i++){
+				    	if($scope.occupancyZones[i].id == object.id){
+				    		$scope.occupancyZones.splice(i, 1);
+				    	}
+				    }
+			    }
+			    $scope.mapSelectedZones.push(object);
+			    $scope.showZoneDet();
+				$scope.zDetails = object;
+				break;
+			case 5:
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				object.stroke.weight = 10;
+				var toDelAreas = $scope.map.shapes;
+			    toDelAreas[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+			    if(theme == 0){
+				    for(var i = 0; i < $scope.mapAreas.length; i++){
+				    	if($scope.mapAreas[i].id == object.id){
+				    		$scope.mapAreas.splice(i, 1);
+				    	}
+				    }
+			    } else {
+			    	for(var i = 0; i < $scope.occupancyAreas.length; i++){
+				    	if($scope.occupancyAreas[i].id == object.id){
+				    		$scope.occupancyAreas.splice(i, 1);
+				    	}
+				    }
+			    }
+			    $scope.mapSelectedAreas.push(object);
+			    $scope.showAreaDet();
+				$scope.aDetails = object;
+				break;	
 		};
-		
+		$scope.detailsOpened = true;
 		return object;
 	};
 	
@@ -1119,11 +1242,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.detailsOpened = false;
 		switch(type){
 		case 1:
-			$scope.mapParkingMetersMarkers.push(object);
+			if($scope.mapParkingMetersMarkers.length > 0){
+				$scope.mapParkingMetersMarkers.push(object);
+			} else {
+				$scope.occupancyParkingMeterMarkers.push(object);
+			}
 			$scope.mapParkingMetersSelectedMarkers = [];
 			break;
 		case 2:
-			$scope.mapParkingStructureMarkers.push(object);
+			if($scope.mapParkingStructureMarkers.length > 0){
+				$scope.mapParkingStructureMarkers.push(object);
+			} else {
+				$scope.occupancyParkingStructureMarkers.push(object);
+			}
 			$scope.mapParkingStructureSelectedMarkers = [];
 			break;
 		case 3:
@@ -1131,10 +1262,35 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var toDelStreet = $scope.map.shapes;
 	    	toDelStreet[object.id].setMap(null);
 	    	object.stroke.weight = 3;
-	    	$scope.mapStreets.push(object);
+	    	if($scope.mapStreets.length > 0){
+	    		$scope.mapStreets.push(object);
+	    	} else {
+	    		$scope.occupancyStreets.push(object);
+	    	}
 			break;
-	};
-		
+		case 4:
+			$scope.mapSelectedZones = [];
+			var toDelZone = $scope.map.shapes;
+	    	toDelZone[object.id].setMap(null);
+	    	object.stroke.weight = 3;
+	    	if($scope.mapZones.length > 0){
+	    		$scope.mapZones.push(object);
+	    	} else {
+	    		$scope.occupancyZones.push(object);
+	    	}
+			break;
+		case 5:
+			$scope.mapSelectedAreas = [];
+			var toDelArea = $scope.map.shapes;
+	    	toDelArea[object.id].setMap(null);
+	    	object.stroke.weight = 3;
+	    	if($scope.mapAreas.length > 0){
+	    		$scope.mapAreas.push(object);
+	    	} else {
+	    		$scope.occupancyAreas.push(object);
+	    	}
+			break;	
+		};
 	};
 	
 	$scope.isPMDetShow = function(){
@@ -1148,5 +1304,140 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.isStreetDetShow = function(){
 		return streetDet;
 	};
+	
+	$scope.isZoneDetShow = function(){
+		return zoneDet;
+	};
+	
+	$scope.isAreaDetShow = function(){
+		return areaDet;
+	};
+	
+	$scope.closeAllDetails = function(theme){
+		$scope.detailsOpened = false;
+		if($scope.mapParkingMetersSelectedMarkers.length > 0){
+			$scope.fixIfAlreadySelected($scope.mapParkingMetersSelectedMarkers, 1, theme);
+		}
+		if($scope.mapParkingStructureSelectedMarkers.length > 0){
+			$scope.fixIfAlreadySelected($scope.mapParkingStructureSelectedMarkers, 2, theme);
+		}
+		if($scope.mapSelectedStreets.length > 0){
+			$scope.fixIfAlreadySelected($scope.mapSelectedStreets, 3, theme);
+		}
+		if($scope.mapSelectedZones.length > 0){
+			$scope.fixIfAlreadySelected($scope.mapSelectedZones, 4, theme);
+		}
+		if($scope.mapSelectedAreas.length > 0){
+			$scope.fixIfAlreadySelected($scope.mapSelectedAreas, 5, theme);
+		}
+	};
+	
+	// Method used to check if an element is already selected
+	$scope.fixIfAlreadySelected = function(list, type, theme){
+		switch(type){
+		case 1:
+			if(list.length > 0){
+				var object = list[0];
+				object.options.animation = "";
+				if(theme == 0){
+					$scope.mapParkingMetersMarkers.push(object);
+				} else {
+					$scope.occupancyParkingMeterMarkers.push(object);
+				}
+			}
+			$scope.mapParkingMetersSelectedMarkers = [];
+			break;
+		case 2:
+			if(list.length > 0){
+				var object = list[0];
+				object.options.animation = "";
+				if(theme == 0){
+					$scope.mapParkingStructureMarkers.push(object);
+				} else {
+					$scope.occupancyParkingStructureMarkers.push(object);
+				}
+			}
+			$scope.mapParkingStructureSelectedMarkers = [];
+			break;
+		case 3:
+			if(list.length > 0){
+				var object = list[0];
+				var toDelStreet = $scope.map.shapes;
+		    	toDelStreet[object.id].setMap(null);
+		    	object.stroke.weight = 3;
+		    	if(theme == 0){
+		    		$scope.mapStreets.push(object);
+		    	} else {
+		    		$scope.occupancyStreets.push(object);
+		    	}
+			}
+			$scope.mapSelectedStreets = [];
+			break;
+		case 4:
+			if(list.length > 0){
+				var object = list[0];
+				var toDelZone = $scope.map.shapes;
+		    	toDelZone[object.id].setMap(null);
+		    	object.stroke.weight = 3;
+		    	if(theme == 0){
+		    		$scope.mapZones.push(object);
+		    	} else {
+		    		$scope.occupancyZones.push(object);
+		    	}
+			}
+			$scope.mapSelectedZones = [];
+			break;
+		case 5:
+			if(list.length > 0){
+				var object = list[0];
+				var toDelArea = $scope.map.shapes;
+		    	toDelArea[object.id].setMap(null);
+		    	object.stroke.weight = 3;
+		    	if(theme == 0){
+		    		$scope.mapAreas.push(object);
+		    	} else {
+		    		$scope.occupancyAreas.push(object);
+		    	}
+			}
+			$scope.mapSelectedAreas = [];
+			break;	
+		}
+	};
+	
+	$scope.fixAllStreetsOccupancy = function(){
+    	var toHideStreets = $scope.map.shapes;
+    	for(var i = 0; i < $scope.mapStreets.length; i++){
+    		toHideStreets[$scope.mapStreets[i].id].setMap(null);
+    		var object = $scope.mapStreets[i];
+    		object.stroke.color = $scope.getOccupancyColor(object.data.averageOccupation1012);
+    		$scope.occupancyStreets.push(object);
+    	}
+    	$scope.mapStreets = [];
+    };
+    
+    $scope.fixAllStreetsSupply = function(){
+    	var toHideStreets = $scope.map.shapes;
+    	for(var i = 0; i < $scope.occupancyStreets.length; i++){
+    		toHideStreets[$scope.occupancyStreets[i].id].setMap(null);
+    		var object = $scope.occupancyStreets[i];
+    		object.stroke.color = $scope.correctColor(object.data.color);
+    		$scope.mapStreets.push(object);
+    	}
+    	$scope.occupancyStreets = [];
+    };
+    
+    $scope.getOccupancyColor = function(value){
+    	if(value < 25){
+    		return $scope.green;
+    	} else if(value < 50){
+    		return $scope.yellow;
+    	} else if(value < 75){
+    		return $scope.orange;
+    	} else if(value < 90){
+    		return $scope.red;
+    	} else {
+    		return $scope.violet;
+    	}
+    };
 	
 }]);

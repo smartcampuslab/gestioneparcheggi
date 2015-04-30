@@ -914,5 +914,9 @@
 	"key": "ps_fee_details",
 	"value": "Tariffa oraria",
 	"description": "Label per tariffa oraria in dettagli oggetto dashboard"
+}, {
+    "key": "view_macrozones",
+    "value": "Macrozone",
+    "description": "Label macrozone in pagina dashboard"
 }
 ]

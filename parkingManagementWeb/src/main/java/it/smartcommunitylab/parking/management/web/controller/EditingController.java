@@ -203,6 +203,7 @@ public class EditingController {
 	public @ResponseBody
 	ZoneBean editZone(@PathVariable("zid") String zid,
 			@RequestBody ZoneBean zone) throws NotFoundException {
+		System.out.println(String.format("Zone to edit id:%s; name:%s; submacro:%s ", zone.getId(), zone.getName(), zone.getSubmacro()));
 		return storage.editZone(zone);
 	}
 

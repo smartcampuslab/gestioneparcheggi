@@ -12,32 +12,23 @@
 						</div>
 						<div class="panel-body">
 							<table width="100%">
-<!-- 								<tr> -->
-<!-- 									<th colspan="2">{{ 'view_hide_block_title' | i18n }}</th> -->
-<!-- 								</tr> -->
 								<tr>
-									<td align="center" width="15%"><input id="slotSupply" type="checkbox" ng-model="dashboard_topics.parkSupply" ng-click="showParkSupply()"></td>
-									<td align="left" width="85%"><label for="slotSupply">{{ 'park_parkSupply' | i18n }}</label></td>
+									<td align="left"><label><input id="slotSupply" type="radio" ng-model="dashboard_topics" value="parkSupply" ng-change="changeDashboardView()">&nbsp;{{ 'park_parkSupply' | i18n }}</label></td>
 								</tr>
-								<tr >
-									<td align="center"><input id="occupancy" type="checkbox" ng-model="dashboard_topics.occupation" ng-click="showOccupation()"></td>
-									<td align="left"><label for="occupancy">{{ 'park_occupation' | i18n }}</label></td>
+								<tr>
+									<td align="left"><label><input id="occupancy" type="radio" ng-model="dashboard_topics" value="occupation" ng-change="changeDashboardView()">&nbsp;{{ 'park_occupation' | i18n }}</label></td>
 								</tr>
-								<tr >
-									<td align="center"><input id="receipt" type="checkbox" ng-model="dashboard_topics.receipts" ng-click="showReceipts()"></td>
-									<td align="left"><label for="receipt">{{ 'park_receipts' | i18n }}</label></td>
+								<tr>
+									<td align="left"><label><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView()">&nbsp;{{ 'park_receipts' | i18n }}</label></td>
 								</tr>
-								<tr >
-									<td align="center"><input id="time" type="checkbox" ng-model="dashboard_topics.timeCost" ng-click="showTimecost()"></td>
-									<td align="left"><label for="time">{{ 'park_timeCost' | i18n }}</label></td>
+								<tr>
+									<td align="left"><label><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView()">&nbsp;{{ 'park_timeCost' | i18n }}</label></td>
 								</tr>
-								<tr >
-									<td align="center"><input id="park&ride" type="checkbox" ng-model="dashboard_topics.pr" ng-click="showPR()"></td>
-									<td align="left"><label for="park&ride">{{ 'park_pr' | i18n }}</label></td>
+								<tr>
+									<td align="left"><label><input id="park&ride" type="radio" ng-model="dashboard_topics" value="pr" ng-change="changeDashboardView()">&nbsp;{{ 'park_pr' | i18n }}</label></td>
 								</tr>
-								<tr >
-									<td align="center"><input id="balance" type="checkbox" ng-model="dashboard_topics.budget" ng-click="showBudget()"></td>
-									<td align="left"><label for="balance">{{ 'park_budget' | i18n }}</label></td>
+								<tr>
+									<td align="left"><label><input id="balance" type="radio" ng-model="dashboard_topics" value="budget" ng-change="changeDashboardView()">&nbsp;{{ 'park_budget' | i18n }}</label></td>
 								</tr>
 							</table>
 						</div>
@@ -46,13 +37,13 @@
 						<div class="panel-body">
 							<table width="100%">
 								<tr><!-- ng-show="isAreaVisible()" -->
-									<td align="center" width="15%"><input id="rateArea" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeAreaAndZonePolygons()"></td>
+									<td align="center" width="15%"><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons()"></td>
 									<td align="left" width="85%"><label for="rateArea">{{ 'view_areas' | i18n }}</label></td>
 								</tr>
-<!-- 								<tr ng-show="isZonesVisible()"> -->
-<!-- 									<td align="center"><input id="zones" type="checkbox" ng-model="macrozone" ng-click="changeZonePolygons()"></td> -->
-<!-- 									<td align="left"><label for="zones">{{ 'view_zones' | i18n }}</label></td> -->
-<!-- 								</tr> -->
+								<tr><!-- ng-show="isZonesVisible()" -->
+									<td align="center"><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons()"></td>
+									<td align="left"><label for="zones">{{ 'view_macrozones' | i18n }}</label></td>
+								</tr>
 								<tr><!-- ng-show="isStreetVisible()" -->
 									<td align="center"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetAndPS()"></td>
 									<td align="left"><label for="streets">{{ 'view_streets' | i18n }}</label></td>
@@ -73,121 +64,10 @@
 				<div ng-class="{'col-md-10':!detailsOpened, 'col-md-8':detailsOpened}">
 <!-- 					<div id="map_canvas" ></div> -->
 					<map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}">
-						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showDetails(event, pm, 1)" ><!-- on-click="showInfoWindow(event, 'pm')" -->
-							<info-window id="pm" visible-on-marker="{{ pm.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="pm_code.visible">{{ pm.data.code }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="pm_note.visible">
-							        			<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ pm.data.note }}</td>
-							        		</tr>
-											<tr ng-show="pm_status.visible">
-							        			<td><strong>{{ 'pm_status' | i18n }}:</strong></td>
-							        			<td>
-							        				<span ng-show="pm.data.status=='ACTIVE'">Attivo</span>
-													<span ng-show="pm.data.status!='ACTIVE'">Disattivo</span>
-												</td>	
-							        		</tr>
-							        		<tr ng-show="pm_rateArea.visible">
-							        			<td colspan="2">
-							        				<strong>{{ 'pm_area_name' | i18n }}:</strong>
-							        				<div class="panel panel-default">
-														<div class="panel-body">
-															<table width="100%">
-																<tr>
-																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-																	<td width="55%">{{ pm.area.name }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ pm.area.fee }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-																	<td>{{ pm.area.timeSlot }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-																	<td>{{ pm.area.smsCode }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_color' | i18n }}</strong></td>
-																	<td><span class="colorBox" ng-style="{'background-color': correctColor(pm.area.color)}"></span></td>
-																</tr>
-													   		</table>
-														</div>
-													</div>	
-							        			</td>
-<!-- 							        			<td></td> -->
-<!-- 							        			<td><b>{{ pm.data.color }}</b></td> -->
-							        		</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
+						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showDetails(event, pm, 1, 0)" ><!-- on-click="showInfoWindow(event, 'pm')" -->
 						</marker>
 						<marker ng-repeat="pmSel in mapParkingMetersSelectedMarkers" id="{{ pmSel.id }}" animation="{{ pmSel.options.animation }}" position="{{ pmSel.position }}" icon="{{ pmSel.icon }}" on-click="hideDetails(event, pmSel, 1)" ></marker><!-- on-click="showInfoWindow(event, 'pm')" -->
-						<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ psMarkerIcon }}" on-click="showDetails(event, ps, 2)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
-							<info-window id="ps" visible-on-marker="{{ ps.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="ps_name.visible">{{ ps.data.name }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="ps_address.visible">
-							        			<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.streetReference }}</td>
-							        		</tr>
-											<tr ng-show="ps_fee.visible">
-							        			<td><strong>{{ 'ps_fee' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.fee }}</td>
-							        		</tr>
-							        		<tr ng-show="ps_timeSlot.visible">
-							        			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.timeSlot }}</td>
-							        		</tr>
-							        		<tr ng-show="ps_phoneNumber.visible">
-							        			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
-							        		</tr>
-							        		<tr ng-show="ps_management.visible">
-							        			<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.managementMode }}</td>
-							        		</tr>
-							        		<tr ng-show="ps_payment.visible">
-							        			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td>
-							        		</tr>
-											<tr>
-												<td colspan="2">
-													<strong>{{ 'ps_slots' | i18n }}</strong>:
-													<div class="panel panel-default">
-														<div class="panel-body">
-															<table width="100%">
-																<tr ng-show="ps_slotNumber.visible">
-																	<td width="45%"><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
-																	<td width="55%">{{ ps.data.slotNumber }}</td>
-																</tr>
-																<tr ng-show="ps_handicappedSlot.visible">	
-																	<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
-																	<td>{{ ps.data.handicappedSlotNumber }}</td>
-																</tr>
-																<tr ng-show="ps_unusuableSlot.visible">	
-																	<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td>
-																	<td>{{ ps.data.unusuableSlotNumber }}</td>
-																</tr>
-															</table>
-														</div>
-													</div>
-												</td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
+						<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ psMarkerIcon }}" on-click="showDetails(event, ps, 2, 0)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 						</marker>
 						<marker ng-repeat="psSel in mapParkingStructureSelectedMarkers" id="{{ psSel.id }}" animation="{{ psSel.options.animation }}" position="{{ psSel.position }}" icon="{{ psMarkerIcon }}" on-click="hideDetails(event, psSel, 2)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 						</marker>
@@ -212,170 +92,29 @@
 						    </info-window>
 						</marker>
 						<shape name="polyline" ng-repeat="s in mapStreets" id="{{ s.id }}" path="{{ s.gpath }}" 
-         					geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showDetails(event, s, 3)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
-     						<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="s_streetRef.visible">{{ s.data.streetReference }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="s_slotNum.visible">
-							        			<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ s.data.slotNumber }}</td>
-							        		</tr>
-											<tr ng-show="s_handicappedSlot.visible">
-							        			<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
-							        		</tr>
-							        		<tr ng-show="s_timedSlot.visible">
-							        			<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
-							        		</tr>
-							        		<tr ng-show="s_freeSlot.visible">
-							        			<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
-							        		</tr>
-							        		<tr ng-show="s_unusuableSlot.visible">
-							        			<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
-							        		</tr>
-							        		<tr ng-show="s_subscrition.visible">
-							        			<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
-							        		</tr>
-<!-- 							        		<tr ng-show="s_areaId.visible">	 -->
-<!-- 												<td> -->
-<!-- 													<strong>{{ 'street_area_name' | i18n }}:</strong> -->
-<!-- 												</td> -->
-<!-- 												<td>	  -->
-<!-- 													{{ s.area.name }}  -->
-<!-- 													<span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span> -->
-<!-- 												</td> -->
-<!-- 											</tr> -->
-											<tr ng-show="s_pms.visible">	
-												<td>
-													<strong>{{ 'street_pm' | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="p in s.pms track by p.code">
-															<td width="30%">{{ p.code }}</td>
-															<td width="70%">{{ p.note }}</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-show="s_zones.visible">	
-												<td>
-													<strong>{{ 'street_zone' | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z in s.zones track by z.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
-															<td width="80%">{{ z.name }} - {{ z.submacro }}</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-show="s_areaId.visible">
-									        	<td colspan="2">
-									        		<strong>{{ 'street_area_name' | i18n }}:</strong>
-									        		<div class="panel panel-default">
-														<div class="panel-body">
-															<table width="100%">
-																<tr>
-																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-																	<td width="55%">{{ s.area.name }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ s.area.fee }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-																	<td>{{ s.area.timeSlot }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-																	<td>{{ s.area.smsCode }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_color' | i18n }}</strong></td>
-																	<td><span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span></td>
-																</tr>
-															</table>
-														</div>
-													</div>	
-									        	</td>
-									        </tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
+         					geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showDetails(event, s, 3, 0)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
      					</shape>
      					<shape name="polyline" ng-repeat="sSel in mapSelectedStreets" id="{{ sSel.id }}" path="{{ sSel.gpath }}" 
          					geodesic="{{ sSel.geodesic }}" stroke-color="{{ sSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ sSel.stroke.weight }}" on-click="hideDetails(event, sSel, 3)"><!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
      					</shape>
+     					<shape name="polyline" ng-repeat="sOcc in occupancyStreets" id="{{ sOcc.id }}" path="{{ sOcc.gpath }}" 
+         					geodesic="{{ sOcc.geodesic }}" stroke-color="{{ sOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ sOcc.stroke.weight }}" on-click="showDetails(event, sOcc, 3, 1)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
+     					</shape>
 						<shape name="polygon" ng-repeat="z in mapZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
-         					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
-     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="zone_name.visible">{{ z.data.name }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="zone_type.visible">
-							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.type }}</td>
-							        		</tr>
-											<tr ng-show="zone_note.visible">
-							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.note }}</td>
-							        		</tr>
-							        		<tr ng-show="zone_color.visible">	
-												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
-											</tr> <!-- col-md-3 -->
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
+         					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     					</shape>
+     					<shape name="polygon" ng-repeat="zSel in mapSelectedZones" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
+         					geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zSel.stroke.weight }}"
+         					fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      					</shape>
      					<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ a.stroke.weight }}"
-         					fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showInfoWindow(event, a.info_windows_cod)">
-     						<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="a_name.visible">{{ a.data.name }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-											<tr ng-show="a_fee.visible">	
-												<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
-												<td width="55%">{{ a.data.fee }}</td>
-											</tr>
-											<tr ng-show="a_timeSlot.visible">	
-												<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-												<td>{{ a.data.timeSlot }}</td>
-											</tr>
-											<tr ng-show="a_smsCode.visible">	
-												<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-												<td>{{ a.data.smsCode }}</td>
-											</tr>
-											<tr ng-show="a_color.visible">	
-												<td><strong>{{ 'area_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
-											</tr>
-											<tr ng-show="a_note.visible">	
-												<td><strong>{{ 'area_note' | i18n }}:</strong></td>
-												<td>{{ a.data.note }}</td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
+         					fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showDetails(event, a, 5, 0)"><!-- on-click="showInfoWindow(event, a.info_windows_cod)" -->
+     					</shape>
+     					<shape name="polygon" ng-repeat="aSel in mapSelectedAreas" id="{{ aSel.id }}" path="{{ aSel.gpath }}" visible="{{ aSel.visible }}"
+         					geodesic="{{ aSel.geodesic }}" stroke-color="{{ aSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ aSel.stroke.weight }}"
+         					fill-color="{{ aSel.fill.color }}" fill-opacity="{{ aSel.fill.opacity }}" on-click="hideDetails(event, aSel, 5)"><!-- on-click="showInfoWindow(event, aSel.info_windows_cod)" -->
      					</shape>
 					</map>
 				</div>
@@ -390,7 +129,7 @@
 				<div class="col-md-2" ng-show="detailsOpened">
 					<div class="panel panel-danger" >
 						<div class="panel-heading">
-							<h5 class="panel-title">{{ 'element_details' | i18n }}</h5>
+							<h5 class="panel-title">{{ 'element_details' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></h5>
 						</div>
 						<div class="panel-body">
 							<div ng-show="isPMDetShow()">
@@ -587,7 +326,54 @@
 							       	</tr>
 							    </table>
 							</div>
-							
+							<div ng-show="isZoneDetShow()">
+								<table width="100%">
+									<tr>
+							    		<td><strong>{{ 'zone_name' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+							    	</tr>
+							    	<tr ng-show="zone_type.visible">
+							    		<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ zDetails.data.type }}</td>
+							    	</tr>
+									<tr ng-show="zone_note.visible">
+							        	<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
+							        	<td>&nbsp;{{ zDetails.data.note }}</td>
+							        </tr>
+							        <tr ng-show="zone_color.visible">	
+										<td><strong>{{ 'zone_color' | i18n }}</strong></td>
+										<td><span class="colorBox" ng-style="{'background-color': correctColor(zDetails.data.color)}"></span></td>
+									</tr>
+							    </table>
+							</div>
+							<div ng-show="isAreaDetShow()">
+								<table width="100%">
+							        <tr>	
+										<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
+										<td width="55%">{{ aDetails.data.name }}</td>
+									</tr>
+									<tr ng-show="a_fee.visible">	
+										<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
+										<td width="55%">{{ aDetails.data.fee }}</td>
+									</tr>
+									<tr ng-show="a_timeSlot.visible">	
+										<td><strong>{{ 'area_time' | i18n }}:</strong></td>
+										<td>{{ aDetails.data.timeSlot }}</td>
+									</tr>
+									<tr ng-show="a_smsCode.visible">	
+										<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
+										<td>{{ aDetails.data.smsCode }}</td>
+									</tr>
+									<tr ng-show="a_color.visible">	
+										<td><strong>{{ 'area_color' | i18n }}</strong></td>
+										<td><span class="colorBox" ng-style="{'background-color': correctColor(aDetails.data.color)}"></span></td>
+									</tr>
+									<tr ng-show="a_note.visible">	
+										<td><strong>{{ 'area_note' | i18n }}:</strong></td>
+										<td>{{ aDetails.data.note }}</td>
+									</tr>
+							    </table>
+							</div>        
 						</div>
 					</div>
 				</div>

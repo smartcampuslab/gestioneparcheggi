@@ -702,8 +702,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var points = [];
 		for(var i = 0; i < geo.length; i++){
 			var tmpPoint = {
-				lat: geo[i].latitude,
-				lng: geo[i].longitude
+				lat: Number(geo[i].latitude),
+				lng: Number(geo[i].longitude)
 			};
 			points.push(tmpPoint);
 		}

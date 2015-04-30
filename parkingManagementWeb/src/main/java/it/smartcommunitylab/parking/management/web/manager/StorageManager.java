@@ -750,11 +750,21 @@ public class StorageManager {
 		zona.setColor(z.getColor());
 		zona.setType(z.getType());
 		zona.setNote(z.getNote());
-		if(zona.getGeometry() != null && zona.getGeometry().getPoints().size() > 0){
-			zona.getGeometry().getPoints().clear();
-			for (PointBean pb : z.getGeometry().getPoints()) {
-				zona.getGeometry().getPoints()
-						.add(ModelConverter.convert(pb, Point.class));
+		if(z.getGeometry()!= null && z.getGeometry().getPoints() != null && z.getGeometry().getPoints().size() > 0){
+			if(zona.getGeometry() != null && zona.getGeometry().getPoints() != null && zona.getGeometry().getPoints().size() > 0){
+				zona.getGeometry().getPoints().clear();
+				for (PointBean pb : z.getGeometry().getPoints()) {
+					zona.getGeometry().getPoints()
+							.add(ModelConverter.convert(pb, Point.class));
+				}	
+			} else {
+				Polygon geo = new Polygon();
+				List<Point> points = new ArrayList<Point>();
+				for (PointBean pb : z.getGeometry().getPoints()) {
+					points.add(ModelConverter.convert(pb, Point.class));
+				}
+				geo.setPoints(points);
+				zona.setGeometry(geo);
 			}
 		}
 		mongodb.save(zona);

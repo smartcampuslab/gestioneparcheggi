@@ -193,7 +193,7 @@ providers:
         - code: viewPage
           editable: false
           required: false
-          visible: false
+          visible: true
      - id: Bp
        attributes:
         - code: name
