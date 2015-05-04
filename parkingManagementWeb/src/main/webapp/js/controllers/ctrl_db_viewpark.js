@@ -723,6 +723,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon; 
+				var averageOccupation = Math.floor((Math.random() * 100) + 1);
+				marker.averageOccupation1012 = averageOccupation;
+				//myIcon = $scope.getOccupancyIcon(averageOccupation, 2);
+				marker.slotOccupied = Math.floor(marker.slotNumber * averageOccupation / 100);
 				break;
 			case 3 :
 				myIcon = $scope.bpMarkerIcon;
@@ -905,6 +909,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var mystreet = streets[i];
 			var averageOccupation = Math.floor((Math.random() * 100) + 1);
 			mystreet.averageOccupation1012 = averageOccupation;
+			mystreet.slotOccupied = Math.floor(mystreet.slotNumber * averageOccupation / 100);
 			mystreet.area_name = area.name;
 			mystreet.area_color= area.color;
 			mystreet.myZones = zones;
@@ -1405,7 +1410,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.fixAllStreetsOccupancy = function(){
-    	var toHideStreets = $scope.map.shapes;
+    	// For Streets
+		var toHideStreets = $scope.map.shapes;
     	for(var i = 0; i < $scope.mapStreets.length; i++){
     		toHideStreets[$scope.mapStreets[i].id].setMap(null);
     		var object = $scope.mapStreets[i];
@@ -1413,9 +1419,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		$scope.occupancyStreets.push(object);
     	}
     	$scope.mapStreets = [];
+    	// For Structures
+    	for (var i = 0; i < $scope.mapParkingStructureMarkers.length; i++){
+    		var myIcon = $scope.getOccupancyIcon($scope.mapParkingStructureMarkers[i].data.averageOccupation1012, 2);
+    		var object = $scope.mapParkingStructureMarkers[i];
+    		object.icon = myIcon;
+    		$scope.occupancyParkingStructureMarkers.push(object);
+    	};
+    	$scope.mapParkingStructureMarkers = [];
+    	
     };
     
     $scope.fixAllStreetsSupply = function(){
+    	// For Streets
     	var toHideStreets = $scope.map.shapes;
     	for(var i = 0; i < $scope.occupancyStreets.length; i++){
     		toHideStreets[$scope.occupancyStreets[i].id].setMap(null);
@@ -1424,6 +1440,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		$scope.mapStreets.push(object);
     	}
     	$scope.occupancyStreets = [];
+    	// For Structures
+    	for (var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
+    		var object = $scope.occupancyParkingStructureMarkers[i];
+    		object.icon = $scope.psMarkerIcon;
+    		$scope.mapParkingStructureMarkers.push(object);
+    	};
+    	$scope.occupancyParkingStructureMarkers = [];
     };
     
     $scope.getOccupancyColor = function(value){
@@ -1438,6 +1461,57 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	} else {
     		return $scope.violet;
     	}
+    };
+    
+    $scope.getOccupancyIcon = function(value, type){
+    	var image_url="";
+    	if(value < 25){
+    		switch(type){
+    			case 1: break;
+    			case 2:
+    				image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_green.png";
+    				break;
+    			case 3: break;
+    			default: break;
+    		}
+    	} else if(value < 50){
+    		switch(type){
+				case 1: break;
+				case 2:
+					image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_yellow.png";
+					break;
+				case 3: break;
+				default: break;
+    		}
+    	} else if(value < 75){
+    		switch(type){
+				case 1: break;
+				case 2:
+					image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_orange.png";
+					break;
+				case 3: break;
+				default: break;
+    		}
+    	} else if(value < 90){
+    		switch(type){
+				case 1: break;
+				case 2:
+					image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_red.png";
+					break;
+				case 3: break;
+				default: break;
+			}
+    	} else {
+    		switch(type){
+				case 1: break;
+				case 2:
+					image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_violet.png";
+					break;
+				case 3: break;
+				default: break;
+			}
+    	}
+    	return image_url;
     };
 	
 }]);

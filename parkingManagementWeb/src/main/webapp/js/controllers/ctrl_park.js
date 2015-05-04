@@ -16,6 +16,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.maxPmeters = 7;
     $scope.maxPStructs = 8;
     $scope.maxZones = 8;
+    $scope.maxBPoints = 11;
     
     // Variable declaration (without this in ie the edit/view features do not work)
     $scope.eStreet = {};
@@ -23,6 +24,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.parckingMeter = {};
     $scope.parkingStructure = {};
     $scope.zone = {};
+    $scope.bikePoint = {};
     
     $scope.multiSelSettings = {displayProp: 'name'-'submacro'};
     
@@ -91,6 +93,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     var showPm = false;
     var showPs = false;
     var showZones = false;
+    var showBp = false;
     
     // Methods to show/hide street area filter
     $scope.showAreaFilter = function(){
@@ -160,6 +163,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    			showZones = true;
 	    			$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
 	    			parktabs.push({ title:'Zona', index: 5, content:"partials/edit/tabs/edit_zone.html" });
+	    		}
+	    		if($scope.showedObjects[i].id == 'Bp'){
+	    			showBp = true;
+	    			$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
+	    			parktabs.push({ title:'Punti Bici', index: 6, content:"partials/edit/tabs/edit_bike.html" });
 	    		}
 	    	}
 	    	angular.copy(parktabs, $scope.editparktabs);
@@ -320,6 +328,25 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     	}
     };
+    
+    //BikePoint Component settings
+    $scope.loadBikeAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.bp_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'bikeNumber'){
+    			$scope.bp_bikeNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.bp_slotNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.bp_geometry = attributes[i];
+    		}
+    	}
+    };
+    
     // ---------------------- End Block to read conf params and show/hide elements ---------------------
     
     // The tab directive will use this data
@@ -358,6 +385,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	if(tab.index == 5){
        		//$scope.resizeMap();
        		$scope.getZonesFromDb();
+       	}
+       	if(tab.index == 6){
+       		$scope.getBikePointsFromDb();
        	}
     };  
     
@@ -627,6 +657,29 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	$scope.initZonesOnMap($scope.zoneWS);
 	    	sharedDataService.setSharedLocalZones($scope.zoneWS);
 	    	$scope.zoneMapReady = true;
+	    });
+	};
+	
+	$scope.getBikePointsFromDb = function(){
+		var markers = [];
+		$scope.bpMapReady = false;
+		var allBpoints = [];
+		var method = 'GET';
+		
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+	    	angular.copy(result, allBpoints);
+	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
+	    	
+	    	for (var i = 0; i <  allBpoints.length; i++) {
+	    		markers.push(createMarkers(i, allBpoints[i], 3));
+		    }
+	    	
+	    	$scope.bpointWS = allBpoints;
+	    	if(showBp)$scope.resizeMap("viewBike");
+	    	$scope.initBPointMap(markers);
+	    	$scope.bpMapReady = true;
 	    });
 	};
 	
@@ -1325,6 +1378,74 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.editModeZ = false;
 	};
 	
+	// BikePoints
+	$scope.setBpDetails = function(bikePoint){
+		$scope.bpViewMapReady = false;
+		$scope.mySpecialBPMarkers = [];
+		
+		$scope.bikePoint = bikePoint;
+		
+		var toRemLat = 0;
+		var toRemLng = 0;
+		var sLat = "" + $scope.bikePoint.geometry.lat;
+		var sLng = "" + $scope.bikePoint.geometry.lng;
+		if(sLat.length > $scope.gpsLength){
+			toRemLat = sLat.length - $scope.gpsLength;
+		}
+		if(sLng.length > $scope.gpsLength){
+			toRemLng = sLng.length - $scope.gpsLength;
+		}
+		$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+		
+		// Init the map for view
+		$scope.pViewBikeMap = {
+			control: {},
+			center: $scope.mapCenter,
+			zoom: 14,
+			bounds: {},
+			options: {
+				scrollwheel: true
+			}
+		};
+		
+		$scope.pViewBikeMarkers = $scope.bikePointMarkers;
+		for(var i = 0; i < $scope.pViewBikeMarkers.length; i++){
+			if($scope.pViewBikeMarkers[i].title == $scope.bikePoint.id){
+				$scope.pViewBikeMarkers.splice(i, 1);
+				//$scope.bikePointMarkers[i].animation = "BOUNCE";
+			};
+		}
+		
+		var mySpecialBPMarker = {
+			id: bikePoint.id,
+			coords: {
+				latitude: $scope.bikePoint.geometry.lat,
+				longitude: $scope.bikePoint.geometry.lng
+			},
+			pos: $scope.bikePoint.geometry.lat + "," + $scope.bikePoint.geometry.lng,
+			data: bikePoint,
+			visible: true,
+			options: { 
+				draggable: false,
+				animation: "BOUNCE"	//1
+			},
+			icon: $scope.bpMarkerIcon
+		};
+		$scope.mySpecialBPMarkers.push(mySpecialBPMarker);
+		
+		$scope.viewModeBP = true;
+		$scope.editModeBP = false;
+		$scope.bpViewMapReady = true;
+	};
+	
+	$scope.closeBPView = function(){
+		//$scope.mySpecialBPMarker.visible = false;
+		$scope.mySpecialBPMarkers = [];
+		$scope.getBikePointsFromDb();	// to refresh the data on page
+		$scope.viewModeBP = false;
+		$scope.editModeBP = false;
+	};
+	
 	// Edit management
 	// Area
 	$scope.setAEdit = function(area){
@@ -1784,6 +1905,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.resizeMapTimed("editPs", false);
 	};
 	
+	// Zone
 	$scope.setZEdit = function(zone){
 		// Case create
 		$scope.isEditing = false;
@@ -1944,6 +2066,92 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.resizeMapTimed("editZone", false);
 	};
 	
+	// BikePoint
+	$scope.setBpEdit = function(bikePoint){
+		$scope.editBikePointMarkers = [];
+		$scope.newBikePointMarkers = [];
+		// Case create
+		$scope.isEditing = false;
+		$scope.isInit = true;
+		
+		//$scope.resizeMap();
+		
+		$scope.bikePoint = {
+			id: null,
+			id_app: null,
+			name: null,
+			slotNumber: null,
+			bikeNumber: null,
+			geometry: null
+		};
+		
+		// Case edit
+		if(bikePoint != null){
+			$scope.isEditing = true;
+			$scope.isInit = false;
+			angular.copy(bikePoint, $scope.bikePoint);
+			
+			$scope.bpEditMap = {
+				control: {},
+				center: $scope.mapCenter,
+				zoom: 15,
+				bounds: {},
+				options: {
+					scrollwheel: true
+				}
+			};
+			
+			$scope.setMyGeometry($scope.bikePoint.geometry.lat + "," + $scope.bikePoint.geometry.lng);
+			
+			$scope.myBp = {
+				id: 0,
+				coords: {
+					latitude: $scope.bikePoint.geometry.lat,
+					longitude: $scope.bikePoint.geometry.lng
+				},
+				pos:$scope.bikePoint.geometry.lat + "," + $scope.bikePoint.geometry.lng,
+				options: { 
+					draggable: true
+				},
+				icon: $scope.bpMarkerIcon
+			};
+			$scope.editBikePointMarkers.push($scope.myBp);
+			
+		} else {
+			$scope.setMyGeometry(null);
+		}
+		$scope.viewModeBP = false;
+		$scope.editModeBP = true;
+		$scope.resizeMapTimed("editBike", false);
+	};
+	
+	$scope.setMyGeometry = function(value){
+		$scope.myGeometry = value;
+	};
+	
+	$scope.addMyNewMarker = function(pos, map){
+		$scope.myNewPm = {
+				id: 0,
+				coords: {
+					latitude: pos.lat,
+					longitude: pos.lng
+				},
+				options: { 
+					draggable: true,
+					visible: true
+				},
+				map: map,
+				events: {
+				    dragend: function (marker, eventName, args) {
+				    	var lat = marker.getPosition().lat();
+				    	var lng = marker.getPosition().lng();
+				    	console.log('marker dragend: ' + lat + "," + lng);
+				    	$scope.setMyGeometry(lat + "," + lng);
+				    }
+				}
+		};
+	};
+	
 	$scope.setMyGeometry = function(value){
 		$scope.myGeometry = value;
 	};
@@ -2027,6 +2235,26 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	return $scope.newPsMarkers.push(ret);
 		}
     };
+    
+    $scope.addNewMarker = function(event) {
+		if(!$scope.isEditing){
+			$scope.newBikePointMarkers = []; 	// I permit only one marker a time
+	        var pos = event.latLng;
+	        var i = 0;
+	        
+	    	var ret = {
+	    		id: i,
+	    		pos: pos.lat() + "," + pos.lng(),
+	    		options: { 
+	    		   	draggable: true,
+	    		   	visible: true
+	    		},
+	    		icon: $scope.bpMarkerIcon
+	    	};
+	    	$scope.myGeometry = ret.pos;
+	    	return $scope.newBikePointMarkers.push(ret);
+		}
+    };
 	
 	$scope.updatePmPos = function(event){
     	var pos = event.latLng;
@@ -2037,6 +2265,17 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	var pos = event.latLng;
     	$scope.myGeometry = pos.lat() + "," + pos.lng();
     	$scope.getStructAddress(event);
+    };
+    
+    $scope.updatePos = function(event){
+    	var pos = event.latLng;
+    	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    };
+    
+    $scope.moveMarker = function(val){
+    	if($scope.newBikePointMarkers!=null && $scope.newBikePointMarkers.length > 0){
+    		$scope.newBikePointMarkers[0].pos = val;
+    	}
     };
 	
 	// Object Update methods
@@ -2318,6 +2557,45 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	// Update BikePoint Object
+	$scope.updateBpoint = function(form, geo){
+		if(!form.$valid){
+			$scope.isInit=false;
+		} else {
+			$scope.isInit=true;
+			$scope.showUpdatingBPErrorMessage = false;
+			
+			var id = $scope.bikePoint.id;
+			var method = 'PUT';
+			var bp = $scope.bikePoint;
+			
+			var data = {
+				id: bp.id,
+				id_app: bp.id_app,
+				name: bp.name,
+				slotNumber: bp.slotNumber,
+				bikeNumber: bp.bikeNumber,
+				geometry: $scope.correctMyGeometry(geo)
+			};
+			
+		    var value = JSON.stringify(data);
+		    if($scope.showLog) console.log("Bikepoint data : " + value);
+			
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
+		    myDataPromise.then(function(result){
+		    	console.log("Updated bikepoint: " + result);
+		    	if(result != null){//== "OK"){
+		    		$scope.getBikePointsFromDb();
+					$scope.editModeBP = false;
+		    	} else {
+		    		$scope.editModeBP = true;
+		    		$scope.showUpdatingBPErrorMessage = true;
+		    	}
+		    });
+		}
+	};
+	
 	// Prepare Delete Methods
 	// Area
 	$scope.setARemove = function(area){
@@ -2378,6 +2656,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				// yes case
 				$scope.deleteZone(zone);
 				
+				// Call the delete method
+			},function(btn){
+				// no case
+				// do nothing
+        });
+	};
+	
+	// BikePoint
+	$scope.setBpRemove = function(bPoint){
+		var delBike = $dialogs.confirm("Attenzione", "Vuoi cancellare il punto bici '" + bPoint.name + "'?");
+			delBike.result.then(function(btn){
+				// yes case
+				$scope.deleteBPoint(bPoint);
 				// Call the delete method
 			},function(btn){
 				// no case
@@ -2495,6 +2786,25 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	} else {
 	    		//$scope.editModeA = true;
 	    		$scope.showDeletingZErrorMessage = true;
+	    	}
+	    });
+	};
+	
+	// BikePoint
+	$scope.deleteBPoint = function(bPoint){
+		$scope.showDeletingBPErrorMessage = false;
+		var method = 'DELETE';
+		
+	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
+	   	myDataPromise.then(function(result){
+	    	console.log("Deleted bikePoint: " + JSON.stringify(result));
+	    	if(result != null && result != ""){
+	    		$scope.getBikePointsFromDb();
+	    		//$scope.editModeA = false;
+	    	} else {
+	    		//$scope.editModeA = true;
+	    		$scope.showDeletingBPErrorMessage = true;
 	    	}
 	    });
 	};
@@ -2744,6 +3054,43 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	// BikePoint
+	$scope.createBpoint = function(form, geo){
+		if(!form.$valid){
+			$scope.isInit=false;
+		} else {
+			$scope.isInit=true;
+			$scope.showUpdatingBPErrorMessage = false;
+			
+			var method = 'POST';
+			var bp = $scope.bikePoint;
+			
+			var data = {
+				id_app: $scope.myAppId,
+				name: bp.name,
+				slotNumber: bp.slotNumber,
+				bikeNumber: bp.bikeNumber,
+				geometry: $scope.correctMyGeometry(geo)
+			};
+			
+		    var value = JSON.stringify(data);
+		    if($scope.showLog) console.log("Bikepoint data : " + value);
+			
+		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
+		    myDataPromise.then(function(result){
+		    	console.log("Create bikePoint: " + JSON.stringify(result));
+		    	if(result != null && result != ""){
+		    		$scope.getBikePointsFromDb();
+					$scope.editModeBP = false;
+		    	} else {
+		    		$scope.editModeBP = true;
+		    		$scope.showUpdatingBPErrorMessage = true;
+		    	}
+		    });
+		}
+	};
+	
 	// Maps management
 	$scope.parkingMetersMarkers = [];
 	$scope.parkingStructureMarkers = [];
@@ -2806,6 +3153,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				break;
 			case "editZone":
 				map = $scope.eZoneMap;	
+				break;
+			case "viewBike":
+				map = $scope.vBpMap;
+				break;
+			case "editBike":
+				map = $scope.eBpMap;	
 				break;	
 			default:
 				break;
@@ -2904,6 +3257,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	case "editZone":
 	    		$scope.eZoneMap = map;
 	    		gzone.setMap(map);
+	    		break;
+	    	case "viewBike":
+	    		$scope.vBpMap = map;
+	    		break;
+	    	case "editBike":
+	    		$scope.eBpMap = map;
 	    		break;	
 	    	default: break;
     	}
@@ -3188,6 +3547,28 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	$scope.initBPointMap = function(bpMarkers){
+		$scope.bPointMap = {
+			control: {},
+			center: $scope.mapCenter,
+		    zoom: 14,
+		    bounds: {}
+		};
+			
+		$scope.options = {
+		    scrollwheel: true
+		};
+		
+		if(bpMarkers!= null){
+			$scope.bikePointMarkers = bpMarkers;
+		} else {
+			$scope.bikePointMarkers = [];
+		}
+		$scope.addMarkerToMap($scope.bPointMap, 3);
+		
+		$scope.mySpecialBPMarkers = [];
+	};
+	
 	$scope.updateMyNewArea = function(path){
 		var color = "000000";
 		if($scope.myColor != null){
@@ -3287,6 +3668,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				break;
 			case 3 :
 				myIcon = $scope.bpMarkerIcon;
+				title = marker.id;
 		}
 		
 		var ret = {

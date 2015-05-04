@@ -918,5 +918,17 @@
     "key": "view_macrozones",
     "value": "Macrozone",
     "description": "Label macrozone in pagina dashboard"
+}, {
+    "key": "ps_occupiedslot",
+    "value": "Occupati",
+    "description": "Label posti occupati in dettagli struttura pagina dashboard"
+}, {
+    "key": "street_occupiedslot",
+    "value": "Occupati",
+    "description": "Label posti occupati in dettagli strada pagina dashboard"
+}, {
+    "key": "element_occupancy",
+    "value": "Occupazione",
+    "description": "Title panel object occupancy"
 }
 ]
