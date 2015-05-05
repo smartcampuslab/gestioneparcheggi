@@ -26,6 +26,8 @@ public class Street {
 	private Integer slotNumber;
 	private Integer handicappedSlotNumber;	// off_h
 	private Integer handicappedSlotOccupied;
+	private Integer reservedSlotNumber;	// off_rs
+	private Integer reservedSlotOccupied;
 	private Integer timedParkSlotNumber;	// off_do
 	private Integer timedParkSlotOccupied;
 	private Integer freeParkSlotNumber;		// off_ls
@@ -165,6 +167,22 @@ public class Street {
 		this.handicappedSlotNumber = handicappedSlotNumber;
 	}
 
+	public Integer getReservedSlotNumber() {
+		return reservedSlotNumber;
+	}
+
+	public Integer getReservedSlotOccupied() {
+		return reservedSlotOccupied;
+	}
+
+	public void setReservedSlotNumber(Integer reservedSlotNumber) {
+		this.reservedSlotNumber = reservedSlotNumber;
+	}
+
+	public void setReservedSlotOccupied(Integer reservedSlotOccupied) {
+		this.reservedSlotOccupied = reservedSlotOccupied;
+	}
+
 	public Integer getTimedParkSlotNumber() {
 		return timedParkSlotNumber;
 	}
@@ -242,6 +260,8 @@ public class Street {
 		json += "\"freeParkSlotSignOccupied\":\"" + getFreeParkSlotSignOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
+		json += "\"reservedSlotNumber\":\"" + getReservedSlotNumber() + "\",";
+		json += "\"reservedSlotOccupied\":\"" + getReservedSlotOccupied() + "\",";
 		json += "\"timedParkSlotNumber\":\"" + getTimedParkSlotNumber() + "\",";
 		json += "\"timedParkSlotOccupied\":\"" + getTimedParkSlotOccupied() + "\",";
 		json += "\"paidSlotNumber\":\"" + getPaidSlotNumber() + "\",";

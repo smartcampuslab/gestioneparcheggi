@@ -23,6 +23,10 @@
 							    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
 							    		<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
 							    	</tr>
+							    	<tr ng-show="s_reservedSlot.visible">
+							    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ s.data.reservedSlotNumber }}</td>
+							    	</tr>
 							    	<tr ng-show="s_timedSlot.visible">
 							    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
 							    		<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
@@ -125,6 +129,10 @@
 									<tr ng-show="s_handicappedSlot.visible">
 							    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
 							    		<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
+							    	</tr>
+							    	<tr ng-show="s_reservedSlot.visible">
+							    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
+							    		<td>&nbsp;{{ s.data.reservedSlotNumber }}</td>
 							    	</tr>
 							    	<tr ng-show="s_timedSlot.visible">
 							    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
@@ -296,6 +304,10 @@
 							<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
 							<td>{{ viewStreet.handicappedSlotNumber }}</td>
 						</tr>
+						<tr ng-show="s_reservedSlot.visible">	
+							<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
+							<td>{{ viewStreet.reservedSlotNumber }}</td>
+						</tr>
 						<tr ng-show="s_timedSlot.visible">	
 							<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
 							<td>{{ viewStreet.timedParkSlotNumber }}</td>
@@ -449,6 +461,12 @@
 						    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="eStreet.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
+						   	</div>
+						   	<div class="form-group" ng-show="s_reservedSlot.visible">
+						    	<label for="reservedSlot">{{ 'street_reserved_slot' | i18n }}</label>
+						    	<input id="reservedSlot" type="text" class="form-control" name="sReservedslot" ng-model="eStreet.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
 						   	</div>
 						   	<div class="form-group" ng-show="s_timedSlot.visible">
 						    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>

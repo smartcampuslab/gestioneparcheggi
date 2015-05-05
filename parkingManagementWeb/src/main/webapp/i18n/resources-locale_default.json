@@ -175,6 +175,14 @@
     "value": "Posti",
     "description": "Intestazione colonna parcheggi in tabella lista strade"
 }, {
+    "key": "street_free_slots",
+    "value": "Posti liberi",
+    "description": "Label parcheggi liberi in strade pagina dashboard"
+}, {
+    "key": "street_occupied_slots",
+    "value": "Posti occupati",
+    "description": "Label parcheggi occupati in strade pagina dashboard"
+}, {
     "key": "street_area_name",
     "value": "Area",
     "description": "Intestazione colonna area in tabella lista strade"
@@ -507,6 +515,10 @@
     "value": "Posti riservati ai disabili",
     "description": "Label campo posti disabili per oggetto strada"
 }, {
+    "key": "street_reserved_slot",
+    "value": "Posti riservati",
+    "description": "Label campo posti riservati per oggetto strada"
+}, {
     "key": "street_timedpark_slot",
     "value": "Posti disco orario",
     "description": "Label campo posti disco orario per oggetto strada"
@@ -514,6 +526,10 @@
     "key": "street_freepark_slot",
     "value": "Posti sosta libera",
     "description": "Label campo posti sosta libera per oggetto strada"
+}, {
+    "key": "street_paid_slot",
+    "value": "Posti a pagamento",
+    "description": "Label campo posti a pagamento per oggetto strada"
 }, {
     "key": "street_totalslot",
     "value": "Posti totali",
@@ -546,6 +562,10 @@
     "key": "street_handicapped_slots_err_required",
     "value": "Campo posti per disabili obbligatorio.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_reserved_slots_err_required",
+    "value": "Campo posti riservati obbligatorio.",
+    "description": "Messaggio errore campo posti riservati in strada obbligatorio"
 }, {
     "key": "street_timedpark_slots_err_required",
     "value": "Campo posti 'disco orario' obbligatorio.",
@@ -767,6 +787,10 @@
     "value": "Inserire il numero di posti riservati ai disabili",
     "description": "Testo placeholder campo posti disabili via"
 }, {
+    "key": "street_reservedslot_placeholder",
+    "value": "Inserire il numero di posti riservati",
+    "description": "Testo placeholder campo posti riservati in via"
+}, {
     "key": "street_timedslot_placeholder",
     "value": "Inserire il numero di posti a disco-orario",
     "description": "Testo placeholder campo posti disco orario via"
@@ -930,5 +954,21 @@
     "key": "element_occupancy",
     "value": "Occupazione",
     "description": "Title panel object occupancy"
+}, {
+    "key": "street_handicapped_slot_occupied",
+    "value": "Posti riservati ai disabili",
+    "description": "Label campo posti disabili per oggetto strada"
+}, {
+    "key": "street_timedpark_slot_occupied",
+    "value": "Posti disco orario",
+    "description": "Label campo posti disco orario per oggetto strada"
+}, {
+    "key": "street_freepark_slot_occupied",
+    "value": "Posti sosta libera",
+    "description": "Label campo posti sosta libera per oggetto strada"
+}, {
+    "key": "street_paid_slot_occupied",
+    "value": "Posti a pagamento",
+    "description": "Label campo posti a pagamento per oggetto strada"
 }
 ]

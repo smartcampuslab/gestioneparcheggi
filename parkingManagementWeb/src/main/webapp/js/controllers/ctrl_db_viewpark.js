@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-var pmControllers = angular.module('pmControllers');
+var pmControllers = angular.module('pmControllers', ['googlechart']);
 
 pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
                           function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
@@ -907,9 +907,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 			var area = $scope.getLocalAreaById(streets[i].rateAreaId);
 			var mystreet = streets[i];
+			// ------------------------- TEST data -----------------------
 			var averageOccupation = Math.floor((Math.random() * 100) + 1);
 			mystreet.averageOccupation1012 = averageOccupation;
 			mystreet.slotOccupied = Math.floor(mystreet.slotNumber * averageOccupation / 100);
+			mystreet.freeParkSlotOccupied = Math.floor(mystreet.freeParkSlotNumber * averageOccupation / 100);
+			mystreet.freeParkSlotSignOccupied = Math.floor(mystreet.freeParkSlotSignNumber * averageOccupation / 100);
+			mystreet.paidSlotOccupied = Math.floor(mystreet.paidSlotNumber * averageOccupation / 100);
+			mystreet.timedParkSlotOccupied = Math.floor(mystreet.timedParkSlotNumber * averageOccupation / 100);
+			mystreet.handicappedSlotOccupied = Math.floor(mystreet.handicappedSlotNumber * averageOccupation / 100);
+			// ----------------------------------------------------------
 			mystreet.area_name = area.name;
 			mystreet.area_color= area.color;
 			mystreet.myZones = zones;
@@ -1298,6 +1305,166 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		};
 	};
 	
+	$scope.showOccupancy = function(event, object, type, theme){
+		$scope.theme = theme;	// used in close details panel
+		switch(type){
+			case 1:
+				for(var i = 0; i < $scope.occupancyParkingMeterMarkers.length; i++){
+					if($scope.occupancyParkingMeterMarkers[i].id == object.id){
+						$scope.occupancyParkingMeterMarkers.splice(i, 1);
+					}
+				}
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				$scope.showPMDet();
+				object.options.animation = "BOUNCE";
+				$scope.mapParkingMetersSelectedMarkers.push(object);
+				//$scope.pmDetails = object;
+				// here i call the method that init the pie diagram
+				break;
+			case 2:
+				for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
+					if($scope.occupancyParkingStructureMarkers[i].id == object.id){
+						$scope.occupancyParkingStructureMarkers.splice(i, 1);
+					}
+				}
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				$scope.showPSDet();
+				object.options.animation = "BOUNCE";
+				$scope.mapParkingStructureSelectedMarkers.push(object);
+				$scope.psDetails = object;
+				$scope.initPsOccupancyDiagram(object);
+				break;
+			case 3:
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				object.stroke.weight = 10;
+				var toDelStreet = $scope.map.shapes;
+			    toDelStreet[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+			    for(var i = 0; i < $scope.occupancyStreets.length; i++){
+				   	if($scope.occupancyStreets[i].id == object.id){
+				   		$scope.occupancyStreets.splice(i, 1);
+				   	}
+			    }
+			    $scope.mapSelectedStreets.push(object);
+			    $scope.showStreetDet();
+				// -------------------------- Data correction for TEST ----------------------------
+				object.data.freeParkSlotSignFree = object.data.freeParkSlotSignNumber - object.data.freeParkSlotSignOccupied;
+				if(object.data.freeParkSlotSignFree == null){
+					object.data.freeParkSlotSignFree = object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied;
+					if(object.data.freeParkSlotSignFree == null){
+						object.data.freeParkSlotSignFree = 0;
+					}
+				}
+				object.data.paidSlotFree = object.data.paidSlotNumber - object.data.paidSlotOccupied;
+				object.data.timedParkSlotFree = object.data.timedParkSlotNumber - object.data.timedParkSlotOccupied;
+				object.data.handicappedSlotFree = object.data.handicappedSlotNumber - object.data.handicappedSlotOccupied;
+				// --------------------------------------------------------------------------------
+			    $scope.sDetails = object;
+			    $scope.initStreetOccupancyDiagram(object);
+				break;
+			case 4:
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				object.stroke.weight = 10;
+				var toDelZones = $scope.map.shapes;
+			    toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+			    if(theme == 0){
+				    for(var i = 0; i < $scope.mapZones.length; i++){
+				    	if($scope.mapZones[i].id == object.id){
+				    		$scope.mapZones.splice(i, 1);
+				    	}
+				    }
+			    } else {
+			    	for(var i = 0; i < $scope.occupancyZones.length; i++){
+				    	if($scope.occupancyZones[i].id == object.id){
+				    		$scope.occupancyZones.splice(i, 1);
+				    	}
+				    }
+			    }
+			    $scope.mapSelectedZones.push(object);
+			    $scope.showZoneDet();
+				$scope.zDetails = object;
+				break;
+			case 5:
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				object.stroke.weight = 10;
+				var toDelAreas = $scope.map.shapes;
+			    toDelAreas[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+			    if(theme == 0){
+				    for(var i = 0; i < $scope.mapAreas.length; i++){
+				    	if($scope.mapAreas[i].id == object.id){
+				    		$scope.mapAreas.splice(i, 1);
+				    	}
+				    }
+			    } else {
+			    	for(var i = 0; i < $scope.occupancyAreas.length; i++){
+				    	if($scope.occupancyAreas[i].id == object.id){
+				    		$scope.occupancyAreas.splice(i, 1);
+				    	}
+				    }
+			    }
+			    $scope.mapSelectedAreas.push(object);
+			    $scope.showAreaDet();
+				$scope.aDetails = object;
+				break;	
+		};
+		$scope.occupancyOpened = true;
+		return object;
+	};
+	
+	$scope.hideOccupancy = function(event, object, type){
+		$scope.occupancyOpened = false;
+		switch(type){
+		case 1:
+			if($scope.mapParkingMetersMarkers.length > 0){
+				$scope.mapParkingMetersMarkers.push(object);
+			} else {
+				$scope.occupancyParkingMeterMarkers.push(object);
+			}
+			$scope.mapParkingMetersSelectedMarkers = [];
+			break;
+		case 2:
+			if($scope.mapParkingStructureMarkers.length > 0){
+				$scope.mapParkingStructureMarkers.push(object);
+			} else {
+				$scope.occupancyParkingStructureMarkers.push(object);
+			}
+			$scope.mapParkingStructureSelectedMarkers = [];
+			break;
+		case 3:
+			$scope.mapSelectedStreets = [];
+			var toDelStreet = $scope.map.shapes;
+	    	toDelStreet[object.id].setMap(null);
+	    	object.stroke.weight = 3;
+	    	if($scope.mapStreets.length > 0){
+	    		$scope.mapStreets.push(object);
+	    	} else {
+	    		$scope.occupancyStreets.push(object);
+	    	}
+			break;
+		case 4:
+			$scope.mapSelectedZones = [];
+			var toDelZone = $scope.map.shapes;
+	    	toDelZone[object.id].setMap(null);
+	    	object.stroke.weight = 3;
+	    	if($scope.mapZones.length > 0){
+	    		$scope.mapZones.push(object);
+	    	} else {
+	    		$scope.occupancyZones.push(object);
+	    	}
+			break;
+		case 5:
+			$scope.mapSelectedAreas = [];
+			var toDelArea = $scope.map.shapes;
+	    	toDelArea[object.id].setMap(null);
+	    	object.stroke.weight = 3;
+	    	if($scope.mapAreas.length > 0){
+	    		$scope.mapAreas.push(object);
+	    	} else {
+	    		$scope.occupancyAreas.push(object);
+	    	}
+			break;	
+		};
+	};
+	
 	$scope.isPMDetShow = function(){
 		return pMDet;
 	};
@@ -1320,6 +1487,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.closeAllDetails = function(theme){
 		$scope.detailsOpened = false;
+		$scope.occupancyOpened = false;
 		if($scope.mapParkingMetersSelectedMarkers.length > 0){
 			$scope.fixIfAlreadySelected($scope.mapParkingMetersSelectedMarkers, 1, theme);
 		}
@@ -1513,5 +1681,185 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	}
     	return image_url;
     };
+    
+    // ---------------------------------------------- Start block Utilization diagrams --------------------------------------
+    $scope.chartPsOccupancy = $scope.chart = {
+  		  "type": "PieChart",
+  		  "data": [],
+  		  "options": {
+  		    "displayExactValues": true,
+  		    "width": "100%",
+  		    "height": "100%",
+  		    "is3D": true,
+  		    "legend": {
+  		    	"position": 'top',
+  		    	"textStyle": {"color": 'black', "fontSize" : 10}
+      	    },
+  		    "chartArea": {
+  		      "left": 5,
+  		      "top": 50,
+  		      "bottom": 0,
+  		      "width": "100%",
+  		      "height": "100%"
+  		    }
+  		  },
+  		  "formatters": {
+  		    "number": [
+  		      {
+  		        "columnNum": 1,
+  		        "pattern": "#0 posti"
+  		      }
+  		    ]
+  		  },
+  		  "displayed": true
+    };
+  
+    $scope.initPsOccupancyDiagram = function(structure){
+    	$scope.chartPsOccupancy.data = [["Posti", "num"]];
+  	
+  	//for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
+  		var object = structure.data;
+  		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+  		var dataOcc = [ "Occupati", object.slotOccupied ];
+  		$scope.chartPsOccupancy.data.push(dataTot);
+  		$scope.chartPsOccupancy.data.push(dataOcc);
+  	//}
+  		$scope.chartPsOccupancy.options.title = "Posti occupati in struttura";
+    };
+    
+    $scope.chartStreetOccupancy = $scope.chart = {
+    	"type": "PieChart",
+    	"data": [],
+    	"options": {
+    	    "displayExactValues": true,
+    	    "width": "100%",
+    	    "height": "100%",
+    	    "is3D": true,
+    	    "legend": {
+    	    	"position": 'top',
+    	    	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+    	    "chartArea": {
+    	      "left": 5,
+    	      "top": 50,
+    	      "bottom": 0,
+    	      "width": "100%",
+    	      "height": "100%"
+    	    }
+    	},
+    	"formatters": {
+    	    "number": [
+    	        {
+    	        	"columnNum": 1,
+    	        	"pattern": "#0 posti"
+    	        }
+    	    ]
+    	},
+    	"displayed": true
+    };
+    
+    $scope.chartStreetFreeParkAvailability = $scope.chart = {
+        "type": "PieChart",
+        "data": [],
+        "options": {
+            "displayExactValues": true,
+            "width": "100%",
+            "height": "100%",
+            "is3D": true,
+            "legend": {
+            	"position": 'top',
+       	    	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+       	    "chartArea": {
+       	      "left": 5,
+       	      "top": 50,
+       	      "bottom": 0,
+       	      "width": "100%",
+       	      "height": "100%"
+       	    }
+       	},
+      	"formatters": {
+       	    "number": [
+      	        {
+       	        	"columnNum": 1,
+       	        	"pattern": "#0 posti"
+       	        }
+       	    ]
+       	},
+      	"displayed": true
+    };
+    
+    $scope.chartStreetOccupiedParkComposition = $scope.chart = {
+        "type": "PieChart",
+        "data": [],
+        "options": {
+            "displayExactValues": true,
+            "width": "100%",
+            "height": "100%",
+            "is3D": true,
+            "legend": {
+              	"position": 'top',
+       	    	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+       	    "chartArea": {
+       	      "left": 5,
+       	      "top": 50,
+       	      "bottom": 0,
+       	      "width": "100%",
+       	      "height": "100%"
+       	    }
+       	},
+      	"formatters": {
+       	    "number": [
+      	        {
+       	        	"columnNum": 1,
+       	        	"pattern": "#0 posti"
+       	        }
+       	    ]
+       	},
+      	"displayed": true
+    };    
+    
+    $scope.initStreetOccupancyDiagram = function(street){
+      	$scope.chartStreetOccupancy.data = [["Posti", "number"]];
+      	$scope.chartStreetFreeParkAvailability.data = [["Posti liberi", "number"]];
+      	$scope.chartStreetOccupiedParkComposition.data = [["Posti occupati", "number"]];
+      	
+      	var object = street.data;
+      	// for Total slot
+    	var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+    	var dataOcc = [ "Occupati", object.slotOccupied ];
+    	$scope.chartStreetOccupancy.data.push(dataTot);
+    	$scope.chartStreetOccupancy.data.push(dataOcc);
+    	$scope.chartStreetOccupancy.options.title = "Posti in strada";
+    	// for Free slot
+    	var freeFree = [ "Gratuiti", object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied ];
+    	var freePaid = [ "A pagamento", object.paidSlotNumber - object.paidSlotOccupied ];
+    	var freeTimed = [ "Disco Orario", object.timedParkSlotNumber - object.timedParkSlotOccupied ];
+    	var freeHandicapped = [ "Per disabili", object.handicappedSlotNumber - object.handicappedSlotOccupied ];
+    	$scope.chartStreetFreeParkAvailability.data.push(freeFree);
+    	$scope.chartStreetFreeParkAvailability.data.push(freePaid);
+    	$scope.chartStreetFreeParkAvailability.data.push(freeTimed);
+    	$scope.chartStreetFreeParkAvailability.data.push(freeHandicapped);
+    	$scope.chartStreetFreeParkAvailability.options.title = "Posti liberi in strada";
+    	// for Occupied slot
+    	var occupiedFree = [ "Gratuiti", object.freeParkSlotSignOccupied ];
+    	if(object.freeParkSlotSignOccupied == null){
+    		occupiedFree = [ "Gratuiti", object.freeParkSlotOccupied ];
+    		if(object.freeParkSlotOccupied == null){
+    			occupiedFree = [ "Gratuiti", 0 ];
+    		}
+    	}
+    	var occupiedPaid = [ "A pagamento", object.paidSlotOccupied ];
+    	var occupiedTimed = [ "Disco Orario", object.timedParkSlotOccupied ];
+    	var occupiedHandicapped = [ "Per disabili", object.handicappedSlotOccupied ];
+    	$scope.chartStreetOccupiedParkComposition.data.push(occupiedFree);
+    	$scope.chartStreetOccupiedParkComposition.data.push(occupiedPaid);
+    	$scope.chartStreetOccupiedParkComposition.data.push(occupiedTimed);
+    	$scope.chartStreetOccupiedParkComposition.data.push(occupiedHandicapped);
+    	$scope.chartStreetOccupiedParkComposition.options.title = "Posti occupati in strada";
+    	
+    };
 	
+   // ---------------------------------------------- End block Utilization diagrams --------------------------------------
 }]);

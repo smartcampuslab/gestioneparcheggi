@@ -27,6 +27,8 @@ public class StreetBean {
 	private Integer slotNumber;
 	private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
+	private Integer reservedSlotNumber;
+	private Integer reservedSlotOccupied;
 	private Integer timedParkSlotNumber;
 	private Integer timedParkSlotOccupied;
 	private Integer freeParkSlotNumber;
@@ -133,6 +135,14 @@ public class StreetBean {
 		return handicappedSlotOccupied;
 	}
 
+	public Integer getReservedSlotNumber() {
+		return reservedSlotNumber;
+	}
+
+	public Integer getReservedSlotOccupied() {
+		return reservedSlotOccupied;
+	}
+
 	public Integer getTimedParkSlotOccupied() {
 		return timedParkSlotOccupied;
 	}
@@ -178,6 +188,14 @@ public class StreetBean {
 
 	public void setHandicappedSlotOccupied(Integer handicappedSlotOccupied) {
 		this.handicappedSlotOccupied = handicappedSlotOccupied;
+	}
+
+	public void setReservedSlotNumber(Integer reservedSlotNumber) {
+		this.reservedSlotNumber = reservedSlotNumber;
+	}
+
+	public void setReservedSlotOccupied(Integer reservedSlotOccupied) {
+		this.reservedSlotOccupied = reservedSlotOccupied;
 	}
 
 	public void setTimedParkSlotOccupied(Integer timedParkSlotOccupied) {
@@ -252,7 +270,9 @@ public class StreetBean {
 				+ ", streetReference=" + streetReference + ", slotNumber="
 				+ slotNumber + ", handicappedSlotNumber="
 				+ handicappedSlotNumber + ", handicappedSlotOccupied="
-				+ handicappedSlotOccupied + ", timedParkSlotNumber="
+				+ handicappedSlotOccupied+ ", reservedSlotNumber="
+						+ reservedSlotNumber + ", reservedSlotOccupied="
+						+ reservedSlotOccupied + ", timedParkSlotNumber="
 				+ timedParkSlotNumber + ", timedParkSlotOccupied="
 				+ timedParkSlotOccupied + ", freeParkSlotNumber="
 				+ freeParkSlotNumber + ", freeParkSlotOccupied="

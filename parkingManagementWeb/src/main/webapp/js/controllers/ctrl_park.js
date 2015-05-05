@@ -215,6 +215,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		if(attributes[i].code == 'handicappedSlotNumber'){
     			$scope.s_handicappedSlot = attributes[i];
     		}
+    		if(attributes[i].code == 'reservedSlotNumber'){
+    			$scope.s_reservedSlot = attributes[i];
+    		}
     		if(attributes[i].code == 'timedParkSlotNumber'){
     			$scope.s_timedSlot = attributes[i];
     		}
@@ -1721,6 +1724,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				streetReference: null,
 				slotNumber: null,
 				handicappedSlotNumber: null,
+				reservedSlotNumber: null,
 				timedParkSlotNumber: null,
 				freeParkSlotNumber: null,
 				unusuableSlotNumber: null,
@@ -2371,6 +2375,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				streetReference: street.streetReference,
 				slotNumber: street.slotNumber,
 				handicappedSlotNumber: street.handicappedSlotNumber,
+				reservedSlotNumber: street.reservedSlotNumber,
 				timedParkSlotNumber:street.timedParkSlotNumber,
 				paidSlotNumber:street.paidSlotNumber,
 				freeParkSlotNumber: street.freeParkSlotNumber,
@@ -2882,6 +2887,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				streetReference: street.streetReference,
 				slotNumber: street.slotNumber,
 				handicappedSlotNumber: street.handicappedSlotNumber,
+				reservedSlotNumber : street.reservedSlotNumber,
 				timedParkSlotNumber:street.timedParkSlotNumber,
 				paidSlotNumber:street.paidSlotNumber,
 				freeParkSlotNumber: street.freeParkSlotNumber,
