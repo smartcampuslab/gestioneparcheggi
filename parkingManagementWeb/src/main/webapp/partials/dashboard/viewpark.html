@@ -37,24 +37,19 @@
 						<div class="panel-body">
 							<table width="100%">
 								<tr><!-- ng-show="isAreaVisible()" -->
-									<td align="center" width="15%"><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons()"></td>
-									<td align="left" width="85%"><label for="rateArea">{{ 'view_areas' | i18n }}</label></td>
+									<td align="left"><label><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons()">&nbsp;{{ 'view_areas' | i18n }}</label></td>
 								</tr>
 								<tr><!-- ng-show="isZonesVisible()" -->
-									<td align="center"><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons()"></td>
-									<td align="left"><label for="zones">{{ 'view_macrozones' | i18n }}</label></td>
+									<td align="left"><label><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons()">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
 								</tr>
 								<tr><!-- ng-show="isStreetVisible()" -->
-									<td align="center"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetAndPS()"></td>
-									<td align="left"><label for="streets">{{ 'view_streets' | i18n }}</label></td>
+									<td align="left"><label><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines()">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
 								</tr>
-<!-- 								<tr ng-show="isPsVisible()"> -->
-<!-- 									<td align="center"><input id="pStruct" type="checkbox" ng-model="mapelements.parkingstructs" ng-click="changeParkingStructuresMarkers()"></td> -->
-<!-- 									<td align="left"><label for="pStruct">{{ 'view_parkingstructs' | i18n }}</label></td> -->
-<!-- 								</tr> -->
+								<tr><!--  ng-show="isPsVisible()" -->
+									<td align="left"><label><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers()">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
+								</tr>
 								<tr><!-- ng-show="isPmVisible()" -->
-									<td align="center"><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers()"></td>
-									<td align="left"><label for="pMeters">{{ 'view_parkingmeters' | i18n }}</label></td>
+									<td align="left"><label><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers()">&nbsp;{{ 'view_parkingmeters' | i18n }}</label></td>
 								</tr>
 							</table>
 						</div>
@@ -605,20 +600,28 @@
 													<div class="panel-body">
 														<table width="100%">
 															 <tr ng-show="s_freeSlot.visible">
-													        	<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
+													        	<td><strong>{{ 'street_freepark_slot_db' | i18n }}:</strong></td>
+													        	<td>&nbsp;{{ sDetails.data.freeParkSlotFree }}</td>
+													        </tr>
+													        <tr>
+													        	<td><strong>{{ 'street_freepark_slot_signed_db' | i18n }}:</strong></td>
 													        	<td>&nbsp;{{ sDetails.data.freeParkSlotSignFree }}</td>
 													        </tr>
 													        <tr>
-													        	<td><strong>{{ 'street_paid_slot' | i18n }}:</strong></td>
+													        	<td><strong>{{ 'street_paid_slot_db' | i18n }}:</strong></td>
 													        	<td>&nbsp;{{ sDetails.data.paidSlotFree }}</td>
 													        </tr>
 															<tr ng-show="s_timedSlot.visible">
-													        	<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
+													        	<td><strong>{{ 'street_timedpark_slot_db' | i18n }}:</strong></td>
 													        	<td>&nbsp;{{ sDetails.data.timedParkSlotFree }}</td>
 													        </tr>
 															<tr ng-show="s_handicappedSlot.visible">
-													        	<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
+													        	<td><strong>{{ 'street_handicapped_slot_db' | i18n }}:</strong></td>
 													        	<td>&nbsp;{{ sDetails.data.handicappedSlotFree }}</td>
+													        </tr>
+													        <tr>
+													        	<td><strong>{{ 'street_reserved_slot_db' | i18n }}:</strong></td>
+													        	<td>&nbsp;{{ sDetails.data.reservedSlotFree }}</td>
 													        </tr>
 												        </table>
 											        </div>
@@ -633,20 +636,28 @@
 													<div class="panel-body">
 														<table width="100%">
 															 <tr ng-show="s_freeSlot.visible">
-													        	<td><strong>{{ 'street_freepark_slot_occupied' | i18n }}:</strong></td>
+													        	<td><strong>{{ 'street_freepark_slot_occupied_db' | i18n }}:</strong></td>
+													        	<td>&nbsp;{{ sDetails.data.freeParkSlotOccupied }}</td>
+													        </tr>
+													        <tr>
+													        	<td><strong>{{ 'street_freepark_slot_signed_occupied_db' | i18n }}:</strong></td>
 													        	<td>&nbsp;{{ sDetails.data.freeParkSlotSignOccupied }}</td>
 													        </tr>
 													        <tr>
-													        	<td><strong>{{ 'street_paid_slot_occupied' | i18n }}:</strong></td>
+													        	<td><strong>{{ 'street_paid_slot_occupied_db' | i18n }}:</strong></td>
 													        	<td>&nbsp;{{ sDetails.data.paidSlotOccupied }}</td>
 													        </tr>
 															<tr ng-show="s_timedSlot.visible">
-													        	<td><strong>{{ 'street_timedpark_slot_occupied' | i18n }}:</strong></td>
+													        	<td><strong>{{ 'street_timedpark_slot_occupied_db' | i18n }}:</strong></td>
 													        	<td>&nbsp;{{ sDetails.data.timedParkSlotOccupied }}</td>
 													        </tr>
 															<tr ng-show="s_handicappedSlot.visible">
-													        	<td><strong>{{ 'street_handicapped_slot_occupied' | i18n }}:</strong></td>
+													        	<td><strong>{{ 'street_handicapped_slot_occupied_db' | i18n }}:</strong></td>
 													        	<td>&nbsp;{{ sDetails.data.handicappedSlotOccupied }}</td>
+													        </tr>
+													        <tr>
+													        	<td><strong>{{ 'street_reserved_slot_occupied_db' | i18n }}:</strong></td>
+													        	<td>&nbsp;{{ sDetails.data.reservedSlotOccupied }}</td>
 													        </tr>
 												        </table>
 											        </div>

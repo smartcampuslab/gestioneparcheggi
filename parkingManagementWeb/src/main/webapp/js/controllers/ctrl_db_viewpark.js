@@ -10,6 +10,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.parkingMetersMarkers = [];
 	$scope.parkingStructureMarkers = [];
 	$scope.bikePointMarkers = [];
+	$scope.mapParkingMetersMarkers = [];
+	$scope.mapParkingStructureMarkers = [];
+	$scope.mapBikePointMarkers = [];
 	
 	$scope.occupancyStreets = [];
 	$scope.occupancyAreas = [];
@@ -337,7 +340,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			rate_area : false,
 			macrozone : false,
 			microzone : true,
-			parkingmeter : false
+			parkingmeter : false,
+			parkingstructs : false
 		};
 		
 		
@@ -534,7 +538,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // Show/hide parkingStructures markers
     $scope.changeParkingStructuresMarkers = function(){
-		if(!$scope.mapelements.parkingstructs){
+    	//if(!$scope.mapelements.parkingstructs){
+    	if(!$scope.dashboard_space.parkingstructs){
 			$scope.showParkingStructuresMarkers();
 		} else {
 			$scope.hideParkingStructuresMarkers();
@@ -618,8 +623,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // Show/hide streets polygons
     $scope.changeStreetPolylines = function(){
-		if(!$scope.mapelements.streets){
-			$scope.showStreetPolylines();
+		//if(!$scope.mapelements.streets){
+    	if(!$scope.dashboard_space.microzone){
+    		$scope.showStreetPolylines();
 		} else {
 			$scope.hideStreetPolylines();
 		}
@@ -916,6 +922,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			mystreet.paidSlotOccupied = Math.floor(mystreet.paidSlotNumber * averageOccupation / 100);
 			mystreet.timedParkSlotOccupied = Math.floor(mystreet.timedParkSlotNumber * averageOccupation / 100);
 			mystreet.handicappedSlotOccupied = Math.floor(mystreet.handicappedSlotNumber * averageOccupation / 100);
+			mystreet.reservedSlotOccupied = Math.floor(mystreet.reservedSlotNumber * averageOccupation / 100);
 			// ----------------------------------------------------------
 			mystreet.area_name = area.name;
 			mystreet.area_color= area.color;
@@ -1058,7 +1065,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    		angular.copy(markers, $scope.bikePointMarkers);
 	    		//$scope.initMap($scope.parkingMetersMarkers, $scope.parkingStructureMarkers, $scope.bikePointMarkers);
 	    		//$scope.initMap($scope.parkingMetersMarkers, null, null);
-	    		$scope.initMap(null, $scope.parkingStructureMarkers, null);
+	    		//$scope.initMap(null, $scope.parkingStructureMarkers, null);
 	    	}
 			$scope.getZonesFromDb();
 		});
@@ -1348,15 +1355,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    $scope.showStreetDet();
 				// -------------------------- Data correction for TEST ----------------------------
 				object.data.freeParkSlotSignFree = object.data.freeParkSlotSignNumber - object.data.freeParkSlotSignOccupied;
-				if(object.data.freeParkSlotSignFree == null){
-					object.data.freeParkSlotSignFree = object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied;
-					if(object.data.freeParkSlotSignFree == null){
-						object.data.freeParkSlotSignFree = 0;
-					}
-				}
+				//if(object.data.freeParkSlotSignFree == null){
+				//	object.data.freeParkSlotSignFree = object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied;
+				//	if(object.data.freeParkSlotSignFree == null){
+				//		object.data.freeParkSlotSignFree = 0;
+				//	}
+				//}
+				object.data.freeParkSlotFree = object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied;
 				object.data.paidSlotFree = object.data.paidSlotNumber - object.data.paidSlotOccupied;
 				object.data.timedParkSlotFree = object.data.timedParkSlotNumber - object.data.timedParkSlotOccupied;
 				object.data.handicappedSlotFree = object.data.handicappedSlotNumber - object.data.handicappedSlotOccupied;
+				object.data.reservedSlotFree = object.data.reservedSlotNumber - object.data.reservedSlotOccupied;
 				// --------------------------------------------------------------------------------
 			    $scope.sDetails = object;
 			    $scope.initStreetOccupancyDiagram(object);
@@ -1833,30 +1842,38 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.chartStreetOccupancy.data.push(dataOcc);
     	$scope.chartStreetOccupancy.options.title = "Posti in strada";
     	// for Free slot
-    	var freeFree = [ "Gratuiti", object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied ];
+    	var freeFree = [ "Gratuiti", object.freeParkSlotNumber - object.freeParkSlotOccupied ];
+    	var freeFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied ];
     	var freePaid = [ "A pagamento", object.paidSlotNumber - object.paidSlotOccupied ];
     	var freeTimed = [ "Disco Orario", object.timedParkSlotNumber - object.timedParkSlotOccupied ];
     	var freeHandicapped = [ "Per disabili", object.handicappedSlotNumber - object.handicappedSlotOccupied ];
+    	var freeReserved = [ "Riservati", object.reservedSlotNumber - object.reservedSlotOccupied ];
     	$scope.chartStreetFreeParkAvailability.data.push(freeFree);
+    	$scope.chartStreetFreeParkAvailability.data.push(freeFreeSigned);
     	$scope.chartStreetFreeParkAvailability.data.push(freePaid);
     	$scope.chartStreetFreeParkAvailability.data.push(freeTimed);
     	$scope.chartStreetFreeParkAvailability.data.push(freeHandicapped);
+    	$scope.chartStreetFreeParkAvailability.data.push(freeReserved);
     	$scope.chartStreetFreeParkAvailability.options.title = "Posti liberi in strada";
     	// for Occupied slot
-    	var occupiedFree = [ "Gratuiti", object.freeParkSlotSignOccupied ];
-    	if(object.freeParkSlotSignOccupied == null){
-    		occupiedFree = [ "Gratuiti", object.freeParkSlotOccupied ];
-    		if(object.freeParkSlotOccupied == null){
-    			occupiedFree = [ "Gratuiti", 0 ];
-    		}
-    	}
+    	var occupiedFree = [ "Gratuiti", object.freeParkSlotOccupied ];
+    	var occupiedFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignOccupied ];
+    	//if(object.freeParkSlotSignOccupied == null){
+    	//	occupiedFree = [ "Gratuiti", object.freeParkSlotOccupied ];
+    	//	if(object.freeParkSlotOccupied == null){
+    	//		occupiedFree = [ "Gratuiti", 0 ];
+    	//	}
+    	//}
     	var occupiedPaid = [ "A pagamento", object.paidSlotOccupied ];
     	var occupiedTimed = [ "Disco Orario", object.timedParkSlotOccupied ];
     	var occupiedHandicapped = [ "Per disabili", object.handicappedSlotOccupied ];
+    	var occupiedReserved = [ "Riservati", object.reservedSlotOccupied ];
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedFree);
+    	$scope.chartStreetOccupiedParkComposition.data.push(occupiedFreeSigned);
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedPaid);
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedTimed);
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedHandicapped);
+    	$scope.chartStreetOccupiedParkComposition.data.push(occupiedReserved);
     	$scope.chartStreetOccupiedParkComposition.options.title = "Posti occupati in strada";
     	
     };

@@ -431,6 +431,7 @@ public class StorageManager {
 					temp.setFreeParkSlotSignNumber(sb.getFreeParkSlotSignNumber());
 					temp.setUnusuableSlotNumber(sb.getUnusuableSlotNumber());
 					temp.setHandicappedSlotNumber(sb.getHandicappedSlotNumber());
+					temp.setReservedSlotNumber(sb.getReservedSlotNumber());
 					temp.setStreetReference(sb.getStreetReference());
 					temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());
 					temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());

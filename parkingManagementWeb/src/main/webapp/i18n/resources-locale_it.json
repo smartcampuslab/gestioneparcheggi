@@ -527,6 +527,10 @@
     "value": "Posti sosta libera",
     "description": "Label campo posti sosta libera per oggetto strada"
 }, {
+    "key": "street_freepark_slot_signed",
+    "value": "Posti sosta libera con segnaletica",
+    "description": "Label campo posti sosta libera con segnaletica per oggetto strada"
+}, {
     "key": "street_paid_slot",
     "value": "Posti a pagamento",
     "description": "Label campo posti a pagamento per oggetto strada"
@@ -572,6 +576,10 @@
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_freepark_slots_err_required",
+    "value": "Campo posti gratuiti obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_freepark_slots_sign_err_required",
     "value": "Campo posti gratuiti obbligatorio.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
@@ -799,6 +807,10 @@
     "value": "Inserire il numero di posti gratuiti",
     "description": "Testo placeholder campo posti gratuiti via"
 }, {
+    "key": "street_freeparkslotsign_placeholder",
+    "value": "Inserire il numero di posti gratuiti (con segnaletica)",
+    "description": "Testo placeholder campo posti gratuiti con segnaletica in via"
+}, {
     "key": "street_unusuableslot_placeholder",
     "value": "Inserire il numero di posti inutilizzabili",
     "description": "Testo placeholder campo posti inutilizzabili via"
@@ -955,20 +967,52 @@
     "value": "Occupazione",
     "description": "Title panel object occupancy"
 }, {
-    "key": "street_handicapped_slot_occupied",
-    "value": "Posti riservati ai disabili",
+    "key": "street_handicapped_slot_occupied_db",
+    "value": "per disabili",
     "description": "Label campo posti disabili per oggetto strada"
 }, {
-    "key": "street_timedpark_slot_occupied",
-    "value": "Posti disco orario",
+    "key": "street_reserved_slot_occupied_db",
+    "value": "riservati",
+    "description": "Label campo posti riservati per oggetto strada"
+}, {
+    "key": "street_timedpark_slot_occupied_db",
+    "value": "disco orario",
     "description": "Label campo posti disco orario per oggetto strada"
 }, {
-    "key": "street_freepark_slot_occupied",
-    "value": "Posti sosta libera",
+    "key": "street_freepark_slot_occupied_db",
+    "value": "sosta libera",
     "description": "Label campo posti sosta libera per oggetto strada"
 }, {
-    "key": "street_paid_slot_occupied",
-    "value": "Posti a pagamento",
+    "key": "street_freepark_slot_signed_occupied_db",
+    "value": "sosta libera (segnaletica)",
+    "description": "Label campo posti sosta libera per oggetto strada"
+}, {
+    "key": "street_paid_slot_occupied_db",
+    "value": "a pagamento",
     "description": "Label campo posti a pagamento per oggetto strada"
+}, {
+    "key": "street_handicapped_slot_db",
+    "value": "per disabili",
+    "description": "Label campo posti disabili per oggetto strada in dashboard"
+}, {
+    "key": "street_reserved_slot_db",
+    "value": "riservati",
+    "description": "Label campo posti riservati per oggetto strada in dashboard"
+}, {
+    "key": "street_timedpark_slot_db",
+    "value": "disco orario",
+    "description": "Label campo posti disco orario per oggetto strada in dashboard"
+}, {
+    "key": "street_freepark_slot_db",
+    "value": "sosta libera",
+    "description": "Label campo posti sosta libera per oggetto strada in dashboard"
+}, {
+    "key": "street_freepark_slot_signed_db",
+    "value": "sosta libera (segnaletica)",
+    "description": "Label campo posti sosta libera con segnaletica per oggetto strada in dashboard"
+}, {
+    "key": "street_paid_slot_db",
+    "value": "a pagamento",
+    "description": "Label campo posti a pagamento per oggetto strada in dashboard"
 }
 ]

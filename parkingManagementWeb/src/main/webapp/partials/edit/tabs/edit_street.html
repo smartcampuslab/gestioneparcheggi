@@ -142,6 +142,10 @@
 							    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
 							    		<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
 							    	</tr>
+							    	<tr ng-show="s_freeSlotSign.visible">	
+										<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+										<td>&nbsp;{{  s.data.freeParkSlotSignNumber }}</td>
+									</tr>
 							    	<tr ng-show="s_unusuableSlot.visible">
 							    		<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
 							    		<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
@@ -316,6 +320,10 @@
 							<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
 							<td>{{ viewStreet.freeParkSlotNumber }}</td>
 						</tr>
+						<tr ng-show="s_freeSlotSign.visible">	
+							<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+							<td>{{ viewStreet.freeParkSlotSignNumber }}</td>
+						</tr>
 						<tr ng-show="s_unusuableSlot.visible">	
 							<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
 							<td>{{ viewStreet.unusuableSlotNumber }}</td>
@@ -479,6 +487,12 @@
 						    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="eStreet.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 						    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
+						   	</div>
+						   	<div class="form-group" ng-show="s_freeSlotSign.visible">
+						    	<label for="freeparkSlotSigned">{{ 'street_freepark_slot_signed' | i18n }}</label>
+						    	<input id="freeparkSlotSigned" type="text" class="form-control" name="sFreeparkslotSigned" ng-model="eStreet.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+						    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
 						   	</div>
 						   	<div class="form-group" ng-show="s_unusuableSlot.visible">
 						    	<label for="unusuableSlot">{{ 'street_unusuable_slot' | i18n }}</label>

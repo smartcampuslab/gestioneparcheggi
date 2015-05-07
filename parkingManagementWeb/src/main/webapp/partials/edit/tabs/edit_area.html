@@ -190,10 +190,14 @@
 <!-- 						<ui-gmap-google-map id="11" center="aCreateMap.center" draggable="true" zoom="aCreateMap.zoom" options="aCreateMap.options" control="aCreateMap.control" bounds="aCreateMap.bounds" events="aCreateMap.events"> -->
 <!-- 							<ui-gmap-polygon static="false" path="newArea.path" stroke="newArea.stroke" visible="newArea.visible" geodesic="newArea.geodesic" fill="newArea.fill" fit="false" editable="newArea.editable" draggable="newArea.draggable"></ui-gmap-polygon> -->
 <!-- 						</ui-gmap-google-map> -->
-						<map id="editArea" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addAreaPath()" ><!-- ng-show="resizeMap()" -->
-							<shape name="polygon" id="editAPolygon" path="{{ editGArea.gpath }}" visible="{{ editGArea.visible }}" editable="{{ editGArea.editable }}"
-			         			geodesic="{{ editGArea.geodesic }}" stroke-color="{{ editGArea.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ editGArea.stroke.weight }}"
-			         			fill-color="{{ editGArea.fill.color }}" fill-opacity="{{ editGArea.fill.opacity }}">
+						<map id="editArea" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addAreaPath()" on-rightclick="addNewAreaPath()" ><!-- ng-show="resizeMap()" -->
+<!-- 							<shape name="polygon" id="editAPolygon" path="{{ editGArea.gpath }}" visible="{{ editGArea.visible }}" editable="{{ editGArea.editable }}" -->
+<!-- 			         			geodesic="{{ editGArea.geodesic }}" stroke-color="{{ editGArea.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ editGArea.stroke.weight }}" -->
+<!-- 			         			fill-color="{{ editGArea.fill.color }}" fill-opacity="{{ editGArea.fill.opacity }}"> -->
+<!-- 			    			</shape> -->
+			    			<shape name="polygon" ng-repeat="eA in editGAreas" id="{{ eA.id }}" path="{{ eA.gpath }}" visible="{{ eA.visible }}" editable="{{ eA.editable }}"
+			         			geodesic="{{ eA.geodesic }}" stroke-color="#000000" stroke-opacity="1.0" stroke-weight="{{ eA.stroke.weight }}"
+			         			fill-color="#000000" fill-opacity="{{ eA.fill.opacity }}">
 			    			</shape>
 						</map>
 					</div>

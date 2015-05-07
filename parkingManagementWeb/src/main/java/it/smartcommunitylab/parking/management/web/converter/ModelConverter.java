@@ -96,6 +96,8 @@ public class ModelConverter {
 		sb.setFreeParkSlotSignOccupied(s.getFreeParkSlotSignOccupied());
 		sb.setHandicappedSlotNumber(s.getHandicappedSlotNumber());
 		sb.setHandicappedSlotOccupied(s.getHandicappedSlotOccupied());
+		sb.setReservedSlotNumber(s.getReservedSlotNumber());
+		sb.setReservedSlotOccupied(s.getReservedSlotOccupied());
 		sb.setPaidSlotNumber(s.getPaidSlotNumber());
 		sb.setPaidSlotOccupied(s.getPaidSlotOccupied());
 		sb.setTimedParkSlotNumber(s.getTimedParkSlotNumber());

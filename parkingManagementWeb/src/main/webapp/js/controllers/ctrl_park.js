@@ -224,6 +224,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		if(attributes[i].code == 'freeParkSlotNumber'){
     			$scope.s_freeSlot = attributes[i];
     		}
+    		if(attributes[i].code == 'freeParkSlotSignNumber'){
+    			$scope.s_freeSlotSign = attributes[i];
+    		}
     		if(attributes[i].code == 'unusuableSlotNumber'){
     			$scope.s_unusuableSlot = attributes[i];
     		}
@@ -416,6 +419,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     $scope.myPath = [];
     $scope.myAreaPath = [];
+    $scope.allNewAreas = [];
     $scope.myZonePath = [];
     $scope.mySpecialStreets = [];
     $scope.mySpecialAreas = [];
@@ -790,21 +794,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	$scope.correctMyGeometryPolygonForArea = function(geo){
 		var corrected = [];
-		var tmpPol = {
-			points: null
-		};
-		var points = [];
-		for(var i = 0; i < geo.length; i++){
-			var tmpPoint = {
-				lat: geo[i].latitude,
-				lng: geo[i].longitude
+		for(var j = 0; j < geo.length; j++){
+			var points = [];
+			for(var i = 0; i < geo[j].length; i++){
+				var tmpPoint = {
+					lat: geo[j][i].latitude,
+					lng: geo[j][i].longitude
+				};
+				points.push(tmpPoint);
+			}
+			
+			var tmpPol = {
+				points: points
 			};
-			points.push(tmpPoint);
+			corrected.push(tmpPol);
 		}
-		
-		tmpPol.points = points;
-		corrected.push(tmpPol);
-		
 		return corrected;
 	};
 	
@@ -995,6 +999,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return myPms;
 	};
 	
+	$scope.correctAreaId = function(id, i){
+		if(i == 0){
+			return id;
+		} else {
+			return id + '_' + i;
+		}
+	};
+	
 	// View management
 	// RateArea
 	$scope.setADetails = function(area){
@@ -1024,37 +1036,47 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(area.geometry != null && area.geometry.length > 0 && area.geometry[0].points.length > 0){
 			// Move this code in the if blok to preserve from the udefined map exception
 			var toHide = $scope.vAreaMap.shapes;
-			toHide[area.id].setMap(null);
-			
-			var tmpPol = "";
-			for(var i = 0; i < area.geometry[0].points.length; i++){
-				var tmpPoint = area.geometry[0].points[i].lat + "," + area.geometry[0].points[i].lng;
-				tmpPol = tmpPol + tmpPoint + ",";
-			}
-			tmpPol = tmpPol.substring(0, tmpPol.length-1);
-			$scope.setMyPolGeometry(tmpPol);
-			
-			$scope.myAreaPol = {
-				id: area.id,
-				path: $scope.correctPoints(area.geometry[0].points),
-				gpath: $scope.correctPointsGoogle(area.geometry[0].points),
-				stroke: {
-				    color: $scope.correctColor(area.color),
-				    weight: 10
-				},
-				data:area,
-				info_windows_pos: $scope.correctPointGoogle(area.geometry[0].points[1]),
-				info_windows_cod: "ma" + area.id,
-				editable: false,
-				draggable: false,
-				geodesic: false,
-				visible: true,
-				fill: {
-				    color: $scope.correctColor(area.color),
-				    opacity: 0.9
+			if(area.geometry.length == 1){
+				toHide[area.id].setMap(null);
+			} else {
+				for(var i = 0; i < area.geometry.length; i++){
+					var myId = $scope.correctAreaId(area.id, i);
+					toHide[myId].setMap(null);
 				}
-			};
-			$scope.mySpecialAreas.push($scope.myAreaPol);
+			}
+			
+			for(var j = 0; j < area.geometry.length; j++){
+			
+				var tmpPol = "";
+				for(var i = 0; i < area.geometry[j].points.length; i++){
+					var tmpPoint = area.geometry[j].points[i].lat + "," + area.geometry[j].points[i].lng;
+					tmpPol = tmpPol + tmpPoint + ",";
+				}
+				tmpPol = tmpPol.substring(0, tmpPol.length-1);
+				$scope.setMyPolGeometry(tmpPol);
+				
+				$scope.myAreaPol = {
+					id: $scope.correctAreaId(area.id, j),
+					path: $scope.correctPoints(area.geometry[j].points),
+					gpath: $scope.correctPointsGoogle(area.geometry[j].points),
+					stroke: {
+					    color: $scope.correctColor(area.color),
+					    weight: 10
+					},
+					data:area,
+					info_windows_pos: $scope.correctPointGoogle(area.geometry[j].points[1]),
+					info_windows_cod: "ma" + area.id,
+					editable: false,
+					draggable: false,
+					geodesic: false,
+					visible: true,
+					fill: {
+					    color: $scope.correctColor(area.color),
+					    opacity: 0.9
+					}
+				};
+				$scope.mySpecialAreas.push($scope.myAreaPol);
+			}
 		}
 		
 		$scope.viewModeA = true;
@@ -1457,21 +1479,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.isInit = true;
 		
 		// Polygon void object
-		$scope.newArea = {
-			path: null,
-			stroke: {
-			    color: '#000000',
-			    weight: 3
-			},
-			editable: true,
-			draggable: true,
-			visible: true,
-			geodesic: false,
-			fill: {
-			    color: $scope.correctColor('#000000'),
-			    opacity: 0.7
-			}
-		};
+//		$scope.newArea = {
+//			path: null,
+//			stroke: {
+//			    color: '#000000',
+//			    weight: 3
+//			},
+//			editable: true,
+//			draggable: true,
+//			visible: true,
+//			geodesic: false,
+//			fill: {
+//			    color: $scope.correctColor('#000000'),
+//			    opacity: 0.7
+//			}
+//		};
 		
 		$scope.myColor = "";
 		
@@ -1479,8 +1501,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(area != null){
 			if(area.geometry == null || area.geometry.length == 0 || area.geometry[0].points.length == 0){
 				garea.visible = true;					// here I show the polygon for creation
-				if($scope.editGArea != null){
-					$scope.editGArea.visible = false;	// and hide the edit polygon
+//				if($scope.editGArea != null){
+//					$scope.editGArea.visible = false;	// and hide the edit polygon
+//				}
+				if($scope.editGAreas != null && $scope.editGAreas.length > 0){
+					for(var i = 0; i < $scope.editGAreas.length; i++){
+						$scope.editGAreas[i].visible = false;
+						$scope.eAreaMap.shapes[$scope.correctAreaId(area.id, i)].setMap(null);	// I clean the edit map form old polygons
+					}
+					$scope.editGAreas = [];
 				}
 			} else {
 				garea.visible = false;		// here I hide the polygon for creation
@@ -1513,66 +1542,91 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			};
 			
 			if(area.geometry != null && area.geometry.length > 0 && area.geometry[0].points.length > 0){
-				var tmpPol = "";
-				var poligons = {};
-				for(var i = 0; i < $scope.area.geometry[0].points.length; i++){
-					var tmpPoint = $scope.area.geometry[0].points[i].lat + "," + $scope.area.geometry[0].points[i].lng;
-					tmpPol = tmpPol + tmpPoint + ",";
-				}
-				tmpPol = tmpPol.substring(0, tmpPol.length-1);
-				$scope.setMyPolGeometry(tmpPol);
-			
-				poligons = area.geometry[0];
-				$scope.editGArea = {
-					id: area.id,
-					path: $scope.correctPoints(poligons.points),
-					gpath: $scope.correctPointsGoogle(poligons.points),
-					stroke: {
-					    color: $scope.correctColor(area.color),
-					    weight: 3
-					},
-					geodesic: false,
-					editable: true,
-					draggable: true,
-					visible: true,
-					fill: {
-					    color: $scope.correctColor(area.color),
-					    opacity: 0.7
+				$scope.editGAreas = [];
+				for(var j = 0; j < $scope.area.geometry.length; j++){
+					var tmpPol = "";
+					var poligons = {};
+					for(var i = 0; i < $scope.area.geometry[j].points.length; i++){
+						var tmpPoint = $scope.area.geometry[j].points[i].lat + "," + $scope.area.geometry[j].points[i].lng;
+						tmpPol = tmpPol + tmpPoint + ",";
 					}
-//					events: {
-//					    dragend: function (polygon, eventName, args) {
-//					    	var path = args.path;
-//					    	
-//					    	console.log('polygon dragend: ' + JSON.stringify(path));
-//					    	$scope.setMyPolGeometry(path);
-//					    },
-//					    click: function (polygon, eventName, args) {
-//					    	var path = args.path;
-//					    	
-//					    	console.log('polygon click: ' + JSON.stringify(path));
-//					    	$scope.setMyPolGeometry(path);
-//					    },
-//					    mouseup: function (polygon, eventName, args) {
-//					    	var path = args.path;
-//					    	
-//					    	var tmpPol = "";
-//							for(var i = 0; i < path.length; i++){
-//								var tmpPoint = path[i].latitude + "," + path[i].longitude;
-//								tmpPol = tmpPol + tmpPoint + ",";
-//							}
-//							tmpPol = tmpPol.substring(0, tmpPol.length-1);
-//							$scope.setMyPolGeometry(tmpPol);
-//					    	
-//					    	console.log('polygon mouse up: ' + tmpPol);
-//					    }
-//					}
-				};
+					tmpPol = tmpPol.substring(0, tmpPol.length-1);
+					$scope.setMyPolGeometry(tmpPol);
+				
+					poligons = area.geometry[j];
+					$scope.editGArea = {
+						id: $scope.correctAreaId(area.id, j),
+						path: $scope.correctPoints(poligons.points),
+						gpath: $scope.correctPointsGoogle(poligons.points),
+						stroke: {
+						    color: $scope.correctColor(area.color),
+						    weight: 3
+						},
+						geodesic: false,
+						editable: true,
+						draggable: true,
+						visible: true,
+						fill: {
+						    color: $scope.correctColor(area.color),
+						    opacity: 0.7
+						}
+	//					events: {
+	//					    dragend: function (polygon, eventName, args) {
+	//					    	var path = args.path;
+	//					    	
+	//					    	console.log('polygon dragend: ' + JSON.stringify(path));
+	//					    	$scope.setMyPolGeometry(path);
+	//					    },
+	//					    click: function (polygon, eventName, args) {
+	//					    	var path = args.path;
+	//					    	
+	//					    	console.log('polygon click: ' + JSON.stringify(path));
+	//					    	$scope.setMyPolGeometry(path);
+	//					    },
+	//					    mouseup: function (polygon, eventName, args) {
+	//					    	var path = args.path;
+	//					    	
+	//					    	var tmpPol = "";
+	//							for(var i = 0; i < path.length; i++){
+	//								var tmpPoint = path[i].latitude + "," + path[i].longitude;
+	//								tmpPol = tmpPol + tmpPoint + ",";
+	//							}
+	//							tmpPol = tmpPol.substring(0, tmpPol.length-1);
+	//							$scope.setMyPolGeometry(tmpPol);
+	//					    	
+	//					    	console.log('polygon mouse up: ' + tmpPol);
+	//					    }
+	//					}
+					};
+					$scope.editGAreas.push($scope.editGArea);
+				}
 			}	
 		} else {
-			garea.setPath([]);										// here I clear the old path
-			garea.visible = true;									// here I show the polygon for creation
-			if($scope.editGArea != null){
-				$scope.editGArea.visible = false;					// and hide the edit polygon
+			garea.setMap(null);					// here I clear the old path				
+			garea = new google.maps.Polygon({
+		        strokeColor: '#000000',
+		        strokeOpacity: 1.0,
+		        strokeWeight: 3,
+		        fillColor: '#000000',
+		        fillOpacity: 0.35,
+		        editable:true,
+		        draggable:true,
+		        visible:true,
+		        path: []
+		    });
+			
+			//garea.setPath([]);									// here I clear the old path
+			//garea.visible = true;									// here I show the polygon for creation
+			
+			//if($scope.editGArea != null){
+			//	$scope.editGArea.visible = false;					// and hide the edit polygon
+			//}
+			if($scope.editGAreas !=null && $scope.editGAreas.length > 0){
+				for(var i = 0; i < $scope.editGAreas.length; i++){
+					$scope.editGAreas[i].visible = false;
+					$scope.eAreaMap.shapes[$scope.correctAreaId(area.id, i)].setMap(null);	// I clean the edit map form old polygons
+				}
+				$scope.editGAreas = [];
 			}
 			$scope.setMyPolGeometry("");
 			
@@ -2292,19 +2346,52 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.showUpdatingAErrorMessage = false;
 			
 			var editCorrectedPath = [];
-			var updatedPath = $scope.map.shapes.editAPolygon.getPath();
-			if(updatedPath != null && updatedPath.length > 0){
-				for(var i = 0; i < updatedPath.length; i++){
-					var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
-					editCorrectedPath.push(point);
+			var editPaths = [];
+			if($scope.editGAreas != null &&  $scope.editGAreas.length > 0){
+				for(var j = 0; j < $scope.editGAreas.length; j++){
+					var updatedAreaPol = $scope.map.shapes[$scope.editGAreas[j].id];
+					if(updatedAreaPol != null){
+						var updatedPath = updatedAreaPol.getPath();
+						if(updatedPath != null && updatedPath.length > 0){
+							editCorrectedPath = [];
+							for(var i = 0; i < updatedPath.length; i++){
+								var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
+								editCorrectedPath.push(point);
+							}
+							editPaths.push(editCorrectedPath);
+						}
+						//updatedAreaPol.setMap(null);	//Here I delete the area in edit map
+					}
 				}
-			} else {
+			}
+			
+//			var updatedPath = $scope.map.shapes.editAPolygon.getPath();
+//			if(updatedPath != null && updatedPath.length > 0){
+//				for(var i = 0; i < updatedPath.length; i++){
+//					var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
+//					editCorrectedPath.push(point);
+//				}
+//				editPaths.push(editCorrectedPath);
+//			} else {
+			else {
 				// Case of creating geografic object in area editing
 				var createdPath = garea.getPath();
 				for(var i = 0; i < createdPath.length; i++){
 					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
 					editCorrectedPath.push(point);
 				}
+				editPaths.push(newCorrectedPath);
+				if($scope.allNewAreas != null && $scope.allNewAreas.length > 0){
+					for(var i = 0; i < $scope.allNewAreas.length; i++){
+						createdPath = $scope.allNewAreas[i].getPath();
+						for(var i = 0; i < createdPath.length; i++){
+							var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+							editCorrectedPath.push(point);
+						};
+						editPaths.push(editCorrectedPath);
+					}
+				}
+				$scope.allNewAreas = [];
 			}
 			
 			var id = area.id;
@@ -2321,7 +2408,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				smsCode: area.smsCode,
 				color: color.substring(1, color.length),
 				note: area.note,
-				geometry: $scope.correctMyGeometryPolygonForArea(editCorrectedPath)
+				geometry: $scope.correctMyGeometryPolygonForArea(editPaths)
 				//geometry: $scope.correctMyGeometryPolygonForArea(polygon.path)
 			};
 			
@@ -2366,6 +2453,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 			
+			var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
+			
 			var id = street.id;
 			var method = 'PUT';
 			
@@ -2377,8 +2466,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				handicappedSlotNumber: street.handicappedSlotNumber,
 				reservedSlotNumber: street.reservedSlotNumber,
 				timedParkSlotNumber:street.timedParkSlotNumber,
-				paidSlotNumber:street.paidSlotNumber,
+				paidSlotNumber: calculatedPaidSlot, //street.paidSlotNumber,
 				freeParkSlotNumber: street.freeParkSlotNumber,
+				freeParkSlotSignNumber: street.freeParkSlotSignNumber,
 				unusuableSlotNumber: street.unusuableSlotNumber,
 				subscritionAllowedPark: street.subscritionAllowedPark,
 				color: area.color,
@@ -2689,9 +2779,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		
 		// area removing from gmap
 		var toDelArea = $scope.vAreaMap.shapes;
-    	if(toDelArea[area.id] != null){
-    		toDelArea[area.id].setMap(null);
-    	}
+		if(area.geometry.length == 1){
+			if(toDelArea[area.id] != null){
+				toDelArea[area.id].setMap(null);
+			}
+		} else {
+			for(var i = 0; i < area.geometry.length; i++){
+				var myId = $scope.correctAreaId(area.id, i);
+				if(toDelArea[myId] != null){
+					toDelArea[myId].setMap(null);
+				}
+			}
+		}
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
 	   	var myDataPromise = invokeWSService.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
@@ -2825,11 +2924,25 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.showUpdatingAErrorMessage = false;
 			
 			var newCorrectedPath = [];
+			var createdPaths = [];
 			var createdPath = garea.getPath();
 			for(var i = 0; i < createdPath.length; i++){
 				var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
 				newCorrectedPath.push(point);
 			};
+			createdPaths.push(newCorrectedPath);
+			if($scope.allNewAreas != null && $scope.allNewAreas.length > 0){
+				for(var j = 0; j < $scope.allNewAreas.length; j++){
+					createdPath = $scope.allNewAreas[j].getPath();
+					newCorrectedPath = [];
+					for(var i = 0; i < createdPath.length; i++){
+						var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+						newCorrectedPath.push(point);
+					};
+					createdPaths.push(newCorrectedPath);
+				}
+			}
+			$scope.allNewAreas = [];	// Here I clear the array of area polygons
 			
 			var method = 'POST';
 			
@@ -2842,7 +2955,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				smsCode: area.smsCode,
 				color: myColor.substring(1, myColor.length),	// I have to remove '#' char
 				note: area.note,
-				geometry: $scope.correctMyGeometryPolygonForArea(newCorrectedPath)
+				geometry: $scope.correctMyGeometryPolygonForArea(createdPaths)
 				//geometry: $scope.correctMyGeometryPolygonForArea(polygon.path)
 			};
 			
@@ -2879,18 +2992,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
 				newCorrectedPath.push(point);
 			};
+			var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
 			
 			var method = 'POST';
-			
 			var data = {
 				id_app: $scope.myAppId,
 				streetReference: street.streetReference,
 				slotNumber: street.slotNumber,
 				handicappedSlotNumber: street.handicappedSlotNumber,
 				reservedSlotNumber : street.reservedSlotNumber,
-				timedParkSlotNumber:street.timedParkSlotNumber,
-				paidSlotNumber:street.paidSlotNumber,
+				timedParkSlotNumber: street.timedParkSlotNumber,
+				paidSlotNumber: calculatedPaidSlot, //street.paidSlotNumber,
 				freeParkSlotNumber: street.freeParkSlotNumber,
+				freeParkSlotSignNumber: street.freeParkSlotSignNumber,
 				unusuableSlotNumber: street.unusuableSlotNumber,
 				subscritionAllowedPark: street.subscritionAllowedPark,
 				color: area.color,
@@ -3287,6 +3401,33 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    garea.setMap($scope.map);
 	};
 	
+	$scope.addNewAreaPath = function(event){
+		$scope.allNewAreas.push(garea);
+		// Here I create a new Area
+		garea = new google.maps.Polygon({
+	        strokeColor: '#000000',
+	        strokeOpacity: 1.0,
+	        strokeWeight: 3,
+	        fillColor: '#000000',
+	        fillOpacity: 0.35,
+	        editable:true,
+	        draggable:true,
+	        visible:true,
+	        path: []
+	    });
+		
+	    var path = garea.getPath();
+	    if(path.length == 0){
+		    //$scope.getStreetAddress(event);	// Retrieve the address from the map
+		    $scope.myAreaPath = [];
+	    }
+	    path.push(event.latLng);
+	    var myPoint = $scope.getPointFromLatLng(event.latLng, 1);
+	    $scope.myAreaPath.push(myPoint);
+	    $scope.setMyPolGeometry($scope.myAreaPath);
+	    garea.setMap($scope.map);
+	};
+	
 	$scope.addPath = function(event){
 	    var path = poly.getPath();
 		if(path.length == 0){
@@ -3388,28 +3529,30 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		
 		for(var i = 0; i < areas.length; i++){
 			if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
-				poligons = areas[i].geometry;
-				area = {
-					id: areas[i].id,
-					path: $scope.correctPoints(poligons[0].points),
-					gpath: $scope.correctPointsGoogle(poligons[0].points),
-					stroke: {
-					    color: $scope.correctColor(areas[i].color),
-					    weight: 3
-					},
-					data: areas[i],
-					info_windows_pos: $scope.correctPointGoogle(poligons[0].points[1]),
-					info_windows_cod: "a" + areas[i].id,
-					editable: false,
-					draggable: false,
-					geodesic: false,
-					visible: true,
-					fill: {
-					    color: $scope.correctColor(areas[i].color),
-					    opacity: 0.7
-					}
-				};
-				$scope.polygons.push(area);
+				for(var j = 0; j < areas[i].geometry.length; j++){
+					poligons = areas[i].geometry;
+					area = {
+						id: $scope.correctAreaId(areas[i].id, j),
+						path: $scope.correctPoints(poligons[j].points),
+						gpath: $scope.correctPointsGoogle(poligons[j].points),
+						stroke: {
+						    color: $scope.correctColor(areas[i].color),
+						    weight: 3
+						},
+						data: areas[i],
+						info_windows_pos: $scope.correctPointGoogle(poligons[j].points[1]),
+						info_windows_cod: "a" + areas[i].id,
+						editable: false,
+						draggable: false,
+						geodesic: false,
+						visible: true,
+						fill: {
+						    color: $scope.correctColor(areas[i].color),
+						    opacity: 0.7
+						}
+					};
+					$scope.polygons.push(area);
+				}
 			}
 		}
 	};
@@ -3417,8 +3560,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.hideAllAreas = function(areas){
     	var toHideArea = $scope.vAreaMap.shapes;
     	for(var i = 0; i < areas.length; i++){
-    		if(toHideArea[areas[i].id] != null){
-    			toHideArea[areas[i].id].setMap(null);
+    		if(areas[i].geometry != null && areas[i].geometry.length > 0){
+	    		if(areas[i].geometry.length == 1){
+	    			if(toHideArea[areas[i].id] != null){
+		    			toHideArea[areas[i].id].setMap(null);
+		    		}
+	    		} else {
+	    			for(var j = 0; j <  areas[i].geometry.length; j++){
+	    				var myId = $scope.correctAreaId(areas[i].id, j);
+	    				if(toHideArea[myId] != null){
+			    			toHideArea[myId].setMap(null);
+			    		}
+	    			}
+	    		}
     		}
     	}
     };

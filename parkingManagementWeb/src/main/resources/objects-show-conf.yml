@@ -52,6 +52,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: true          
         - code: timedParkSlotNumber
           editable: true
           required: false
@@ -60,6 +64,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: freeParkSlotSignNumber
+          editable: true
+          required: false
+          visible: true  
         - code: unusuableSlotNumber
           editable: true
           required: false
