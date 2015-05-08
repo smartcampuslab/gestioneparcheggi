@@ -135,6 +135,17 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
     	border-color: rgba(0,0,0,.2);
 	}
 	
+	div #panelMap {
+      position: absolute;
+      top: 5px;
+      left: 50%;
+      margin-left: -90px;
+      z-index: 5;
+      background-color: #fff;
+      padding: 5px;
+      border: 1px solid #999;
+    }
+	
   </style>
 
 </head>
@@ -147,7 +158,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
           <div class="navbar-brand"><strong>{{ 'app_home-title' | i18n }}&nbsp;&nbsp;&nbsp;</strong></div>
           <ul class="nav navbar-nav">
 <!--             <li class="{{ isHomeActive() }}"><a href="#/" ng-click="home()">{{ 'menu_bar-home' | i18n }}</a></li> -->
-			<li class="{{ isHomeDashboardActive() }}"><a href="#/dashboard/home" ng-click="setHomeDashboardActive()">{{ 'menu_bar-homedashboard' | i18n }}</a></li>
+			<li class="{{ isHomeDashboardActive() }}" ng-show="showDashboardMenuLink"><a href="#/dashboard/home" ng-click="setHomeDashboardActive()">{{ 'menu_bar-homedashboard' | i18n }}</a></li>
             <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
             <li class="{{ isHomeAuxActive() }}"><a href="#/aux/home" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li>
 <!--             <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li> -->

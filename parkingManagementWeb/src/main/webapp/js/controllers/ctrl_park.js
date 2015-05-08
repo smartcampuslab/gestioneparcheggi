@@ -418,8 +418,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.myAppId = "rv";
     
     $scope.myPath = [];
+    $scope.aEditAddingPolygon = false;	// used for area update with polygon adding
     $scope.myAreaPath = [];
     $scope.allNewAreas = [];
+    $scope.editNewAreas = [];
+    $scope.editGAreas = [];
     $scope.myZonePath = [];
     $scope.mySpecialStreets = [];
     $scope.mySpecialAreas = [];
@@ -1478,23 +1481,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.isEditing = false;
 		$scope.isInit = true;
 		
-		// Polygon void object
-//		$scope.newArea = {
-//			path: null,
-//			stroke: {
-//			    color: '#000000',
-//			    weight: 3
-//			},
-//			editable: true,
-//			draggable: true,
-//			visible: true,
-//			geodesic: false,
-//			fill: {
-//			    color: $scope.correctColor('#000000'),
-//			    opacity: 0.7
-//			}
-//		};
-		
 		$scope.myColor = "";
 		
 		// Case edit
@@ -1504,17 +1490,38 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 //				if($scope.editGArea != null){
 //					$scope.editGArea.visible = false;	// and hide the edit polygon
 //				}
-				if($scope.editGAreas != null && $scope.editGAreas.length > 0){
-					for(var i = 0; i < $scope.editGAreas.length; i++){
-						$scope.editGAreas[i].visible = false;
-						$scope.eAreaMap.shapes[$scope.correctAreaId(area.id, i)].setMap(null);	// I clean the edit map form old polygons
-					}
-					$scope.editGAreas = [];
-				}
 			} else {
 				garea.visible = false;		// here I hide the polygon for creation
 			}
 			garea.setPath([]);				// and clear the path
+			// Here i check if there are old 'create/edit' polygons in editAreaMap and remove them from it
+			if($scope.allNewAreas != null && $scope.allNewAreas.length > 0){
+				for(var i = 0; i < $scope.allNewAreas.length; i++){
+					$scope.allNewAreas[i].visible = false;
+					$scope.allNewAreas[i].setMap(null);			// I clean the edit map form old polygons
+					//$scope.eAreaMap.shapes[$scope.allNewAreas[i].id].setMap(null);	
+				}
+				$scope.allNewAreas = [];
+			}
+			if($scope.editNewAreas != null && $scope.editNewAreas.length > 0){
+				for(var i = 0; i < $scope.editNewAreas.length; i++){
+					$scope.editNewAreas[i].visible = false;
+					$scope.editNewAreas[i].setMap(null);			// I clean the edit map form old polygons
+					//$scope.eAreaMap.shapes[$scope.allNewAreas[i].id].setMap(null);	
+				}
+				$scope.editNewAreas = [];
+			}
+			if($scope.editGAreas != null && $scope.editGAreas.length > 0){
+				for(var i = 0; i < $scope.editGAreas.length; i++){
+					$scope.editGAreas[i].visible = false;
+					if($scope.editGAreas[i].id == null){
+						$scope.editGAreas[i].setMap(null);
+					} else {
+						$scope.eAreaMap.shapes[$scope.editGAreas[i].id].setMap(null);	// I clean the edit map form old polygons
+					}
+				}
+				$scope.editGAreas = [];
+			}
 			
 			$scope.isEditing = true;
 			$scope.isInit = false;
@@ -1568,66 +1575,55 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						visible: true,
 						fill: {
 						    color: $scope.correctColor(area.color),
-						    opacity: 0.7
+						    opacity: 0.4
 						}
-	//					events: {
-	//					    dragend: function (polygon, eventName, args) {
-	//					    	var path = args.path;
-	//					    	
-	//					    	console.log('polygon dragend: ' + JSON.stringify(path));
-	//					    	$scope.setMyPolGeometry(path);
-	//					    },
-	//					    click: function (polygon, eventName, args) {
-	//					    	var path = args.path;
-	//					    	
-	//					    	console.log('polygon click: ' + JSON.stringify(path));
-	//					    	$scope.setMyPolGeometry(path);
-	//					    },
-	//					    mouseup: function (polygon, eventName, args) {
-	//					    	var path = args.path;
-	//					    	
-	//					    	var tmpPol = "";
-	//							for(var i = 0; i < path.length; i++){
-	//								var tmpPoint = path[i].latitude + "," + path[i].longitude;
-	//								tmpPol = tmpPol + tmpPoint + ",";
-	//							}
-	//							tmpPol = tmpPol.substring(0, tmpPol.length-1);
-	//							$scope.setMyPolGeometry(tmpPol);
-	//					    	
-	//					    	console.log('polygon mouse up: ' + tmpPol);
-	//					    }
-	//					}
 					};
 					$scope.editGAreas.push($scope.editGArea);
 				}
 			}	
 		} else {
-			garea.setMap(null);					// here I clear the old path				
-			garea = new google.maps.Polygon({
-		        strokeColor: '#000000',
-		        strokeOpacity: 1.0,
-		        strokeWeight: 3,
-		        fillColor: '#000000',
-		        fillOpacity: 0.35,
-		        editable:true,
-		        draggable:true,
-		        visible:true,
-		        path: []
-		    });
-			
 			//garea.setPath([]);									// here I clear the old path
 			//garea.visible = true;									// here I show the polygon for creation
 			
 			//if($scope.editGArea != null){
 			//	$scope.editGArea.visible = false;					// and hide the edit polygon
 			//}
+			garea.setMap(null);					// here I clear the old path				
+			garea = new google.maps.Polygon({
+		        strokeColor: '#000000',
+		        strokeOpacity: 1.0,
+		        strokeWeight: 3,
+		        fillColor: '#000000',
+		        fillOpacity: 0.4,
+		        editable:true,
+		        draggable:true,
+		        visible:true
+		    });
+			// Here i check if there are old 'create/edit' polygons in editAreaMap and remove them from it
+			if($scope.allNewAreas !=null && $scope.allNewAreas.length > 0){
+				for(var i = 0; i < $scope.allNewAreas.length; i++){
+					$scope.allNewAreas[i].visible = false;
+					$scope.allNewAreas[i].setMap(null);			// I clean the edit map form old polygons
+					//$scope.eAreaMap.shapes[$scope.allNewAreas[i].id].setMap(null);	// I clean the edit map form old polygons
+				}
+				$scope.allNewAreas = [];
+			}
+			if($scope.editNewAreas != null && $scope.editNewAreas.length > 0){
+				for(var i = 0; i < $scope.editNewAreas.length; i++){
+					$scope.editNewAreas[i].visible = false;
+					$scope.editNewAreas[i].setMap(null);			// I clean the edit map form old polygons
+					//$scope.eAreaMap.shapes[$scope.allNewAreas[i].id].setMap(null);	
+				}
+				$scope.editNewAreas = [];
+			}
 			if($scope.editGAreas !=null && $scope.editGAreas.length > 0){
 				for(var i = 0; i < $scope.editGAreas.length; i++){
 					$scope.editGAreas[i].visible = false;
-					$scope.eAreaMap.shapes[$scope.correctAreaId(area.id, i)].setMap(null);	// I clean the edit map form old polygons
+					$scope.eAreaMap.shapes[$scope.editGAreas[i].id].setMap(null);	// I clean the edit map form old polygons
 				}
 				$scope.editGAreas = [];
 			}
+			
 			$scope.setMyPolGeometry("");
 			
 			$scope.area = {
@@ -2348,8 +2344,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var editCorrectedPath = [];
 			var editPaths = [];
 			if($scope.editGAreas != null &&  $scope.editGAreas.length > 0){
+				// case edit polygons or adding polygons
 				for(var j = 0; j < $scope.editGAreas.length; j++){
-					var updatedAreaPol = $scope.map.shapes[$scope.editGAreas[j].id];
+					var updatedAreaPol = {};
+					if($scope.editGAreas[j].id != null){
+						updatedAreaPol = $scope.map.shapes[$scope.editGAreas[j].id];
+					}
 					if(updatedAreaPol != null){
 						var updatedPath = updatedAreaPol.getPath();
 						if(updatedPath != null && updatedPath.length > 0){
@@ -2363,6 +2363,28 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						//updatedAreaPol.setMap(null);	//Here I delete the area in edit map
 					}
 				}
+				if($scope.aEditAddingPolygon){
+					var createdPath = garea.getPath();
+					editCorrectedPath = [];
+					for(var i = 0; i < createdPath.length; i++){
+						var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+						editCorrectedPath.push(point);
+					}
+					editPaths.push(editCorrectedPath);
+					$scope.aEditAddingPolygon = false;
+					
+					if($scope.editNewAreas != null && $scope.editNewAreas.length > 0){
+						for(var j = 0; j < $scope.editNewAreas.length; j++){
+							createdPath = $scope.editNewAreas[j].getPath();
+							editCorrectedPath = [];
+							for(var i = 0; i < createdPath.length; i++){
+								var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+								editCorrectedPath.push(point);
+							};
+							editPaths.push(editCorrectedPath);
+						}
+					}
+				}
 			}
 			
 //			var updatedPath = $scope.map.shapes.editAPolygon.getPath();
@@ -2372,9 +2394,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 //					editCorrectedPath.push(point);
 //				}
 //				editPaths.push(editCorrectedPath);
-//			} else {
+//			}
 			else {
-				// Case of creating geografic object in area editing
+				//if($scope.aEditAddingPolygon || ($scope.allNewAreas != null && $scope.allNewAreas.length > 0) || (garea.visible == true)){
+				// case creating polygons in area edit
 				var createdPath = garea.getPath();
 				for(var i = 0; i < createdPath.length; i++){
 					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
@@ -2384,6 +2407,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				if($scope.allNewAreas != null && $scope.allNewAreas.length > 0){
 					for(var i = 0; i < $scope.allNewAreas.length; i++){
 						createdPath = $scope.allNewAreas[i].getPath();
+						editCorrectedPath = [];
 						for(var i = 0; i < createdPath.length; i++){
 							var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
 							editCorrectedPath.push(point);
@@ -2391,7 +2415,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						editPaths.push(editCorrectedPath);
 					}
 				}
-				$scope.allNewAreas = [];
 			}
 			
 			var id = area.id;
@@ -2926,11 +2949,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var newCorrectedPath = [];
 			var createdPaths = [];
 			var createdPath = garea.getPath();
-			for(var i = 0; i < createdPath.length; i++){
-				var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
-				newCorrectedPath.push(point);
-			};
-			createdPaths.push(newCorrectedPath);
+			if(createdPath.length > 0){
+				for(var i = 0; i < createdPath.length; i++){
+					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+					newCorrectedPath.push(point);
+				};
+				createdPaths.push(newCorrectedPath);
+			}
 			if($scope.allNewAreas != null && $scope.allNewAreas.length > 0){
 				for(var j = 0; j < $scope.allNewAreas.length; j++){
 					createdPath = $scope.allNewAreas[j].getPath();
@@ -2942,7 +2967,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					createdPaths.push(newCorrectedPath);
 				}
 			}
-			$scope.allNewAreas = [];	// Here I clear the array of area polygons
+			//$scope.allNewAreas = [];	// Here I clear the array of area polygons
 			
 			var method = 'POST';
 			
@@ -3315,7 +3340,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
         strokeOpacity: 1.0,
         strokeWeight: 3,
         fillColor: '#000000',
-        fillOpacity: 0.35,
+        fillOpacity: 0.4,
         editable:true,
         draggable:true,
         visible:true
@@ -3388,6 +3413,42 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
     });
 	
+    $scope.removeAllNewPolygons = function(){
+    	garea.setMap(null);
+    	garea.setPath([]);				// and clear the path
+		// Here i check if there are old 'create/edit' polygons in editAreaMap and remove them from it
+		if($scope.allNewAreas != null && $scope.allNewAreas.length > 0){
+			for(var i = 0; i < $scope.allNewAreas.length; i++){
+				$scope.allNewAreas[i].visible = false;
+				$scope.allNewAreas[i].setMap(null);			// I clean the edit map form old polygons
+				//$scope.eAreaMap.shapes[$scope.allNewAreas[i].id].setMap(null);	
+			}
+			$scope.allNewAreas = [];
+		}
+    };
+    
+    $scope.removeLastNewPolygon = function(){
+    	garea.setMap(null);
+    	garea.setPath([]);				// and clear the path
+    };
+    
+    $scope.removeAreaPath = function(event, value){
+    	var found = false;
+    	console.log("Area to remove" + JSON.stringify(value)); 
+    	for(var i = 0; !found && (i < $scope.editGAreas.length); i++){
+    		if($scope.editGAreas[i].id == value.id){
+    			$scope.eAreaMap.shapes[$scope.editGAreas[i].id].setMap(null);
+    			$scope.vAreaMap.shapes[$scope.editGAreas[i].id].setMap(null);	//remove polygon from area view map too
+    			$scope.editGAreas.splice(i, 1);
+    			found = true;
+    		}
+    	}
+    	if(!found){
+    		garea.setPath([]);
+    		garea.setMap(null);
+    	}
+    };
+    
 	$scope.addAreaPath = function(event){
 	    var path = garea.getPath();
 	    if(path.length == 0){
@@ -3398,22 +3459,30 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    var myPoint = $scope.getPointFromLatLng(event.latLng, 1);
 	    $scope.myAreaPath.push(myPoint);
 	    $scope.setMyPolGeometry($scope.myAreaPath);
+	    garea.setPath(path);
 	    garea.setMap($scope.map);
 	};
 	
 	$scope.addNewAreaPath = function(event){
-		$scope.allNewAreas.push(garea);
+		// Check if I am in creation or update operation
+		if($scope.editGAreas != null &&  $scope.editGAreas.length > 0){
+			$scope.aEditAddingPolygon = true;	//editing
+			if(garea.visible){
+				$scope.editNewAreas.push(garea);
+			}
+		} else {
+			$scope.allNewAreas.push(garea);		//creation
+		}
 		// Here I create a new Area
 		garea = new google.maps.Polygon({
 	        strokeColor: '#000000',
 	        strokeOpacity: 1.0,
 	        strokeWeight: 3,
 	        fillColor: '#000000',
-	        fillOpacity: 0.35,
+	        fillOpacity: 0.4,
 	        editable:true,
 	        draggable:true,
-	        visible:true,
-	        path: []
+	        visible:true
 	    });
 		
 	    var path = garea.getPath();

@@ -4,6 +4,12 @@ providers:
     mapCenter: 45.88875357753771,11.037440299987793
     mapZoom: 14
     showObjects:
+     - id: Dashboard
+       attributes:
+        - code: link
+          editable: false
+          required: false
+          visible: true
      - id: Area
        attributes:
         - code: name
@@ -229,6 +235,12 @@ providers:
     mapCenter: 46.071691, 11.120545
     mapZoom: 14
     showObjects:
+     - id: Dashboard
+       attributes:
+        - code: link
+          editable: false
+          required: false
+          visible: false
      - id: Area
        attributes:
         - code: name

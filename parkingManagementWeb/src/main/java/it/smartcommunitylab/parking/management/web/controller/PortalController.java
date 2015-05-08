@@ -77,7 +77,7 @@ public class PortalController extends SCController{
 		//model.addAttribute("user_surname", user.getSurname());
 	
 		UserSetting user = mongoUserDetailsService.getUserDetails(name);
-		logger.error("I am in get root console. User id: " + name);
+		logger.error("I am in home redirect. User id: " + name);
 		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetails(user.getUsername());
 		model.addAttribute("user_name", user.getUsername());
 		model.addAttribute("user_surname", objectToShow.getId());
@@ -87,7 +87,11 @@ public class PortalController extends SCController{
 		model.addAttribute("map_zoom", objectToShow.getMapZoom());
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
 		logger.error("I am in get root console. object_showed: " + objectToShow.getShowObjectsMap());
-		return new ModelAndView("index", model);
+		//if(objectToShow.getShowObjects().get(0).getAttributes().get(0).isVisible()){
+			return new ModelAndView("index", model);
+		//} else {
+		//	return new ModelAndView("redirect:/park/home", model);
+		//}
 	}
 	
 	

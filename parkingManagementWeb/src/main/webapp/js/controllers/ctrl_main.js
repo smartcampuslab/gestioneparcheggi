@@ -383,12 +383,24 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	
 	$scope.initComponents = function(){
 	    $scope.showedObjects = sharedDataService.getVisibleObjList();
+	    $scope.showBikeMenuLink = false;
+	    $scope.showDashboardMenuLink = false;
 	    for(var i = 0; i < $scope.showedObjects.length; i++){
 	    	if($scope.showedObjects[i].id == 'Bp'){
 	    		$scope.showBikeMenuLink = true;
-	    	} else {
-	    		$scope.showBikeMenuLink = false;
 	    	}
+	    	if($scope.showedObjects[i].id == 'Dashboard'){
+	    		if($scope.showedObjects[i].attributes[0].visible){
+	    			$scope.showDashboardMenuLink = true;
+	    			$scope.setHomeDashboardActive();
+	    		} else {
+	    			$scope.showDashboardMenuLink = false;
+	    		}
+	    	}	
+	    }
+	    if($scope.showDashboardMenuLink == false){
+	    	$scope.setHomeParkActive();
+			//window.location.href = "home";
 	    }
     };
     

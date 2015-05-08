@@ -911,6 +911,14 @@
     "value": "Scegliere la posizione del punto bici (click sulla mappa)",
     "description": "Testo placeholder campo posizione punto bici"
 }, {
+    "key": "btn_remove_all_polygons",
+    "value": "Cancella poligoni",
+    "description": "Label pulsante cancella poligoni in area edit"
+}, {
+    "key": "btn_remove_last_polygons",
+    "value": "Cancella ultimo",
+    "description": "Label pulsante cancella ultimo poligono in area edit"
+}, {
     "key": "filter_area_title",
     "value": "Filtra per Area",
     "description": "Title icona filtro per area"
