@@ -82,7 +82,6 @@
 		<sec:intercept-url pattern="/login" access="permitAll" />
 		<sec:intercept-url pattern="/logout" access="permitAll" />
 		<sec:intercept-url pattern="/j_spring_security_check" access="permitAll" />
-<!-- 		<sec:intercept-url pattern="/park/home" access="hasAnyRole('ROLE_ADMIN')" /> -->
 		<sec:intercept-url pattern="/**" access="hasAnyRole('ROLE_ADMIN')" />
 		
 		<sec:form-login login-page="/login" default-target-url="/home" always-use-default-target="true"

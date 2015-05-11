@@ -537,7 +537,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     
     $scope.hideAreaPolygons = function() {
     	$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, false);
-    	$scope.hideAllAreas();
+    	$scope.hideAllAreas($scope.areaWS);
         //$scope.refreshMap();
         //$scope.$apply();
     };
@@ -598,10 +598,36 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     	}
     };
     
-    $scope.hideAllAreas = function(){
-    	var toDelAreas = $scope.map.shapes;
-    	for(var i = 0; i < $scope.mapAreas.length; i++){
-    		toDelAreas[$scope.mapAreas[i].id].setMap(null);		// I can access dinamically the value of the object shapes for zones
+    $scope.correctAreaId = function(id, i){
+		if(i == 0){
+			return id;
+		} else {
+			return id + '_' + i;
+		}
+	};
+    
+    $scope.hideAllAreas = function(areas){
+    	//var toDelAreas = $scope.map.shapes;
+    	//for(var i = 0; i < $scope.mapAreas.length; i++){
+    	//	toDelAreas[$scope.mapAreas[i].id].setMap(null);		// I can access dinamically the value of the object shapes for zones
+    	//}
+    	
+    	var toHideArea = $scope.map.shapes;
+    	for(var i = 0; i < areas.length; i++){
+    		if(areas[i].geometry != null && areas[i].geometry.length > 0){
+	    		if(areas[i].geometry.length == 1){
+	    			if(toHideArea[areas[i].id] != null){
+		    			toHideArea[areas[i].id].setMap(null);
+		    		}
+	    		} else {
+	    			for(var j = 0; j <  areas[i].geometry.length; j++){
+	    				var myId = $scope.correctAreaId(areas[i].id, j);
+	    				if(toHideArea[myId] != null){
+			    			toHideArea[myId].setMap(null);
+			    		}
+	    			}
+	    		}
+    		}
     	}
     };
     
@@ -693,23 +719,23 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var poligons = {};
 		var tmpAreas = [];
 		
-		if(areas != null){
-			for(var i = 0; i < areas.length; i++){
-				if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0 ){
+		for(var i = 0; i < areas.length; i++){
+			if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
+				for(var j = 0; j < areas[i].geometry.length; j++){
 					poligons = areas[i].geometry;
 					area = {
-						id: areas[i].id,
-						path: $scope.correctPoints(poligons[0].points),
-						gpath: $scope.correctPointsGoogle(poligons[0].points),
+						id: $scope.correctAreaId(areas[i].id, j),
+						path: $scope.correctPoints(poligons[j].points),
+						gpath: $scope.correctPointsGoogle(poligons[j].points),
 						stroke: {
 						    color: $scope.correctColor(areas[i].color),
 						    weight: 3
 						},
 						data: areas[i],
-						info_windows_pos: $scope.correctPointGoogle(poligons[0].points[1]),
+						info_windows_pos: $scope.correctPointGoogle(poligons[j].points[1]),
 						info_windows_cod: "a" + areas[i].id,
-						editable: true,
-						draggable: true,
+						editable: false,
+						draggable: false,
 						geodesic: false,
 						visible: visible,
 						fill: {
@@ -721,6 +747,35 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 				}
 			}
 		}
+		
+//		if(areas != null){
+//			for(var i = 0; i < areas.length; i++){
+//				if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0 ){
+//					poligons = areas[i].geometry;
+//					area = {
+//						id: areas[i].id,
+//						path: $scope.correctPoints(poligons[0].points),
+//						gpath: $scope.correctPointsGoogle(poligons[0].points),
+//						stroke: {
+//						    color: $scope.correctColor(areas[i].color),
+//						    weight: 3
+//						},
+//						data: areas[i],
+//						info_windows_pos: $scope.correctPointGoogle(poligons[0].points[1]),
+//						info_windows_cod: "a" + areas[i].id,
+//						editable: true,
+//						draggable: true,
+//						geodesic: false,
+//						visible: visible,
+//						fill: {
+//						    color: $scope.correctColor(areas[i].color),
+//						    opacity: 0.7
+//						}
+//					};
+//					tmpAreas.push(area);
+//				}
+//			}
+//		}
 		return tmpAreas;
 	};
 	

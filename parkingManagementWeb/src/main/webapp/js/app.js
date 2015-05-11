@@ -25,31 +25,31 @@ var pm = angular.module('pm', [
 pm.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
   	$routeProvider
-//  		.when('/', {
-//    		templateUrl: 'partials/home.html',
-//    		controller: 'MainCtrl',
-//    		controllerAs: 'main'
-//    	})
-//    	.when('/home', {
-//    		templateUrl: 'partials/home.html',
-//    		controller: 'MainCtrl',
-//    		controllerAs: 'main'
-//    	})
-    	.when('/', {
-    		templateUrl: 'partials/dashboard/viewpark.html',
-    		controller: 'ViewDashboardCtrlPark',
-    		controllerAs: 'db_view_park_ctrl'
+  		.when('/', {
+    		templateUrl: 'partials/home.html',
+    		controller: 'MainCtrl',
+    		controllerAs: 'main'
     	})
     	.when('/home', {
+    		templateUrl: 'partials/home.html',
+    		controller: 'MainCtrl',
+    		controllerAs: 'main'
+    	})
+//    	.when('/', {
+//    		templateUrl: 'partials/dashboard/viewpark.html',
+//    		controller: 'ViewDashboardCtrlPark',
+//    		controllerAs: 'db_view_park_ctrl'
+//    	})
+//    	.when('/home', {
+//    		templateUrl: 'partials/dashboard/viewpark.html',
+//    		controller: 'ViewDashboardCtrlPark',
+//    		controllerAs: 'db_view_park_ctrl'
+//    	})
+    	.when('/dashboard/home', {
     		templateUrl: 'partials/dashboard/viewpark.html',
     		controller: 'ViewDashboardCtrlPark',
     		controllerAs: 'db_view_park_ctrl'
     	})
-//    	.when('/park/home', {
-//    		templateUrl: 'partials/park/home.html',
-//    		controller: 'MainCtrl',
-//    		controllerAs: 'main'
-//    	})
     	.when('/park/home', {
     		templateUrl: 'partials/edit/parkediting.html',
     		controller: 'ParkCtrl',

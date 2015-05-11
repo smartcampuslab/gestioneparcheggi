@@ -478,6 +478,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.pmeterWS = [];
     $scope.pstructWS = [];
     $scope.zoneWS = [];
+    $scope.bpointWS = [];
     
     $scope.myNewArea;
      
@@ -511,6 +512,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	} else if(type == 5){
        		if($scope.zoneWS != null){
        			return Math.ceil($scope.zoneWS.length/$scope.maxZones);
+       		} else {
+       			return 0;
+     		}
+       	} else if(type == 6){
+       		if($scope.bpointWS != null){
+       			return Math.ceil($scope.bpointWS.length/$scope.maxBPoints);
        		} else {
        			return 0;
      		}
@@ -2403,7 +2410,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
 					editCorrectedPath.push(point);
 				}
-				editPaths.push(newCorrectedPath);
+				editPaths.push(editCorrectedPath);
 				if($scope.allNewAreas != null && $scope.allNewAreas.length > 0){
 					for(var i = 0; i < $scope.allNewAreas.length; i++){
 						createdPath = $scope.allNewAreas[i].getPath();

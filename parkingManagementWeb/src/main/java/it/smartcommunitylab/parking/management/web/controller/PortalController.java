@@ -87,13 +87,8 @@ public class PortalController extends SCController{
 		model.addAttribute("map_zoom", objectToShow.getMapZoom());
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
 		logger.error("I am in get root console. object_showed: " + objectToShow.getShowObjectsMap());
-		//if(objectToShow.getShowObjects().get(0).getAttributes().get(0).isVisible()){
-			return new ModelAndView("index", model);
-		//} else {
-		//	return new ModelAndView("redirect:/park/home", model);
-		//}
+		return new ModelAndView("index", model);
 	}
-	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/login")
 	public ModelAndView secureConsole(ModelMap model) {
