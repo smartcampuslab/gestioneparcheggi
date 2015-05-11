@@ -38,6 +38,7 @@ import org.springframework.security.web.authentication.preauth.PreAuthenticatedA
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -102,11 +103,11 @@ public class PortalController extends SCController{
 		return new ModelAndView("redirect:/logout");
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/viewallrv")
-	public ModelAndView viewAllElementsRv(ModelMap model) {
+	@RequestMapping(method = RequestMethod.GET, value = "/viewall/{appId}")
+	public ModelAndView viewAllElementsRv(ModelMap model, @PathVariable String appId) {
 		model.addAttribute("no_sec", "true");
-		model.addAttribute("app_id", "rv");
-		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetailsByAppId("rv");
+		model.addAttribute("app_id", appId);
+		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetailsByAppId(appId);
 		model.addAttribute("map_center", objectToShow.getMapCenter());
 		model.addAttribute("map_zoom", objectToShow.getMapZoom());
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
@@ -116,25 +117,7 @@ public class PortalController extends SCController{
 //		model.addAttribute("show_ps", view_rv_ps);
 //		model.addAttribute("show_bp", view_rv_bp);
 //		model.addAttribute("show_zone", view_rv_zone);
-		logger.error(String.format("I am in get viewAll Rv"));
-		return new ModelAndView("viewallnosec");
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/viewalltn")
-	public ModelAndView viewAllElementsTn(ModelMap model) {
-		model.addAttribute("no_sec", "true");
-		model.addAttribute("app_id", "tn");
-		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetailsByAppId("tn");
-		model.addAttribute("map_center", objectToShow.getMapCenter());
-		model.addAttribute("map_zoom", objectToShow.getMapZoom());
-		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
-//		model.addAttribute("show_area", view_tn_area);
-//		model.addAttribute("show_street", view_tn_street);
-//		model.addAttribute("show_pm", view_tn_pm);
-//		model.addAttribute("show_ps", view_tn_ps);
-//		model.addAttribute("show_bp", view_tn_bp);
-//		model.addAttribute("show_zone", view_tn_zone);
-		logger.error(String.format("I am in get viewAll Tn"));
+		logger.error(String.format("I am in get viewAll %s", appId));
 		return new ModelAndView("viewallnosec");
 	}
 

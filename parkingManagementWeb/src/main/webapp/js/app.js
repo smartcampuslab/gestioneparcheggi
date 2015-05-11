@@ -75,21 +75,21 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'ViewCtrlGmap',
     		controllerAs: 'view_ctrl_gmap'
     	})
-    	.when('/viewall', {
+    	.when('/viewall/:type', {
     		templateUrl: 'partials/view/viewallgmapnosec.html',
     		controller: 'ViewCtrlGmap',
     		controllerAs: 'view_ctrl_gmap'
     	})
-    	.when('/viewallrv', {
-    		templateUrl: 'partials/view/viewallgmapnosec.html',
-    		controller: 'ViewCtrlGmap',
-    		controllerAs: 'view_ctrl_gmap'
-    	})
-    	.when('/viewalltn', {
-    		templateUrl: 'partials/view/viewallgmapnosec.html',
-    		controller: 'ViewCtrlGmap',
-    		controllerAs: 'view_ctrl_gmap'
-    	})  	
+//    	.when('/viewallrv', {
+//    		templateUrl: 'partials/view/viewallgmapnosec.html',
+//    		controller: 'ViewCtrlGmap',
+//    		controllerAs: 'view_ctrl_gmap'
+//    	})
+//    	.when('/viewalltn', {
+//    		templateUrl: 'partials/view/viewallgmapnosec.html',
+//    		controller: 'ViewCtrlGmap',
+//    		controllerAs: 'view_ctrl_gmap'
+//    	})  	
     	.otherwise({
     		redirectTo:'/'
     	});

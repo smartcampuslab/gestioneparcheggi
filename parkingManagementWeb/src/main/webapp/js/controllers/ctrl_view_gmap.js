@@ -6,6 +6,7 @@ var pmControllers = angular.module('pmControllers');
 pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeWSService', 'invokeWSServiceNS', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
                           function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeWSService, invokeWSServiceNS, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
 
+	$scope.params = $routeParams;
 	
 	$scope.parkingMetersMarkers = [];
 	$scope.parkingStructureMarkers = [];

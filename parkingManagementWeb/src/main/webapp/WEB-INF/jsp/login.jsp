@@ -103,12 +103,18 @@
 												<tr>
 													<td colspan="2">&nbsp;</td>
 												</tr>
+<!-- 												<tr> -->
+<!-- 													<td align="right"><input value="Login" name="submit" type="submit" class="btn btn-primary">&nbsp;</td> -->
+<!-- 													<td> -->
+<!-- 														<input value="Cancella" name="reset" type="reset" class="btn btn-default">&nbsp; -->
+<!-- 														<a id="btn_viewrv" href="viewall/rv" class="btn btn-primary" role="button">Mappa Rv</a>&nbsp; -->
+<!--  														<a id="btn_viewtn" href="viewall/tn" class="btn btn-primary" role="button">Mappa Tn</a> -->
+<!-- 													</td> -->
+<!-- 												</tr> -->
 												<tr>
-													<td align="right"><input value="Login" name="submit" type="submit" class="btn btn-primary">&nbsp;</td>
-													<td>
-														<input value="Cancella" name="reset" type="reset" class="btn btn-default">&nbsp;
-														<a id="btn_viewrv" href="viewallrv" class="btn btn-primary" role="button">Mappa Rv</a>&nbsp;
-														<a id="btn_viewtn" href="viewalltn" class="btn btn-primary" role="button">Mappa Tn</a>
+													<td colspan="2" align="center">
+														<input value="Login" name="submit" type="submit" class="btn btn-primary">&nbsp;
+														<input value="Cancella" name="reset" type="reset" class="btn btn-default">
 													</td>
 												</tr>
 											</table>

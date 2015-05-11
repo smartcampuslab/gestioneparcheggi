@@ -43,9 +43,7 @@
 	<http xmlns="http://www.springframework.org/schema/security"
         pattern="/login" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
-        pattern="/viewallrv" security="none" />
-	<http xmlns="http://www.springframework.org/schema/security"
-        pattern="/viewalltn" security="none" />
+        pattern="/viewall/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/rest/nosec/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"

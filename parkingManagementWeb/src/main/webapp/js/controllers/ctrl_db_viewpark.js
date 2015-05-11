@@ -6,6 +6,7 @@ var pmControllers = angular.module('pmControllers', ['googlechart']);
 pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
                           function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
 
+	$scope.disableThemes = true;	//Used to disable/enable themes buttons selection 
 	
 	$scope.parkingMetersMarkers = [];
 	$scope.parkingStructureMarkers = [];
