@@ -52,39 +52,80 @@
 					<table width="100%">
 						<tr>
 							<!-- ng-show="isAreaVisible()" -->
-							<td align="left"><label><input id="rateArea"
-									type="checkbox" ng-model="dashboard_space.rate_area"
-									ng-click="changeAreaPolygons()">&nbsp;{{ 'view_areas' |
-									i18n }}</label></td>
+							<td align="left">
+								<label>
+									<input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons()">
+									&nbsp;{{ 'view_areas' |i18n }}
+								</label>
+							</td>
 						</tr>
 						<tr>
 							<!-- ng-show="isZonesVisible()" -->
-							<td align="left"><label><input id="zones"
-									type="checkbox" ng-model="dashboard_space.macrozone"
-									ng-click="changeZonePolygons()">&nbsp;{{
-									'view_macrozones' | i18n }}</label></td>
+							<td align="left">
+								<label>
+									<input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons()">
+									&nbsp;{{ 'view_macrozones' | i18n }}
+								</label>
+							</td>
 						</tr>
 						<tr>
 							<!-- ng-show="isStreetVisible()" -->
-							<td align="left"><label><input id="streets"
-									type="checkbox" ng-model="dashboard_space.microzone"
-									ng-click="changeStreetPolylines()">&nbsp;{{
-									'view_streets' | i18n }}</label></td>
+							<td align="left">
+								<label>
+									<input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines()">
+									&nbsp;{{ 'view_streets' | i18n }}
+								</label>
+							</td>
 							<!-- ng-click="changeStreetAndPS()" -->
 						</tr>
 						<tr>
 							<!--  ng-show="isPsVisible()" -->
-							<td align="left"><label><input id="pStruct"
-									type="checkbox" ng-model="dashboard_space.parkingstructs"
-									ng-click="changeParkingStructuresMarkers()">&nbsp;{{
-									'view_parkingstructs' | i18n }}</label></td>
+							<td align="left">
+								<label>
+									<input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers()">
+									&nbsp;{{'view_parkingstructs' | i18n }}
+								</label>
+							</td>
 						</tr>
 						<tr>
 							<!-- ng-show="isPmVisible()" -->
-							<td align="left"><label><input id="pMeters"
-									type="checkbox" ng-model="dashboard_space.parkingmeter"
-									ng-click="changeParkingMetersMarkers()">&nbsp;{{
-									'view_parkingmeters' | i18n }}</label></td>
+							<td align="left">
+								<label>
+									<input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers()">
+									&nbsp;{{'view_parkingmeters' | i18n }}
+								</label>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div class="panel panel-danger">
+				<div class="panel-body">
+					<table width="100%">
+						<tr>
+							<!-- ng-show="isAreaVisible()" -->
+							<td align="left">
+								<label>Mese</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
+								<slider id="sl1" ng-model="sliders1.sliderValue" range="sliderMonth.range" min="sliderMonth.min" step="sliderMonth.step" max="sliderMonth.max" value="sliderMonth.value" ></slider>
+								<br/>
+							</td>
+						</tr>
+						<tr>
+							<!-- ng-show="isZonesVisible()" -->
+							<td align="left">
+								<label>Giorno Settimana</label>
+								<slider id="sl2" ng-model="sliders2.sliderValue" min="sliderWeek.min" step="sliderWeek.step" max="sliderWeek.max" range="sliderWeek.range" value="sliderWeek.value"></slider>
+								<br/>
+							</td>
+						</tr>
+						<tr>
+							<!-- ng-show="isStreetVisible()" -->
+							<td align="left">
+								<label>Fascia Oraria</label>
+								<slider id="sl3" ng-model="sliders3.sliderValue" min="sliderTime.min" step="sliderTime.step" max="sliderTime.max" range="sliderTime.range" value="sliderTime.value"></slider>
+								<br/>
+							</td>
+							<!-- ng-click="changeStreetAndPS()" -->
 						</tr>
 					</table>
 				</div>

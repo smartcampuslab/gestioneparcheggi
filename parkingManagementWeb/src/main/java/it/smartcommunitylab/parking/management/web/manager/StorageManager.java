@@ -283,7 +283,7 @@ public class StorageManager {
 	// Street Methods
 	public List<StreetBean> getAllStreets() {
 		List<StreetBean> result = new ArrayList<StreetBean>();
-
+		//logger.error("I am in GET ALL STREETS");
 		for (RateAreaBean temp : getAllArea()) {
 			if(temp != null && temp.getId_app().compareTo(appId) == 0){
 				result.addAll(getAllStreets(temp));

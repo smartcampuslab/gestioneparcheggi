@@ -52,6 +52,8 @@
 		pattern="/rest/appid/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/dashboard/rest/appid/**" security="none" />
+	<http xmlns="http://www.springframework.org/schema/security"
+		pattern="/auxiliary/rest/**" security="none" />
 	
 <!-- 	<sec:http pattern="/rest/**" entry-point-ref="forbEntryPoint" -->
 <!-- 		use-expressions="true" create-session="stateless">ifRequired  -->

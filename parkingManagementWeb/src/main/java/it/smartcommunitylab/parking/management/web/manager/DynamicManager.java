@@ -26,6 +26,8 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.model.HistoricalEaster;
+import it.smartcommunitylab.parking.management.web.model.ItaHolidays;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
@@ -33,6 +35,7 @@ import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.Zone;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -249,6 +252,17 @@ public class DynamicManager {
 					dl.setObjId("@" + temp.getId_app() + "@street@" + vb.getId());
 					dl.setType("street");
 					dl.setUpdateTime(timestamp);
+					// set new fields ---------
+					Calendar cal = Calendar.getInstance();
+					cal.setTimeInMillis(timestamp);
+					dl.setYear(cal.get(Calendar.YEAR) + "");
+					dl.setMonth((cal.get(Calendar.MONTH) + 1) + "");
+					int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+					dl.setWeek_day(dayOfWeek + "");
+					dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
+					boolean isHolyday = isAHoliday(cal, temp.getId_app());
+					dl.setHolyday(isHolyday);
+					//---------------------------
 					Integer oldVersion = getLastVersion(dl.getObjId());
 					dl.setVersion(new Integer(oldVersion.intValue() + 1));
 					if(temp.getGeometry() != null){
@@ -260,6 +274,7 @@ public class DynamicManager {
 					Map<String,Object> map = ModelConverter.convert(temp, Map.class);
 					dl.setContent(map);
 					mongodb.save(dl);
+					logger.error(String.format("Updated street: %s", temp.toString()));
 					break;
 				}
 			}
@@ -298,6 +313,17 @@ public class DynamicManager {
 		dl.setObjId("@" + bike.getId_app() + "@bikePoint@" + bp.getId());
 		dl.setType("bikePoint");
 		dl.setUpdateTime(timestamp);
+		// set new fields -----------
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp);
+		dl.setYear(cal.get(Calendar.YEAR) + "");
+		dl.setMonth((cal.get(Calendar.MONTH) + 1) + "");
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		dl.setWeek_day(dayOfWeek + "");
+		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
+		boolean isHolyday = isAHoliday(cal, bike.getId_app());
+		dl.setHolyday(isHolyday);
+		//---------------------------
 		Integer oldVersion = getLastVersion(dl.getObjId());
 		dl.setVersion(new Integer(oldVersion.intValue() + 1));
 		if(bike.getGeometry() != null){
@@ -356,6 +382,17 @@ public class DynamicManager {
 		dl.setObjId("@" + entity.getId_app() + "@parkingStructure@" + entityBean.getId());
 		dl.setType("parkingStructure");
 		dl.setUpdateTime(timestamp);
+		// set new fields ---------
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp);
+		dl.setYear(cal.get(Calendar.YEAR) + "");
+		dl.setMonth((cal.get(Calendar.MONTH) + 1) + "");
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		dl.setWeek_day(dayOfWeek + "");
+		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
+		boolean isHolyday = isAHoliday(cal, entity.getId_app());
+		dl.setHolyday(isHolyday);
+		//---------------------------
 		Integer oldVersion = getLastVersion(dl.getObjId());
 		dl.setVersion(new Integer(oldVersion.intValue() + 1));
 		if(entity.getGeometry() != null){
@@ -373,6 +410,51 @@ public class DynamicManager {
 		
 		return entityBean;
 	}
+	
+	// --------------- For holidays query -----------------
+	private List<ItaHolidays> getAllHolydays(String appId){
+		List<ItaHolidays> result = new ArrayList<ItaHolidays>();
+		for (ItaHolidays ih : mongodb.findAll(ItaHolidays.class)) {
+			if(ih.getApp_id().compareTo(appId) == 0){
+				result.add(ih);
+			}
+		}
+		return result;
+	}
+	
+	private ItaHolidays findHolydaysByDate(Integer month, Integer day, String appId){
+		ItaHolidays result = null;
+		for (ItaHolidays ih : mongodb.findAll(ItaHolidays.class)) {
+			logger.error(String.format("finded holiday: %s", ih.getName()));
+			if(ih.getApp_id().compareTo(appId) == 0 || ih.getApp_id().compareTo("all") == 0){
+				logger.error(String.format("finded holiday: %s", ih.getName()));
+				if(ih.getMonth() == month && ih.getDay() == day){
+					result = ih;
+				}
+			}
+		}
+		return result;
+	}
+	
+	private List<HistoricalEaster> getAllEasterMondays(){
+		List<HistoricalEaster> result = new ArrayList<HistoricalEaster>();
+		for (HistoricalEaster he : mongodb.findAll(HistoricalEaster.class)) {
+			result.add(he);
+		}
+		return result;
+	}
+	
+	private HistoricalEaster findEasterMondaysByDate(Integer year, Integer month, Integer day){
+		HistoricalEaster result = null;
+		for (HistoricalEaster he : mongodb.findAll(HistoricalEaster.class)) {
+			if(he.getYear() == year && he.getMonth() == month && he.getDay() == day){
+				result = he;
+			}
+		}
+		return result;
+	}
+	
+	// -----------------------------------------------------
 
 	public byte[] exportData() throws ExportException {
 		Exporter exporter = new ZipCsvExporter(mongodb);
@@ -400,5 +482,31 @@ public class DynamicManager {
 		}
 		return version;
 	}
+	
+	/**
+	 * Method used to calculate if a specific date is holiday or not
+	 * @param cal: imput calendar object
+	 * @return true if holiday, false if not
+	 */
+	private boolean isAHoliday(Calendar cal, String appId){
+		boolean isHoliday = false;
+		// here I have to cover all the cases: public holidays in Ita, year holidays, city holidays
+		int wd = cal.get(Calendar.DAY_OF_WEEK);
+		if(wd == Calendar.SUNDAY){
+			isHoliday = true;
+		} else {
+			if(findHolydaysByDate(cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), appId) != null){
+				isHoliday = true;
+			}
+		}
+		if(wd == Calendar.MONDAY){
+			if(findEasterMondaysByDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)) != null){
+				isHoliday = true;
+			}
+		}
+		logger.error(String.format("isAHoliday function: day of week %d, day %d, month %d", wd, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1));
+		
+		return isHoliday;
+	};
 
 }

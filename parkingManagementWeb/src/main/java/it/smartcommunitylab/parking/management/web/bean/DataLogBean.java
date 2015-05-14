@@ -27,6 +27,13 @@ public class DataLogBean {
 	private Long updateTime;
 	private Integer version;
 	private boolean deleted;
+	//new fields added in 12/5/2015 from MB
+	private String year;
+	private String month;
+	private String week_day;
+	private String timeSlot;	//time of operation (start a slot of one hour)
+	private boolean isHolyday;	//true if is an holyday day (in ita = festivo)
+
 	//private String content;
 	private Map<String, Object> content;
 	
@@ -101,5 +108,45 @@ public class DataLogBean {
 //		this.content = content;
 //	}
 	
+	// new setter and getter methods added in 12/5/2015 from MB
+	public String getYear() {
+		return year;
+	}
+	
+	public String getMonth() {
+		return month;
+	}
 
+	public String getWeek_day() {
+		return week_day;
+	}
+
+	public String getTimeSlot() {
+		return timeSlot;
+	}
+
+	public boolean isHolyday() {
+		return isHolyday;
+	}
+
+	public void setYear(String year) {
+		this.year = year;
+	}
+	
+	public void setMonth(String month) {
+		this.month = month;
+	}
+
+	public void setWeek_day(String week_day) {
+		this.week_day = week_day;
+	}
+
+	public void setTimeSlot(String timeSlot) {
+		this.timeSlot = timeSlot;
+	}
+
+	public void setHolyday(boolean isHolyday) {
+		this.isHolyday = isHolyday;
+	}
+	
 }

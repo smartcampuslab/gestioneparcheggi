@@ -9,6 +9,7 @@
 <link href="css/xeditable.css" rel="stylesheet" />
 <link href="css/modaldialog.css" rel="stylesheet" />
 <link href="css/colorpicker.css" rel="stylesheet" />
+<link href="css/bootstrap-slider.min.css" rel="stylesheet" />
 <link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
 
 <!-- required libraries -->
@@ -17,6 +18,8 @@
 <script src="lib/angular.js"></script>
 <script src="js/localize.js" type="text/javascript"></script>
 <script src="js/dialogs.min.js" type="text/javascript"></script>
+<script src="lib/bootstrap-slider.min.js"></script>
+<script src="lib/slider.js"></script>
 <script src="lib/angular-route.js"></script>
 <script src="lib/angular-sanitize.js"></script>
 <script src="lib/ng-google-chart.js"></script>
@@ -122,7 +125,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	}
 	
 	.angular-google-map-container {
-		height: 610px; 
+		height: 700px; 
 	}
 	
 	.colorBox {   

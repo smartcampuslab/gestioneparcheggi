@@ -1,12 +1,39 @@
 'use strict';
 
 /* Controllers */
-var pmControllers = angular.module('pmControllers', ['googlechart']);
+var pmControllers = angular.module('pmControllers', ['googlechart','ui.bootstrap-slider']);
 
 pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
                           function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
 
-	$scope.disableThemes = true;	//Used to disable/enable themes buttons selection 
+	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection 
+	
+	// Sliders
+	$scope.sliderMonth = {
+		min: 1,
+		max: 12,
+		step: 1,
+		range: true,
+		value: [1,3],
+		ticks: [1,3,6,9,12],			//it does not work in js
+		ticks_pos: [0,25,50,75,100],	//it does not work in js
+		ticks_labels: ['gen','mar','giu','set','dic'],	//it does not work in js
+		ticks_snap_bound: 1				//it does not work in js
+	};
+	$scope.sliderWeek = {
+		min: 1,
+		max: 7,
+		step: 1,
+		range: true,
+		value: [1,2]
+	};
+	$scope.sliderTime = {
+		min: 0,
+		max: 24,
+		step: 1,
+		range: true,
+		value: [0,1]
+	};
 	
 	$scope.parkingMetersMarkers = [];
 	$scope.parkingStructureMarkers = [];

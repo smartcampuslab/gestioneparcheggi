@@ -45,7 +45,7 @@ public class DynamicManagerTest {
 	private static final String appId="rv";
 	private static final String appIdTn="tn";
 
-	private static final Long NOW = System.currentTimeMillis();
+	private static final Long NOW = 1420066800000L;	//System.currentTimeMillis();
 	
 	@Autowired
 	private StorageManager manager;

@@ -55,7 +55,6 @@ public class DashboardController {
 	MarkerIconStorage markerIconStorage;
 
 	@PostConstruct
-	@SuppressWarnings("unused")
 	private void init() throws IOException {
 		markerIconStorage = new MarkerIconStorage();
 	}
