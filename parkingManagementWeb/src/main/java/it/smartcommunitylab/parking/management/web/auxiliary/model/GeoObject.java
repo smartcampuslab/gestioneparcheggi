@@ -15,9 +15,11 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.model;
 
-import eu.trentorise.smartcampus.presentation.data.BasicObject;
+import com.mongodb.BasicDBObject;
 
-public class GeoObject extends BasicObject {
+//import eu.trentorise.smartcampus.presentation.data.BasicObject;
+
+public class GeoObject {	//extends BasicObject
 	
 	private static final long serialVersionUID = 3589900794339644582L;
 
@@ -25,8 +27,18 @@ public class GeoObject extends BasicObject {
 	private double[] position;
 	private String name;
 	private String description;
+	// Fields from basic object
+	private String id;	
+	private Long updateTime;
+	private Long version;
+	private Integer user;
 	
-	
+	public String getId() {
+		return id;
+	}
+	public void setId(String id) {
+		this.id = id;
+	}
 	public double[] getPosition() {
 		return position;
 	}
@@ -51,4 +63,23 @@ public class GeoObject extends BasicObject {
 	public void setAgency(String agency) {
 		this.agency = agency;
 	}
+	public Long getUpdateTime() {
+		return updateTime;
+	}
+	public Long getVersion() {
+		return version;
+	}
+	public Integer getUser() {
+		return user;
+	}
+	public void setUpdateTime(Long updateTime) {
+		this.updateTime = updateTime;
+	}
+	public void setVersion(Long version) {
+		this.version = version;
+	}
+	public void setUser(Integer user) {
+		this.user = user;
+	}
+	
 }

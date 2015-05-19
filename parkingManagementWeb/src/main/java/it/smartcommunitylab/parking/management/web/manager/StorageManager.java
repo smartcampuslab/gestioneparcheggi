@@ -46,6 +46,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
@@ -131,7 +132,8 @@ public class StorageManager {
 			dl.setObjId("@" + sb.getId_app() + "@street@" + sb.getId());
 			dl.setType("street");
 			dl.setVersion(getLastVersion(dl.getObjId()));
-			dl.setUpdateTime(System.currentTimeMillis());
+			dl.setTime(System.currentTimeMillis());
+			dl.setAuthor("999");
 			dl.setDeleted(true);
 			mongodb.save(dl);
 		}
@@ -479,10 +481,11 @@ public class StorageManager {
 			DataLogBean dl = new DataLogBean();
 			dl.setObjId("@" + area.getId_app() + "@street@" + streetId);
 			dl.setType("street");
-			dl.setUpdateTime(System.currentTimeMillis());
-			if(s.getGeometry() != null){
-				dl.setLocation(s.getGeometry().getPointBeans().get(0));	// I get the first element of the line
-			}
+			dl.setTime(System.currentTimeMillis());
+			dl.setAuthor("999");
+			//if(s.getGeometry() != null){
+			//	dl.setLocation(s.getGeometry().getPointBeans().get(0));	// I get the first element of the line
+			//}
 			dl.setVersion(getLastVersion(dl.getObjId()));
 			dl.setDeleted(true);
 			mongodb.save(dl);
@@ -513,10 +516,11 @@ public class StorageManager {
 			dl.setObjId("@" + s.getId_app() + "@street@" + s.getId());
 			dl.setType("street");
 			dl.setVersion(new Integer(1));
-			dl.setUpdateTime(System.currentTimeMillis());
-			if(street.getGeometry() != null && street.getGeometry().getPointBeans().size() > 0){
-				dl.setLocation(street.getGeometry().getPointBeans().get(0));	// I get the first element of the line
-			}
+			dl.setTime(System.currentTimeMillis());
+			dl.setAuthor("999");
+			//if(street.getGeometry() != null && street.getGeometry().getPointBeans().size() > 0){
+			//	dl.setLocation(street.getGeometry().getPointBeans().get(0));	// I get the first element of the line
+			//}
 			dl.setDeleted(false);
 			@SuppressWarnings("unchecked")
 			Map<String,Object> map = ModelConverter.convert(s, Map.class);
@@ -551,7 +555,8 @@ public class StorageManager {
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + puntobiciId);
 		dl.setType("bikePoint");
-		dl.setUpdateTime(System.currentTimeMillis());
+		dl.setTime(System.currentTimeMillis());
+		dl.setAuthor("999");
 		dl.setVersion(getLastVersion(dl.getObjId()));
 		dl.setDeleted(true);
 		mongodb.save(dl);
@@ -571,13 +576,14 @@ public class StorageManager {
 		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + bp.getId());
 		dl.setType("bikePoint");
 		dl.setVersion(new Integer(1));
-		dl.setUpdateTime(System.currentTimeMillis());
-		if(bp.getGeometry() != null){
-			PointBean point = new PointBean();
-			point.setLat(bp.getGeometry().getLat());
-			point.setLng(bp.getGeometry().getLng());
-			dl.setLocation(point);
-		}
+		dl.setTime(System.currentTimeMillis());
+		dl.setAuthor("999");
+		//if(bp.getGeometry() != null){
+		//	PointBean point = new PointBean();
+		//	point.setLat(bp.getGeometry().getLat());
+		//	point.setLng(bp.getGeometry().getLng());
+		//	dl.setLocation(point);
+		//}
 		dl.setDeleted(false);
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(bp, Map.class);
@@ -624,7 +630,8 @@ public class StorageManager {
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + ps.getId_app() + "@parkingStructure@" + id);
 		dl.setType("parkingStructure");
-		dl.setUpdateTime(System.currentTimeMillis());
+		dl.setTime(System.currentTimeMillis());
+		dl.setAuthor("999");
 		dl.setVersion(getLastVersion(dl.getObjId()));
 		dl.setDeleted(true);
 		mongodb.save(dl);
@@ -645,13 +652,14 @@ public class StorageManager {
 		dl.setObjId("@" + entity.getId_app() + "@parkingStructure@" + entity.getId());
 		dl.setType("parkingStructure");
 		dl.setVersion(new Integer(1));
-		dl.setUpdateTime(System.currentTimeMillis());
-		if(entity.getGeometry() != null){
-			PointBean point = new PointBean();
-			point.setLat(entity.getGeometry().getLat());
-			point.setLng(entity.getGeometry().getLng());
-			dl.setLocation(point);
-		}
+		dl.setTime(System.currentTimeMillis());
+		dl.setAuthor("999");
+		//if(entity.getGeometry() != null){
+		//	PointBean point = new PointBean();
+		//	point.setLat(entity.getGeometry().getLat());
+		//	point.setLng(entity.getGeometry().getLng());
+		//	dl.setLocation(point);
+		//}
 		dl.setDeleted(false);
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(entity, Map.class);
@@ -826,6 +834,7 @@ public class StorageManager {
 		Query q = new Query();
 		q.addCriteria(Criteria.where("objId").is(objId));
 		q.sort().on("updateTime", Order.DESCENDING);
+		//q.with(new Sort(Sort.Direction.DESC, "updateTime"));
 		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
 		if(result != null && result.size() > 0){
 			version = result.get(0).getVersion();

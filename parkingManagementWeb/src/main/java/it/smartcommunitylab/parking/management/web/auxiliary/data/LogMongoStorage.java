@@ -36,15 +36,17 @@ public class LogMongoStorage {
 	private <T> List<T> getLogsById(String id, String agency, int count, Class<T> cls) {
 		Query query = Query.query(Criteria.where("value._id").is(id).and("value.agency").is(agency)).limit(count);
 		query.sort().on("time", Order.DESCENDING);
+		//query.with(new Sort(Sort.Direction.DESC, "time"));
 		return mongoTemplate.find(query, cls);
 	}
 	
 	public List<LogObject<?>> getLogsByAuthor(String authorId, String agency, int count) {
 		Query query = Query.query(Criteria.where("author").is(authorId).and("value.agency").is(agency)).limit(count);
 		query.sort().on("time", Order.DESCENDING);
+		//query.with(new Sort(Sort.Direction.DESC, "time"));
 		List<LogObject<?>> result = new ArrayList<LogObject<?>>();
-		result.addAll(mongoTemplate.find(query, StreetLog.class));
-		result.addAll(mongoTemplate.find(query, ParkingLog.class));
+		//result.addAll(mongoTemplate.find(query, StreetLog.class));
+		//result.addAll(mongoTemplate.find(query, ParkingLog.class));
 	
 		Collections.sort(result, new Comparator<LogObject<?>>() {
 			@Override

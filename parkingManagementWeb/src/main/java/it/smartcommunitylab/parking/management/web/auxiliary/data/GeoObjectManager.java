@@ -1,0 +1,735 @@
+/*******************************************************************************
+ * Copyright 2015 Fondazione Bruno Kessler
+ * 
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ * 
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ ******************************************************************************/
+package it.smartcommunitylab.parking.management.web.auxiliary.data;
+
+import it.smartcommunitylab.parking.management.web.auxiliary.model.GeoObject;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.LastChange;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.LastGeoObjectVersion;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
+import it.smartcommunitylab.parking.management.web.auxiliary.services.PolylineEncoder;
+import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
+import it.smartcommunitylab.parking.management.web.bean.PointBean;
+import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
+import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.model.DataLog;
+import it.smartcommunitylab.parking.management.web.model.geo.Point;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+
+import javax.annotation.PostConstruct;
+
+import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.geo.Circle;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Order;
+import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.mongodb.BasicDBObject;
+
+//import eu.trentorise.smartcampus.presentation.common.exception.DataException;
+//import eu.trentorise.smartcampus.presentation.data.BasicObject;
+
+// Manager used to store the dynamic data
+@Service("GeoObjectManager")
+public class GeoObjectManager {
+
+	@Autowired 
+	private LogMongoStorage logMongoStorage;
+	//@Autowired
+	//private GeoStorage geoStorage;
+	@Autowired
+	private StorageManager storageManager;
+	@Autowired
+	private DynamicManager dynamicManager;
+	@Autowired
+	private MongoTemplate mongodb;
+
+//	@Value("${parking.sources}")
+//	private String parkingSources;
+	@Value("${parking.agencies}")
+	private String parkingAgencies;
+
+//	@Value("${street.sources}")
+//	private String streetURLs;
+	@Value("${street.agencies}")
+	private String streetAgencies;
+	
+	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
+	private static final int PHYSICS_DELETION = 1;
+	private static final int LOGIC_DELETION = 2;
+	
+	//@PostConstruct
+	private void initData() throws IOException, Exception { //DataException,
+		String[] agencies = parkingAgencies.split(",");
+		
+		for (int i = 0; i < agencies.length; i++) {
+			String agency = agencies[i];
+
+			List<Parking> oldParkings = getParkings(agency);
+			Set<String> oldIds = new HashSet<String>();
+			for (Parking p : oldParkings) {
+				oldIds.add(p.getId());
+			}
+			
+			storageManager.setAppId(agency);
+			List<ParkingStructureBean> structures = storageManager.getAllParkingStructure();
+			//ClassPathResource res = new ClassPathResource(refs[i]);
+			//List<KMLData> data = KMLHelper.readData(res.getInputStream());
+			for(ParkingStructureBean ps : structures){
+				Parking p = new Parking();
+				p.setId("parking@"+agency+"@"+ps.getId());
+				oldIds.remove(p.getId());
+				p.setName(ps.getName());
+				p.setAgency(agency);
+				p.setSlotsTotal(ps.getSlotNumber());
+				p.setPosition(new double[]{ps.getGeometry().getLat(),ps.getGeometry().getLng()});
+				saveOrUpdateParking(p);
+			}
+
+			for (String id : oldIds) {
+				deleteObject(getLastObjectByIdAndAgency(Parking.class.getCanonicalName(), id, agency), LOGIC_DELETION);
+			}
+		}
+	}
+	
+	//@Scheduled(fixedRate = 4*60*60*1000)
+	//@Scheduled(fixedRate = 1*60*1000)
+	//@PostConstruct
+	private void updateStreets() throws Exception {
+		String[] agencies = streetAgencies.split(",");
+		
+		for (int i = 0; i < agencies.length; i++) {
+			String agency = agencies[i];
+				
+			List<Street> oldStreets = getStreets(agency);
+			Set<String> oldIds = new HashSet<String>();
+			for (Street p : oldStreets) {
+				oldIds.add(p.getId());
+			}
+
+			storageManager.setAppId(agency);
+			List<StreetBean> newStreets = storageManager.getAllStreets();
+			for (StreetBean s : newStreets){
+				//logger.info(String.format("found street %s", s.toString()));
+				Street street = new Street();
+				street.setId("street@"+agency+"@"+s.getId());
+				oldIds.remove(street.getId());
+				street.setAreaId(s.getRateAreaId()); //s.getRateAreaId()
+				street.setAgency(agency);
+				street.setName(s.getStreetReference());
+				street.setPolyline(PolylineEncoder.encode(s.getGeometry().getPoints()));
+				PointBean start = s.getGeometry().getPoints().get(0);
+				street.setPosition(new double[]{start.getLat(),start.getLng()});
+				if (s.getFreeParkSlotNumber() != null) {
+					street.setSlotsFree(s.getFreeParkSlotNumber());
+				}
+				if (s.getPaidSlotNumber() != null) {
+					street.setSlotsPaying(s.getPaidSlotNumber());
+				} else if (s.getSlotNumber() != null) {
+					street.setSlotsPaying(s.getSlotNumber());
+				}
+				if (s.getTimedParkSlotNumber() != null){
+					street.setSlotsTimed(s.getTimedParkSlotNumber());
+				}
+				//street.setSlotsUnavailable(via.getReservedSlotNumber());
+				saveOrUpdateStreet(street);
+			}
+			for (String id : oldIds) {
+				deleteObject(getLastObjectByIdAndAgency(Street.class.getCanonicalName(), id, agency), LOGIC_DELETION);
+			}
+		}
+	}
+	
+//	public List<Parking> getParkings(String agency) throws Exception { //Data
+//		return searchObjects(Parking.class, (Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
+//	}
+//	
+//	public List<Street> getStreets(String agency) throws Exception {
+//		logger.error(String.format("I am in getStreets 1 for agency %s", agency));
+//		return searchObjects(Street.class, (Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null, 
+//	}
+//	
+//	public List<Parking> getParkings(String agency, double lat, double lon, double radius) throws Exception {
+//		return searchObjects(Parking.class, new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+//	}
+//	public List<Street> getStreets(String agency, double lat, double lon, double radius) throws Exception {
+//		return searchObjects(Street.class, new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+//	}
+	
+	public List<Parking> getParkings(String agency) throws Exception { //Data
+		return searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
+	}
+	
+	public List<Parking> getParkings(String agency, double lat, double lon, double radius) throws Exception {
+		return searchParkings(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+	}
+	
+	public List<Street> getStreets(String agency) throws Exception {
+		//logger.error(String.format("I am in getStreets 1 for agency %s", agency));
+		return searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null, 
+	}
+	
+	public List<Street> getStreets(String agency, double lat, double lon, double radius) throws Exception {
+		return searchStreets(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+	}
+	
+	
+	public void saveOrUpdateStreet(Street s) throws Exception {
+		LastGeoObjectVersionBean oldObj = null;
+		try {
+			oldObj = getLastObjectByIdAndAgency(Street.class.getCanonicalName(), s.getId(), s.getAgency());
+			Street old = castStreetJSONToObject(oldObj.getContent());
+			//Street old = oldObj.getContent();
+			old.setAgency(s.getAgency());
+			old.setSlotsFree(s.getSlotsFree());
+			old.setSlotsPaying(s.getSlotsPaying());
+			old.setSlotsTimed(s.getSlotsTimed());
+			old.setName(s.getName());
+			old.setPolyline(s.getPolyline());
+			old.setPosition(s.getPosition());
+			old.setDescription(s.getDescription());
+			if(s.getPosition() != null && s.getPosition().length > 0){
+				oldObj.setLocation(s.getPosition());
+			}
+			oldObj.setUpdateTime(System.currentTimeMillis());
+			oldObj.setContent(old.toJSON());
+		} catch (NotFoundException e) {
+			oldObj = new LastGeoObjectVersionBean();
+			oldObj.setId(s.getId());
+			oldObj.setType(s.getClass().getCanonicalName());
+			oldObj.setUpdateTime(System.currentTimeMillis());
+			oldObj.setContent(s.toJSON());
+			if(s.getPosition() != null && s.getPosition().length > 0){
+				oldObj.setLocation(s.getPosition());
+			}
+			oldObj.setAgency(s.getAgency());
+		}
+		storeObject(oldObj);
+	}
+	public void saveOrUpdateParking(Parking p) throws Exception {
+		LastGeoObjectVersionBean oldObj = null;
+		try {
+			oldObj = getLastObjectByIdAndAgency(Parking.class.getCanonicalName(), p.getId(), p.getAgency());
+			Parking old = castParkingJSONToObject(oldObj.getContent());
+			//Parking old = oldObj.getContent();
+			old.setName(p.getName());
+			old.setAgency(p.getAgency());
+			old.setPosition(p.getPosition());
+			old.setDescription(p.getDescription());
+			old.setSlotsTotal(p.getSlotsTotal());
+			if(p.getPosition() != null && p.getPosition().length > 0){
+				oldObj.setLocation(p.getPosition());
+			}
+			oldObj.setUpdateTime(System.currentTimeMillis());
+			oldObj.setContent(old.toJSON());
+		} catch (NotFoundException e) {
+			oldObj = new LastGeoObjectVersionBean();
+			oldObj.setId(p.getId());
+			oldObj.setType(p.getClass().getCanonicalName());
+			oldObj.setUpdateTime(System.currentTimeMillis());
+			oldObj.setContent(p.toJSON());
+			if(p.getPosition() != null && p.getPosition().length > 0){
+				oldObj.setLocation(p.getPosition());
+			}
+			oldObj.setAgency(p.getAgency());
+		}
+		storeObject(oldObj);
+	}
+	
+	public void updateStreetData(Street s, String agencyId, String authorId) throws Exception, NotFoundException {
+		LastGeoObjectVersionBean oldObj = getLastObjectByIdAndAgency(Street.class.getCanonicalName(), s.getId(), agencyId);
+		Street old = castStreetJSONToObject(oldObj.getContent());
+		//Street old = (Street)oldObj.getContent();
+		old.setSlotsFree(s.getSlotsFree());
+		old.setSlotsOccupiedOnFree(s.getSlotsOccupiedOnFree());
+		old.setSlotsPaying(s.getSlotsPaying());
+		old.setSlotsOccupiedOnPaying(s.getSlotsOccupiedOnPaying());
+		old.setSlotsTimed(s.getSlotsTimed());
+		old.setSlotsUnavailable(s.getSlotsUnavailable());
+		long currTime = System.currentTimeMillis();
+		//----- Here I have to store data in dataLogBean -----
+		//StreetLog sl = new StreetLog();
+		//sl.setAuthor(authorId);
+		//sl.setTime(System.currentTimeMillis());
+		//sl.setValue(old);
+		//logMongoStorage.storeLog(sl);
+		// ----------------------------------------------------
+		LastChange lc = new LastChange();
+		lc.setAuthor(authorId);
+		lc.setTime(currTime);
+		old.setLastChange(lc);
+		//oldObj.setVersion(getLastVersion(oldObj.getId()));
+		oldObj.setUpdateTime(currTime);
+		storeObject(oldObj);
+	}
+	
+	public void updateDynamicStreetData(Street s, String agencyId, String authorId) throws Exception, NotFoundException {
+		long currTime = System.currentTimeMillis();
+		dynamicManager.editStreetAux(s, currTime, agencyId, authorId);
+	}
+	
+	public void updateParkingData(Parking object, String agencyId, String authorId) throws Exception, NotFoundException {
+		LastGeoObjectVersionBean oldObj = getLastObjectByIdAndAgency(Parking.class.getCanonicalName(), object.getId(), agencyId);
+		Parking old = castParkingJSONToObject(oldObj.getContent());
+		//Parking old = (Parking)oldObj.getContent();
+		old.setSlotsOccupiedOnTotal(object.getSlotsOccupiedOnTotal());
+		old.setSlotsTotal(object.getSlotsTotal());
+		old.setSlotsUnavailable(object.getSlotsUnavailable());
+		long currTime = System.currentTimeMillis();
+		//----- Here I have to store data in dataLogBean -----
+		//ParkingLog sl = new ParkingLog();
+		//sl.setAuthor(authorId);
+		//sl.setTime(System.currentTimeMillis());
+		//sl.setValue(old);
+		//logMongoStorage.storeLog(sl);
+		// ----------------------------------------------------
+		LastChange lc = new LastChange();
+		lc.setAuthor(authorId);
+		lc.setTime(currTime);
+		old.setLastChange(lc);
+		//oldObj.setVersion(getLastVersion(oldObj.getId()));
+		oldObj.setUpdateTime(currTime);
+		storeObject(oldObj);
+	}
+	
+	public void updateDynamicParkingData(Parking object, String agencyId, String authorId) throws Exception, NotFoundException {
+		long currTime = System.currentTimeMillis();
+		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId);
+	}
+	
+	public List<DataLogBean> getStreetLogsByIdDyn(String id, String agency, int count) {
+		return getLogsById(id, agency, count, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+	}
+	public List<DataLogBean> getParkingLogsByIdDyn(String id, String agency, int count) {
+		return getLogsById(id, agency, count, Parking.class.getCanonicalName());
+	}
+
+	private List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
+		return dynamicManager.getLogsById(id, agency, count, type);
+	}
+	
+	public List<DataLogBean> getLogsByAuthorDyn(String authorId, String agency, int count) {
+		return dynamicManager.getLogsByAuthor(authorId, agency, count);
+	}
+	
+	// -------------------- Methods from geoStorage ---------------------------
+
+	public LastGeoObjectVersionBean getLastObjectByIdAndAgency(String type, String id, String agency) throws Exception, NotFoundException {
+		Query query = Query.query(
+				Criteria.where("content._id").is(id)
+				.and("content.agency").is(agency)
+				.and("type").is(type));
+		LastGeoObjectVersion res = mongodb.findOne(query, LastGeoObjectVersion.class);
+		//LastGeoObjectVersion res = mongodb.findById(id, LastGeoObjectVersion.class);
+		if (res == null) throw new NotFoundException();
+		//return ModelConverter.convert(res, LastGeoObjectVersionBean.class);
+		return ModelConverter.toLastGeoObjectBean(res);
+	}
+	
+//	public <T extends GeoObject> LastGeoObjectVersionBean<T> getObjectByIdAndAgency(Class<T> cls, String id, String agency) throws Exception, NotFoundException {
+//		//Query query = Query.query(
+//		//		Criteria.where("content._id").is(id)
+//		//		.and("content.agency").is(agency)
+//		//		.and("type").is(cls.getCanonicalName()));
+//		//LastGeoObjectVersion res = mongodb.findOne(query, LastGeoObjectVersion.class);
+//		LastGeoObjectVersion res = mongodb.findById(id, LastGeoObjectVersion.class);
+//		if (res == null) throw new NotFoundException();
+//		//return ModelConverter.convert(res, LastGeoObjectVersionBean.class);
+//		return ModelConverter.toLastGeoObjectBean(res);
+//	}
+	
+	public <T extends GeoObject> Street getStreetByIdAndAgency(String type, String id, String agency) throws Exception, NotFoundException {
+		LastGeoObjectVersionBean res = getLastObjectByIdAndAgency(type, id, agency);
+		JSONObject jsonStreet = new JSONObject(res.getContent());
+		Street s = new Street();
+		s.setId(jsonStreet.getString("id"));
+		s.setAgency(jsonStreet.getString("agency"));
+		s.setSlotsFree(Integer.valueOf(jsonStreet.getString("slotsFree")));
+		s.setSlotsPaying(Integer.valueOf(jsonStreet.getString("slotsPaying")));
+		s.setSlotsTimed(Integer.valueOf(jsonStreet.getString("slotsTimed")));
+		s.setName(jsonStreet.getString("name"));
+		s.setPolyline(jsonStreet.getString("polyline"));
+		String pos = jsonStreet.getString("position");
+		if(pos != null && pos.length() > 0){
+			String[] pos_string = pos.split(",");
+			double[] pos_double = new double[2];
+			pos_double[0] = Double.valueOf(pos_string[0]);
+			pos_double[1] = Double.valueOf(pos_string[1]);
+			s.setPosition(pos_double);
+		}
+		s.setDescription(jsonStreet.getString("description"));
+		
+		return s;
+	}
+	
+//	public <T extends GeoObject> void storeObject(LastGeoObjectVersionBean<T> object) throws Exception {
+//		LastGeoObjectVersion<T> obj = ModelConverter.toLastGeoObject(object);//ModelConverter.convert(object, LastGeoObjectVersion.class);
+//		try {
+//			storeObject(object, getLastVersion(obj.getId()));
+//		} catch (Exception e) {
+//			throw new Exception("Failed to store data", e);
+//		}
+//	}
+//	
+//	protected <T extends GeoObject> void storeObject(LastGeoObjectVersionBean<T> object, long version) throws InstantiationException, IllegalAccessException {
+//		LastGeoObjectVersion<T> obj = ModelConverter.toLastGeoObject(object);//ModelConverter.convert(object, LastGeoObjectVersion.class);
+//		//obj.setVersion(version);
+//		if (obj.getId() == null) {
+//			obj.setId(new ObjectId().toString());
+//		}
+//		mongodb.save(obj);
+//	}
+	
+	public void storeObject(LastGeoObjectVersionBean object) throws Exception {
+		LastGeoObjectVersion obj = ModelConverter.toLastGeoObject(object);//ModelConverter.convert(object, LastGeoObjectVersion.class);
+		try {
+			storeObject(object, getLastVersion(obj.getId()));
+		} catch (Exception e) {
+			throw new Exception("Failed to store data", e);
+		}
+	}
+	
+	protected void storeObject(LastGeoObjectVersionBean object, long version) throws InstantiationException, IllegalAccessException {
+		LastGeoObjectVersion obj = ModelConverter.toLastGeoObject(object);//ModelConverter.convert(object, LastGeoObjectVersion.class);
+		//obj.setVersion(version);
+		if (obj.getId() == null) {
+			obj.setId(new ObjectId().toString());
+		}
+		mongodb.save(obj);
+	}
+	
+//	public <T extends GeoObject> void deleteObject(LastGeoObjectVersionBean<T> object, int type) throws Exception {
+//		LastGeoObjectVersion<T> obj = ModelConverter.toLastGeoObject(object); //ModelConverter.convert(object, LastGeoObjectVersion.class);
+//		if(type == PHYSICS_DELETION){
+//			mongodb.remove(obj);
+//		} else {
+//			obj.setDeleted(true);
+//			mongodb.save(obj);
+//		}
+//	}
+	
+	public void deleteObject(LastGeoObjectVersionBean object, int type) throws Exception {
+		LastGeoObjectVersion obj = ModelConverter.toLastGeoObject(object); //ModelConverter.convert(object, LastGeoObjectVersion.class);
+		if(type == PHYSICS_DELETION){
+			mongodb.remove(obj);
+		} else {
+			obj.setDeleted(true);
+			mongodb.save(obj);
+		}
+	}
+	
+	public <T extends GeoObject> List<T> searchObjects(Class<T> inCls, Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
+		logger.error(String.format("Search Object %s", inCls.toString()));
+		return searchObjects(inCls, circle, inCriteria, 0, 0);//circle,
+	}
+	
+	public <T extends GeoObject> List<T> searchObjects(Class<T> inCls, Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle
+		Criteria criteria = createSearchCriteria(inCls, circle, inCriteria); //circle,
+		Query query = Query.query(criteria);
+		if (limit > 0) query.limit(limit);
+		if (skip > 0) query.skip(skip);
+				
+		Class<T> cls = inCls;
+		if (cls == null) cls = (Class<T>)GeoObject.class;
+
+		logger.error(String.format("Search Object limit %s, skip %s, query %s, class %s", limit, skip, query.getHint(), cls));
+		//List<T> listaObj = mongodb.find(query, cls);
+		List<T> listaObj = new ArrayList<T>();
+		List<LastGeoObjectVersion> res = mongodb.find(query, LastGeoObjectVersion.class);
+		for(int i = 0; i < res.size(); i++){
+			//logger.error(String.format("street found : %s", res.get(i).toString()));
+			//listaObj.add(castStreetJSONToObject(res.get(i).getContent())); //(T)res.get(i).getContent()
+		}
+		
+		//List<LastGeoObjectVersion> res = mongodb.findAll(LastGeoObjectVersion.class);
+		//for(int i = 0; i < res.size(); i++){
+			//logger.error(String.format("street found : %s", res.get(i).toString()));
+		//	if(res.get(i).getType().compareTo(cls.getCanonicalName()) == 0 && !res.get(i).isDeleted() && res.get(i).getAgency().compareTo(inCriteria.get("agency").toString()) == 0 ){
+		//		listaObj.add((T)res.get(i).getContent()); //castStreetJSONToObject(res.get(i).getContent())
+		//	}
+		//}
+		
+		return listaObj; //find(query, cls);
+	}
+	
+	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
+		return searchStreets(circle, inCriteria, 0, 0);//circle,
+	}
+	
+	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle
+		//Criteria criteria = createSearchCriteria(type, circle, inCriteria); //circle,
+		//Query query = Query.query(criteria);
+		//if (limit > 0) query.limit(limit);
+		//if (skip > 0) query.skip(skip);
+
+		List<Street> listaObj = new ArrayList<Street>();
+		storageManager.setAppId(inCriteria.get("agency").toString());
+		List<StreetBean> myStreets = storageManager.getAllStreets();
+		for(int i = 0; i < myStreets.size(); i++){
+			Street s = castPMStreetBeanToStreet(myStreets.get(i));
+			if(circle != null){
+				// here I have to create a specific filter for position distances from circle center and distances < radius
+				logger.error(String.format("Circle params: lat:%s, lng:%s, radius:%s", circle.getCenter().getX(), circle.getCenter().getY(), circle.getRadius()));
+				logger.error(String.format("Streets: lat:%s, lng:%s", s.getPosition()[0], s.getPosition()[1]));
+				double dist = distance(circle.getCenter().getX(), circle.getCenter().getY(), s.getPosition()[0], s.getPosition()[1],'K');
+				logger.error(String.format("distance: %s", dist));
+				if(dist  <= circle.getRadius()){
+					listaObj.add(s);
+				}
+			} else {
+				listaObj.add(s);
+			}
+		}
+		logger.error(String.format("Streets found: %s", listaObj.size()));
+		
+		return listaObj; //find(query, cls);
+	}
+	
+	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
+		return searchParkings(circle, inCriteria, 0, 0);//circle,
+	}
+	
+	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle
+//		Criteria criteria = createSearchCriteria(type, circle, inCriteria); //circle,
+//		Query query = Query.query(criteria);
+//		if (limit > 0) query.limit(limit);
+//		if (skip > 0) query.skip(skip);
+		
+		//logger.error(String.format("Search Parking limit %s, skip %s, query %s, class %s", limit, skip, query.getHint(), type));
+		
+		List<Parking> listaObj = new ArrayList<Parking>();
+		storageManager.setAppId(inCriteria.get("agency").toString());
+		List<ParkingStructureBean> myStructures = storageManager.getAllParkingStructure();
+		
+		for(int i = 0; i < myStructures.size(); i++){
+			Parking p = castPMStructureBeanToParking(myStructures.get(i));
+			if(circle != null){
+				// here I have to create a specific filter for position distances from circle center and distances < radius
+				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), p.getPosition()[0], p.getPosition()[1],'K') <= circle.getRadius()){
+					listaObj.add(p);
+				}
+			} else {
+				listaObj.add(p);
+			}
+		}
+		
+		return listaObj; //find(query, cls);
+	}
+	
+	private static <T> Criteria createSearchCriteria(Class<T> cls, Circle circle, Map<String, Object> inCriteria) { //Circle circle
+		Criteria criteria = new Criteria();
+		if (cls != null) {
+			criteria.and("type").is(cls.getCanonicalName());
+		}
+		criteria.and("deleted").is(false);
+		if (inCriteria != null) {
+			for (String key : inCriteria.keySet()) {
+				//criteria.and("content."+key).is(inCriteria.get(key));
+				criteria.and(""+key).is(inCriteria.get(key));
+			}
+		}
+		if (circle != null) {
+			criteria.and("location").within(circle);
+		}
+		return criteria;
+	}
+	
+	private static Criteria createSearchCriteria(String cls, Circle circle, Map<String, Object> inCriteria) { //Circle circle
+		Criteria criteria = new Criteria();
+		if (cls != null) {
+			criteria.and("type").is(cls);
+		}
+		criteria.and("deleted").is(false);
+		if (inCriteria != null) {
+			for (String key : inCriteria.keySet()) {
+				//criteria.and("content."+key).is(inCriteria.get(key));
+				criteria.and(""+key).is(inCriteria.get(key));
+			}
+		}
+		if (circle != null) {
+			criteria.and("location").within(circle);
+		}
+		return criteria;
+	}
+	
+	protected <T extends GeoObject> List<LastGeoObjectVersion> find(Query query, Class<T> cls) {
+		List<LastGeoObjectVersion> result = mongodb.find(query, LastGeoObjectVersion.class); 
+		return result;
+	}
+	
+	// ------------------------------------------------------------------------
+	
+	private <T> T findById(String id, Class<T> javaClass)
+			throws NotFoundException {
+		T result = mongodb.findById(id, javaClass);
+		if (result == null) {
+			throw new NotFoundException();
+		}
+		return result;
+	}
+	
+	private Long getLastVersion(String objId){
+		Long version = new Long(1);
+//		Query q = new Query();
+//		q.addCriteria(Criteria.where("objId").is(objId));
+//		q.sort().on("updateTime", Order.DESCENDING);
+//		//q.with(new Sort(Sort.Direction.DESC, "updateTime"));
+//		List<LastGeoObjectVersionBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.auxiliary.data.LastGeoObjectVersionBean.class);
+//		if(result != null && result.size() > 0){
+//			version = result.get(0).getVersion();
+//			//logger.info(String.format("Version finded: %d", version ));
+//		}
+		return version;
+	}
+	
+	private Street castStreetJSONToObject(String value){
+		logger.error(String.format("Street to be casted : %s", value));
+		JSONObject jsonStreet = new JSONObject(value);
+
+		Street s = new Street();
+		s.setId(jsonStreet.getString("id"));
+		s.setAgency(jsonStreet.getString("agency"));
+		s.setSlotsFree(Integer.valueOf(jsonStreet.getInt("slotsFree")));
+		s.setSlotsPaying(Integer.valueOf(jsonStreet.getInt("slotsPaying")));
+		s.setSlotsTimed(Integer.valueOf(jsonStreet.getInt("slotsTimed")));
+		s.setName(jsonStreet.getString("name"));
+		s.setPolyline(jsonStreet.getString("polyline"));
+		//String pos = jsonStreet.getString("position");
+		//if(pos != null && pos.length() > 0){
+		//	String[] pos_string = pos.split(",");
+		//	double[] pos_double = new double[2];
+		//	pos_double[0] = Double.valueOf(pos_string[0]);
+		//	pos_double[1] = Double.valueOf(pos_string[1]);
+		//	s.setPosition(pos_double);
+		//}
+		JSONArray pos = jsonStreet.getJSONArray("position");//getString("position");
+		if(pos != null && pos.length() > 0){
+			//String[] pos_string = pos.split(",");
+			double[] pos_double = new double[2];
+			pos_double[0] = Double.valueOf(pos.getDouble(0));	//pos_string[0]
+			pos_double[1] = Double.valueOf(pos.getDouble(1));	//pos_string[1]
+			s.setPosition(pos_double);
+		}
+		s.setDescription(jsonStreet.getString("description"));
+		return s;
+	}
+	
+	private Street castPMStreetBeanToStreet(StreetBean street){
+		//logger.error(String.format("Street to be casted : %s", street.toJSON()));
+
+		Street s = new Street();
+		s.setId("street@" + street.getId_app() + "@" + street.getId());
+		s.setAgency(street.getId_app());
+		s.setSlotsFree(street.getFreeParkSlotNumber());
+		s.setSlotsPaying(street.getPaidSlotNumber());
+		s.setSlotsTimed(street.getTimedParkSlotNumber());
+		s.setName(street.getStreetReference());
+		if(street.getGeometry()!= null && street.getGeometry().getPoints() != null && street.getGeometry().getPoints().size() > 0){
+			s.setPolyline(PolylineEncoder.encode(street.getGeometry().getPoints()));
+			PointBean start = street.getGeometry().getPoints().get(0);
+			s.setPosition(new double[]{start.getLat(),start.getLng()});
+		}
+		s.setDescription(street.getStreetReference());
+		s.setAreaId(street.getRateAreaId());
+		return s;
+	}
+	
+	private Parking castPMStructureBeanToParking(ParkingStructureBean park){
+		//logger.error(String.format("Park to be casted : %s", park.toJSON()));
+		Parking p = new Parking();
+		p.setId("parking@" + park.getId_app() + "@" + park.getId());
+		p.setAgency(park.getId_app());
+		p.setSlotsTotal(park.getSlotNumber());
+		p.setName(park.getName());
+		if(park.getGeometry()!= null){
+			p.setPosition(new double[]{park.getGeometry().getLat(), park.getGeometry().getLng()});
+		}
+		p.setDescription(park.getFee() + ", " + park.getManagementMode());
+		return p;
+	}
+	
+	private Parking castParkingJSONToObject(String value){
+		JSONObject jsonParking = new JSONObject(value);	
+		Parking p = new Parking();
+		p.setId(jsonParking.getString("id"));
+		p.setAgency(jsonParking.getString("agency"));
+		p.setSlotsTotal(Integer.valueOf(jsonParking.getInt("slotsTotal")));
+		p.setName(jsonParking.getString("name"));
+		JSONArray pos = jsonParking.getJSONArray("position");//getString("position");
+		if(pos != null && pos.length() > 0){
+			//String[] pos_string = pos.split(",");
+			double[] pos_double = new double[2];
+			pos_double[0] = Double.valueOf(pos.getDouble(0));	//pos_string[0]
+			pos_double[1] = Double.valueOf(pos.getDouble(1));	//pos_string[1]
+			p.setPosition(pos_double);
+		}
+		p.setDescription(jsonParking.getString("description"));
+		return p;
+	}
+	
+	private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
+		double theta = lon1 - lon2;
+		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));
+		dist = Math.acos(dist);
+		dist = rad2deg(dist);
+		dist = dist * 60 * 1.1515;
+		if (unit == 'K') {
+			dist = dist * 1.609344;
+		} else if (unit == 'N') {
+			dist = dist * 0.8684;
+		}
+		return (dist);
+	}
+	
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	/*::  This function converts decimal degrees to radians             :*/
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	private double deg2rad(double deg) {
+		return (deg * Math.PI / 180.0);
+	}
+		 
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	/*::  This function converts radians to decimal degrees             :*/
+	/*:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::*/
+	private double rad2deg(double rad) {
+		return (rad * 180 / Math.PI);
+	}
+	
+	
+
+
+}

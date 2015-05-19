@@ -15,6 +15,11 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.GeoObject;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.LogObject;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkingLog;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.StreetLog;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
@@ -26,6 +31,7 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.model.DataLog;
 import it.smartcommunitylab.parking.management.web.model.HistoricalEaster;
 import it.smartcommunitylab.parking.management.web.model.ItaHolidays;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
@@ -36,11 +42,14 @@ import it.smartcommunitylab.parking.management.web.model.Zone;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
@@ -177,6 +186,25 @@ public class DynamicManager {
 		return result;
 	}
 
+	public StreetBean findStreet(String streetId) {
+		List<RateArea> aree = mongodb.findAll(RateArea.class);
+		Street s = new Street();
+		for (RateArea area : aree) {
+			if (area.getStreets() != null) {
+				s.setId(streetId);
+				int index = area.getStreets().indexOf(s);
+				if (index != -1) {
+					Street st = area.getStreets().get(index);
+					StreetBean result = ModelConverter.toStreetBean(area, st);
+					//StreetBean result = ModelConverter.convert(area.getStreets().get(index), StreetBean.class);
+					//result.setRateAreaId(area.getId());
+					return result;
+				}
+			}
+		}
+		return null;
+	}
+	
 	public StreetBean findStreet(String parkingMeterId, Long timestamp) {
 		List<RateArea> aree = mongodb.findAll(RateArea.class);
 		Street s = new Street();
@@ -251,7 +279,7 @@ public class DynamicManager {
 					DataLogBean dl = new DataLogBean();
 					dl.setObjId("@" + temp.getId_app() + "@street@" + vb.getId());
 					dl.setType("street");
-					dl.setUpdateTime(timestamp);
+					dl.setTime(timestamp);
 					// set new fields ---------
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(timestamp);
@@ -265,9 +293,9 @@ public class DynamicManager {
 					//---------------------------
 					Integer oldVersion = getLastVersion(dl.getObjId());
 					dl.setVersion(new Integer(oldVersion.intValue() + 1));
-					if(temp.getGeometry() != null){
-						dl.setLocation(temp.getGeometry().getPointBeans().get(0));	// I get the first element of the line
-					}
+					//if(temp.getGeometry() != null){
+					//	dl.setLocation(temp.getGeometry().getPointBeans().get(0));	// I get the first element of the line
+					//}
 					dl.setDeleted(false);
 					//dl.setContent(temp.toJSON());
 					@SuppressWarnings("unchecked")
@@ -282,6 +310,84 @@ public class DynamicManager {
 		return vb;
 	}
 
+	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId) throws DatabaseException {
+		String[] ids = s.getId().split("@");
+		String pmId = ids[2];
+		s.setUpdateTime(timestamp);
+		s.setUser(Integer.valueOf(authorId));
+		
+		RateArea area = null;
+		if((s.getAreaId() != null) && (s.getAreaId().compareTo("") != 0)){
+			area = mongodb.findById(s.getAreaId(), RateArea.class);
+		} else {
+			List<RateArea> aree = mongodb.findAll(RateArea.class);
+			Street myS = new Street();
+			for (RateArea a : aree) {
+				if (a.getStreets() != null) {
+					myS.setId(pmId);
+					int index = a.getStreets().indexOf(s);
+					if (index != -1) {
+						area = a;
+					}
+				}
+			}
+		}
+		if (area.getStreets() != null) {
+			for (Street temp : area.getStreets()) {
+				if (temp.getId().equals(pmId)) {
+//					temp.setSlotNumber(vb.getSlotNumber());
+//					temp.setFreeParkSlotNumber(vb.getFreeParkSlotNumber());
+//					temp.setFreeParkSlotSignNumber(vb.getFreeParkSlotSignNumber());
+//					temp.setUnusuableSlotNumber(vb.getUnusuableSlotNumber());
+//					temp.setHandicappedSlotNumber(vb.getHandicappedSlotNumber());
+//					temp.setStreetReference(vb.getStreetReference());
+//					temp.setTimedParkSlotNumber(vb.getTimedParkSlotNumber());
+//					temp.setSubscritionAllowedPark(vb.isSubscritionAllowedPark());
+//					temp.getGeometry().getPoints().clear();
+//					for (PointBean pb : vb.getGeometry().getPoints()) {
+//						temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
+//					}
+//					temp.setZones(vb.getZoneBeanToZone());
+					// Dynamic data
+					temp.setFreeParkSlotOccupied(s.getSlotsOccupiedOnFree());
+					//temp.setFreeParkSlotSignOccupied(s.getSlotsOccupiedOnFree());
+					temp.setTimedParkSlotOccupied(s.getSlotsOccupiedOnTimed());
+					temp.setPaidSlotOccupied(s.getSlotsOccupiedOnPaying());
+					temp.setLastChange(timestamp);
+					mongodb.save(area);
+					
+					DataLogBean dl = new DataLogBean();
+					dl.setObjId(s.getId());
+					dl.setType(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+					dl.setTime(timestamp);
+					dl.setAuthor(authorId);
+					// set new fields ---------
+					Calendar cal = Calendar.getInstance();
+					cal.setTimeInMillis(timestamp);
+					dl.setYear(cal.get(Calendar.YEAR) + "");
+					dl.setMonth((cal.get(Calendar.MONTH) + 1) + "");
+					int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+					dl.setWeek_day(dayOfWeek + "");
+					dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
+					boolean isHolyday = isAHoliday(cal, temp.getId_app());
+					dl.setHolyday(isHolyday);
+					//---------------------------
+					Integer oldVersion = getLastVersion(dl.getObjId());
+					dl.setVersion(new Integer(oldVersion.intValue() + 1));
+					dl.setDeleted(false);
+					//dl.setContent(temp.toJSON());
+					@SuppressWarnings("unchecked")
+					Map<String,Object> map = ModelConverter.convert(s, Map.class);
+					dl.setContent(map);
+					//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
+					mongodb.save(dl);
+					logger.error(String.format("Updated street: %s", temp.toString()));
+					break;
+				}
+			}
+		}
+	}
+	
 	// BikePoint Methods
 	public List<BikePointBean> getAllBikePoints(Long timestamp) {
 		List<BikePointBean> result = new ArrayList<BikePointBean>();
@@ -312,7 +418,7 @@ public class DynamicManager {
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + bike.getId_app() + "@bikePoint@" + bp.getId());
 		dl.setType("bikePoint");
-		dl.setUpdateTime(timestamp);
+		dl.setTime(timestamp);
 		// set new fields -----------
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(timestamp);
@@ -326,12 +432,12 @@ public class DynamicManager {
 		//---------------------------
 		Integer oldVersion = getLastVersion(dl.getObjId());
 		dl.setVersion(new Integer(oldVersion.intValue() + 1));
-		if(bike.getGeometry() != null){
-			PointBean point = new PointBean();
-			point.setLat(bike.getGeometry().getLat());
-			point.setLng(bike.getGeometry().getLng());
-			dl.setLocation(point);
-		}
+		//if(bike.getGeometry() != null){
+		//	PointBean point = new PointBean();
+		//	point.setLat(bike.getGeometry().getLat());
+		//	point.setLng(bike.getGeometry().getLng());
+		//	dl.setLocation(point);
+		//}
 		dl.setDeleted(false);
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(bike, Map.class);
@@ -381,7 +487,7 @@ public class DynamicManager {
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + entity.getId_app() + "@parkingStructure@" + entityBean.getId());
 		dl.setType("parkingStructure");
-		dl.setUpdateTime(timestamp);
+		dl.setTime(timestamp);
 		// set new fields ---------
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(timestamp);
@@ -395,12 +501,12 @@ public class DynamicManager {
 		//---------------------------
 		Integer oldVersion = getLastVersion(dl.getObjId());
 		dl.setVersion(new Integer(oldVersion.intValue() + 1));
-		if(entity.getGeometry() != null){
-			PointBean point = new PointBean();
-			point.setLat(entity.getGeometry().getLat());
-			point.setLng(entity.getGeometry().getLng());
-			dl.setLocation(point);
-		}
+		//if(entity.getGeometry() != null){
+		//	PointBean point = new PointBean();
+		//	point.setLat(entity.getGeometry().getLat());
+		//	point.setLng(entity.getGeometry().getLng());
+		//	dl.setLocation(point);
+		//}
 		dl.setDeleted(false);
 		//dl.setContent(entity.toJSON());
 		@SuppressWarnings("unchecked")
@@ -410,6 +516,93 @@ public class DynamicManager {
 		
 		return entityBean;
 	}
+	
+	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId) throws NotFoundException {
+		String[] ids = p.getId().split("@");
+		String pmId = ids[2];
+		p.setUpdateTime(timestamp);
+		p.setUser(Integer.valueOf(authorId));
+		
+		ParkingStructure entity = findById(pmId,ParkingStructure.class);
+//		entity.setFee(entityBean.getFee());
+//		entity.setManagementMode(entityBean.getManagementMode());
+//		entity.setName(entityBean.getName());
+//		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean.getPaymentMode()));
+//		entity.setPhoneNumber(entityBean.getPhoneNumber());
+//		entity.setSlotNumber(entityBean.getSlotNumber());
+//		entity.setStreetReference(entityBean.getStreetReference());
+//		entity.setTimeSlot(entityBean.getTimeSlot());
+//		entity.getGeometry().setLat(entityBean.getGeometry().getLat());
+//		entity.getGeometry().setLng(entityBean.getGeometry().getLng());
+		
+		// Dynamic data
+		entity.setSlotOccupied(p.getSlotsOccupiedOnTotal());
+		entity.setUnusuableSlotNumber(p.getSlotsUnavailable());
+		entity.setLastChange(timestamp);
+		
+		mongodb.save(entity);
+		
+		DataLogBean dl = new DataLogBean();
+		dl.setObjId(p.getId());
+		dl.setType(Parking.class.getCanonicalName());
+		dl.setTime(timestamp);
+		dl.setAuthor(authorId);
+		// set new fields ---------
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp);
+		dl.setYear(cal.get(Calendar.YEAR) + "");
+		dl.setMonth((cal.get(Calendar.MONTH) + 1) + "");
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		dl.setWeek_day(dayOfWeek + "");
+		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
+		boolean isHolyday = isAHoliday(cal, entity.getId_app());
+		dl.setHolyday(isHolyday);
+		//---------------------------
+		Integer oldVersion = getLastVersion(dl.getObjId());
+		dl.setVersion(new Integer(oldVersion.intValue() + 1));
+		//if(entity.getGeometry() != null){
+		//	PointBean point = new PointBean();
+		//	point.setLat(entity.getGeometry().getLat());
+		//	point.setLng(entity.getGeometry().getLng());
+		//	dl.setLocation(point);
+		//}
+		dl.setDeleted(false);
+		//dl.setContent(entity.toJSON());
+		@SuppressWarnings("unchecked")
+		Map<String,Object> map = ModelConverter.convert(p, Map.class);
+		dl.setContent(map);
+		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
+		mongodb.save(dl);
+	}
+
+	
+	public List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
+		Query query = Query.query(Criteria.where("content.id").is(id).and("content.agency").is(agency)).limit(count);
+		query.sort().on("time", Order.DESCENDING);
+		//query.with(new Sort(Sort.Direction.DESC, "time"));
+		//return mongodb.find(query, DataLog.class);
+		List<DataLogBean> myLog = mongodb.find(query, DataLogBean.class);
+//		List<DataLogBean> myLogBean = new ArrayList<DataLogBean>();
+//		for(int i = 0; i < myLog.size(); i++){
+//			myLogBean.add(ModelConverter.convert(myLog.get(i), DataLogBean.class));
+//		}
+		return myLog;
+	}
+	
+	public List<DataLogBean> getLogsByAuthor(String authorId, String agency, int count) {
+		Query query = Query.query(Criteria.where("author").is(authorId).and("content.agency").is(agency)).limit(count);
+		query.sort().on("time", Order.DESCENDING);
+		//query.with(new Sort(Sort.Direction.DESC, "time"));
+		//List<DataLogBean> result = new ArrayList<DataLogBean>();
+		List<DataLogBean> resLog = new ArrayList<DataLogBean>();
+		resLog.addAll(mongodb.find(query, DataLogBean.class));
+//		for(int i = 0; i < resLog.size(); i++){
+//			result.add(ModelConverter.convert(resLog.get(i), DataLogBean.class));
+//		}
+		if (count < resLog.size()) return resLog.subList(0, count);
+		return resLog;
+	}
+	
 	
 	// --------------- For holidays query -----------------
 	private List<ItaHolidays> getAllHolydays(String appId){
@@ -475,6 +668,7 @@ public class DynamicManager {
 		Query q = new Query();
 		q.addCriteria(Criteria.where("objId").is(objId));
 		q.sort().on("updateTime", Order.DESCENDING);
+		//q.with(new Sort(Sort.Direction.DESC, "updateTime"));
 		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
 		if(result != null && result.size() > 0){
 			version = result.get(0).getVersion();

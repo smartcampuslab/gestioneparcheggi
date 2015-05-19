@@ -21,13 +21,12 @@ import java.util.Map;
 import org.springframework.data.mongodb.core.geo.Circle;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.model.GeoObject;
-import eu.trentorise.smartcampus.presentation.common.exception.DataException;
-import eu.trentorise.smartcampus.presentation.common.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 
 public interface GeoObjectSyncStorage {//extends BasicObjectSyncStorage {
 	
-	public <T extends GeoObject> List<T> searchObjects(Class<T> cls, Circle circle, Map<String, Object> criteria) throws DataException; 
-	public <T extends GeoObject> List<T> searchObjects(Class<T> cls, Circle circle, Map<String, Object> criteria, int limit, int skip) throws DataException; 
+	public <T extends GeoObject> List<T> searchObjects(Class<T> cls, Circle circle, Map<String, Object> criteria) throws Exception; //Circle circle, 
+	public <T extends GeoObject> List<T> searchObjects(Class<T> cls, Circle circle, Map<String, Object> criteria, int limit, int skip) throws Exception; //Circle circle, 
 
-	public <T extends GeoObject> T getObjectByIdAndAgency(Class<T> cls, String id, String agency) throws DataException, NotFoundException; 
+	public <T extends GeoObject> T getObjectByIdAndAgency(Class<T> cls, String id, String agency) throws Exception, NotFoundException; 
 }

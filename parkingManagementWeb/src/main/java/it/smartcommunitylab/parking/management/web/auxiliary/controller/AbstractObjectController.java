@@ -37,7 +37,7 @@ public class AbstractObjectController {
 	private static final String SEARCH_FILTER_PARAM = "filter";
 
 	@Autowired
-	protected GeoObjectSyncStorage storage;
+	//protected GeoObjectSyncStorage storage;
 
 	protected Log logger = LogFactory.getLog(this.getClass());
 
@@ -68,7 +68,7 @@ public class AbstractObjectController {
 			}
 			List<T> objects = null;
 
-			objects = storage.searchObjects((Class<T>) cls, circle, criteria,  filterObj.getLimit(), filterObj.getSkip());
+			//objects = storage.searchObjects((Class<T>) cls, circle, criteria,  filterObj.getLimit(), filterObj.getSkip());//circle,
 
 			if (objects != null) {
 				return objects;

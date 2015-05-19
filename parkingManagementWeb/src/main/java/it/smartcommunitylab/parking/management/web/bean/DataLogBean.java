@@ -22,9 +22,10 @@ public class DataLogBean {
 
 	private String id;
 	private String objId;
-	private PointBean location;
+	//private PointBean location;
 	private String type;
-	private Long updateTime;
+	private Long time;
+	private String author;
 	private Integer version;
 	private boolean deleted;
 	//new fields added in 12/5/2015 from MB
@@ -45,16 +46,16 @@ public class DataLogBean {
 		return objId;
 	}
 
-	public PointBean getLocation() {
-		return location;
-	}
+	//public PointBean getLocation() {
+	//	return location;
+	//}
 	
 	public String getType() {
 		return type;
 	}
 	
-	public Long getUpdateTime() {
-		return updateTime;
+	public Long getTime() {
+		return time;
 	}
 	
 	public Integer getVersion() {
@@ -65,10 +66,6 @@ public class DataLogBean {
 		return deleted;
 	}
 	
-//	public String getContent() {
-//		return content;
-//	}
-	
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -77,16 +74,16 @@ public class DataLogBean {
 		this.objId = objId;
 	}
 	
-	public void setLocation(PointBean location) {
-		this.location = location;
-	}
+	//public void setLocation(PointBean location) {
+	//	this.location = location;
+	//}
 	
 	public void setType(String type) {
 		this.type = type;
 	}
 	
-	public void setUpdateTime(Long updateTime) {
-		this.updateTime = updateTime;
+	public void setTime(Long time) {
+		this.time = time;
 	}
 	public void setVersion(Integer version) {
 		this.version = version;
@@ -104,9 +101,13 @@ public class DataLogBean {
 		this.content = content;
 	}
 	
-//	public void setContent(String content) {
-//		this.content = content;
-//	}
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
 	
 	// new setter and getter methods added in 12/5/2015 from MB
 	public String getYear() {
