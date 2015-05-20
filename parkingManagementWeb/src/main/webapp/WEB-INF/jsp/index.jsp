@@ -11,6 +11,7 @@
 <link href="css/colorpicker.css" rel="stylesheet" />
 <link href="css/bootstrap-slider.min.css" rel="stylesheet" />
 <link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="css/style.css" rel="stylesheet" />
 
 <!-- required libraries -->
 <script src="js/jquery.min.js"></script>

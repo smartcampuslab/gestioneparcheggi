@@ -19,8 +19,7 @@ var pm = angular.module('pm', [
 	'xeditable',
 	'dialogs',
 	'ui.bootstrap',
-	'base64',
-	'angularAwesomeSlider'
+	'base64'
 ]);
 
 pm.config(['$routeProvider', '$locationProvider',

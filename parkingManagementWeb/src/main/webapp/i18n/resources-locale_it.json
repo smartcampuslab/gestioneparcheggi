@@ -1022,5 +1022,47 @@
     "key": "street_paid_slot_db",
     "value": "a pagamento",
     "description": "Label campo posti a pagamento per oggetto strada in dashboard"
+}, {
+    "key": "time_vis",
+    "value": "Visualizzazione"
+}, {
+    "key": "vis_last_value",
+    "value": "Ultimo valore"
+}, {
+    "key": "vis_medium",
+    "value": "Valore medio"
+}, {
+    "key": "vis_medium_year",
+    "value": "Medio ultimo anno"
+}, {
+    "key": "vis_medium_month",
+    "value": "Medio ultimo mese"
+}, {
+    "key": "vis_medium_day",
+    "value": "Medio ultimo giorno"
+}, {
+    "key": "year_vis",
+    "value": "Anno"
+}, {
+    "key": "all_years_vis",
+    "value": "Tutti"
+}, {
+    "key": "month_vis",
+    "value": "Mese"
+}, {
+    "key": "day_vis",
+    "value": "Giorno"
+}, {
+    "key": "wd_vis",
+    "value": "Feriale"
+}, {
+    "key": "we_vis",
+    "value": "Festivo"
+}, {
+    "key": "custom_vis",
+    "value": "Seleziona"
+}, {
+    "key": "hour_vis",
+    "value": "Fascia oraria"
 }
 ]
