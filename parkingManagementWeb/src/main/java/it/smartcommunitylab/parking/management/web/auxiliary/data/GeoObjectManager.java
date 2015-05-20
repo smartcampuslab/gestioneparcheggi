@@ -70,10 +70,10 @@ public class GeoObjectManager {
 	@Autowired
 	private MongoTemplate mongodb;
 
-	@Value("${parking.agencies}")
+//	@Value("${parking.agencies}")
 	private String parkingAgencies;
 
-	@Value("${street.agencies}")
+//	@Value("${street.agencies}")
 	private String streetAgencies;
 	
 	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
