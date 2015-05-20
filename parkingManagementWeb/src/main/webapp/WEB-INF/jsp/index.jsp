@@ -6,7 +6,6 @@
 
 <link href="css/bootstrap.min.css" rel="stylesheet" />
 <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
-<link href="css/xeditable.css" rel="stylesheet" />
 <link href="css/modaldialog.css" rel="stylesheet" />
 <link href="css/colorpicker.css" rel="stylesheet" />
 <link href="css/bootstrap-slider.min.css" rel="stylesheet" />
@@ -14,14 +13,20 @@
 
 <!-- required libraries -->
 <script src="js/jquery.min.js"></script>
-<script src="js/bootstrap.min.js"></script>
 <script src="lib/angular.js"></script>
-<script src="js/localize.js" type="text/javascript"></script>
-<script src="js/dialogs.min.js" type="text/javascript"></script>
+<script src="lib/angular-route.js"></script>
+<script src="lib/angular-route.min.js"></script>
+<script src="lib/angular-sanitize.js"></script>
+<script src="lib/angular-resource.min.js"></script>
+<script src="lib/angular-cookies.min.js"></script>
+
+<script src="js/bootstrap.min.js"></script>
 <script src="lib/bootstrap-slider.min.js"></script>
 <script src="lib/slider.js"></script>
-<script src="lib/angular-route.js"></script>
-<script src="lib/angular-sanitize.js"></script>
+<script src="lib/bootstrap-colorpicker-module.js"></script>
+
+<script src="js/localize.js" type="text/javascript"></script>
+<script src="js/dialogs.min.js" type="text/javascript"></script>
 <script src="lib/ng-google-chart.js"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
@@ -42,20 +47,7 @@
 <script src="js/directives.js"></script>
 <script src="lib/ui-bootstrap-tpls.min.js"></script>
 
-<!-- <script type="text/javascript" src="js/jquery.min.js" /></script> -->
-<!-- <script type="text/javascript" src="js/jquery-ui.custom.min.js" ></script> -->
-<!-- <script type="text/javascript" src="js/ui.datepicker-it.js" ></script> -->
-
-<!-- optional libraries -->
-<script src="lib/angular-resource.min.js"></script>
-<script src="lib/angular-cookies.min.js"></script>
-<script src="lib/angular-route.min.js"></script>
-<script src="lib/xeditable.min.js"></script>
-<script src="lib/angular-base64.min.js"></script>
-<script src="lib/bootstrap-colorpicker-module.js"></script>
-
 <script src="lib/lodash.js"></script>
-<!-- <script src="lib/angular-google-maps.js"></script> -->
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
 <script src="lib/ng-map.min.js"></script>
 
@@ -71,46 +63,7 @@ var conf_app_id="<%=request.getAttribute("app_id")%>";
 var conf_map_center="<%=request.getAttribute("map_center")%>";
 var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
-
-<%-- Part for google analytics --%>
-
-  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
-
-  ga('create', 'UA-54947160-1', 'auto');
-  ga('send', 'pageview');
-
-	<%-- Prevent the backspace key from navigating back. --%>
-	$(document).unbind('keydown').bind('keydown', function (event) {
-	    var doPrevent = false;
-	    if (event.keyCode === 8) {
-	        var d = event.srcElement || event.target;
-	        if ((d.tagName.toUpperCase() === 'INPUT' && 
-	             (
-	                 d.type.toUpperCase() === 'TEXT' ||
-	                 d.type.toUpperCase() === 'NUMBER' ||
-	                 d.type.toUpperCase() === 'PASSWORD' || 
-	                 d.type.toUpperCase() === 'FILE' || 
-	                 d.type.toUpperCase() === 'EMAIL' || 
-	                 d.type.toUpperCase() === 'SEARCH' || 
-	                 d.type.toUpperCase() === 'DATE' )
-	             ) || 
-	             d.tagName.toUpperCase() === 'TEXTAREA') {
-	            doPrevent = d.readOnly || d.disabled;
-	        }
-	        else {
-	            doPrevent = true;
-	        }
-	    }
-	
-	    if (doPrevent) {
-	        event.preventDefault();
-	    }
-	});
-
-  </script>
+</script>
   
   <style>
   

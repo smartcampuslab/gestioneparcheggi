@@ -28,13 +28,16 @@ import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.model.DataLog;
-import it.smartcommunitylab.parking.management.web.model.HistoricalEaster;
-import it.smartcommunitylab.parking.management.web.model.ItaHolidays;
+import it.smartcommunitylab.parking.management.web.model.ObjectsHistoricalEaster;
+import it.smartcommunitylab.parking.management.web.model.ObjectsItaHolidays;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.Zone;
+import it.smartcommunitylab.parking.management.web.security.ObjectShowSetup;
+import it.smartcommunitylab.parking.management.web.security.ObjectsHistoricalEasterSetup;
+import it.smartcommunitylab.parking.management.web.security.ObjectsItaHolidaysSetup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -60,7 +63,13 @@ public class DynamicManager {
 
 	@Autowired
 	private MongoTemplate mongodb;
+	
+	@Autowired
+	private ObjectsItaHolidaysSetup objectItaHolidays;
 
+	@Autowired
+	private ObjectsHistoricalEasterSetup objectHistoricalEaster;
+	
 	// RateArea Methods
 	public List<RateAreaBean> getAllArea() {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
@@ -287,8 +296,8 @@ public class DynamicManager {
 					boolean isHolyday = isAHoliday(cal, temp.getId_app());
 					dl.setHolyday(isHolyday);
 					//---------------------------
-					Integer oldVersion = getLastVersion(dl.getObjId());
-					dl.setVersion(new Integer(oldVersion.intValue() + 1));
+					//Integer oldVersion = getLastVersion(dl.getObjId());
+					//dl.setVersion(new Integer(oldVersion.intValue() + 1));
 					//if(temp.getGeometry() != null){
 					//	dl.setLocation(temp.getGeometry().getPointBeans().get(0));	// I get the first element of the line
 					//}
@@ -355,8 +364,8 @@ public class DynamicManager {
 					boolean isHolyday = isAHoliday(cal, temp.getId_app());
 					dl.setHolyday(isHolyday);
 					//---------------------------
-					Integer oldVersion = getLastVersion(dl.getObjId());
-					dl.setVersion(new Integer(oldVersion.intValue() + 1));
+					//Integer oldVersion = getLastVersion(dl.getObjId());
+					//dl.setVersion(new Integer(oldVersion.intValue() + 1));
 					dl.setDeleted(false);
 					//dl.setContent(temp.toJSON());
 					@SuppressWarnings("unchecked")
@@ -413,8 +422,8 @@ public class DynamicManager {
 		boolean isHolyday = isAHoliday(cal, bike.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
-		Integer oldVersion = getLastVersion(dl.getObjId());
-		dl.setVersion(new Integer(oldVersion.intValue() + 1));
+		//Integer oldVersion = getLastVersion(dl.getObjId());
+		//dl.setVersion(new Integer(oldVersion.intValue() + 1));
 		//if(bike.getGeometry() != null){
 		//	PointBean point = new PointBean();
 		//	point.setLat(bike.getGeometry().getLat());
@@ -482,8 +491,8 @@ public class DynamicManager {
 		boolean isHolyday = isAHoliday(cal, entity.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
-		Integer oldVersion = getLastVersion(dl.getObjId());
-		dl.setVersion(new Integer(oldVersion.intValue() + 1));
+		//Integer oldVersion = getLastVersion(dl.getObjId());
+		//dl.setVersion(new Integer(oldVersion.intValue() + 1));
 		//if(entity.getGeometry() != null){
 		//	PointBean point = new PointBean();
 		//	point.setLat(entity.getGeometry().getLat());
@@ -531,8 +540,8 @@ public class DynamicManager {
 		boolean isHolyday = isAHoliday(cal, entity.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
-		Integer oldVersion = getLastVersion(dl.getObjId());
-		dl.setVersion(new Integer(oldVersion.intValue() + 1));
+		//Integer oldVersion = getLastVersion(dl.getObjId());
+		//dl.setVersion(new Integer(oldVersion.intValue() + 1));
 		//if(entity.getGeometry() != null){
 		//	PointBean point = new PointBean();
 		//	point.setLat(entity.getGeometry().getLat());
@@ -578,42 +587,39 @@ public class DynamicManager {
 	
 	
 	// --------------- For holidays query -----------------
-	private List<ItaHolidays> getAllHolydays(String appId){
-		List<ItaHolidays> result = new ArrayList<ItaHolidays>();
-		for (ItaHolidays ih : mongodb.findAll(ItaHolidays.class)) {
-			if(ih.getApp_id().compareTo(appId) == 0){
-				result.add(ih);
+	private List<ObjectsItaHolidays> getAllHolidays(String appId){
+		List<ObjectsItaHolidays> res = objectItaHolidays.getHolidays();
+		List<ObjectsItaHolidays> resApp = new ArrayList<ObjectsItaHolidays>();
+		for (ObjectsItaHolidays ih : res) {
+			if((ih.getAppId().compareTo(appId) == 0) || (ih.getAppId().compareTo("all") == 0)){
+				resApp.add(ih);
+			}
+		}
+		return resApp;
+	}
+	
+	private ObjectsItaHolidays findHolidaysByDate(Integer month, Integer day, String appId){
+		ObjectsItaHolidays result = null;
+		List<ObjectsItaHolidays> itaHolidays = getAllHolidays(appId);
+		for (ObjectsItaHolidays ih : itaHolidays) {
+			//logger.error(String.format("finded holiday: %s", ih.getId()));
+			if(ih.getMonth() == month && ih.getDay() == day){
+				result = ih;
 			}
 		}
 		return result;
 	}
 	
-	private ItaHolidays findHolydaysByDate(Integer month, Integer day, String appId){
-		ItaHolidays result = null;
-		for (ItaHolidays ih : mongodb.findAll(ItaHolidays.class)) {
-			logger.error(String.format("finded holiday: %s", ih.getName()));
-			if(ih.getApp_id().compareTo(appId) == 0 || ih.getApp_id().compareTo("all") == 0){
-				logger.error(String.format("finded holiday: %s", ih.getName()));
-				if(ih.getMonth() == month && ih.getDay() == day){
-					result = ih;
-				}
-			}
-		}
-		return result;
+	private List<ObjectsHistoricalEaster> getAllEasterMondays(){
+		List<ObjectsHistoricalEaster> res = objectHistoricalEaster.getHolidays();
+		return res;
 	}
 	
-	private List<HistoricalEaster> getAllEasterMondays(){
-		List<HistoricalEaster> result = new ArrayList<HistoricalEaster>();
-		for (HistoricalEaster he : mongodb.findAll(HistoricalEaster.class)) {
-			result.add(he);
-		}
-		return result;
-	}
-	
-	private HistoricalEaster findEasterMondaysByDate(Integer year, Integer month, Integer day){
-		HistoricalEaster result = null;
-		for (HistoricalEaster he : mongodb.findAll(HistoricalEaster.class)) {
-			if(he.getYear() == year && he.getMonth() == month && he.getDay() == day){
+	private ObjectsHistoricalEaster findEasterMondaysByDate(Integer year, Integer month, Integer day){
+		ObjectsHistoricalEaster result = null;
+		for (ObjectsHistoricalEaster he : getAllEasterMondays()) {
+			//logger.error(String.format("finded Easter Monday: %s - %d/%d/%d - myDay - %d/%d/%d", he.getId(), he.getDay(), he.getMonth(), he.getYear(), day, month, year));			
+			if(he.getYear().compareTo(year) == 0 && he.getMonth().compareTo(month) == 0 && he.getDay().compareTo(day) == 0){
 				result = he;
 			}
 		}
@@ -644,7 +650,7 @@ public class DynamicManager {
 		//q.with(new Sort(Sort.Direction.DESC, "updateTime"));
 		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
 		if(result != null && result.size() > 0){
-			version = result.get(0).getVersion();
+			//version = result.get(0).getVersion();
 			//logger.info(String.format("Version finded: %d", version ));
 		}
 		return version;
@@ -662,7 +668,7 @@ public class DynamicManager {
 		if(wd == Calendar.SUNDAY){
 			isHoliday = true;
 		} else {
-			if(findHolydaysByDate(cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), appId) != null){
+			if(findHolidaysByDate(cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), appId) != null){
 				isHoliday = true;
 			}
 		}
@@ -672,7 +678,7 @@ public class DynamicManager {
 			}
 		}
 		logger.error(String.format("isAHoliday function: day of week %d, day %d, month %d", wd, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1));
-		
+		logger.error(String.format("isAHoliday function result: %s", isHoliday));
 		return isHoliday;
 	};
 

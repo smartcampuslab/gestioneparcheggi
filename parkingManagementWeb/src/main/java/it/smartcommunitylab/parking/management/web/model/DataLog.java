@@ -26,7 +26,7 @@ public class DataLog {
 	private Point location;
 	private String type;
 	private Long updateTime;
-	private Integer version;
+	//private Integer version;
 	private boolean deleted;
 	//new fields added in 12/5/2015 from MB
 	private String year;
@@ -58,9 +58,9 @@ public class DataLog {
 		return updateTime;
 	}
 	
-	public Integer getVersion() {
-		return version;
-	}
+//	public Integer getVersion() {
+//		return version;
+//	}
 	
 	public boolean isDeleted() {
 		return deleted;
@@ -94,9 +94,9 @@ public class DataLog {
 		this.updateTime = updateTime;
 	}
 	
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
+//	public void setVersion(Integer version) {
+//		this.version = version;
+//	}
 	
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;

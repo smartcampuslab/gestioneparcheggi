@@ -4,7 +4,6 @@
 
 <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
-<link href="css/xeditable.css" rel="stylesheet" type="text/css">
 <link href="css/modaldialog.css" rel="stylesheet" type="text/css" />
 <link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
 
@@ -29,13 +28,10 @@
 <script src="js/directives.js"></script>
 <script src="lib/ui-bootstrap-tpls.min.js"></script>
 
-
 <!-- optional libraries -->
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-cookies.min.js"></script>
 <script src="lib/angular-route.min.js"></script>
-<script src="lib/xeditable.min.js"></script>
-<script src="lib/angular-base64.min.js"></script>
 <base href="/parking-management/" />
 
 <script type="text/javascript">

@@ -6,7 +6,6 @@
 
 <link href="../css/bootstrap.min.css" rel="stylesheet" />
 <link href="../css/bootstrap-theme.min.css" rel="stylesheet" />
-<link href="../css/xeditable.css" rel="stylesheet" />
 <link href="../css/modaldialog.css" rel="stylesheet" />
 <link href="../css/colorpicker.css" rel="stylesheet" />
 <link href="../imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
@@ -37,12 +36,8 @@
 <script src="../lib/angular-resource.min.js"></script>
 <script src="../lib/angular-cookies.min.js"></script>
 <script src="../lib/angular-route.min.js"></script>
-<script src="../lib/xeditable.min.js"></script>
-<script src="../lib/angular-base64.min.js"></script>
 <script src="../lib/bootstrap-colorpicker-module.js"></script>
 
-<!-- <script src="lib/lodash.js"></script> -->
-<!-- <script src="lib/angular-google-maps.js"></script> -->
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
 <script src="../lib/ng-map.min.js"></script>
 
@@ -60,35 +55,35 @@ var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
 
 
-	<%-- Prevent the backspace key from navigating back. --%>
-	$(document).unbind('keydown').bind('keydown', function (event) {
-	    var doPrevent = false;
-	    if (event.keyCode === 8) {
-	        var d = event.srcElement || event.target;
-	        if ((d.tagName.toUpperCase() === 'INPUT' && 
-	             (
-	                 d.type.toUpperCase() === 'TEXT' ||
-	                 d.type.toUpperCase() === 'NUMBER' ||
-	                 d.type.toUpperCase() === 'PASSWORD' || 
-	                 d.type.toUpperCase() === 'FILE' || 
-	                 d.type.toUpperCase() === 'EMAIL' || 
-	                 d.type.toUpperCase() === 'SEARCH' || 
-	                 d.type.toUpperCase() === 'DATE' )
-	             ) || 
-	             d.tagName.toUpperCase() === 'TEXTAREA') {
-	            doPrevent = d.readOnly || d.disabled;
-	        }
-	        else {
-	            doPrevent = true;
-	        }
-	    }
+<%-- Prevent the backspace key from navigating back. --%>
+$(document).unbind('keydown').bind('keydown', function (event) {
+    var doPrevent = false;
+    if (event.keyCode === 8) {
+        var d = event.srcElement || event.target;
+        if ((d.tagName.toUpperCase() === 'INPUT' && 
+             (
+                 d.type.toUpperCase() === 'TEXT' ||
+                 d.type.toUpperCase() === 'NUMBER' ||
+                 d.type.toUpperCase() === 'PASSWORD' || 
+                 d.type.toUpperCase() === 'FILE' || 
+                 d.type.toUpperCase() === 'EMAIL' || 
+                 d.type.toUpperCase() === 'SEARCH' || 
+                 d.type.toUpperCase() === 'DATE' )
+             ) || 
+             d.tagName.toUpperCase() === 'TEXTAREA') {
+            doPrevent = d.readOnly || d.disabled;
+        }
+        else {
+            doPrevent = true;
+        }
+    }
 	
-	    if (doPrevent) {
-	        event.preventDefault();
-	    }
-	});
+    if (doPrevent) {
+        event.preventDefault();
+    }
+});
 
-  </script>
+</script>
   
   <style>
   

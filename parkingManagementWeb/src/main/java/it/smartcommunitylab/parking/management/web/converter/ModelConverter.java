@@ -15,17 +15,11 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.converter;
 
-import it.smartcommunitylab.parking.management.web.auxiliary.data.LastGeoObjectVersionBean;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.GeoObject;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.LastGeoObjectVersion;
-import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.LineBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
-import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentMode;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.Street;
-import it.smartcommunitylab.parking.management.web.model.Zone;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -124,8 +118,8 @@ public class ModelConverter {
 		return sb;
 	}
 	
-//	public static <T extends GeoObject> LastGeoObjectVersion<T> toLastGeoObject(LastGeoObjectVersionBean<T> lastGeoBean){
-//		LastGeoObjectVersion<T> lastGeo = new LastGeoObjectVersion<T>();
+//	public static LastGeoObjectVersion toLastGeoObject(LastGeoObjectVersionBean lastGeoBean){
+//		LastGeoObjectVersion lastGeo = new LastGeoObjectVersion();
 //		lastGeo.setId(lastGeoBean.getId());
 //		lastGeo.setType(lastGeoBean.getType());
 //		//lastGeo.setVersion(lastGeoBean.getVersion());
@@ -133,12 +127,12 @@ public class ModelConverter {
 //		lastGeo.setLocation(lastGeoBean.getLocation());
 //		lastGeo.setUpdateTime(lastGeoBean.getUpdateTime());
 //		lastGeo.setAgency(lastGeoBean.getAgency());
-//		lastGeo.setContent((T)lastGeoBean.getContent());	//lastGeo.setContent((T)lastGeoBean.getContent());		
+//		lastGeo.setContent(lastGeoBean.getContent());	//lastGeo.setContent((T)lastGeoBean.getContent());		
 //		return lastGeo;
 //	}
 //	
-//	public static <T extends GeoObject> LastGeoObjectVersionBean<T> toLastGeoObjectBean(LastGeoObjectVersion<T> lastGeo){
-//		LastGeoObjectVersionBean<T> lastGeoBean = new LastGeoObjectVersionBean<T>();
+//	public static LastGeoObjectVersionBean toLastGeoObjectBean(LastGeoObjectVersion lastGeo){
+//		LastGeoObjectVersionBean lastGeoBean = new LastGeoObjectVersionBean();
 //		lastGeoBean.setId(lastGeo.getId());
 //		lastGeoBean.setType(lastGeo.getType());
 //		//lastGeoBean.setVersion(lastGeo.getVersion());
@@ -146,39 +140,9 @@ public class ModelConverter {
 //		lastGeoBean.setLocation(lastGeo.getLocation());
 //		lastGeoBean.setUpdateTime(lastGeo.getUpdateTime());
 //		lastGeoBean.setAgency(lastGeo.getAgency());
-//		lastGeoBean.setContent((T)lastGeo.getContent());	//lastGeo.setContent((T)lastGeoBean.getContent());		
+//		lastGeoBean.setContent(lastGeo.getContent());	//lastGeo.setContent((T)lastGeoBean.getContent());		
 //		return lastGeoBean;
 //	}
 	
-	public static LastGeoObjectVersion toLastGeoObject(LastGeoObjectVersionBean lastGeoBean){
-		LastGeoObjectVersion lastGeo = new LastGeoObjectVersion();
-		lastGeo.setId(lastGeoBean.getId());
-		lastGeo.setType(lastGeoBean.getType());
-		//lastGeo.setVersion(lastGeoBean.getVersion());
-		lastGeo.setDeleted(lastGeoBean.isDeleted());
-		lastGeo.setLocation(lastGeoBean.getLocation());
-		lastGeo.setUpdateTime(lastGeoBean.getUpdateTime());
-		lastGeo.setAgency(lastGeoBean.getAgency());
-		lastGeo.setContent(lastGeoBean.getContent());	//lastGeo.setContent((T)lastGeoBean.getContent());		
-		return lastGeo;
-	}
-	
-	public static LastGeoObjectVersionBean toLastGeoObjectBean(LastGeoObjectVersion lastGeo){
-		LastGeoObjectVersionBean lastGeoBean = new LastGeoObjectVersionBean();
-		lastGeoBean.setId(lastGeo.getId());
-		lastGeoBean.setType(lastGeo.getType());
-		//lastGeoBean.setVersion(lastGeo.getVersion());
-		lastGeoBean.setDeleted(lastGeo.isDeleted());
-		lastGeoBean.setLocation(lastGeo.getLocation());
-		lastGeoBean.setUpdateTime(lastGeo.getUpdateTime());
-		lastGeoBean.setAgency(lastGeo.getAgency());
-		lastGeoBean.setContent(lastGeo.getContent());	//lastGeo.setContent((T)lastGeoBean.getContent());		
-		return lastGeoBean;
-	}
-	
-//	public static DataLogBean toDataLogBean(DataLog dl){
-//		DataLogBean dlb = new DataLogBean();
-//		dlb.setAuthor(dl.get)
-//	}
 
 }

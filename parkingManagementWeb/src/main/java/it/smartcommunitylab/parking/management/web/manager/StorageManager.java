@@ -131,7 +131,7 @@ public class StorageManager {
 			DataLogBean dl = new DataLogBean();
 			dl.setObjId("@" + sb.getId_app() + "@street@" + sb.getId());
 			dl.setType("street");
-			dl.setVersion(getLastVersion(dl.getObjId()));
+			//dl.setVersion(getLastVersion(dl.getObjId()));
 			dl.setTime(System.currentTimeMillis());
 			dl.setAuthor("999");
 			dl.setDeleted(true);
@@ -486,7 +486,7 @@ public class StorageManager {
 			//if(s.getGeometry() != null){
 			//	dl.setLocation(s.getGeometry().getPointBeans().get(0));	// I get the first element of the line
 			//}
-			dl.setVersion(getLastVersion(dl.getObjId()));
+			//dl.setVersion(getLastVersion(dl.getObjId()));
 			dl.setDeleted(true);
 			mongodb.save(dl);
 		} else {
@@ -515,7 +515,7 @@ public class StorageManager {
 			DataLogBean dl = new DataLogBean();
 			dl.setObjId("@" + s.getId_app() + "@street@" + s.getId());
 			dl.setType("street");
-			dl.setVersion(new Integer(1));
+			//dl.setVersion(new Integer(1));
 			dl.setTime(System.currentTimeMillis());
 			dl.setAuthor("999");
 			//if(street.getGeometry() != null && street.getGeometry().getPointBeans().size() > 0){
@@ -557,7 +557,7 @@ public class StorageManager {
 		dl.setType("bikePoint");
 		dl.setTime(System.currentTimeMillis());
 		dl.setAuthor("999");
-		dl.setVersion(getLastVersion(dl.getObjId()));
+		//dl.setVersion(getLastVersion(dl.getObjId()));
 		dl.setDeleted(true);
 		mongodb.save(dl);
 		
@@ -575,7 +575,7 @@ public class StorageManager {
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + bp.getId());
 		dl.setType("bikePoint");
-		dl.setVersion(new Integer(1));
+		//dl.setVersion(new Integer(1));
 		dl.setTime(System.currentTimeMillis());
 		dl.setAuthor("999");
 		//if(bp.getGeometry() != null){
@@ -632,7 +632,7 @@ public class StorageManager {
 		dl.setType("parkingStructure");
 		dl.setTime(System.currentTimeMillis());
 		dl.setAuthor("999");
-		dl.setVersion(getLastVersion(dl.getObjId()));
+		//dl.setVersion(getLastVersion(dl.getObjId()));
 		dl.setDeleted(true);
 		mongodb.save(dl);
 		
@@ -651,7 +651,7 @@ public class StorageManager {
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + entity.getId_app() + "@parkingStructure@" + entity.getId());
 		dl.setType("parkingStructure");
-		dl.setVersion(new Integer(1));
+		//dl.setVersion(new Integer(1));
 		dl.setTime(System.currentTimeMillis());
 		dl.setAuthor("999");
 		//if(entity.getGeometry() != null){
@@ -837,7 +837,7 @@ public class StorageManager {
 		//q.with(new Sort(Sort.Direction.DESC, "updateTime"));
 		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
 		if(result != null && result.size() > 0){
-			version = result.get(0).getVersion();
+			//version = result.get(0).getVersion();
 			//logger.info(String.format("Version finded: %d", version ));
 		}
 		return version;

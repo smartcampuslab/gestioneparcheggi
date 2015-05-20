@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers', ['googlechart','ui.bootstrap-slider']);
 
-pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
-                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
+pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy',
+                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) { 
 
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection 
 	

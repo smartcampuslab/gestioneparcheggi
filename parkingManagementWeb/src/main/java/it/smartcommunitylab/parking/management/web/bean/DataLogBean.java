@@ -26,7 +26,7 @@ public class DataLogBean {
 	private String type;
 	private Long time;
 	private String author;
-	private Integer version;
+//	private Integer version;
 	private boolean deleted;
 	//new fields added in 12/5/2015 from MB
 	private String year;
@@ -58,9 +58,9 @@ public class DataLogBean {
 		return time;
 	}
 	
-	public Integer getVersion() {
-		return version;
-	}
+//	public Integer getVersion() {
+//		return version;
+//	}
 	
 	public boolean isDeleted() {
 		return deleted;
@@ -85,9 +85,9 @@ public class DataLogBean {
 	public void setTime(Long time) {
 		this.time = time;
 	}
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
+//	public void setVersion(Integer version) {
+//		this.version = version;
+//	}
 	
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;

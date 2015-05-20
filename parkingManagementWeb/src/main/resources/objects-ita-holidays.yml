@@ -1,0 +1,50 @@
+holidays:
+  - id: Capodanno
+    appId: all
+    day: 1
+    month: 1
+  - id: Epifania
+    appId: all
+    day: 6
+    month: 1
+  - id: Festa della Liberazione
+    appId: all
+    day: 25
+    month: 4
+  - id: Festa del lavoro
+    appId: all
+    day: 1
+    month: 5
+  - id: Festa della Repubblica
+    appId: all
+    day: 2
+    month: 6
+  - id: Ferragosto/Assunta
+    appId: all
+    day: 15
+    month: 8
+  - id: Ognissanti
+    appId: all
+    day: 1
+    month: 11
+  - id: Immacolata
+    appId: all
+    day: 8
+    month: 12
+  - id: Natale
+    appId: all
+    day: 25
+    month: 12
+  - id: S.Stefano
+    appId: all
+    day: 26
+    month: 12
+  - id: S.Vigilio
+    appId: tn
+    day: 26
+    month: 6
+  - id: S.Maria Ausiliatrice
+    appId: rv
+    day: 5
+    month: 8
+
