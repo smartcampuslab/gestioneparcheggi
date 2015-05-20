@@ -2,15 +2,15 @@ package it.smartcommunitylab.parking.management.web.model;
 
 import java.io.Serializable;
 
-public class ObjectsItaHolidays implements Serializable{
+public class ObjectsHolidays implements Serializable{
 	
 	private static final long serialVersionUID = -1108841158751326649L;
 	private String id;
 	private String appId;
   	private Integer day;
   	private Integer month;
+  	private boolean workingday;
 	
-  	
 	public String getAppId() {
 		return appId;
 	}
@@ -43,9 +43,17 @@ public class ObjectsItaHolidays implements Serializable{
 		this.id = id;
 	}
 
+	public boolean isWorkingday() {
+		return workingday;
+	}
+
+	public void setWorkingday(boolean workingday) {
+		this.workingday = workingday;
+	}
+
 	@Override
 	public String toString() {
-		return "ObjectsItaHolidays [appId=" + appId + ", day=" + day
+		return "ObjectsHolidays [appId=" + appId + ", day=" + day
 				+ ", month=" + month + ", id=" + id + "]";
 	}
 

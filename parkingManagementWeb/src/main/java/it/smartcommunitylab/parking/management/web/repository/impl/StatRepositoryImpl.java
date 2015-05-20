@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.repository.impl;
 
+import it.smartcommunitylab.parking.management.web.manager.HolidaysManager;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 import it.smartcommunitylab.parking.management.web.model.stats.YearStat;
@@ -42,6 +43,9 @@ public class StatRepositoryImpl implements StatCustomRepository {
 
     @Autowired
     private StatRepository repository;
+    
+    //@Autowired
+    //private HolidaysManager holidaysManager;
 
 	public Map<StatKey, StatValue> findStats(String objectId, String appId, String type, Map<String, Object> params,
 			int[] years, byte[] months, byte[] days, byte[] hours) {
@@ -89,7 +93,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		StatValue stat = new StatValue(1, value, value, timestamp);
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(timestamp);
-		boolean isHoliday = isHoliday(c);
+		boolean isHoliday = isHoliday(c, appId);
 		int month = c.get(Calendar.MONTH);
 		int dow = c.get(Calendar.DAY_OF_WEEK);
 		int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -194,9 +198,10 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		mongoTemplate.upsert(Query.query(criteria), update, YearStat.class);
 	}
 
-	private boolean isHoliday(Calendar c) {
+	private boolean isHoliday(Calendar c, String appId) {
 		// TODO
 		return c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+		//return holidaysManager.isAHoliday(c, appId);
 	}
 
 	private Query createQuery(

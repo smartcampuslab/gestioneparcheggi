@@ -28,16 +28,16 @@ import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.model.DataLog;
-import it.smartcommunitylab.parking.management.web.model.ObjectsHistoricalEaster;
-import it.smartcommunitylab.parking.management.web.model.ObjectsItaHolidays;
+import it.smartcommunitylab.parking.management.web.model.ObjectsSpecialHolidays;
+import it.smartcommunitylab.parking.management.web.model.ObjectsHolidays;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.Zone;
 import it.smartcommunitylab.parking.management.web.security.ObjectShowSetup;
-import it.smartcommunitylab.parking.management.web.security.ObjectsHistoricalEasterSetup;
-import it.smartcommunitylab.parking.management.web.security.ObjectsItaHolidaysSetup;
+import it.smartcommunitylab.parking.management.web.security.ObjectsSpecialHolidaysSetup;
+import it.smartcommunitylab.parking.management.web.security.ObjectsHolidaysSetup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -64,11 +64,13 @@ public class DynamicManager {
 	@Autowired
 	private MongoTemplate mongodb;
 	
+//	@Autowired
+//	private ObjectsHolidaysSetup objectItaHolidays;
+//
+//	@Autowired
+//	private ObjectsSpecialHolidaysSetup objectHistoricalEaster;
 	@Autowired
-	private ObjectsItaHolidaysSetup objectItaHolidays;
-
-	@Autowired
-	private ObjectsHistoricalEasterSetup objectHistoricalEaster;
+	HolidaysManager holidaysManager;
 	
 	// RateArea Methods
 	public List<RateAreaBean> getAllArea() {
@@ -293,7 +295,7 @@ public class DynamicManager {
 					int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 					dl.setWeek_day(dayOfWeek + "");
 					dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-					boolean isHolyday = isAHoliday(cal, temp.getId_app());
+					boolean isHolyday = holidaysManager.isAHoliday(cal, temp.getId_app());
 					dl.setHolyday(isHolyday);
 					//---------------------------
 					//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -361,7 +363,7 @@ public class DynamicManager {
 					int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 					dl.setWeek_day(dayOfWeek + "");
 					dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-					boolean isHolyday = isAHoliday(cal, temp.getId_app());
+					boolean isHolyday = holidaysManager.isAHoliday(cal, temp.getId_app());
 					dl.setHolyday(isHolyday);
 					//---------------------------
 					//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -419,7 +421,7 @@ public class DynamicManager {
 		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 		dl.setWeek_day(dayOfWeek + "");
 		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-		boolean isHolyday = isAHoliday(cal, bike.getId_app());
+		boolean isHolyday = holidaysManager.isAHoliday(cal, bike.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
 		//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -488,7 +490,7 @@ public class DynamicManager {
 		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 		dl.setWeek_day(dayOfWeek + "");
 		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-		boolean isHolyday = isAHoliday(cal, entity.getId_app());
+		boolean isHolyday = holidaysManager.isAHoliday(cal, entity.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
 		//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -537,7 +539,7 @@ public class DynamicManager {
 		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 		dl.setWeek_day(dayOfWeek + "");
 		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-		boolean isHolyday = isAHoliday(cal, entity.getId_app());
+		boolean isHolyday = holidaysManager.isAHoliday(cal, entity.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
 		//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -584,49 +586,6 @@ public class DynamicManager {
 		if (count < resLog.size()) return resLog.subList(0, count);
 		return resLog;
 	}
-	
-	
-	// --------------- For holidays query -----------------
-	private List<ObjectsItaHolidays> getAllHolidays(String appId){
-		List<ObjectsItaHolidays> res = objectItaHolidays.getHolidays();
-		List<ObjectsItaHolidays> resApp = new ArrayList<ObjectsItaHolidays>();
-		for (ObjectsItaHolidays ih : res) {
-			if((ih.getAppId().compareTo(appId) == 0) || (ih.getAppId().compareTo("all") == 0)){
-				resApp.add(ih);
-			}
-		}
-		return resApp;
-	}
-	
-	private ObjectsItaHolidays findHolidaysByDate(Integer month, Integer day, String appId){
-		ObjectsItaHolidays result = null;
-		List<ObjectsItaHolidays> itaHolidays = getAllHolidays(appId);
-		for (ObjectsItaHolidays ih : itaHolidays) {
-			//logger.error(String.format("finded holiday: %s", ih.getId()));
-			if(ih.getMonth() == month && ih.getDay() == day){
-				result = ih;
-			}
-		}
-		return result;
-	}
-	
-	private List<ObjectsHistoricalEaster> getAllEasterMondays(){
-		List<ObjectsHistoricalEaster> res = objectHistoricalEaster.getHolidays();
-		return res;
-	}
-	
-	private ObjectsHistoricalEaster findEasterMondaysByDate(Integer year, Integer month, Integer day){
-		ObjectsHistoricalEaster result = null;
-		for (ObjectsHistoricalEaster he : getAllEasterMondays()) {
-			//logger.error(String.format("finded Easter Monday: %s - %d/%d/%d - myDay - %d/%d/%d", he.getId(), he.getDay(), he.getMonth(), he.getYear(), day, month, year));			
-			if(he.getYear().compareTo(year) == 0 && he.getMonth().compareTo(month) == 0 && he.getDay().compareTo(day) == 0){
-				result = he;
-			}
-		}
-		return result;
-	}
-	
-	// -----------------------------------------------------
 
 	public byte[] exportData() throws ExportException {
 		Exporter exporter = new ZipCsvExporter(mongodb);
@@ -655,31 +614,5 @@ public class DynamicManager {
 		}
 		return version;
 	}
-	
-	/**
-	 * Method used to calculate if a specific date is holiday or not
-	 * @param cal: imput calendar object
-	 * @return true if holiday, false if not
-	 */
-	private boolean isAHoliday(Calendar cal, String appId){
-		boolean isHoliday = false;
-		// here I have to cover all the cases: public holidays in Ita, year holidays, city holidays
-		int wd = cal.get(Calendar.DAY_OF_WEEK);
-		if(wd == Calendar.SUNDAY){
-			isHoliday = true;
-		} else {
-			if(findHolidaysByDate(cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), appId) != null){
-				isHoliday = true;
-			}
-		}
-		if(wd == Calendar.MONDAY){
-			if(findEasterMondaysByDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)) != null){
-				isHoliday = true;
-			}
-		}
-		logger.error(String.format("isAHoliday function: day of week %d, day %d, month %d", wd, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1));
-		logger.error(String.format("isAHoliday function result: %s", isHoliday));
-		return isHoliday;
-	};
 
 }

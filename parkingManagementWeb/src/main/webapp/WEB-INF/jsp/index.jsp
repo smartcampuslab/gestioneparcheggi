@@ -8,21 +8,23 @@
 <link href="css/bootstrap-theme.min.css" rel="stylesheet" />
 <link href="css/modaldialog.css" rel="stylesheet" />
 <link href="css/colorpicker.css" rel="stylesheet" />
-<link href="css/bootstrap-slider.min.css" rel="stylesheet" />
 <link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
 <link href="css/style.css" rel="stylesheet" />
 
 <!-- required libraries -->
 <script src="js/jquery.min.js"></script>
 <script src="lib/angular.js"></script>
+<script src="lib/angular-route.js"></script>
+<script src="lib/angular-sanitize.js"></script>
+<script src="lib/angular-resource.min.js"></script>
+<script src="lib/angular-cookies.min.js"></script>
+<script src="lib/angular-route.min.js"></script>
 <script src="js/localize.js" type="text/javascript"></script>
 <script src="js/dialogs.min.js" type="text/javascript"></script>
 
 <script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
-<script src="lib/angular.js"></script>
-<script src="lib/angular-route.js"></script>
-<script src="lib/angular-sanitize.js"></script>
+<script src="lib/bootstrap-colorpicker-module.js"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
 <script src="i18n/angular-locale_en-EN.js"></script>
@@ -45,10 +47,6 @@
 <script src="lib/ng-google-chart.js"></script>
 
 <!-- optional libraries -->
-<script src="lib/angular-resource.min.js"></script>
-<script src="lib/angular-cookies.min.js"></script>
-<script src="lib/angular-route.min.js"></script>
-<script src="lib/bootstrap-colorpicker-module.js"></script>
 
 <link rel="stylesheet" type="text/css" href="css/angular-awesome-slider.min.css">
 <script type="text/javascript" src="js/angular-awesome-slider.min.js"></script>

@@ -15,7 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.security;
 
-import it.smartcommunitylab.parking.management.web.model.ObjectsItaHolidays;
+import it.smartcommunitylab.parking.management.web.model.ObjectsSpecialHolidays;
+import it.smartcommunitylab.parking.management.web.model.ObjectsHolidays;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -31,52 +32,43 @@ import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
 
 @Component
-public class ObjectsItaHolidaysSetup {
+public class ObjectsSpecialHolidaysSetup {
 
-	@Value("classpath:/objects-ita-holidays.yml")
+	@Value("classpath:/objects-special-holidays.yml")
 	private Resource resource;
 
 	@PostConstruct
 	public void init() throws IOException {
-		Yaml yaml = new Yaml(new Constructor(ObjectsItaHolidaysSetup.class));
-		ObjectsItaHolidaysSetup data = (ObjectsItaHolidaysSetup) yaml.load(resource.getInputStream());
+		Yaml yaml = new Yaml(new Constructor(ObjectsSpecialHolidaysSetup.class));
+		ObjectsSpecialHolidaysSetup data = (ObjectsSpecialHolidaysSetup) yaml.load(resource.getInputStream());
 		this.holidays = data.holidays;
 	}
 	
-	private List<ObjectsItaHolidays> holidays;
-	private Map<String,ObjectsItaHolidays> holidaysMap;
+	private List<ObjectsSpecialHolidays> holidays;
+	private Map<String,ObjectsSpecialHolidays> holidaysMap;
 	
 
-	public List<ObjectsItaHolidays> getHolidays() {
+	public List<ObjectsSpecialHolidays> getHolidays() {
 		return holidays;
 	}
 
-	public void setHolidays(List<ObjectsItaHolidays> holidays) {
+	public void setHolidays(List<ObjectsSpecialHolidays> holidays) {
 		this.holidays = holidays;
 	}
 
 	@Override
 	public String toString() {
-		return "HolidaySetup [holidays=" + holidays + "]";
+		return "HolidayEasterSetup [holidays=" + holidays + "]";
 	}
 
-	public ObjectsItaHolidays findHolidayById(String id) {
+	public ObjectsSpecialHolidays findHolidayById(String id) {
 		if (holidaysMap == null) {
-			holidaysMap = new HashMap<String, ObjectsItaHolidays>();
-			for (ObjectsItaHolidays holiday : holidays) {
+			holidaysMap = new HashMap<String, ObjectsSpecialHolidays>();
+			for (ObjectsSpecialHolidays holiday : holidays) {
 				holidaysMap.put(holiday.getId(), holiday);
 			}
 		}
 		return holidaysMap.get(id);
 	}
 	
-	public ObjectsItaHolidays findHolidayByAppId(String appId) {
-		if (holidaysMap == null) {
-			holidaysMap = new HashMap<String, ObjectsItaHolidays>();
-			for (ObjectsItaHolidays holiday : holidays) {
-				holidaysMap.put(holiday.getAppId(), holiday);
-			}
-		}
-		return holidaysMap.get(appId);
-	}
 }

@@ -2,13 +2,14 @@ package it.smartcommunitylab.parking.management.web.model;
 
 import java.io.Serializable;
 
-public class ObjectsHistoricalEaster implements Serializable {
+public class ObjectsSpecialHolidays implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String id;
 	private Integer year;
 	private Integer month;
 	private Integer day;
+	private boolean workingday;
 	
 	public String getId() {
 		return id;
@@ -42,9 +43,17 @@ public class ObjectsHistoricalEaster implements Serializable {
 		this.day = day;
 	}
 
+	public boolean isWorkingday() {
+		return workingday;
+	}
+
+	public void setWorkingday(boolean workingday) {
+		this.workingday = workingday;
+	}
+
 	@Override
 	public String toString() {
-		return "ObjectsHistoricalEaster [id=" + id + ", year="
+		return "ObjectsSpecialHolidays [id=" + id + ", year="
 				+ year + ", month=" + month + ", day=" + day + "]";
 	}
 	
