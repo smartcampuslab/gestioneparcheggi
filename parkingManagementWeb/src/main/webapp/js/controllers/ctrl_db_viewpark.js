@@ -1,39 +1,47 @@
 'use strict';
 
 /* Controllers */
-var pmControllers = angular.module('pmControllers', ['googlechart','ui.bootstrap-slider']);
+var pmControllers = angular.module('pmControllers', ['googlechart','angularAwesomeSlider']);
+pm.controller('TimeFilterCtrl',['$scope', '$rootScope','$filter', 'localize',
+                                function($scope, $$rootScope, $filter, localize) {
+	
+	$scope.vis = 'vis_last_value';
+	$scope.visOptions = ['vis_last_value','vis_medium', 'vis_medium_year', 'vis_medium_month', 'vis_medium_day'];
+	var date = new Date();
+	$scope.years = [];
+	$scope.year = "";
+	$scope.dayOptions = {value:'wd'};
+	
+	for (var i = 0; i < 5; i++) {
+		$scope.years.push(date.getFullYear()-i);
+	}
+	$scope.monthSliderValue = (date.getMonth() == 0 ? date.getMonth()+1 : date.getMonth())+";"+(date.getMonth()+1);
+	$scope.monthSliderOptions = {       
+		    from: 1,
+		    to: 12,
+		    step: 1,
+		    modelLabels: {1: 'GE', 2: 'FE', 3: 'MA', 4: 'AP', 5: 'MA', 6: 'GI', 7:'LU', 8: 'AG', 9: 'SE', 10: 'OT', 11: 'NO', 12: 'DI'}
+	};
+	$scope.daySliderValue = (date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
+	$scope.daySliderOptions = {       
+		    from: 1,
+		    to: 7,
+		    step: 1,
+		    modelLabels: {1: 'LU', 2: 'MA', 3: 'ME', 4: 'GI', 5: 'VE', 6: 'SA', 7:'DO'}
+	};
+	$scope.hourSliderValue = "10;11";
+	$scope.hourSliderOptions = {
+		    from: 0,
+		    to: 23,
+		    step: 1
+	};
 
-pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy',
-                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) { 
+}]);
+
+pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', 
+                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) {
 
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection 
-	
-	// Sliders
-	$scope.sliderMonth = {
-		min: 1,
-		max: 12,
-		step: 1,
-		range: true,
-		value: [1,3],
-		ticks: [1,3,6,9,12],			//it does not work in js
-		ticks_pos: [0,25,50,75,100],	//it does not work in js
-		ticks_labels: ['gen','mar','giu','set','dic'],	//it does not work in js
-		ticks_snap_bound: 1				//it does not work in js
-	};
-	$scope.sliderWeek = {
-		min: 1,
-		max: 7,
-		step: 1,
-		range: true,
-		value: [1,2]
-	};
-	$scope.sliderTime = {
-		min: 0,
-		max: 24,
-		step: 1,
-		range: true,
-		value: [0,1]
-	};
 	
 	$scope.parkingMetersMarkers = [];
 	$scope.parkingStructureMarkers = [];

@@ -32,7 +32,7 @@
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-cookies.min.js"></script>
 <script src="lib/angular-route.min.js"></script>
-<base href="/parking-management/" />
+<base href="<%=request.getContextPath()%>/" />
 
 <script type="text/javascript">
  	function get(name){

@@ -10,24 +10,19 @@
 <link href="css/colorpicker.css" rel="stylesheet" />
 <link href="css/bootstrap-slider.min.css" rel="stylesheet" />
 <link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="css/style.css" rel="stylesheet" />
 
 <!-- required libraries -->
 <script src="js/jquery.min.js"></script>
 <script src="lib/angular.js"></script>
-<script src="lib/angular-route.js"></script>
-<script src="lib/angular-route.min.js"></script>
-<script src="lib/angular-sanitize.js"></script>
-<script src="lib/angular-resource.min.js"></script>
-<script src="lib/angular-cookies.min.js"></script>
-
-<script src="js/bootstrap.min.js"></script>
-<script src="lib/bootstrap-slider.min.js"></script>
-<script src="lib/slider.js"></script>
-<script src="lib/bootstrap-colorpicker-module.js"></script>
-
 <script src="js/localize.js" type="text/javascript"></script>
 <script src="js/dialogs.min.js" type="text/javascript"></script>
-<script src="lib/ng-google-chart.js"></script>
+
+<script src="js/jquery.min.js"></script>
+<script src="js/bootstrap.min.js"></script>
+<script src="lib/angular.js"></script>
+<script src="lib/angular-route.js"></script>
+<script src="lib/angular-sanitize.js"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
 <script src="i18n/angular-locale_en-EN.js"></script>
@@ -39,6 +34,7 @@
 <script src="js/controllers/ctrl_main.js"></script>
 <script src="js/controllers/ctrl_park.js"></script>
 <script src="js/controllers/ctrl_bike.js"></script>
+<!-- <script src="js/controllers/ctrl_view.js"></script> -->
 <script src="js/controllers/ctrl_view_gmap.js"></script>
 <script src="js/controllers/ctrl_db_viewpark.js"></script>
 
@@ -46,12 +42,22 @@
 <script src="js/services.js?1001"></script>
 <script src="js/directives.js"></script>
 <script src="lib/ui-bootstrap-tpls.min.js"></script>
+<script src="lib/ng-google-chart.js"></script>
+
+<!-- optional libraries -->
+<script src="lib/angular-resource.min.js"></script>
+<script src="lib/angular-cookies.min.js"></script>
+<script src="lib/angular-route.min.js"></script>
+<script src="lib/bootstrap-colorpicker-module.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/angular-awesome-slider.min.css">
+<script type="text/javascript" src="js/angular-awesome-slider.min.js"></script>
 
 <script src="lib/lodash.js"></script>
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
 <script src="lib/ng-map.min.js"></script>
 
-<base href="/parking-management/" />
+<base href="<%=request.getContextPath()%>/" />
 
 <script>
 <%-- var token="<%=request.getAttribute("token")%>"; --%>

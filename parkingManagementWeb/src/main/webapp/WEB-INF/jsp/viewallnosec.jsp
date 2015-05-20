@@ -41,7 +41,7 @@
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
 <script src="../lib/ng-map.min.js"></script>
 
-<base href="/parking-management/" />
+<base href="<%=request.getContextPath()%>/" />
 
 <script>
 

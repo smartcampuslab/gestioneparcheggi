@@ -51,7 +51,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
         sharedDataService.setBase64(null);
         $scope.user_token = null;
         
-    	window.location.href = "parking-management/logout";
+    	window.location.href = "logout";
     };
     
     // ------------------ Start datetimepicker section -----------------------

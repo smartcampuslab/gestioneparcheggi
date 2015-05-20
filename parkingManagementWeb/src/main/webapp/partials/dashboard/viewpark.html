@@ -5,12 +5,12 @@
 <!-- 	<div class="panel-body"> -->
 		<!--<form name="viewForm"  > ng-init="initWs()" -->
 			<div class="row" ng-controller="ViewDashboardCtrlPark" ng-init="initWs()">
-				<div class="col-md-2">
+				<div class="col-md-2" >
 					<div class="panel panel-danger">
-						<div class="panel-heading">
+<!-- 						<div class="panel-heading">
 							<h5 class="panel-title">{{ 'view_hide_block_title' | i18n }}</h5>
 						</div>
-						<div class="panel-body">
+ -->						<div class="panel-body dashboard-panel">
 							<table width="100%">
 								<tr>
 									<td align="left"><label><input id="slotSupply" type="radio" ng-model="dashboard_topics" value="parkSupply" ng-change="changeDashboardView()" ng-disabled="disableThemes">&nbsp;{{ 'park_parkSupply' | i18n }}</label></td>
@@ -34,7 +34,7 @@
 						</div>
 					</div>
 					<div class="panel panel-danger">
-						<div class="panel-body">
+						<div class="panel-body  dashboard-panel">
 							<table width="100%">
 								<tr><!-- ng-show="isAreaVisible()" -->
 									<td align="left"><label><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons()">&nbsp;{{ 'view_areas' | i18n }}</label></td>
@@ -55,31 +55,57 @@
 						</div>
 					</div>
 					<div class="panel panel-danger">
-						<div class="panel-body">
-							<table width="100%">
-								<tr>
-									<!-- ng-show="isAreaVisible()" -->
+						<div class="panel-body dashboard-panel">
+							<table width="100%" ng-controller="TimeFilterCtrl">
+                                <tr>
+                                    <td align="left">
+                                        <label>{{'time_vis'|i18n}}</label>
+                                        <select class="form-control input-sm" ng-model="vis">
+                                            <option ng-repeat="v in visOptions" value="{{v}}">{{v|i18n}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                                <tr ng-if="vis=='vis_medium'">
+                                    <td align="left">
+                                        <label>{{'year_vis'|i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
+                                        <select class="form-control input-sm" ng-model="year">
+                                            <option value="">{{'all_years_vis'|i18n}}</option>
+                                            <option ng-repeat="y in years" value="{{y}}">{{y}}</option>
+                                        </select>
+                                    </td>
+                                </tr>
+								<tr ng-if="vis=='vis_medium' || vis=='vis_medium_year'">
 									<td align="left">
-										<label>Mese</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
-										<slider id="sl1" ng-model="sliders1.sliderValue" range="sliderMonth.range" min="sliderMonth.min" step="sliderMonth.step" max="sliderMonth.max" value="sliderMonth.value" ></slider>
+										<label>{{'month_vis'| i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
+                                        <br/><br/>
+										<input ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" />
 										<br/>
 									</td>
 								</tr>
-								<tr>
-									<!-- ng-show="isZonesVisible()" -->
+                                <tr ng-if="vis !='vis_medium_day'">
 									<td align="left">
-										<label>Giorno Settimana</label>
-										<slider id="sl2" ng-model="sliders2.sliderValue" min="sliderWeek.min" step="sliderWeek.step" max="sliderWeek.max" range="sliderWeek.range" value="sliderWeek.value"></slider>
-										<br/>
-									</td>
-								</tr>
+                                        <label>{{'day_vis'|i18n}}</label>
+                                        <div>
+                                            <label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="wd">{{'wd_vis'|i18n}}</label>
+                                            <label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="we">{{'we_vis'|i18n}}</label>
+                                        </div>
+                                        <div><label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="custom">{{'custom_vis'|i18n}}</label></div>
+                                    </td>
+                                </tr>
+                                <tr ng-if="vis !='vis_medium_day' && dayOptions.value=='custom'">
+                                    <td align="left">
+                                        <br/>
+                                        <input ng-model="daySliderValue" type="text" id="daySlider" slider options="daySliderOptions" />
+                                        <br/>
+                                    </td>
+                                </tr>
 								<tr>
 									<!-- ng-show="isStreetVisible()" -->
 									<td align="left">
-										<label>Fascia Oraria</label>
-										<slider id="sl3" ng-model="sliders3.sliderValue" min="sliderTime.min" step="sliderTime.step" max="sliderTime.max" range="sliderTime.range" value="sliderTime.value"></slider>
-										<br/>
-									</td>
+										<label>{{'hour_vis'|i18n}}</label>
+										<br/><br/>
+                                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" />
+                                    </td>
 									<!-- ng-click="changeStreetAndPS()" -->
 								</tr>
 							</table>
@@ -152,7 +178,7 @@
 							<div class="panel-heading">
 								<h5 class="panel-title">{{ 'element_details' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></h5>
 							</div>
-							<div class="panel-body">
+							<div class="panel-body dashboard-panel"">
 								<div ng-show="isPMDetShow()">
 									<table width="100%">
 										<tr>
@@ -433,7 +459,7 @@
 							<div class="panel-heading">
 								<h5 class="panel-title">{{ 'element_occupancy' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></h5>
 							</div>
-							<div class="panel-body">
+							<div class="panel-body dashboard-panel"">
 								<div ng-show="isPMDetShow()">
 									<table width="100%">
 										<tr>
