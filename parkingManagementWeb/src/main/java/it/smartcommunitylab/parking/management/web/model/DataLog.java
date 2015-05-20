@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.Map;
+
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 
 public class DataLog {
@@ -26,13 +28,15 @@ public class DataLog {
 	private Long updateTime;
 	private Integer version;
 	private boolean deleted;
-	private String content;
 	//new fields added in 12/5/2015 from MB
 	private String year;
 	private String month;
 	private String week_day;
 	private String timeSlot;	//time of operation (start a slot of one hour)
 	private boolean isHolyday;	//true if is an holyday day (in ita = festivo)
+	
+	//private String content;
+	private Map<String, Object> value;
 	
 	public String getId() {
 		return id;
@@ -62,9 +66,13 @@ public class DataLog {
 		return deleted;
 	}
 	
-	public String getContent() {
-		return content;
+	public Map<String, Object> getValue() {
+		return value;
 	}
+	
+//	public String getContent() {
+//		return content;
+//	}
 	
 	public void setId(String id) {
 		this.id = id;
@@ -94,8 +102,12 @@ public class DataLog {
 		this.deleted = deleted;
 	}
 	
-	public void setContent(String content) {
-		this.content = content;
+//	public void setContent(String content) {
+//		this.content = content;
+//	}
+	
+	public void setValue(Map<String, Object> value) {
+		this.value = value;
 	}
 	
 	// new setter and getter methods added in 12/5/2015 from MB

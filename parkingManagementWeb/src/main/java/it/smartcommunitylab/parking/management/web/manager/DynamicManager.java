@@ -15,11 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
-import it.smartcommunitylab.parking.management.web.auxiliary.model.GeoObject;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.LogObject;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkingLog;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.StreetLog;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
@@ -300,7 +296,7 @@ public class DynamicManager {
 					//dl.setContent(temp.toJSON());
 					@SuppressWarnings("unchecked")
 					Map<String,Object> map = ModelConverter.convert(temp, Map.class);
-					dl.setContent(map);
+					dl.setValue(map);
 					mongodb.save(dl);
 					logger.error(String.format("Updated street: %s", temp.toString()));
 					break;
@@ -335,19 +331,6 @@ public class DynamicManager {
 		if (area.getStreets() != null) {
 			for (Street temp : area.getStreets()) {
 				if (temp.getId().equals(pmId)) {
-//					temp.setSlotNumber(vb.getSlotNumber());
-//					temp.setFreeParkSlotNumber(vb.getFreeParkSlotNumber());
-//					temp.setFreeParkSlotSignNumber(vb.getFreeParkSlotSignNumber());
-//					temp.setUnusuableSlotNumber(vb.getUnusuableSlotNumber());
-//					temp.setHandicappedSlotNumber(vb.getHandicappedSlotNumber());
-//					temp.setStreetReference(vb.getStreetReference());
-//					temp.setTimedParkSlotNumber(vb.getTimedParkSlotNumber());
-//					temp.setSubscritionAllowedPark(vb.isSubscritionAllowedPark());
-//					temp.getGeometry().getPoints().clear();
-//					for (PointBean pb : vb.getGeometry().getPoints()) {
-//						temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
-//					}
-//					temp.setZones(vb.getZoneBeanToZone());
 					// Dynamic data
 					temp.setFreeParkSlotOccupied(s.getSlotsOccupiedOnFree());
 					//temp.setFreeParkSlotSignOccupied(s.getSlotsOccupiedOnFree());
@@ -378,7 +361,7 @@ public class DynamicManager {
 					//dl.setContent(temp.toJSON());
 					@SuppressWarnings("unchecked")
 					Map<String,Object> map = ModelConverter.convert(s, Map.class);
-					dl.setContent(map);
+					dl.setValue(map);
 					//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 					mongodb.save(dl);
 					logger.error(String.format("Updated street: %s", temp.toString()));
@@ -441,7 +424,7 @@ public class DynamicManager {
 		dl.setDeleted(false);
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(bike, Map.class);
-		dl.setContent(map);
+		dl.setValue(map);
 		mongodb.save(dl);
 		
 		return bp;
@@ -511,7 +494,7 @@ public class DynamicManager {
 		//dl.setContent(entity.toJSON());
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(entity, Map.class);
-		dl.setContent(map);
+		dl.setValue(map);
 		mongodb.save(dl);
 		
 		return entityBean;
@@ -524,16 +507,6 @@ public class DynamicManager {
 		p.setUser(Integer.valueOf(authorId));
 		
 		ParkingStructure entity = findById(pmId,ParkingStructure.class);
-//		entity.setFee(entityBean.getFee());
-//		entity.setManagementMode(entityBean.getManagementMode());
-//		entity.setName(entityBean.getName());
-//		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean.getPaymentMode()));
-//		entity.setPhoneNumber(entityBean.getPhoneNumber());
-//		entity.setSlotNumber(entityBean.getSlotNumber());
-//		entity.setStreetReference(entityBean.getStreetReference());
-//		entity.setTimeSlot(entityBean.getTimeSlot());
-//		entity.getGeometry().setLat(entityBean.getGeometry().getLat());
-//		entity.getGeometry().setLng(entityBean.getGeometry().getLng());
 		
 		// Dynamic data
 		entity.setSlotOccupied(p.getSlotsOccupiedOnTotal());
@@ -570,14 +543,14 @@ public class DynamicManager {
 		//dl.setContent(entity.toJSON());
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(p, Map.class);
-		dl.setContent(map);
+		dl.setValue(map);
 		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 		mongodb.save(dl);
 	}
 
 	
 	public List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
-		Query query = Query.query(Criteria.where("content.id").is(id).and("content.agency").is(agency)).limit(count);
+		Query query = Query.query(Criteria.where("value.id").is(id).and("value.agency").is(agency)).limit(count);
 		query.sort().on("time", Order.DESCENDING);
 		//query.with(new Sort(Sort.Direction.DESC, "time"));
 		//return mongodb.find(query, DataLog.class);
@@ -590,7 +563,7 @@ public class DynamicManager {
 	}
 	
 	public List<DataLogBean> getLogsByAuthor(String authorId, String agency, int count) {
-		Query query = Query.query(Criteria.where("author").is(authorId).and("content.agency").is(agency)).limit(count);
+		Query query = Query.query(Criteria.where("author").is(authorId).and("value.agency").is(agency)).limit(count);
 		query.sort().on("time", Order.DESCENDING);
 		//query.with(new Sort(Sort.Direction.DESC, "time"));
 		//List<DataLogBean> result = new ArrayList<DataLogBean>();

@@ -28,24 +28,17 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
-import it.smartcommunitylab.parking.management.web.auxiliary.data.LogMongoStorage;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.LogObject;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkingLog;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.StreetLog;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 
 @Controller
-public class ObjectController  { //extends AbstractObjectController
+public class ObjectController  {
 
 	private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
 	private static final int DEFAULT_COUNT = 10;
-
-	@Autowired
-	private LogMongoStorage logMongoStorage;
 	
 	@Autowired
 	private GeoObjectManager dataService; 

@@ -36,7 +36,7 @@ public class DataLogBean {
 	private boolean isHolyday;	//true if is an holyday day (in ita = festivo)
 
 	//private String content;
-	private Map<String, Object> content;
+	private Map<String, Object> value;
 	
 	public String getId() {
 		return id;
@@ -93,12 +93,12 @@ public class DataLogBean {
 		this.deleted = deleted;
 	}
 
-	public Map<String, Object> getContent() {
-		return content;
+	public Map<String, Object> getValue() {
+		return value;
 	}
 
-	public void setContent(Map<String, Object> content) {
-		this.content = content;
+	public void setValue(Map<String, Object> value) {
+		this.value = value;
 	}
 	
 	public String getAuthor() {

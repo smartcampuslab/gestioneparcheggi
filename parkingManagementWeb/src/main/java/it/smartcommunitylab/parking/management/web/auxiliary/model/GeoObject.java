@@ -15,13 +15,9 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.model;
 
-import com.mongodb.BasicDBObject;
-
 //import eu.trentorise.smartcampus.presentation.data.BasicObject;
 
 public class GeoObject {	//extends BasicObject
-	
-	private static final long serialVersionUID = 3589900794339644582L;
 
 	private String agency;
 	private double[] position;

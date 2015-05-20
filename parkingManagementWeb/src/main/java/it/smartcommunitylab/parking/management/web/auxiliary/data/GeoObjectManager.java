@@ -41,8 +41,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import javax.annotation.PostConstruct;
-
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -58,8 +56,6 @@ import org.springframework.stereotype.Service;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.mongodb.BasicDBObject;
-
 //import eu.trentorise.smartcampus.presentation.common.exception.DataException;
 //import eu.trentorise.smartcampus.presentation.data.BasicObject;
 
@@ -67,10 +63,6 @@ import com.mongodb.BasicDBObject;
 @Service("GeoObjectManager")
 public class GeoObjectManager {
 
-	@Autowired 
-	private LogMongoStorage logMongoStorage;
-	//@Autowired
-	//private GeoStorage geoStorage;
 	@Autowired
 	private StorageManager storageManager;
 	@Autowired
@@ -78,13 +70,9 @@ public class GeoObjectManager {
 	@Autowired
 	private MongoTemplate mongodb;
 
-//	@Value("${parking.sources}")
-//	private String parkingSources;
 	@Value("${parking.agencies}")
 	private String parkingAgencies;
 
-//	@Value("${street.sources}")
-//	private String streetURLs;
 	@Value("${street.agencies}")
 	private String streetAgencies;
 	
@@ -190,7 +178,7 @@ public class GeoObjectManager {
 //		return searchObjects(Street.class, new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
 //	}
 	
-	public List<Parking> getParkings(String agency) throws Exception { //Data
+	public List<Parking> getParkings(String agency) throws Exception { 
 		return searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
 	}
 	
@@ -199,14 +187,12 @@ public class GeoObjectManager {
 	}
 	
 	public List<Street> getStreets(String agency) throws Exception {
-		//logger.error(String.format("I am in getStreets 1 for agency %s", agency));
 		return searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null, 
 	}
 	
 	public List<Street> getStreets(String agency, double lat, double lon, double radius) throws Exception {
 		return searchStreets(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
 	}
-	
 	
 	public void saveOrUpdateStreet(Street s) throws Exception {
 		LastGeoObjectVersionBean oldObj = null;
@@ -240,6 +226,7 @@ public class GeoObjectManager {
 		}
 		storeObject(oldObj);
 	}
+	
 	public void saveOrUpdateParking(Parking p) throws Exception {
 		LastGeoObjectVersionBean oldObj = null;
 		try {
@@ -568,23 +555,6 @@ public class GeoObjectManager {
 		return criteria;
 	}
 	
-	private static Criteria createSearchCriteria(String cls, Circle circle, Map<String, Object> inCriteria) { //Circle circle
-		Criteria criteria = new Criteria();
-		if (cls != null) {
-			criteria.and("type").is(cls);
-		}
-		criteria.and("deleted").is(false);
-		if (inCriteria != null) {
-			for (String key : inCriteria.keySet()) {
-				//criteria.and("content."+key).is(inCriteria.get(key));
-				criteria.and(""+key).is(inCriteria.get(key));
-			}
-		}
-		if (circle != null) {
-			criteria.and("location").within(circle);
-		}
-		return criteria;
-	}
 	
 	protected <T extends GeoObject> List<LastGeoObjectVersion> find(Query query, Class<T> cls) {
 		List<LastGeoObjectVersion> result = mongodb.find(query, LastGeoObjectVersion.class); 
@@ -648,6 +618,25 @@ public class GeoObjectManager {
 		return s;
 	}
 	
+	private Parking castParkingJSONToObject(String value){
+		JSONObject jsonParking = new JSONObject(value);	
+		Parking p = new Parking();
+		p.setId(jsonParking.getString("id"));
+		p.setAgency(jsonParking.getString("agency"));
+		p.setSlotsTotal(Integer.valueOf(jsonParking.getInt("slotsTotal")));
+		p.setName(jsonParking.getString("name"));
+		JSONArray pos = jsonParking.getJSONArray("position");//getString("position");
+		if(pos != null && pos.length() > 0){
+			//String[] pos_string = pos.split(",");
+			double[] pos_double = new double[2];
+			pos_double[0] = Double.valueOf(pos.getDouble(0));	//pos_string[0]
+			pos_double[1] = Double.valueOf(pos.getDouble(1));	//pos_string[1]
+			p.setPosition(pos_double);
+		}
+		p.setDescription(jsonParking.getString("description"));
+		return p;
+	}
+	
 	private Street castPMStreetBeanToStreet(StreetBean street){
 		//logger.error(String.format("Street to be casted : %s", street.toJSON()));
 
@@ -681,25 +670,7 @@ public class GeoObjectManager {
 		p.setDescription(park.getFee() + ", " + park.getManagementMode());
 		return p;
 	}
-	
-	private Parking castParkingJSONToObject(String value){
-		JSONObject jsonParking = new JSONObject(value);	
-		Parking p = new Parking();
-		p.setId(jsonParking.getString("id"));
-		p.setAgency(jsonParking.getString("agency"));
-		p.setSlotsTotal(Integer.valueOf(jsonParking.getInt("slotsTotal")));
-		p.setName(jsonParking.getString("name"));
-		JSONArray pos = jsonParking.getJSONArray("position");//getString("position");
-		if(pos != null && pos.length() > 0){
-			//String[] pos_string = pos.split(",");
-			double[] pos_double = new double[2];
-			pos_double[0] = Double.valueOf(pos.getDouble(0));	//pos_string[0]
-			pos_double[1] = Double.valueOf(pos.getDouble(1));	//pos_string[1]
-			p.setPosition(pos_double);
-		}
-		p.setDescription(jsonParking.getString("description"));
-		return p;
-	}
+
 	
 	private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
 		double theta = lon1 - lon2;

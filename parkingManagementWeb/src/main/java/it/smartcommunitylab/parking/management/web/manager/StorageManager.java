@@ -524,7 +524,7 @@ public class StorageManager {
 			dl.setDeleted(false);
 			@SuppressWarnings("unchecked")
 			Map<String,Object> map = ModelConverter.convert(s, Map.class);
-			dl.setContent(map);
+			dl.setValue(map);
 			mongodb.save(dl);
 			
 			return s;
@@ -587,7 +587,7 @@ public class StorageManager {
 		dl.setDeleted(false);
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(bp, Map.class);
-		dl.setContent(map);
+		dl.setValue(map);
 		mongodb.save(dl);
 		
 		return bp;
@@ -663,7 +663,7 @@ public class StorageManager {
 		dl.setDeleted(false);
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(entity, Map.class);
-		dl.setContent(map);
+		dl.setValue(map);
 		mongodb.save(dl);
 		
 		return entityBean;
