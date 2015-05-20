@@ -36,7 +36,7 @@
 <script src="lib/angular-route.min.js"></script>
 <script src="lib/xeditable.min.js"></script>
 <script src="lib/angular-base64.min.js"></script>
-<base href="/parking-management/" />
+<base href="<%=request.getContextPath()%>/" />
 
 <script type="text/javascript">
  	function get(name){

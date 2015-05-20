@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-var pmControllers = angular.module('pmControllers', ['googlechart','ui.bootstrap-slider']);
+var pmControllers = angular.module('pmControllers', ['googlechart'/*,'ui.bootstrap-slider'*/]);
 
 pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', //'uiGmapGoogleMapApi', 'uiGmapIsReady',
                           function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) { // , uiGmapGoogleMapApi, uiGmapIsReady,
