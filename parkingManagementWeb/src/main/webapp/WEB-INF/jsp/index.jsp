@@ -18,11 +18,14 @@
 <script src="lib/angular.js"></script>
 <script src="js/localize.js" type="text/javascript"></script>
 <script src="js/dialogs.min.js" type="text/javascript"></script>
-<script src="lib/bootstrap-slider.min.js"></script>
-<script src="lib/slider.js"></script>
+<!-- <script src="lib/bootstrap-slider.min.js"></script> -->
+<!-- <script src="lib/slider.js"></script> -->
 <script src="lib/angular-route.js"></script>
 <script src="lib/angular-sanitize.js"></script>
 <script src="lib/ng-google-chart.js"></script>
+
+<link rel="stylesheet" type="text/css" href="css/angular-awesome-slider.min.css">
+<script type="text/javascript" src="js/angular-awesome-slider.min.js"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
 <script src="i18n/angular-locale_en-EN.js"></script>
