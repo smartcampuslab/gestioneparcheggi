@@ -41,6 +41,7 @@ import java.util.Map;
  * @author raman
  *
  */
+
 public interface StatCustomRepository {
 
 	public Map<StatKey, StatValue> findStats(
@@ -106,5 +107,9 @@ public interface StatCustomRepository {
 			Map<String, Object> params,
 			double value,
 			long timestamp);
+	
+	public boolean isAHoliday(
+			Calendar cal, 
+			String appId);
 
 }

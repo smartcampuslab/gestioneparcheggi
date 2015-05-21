@@ -15,7 +15,6 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.data;
 
-import it.smartcommunitylab.parking.management.web.auxiliary.model.LastChange;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.auxiliary.services.PolylineEncoder;
@@ -23,32 +22,20 @@ import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
-import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
-import it.smartcommunitylab.parking.management.web.model.DataLog;
-import it.smartcommunitylab.parking.management.web.model.geo.Point;
 
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Collections;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 import org.apache.log4j.Logger;
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.geo.Circle;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Order;
-import org.springframework.data.mongodb.core.query.Query;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import org.json.JSONArray;
@@ -67,16 +54,8 @@ public class GeoObjectManager {
 	private DynamicManager dynamicManager;
 	@Autowired
 	private MongoTemplate mongodb;
-
-//	@Value("${parking.agencies}")
-	private String parkingAgencies;
-
-//	@Value("${street.agencies}")
-	private String streetAgencies;
 	
 	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
-	private static final int PHYSICS_DELETION = 1;
-	private static final int LOGIC_DELETION = 2;
 	
 	public List<Parking> getParkings(String agency) throws Exception { 
 		return searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
@@ -331,8 +310,6 @@ public class GeoObjectManager {
 	private double rad2deg(double rad) {
 		return (rad * 180 / Math.PI);
 	}
-	
-	
 
 
 }

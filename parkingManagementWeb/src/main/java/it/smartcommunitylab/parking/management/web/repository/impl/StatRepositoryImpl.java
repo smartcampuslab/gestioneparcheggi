@@ -15,12 +15,15 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.repository.impl;
 
-import it.smartcommunitylab.parking.management.web.manager.HolidaysManager;
+import it.smartcommunitylab.parking.management.web.model.ObjectsHolidays;
+import it.smartcommunitylab.parking.management.web.model.ObjectsSpecialHolidays;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 import it.smartcommunitylab.parking.management.web.model.stats.YearStat;
 import it.smartcommunitylab.parking.management.web.repository.StatCustomRepository;
 import it.smartcommunitylab.parking.management.web.repository.StatRepository;
+import it.smartcommunitylab.parking.management.web.security.ObjectsHolidaysSetup;
+import it.smartcommunitylab.parking.management.web.security.ObjectsSpecialHolidaysSetup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -28,6 +31,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -37,16 +41,23 @@ import org.springframework.data.mongodb.core.query.Update;
 
 public class StatRepositoryImpl implements StatCustomRepository {
 
-
     @Autowired
     private MongoTemplate mongoTemplate;
 
     @Autowired
     private StatRepository repository;
+
+	@Autowired
+	private ObjectsHolidaysSetup objectItaHolidays;
+
+	@Autowired
+	private ObjectsSpecialHolidaysSetup objectHistoricalEaster;
     
     //@Autowired
-    //private HolidaysManager holidaysManager;
-
+	//private HolidaysManager holidaysManager;
+	
+	private static final Logger logger = Logger.getLogger(StatRepositoryImpl.class);
+    
 	public Map<StatKey, StatValue> findStats(String objectId, String appId, String type, Map<String, Object> params,
 			int[] years, byte[] months, byte[] days, byte[] hours) {
 		
@@ -93,7 +104,8 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		StatValue stat = new StatValue(1, value, value, timestamp);
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(timestamp);
-		boolean isHoliday = isHoliday(c, appId);
+		//boolean isHoliday = isHoliday(c, appId);
+		boolean isHoliday = isAHoliday(c, appId);
 		int month = c.get(Calendar.MONTH);
 		int dow = c.get(Calendar.DAY_OF_WEEK);
 		int hour = c.get(Calendar.HOUR_OF_DAY);
@@ -198,11 +210,12 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		mongoTemplate.upsert(Query.query(criteria), update, YearStat.class);
 	}
 
-	private boolean isHoliday(Calendar c, String appId) {
+	//private boolean isHoliday(Calendar c, String appId) {
 		// TODO
-		return c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+	//	return c.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY;
+		//HolidaysManager holidaysManager = new HolidaysManager();
 		//return holidaysManager.isAHoliday(c, appId);
-	}
+	//}
 
 	private Query createQuery(
 			String objectId, 
@@ -294,5 +307,70 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		}
 		return map;
 	}
+	
+	private List<ObjectsHolidays> getAllHolidays(String appId){
+		List<ObjectsHolidays> res = objectItaHolidays.getHolidays();
+		List<ObjectsHolidays> resApp = new ArrayList<ObjectsHolidays>();
+		for (ObjectsHolidays ih : res) {
+			if((ih.getAppId().compareTo(appId) == 0) || (ih.getAppId().compareTo("all") == 0)){
+				resApp.add(ih);
+			}
+		}
+		return resApp;
+	}
+	
+	private ObjectsHolidays findHolidaysByDate(Integer month, Integer day, String appId){
+		ObjectsHolidays result = null;
+		List<ObjectsHolidays> itaHolidays = getAllHolidays(appId);
+		for (ObjectsHolidays ih : itaHolidays) {
+			//logger.error(String.format("finded holiday: %s", ih.getId()));
+			if(ih.getMonth() == month && ih.getDay() == day){
+				result = ih;
+			}
+		}
+		return result;
+	}
+	
+	private List<ObjectsSpecialHolidays> getAllEasterMondays(){
+		List<ObjectsSpecialHolidays> res = objectHistoricalEaster.getHolidays();
+		return res;
+	}
+	
+	private ObjectsSpecialHolidays findEasterMondaysByDate(Integer year, Integer month, Integer day){
+		ObjectsSpecialHolidays result = null;
+		for (ObjectsSpecialHolidays he : getAllEasterMondays()) {
+			//logger.error(String.format("finded Easter Monday: %s - %d/%d/%d - myDay - %d/%d/%d", he.getId(), he.getDay(), he.getMonth(), he.getYear(), day, month, year));			
+			if(he.getYear().compareTo(year) == 0 && he.getMonth().compareTo(month) == 0 && he.getDay().compareTo(day) == 0){
+				result = he;
+			}
+		}
+		return result;
+	}
+	
+	/**
+	 * Method used to calculate if a specific date is holiday or not
+	 * @param cal: imput calendar object
+	 * @return true if holiday, false if not
+	 */
+	public boolean isAHoliday(Calendar cal, String appId){
+		boolean isHoliday = false;
+		// here I have to cover all the cases: public holidays in Ita, year holidays, city holidays
+		int wd = cal.get(Calendar.DAY_OF_WEEK);
+		if(wd == Calendar.SUNDAY){
+			isHoliday = true;
+		} else {
+			if(findHolidaysByDate(cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH), appId) != null){
+				isHoliday = true;
+			}
+		}
+		if(wd == Calendar.MONDAY){
+			if(findEasterMondaysByDate(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH) + 1, cal.get(Calendar.DAY_OF_MONTH)) != null){
+				isHoliday = true;
+			}
+		}
+		logger.error(String.format("isAHoliday function: day of week %d, day %d, month %d", wd, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1));
+		logger.error(String.format("isAHoliday function result: %s", isHoliday));
+		return isHoliday;
+	};
     
 }

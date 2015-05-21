@@ -45,7 +45,6 @@ public class ObjectsHolidaysSetup {
 	
 	private List<ObjectsHolidays> holidays;
 	private Map<String,ObjectsHolidays> holidaysMap;
-	
 
 	public List<ObjectsHolidays> getHolidays() {
 		return holidays;

@@ -17,7 +17,6 @@ package it.smartcommunitylab.parking.management.web.manager;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
-import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
@@ -27,28 +26,19 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
-import it.smartcommunitylab.parking.management.web.model.DataLog;
-import it.smartcommunitylab.parking.management.web.model.ObjectsSpecialHolidays;
-import it.smartcommunitylab.parking.management.web.model.ObjectsHolidays;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
 import it.smartcommunitylab.parking.management.web.model.Street;
-import it.smartcommunitylab.parking.management.web.model.Zone;
-import it.smartcommunitylab.parking.management.web.security.ObjectShowSetup;
-import it.smartcommunitylab.parking.management.web.security.ObjectsSpecialHolidaysSetup;
-import it.smartcommunitylab.parking.management.web.security.ObjectsHolidaysSetup;
+import it.smartcommunitylab.parking.management.web.repository.StatRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
@@ -64,13 +54,8 @@ public class DynamicManager {
 	@Autowired
 	private MongoTemplate mongodb;
 	
-//	@Autowired
-//	private ObjectsHolidaysSetup objectItaHolidays;
-//
-//	@Autowired
-//	private ObjectsSpecialHolidaysSetup objectHistoricalEaster;
 	@Autowired
-	HolidaysManager holidaysManager;
+	private StatRepository repo;
 	
 	// RateArea Methods
 	public List<RateAreaBean> getAllArea() {
@@ -295,7 +280,7 @@ public class DynamicManager {
 					int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 					dl.setWeek_day(dayOfWeek + "");
 					dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-					boolean isHolyday = holidaysManager.isAHoliday(cal, temp.getId_app());
+					boolean isHolyday = repo.isAHoliday(cal, temp.getId_app());
 					dl.setHolyday(isHolyday);
 					//---------------------------
 					//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -363,7 +348,7 @@ public class DynamicManager {
 					int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 					dl.setWeek_day(dayOfWeek + "");
 					dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-					boolean isHolyday = holidaysManager.isAHoliday(cal, temp.getId_app());
+					boolean isHolyday = repo.isAHoliday(cal, temp.getId_app());
 					dl.setHolyday(isHolyday);
 					//---------------------------
 					//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -376,6 +361,11 @@ public class DynamicManager {
 					//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 					mongodb.save(dl);
 					logger.error(String.format("Updated street: %s", temp.toString()));
+					// Update Stat report
+					int[] total = {s.getSlotsFree(),s.getSlotsPaying(), s.getSlotsTimed()};
+					int[] occupied = {s.getSlotsOccupiedOnFree(),s.getSlotsOccupiedOnPaying(), s.getSlotsOccupiedOnTimed(), s.getSlotsUnavailable()};
+					double statValue = findOccupationRate(total, occupied);
+					repo.updateStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp);
 					break;
 				}
 			}
@@ -421,7 +411,7 @@ public class DynamicManager {
 		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 		dl.setWeek_day(dayOfWeek + "");
 		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-		boolean isHolyday = holidaysManager.isAHoliday(cal, bike.getId_app());
+		boolean isHolyday = repo.isAHoliday(cal, bike.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
 		//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -490,7 +480,7 @@ public class DynamicManager {
 		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 		dl.setWeek_day(dayOfWeek + "");
 		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-		boolean isHolyday = holidaysManager.isAHoliday(cal, entity.getId_app());
+		boolean isHolyday = repo.isAHoliday(cal, entity.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
 		//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -539,7 +529,7 @@ public class DynamicManager {
 		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
 		dl.setWeek_day(dayOfWeek + "");
 		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
-		boolean isHolyday = holidaysManager.isAHoliday(cal, entity.getId_app());
+		boolean isHolyday = repo.isAHoliday(cal, entity.getId_app());
 		dl.setHolyday(isHolyday);
 		//---------------------------
 		//Integer oldVersion = getLastVersion(dl.getObjId());
@@ -557,6 +547,11 @@ public class DynamicManager {
 		dl.setValue(map);
 		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 		mongodb.save(dl);
+		// Update Stat report
+		int[] total = {p.getSlotsTotal()};
+		int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
+		double statValue = findOccupationRate(total, occupied);
+		repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
 	}
 
 	
@@ -601,6 +596,7 @@ public class DynamicManager {
 		return result;
 	}
 	
+	@SuppressWarnings("unused")
 	private Integer getLastVersion(String objId){
 		Integer version = new Integer(0);
 		Query q = new Query();
@@ -613,6 +609,19 @@ public class DynamicManager {
 			//logger.info(String.format("Version finded: %d", version ));
 		}
 		return version;
+	}
+	
+	private double findOccupationRate(int[] total, int[] occupied){
+		int tot = 0;
+		int occ = 0;
+		for(int i = 0; i < total.length; i++){
+			tot+=total[i];
+		}
+		for(int i = 0; i < occupied.length; i++){
+			occ+=occupied[i];
+		}
+		double rate = tot * 100 / occ;
+		return rate;
 	}
 
 }
