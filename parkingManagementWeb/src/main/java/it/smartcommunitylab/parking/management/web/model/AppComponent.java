@@ -51,6 +51,7 @@ public class AppComponent {
 		return listAttr;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List<Map> getAttributesMap(){
 		List<Map> attList = new ArrayList<Map>();
 		for(int i = 0; i < attributes.size(); i++){

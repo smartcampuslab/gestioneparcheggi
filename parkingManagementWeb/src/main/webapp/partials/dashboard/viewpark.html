@@ -60,7 +60,7 @@
                                 <tr>
                                     <td align="left">
                                         <label>{{'time_vis'|i18n}}</label>
-                                        <select class="form-control input-sm" ng-model="vis">
+                                        <select class="form-control input-sm" ng-model="vis" ng-change="updateSearch()">
                                             <option ng-repeat="v in visOptions" value="{{v}}">{{v|i18n}}</option>
                                         </select>
                                     </td>
@@ -68,7 +68,7 @@
                                 <tr ng-if="vis=='vis_medium' || vis=='vis_last_value'">
                                     <td align="left">
                                         <label>{{'year_vis'|i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
-                                        <select class="form-control input-sm" ng-model="year">
+                                        <select class="form-control input-sm" ng-model="year" ng-change="updateSearch()">
                                             <option value="">{{'all_years_vis'|i18n}}</option>
                                             <option ng-repeat="y in years" value="{{y}}">{{y}}</option>
                                         </select>
@@ -78,7 +78,7 @@
 									<td align="left">
 										<label>{{'month_vis'| i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
                                         <br/><br/>
-										<input ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" />
+										<input ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" ng-change="updateMonth(monthSliderValue)" /><!-- ng-change="updateSearch()" -->
 										<br/>
 									</td>
 								</tr>
@@ -86,16 +86,16 @@
 									<td align="left">
                                         <label>{{'day_vis'|i18n}}</label>
                                         <div>
-                                            <label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="wd">{{'wd_vis'|i18n}}</label>
-                                            <label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="we">{{'we_vis'|i18n}}</label>
+                                            <label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="wd" ng-change="updateSearch()">{{'wd_vis'|i18n}}</label>
+                                            <label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="we" ng-change="updateSearch()">{{'we_vis'|i18n}}</label>
                                         </div>
-                                        <div><label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="custom">{{'custom_vis'|i18n}}</label></div>
+                                        <div><label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="custom" ng-change="updateSearch()">{{'custom_vis'|i18n}}</label></div>
                                     </td>
                                 </tr>
                                 <tr ng-if="vis !='vis_medium_day' && dayOptions.value=='custom'">
                                     <td align="left">
                                         <br/>
-                                        <input ng-model="daySliderValue" type="text" id="daySlider" slider options="daySliderOptions" />
+                                        <input ng-model="daySliderValue" type="text" id="daySlider" slider options="daySliderOptions" ng-change="updateDay(daySliderValue)" />
                                         <br/>
                                     </td>
                                 </tr>
@@ -104,7 +104,7 @@
 									<td align="left">
 										<label>{{'hour_vis'|i18n}}</label>
 										<br/><br/>
-                                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" />
+                                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" /><!-- ng-change="updateSearch()" -->
                                     </td>
 									<!-- ng-click="changeStreetAndPS()" -->
 								</tr>

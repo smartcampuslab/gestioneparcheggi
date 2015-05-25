@@ -88,4 +88,11 @@ public class StatKey {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		return "StatKey [objectId=" + objectId + ", appId=" + appId + ", type="
+				+ type + "]";
+	}
+	
 }

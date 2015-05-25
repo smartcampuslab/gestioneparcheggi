@@ -73,6 +73,7 @@ public class ObjectShowSetting implements Serializable {
 		return objToShow;
 	}
 	
+	@SuppressWarnings("rawtypes")
 	public List<Map> getShowObjectsMap() {
 		List<Map> showObjs = new ArrayList<Map>();
 		for(int i = 0; i < showObjects.size(); i++){

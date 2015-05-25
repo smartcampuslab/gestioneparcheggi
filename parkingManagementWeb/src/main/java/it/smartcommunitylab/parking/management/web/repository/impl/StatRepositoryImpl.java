@@ -52,9 +52,6 @@ public class StatRepositoryImpl implements StatCustomRepository {
 
 	@Autowired
 	private ObjectsSpecialHolidaysSetup objectHistoricalEaster;
-    
-    //@Autowired
-	//private HolidaysManager holidaysManager;
 	
 	private static final Logger logger = Logger.getLogger(StatRepositoryImpl.class);
     
@@ -68,6 +65,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			query = createQuery(objectId, appId, type, params, years, months, days, false, false, hours);
 		} 
 		List<YearStat> stats = mongoTemplate.find(query, YearStat.class);
+		
 		return toMap(stats);
 	}
 
@@ -88,6 +86,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	public Map<StatKey, StatValue> findLastValue(String objectId, String appId,
 			String type, Map<String, Object> params, int[] years, byte[] months, byte[] days, byte[] hours) 
 	{
+		//logger.info(String.format("objectId: %s, appId: %s, type: %s", objectId, appId, type));
 		return findStats(objectId, appId, type, params, years, months, days, hours);
 	}
 
@@ -300,6 +299,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		for (YearStat stat : stats) {
 			StatKey key = stat.getKey().toStatKey();
 			StatValue value = stat.toStatValue();
+			logger.info(String.format("key %s, value %s", key.toString(), value.toString()));
 			map.put(key, value.merge(map.get(key)));
 		}
 		for (StatKey key : map.keySet()) {

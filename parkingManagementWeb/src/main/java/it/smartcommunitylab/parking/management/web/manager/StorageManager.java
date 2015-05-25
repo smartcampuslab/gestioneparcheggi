@@ -46,7 +46,6 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
@@ -679,6 +678,16 @@ public class StorageManager {
 		return result;
 	}
 	
+	public ParkingStructureBean findParkingStructure(
+			String id) throws NotFoundException {
+		ParkingStructure entity = findById(id,ParkingStructure.class);
+		ParkingStructureBean ps = null;
+		if(entity != null){
+			ps = ModelConverter.convert(entity, ParkingStructureBean.class);
+		}
+		return ps;
+	}
+	
 	/**
 	 * Method getParkingStructureByName: used to find a ParkingStructure given a specific name
 	 * @param name: name of the structure to find
@@ -829,6 +838,7 @@ public class StorageManager {
 		return result;
 	}
 	
+	@SuppressWarnings("unused")
 	private Integer getLastVersion(String objId){
 		Integer version = new Integer(0);
 		Query q = new Query();

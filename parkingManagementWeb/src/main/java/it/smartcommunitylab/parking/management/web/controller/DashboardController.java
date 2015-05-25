@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.controller;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
@@ -24,8 +26,10 @@ import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 import java.io.IOException;
 import java.util.List;
@@ -41,6 +45,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -51,6 +56,12 @@ public class DashboardController {
 
 	@Autowired
 	StorageManager storage;
+	
+	@Autowired
+	StatRepositoryImpl statRepo;
+	
+	@Autowired
+	DynamicManager dynamic;
 
 	MarkerIconStorage markerIconStorage;
 
@@ -151,6 +162,38 @@ public class DashboardController {
 	List<ParkingStructureBean> getAllParkingStructureNS() {
 		return storage.getAllParkingStructure();
 	}
+	
+	// New Part for occupancy data
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/parkingstructure/{id}")
+	public @ResponseBody ParkingStructureBean getParkingStructureOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday) throws Exception {
+		byte[] hour = new byte[]{(byte)10,(byte)12};
+		String type = Parking.class.getCanonicalName();
+		return dynamic.getOccupationRateFromParking(id, appId, type, null, year, month, dayType, weekday, hour);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/parkingstructures")
+	public @ResponseBody
+	List<ParkingStructureBean> getAllParkingStructureOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday) throws Exception {
+		byte[] hour = new byte[]{(byte)10,(byte)12};
+		String type = Parking.class.getCanonicalName();
+		return dynamic.getOccupationRateFromAllParkings(appId, type, null, year, month, dayType, weekday, hour);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/street/{id}")
+	public @ResponseBody StreetBean getStreetOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday) throws Exception {
+		byte[] hour = new byte[]{(byte)10,(byte)12};
+		String type = Street.class.getCanonicalName();
+		return dynamic.getOccupationRateFromStreet(id, appId, type, null, year, month, dayType, weekday, hour);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/streets")
+	public @ResponseBody
+	List<StreetBean> getAllStreetOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday) throws Exception {
+		byte[] hour = new byte[]{(byte)10,(byte)12};
+		String type = Street.class.getCanonicalName();
+		return dynamic.getOccupationRateFromAllStreets(appId, type, null, year, month, dayType, weekday, hour);
+	}
+	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/data")
 	public @ResponseBody
@@ -209,5 +252,6 @@ public class DashboardController {
 		response.getOutputStream().write(icon);
 		response.getOutputStream().flush();
 	}
+	
 
 }

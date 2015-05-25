@@ -16,7 +16,6 @@
 package it.smartcommunitylab.parking.management.web.security;
 
 import it.smartcommunitylab.parking.management.web.model.ObjectsSpecialHolidays;
-import it.smartcommunitylab.parking.management.web.model.ObjectsHolidays;
 
 import java.io.IOException;
 import java.util.HashMap;

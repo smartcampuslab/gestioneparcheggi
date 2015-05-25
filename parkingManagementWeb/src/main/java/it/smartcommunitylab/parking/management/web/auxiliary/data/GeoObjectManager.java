@@ -78,6 +78,7 @@ public class GeoObjectManager {
 		//currTime = 1419462000000L; // Christmas Day 2014
 		//currTime = 1428271200000L; // Easter Monday 2015
 		//currTime = 1431813600000L; // A Sunday
+		//currTime = 1432543500000L;	// Today at 10.45 am
 		dynamicManager.editStreetAux(s, currTime, agencyId, authorId);
 	}
 	
@@ -167,6 +168,7 @@ public class GeoObjectManager {
 		return listaObj; //find(query, cls);
 	}
 	
+	@SuppressWarnings("unused")
 	private static <T> Criteria createSearchCriteria(Class<T> cls, Circle circle, Map<String, Object> inCriteria) { //Circle circle
 		Criteria criteria = new Criteria();
 		if (cls != null) {
@@ -187,6 +189,7 @@ public class GeoObjectManager {
 	
 	// ------------------------------------------------------------------------
 	
+	@SuppressWarnings("unused")
 	private <T> T findById(String id, Class<T> javaClass)
 			throws NotFoundException {
 		T result = mongodb.findById(id, javaClass);
@@ -197,6 +200,7 @@ public class GeoObjectManager {
 	}
 	
 	
+	@SuppressWarnings("unused")
 	private Street castStreetJSONToObject(String value){
 		logger.error(String.format("Street to be casted : %s", value));
 		JSONObject jsonStreet = new JSONObject(value);
@@ -229,6 +233,7 @@ public class GeoObjectManager {
 		return s;
 	}
 	
+	@SuppressWarnings("unused")
 	private Parking castParkingJSONToObject(String value){
 		JSONObject jsonParking = new JSONObject(value);	
 		Parking p = new Parking();

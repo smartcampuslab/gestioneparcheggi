@@ -103,6 +103,7 @@ public class ModelConverter {
 		sb.setUnusuableSlotNumber(s.getUnusuableSlotNumber());
 		sb.setLastChange(s.getLastChange());
 		sb.setRateAreaId(s.getRateAreaId());
+		//sb.setRateAreaId(area.getId());
 		sb.setColor(area.getColor());
 		sb.setGeometry(convert(s.getGeometry(), LineBean.class));
 		sb.setSubscritionAllowedPark(s.isSubscritionAllowedPark());

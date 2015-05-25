@@ -141,6 +141,7 @@ public class MarkerIconStorage {
 		return iconFolder.getAbsolutePath() + "/";
 	}
 
+	@SuppressWarnings("unused")
 	private void generateMarkerWithFlag(String basePath, String company,
 			String entity, String color) throws IOException {
 		BufferedImage templateIcon = ImageIO.read(new File(getIconFolder(

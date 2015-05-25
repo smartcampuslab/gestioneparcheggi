@@ -35,6 +35,7 @@ public class ParkingStructureBean {
 	private List<String> paymentMode;
 	private String phoneNumber;
 	private Long lastChange;
+	private double occupancyRate;	// I use it only in the bean and not in the db object
 	
 	public String getId_app() {
 		return id_app;
@@ -164,6 +165,14 @@ public class ParkingStructureBean {
 		this.lastChange = lastChange;
 	}
 	
+	public double getOccupancyRate() {
+		return occupancyRate;
+	}
+
+	public void setOccupancyRate(double occupancyRate) {
+		this.occupancyRate = occupancyRate;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -176,7 +185,8 @@ public class ParkingStructureBean {
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
-		json += "\"lastChange\":\"" + getLastChange() + "\"";
+		json += "\"lastChange\":\"" + getLastChange() + "\",";
+		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\"";
 		json += "}";
 		return json;
 	}

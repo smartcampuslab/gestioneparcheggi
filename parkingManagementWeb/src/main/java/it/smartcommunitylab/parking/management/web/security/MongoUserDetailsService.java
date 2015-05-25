@@ -18,8 +18,6 @@ package it.smartcommunitylab.parking.management.web.security;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.annotation.Resource;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
@@ -32,7 +30,6 @@ import org.springframework.stereotype.Component;
 
 import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
 import it.smartcommunitylab.parking.management.web.model.UserSetting;
-import it.smartcommunitylab.parking.management.web.repository.UserRepositoryDao;
 
 @Component
 public class MongoUserDetailsService implements UserDetailsService {
@@ -58,14 +55,13 @@ private org.springframework.security.core.userdetails.User userdetails;
         boolean credentialsNonExpired = true;
         boolean accountNonLocked = true;
         //it.smartcommunitylab.parking.management.web.repository.User user = getUserDetail(username);
-        //System.out.println(user.getUsername());
         //System.out.println(user.getRole());
         
         UserSetting myUser = userSetup.findUserByUsername(username);
         if(myUser != null){
         	objectShowSetup.setApp_id(myUser.getAppId());
-        	System.out.println(myUser.getUsername());
-            System.out.println(myUser.getPassword());
+        	logger.info(String.format("username : %s", myUser.getUsername()));
+        	logger.info(String.format("pwd : %s", myUser.getPassword()));
             
             userdetails = new User(myUser.getUsername(), 
             				myUser.getPassword(),
@@ -77,7 +73,6 @@ private org.springframework.security.core.userdetails.User userdetails;
         }
         
         
-            
 //            userdetails = new User(user.getUsername(), 
 //            					   user.getPassword(),
 //    		        			   enabled,

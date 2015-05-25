@@ -15,9 +15,6 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
-import it.smartcommunitylab.parking.management.web.model.Zone;
-
-import java.util.ArrayList;
 import java.util.List;
 
 public class StreetBean {
@@ -46,6 +43,7 @@ public class StreetBean {
 	private List<String> zones;	//List with the id of the associated zone
 	private List<String> parkingMeters;	//List with the id of the associated pms (optional)
 	private Long lastChange;
+	private double occupancyRate;	// I use it only in the bean and not in the db object
 
 	public String getId() {
 		return id;
@@ -245,6 +243,14 @@ public class StreetBean {
 	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
 		this.unusuableSlotNumber = unusuableSlotNumber;
 	}
+	
+	public double getOccupancyRate() {
+		return occupancyRate;
+	}
+
+	public void setOccupancyRate(double occupancyRate) {
+		this.occupancyRate = occupancyRate;
+	}
 
 //	public List<Zone> getZoneBeanToZone(){
 //		List<Zone> zons = new ArrayList<Zone>();
@@ -284,7 +290,7 @@ public class StreetBean {
 				+ ", subscritionAllowedPark=" + subscritionAllowedPark
 				+ ", rateAreaId=" + rateAreaId + ", geometry=" + geometry
 				+ ", color=" + color + ", zones=" + zones + ", parkingMeters="
-				+ parkingMeters + ", lastChange=" + lastChange + "]";
+				+ parkingMeters + ", lastChange=" + lastChange + ", occupancyRate=" + occupancyRate + "]";
 	}
 	
 	public String toJSON(){
@@ -309,7 +315,8 @@ public class StreetBean {
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";
 		json += "\"zones\":\"" + getZones() + "\",";
-		json += "\"parkingMeters\":\"" + getParkingMeters() + "\"";
+		json += "\"parkingMeters\":\"" + getParkingMeters() + "\",";
+		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\"";
 		json += "}";
 		return json;
 	}

@@ -84,4 +84,12 @@ public class StatValue {
 	public StatValue copy() {
 		return new StatValue(count, aggregateValue, lastValue, lastUpdate); 
 	}
+
+	@Override
+	public String toString() {
+		return "StatValue [count=" + count + ", aggregateValue="
+				+ aggregateValue + ", lastValue=" + lastValue + ", lastUpdate="
+				+ lastUpdate + "]";
+	}
+	
 }

@@ -30,6 +30,8 @@ import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
 import it.smartcommunitylab.parking.management.web.model.Street;
+import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
+import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 import it.smartcommunitylab.parking.management.web.repository.StatRepository;
 
 import java.util.ArrayList;
@@ -65,12 +67,32 @@ public class DynamicManager {
 		}
 		return result;
 	}
+	
+	public List<RateAreaBean> getAllAreaInAppId(String appId) {
+		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
+		for (RateArea a : mongodb.findAll(RateArea.class)) {
+			if(a != null && a.getId_app().compareTo(appId) == 0){
+				result.add(ModelConverter.convert(a, RateAreaBean.class));
+			}
+		}
+		return result;
+	}
 
 	// Street Methods
 	public List<StreetBean> getAllStreets(Long timestamp) {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 
 		for (RateAreaBean temp : getAllArea()) {
+			result.addAll(getAllStreets(temp, timestamp));
+		}
+
+		return result;
+	}
+	
+	public List<StreetBean> getAllStreetsInAppId(Long timestamp, String appId) {
+		List<StreetBean> result = new ArrayList<StreetBean>();
+
+		for (RateAreaBean temp : getAllAreaInAppId(appId)) {
 			result.addAll(getAllStreets(temp, timestamp));
 		}
 
@@ -387,6 +409,22 @@ public class DynamicManager {
 		return result;
 	}
 	
+	public List<BikePointBean> getAllBikePointsInAppId(Long timestamp, String appId) {
+		List<BikePointBean> result = new ArrayList<BikePointBean>();
+		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
+			if(bp != null && bp.getId_app().compareTo(appId) == 0){
+				if(timestamp == null){
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				} else {
+					if(bp.getLastChange() != null && bp.getLastChange() >= timestamp){
+						result.add(ModelConverter.convert(bp, BikePointBean.class));
+					}
+				}
+			}
+		}
+		return result;
+	}
+	
 	public BikePointBean editBikePoint(BikePointBean bp, Long timestamp)
 			throws NotFoundException {
 		BikePoint bike = findById(bp.getId(), BikePoint.class);
@@ -444,6 +482,32 @@ public class DynamicManager {
 			}
 		}	
 		return result;
+	}
+	
+	public List<ParkingStructureBean> getAllParkingStructureInAppId(Long timestamp, String appId) {
+		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
+		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
+			if(entity != null && entity.getId_app().compareTo(appId) == 0){
+				if(timestamp == null){
+					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+				} else {
+					if(entity.getLastChange() != null && entity.getLastChange() >= timestamp){
+						result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+					}
+				}
+			}
+		}	
+		return result;
+	}
+	
+	public ParkingStructureBean findParkingStructure(
+			String id) throws NotFoundException {
+		ParkingStructure entity = findById(id,ParkingStructure.class);
+		ParkingStructureBean ps = null;
+		if(entity != null){
+			ps = ModelConverter.convert(entity, ParkingStructureBean.class);
+		}
+		return ps;
 	}
 
 	public ParkingStructureBean editParkingStructure(ParkingStructureBean entityBean, 
@@ -620,8 +684,88 @@ public class DynamicManager {
 		for(int i = 0; i < occupied.length; i++){
 			occ+=occupied[i];
 		}
-		double rate = tot * 100 / occ;
+		double rate = occ * 100 / tot;
 		return rate;
+	}
+	
+	/**
+	 * Methods getOccupationRateFromObject: retrieve the occupation rate of a specific object in a specific time range
+	 * @param objectId: id of the stored object
+	 * @param appId: app id of the object
+	 * @param type: class type of the object
+	 * @param params: Map object with useful parameters (in this first version we consider all null)
+	 * @param years: year range
+	 * @param months: month range
+	 * @param days: day range
+	 * @param hours: hour range
+	 * @return double occupation rate retrieved with the specific parameters
+	 */
+	public double getOccupationRateFromObject(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		Map<StatKey, StatValue> res = null;
+		StatKey key = new StatKey(objectId, appId,type);
+		if(dayType != null && dayType.compareTo("wd") == 0){
+			res = repo.findLastValueWD(objectId, appId, type, params, years, months, hours);
+		} else if(dayType != null && dayType.compareTo("we") == 0){
+			res = repo.findLastValueWE(objectId, appId, type, params, years, months, hours);
+		} else {
+			res = repo.findLastValue(objectId, appId, type, params, years, months, days, hours);
+		}
+		if(!res.isEmpty()){
+			return res.get(key).getLastValue();
+		} else {
+			return 0.0;
+		}
+	}
+	
+	public StreetBean getOccupationRateFromStreet(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		StreetBean s = findStreet(objectId);
+		String sId = getCorrectId(objectId, "street", appId);
+		double occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+		s.setOccupancyRate(occRate);
+		
+		return s;
+	}
+	
+	public ParkingStructureBean getOccupationRateFromParking(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		ParkingStructureBean p = null;
+		try {
+			p = findParkingStructure(objectId);
+		} catch (NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		double occRate = getOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+		p.setOccupancyRate(occRate);
+		
+		return p;
+	}
+	
+	public List<StreetBean> getOccupationRateFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
+		List<StreetBean> corrStreets = new ArrayList<StreetBean>();
+		String sId = "";
+		for(StreetBean s : streets){
+			sId = getCorrectId(s.getId(), "street", appId);
+			double occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+			s.setOccupancyRate(occRate);
+			corrStreets.add(s);
+		}
+
+		return streets;
+	}
+	
+	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
+		for(ParkingStructureBean p : parkings){
+			double occRate = getOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+			p.setOccupancyRate(occRate);
+		}
+
+		return parkings;
+	}
+	
+	private String getCorrectId(String id, String type, String appId){
+		return new String(type + "@" + appId + "@" + id);
 	}
 
 }

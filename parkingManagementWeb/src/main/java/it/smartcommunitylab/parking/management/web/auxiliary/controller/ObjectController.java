@@ -1,5 +1,5 @@
 /*******************************************************************************
- * Copyright 2012-2013 Trento RISE
+ * Copyright 2015 Fondazione Bruno Kessler
  * 
  *    Licensed under the Apache License, Version 2.0 (the "License");
  *    you may not use this file except in compliance with the License.
@@ -75,6 +75,7 @@ public class ObjectController  {
 		} 
 		return dataService.getStreets(agency);
 	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkings") 
 	public @ResponseBody List<Parking> getParkings(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
 		logger.error("I'm in get all parkings - auxiliary app!!!");

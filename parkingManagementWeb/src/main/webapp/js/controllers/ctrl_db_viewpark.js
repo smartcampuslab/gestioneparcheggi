@@ -2,8 +2,8 @@
 
 /* Controllers */
 var pmControllers = angular.module('pmControllers', ['googlechart','angularAwesomeSlider']);
-pm.controller('TimeFilterCtrl',['$scope', '$rootScope','$filter', 'localize',
-                                function($scope, $$rootScope, $filter, localize) {
+pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize',
+                                function($scope, $route, $$rootScope, $filter, localize) {
 	
 	$scope.vis = 'vis_last_value';
 	$scope.visOptions = ['vis_last_value','vis_medium', 'vis_medium_year', 'vis_medium_month', 'vis_medium_day'];
@@ -13,27 +13,50 @@ pm.controller('TimeFilterCtrl',['$scope', '$rootScope','$filter', 'localize',
 	$scope.dayOptions = {value:'wd'};
 	
 	for (var i = 0; i < 5; i++) {
-		$scope.years.push(date.getFullYear()-i);
+		$scope.years.push('' + date.getFullYear()-i);
 	}
-	$scope.monthSliderValue = (date.getMonth() == 0 ? date.getMonth()+1 : date.getMonth())+";"+(date.getMonth()+1);
+	var initialMonth = (date.getMonth() == 0 ? date.getMonth()+1 : date.getMonth());
+	var endMonth = (date.getMonth()+1);
+	$scope.monthSliderValue = "" + initialMonth +";"+endMonth + "";
 	$scope.monthSliderOptions = {       
 		    from: 1,
 		    to: 12,
 		    step: 1,
-		    modelLabels: {1: 'GE', 2: 'FE', 3: 'MA', 4: 'AP', 5: 'MA', 6: 'GI', 7:'LU', 8: 'AG', 9: 'SE', 10: 'OT', 11: 'NO', 12: 'DI'}
+		    modelLabels: {'1': 'GE', '2': 'FE', '3': 'MA', '4': 'AP', '5': 'MA', '6': 'GI', '7':'LU', '8': 'AG', '9': 'SE', '10': 'OT', '11': 'NO', '12': 'DI'}
 	};
 	$scope.daySliderValue = (date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
 	$scope.daySliderOptions = {       
 		    from: 1,
 		    to: 7,
 		    step: 1,
-		    modelLabels: {1: 'LU', 2: 'MA', 3: 'ME', 4: 'GI', 5: 'VE', 6: 'SA', 7:'DO'}
+		    modelLabels: {'1': 'LU', '2': 'MA', '3': 'ME', '4': 'GI', '5': 'VE', '6': 'SA', '7':'DO'}
 	};
 	$scope.hourSliderValue = "10;11";
 	$scope.hourSliderOptions = {
 		    from: 0,
 		    to: 23,
 		    step: 1
+	};
+	
+	$scope.updateMonth = function(value){
+		$scope.monthSliderValue = value;
+	};
+	
+	$scope.updateDay = function(value){
+		$scope.daySliderValue = value;
+	};
+	
+	$scope.updateSearch = function(){
+	    console.log("Visualizzazione: " + $scope.vis);
+	    console.log("Anno: " + $scope.year);
+	    console.log("Mesi: " + $scope.monthSliderValue);
+	    console.log("Giorno - tipo: " + $scope.dayOptions.value);
+	    console.log("Giorni: " + $scope.daySliderValue);
+	    console.log("Fascia oraria: " + $scope.hourSliderValue);
+	    
+	    // Here I have to invoke new stat WS services
+	    
+	    
 	};
 
 }]);
@@ -1062,7 +1085,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "area", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allAreas);
-			console.log("rateAreas retrieved from db: " + JSON.stringify(result));
+			//console.log("rateAreas retrieved from db: " + JSON.stringify(result));
 			    
 			$scope.areaWS = allAreas;
 			if(showArea){
@@ -1082,7 +1105,32 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "street", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
-		    console.log("streets retrieved from db: " + JSON.stringify(result));
+		    //console.log("streets retrieved from db: " + JSON.stringify(result));
+		    	
+		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
+		    if(showStreets){
+		    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true);
+			}
+		});
+	};
+	
+	$scope.getOccupancyStreetsFromDb = function(year, month, weekday, dayType){
+		$scope.streetMapReady = false;
+		var allStreet = [];
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			year : year,
+			month: month,
+			weekday: weekday,
+			dayType: dayType
+		};
+			
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streets", params, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+		    angular.copy(result, allStreet);
+		    console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
 		    if(showStreets){
@@ -1100,7 +1148,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allParkingMeters);
-		  	console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
+		  	//console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
 		    //$scope.addParkingMetersMarkers(allParkingMeters);
 		    	
 		    if(showPm){
@@ -1677,11 +1725,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.fixAllStreetsOccupancy = function(){
     	// For Streets
+		// Here I have To retrieve all the streets occupancy object
+		var d = new Date();
+		
+		$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), null, "wd");
 		var toHideStreets = $scope.map.shapes;
     	for(var i = 0; i < $scope.mapStreets.length; i++){
     		toHideStreets[$scope.mapStreets[i].id].setMap(null);
     		var object = $scope.mapStreets[i];
-    		object.stroke.color = $scope.getOccupancyColor(object.data.averageOccupation1012);
+    		object.stroke.color = $scope.getOccupancyColor(object.data.occupancyRate);	//averageOccupation1012
     		$scope.occupancyStreets.push(object);
     	}
     	$scope.mapStreets = [];
