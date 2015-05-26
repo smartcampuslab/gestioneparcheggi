@@ -1023,6 +1023,10 @@
     "value": "a pagamento",
     "description": "Label campo posti a pagamento per oggetto strada in dashboard"
 }, {
+    "key": "street_average_occupation",
+    "value": "Occupazione media",
+    "description": "Label per valore occupazione media per oggetto strada in dashboard"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {

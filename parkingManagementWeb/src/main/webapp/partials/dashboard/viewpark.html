@@ -43,7 +43,7 @@
 									<td align="left"><label><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons()">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
 								</tr>
 								<tr><!-- ng-show="isStreetVisible()" -->
-									<td align="left"><label><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines()">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
+									<td align="left"><label><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
 								</tr>
 								<tr><!--  ng-show="isPsVisible()" -->
 									<td align="left"><label><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers()">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
@@ -68,7 +68,7 @@
                                 <tr ng-if="vis=='vis_medium' || vis=='vis_last_value'">
                                     <td align="left">
                                         <label>{{'year_vis'|i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
-                                        <select class="form-control input-sm" ng-model="year" ng-change="updateSearch()">
+                                        <select class="form-control input-sm" ng-model="year" ng-change="updateYear(year)">
                                             <option value="">{{'all_years_vis'|i18n}}</option>
                                             <option ng-repeat="y in years" value="{{y}}">{{y}}</option>
                                         </select>
@@ -100,13 +100,11 @@
                                     </td>
                                 </tr>
 								<tr>
-									<!-- ng-show="isStreetVisible()" -->
 									<td align="left">
 										<label>{{'hour_vis'|i18n}}</label>
 										<br/><br/>
-                                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" /><!-- ng-change="updateSearch()" -->
+                                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateSearch()" />
                                     </td>
-									<!-- ng-click="changeStreetAndPS()" -->
 								</tr>
 							</table>
 						</div>
@@ -367,19 +365,21 @@
 											</td>
 								       	</tr>
 								       	<tr>
-								       		<td colspan="2">
-								       			<strong>{{ 'street_slots' | i18n }}:</strong>
-										       		<div class="panel panel-default">
-														<div class="panel-body">
-														<table width="100%">
-											       			<tr ng-show="s_slotNum.visible">
-													        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
-													        	<td>&nbsp;{{ sDetails.data.slotNumber }}</td>
-													        </tr>
-													        <tr>
-													        	<td><strong>{{ 'street_occupiedslot' | i18n }}:</strong></td>
-													        	<td>&nbsp;{{ sDetails.data.slotOccupied }}</td>
-													        </tr>
+								       		<td width="65%"><strong>{{ 'street_average_occupation' | i18n }}:</strong></td>
+											<td width="35%">{{ sDetails.data.occupancyRate }}</td>
+<!-- 								       		<td colspan="2"> -->
+<!-- 								       			<strong>{{ 'street_slots' | i18n }}:</strong> -->
+<!-- 										       		<div class="panel panel-default"> -->
+<!-- 														<div class="panel-body"> -->
+<!-- 														<table width="100%"> -->
+<!-- 											       			<tr ng-show="s_slotNum.visible"> -->
+<!-- 													        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td> -->
+<!-- 													        	<td>&nbsp;{{ sDetails.data.slotNumber }}</td> -->
+<!-- 													        </tr> -->
+<!-- 													        <tr> -->
+<!-- 													        	<td><strong>{{ 'street_occupiedslot' | i18n }}:</strong></td> -->
+<!-- 													        	<td>&nbsp;{{ sDetails.data.slotOccupied }}</td> -->
+<!-- 													        </tr> -->
 	<!-- 														<tr ng-show="s_handicappedSlot.visible"> -->
 	<!-- 												        	<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td> -->
 	<!-- 												        	<td>&nbsp;{{ sDetails.data.handicappedSlotNumber }}</td> -->
@@ -396,10 +396,10 @@
 	<!-- 												        	<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td> -->
 	<!-- 												        	<td>&nbsp;{{ sDetails.data.unusuableSlotNumber }}</td> -->
 	<!-- 												        </tr> -->
-												        </table>
-											        </div>
-										        </div>
-								       		</td>
+<!-- 												        </table> -->
+<!-- 											        </div> -->
+<!-- 										        </div> -->
+<!-- 								       		</td> -->
 								       	</tr>
 								    </table>
 								</div>

@@ -689,7 +689,7 @@ public class DynamicManager {
 	}
 	
 	/**
-	 * Methods getOccupationRateFromObject: retrieve the occupation rate of a specific object in a specific time range
+	 * Method getOccupationRateFromObject: retrieve the occupation rate of a specific object in a specific time range
 	 * @param objectId: id of the stored object
 	 * @param appId: app id of the object
 	 * @param type: class type of the object
@@ -717,16 +717,50 @@ public class DynamicManager {
 		}
 	}
 	
-	public StreetBean getOccupationRateFromStreet(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+	/**
+	 * Method getAverageOccupationRateFromObject: retrieve the average occupation rate of a specific object in a specific time range
+	 * @param objectId: id of the stored object
+	 * @param appId: app id of the object
+	 * @param type: class type of the object
+	 * @param params: Map object with useful parameters (in this first version we consider all null)
+	 * @param years: year range
+	 * @param months: month range
+	 * @param days: day range
+	 * @param hours: hour range
+	 * @return double average occupation rate retrieved with the specific parameters
+	 */
+	public double getAverageOccupationRateFromObject(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		Map<StatKey, StatValue> res = null;
+		StatKey key = new StatKey(objectId, appId,type);
+		if(dayType != null && dayType.compareTo("wd") == 0){
+			res = repo.findStatsWD(objectId, appId, type, params, years, months, hours);
+		} else if(dayType != null && dayType.compareTo("we") == 0){
+			res = repo.findStatsWE(objectId, appId, type, params, years, months, hours);
+		} else {
+			res = repo.findStats(objectId, appId, type, params, years, months, days, hours);
+		}
+		if(!res.isEmpty()){
+			return res.get(key).getAggregateValue();
+		} else {
+			return 0.0;
+		}
+	}
+	
+	public StreetBean getOccupationRateFromStreet(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		StreetBean s = findStreet(objectId);
 		String sId = getCorrectId(objectId, "street", appId);
-		double occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+		double occRate = 0;
+		if(valueType == 1){
+			occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+		} else {
+			occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+		}
 		s.setOccupancyRate(occRate);
 		
 		return s;
 	}
 	
-	public ParkingStructureBean getOccupationRateFromParking(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+	public ParkingStructureBean getOccupationRateFromParking(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		ParkingStructureBean p = null;
 		try {
 			p = findParkingStructure(objectId);
@@ -734,19 +768,29 @@ public class DynamicManager {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		double occRate = getOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+		double occRate = 0;
+		if(valueType == 1){
+			occRate	= getOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+		} else {
+			occRate	= getAverageOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+		}
 		p.setOccupancyRate(occRate);
 		
 		return p;
 	}
 	
-	public List<StreetBean> getOccupationRateFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+	public List<StreetBean> getOccupationRateFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
 		List<StreetBean> corrStreets = new ArrayList<StreetBean>();
 		String sId = "";
 		for(StreetBean s : streets){
 			sId = getCorrectId(s.getId(), "street", appId);
-			double occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+			double occRate = 0;
+			if(valueType == 1){
+				occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+			} else {
+				occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+			}
 			s.setOccupancyRate(occRate);
 			corrStreets.add(s);
 		}
@@ -754,10 +798,15 @@ public class DynamicManager {
 		return streets;
 	}
 	
-	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
 		for(ParkingStructureBean p : parkings){
-			double occRate = getOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+			double occRate = 0;
+			if(valueType == 1){
+				occRate = getOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+			} else {
+				occRate = getAverageOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+			}
 			p.setOccupancyRate(occRate);
 		}
 

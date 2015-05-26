@@ -40,10 +40,17 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	
 	$scope.updateMonth = function(value){
 		$scope.monthSliderValue = value;
+		$scope.updateSearch();
 	};
 	
 	$scope.updateDay = function(value){
 		$scope.daySliderValue = value;
+		$scope.updateSearch();
+	};
+	
+	$scope.updateYear = function(value){
+		$scope.year = value;
+		$scope.updateSearch();
 	};
 	
 	$scope.updateSearch = function(){
@@ -54,8 +61,15 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    console.log("Giorni: " + $scope.daySliderValue);
 	    console.log("Fascia oraria: " + $scope.hourSliderValue);
 	    
-	    // Here I have to invoke new stat WS services
+	    var valueType = 0;
+	    if($scope.vis == "vis_last_value"){
+	    	valueType = 1;
+	    } else {
+	    	valueType = 2;
+	    }
 	    
+	    // Here I have to invoke new stat WS services
+	    $scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, valueType);
 	    
 	};
 
@@ -689,22 +703,38 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     };
     
     // Show/hide streets polygons
-    $scope.changeStreetPolylines = function(){
+    $scope.changeStreetPolylines = function(dashboardTopic){
 		//if(!$scope.mapelements.streets){
     	if(!$scope.dashboard_space.microzone){
-    		$scope.showStreetPolylines();
+    		if(dashboardTopic == "parkSupply"){
+    			$scope.showStreetPolylines(1);
+    		} else if(dashboardTopic == "occupation"){
+    			$scope.showStreetPolylines(2);
+    		}
 		} else {
-			$scope.hideStreetPolylines();
+			if(dashboardTopic == "parkSupply"){
+				$scope.hideStreetPolylines(1);
+    		} else if(dashboardTopic == "occupation"){
+    			$scope.hideStreetPolylines(2);
+    		}
 		}
 	};
     
-    $scope.showStreetPolylines = function() {
-    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true);
-        //$scope.refreshMap();
+    $scope.showStreetPolylines = function(type) {
+    	if(type == 1){
+    		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true, type);
+    	} else {
+    		$scope.occupancyStreets = $scope.initStreetsOnMap($scope.streetWS, true, type);
+    	}
+    	//$scope.refreshMap();
     };
     
-    $scope.hideStreetPolylines = function() {
-    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, false);
+    $scope.hideStreetPolylines = function(type) {
+    	if(type == 1){
+    		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, false, type);
+    	} else {
+    		$scope.occupancyStreets = $scope.initStreetsOnMap($scope.streetWS, false, type);
+    	}
     	$scope.hideAllStreets();
         //$scope.refreshMap();
         //$scope.$apply();
@@ -712,9 +742,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     $scope.hideAllStreets = function(){
     	var toDelStreet = $scope.map.shapes;
-    	for(var i = 0; i < $scope.mapStreets.length; i++){
-    		toDelStreet[$scope.mapStreets[i].id].setMap(null);		// I can access dinamically the value of the object shapes for street
-    	}
+	    for(var i = 0; i < $scope.mapStreets.length; i++){
+	    	toDelStreet[$scope.mapStreets[i].id].setMap(null);		// I can access dinamically the value of the object shapes for street
+	    }
+    	for(var i = 0; i < $scope.occupancyStreets.length; i++){
+	    	toDelStreet[$scope.occupancyStreets[i].id].setMap(null);		// I can access dinamically the value of the object shapes for street
+	    }
     };
     
     // Show/hide areas and zones polygons
@@ -921,10 +954,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return tmpAreas;
 	};
 	
-	$scope.initStreetsOnMap = function(streets, visible){
+	$scope.initStreetsOnMap = function(streets, visible, type){
 		var street = {};
 		var poligons = {};
 		var tmpStreets = [];
+		var sColor = "";
 		
 		for(var i = 0; i < streets.length; i++){
 			var myAreaS = $scope.getLocalAreaById(streets[i].rateAreaId);
@@ -933,6 +967,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var zone = $scope.getLocalZoneById(streets[i].zones[j]);
 				myZones.push(zone);
 			}
+			
+			if(type == 1){
+				sColor = $scope.correctColor(streets[i].color);
+			} else if(type == 2){
+				sColor = $scope.getOccupancyColor(streets[i].occupancyRate);
+			}
+			
 			if(streets[i].geometry != null){
 				poligons = streets[i].geometry;
 				street = {
@@ -940,7 +981,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					path: $scope.correctPoints(poligons.points),
 					gpath: $scope.correctPointsGoogle(poligons.points),
 					stroke: {
-					    color: $scope.correctColor(streets[i].color),
+					    color: sColor,
 					    weight: (visible) ? 3 : 0
 					},
 					data: streets[i],
@@ -1109,32 +1150,55 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
 		    if(showStreets){
-		    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true);
+		    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true, 1);
 			}
 		});
 	};
 	
-	$scope.getOccupancyStreetsFromDb = function(year, month, weekday, dayType){
+	// Method correctParamsFromSemicolon: used to replace the semicolon with a comma
+	$scope.correctParamsFromSemicolon = function(value){
+		if(value != null){
+			var res = value+"";
+			if(res.indexOf(";") > -1){
+				return res.replace(";",",");
+			} else {
+				return res;
+			}
+		} else {
+			return value;
+		}
+	};
+	
+	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
+	$scope.getOccupancyStreetsFromDb = function(year, month, weekday, dayType, hour, valueType){
 		$scope.streetMapReady = false;
 		var allStreet = [];
 		var idApp = sharedDataService.getConfAppId();
 		var method = 'GET';
 		var params = {
-			year : year,
-			month: month,
-			weekday: weekday,
-			dayType: dayType
+			year: $scope.correctParamsFromSemicolon(year),
+			month: $scope.correctParamsFromSemicolon(month),
+			weekday: $scope.correctParamsFromSemicolon(weekday),
+			dayType: dayType,
+			hour: $scope.correctParamsFromSemicolon(hour),
+			valueType: valueType,
+			noCache: new Date().getTime()
 		};
+		console.log("Params passed in ws get call" + JSON.stringify(params));
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streets", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
-		    console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
 		    if(showStreets){
-		    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true);
+		    	if($scope.dashboard_topics == "parkSupply"){
+		    		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true, 1);
+		    	} else {
+		    		$scope.occupancyStreets = $scope.initStreetsOnMap($scope.streetWS, true, 2);
+		    	}
 			}
 		});
 	};
@@ -1224,7 +1288,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    if(showZones){
 		    	$scope.initZonesOnMap($scope.zoneWS, false);
 		    }
-		    $scope.getStreetsFromDb();
+		    //$scope.getStreetsFromDb();
+		    var d = new Date();
+		    var hour = "10,12";
+		    $scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1);
 		});
 	};
 	
@@ -1725,10 +1792,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.fixAllStreetsOccupancy = function(){
     	// For Streets
-		// Here I have To retrieve all the streets occupancy object
-		var d = new Date();
-		
-		$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), null, "wd");
 		var toHideStreets = $scope.map.shapes;
     	for(var i = 0; i < $scope.mapStreets.length; i++){
     		toHideStreets[$scope.mapStreets[i].id].setMap(null);

@@ -522,7 +522,7 @@ pm.factory('invokeDashboardWSService', function($http, $q) {
 			$http({
 				method : method,
 				url : url + funcName,
-				params : params + '&noCache=' + new Date().getTime(),
+				params : params,
 				headers : headers,
 				data : data
 			}).success(function(data) {
