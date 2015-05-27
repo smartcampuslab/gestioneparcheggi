@@ -11,6 +11,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	$scope.years = [];
 	$scope.year = "";
 	$scope.dayOptions = {value:'wd'};
+	$scope.hourOptions = {value:'morning'};
 	
 	for (var i = 0; i < 5; i++) {
 		$scope.years.push('' + date.getFullYear()-i);
@@ -60,16 +61,26 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    console.log("Giorno - tipo: " + $scope.dayOptions.value);
 	    console.log("Giorni: " + $scope.daySliderValue);
 	    console.log("Fascia oraria: " + $scope.hourSliderValue);
-	    
-	    var valueType = 0;
-	    if($scope.vis == "vis_last_value"){
-	    	valueType = 1;
-	    } else {
-	    	valueType = 2;
+	    var d = new Date();	// I retrieve the actual date
+	    var weekDay = d.getDay() + 1; // In java calendar the weekday are from 1 to 7, in javascript from 0 to 6;
+	    switch($scope.vis){
+	    	case "vis_last_value": 
+	    		$scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1);
+	    		break;
+	    	case "vis_medium":
+	    		$scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2);
+	    		break;
+	    	case "vis_medium_year":
+	    		$scope.getOccupancyStreetsFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2);
+	    		break;
+	    	case "vis_medium_month":
+	    		$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2);
+	    		break;
+	    	case "vis_medium_day":
+	    		$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2);
+	    		break;
+	    	default: break;	
 	    }
-	    
-	    // Here I have to invoke new stat WS services
-	    $scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, valueType);
 	    
 	};
 

@@ -711,6 +711,7 @@ public class DynamicManager {
 			res = repo.findLastValue(objectId, appId, type, params, years, months, days, hours);
 		}
 		if(!res.isEmpty()){
+			logger.info(String.format("Occupation Rate Last Value = %f", res.get(key).getLastValue()));
 			return res.get(key).getLastValue();
 		} else {
 			return 0.0;
@@ -740,7 +741,8 @@ public class DynamicManager {
 			res = repo.findStats(objectId, appId, type, params, years, months, days, hours);
 		}
 		if(!res.isEmpty()){
-			return res.get(key).getAggregateValue();
+			logger.info(String.format("Occupation Rate Aggregate Value = %f", res.get(key).getAggregateValue()));
+			return res.get(key).getLastValue();
 		} else {
 			return 0.0;
 		}

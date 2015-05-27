@@ -99,9 +99,20 @@
                                         <br/>
                                     </td>
                                 </tr>
-								<tr>
+                               	<tr>
 									<td align="left">
-										<label>{{'hour_vis'|i18n}}</label>
+                                        <label>{{'hour_vis'|i18n}}</label>
+                                        <div>
+                                            <label><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="morning" ng-change="updateSearch()">{{'morning_vis'|i18n}}</label>
+                                            <label><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="afternoon" ng-change="updateSearch()">{{'afternoon_vis'|i18n}}</label>
+                                            <label><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="night" ng-change="updateSearch()">{{'night_vis'|i18n}}</label>
+                                        </div>
+                                        <div><label><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="custom" ng-change="updateSearch()">{{'custom_vis'|i18n}}</label></div>
+                                    </td>
+                                </tr>
+								<tr ng-if="hourOptions.value=='custom'">
+									<td align="left">
+<!-- 										<label>{{'hour_vis'|i18n}}</label> -->
 										<br/><br/>
                                         <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateSearch()" />
                                     </td>

@@ -198,7 +198,7 @@ public class DashboardController {
 		int weekday_t = (weekday!= null && weekday.length > 1) ? weekday[1] : 0;
 		int hour_f = (hour!= null && hour.length > 0) ? hour[0] : 0;
 		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
-		logger.info(String.format("Parameters retrieved in back-end request: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d; hour - %d,%d; valueType", appId, year_f, year_t, month_f, month_t, dayType, weekday_f, weekday_t, hour_f, hour_t, valueType));
+		logger.info(String.format("Parameters retrieved in back-end request: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_f, weekday_t, hour_f, hour_t, valueType));
 		String type = Street.class.getCanonicalName();
 		return dynamic.getOccupationRateFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType);
 	}
