@@ -1027,6 +1027,10 @@
     "value": "Occupazione media",
     "description": "Label per valore occupazione media per oggetto strada in dashboard"
 }, {
+    "key": "street_occupation_not_present",
+    "value": "n.p.",
+    "description": "Testo dato non presente per valore occupazione media strada in dashboard"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {
@@ -1067,13 +1071,13 @@
     "value": "Seleziona"
 }, {
     "key": "morning_vis",
-    "value": "10-12"
+    "value": "Matt"
 }, {
     "key": "afternoon_vis",
-    "value": "14-18"
+    "value": "Pome"
 }, {
     "key": "night_vis",
-    "value": "20-23"
+    "value": "Sera"
 }, {
     "key": "hour_vis",
     "value": "Fascia oraria"

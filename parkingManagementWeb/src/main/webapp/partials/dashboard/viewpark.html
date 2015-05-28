@@ -89,7 +89,7 @@
                                             <label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="wd" ng-change="updateSearch()">{{'wd_vis'|i18n}}</label>
                                             <label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="we" ng-change="updateSearch()">{{'we_vis'|i18n}}</label>
                                         </div>
-                                        <div><label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="custom" ng-change="updateSearch()">{{'custom_vis'|i18n}}</label></div>
+                                        <div><label><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="custom">{{'custom_vis'|i18n}}</label></div><!-- ng-change="updateSearch()" -->
                                     </td>
                                 </tr>
                                 <tr ng-if="vis !='vis_medium_day' && dayOptions.value=='custom'">
@@ -107,14 +107,14 @@
                                             <label><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="afternoon" ng-change="updateSearch()">{{'afternoon_vis'|i18n}}</label>
                                             <label><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="night" ng-change="updateSearch()">{{'night_vis'|i18n}}</label>
                                         </div>
-                                        <div><label><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="custom" ng-change="updateSearch()">{{'custom_vis'|i18n}}</label></div>
+                                        <div><label><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="custom">{{'custom_vis'|i18n}}</label></div><!-- ng-change="updateSearch()" -->
                                     </td>
                                 </tr>
 								<tr ng-if="hourOptions.value=='custom'">
 									<td align="left">
 <!-- 										<label>{{'hour_vis'|i18n}}</label> -->
 										<br/><br/>
-                                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateSearch()" />
+                                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateHour(hourSliderValue)" />
                                     </td>
 								</tr>
 							</table>
@@ -377,7 +377,8 @@
 								       	</tr>
 								       	<tr>
 								       		<td width="65%"><strong>{{ 'street_average_occupation' | i18n }}:</strong></td>
-											<td width="35%">{{ sDetails.data.occupancyRate }}</td>
+											<td width="35%"><span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
+												<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.occupancyRate }}</span></td>
 <!-- 								       		<td colspan="2"> -->
 <!-- 								       			<strong>{{ 'street_slots' | i18n }}:</strong> -->
 <!-- 										       		<div class="panel panel-default"> -->
@@ -637,7 +638,10 @@
 													        </tr>
 													        <tr>
 													        	<td><strong>{{ 'street_occupiedslot' | i18n }}:</strong></td>
-													        	<td>&nbsp;{{ sDetails.data.slotOccupied }}</td>
+													        	<td>&nbsp;
+													        		<span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
+													        		<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.slotOccupied }}</span>
+													        	</td>
 													        </tr>
 	<!-- 														<tr ng-show="s_handicappedSlot.visible"> -->
 	<!-- 												        	<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td> -->
@@ -694,7 +698,7 @@
 												        </table>
 											        </div>
 										        </div>
-										        <div google-chart chart="chartStreetFreeParkAvailability" style="{{chart.cssStyle}}"/>
+<!-- 										        <div google-chart chart="chartStreetFreeParkAvailability" style="{{chart.cssStyle}}"/> -->
 								       		</td>
 								       	</tr>
 								       	<tr>
@@ -730,7 +734,7 @@
 												        </table>
 											        </div>
 										        </div>
-										        <div google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/>
+<!-- 										        <div google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/> -->
 								       		</td>
 								       	</tr>
 								    </table>
