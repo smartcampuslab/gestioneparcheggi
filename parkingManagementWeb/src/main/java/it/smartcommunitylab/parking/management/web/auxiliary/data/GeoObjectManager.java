@@ -262,6 +262,7 @@ public class GeoObjectManager {
 		s.setSlotsFree(street.getFreeParkSlotNumber());
 		s.setSlotsPaying(street.getPaidSlotNumber());
 		s.setSlotsTimed(street.getTimedParkSlotNumber());
+		s.setSlotsHandicapped(street.getHandicappedSlotNumber());
 		s.setName(street.getStreetReference());
 		if(street.getGeometry()!= null && street.getGeometry().getPoints() != null && street.getGeometry().getPoints().size() > 0){
 			s.setPolyline(PolylineEncoder.encode(street.getGeometry().getPoints()));

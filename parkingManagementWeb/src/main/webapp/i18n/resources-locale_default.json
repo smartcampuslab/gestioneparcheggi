@@ -1031,6 +1031,14 @@
     "value": "n.p.",
     "description": "Testo dato non presente per valore occupazione media strada in dashboard"
 }, {
+    "key": "zone_total_slots",
+    "value": "Posti totali",
+    "description": "Testo label posti totali zona in dashboard"
+}, {
+    "key": "zone_occupied_slots",
+    "value": "Posti occupati",
+    "description": "Testo label posti occupati zona in dashboard"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {

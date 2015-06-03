@@ -16,6 +16,7 @@
 package it.smartcommunitylab.parking.management.web.auxiliary.model;
 
 import java.io.Serializable;
+import java.util.Arrays;
 
 public class Street implements Serializable {
 
@@ -51,6 +52,12 @@ public class Street implements Serializable {
 	 */
 	private int slotsTimed;
 	private int slotsOccupiedOnTimed;
+	/**
+	 * parcheggi per disabili totali/occupati
+	 */
+	private int slotsHandicapped;
+	private int slotsOccupiedOnHandicapped;
+	
 
 	private String polyline;
 	
@@ -130,6 +137,22 @@ public class Street implements Serializable {
 		this.slotsTimed = slotsTimed;
 	}
 
+	public int getSlotsHandicapped() {
+		return slotsHandicapped;
+	}
+
+	public int getSlotsOccupiedOnHandicapped() {
+		return slotsOccupiedOnHandicapped;
+	}
+
+	public void setSlotsHandicapped(int slotsHandicapped) {
+		this.slotsHandicapped = slotsHandicapped;
+	}
+
+	public void setSlotsOccupiedOnHandicapped(int slotsOccupiedOnHandicapped) {
+		this.slotsOccupiedOnHandicapped = slotsOccupiedOnHandicapped;
+	}
+
 	public String getAreaId() {
 		return areaId;
 	}
@@ -203,33 +226,24 @@ public class Street implements Serializable {
 	public void setUser(Integer user) {
 		this.user = user;
 	}
-
+	
 	@Override
 	public String toString() {
-		return "Street [slotsFree=" + slotsFree + ", slotsOccupiedOnFree="
-				+ slotsOccupiedOnFree + ", slotsUnavailable="
-				+ slotsUnavailable + ", slotsPaying=" + slotsPaying
-				+ ", slotsOccupiedOnPaying=" + slotsOccupiedOnPaying
-				+ ", slotsTimed=" + slotsTimed + ", slotsOccupiedOnTimed="
-				+ slotsOccupiedOnTimed + ", polyline=" + polyline
-				+ ", lastChange=" + lastChange + ", areaId=" + areaId + "]";
+		return "Street [id=" + id + ", agency=" + agency + ", position="
+				+ Arrays.toString(position) + ", name=" + name
+				+ ", description=" + description + ", updateTime=" + updateTime
+				+ ", version=" + version + ", user=" + user + ", slotsFree="
+				+ slotsFree + ", slotsOccupiedOnFree=" + slotsOccupiedOnFree
+				+ ", slotsUnavailable=" + slotsUnavailable + ", slotsPaying="
+				+ slotsPaying + ", slotsOccupiedOnPaying="
+				+ slotsOccupiedOnPaying + ", slotsTimed=" + slotsTimed
+				+ ", slotsOccupiedOnTimed=" + slotsOccupiedOnTimed
+				+ ", slotsHandicapped=" + slotsHandicapped
+				+ ", slotsOccupiedOnHandicapped=" + slotsOccupiedOnHandicapped
+				+ ", polyline=" + polyline + ", lastChange=" + lastChange
+				+ ", areaId=" + areaId + "]";
 	}
-	
-//	@Override
-//	public String toString() {
-//		return "Street [id=" + id + ", agency=" + agency + ", position="
-//				+ Arrays.toString(position) + ", name=" + name
-//				+ ", description=" + description + ", updateTime=" + updateTime
-//				+ ", version=" + version + ", user=" + user + ", slotsFree="
-//				+ slotsFree + ", slotsOccupiedOnFree=" + slotsOccupiedOnFree
-//				+ ", slotsUnavailable=" + slotsUnavailable + ", slotsPaying="
-//				+ slotsPaying + ", slotsOccupiedOnPaying="
-//				+ slotsOccupiedOnPaying + ", slotsTimed=" + slotsTimed
-//				+ ", slotsOccupiedOnTimed=" + slotsOccupiedOnTimed
-//				+ ", polyline=" + polyline + ", lastChange=" + lastChange
-//				+ ", areaId=" + areaId + "]";
-//	}
-	
+
 	public String toJSON() {
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -251,6 +265,8 @@ public class Street implements Serializable {
 		json += "\"slotsOccupiedOnPaying\":" + getSlotsOccupiedOnPaying() + ",";
 		json += "\"slotsTimed\":" + getSlotsTimed() + ",";
 		json += "\"slotsOccupiedOnTimed\":" + getSlotsOccupiedOnTimed() + ",";
+		json += "\"slotsHandicapped\":" + getSlotsHandicapped() + ",";
+		json += "\"slotsOccupiedOnHandicapped\":" + getSlotsOccupiedOnHandicapped() + ",";
 		json += "\"slotsUnavailable\":" + getSlotsUnavailable() + ",";
 		json += "\"lastChange\":" + getLastChange() + ",";
 		json += "\"polyline\":\"" + getPolyline() + "\",";

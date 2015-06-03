@@ -52,6 +52,10 @@ import org.springframework.stereotype.Service;
 public class DynamicManager {
 
 	private static final Logger logger = Logger.getLogger(DynamicManager.class);
+	private static final String freeSlotType = "@free";
+	private static final String paidSlotType = "@paid";
+	private static final String timedSlotType = "@timed";
+	private static final String handicappedSlotType = "@handicapped";
 
 	@Autowired
 	private MongoTemplate mongodb;
@@ -354,6 +358,7 @@ public class DynamicManager {
 					//temp.setFreeParkSlotSignOccupied(s.getSlotsOccupiedOnFree());
 					temp.setTimedParkSlotOccupied(s.getSlotsOccupiedOnTimed());
 					temp.setPaidSlotOccupied(s.getSlotsOccupiedOnPaying());
+					temp.setHandicappedSlotOccupied(s.getSlotsOccupiedOnHandicapped());
 					temp.setLastChange(timestamp);
 					mongodb.save(area);
 					
@@ -386,8 +391,27 @@ public class DynamicManager {
 					// Update Stat report
 					int[] total = {s.getSlotsFree(),s.getSlotsPaying(), s.getSlotsTimed()};
 					int[] occupied = {s.getSlotsOccupiedOnFree(),s.getSlotsOccupiedOnPaying(), s.getSlotsOccupiedOnTimed(), s.getSlotsUnavailable()};
-					double statValue = findOccupationRate(total, occupied);
+					double statValue = findOccupationRate(total, occupied, 0, 0, 1);
 					repo.updateStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp);
+					// Here I have to difference the type of the park: total, free, paying and timed - MULTIPARKOCC
+					if(countElements(total) > 1){	// Here I check if there are more than one element of park type
+						if(s.getSlotsFree()!= 0){
+							double freeOccValue = findOccupationRate(null, null, s.getSlotsFree(), s.getSlotsOccupiedOnFree(), 2);
+							repo.updateStats(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp);
+						}
+						if(s.getSlotsPaying() != 0){
+							double payingOccValue = findOccupationRate(null, null, s.getSlotsPaying(), s.getSlotsOccupiedOnPaying(), 2);
+							repo.updateStats(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp);
+						}
+						if(s.getSlotsTimed() != 0){
+							double timedOccValue = findOccupationRate(null, null, s.getSlotsTimed(), s.getSlotsOccupiedOnTimed(), 2);
+							repo.updateStats(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp);
+						}
+						if(s.getSlotsHandicapped() != 0){
+							double handicappedOccValue = findOccupationRate(null, null, s.getSlotsHandicapped(), s.getSlotsOccupiedOnHandicapped(), 2);
+							repo.updateStats(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp);
+						}
+					}
 					break;
 				}
 			}
@@ -614,7 +638,7 @@ public class DynamicManager {
 		// Update Stat report
 		int[] total = {p.getSlotsTotal()};
 		int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
-		double statValue = findOccupationRate(total, occupied);
+		double statValue = findOccupationRate(total, occupied, 0, 0, 1);
 		repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
 	}
 
@@ -675,17 +699,36 @@ public class DynamicManager {
 		return version;
 	}
 	
-	private double findOccupationRate(int[] total, int[] occupied){
+	/**
+	 * Method findOccupationRate: calculate the occupationRate
+	 * value from the free and occupied parks values
+	 */
+	private double findOccupationRate(int[] total, int[] occupied, int tot_p, int occ_p, int type){
 		int tot = 0;
 		int occ = 0;
-		for(int i = 0; i < total.length; i++){
-			tot+=total[i];
-		}
-		for(int i = 0; i < occupied.length; i++){
-			occ+=occupied[i];
+		if(type == 1){	// Case of total occupation
+			for(int i = 0; i < total.length; i++){
+				tot+=total[i];
+			}
+			for(int i = 0; i < occupied.length; i++){
+				occ+=occupied[i];
+			}
+		} else {	// Case of specific occupation
+			tot = tot_p;
+			occ = occ_p;
 		}
 		double rate = occ * 100 / tot;
 		return rate;
+	}
+	
+	private int countElements(int[] total){
+		int count = 0;
+		for(int i = 0; i < total.length; i++){
+			if(total[i] > 0){
+				count +=1;
+			}
+		}
+		return count;
 	}
 	
 	/**
@@ -788,16 +831,61 @@ public class DynamicManager {
 		for(StreetBean s : streets){
 			sId = getCorrectId(s.getId(), "street", appId);
 			double occRate = 0;
+			double freeOccRate = 0;
+			double paidOccRate = 0;
+			double timedOccRate = 0;
+			int[] parks = {s.getFreeParkSlotNumber()+s.getFreeParkSlotSignNumber(), s.getPaidSlotNumber(), s.getTimedParkSlotNumber()};
+			int multipark = countElements(parks);
 			if(valueType == 1){
 				occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+				if(multipark > 1){
+					freeOccRate = getOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+					paidOccRate = getOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
+					timedOccRate = getOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+				}
 			} else {
 				occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+				if(multipark > 1){
+					freeOccRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+					paidOccRate = getAverageOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
+					timedOccRate = getAverageOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+				}
 			}
 			s.setOccupancyRate(occRate);
+			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
+			if(s.getFreeParkSlotNumber() > 0){
+				if(multipark > 1){
+					s.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * freeOccRate / 100));
+				} else {
+					s.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * occRate / 100));
+				}
+			}
+			if(s.getFreeParkSlotSignNumber() > 0){
+				if(multipark > 1){
+					s.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * freeOccRate / 100));
+				} else {
+					s.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * occRate / 100));
+				}
+				
+			}
+			if(s.getPaidSlotNumber() > 0){
+				if(multipark > 1){
+					s.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * paidOccRate / 100));
+				} else {
+					s.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * occRate / 100));
+				}
+			}
+			if(s.getTimedParkSlotNumber() > 0){
+				if(multipark > 1){
+					s.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * timedOccRate / 100));
+				} else {
+					s.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * occRate / 100));
+				}
+			}
 			corrStreets.add(s);
 		}
 
-		return streets;
+		return corrStreets;
 	}
 	
 	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){

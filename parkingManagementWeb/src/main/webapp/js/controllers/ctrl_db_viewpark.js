@@ -112,7 +112,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.mapParkingMetersMarkers = [];
 	$scope.mapParkingStructureMarkers = [];
 	$scope.mapBikePointMarkers = [];
+	$scope.streetWS = [];
 	$scope.mapStreets = [];
+	$scope.mapZones = [];
 	
 	$scope.occupancyStreets = [];
 	$scope.occupancyAreas = [];
@@ -463,10 +465,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			case "parkSupply": 
 				// Show parkingManagement objects
 				$scope.fixAllStreetsSupply();
+				$scope.switchZoneMapObject(2, null);
 				break;
 			case "occupation": 
 				// Show occupation objects (with specifics colors)
 				$scope.fixAllStreetsOccupancy();
+				$scope.switchZoneMapObject(1, null);
 				break;
 			case "receipts": 
 				break;
@@ -1105,8 +1109,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			//mystreet.handicappedSlotOccupied = Math.floor(mystreet.handicappedSlotNumber * averageOccupation / 100);
 			//mystreet.reservedSlotOccupied = Math.floor(mystreet.reservedSlotNumber * averageOccupation / 100);
 			// ----------------------------------------------------------
-			//mystreet.slotOccupied = $scope.getTotalOccupiedSlots(mystreet);
-			mystreet.slotOccupied = (mystreet.occupancyRate != -1)?Math.floor(mystreet.slotNumber * mystreet.occupancyRate / 100):0;
+			mystreet.slotOccupied = $scope.getTotalOccupiedSlots(mystreet);
+			//mystreet.slotOccupied = (mystreet.occupancyRate != -1)?Math.round(mystreet.slotNumber * mystreet.occupancyRate / 100):0;
 			mystreet.area_name = area.name;
 			mystreet.area_color= area.color;
 			mystreet.myZones = zones;
@@ -1268,6 +1272,75 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	}
 			}
 		});
+	};
+	
+	// Method getStreetsInZoneOccupancy: used to get the occupancy of the streets in a specific zone
+	$scope.getStreetsInZoneOccupancy = function(z_id){
+		var totalOccupancy = 0;
+		var streetsInZone = 0;
+		if($scope.streetWS != null && $scope.streetWS.length > 0){
+			for(var i = 0; i < $scope.streetWS.length; i++){
+				var found = false;
+				for(var j = 0; (j < $scope.streetWS[i].zones.length) && !found; j++){
+					//var zone = $scope.getLocalZoneById(streets[i].zones[j]);
+					//myZones.push(zone);
+					if($scope.streetWS[i].zones[j] == z_id){
+						found = true;
+						streetsInZone += 1;
+						totalOccupancy += $scope.streetWS[i].occupancyRate;
+					}
+				}
+			}
+		}
+		return totalOccupancy / streetsInZone;
+	};
+	
+	// Method getStreetsInAreaOccupancy: used to get the occupancy of the streets in a specific area
+	$scope.getStreetsInAreaOccupancy = function(a_id){
+		var totalOccupancy = 0;
+		var streetsInArea = 0;
+		if($scope.streetWS != null && $scope.streetWS.length > 0){
+			for(var i = 0; i < $scope.streetWS.length; i++){
+				if($scope.streetWS[i].rateAreaId == a_id){
+					found = true;
+					streetsInArea += 1;
+					totalOccupancy += $scope.streetWS[i].occupancyRate;
+				}
+			}
+		}
+		return totalOccupancy / streetsInArea;
+	};
+	
+	// Method getTotalSlotsInZone: used to count the total slots of a zone from the slots in streets
+	$scope.getTotalSlotsInZone = function(z_id){
+		var totalSlots = 0;
+		if($scope.streetWS != null && $scope.streetWS.length > 0){
+			for(var i = 0; i < $scope.streetWS.length; i++){
+				var found = false;
+				for(var j = 0; (j < $scope.streetWS[i].zones.length) && !found; j++){
+					//var zone = $scope.getLocalZoneById(streets[i].zones[j]);
+					//myZones.push(zone);
+					if($scope.streetWS[i].zones[j] == z_id){
+						found = true;
+						totalSlots += $scope.streetWS[i].slotNumber;
+					}
+				}
+			}
+		}
+		return totalSlots;
+	};
+	
+	// Method getTotalSlotsInArea: used to count the total slots of an area from the slots in streets
+	$scope.getTotalSlotsInArea = function(a_id){
+		var totalSlots = 0;
+		if($scope.streetWS != null && $scope.streetWS.length > 0){
+			for(var i = 0; i < $scope.streetWS.length; i++){
+				if($scope.streetWS[i].rateAreaId == a_id){
+					totalSlots += $scope.streetWS[i].slotNumber;
+				}
+			}
+		}
+		return totalSlots;
 	};
 		    
     $scope.getParkingMetersFromDb = function(){
@@ -1662,6 +1735,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    $scope.mapSelectedZones.push(object);
 			    $scope.showZoneDet();
 				$scope.zDetails = object;
+				$scope.initZoneOccupancyDiagram(object);
 				break;
 			case 5:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
@@ -1879,6 +1953,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	
     };
     
+    // Method switchStreetMapObject: used to switch (in map) from street object to occupancy-street object
     $scope.switchStreetMapObject = function(type, newList){
     	var toHideStreets = $scope.map.shapes;
     	switch(type){
@@ -1924,6 +1999,110 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		default:break;
     	}
     	
+    };
+    
+    // Method switchZoneMapObject: used to switch (in map) from zone object to occupancy-zone object
+    $scope.switchZoneMapObject = function(type, newList){
+    	var toHideZones = $scope.map.shapes;
+    	switch(type){
+    		case 1:
+    			for(var i = 0; i < $scope.mapZones.length; i++){
+    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
+    	    		var object = $scope.mapZones[i];
+    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapZones[i].id);
+    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+    	    		object.data.slotNumber = $scope.getTotalSlotsInZone($scope.mapZones[i].id);
+    	    		object.data.slotOccupied = Math.round(object.data.slotNumber * zoneOccupancy / 100);
+    	    		$scope.occupancyZones.push(object);
+    	    	}
+    	    	$scope.mapZones = [];
+    			break;
+    		case 2:
+    			for(var i = 0; i < $scope.occupancyZones.length; i++){
+    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
+    	    		var object = $scope.occupancyZones[i];
+    	    		object.stroke.color = $scope.correctColor(object.data.color);
+    	    		$scope.mapZones.push(object);
+    	    	}
+    	    	$scope.occupancyZones = [];
+    			break;
+    		case 3:
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.mapZones.length; i++){
+    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		object.stroke.color = $scope.correctColor(object.data.color);
+    	    		tmpZones.push(object);
+    	    	}
+    	    	$scope.mapZones = angular.copy(tmpZones);
+    			break;
+    		case 4:
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.occupancyZones.length; i++){
+    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.occupancyZones[i].id);
+    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+    	    		object.data.slotNumber =  $scope.getTotalSlotsInZone($scope.occupancyZones[i].id);
+    	    		object.data.slotOccupied = Math.round(object.data.slotNumber * zoneOccupancy / 100);
+    	    		tmpZones.push(object);
+    	    	}
+    	    	$scope.occupancyZones = angular.copy(tmpZones);
+    			break;	
+    		default:break;
+    	}
+    };
+    
+    // Method switchZoneMapObject: used to switch (in map) from zone object to occupancy-zone object
+    $scope.switchAreaMapObject = function(type, newList){
+    	var toHideZones = $scope.map.shapes;
+    	switch(type){
+    		case 1:
+    			for(var i = 0; i < $scope.mapZones.length; i++){
+    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
+    	    		var object = $scope.mapZones[i];
+    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapZones[i].id);
+    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+    	    		object.data.slotNumber = $scope.getTotalSlotsInZone($scope.mapZones[i].id);
+    	    		object.data.slotOccupied = Math.round(object.data.slotNumber * zoneOccupancy / 100);
+    	    		$scope.occupancyZones.push(object);
+    	    	}
+    	    	$scope.mapZones = [];
+    			break;
+    		case 2:
+    			for(var i = 0; i < $scope.occupancyZones.length; i++){
+    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
+    	    		var object = $scope.occupancyZones[i];
+    	    		object.stroke.color = $scope.correctColor(object.data.color);
+    	    		$scope.mapZones.push(object);
+    	    	}
+    	    	$scope.occupancyZones = [];
+    			break;
+    		case 3:
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.mapZones.length; i++){
+    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		object.stroke.color = $scope.correctColor(object.data.color);
+    	    		tmpZones.push(object);
+    	    	}
+    	    	$scope.mapZones = angular.copy(tmpZones);
+    			break;
+    		case 4:
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.occupancyZones.length; i++){
+    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.occupancyZones[i].id);
+    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+    	    		object.data.slotNumber =  $scope.getTotalSlotsInZone($scope.occupancyZones[i].id);
+    	    		object.data.slotOccupied = Math.round(object.data.slotNumber * zoneOccupancy / 100);
+    	    		tmpZones.push(object);
+    	    	}
+    	    	$scope.occupancyZones = angular.copy(tmpZones);
+    			break;	
+    		default:break;
+    	}
     };
     
     $scope.fixAllStreetsSupply = function(){
@@ -2200,6 +2379,50 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedReserved);
     	$scope.chartStreetOccupiedParkComposition.options.title = "Posti occupati in strada";
     	
+    };
+    
+    $scope.chartZoneOccupancy = $scope.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 posti"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+    
+    $scope.initZoneOccupancyDiagram = function(zone){
+    	$scope.chartZoneOccupancy.data = [["Posti", "num"]];
+  	
+  	//for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
+  		var object = zone.data;
+  		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+  		var dataOcc = [ "Occupati", object.slotOccupied ];
+  		$scope.chartZoneOccupancy.data.push(dataTot);
+  		$scope.chartZoneOccupancy.data.push(dataOcc);
+  	//}
+  		$scope.chartZoneOccupancy.options.title = "Posti occupati in zona";
     };
 	
    // ---------------------------------------------- End block Utilization diagrams --------------------------------------

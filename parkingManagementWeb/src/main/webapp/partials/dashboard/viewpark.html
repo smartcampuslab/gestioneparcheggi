@@ -171,6 +171,10 @@
          					geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zSel.stroke.weight }}"
          					fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      					</shape>
+     					<shape name="polygon" ng-repeat="zOcc in occupancyZones" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
+         					geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zOcc.stroke.weight }}"
+         					fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showOccupancy(event, zOcc, 4, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     					</shape>
      					<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ a.stroke.weight }}"
          					fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showDetails(event, a, 5, 0)"><!-- on-click="showInfoWindow(event, a.info_windows_cod)" -->
@@ -746,18 +750,15 @@
 								    		<td>&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
 								    	</tr>
 								    	<tr ng-show="zone_type.visible">
-								    		<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
-								    		<td>&nbsp;{{ zDetails.data.type }}</td>
+								    		<td><strong>{{ 'zone_total_slots' | i18n }}:</strong></td>
+								    		<td>&nbsp;{{ zDetails.data.slotNumber }}</td>
 								    	</tr>
 										<tr ng-show="zone_note.visible">
-								        	<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
-								        	<td>&nbsp;{{ zDetails.data.note }}</td>
+								        	<td><strong>{{ 'zone_occupied_slots' | i18n }}:</strong></td>
+								        	<td>&nbsp;{{ zDetails.data.slotOccupied }}</td>
 								        </tr>
-								        <tr ng-show="zone_color.visible">	
-											<td><strong>{{ 'zone_color' | i18n }}</strong></td>
-											<td><span class="colorBox" ng-style="{'background-color': correctColor(zDetails.data.color)}"></span></td>
-										</tr>
 								    </table>
+								    <div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}"/> 
 								</div>
 								<div ng-show="isAreaDetShow()">
 									<table width="100%">
