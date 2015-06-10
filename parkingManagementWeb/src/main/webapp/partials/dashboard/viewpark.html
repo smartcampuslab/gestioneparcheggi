@@ -37,10 +37,10 @@
 						<div class="panel-body  dashboard-panel">
 							<table width="100%">
 								<tr><!-- ng-show="isAreaVisible()" -->
-									<td align="left"><label><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons()">&nbsp;{{ 'view_areas' | i18n }}</label></td>
+									<td align="left"><label><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons(dashboard_topics)">&nbsp;{{ 'view_areas' | i18n }}</label></td>
 								</tr>
 								<tr><!-- ng-show="isZonesVisible()" -->
-									<td align="left"><label><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons()">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
+									<td align="left"><label><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons(dashboard_topics)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
 								</tr>
 								<tr><!-- ng-show="isStreetVisible()" -->
 									<td align="left"><label><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
@@ -61,7 +61,7 @@
                                     <td align="left">
                                         <label>{{'time_vis'|i18n}}</label>
                                         <select class="form-control input-sm" ng-model="vis" ng-change="updateSearch()">
-                                            <option ng-repeat="v in visOptions" value="{{v}}">{{v|i18n}}</option>
+                                            <option ng-repeat="v in visOptions" value="{{v}}">{{ v | i18n}}</option>
                                         </select>
                                     </td>
                                 </tr>
@@ -183,6 +183,10 @@
          					geodesic="{{ aSel.geodesic }}" stroke-color="{{ aSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ aSel.stroke.weight }}"
          					fill-color="{{ aSel.fill.color }}" fill-opacity="{{ aSel.fill.opacity }}" on-click="hideDetails(event, aSel, 5)"><!-- on-click="showInfoWindow(event, aSel.info_windows_cod)" -->
      					</shape>
+     					<shape name="polygon" ng-repeat="aOcc in occupancyAreas" id="{{ aOcc.id }}" path="{{ aOcc.gpath }}" visible="{{ aOcc.visible }}"
+         					geodesic="{{ aOcc.geodesic }}" stroke-color="{{ aOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ aOcc.stroke.weight }}"
+         					fill-color="{{ aOcc.stroke.color }}" fill-opacity="{{ aOcc.fill.opacity }}" on-click="showOccupancy(event, aOcc, 5, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     					</shape>
 					</map>
 				</div>
 				<div class="col-md-2" ng-show="detailsOpened || occupancyOpened">
@@ -191,7 +195,7 @@
 							<div class="panel-heading">
 								<h5 class="panel-title">{{ 'element_details' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></h5>
 							</div>
-							<div class="panel-body dashboard-panel"">
+							<div class="panel-body dashboard-panel">
 								<div ng-show="isPMDetShow()">
 									<table width="100%">
 										<tr>
@@ -475,7 +479,7 @@
 							<div class="panel-heading">
 								<h5 class="panel-title">{{ 'element_occupancy' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></h5>
 							</div>
-							<div class="panel-body dashboard-panel"">
+							<div class="panel-body dashboard-panel">
 								<div ng-show="isPMDetShow()">
 									<table width="100%">
 										<tr>
@@ -749,44 +753,43 @@
 								    		<td><strong>{{ 'zone_name' | i18n }}:</strong></td>
 								    		<td>&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
 								    	</tr>
-								    	<tr ng-show="zone_type.visible">
+								    	<tr>
 								    		<td><strong>{{ 'zone_total_slots' | i18n }}:</strong></td>
 								    		<td>&nbsp;{{ zDetails.data.slotNumber }}</td>
 								    	</tr>
-										<tr ng-show="zone_note.visible">
+										<tr>
 								        	<td><strong>{{ 'zone_occupied_slots' | i18n }}:</strong></td>
-								        	<td>&nbsp;{{ zDetails.data.slotOccupied }}</td>
+								        	<td>
+								        		&nbsp;<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+								        		&nbsp;<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+								        	</td>
 								        </tr>
 								    </table>
-								    <div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}"/> 
+								    <div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" /> 
 								</div>
 								<div ng-show="isAreaDetShow()">
 									<table width="100%">
 								        <tr>	
-											<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-											<td width="55%">{{ aDetails.data.name }}</td>
+											<td><strong>{{ 'area_name' | i18n }}:</strong></td>
+											<td>{{ aDetails.data.name }}</td>
 										</tr>
 										<tr ng-show="a_fee.visible">	
-											<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
-											<td width="55%">{{ aDetails.data.fee }}</td>
+											<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+											<td>{{ aDetails.data.fee }}</td>
 										</tr>
-										<tr ng-show="a_timeSlot.visible">	
-											<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-											<td>{{ aDetails.data.timeSlot }}</td>
-										</tr>
-										<tr ng-show="a_smsCode.visible">	
-											<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-											<td>{{ aDetails.data.smsCode }}</td>
-										</tr>
-										<tr ng-show="a_color.visible">	
-											<td><strong>{{ 'area_color' | i18n }}</strong></td>
-											<td><span class="colorBox" ng-style="{'background-color': correctColor(aDetails.data.color)}"></span></td>
-										</tr>
-										<tr ng-show="a_note.visible">	
-											<td><strong>{{ 'area_note' | i18n }}:</strong></td>
-											<td>{{ aDetails.data.note }}</td>
-										</tr>
+										<tr>
+								    		<td><strong>{{ 'area_total_slots' | i18n }}:</strong></td>
+								    		<td>&nbsp;{{ aDetails.data.slotNumber }}</td>
+								    	</tr>
+										<tr>
+								        	<td><strong>{{ 'area_occupied_slots' | i18n }}:</strong></td>
+								        	<td>
+								        		&nbsp;<span ng-show="isCorrectNumber(aDetails.data.slotOccupied)">{{ aDetails.data.slotOccupied }}</span>
+								        		&nbsp;<span ng-show="!isCorrectNumber(aDetails.data.slotOccupied)">n.p.</span>
+								        	</td>
+								        </tr>
 								    </table>
+								    <div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" /> 
 								</div>        
 							</div>
 						</div>

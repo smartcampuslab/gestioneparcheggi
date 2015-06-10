@@ -1039,6 +1039,14 @@
     "value": "Posti occupati",
     "description": "Testo label posti occupati zona in dashboard"
 }, {
+    "key": "area_total_slots",
+    "value": "Posti totali",
+    "description": "Testo label posti totali area in dashboard"
+}, {
+    "key": "area_occupied_slots",
+    "value": "Posti occupati",
+    "description": "Testo label posti occupati area in dashboard"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {
