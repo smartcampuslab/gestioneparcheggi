@@ -46,7 +46,7 @@
 									<td align="left"><label><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
 								</tr>
 								<tr><!--  ng-show="isPsVisible()" -->
-									<td align="left"><label><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers()">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
+									<td align="left"><label><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
 								</tr>
 								<tr><!-- ng-show="isPmVisible()" -->
 									<td align="left"><label><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers()">&nbsp;{{ 'view_parkingmeters' | i18n }}</label></td>

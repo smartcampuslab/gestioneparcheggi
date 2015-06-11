@@ -21,6 +21,7 @@ import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.StreetLog;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
@@ -903,8 +904,16 @@ public class DynamicManager {
 		return parkings;
 	}
 	
-	private String getCorrectId(String id, String type, String appId){
+	public String getCorrectId(String id, String type, String appId){
 		return new String(type + "@" + appId + "@" + id);
+	}
+	
+	public List<StreetLog> getOldLogs(){
+		List<StreetLog> result = new ArrayList<StreetLog>();
+		for (StreetLog s : mongodb.findAll(StreetLog.class)) {
+			result.add(s);
+		}
+		return result;
 	}
 
 }
