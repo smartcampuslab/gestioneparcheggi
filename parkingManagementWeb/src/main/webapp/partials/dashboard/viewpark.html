@@ -531,7 +531,7 @@
 						        	</table>
 								</div>
 								<div ng-show="isPSDetShow()">
-									<table  width="100%">
+									<table width="100%">
 										<tr>
 											<td><strong>{{ 'ps_name' | i18n }}:</strong></td>
 											<td>{{ psDetails.data.name }}</td>
@@ -542,33 +542,29 @@
 								        </tr>
 										<tr>
 											<td colspan="2">
-												<strong>{{ 'ps_slots' | i18n }}</strong>:
+												<strong>{{ 'ps_slots' | i18n }}:</strong>
 												<div class="panel panel-default">
 													<div class="panel-body">
 														<table width="100%">
 															<tr ng-show="ps_slotNumber.visible">
-																<td width="45%"><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
-																<td width="55%">{{ psDetails.data.slotNumber }}</td>
+																<td><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
+																<td>{{ psDetails.data.slotNumber }}</td>
 															</tr>
 															<tr>
 																<td><strong>{{ 'ps_occupiedslot' | i18n }}:</strong></td>
-																<td>{{ psDetails.data.slotOccupied }}</td>
+																<td>
+																	&nbsp;
+																	<span ng-show="isCorrectNumber(psDetails.data.slotOccupied)">{{ psDetails.data.slotOccupied }}</span>
+								        							<span ng-show="!isCorrectNumber(psDetails.data.slotOccupied)">n.p.</span>
+																</td>
 															</tr>
-	<!-- 														<tr ng-show="ps_handicappedSlot.visible">	 -->
-	<!-- 															<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td> -->
-	<!-- 															<td>{{ psDetails.data.handicappedSlotNumber }}</td> -->
-	<!-- 														</tr> -->
-	<!-- 														<tr ng-show="ps_unusuableSlot.visible">	 -->
-	<!-- 															<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td> -->
-	<!-- 															<td>{{ psDetails.data.unusuableSlotNumber }}</td> -->
-	<!-- 														</tr> -->
 														</table>
 													</div>
 												</div>
-												<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}"/>
 								        	</td>
 								        </tr>
 								    </table>
+								    <div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.data.slotOccupied)"/>
 								</div>
 								<div ng-show="isStreetDetShow()">
 									<table width="100%">
@@ -679,13 +675,16 @@
 										       	<div class="panel panel-default">
 													<div class="panel-body">
 														<table width="100%">
-															 <tr ng-show="s_freeSlot.visible">
-													        	<td><strong>{{ 'street_freepark_slot_db' | i18n }}:</strong></td>
-													        	<td>&nbsp;{{ sDetails.data.freeParkSlotFree }}</td>
-													        </tr>
+<!-- 															 <tr ng-show="s_freeSlot.visible"> -->
+<!-- 													        	<td><strong>{{ 'street_freepark_slot_db' | i18n }}:</strong></td> -->
+<!-- 													        	<td>&nbsp;{{ sDetails.data.freeParkSlotFree }}</td> -->
+<!-- 													        </tr> -->
 													        <tr>
 													        	<td><strong>{{ 'street_freepark_slot_signed_db' | i18n }}:</strong></td>
-													        	<td>&nbsp;{{ sDetails.data.freeParkSlotSignFree }}</td>
+													        	<td>&nbsp;
+													        		<span ng-show="sDetails.data.freeParkSlotSignFree > 0">{{ sDetails.data.freeParkSlotSignFree }}</span>
+													        		<span ng-show="sDetails.data.freeParkSlotSignFree == 0">{{ sDetails.data.freeParkSlotFree }}</span>
+													        	</td>
 													        </tr>
 													        <tr>
 													        	<td><strong>{{ 'street_paid_slot_db' | i18n }}:</strong></td>
@@ -715,13 +714,16 @@
 										       	<div class="panel panel-default">
 													<div class="panel-body">
 														<table width="100%">
-															 <tr ng-show="s_freeSlot.visible">
-													        	<td><strong>{{ 'street_freepark_slot_occupied_db' | i18n }}:</strong></td>
-													        	<td>&nbsp;{{ sDetails.data.freeParkSlotOccupied }}</td>
-													        </tr>
+<!-- 															 <tr ng-show="s_freeSlot.visible"> -->
+<!-- 													        	<td><strong>{{ 'street_freepark_slot_occupied_db' | i18n }}:</strong></td> -->
+<!-- 													        	<td>&nbsp;{{ sDetails.data.freeParkSlotOccupied }}</td> -->
+<!-- 													        </tr> -->
 													        <tr>
 													        	<td><strong>{{ 'street_freepark_slot_signed_occupied_db' | i18n }}:</strong></td>
-													        	<td>&nbsp;{{ sDetails.data.freeParkSlotSignOccupied }}</td>
+													        	<td>&nbsp;
+													        		<span ng-show="sDetails.data.freeParkSlotSignOccupied > 0">{{ sDetails.data.freeParkSlotSignOccupied }}</span>
+													        		<span ng-show="sDetails.data.freeParkSlotSignOccupied == 0">{{ sDetails.data.freeParkSlotOccupied }}</span>
+													        	</td>
 													        </tr>
 													        <tr>
 													        	<td><strong>{{ 'street_paid_slot_occupied_db' | i18n }}:</strong></td>

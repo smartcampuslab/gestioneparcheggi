@@ -16,8 +16,10 @@
 package it.smartcommunitylab.parking.management.web.manager;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingLog;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetLog;
@@ -343,69 +345,85 @@ public class DynamicManagerTest {
 //		
 //	}
 	
-	@Test
-	public void loadOldLogRv() throws Exception {
-	
-		List<StreetLog> myOldStreets = dynManager.getOldLogs();
-		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", "rv"));
-		for(int i = 0; i < myOldStreets.size(); i++){
-			//System.err.println(myOldStreets.get(i).getValue());
-			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
-			
-			manager.setAppId(appId);
-			boolean found = false;
-			for(int j = 0; (j < myStreets.size()) && !found; j++){
-				if(myStreets.get(j).getName().compareTo(street.getString("name")) == 0){
-					found = true;
-					Street s = myStreets.get(j);
-					System.out.println("Street founded " + s.toJSON());
-					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
-					//s.setId(sId);
-					s.setSlotsFree(street.getInt("slotsFree"));
-					s.setSlotsOccupiedOnFree(street.getInt("slotsOccupiedOnFree"));
-					s.setSlotsPaying(street.getInt("slotsPaying"));
-					s.setSlotsOccupiedOnPaying(street.getInt("slotsOccupiedOnPaying"));
-					s.setSlotsTimed(street.getInt("slotsTimed"));
-					s.setSlotsOccupiedOnTimed(street.getInt("slotsOccupiedOnTimed"));
-					s.setUpdateTime(myOldStreets.get(i).getTime());
-					s.setUser(999);
-					try {
-						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), "rv", "999");
-						System.out.println("Street updated " + s.toJSON());
-					} catch (DatabaseException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-			
-			
-//			List<StreetBean> sbList = dynManager.findStreetByName(street.getString("name"));
-//			Street s = null;//ModelConverter.convert(street, Street.class);
-//			if(sbList != null && sbList.size() > 0){
-//				s = ModelConverter.convert(sbList.get(0), Street.class);
-//				System.out.println("Street founded " + s.toJSON());
-//				String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
-//				s.setId(sId);
-//				s.setSlotsFree(street.getInt("slotsFree"));
-//				s.setSlotsOccupiedOnFree(street.getInt("slotsOccupiedOnFree"));
-//				s.setSlotsPaying(street.getInt("slotsPaying"));
-//				s.setSlotsOccupiedOnPaying(street.getInt("slotsOccupiedOnPaying"));
-//				s.setSlotsTimed(street.getInt("slotsTimed"));
-//				s.setSlotsOccupiedOnTimed(street.getInt("slotsOccupiedOnTimed"));
-//				s.setUpdateTime(myOldStreets.get(i).getTime());
-//				s.setUser(99);
-//				try {
-//					dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), "rv", myOldStreets.get(i).getAuthor());
-//					System.out.println("Street updated " + s.toJSON());
-//				} catch (DatabaseException e) {
-//					// TODO Auto-generated catch block
-//					e.printStackTrace();
+//	@Test
+//	public void loadOldLogRv() throws Exception {
+//	
+//		List<StreetLog> myOldStreets = dynManager.getOldLogs();
+//		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", "rv"));
+//		for(int i = 0; i < myOldStreets.size(); i++){
+//			//System.err.println(myOldStreets.get(i).getValue());
+//			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
+//			
+//			manager.setAppId(appId);
+//			boolean found = false;
+//			for(int j = 0; (j < myStreets.size()) && !found; j++){
+//				if(myStreets.get(j).getName().compareTo(street.getString("name")) == 0){
+//					found = true;
+//					Street s = myStreets.get(j);
+//					System.out.println("Street founded " + s.toJSON());
+//					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
+//					//s.setId(sId);
+//					s.setSlotsFree(street.getInt("slotsFree"));
+//					s.setSlotsOccupiedOnFree(street.getInt("slotsOccupiedOnFree"));
+//					s.setSlotsPaying(street.getInt("slotsPaying"));
+//					s.setSlotsOccupiedOnPaying(street.getInt("slotsOccupiedOnPaying"));
+//					s.setSlotsTimed(street.getInt("slotsTimed"));
+//					s.setSlotsOccupiedOnTimed(street.getInt("slotsOccupiedOnTimed"));
+//					s.setUpdateTime(myOldStreets.get(i).getTime());
+//					s.setUser(999);
+//					try {
+//						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), "rv", "999");
+//						System.out.println("Street updated " + s.toJSON());
+//					} catch (DatabaseException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
 //				}
 //			}
-		}
-		
-		Assert.assertTrue(myOldStreets.size() > 0);
-		
-	}
+//			
+//		}
+//		
+//		Assert.assertTrue(myOldStreets.size() > 0);
+//		
+//	}
+	
+	
+//	@Test
+//	public void loadOldLogParkRv() throws Exception {
+//	
+//		List<ParkingLog> myOldParks = dynManager.getOldParkLogs();
+//		List<Parking> myParkings = geoManager.searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", "rv"));
+//		for(int i = 0; i < myOldParks.size(); i++){
+//			//System.err.println(myOldStreets.get(i).getValue());
+//			JSONObject park = new JSONObject(myOldParks.get(i).getValue());
+//			
+//			manager.setAppId(appId);
+//			boolean found = false;
+//			for(int j = 0; (j < myParkings.size()) && !found; j++){
+//				//if(myParkings.get(j).getName().compareTo(street.getString("name")) == 0){
+//				if(myParkings.get(j).getName().compareTo("park 'P.zza della P* _ 01") == 0){
+//					found = true;
+//					Parking p = myParkings.get(j);
+//					System.out.println("Park founded " + p.toJSON());
+//					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
+//					//s.setId(sId);
+//					p.setSlotsTotal(park.getInt("slotsTotal"));
+//					p.setSlotsOccupiedOnTotal(park.getInt("slotsOccupiedOnTotal"));
+//					p.setUpdateTime(myOldParks.get(i).getTime());
+//					p.setUser(999);
+//					try {
+//						dynManager.editParkingStructureAux(p, myOldParks.get(i).getTime(), "rv", "999");
+//						System.out.println("Parking updated " + p.toJSON());
+//					} catch (Exception e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//		}
+//		Assert.assertTrue(myOldParks.size() > 0);
+//		
+//	}
+	
+	
 }

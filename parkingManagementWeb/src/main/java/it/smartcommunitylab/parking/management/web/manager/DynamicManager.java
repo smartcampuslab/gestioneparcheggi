@@ -17,6 +17,7 @@ package it.smartcommunitylab.parking.management.web.manager;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingLog;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
@@ -891,14 +892,17 @@ public class DynamicManager {
 	
 	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
+		String pId = "";
 		for(ParkingStructureBean p : parkings){
 			double occRate = 0;
+			pId = getCorrectId(p.getId(), "parking", appId);
 			if(valueType == 1){
-				occRate = getOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+				occRate = getOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
 			} else {
-				occRate = getAverageOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
+				occRate = getAverageOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
 			}
 			p.setOccupancyRate(occRate);
+			p.setSlotOccupied((int)Math.round(p.getSlotNumber() * occRate / 100));
 		}
 
 		return parkings;
@@ -912,6 +916,14 @@ public class DynamicManager {
 		List<StreetLog> result = new ArrayList<StreetLog>();
 		for (StreetLog s : mongodb.findAll(StreetLog.class)) {
 			result.add(s);
+		}
+		return result;
+	}
+	
+	public List<ParkingLog> getOldParkLogs(){
+		List<ParkingLog> result = new ArrayList<ParkingLog>();
+		for (ParkingLog p : mongodb.findAll(ParkingLog.class)) {
+			result.add(p);
 		}
 		return result;
 	}

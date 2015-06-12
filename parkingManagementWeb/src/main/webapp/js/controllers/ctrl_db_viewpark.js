@@ -82,18 +82,23 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    switch($scope.vis){
 	    	case "vis_last_value": 
 	    		$scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1);
+	    		$scope.getOccupancyParksFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2);
 	    		break;
 	    	case "vis_medium":
 	    		$scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2);
+	    		$scope.getOccupancyParksFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2);
 	    		break;
 	    	case "vis_medium_year":
 	    		$scope.getOccupancyStreetsFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2);
+	    		$scope.getOccupancyParksFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2);
 	    		break;
 	    	case "vis_medium_month":
 	    		$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2);
+	    		$scope.getOccupancyParksFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2);
 	    		break;
 	    	case "vis_medium_day":
 	    		$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2);
+	    		$scope.getOccupancyParksFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, 2);
 	    		break;
 	    	default: break;	
 	    }
@@ -123,7 +128,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.occupancyParkingMeterMarkers = [];
 	$scope.occupancyParkingStructureMarkers = [];
 	
-	$scope.lightgreen = "#81EBBA";
+	$scope.lightgray = "#B0B0B0";//"#81EBBA";
 	$scope.green = "#31B404";
 	$scope.yellow = "#F7FE2E";
 	$scope.orange = "#FF8000";
@@ -465,7 +470,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		switch($scope.dashboard_topics){
 			case "parkSupply": 
 				// Show parkingManagement objects
-				//$scope.fixAllStreetsSupply();
 				$scope.switchStreetMapObject(2, null);
 				$scope.switchZoneMapObject(2, null);
 				$scope.switchAreaMapObject(2, null);
@@ -473,7 +477,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case "occupation": 
 				// Show occupation objects (with specifics colors)
-				//$scope.fixAllStreetsOccupancy();
 				$scope.switchStreetMapObject(1, null);
 				$scope.switchZoneMapObject(1, null);
 				$scope.switchAreaMapObject(1, null);
@@ -913,7 +916,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		if(type == 1){
     			markers[i].icon = $scope.psMarkerIcon;
     		} else {
-    			var myIcon = $scope.getOccupancyIcon(markers[i].data.averageOccupation1012, 2);
+    			var myIcon = $scope.getOccupancyIcon(markers[i].data.occupancyRate, 2);
         		markers[i].icon = myIcon;
     		}
     	}
@@ -958,7 +961,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var averageOccupation = Math.floor((Math.random() * 100) + 1);
 				marker.averageOccupation1012 = averageOccupation;
 				//myIcon = $scope.getOccupancyIcon(averageOccupation, 2);
-				marker.slotOccupied = Math.floor(marker.slotNumber * averageOccupation / 100);
+				//marker.slotOccupied = Math.floor(marker.slotNumber * averageOccupation / 100);
 				break;
 			case 3 :
 				myIcon = $scope.bpMarkerIcon;
@@ -1206,18 +1209,18 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method cleanStreetNullValue: used to init to 0 the null value in the slotNumber data
 	$scope.cleanStreetNullValue = function(s_object){
 		var street = s_object;
-		street.freeParkSlotNumber = (s_object.freeParkSlotNumber != null) ? s_object.freeParkSlotNumber : 0;
-		street.freeParkSlotSignNumber = (s_object.freeParkSlotSignNumber != null) ? s_object.freeParkSlotSignNumber : 0;
-		street.paidSlotNumber = (s_object.paidSlotNumber != null) ? s_object.paidSlotNumber : 0;
-		street.timedParkSlotNumber = (s_object.timedParkSlotNumber != null) ? s_object.timedParkSlotNumber : 0;
-		street.handicappedSlotNumber = (s_object.handicappedSlotNumber != null) ? s_object.handicappedSlotNumber : 0;
-		street.reservedSlotNumber = (s_object.reservedSlotNumber != null) ? s_object.reservedSlotNumber : 0;
-		street.freeParkOccupied = (s_object.freeParkSlotOccupied != null) ? s_object.freeParkSlotOccupied : 0;
-		street.freeParkSlotSignOccupied = (s_object.freeParkSlotSignOccupied != null) ? s_object.freeParkSlotSignOccupied : 0;
-		street.paidSlotOccupied = (s_object.paidSlotOccupied != null) ? s_object.paidSlotOccupied : 0;
-		street.timedParkSlotOccupied = (s_object.timedParkSlotOccupied != null) ? s_object.timedParkSlotOccupied : 0;
-		street.handicappedSlotOccupied = (s_object.handicappedSlotOccupied != null) ? s_object.handicappedSlotOccupied : 0;
-		street.reservedSlotOccupied = (s_object.reservedSlotOccupied != null) ? s_object.reservedSlotOccupied : 0;
+		street.freeParkSlotNumber = (s_object.freeParkSlotNumber != null && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotNumber : 0;
+		street.freeParkSlotSignNumber = (s_object.freeParkSlotSignNumber != null && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignNumber : 0;
+		street.paidSlotNumber = (s_object.paidSlotNumber != null && s_object.freeParkSlotSignNumber > 0) ? s_object.paidSlotNumber : 0;
+		street.timedParkSlotNumber = (s_object.timedParkSlotNumber != null && s_object.timedParkSlotNumber > 0) ? s_object.timedParkSlotNumber : 0;
+		street.handicappedSlotNumber = (s_object.handicappedSlotNumber != null && s_object.handicappedSlotNumber > 0) ? s_object.handicappedSlotNumber : 0;
+		street.reservedSlotNumber = (s_object.reservedSlotNumber != null && s_object.reservedSlotNumber > 0) ? s_object.reservedSlotNumber : 0;
+		street.freeParkOccupied = (s_object.freeParkSlotOccupied != null && s_object.freeParkSlotOccupied > 0 && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotOccupied : 0;
+		street.freeParkSlotSignOccupied = (s_object.freeParkSlotSignOccupied != null && s_object.freeParkSlotSignOccupied > 0 && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignOccupied : 0;
+		street.paidSlotOccupied = (s_object.paidSlotOccupied != null && s_object.paidSlotOccupied > 0) ? s_object.paidSlotOccupied : 0;
+		street.timedParkSlotOccupied = (s_object.timedParkSlotOccupied != null && s_object.timedParkSlotOccupied > 0) ? s_object.timedParkSlotOccupied : 0;
+		street.handicappedSlotOccupied = (s_object.handicappedSlotOccupied != null && s_object.handicappedSlotOccupied > 0) ? s_object.handicappedSlotOccupied : 0;
+		street.reservedSlotOccupied = (s_object.reservedSlotOccupied != null && s_object.reservedSlotOccupied > 0) ? s_object.reservedSlotOccupied : 0;
 		return street;
 	};
 	
@@ -1336,6 +1339,42 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    }
 		    if(showArea){
 		    	$scope.updateAreaOccupancy();
+		    }
+		});
+	};
+	
+	// Method getOccupancyParksFromDb: used to retrieve te parks occupancy data from the db
+	$scope.getOccupancyParksFromDb = function(year, month, weekday, dayType, hour, valueType, callType){
+		var allParks = [];
+		var markers = [];
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			year: $scope.correctParamsFromSemicolon(year),
+			month: $scope.correctParamsFromSemicolon(month),
+			weekday: $scope.correctParamsFromSemicolon(weekday),
+			dayType: dayType,
+			hour: $scope.correctParamsFromSemicolon(hour),
+			valueType: valueType,
+			noCache: new Date().getTime()
+		};
+		console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
+			
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructures", params, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+		    angular.copy(result, allParks);
+		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    
+		    if(showPs){
+		    	for (var i = 0; i <  allParks.length; i++) {
+			    	markers.push(createMarkers(i, allParks[i], 2));
+			    }
+		    	angular.copy(markers, $scope.parkingStructureMarkers);
+		    	$scope.updateParkOccupancy();
+		    }
+		    if(callType == 1){
+		    	$scope.getBikePointFromDb();
 		    }
 		});
 	};
@@ -1480,6 +1519,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    }
 		}
 	};
+	
+	// Method updateStreetOccupancy: update all street maps Object elements with new occupation data retrieved from db
+	$scope.updateParkOccupancy = function(parks){
+		if($scope.dashboard_space.parkingstructs){	// I check if the parkingstructures check is selected
+		    if($scope.dashboard_topics == "parkSupply"){
+		   		if($scope.mapParkingStructureMarkers.length == 0){
+		   			$scope.mapParkingStructureMarkers = $scope.setAllMarkersMap($scope.parkingStructureMarkers, $scope.map, true, 1);
+		   		} else {
+		   			var tmpP = $scope.setAllMarkersMap($scope.parkingStructureMarkers, $scope.map, true, 1);
+		   			$scope.switchParkingMapObject(3, tmpP);
+		   		}
+		   	} else {
+		   		if($scope.occupancyParkingStructureMarkers.length == 0){
+		   			$scope.occupancyParkingStructureMarkers = $scope.setAllMarkersMap($scope.parkingStructureMarkers, $scope.map, true, 2);
+		   		} else {
+		   			var tmpP = $scope.setAllMarkersMap($scope.parkingStructureMarkers, $scope.map, true, 2);
+		   	    	$scope.switchParkingMapObject(4, tmpP);
+		    	}
+		    }
+		}
+	};
 		    
     $scope.getParkingMetersFromDb = function(){
 	    var markers = [];
@@ -1501,7 +1561,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    }
 		    //$scope.parkingMetersMarkers = $scope.initPMObjects(allPmeters);
 		    sharedDataService.setSharedLocalPms(allParkingMeters);
-		    $scope.getParkingStructuresFromDb();
+		    var d = new Date();
+		    var hour = "10;12";
+		    $scope.getOccupancyParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, 1);
+		    //$scope.getParkingStructuresFromDb();
 		});
 	};
 	
@@ -1835,20 +1898,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    }
 			    $scope.mapSelectedStreets.push(object);
 			    $scope.showStreetDet();
-				// -------------------------- Data correction for TEST ----------------------------
-				object.data.freeParkSlotSignFree = object.data.freeParkSlotSignNumber - object.data.freeParkSlotSignOccupied;
-				//if(object.data.freeParkSlotSignFree == null){
-				//	object.data.freeParkSlotSignFree = object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied;
-				//	if(object.data.freeParkSlotSignFree == null){
-				//		object.data.freeParkSlotSignFree = 0;
-				//	}
-				//}
-				object.data.freeParkSlotFree = object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied;
-				object.data.paidSlotFree = object.data.paidSlotNumber - object.data.paidSlotOccupied;
-				object.data.timedParkSlotFree = object.data.timedParkSlotNumber - object.data.timedParkSlotOccupied;
-				object.data.handicappedSlotFree = object.data.handicappedSlotNumber - object.data.handicappedSlotOccupied;
-				object.data.reservedSlotFree = object.data.reservedSlotNumber - object.data.reservedSlotOccupied;
-				// --------------------------------------------------------------------------------
+				object.data.freeParkSlotSignFree = (object.data.freeParkSlotSignNumber > 0) ? (object.data.freeParkSlotSignNumber - object.data.freeParkSlotSignOccupied) : 0;
+				object.data.freeParkSlotFree = (object.data.freeParkSlotNumber > 0) ? (object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied) : 0;
+				object.data.paidSlotFree = (object.data.paidSlotNumber > 0 ) ? (object.data.paidSlotNumber - object.data.paidSlotOccupied) : 0;
+				object.data.timedParkSlotFree = (object.data.timedParkSlotNumber > 0) ? (object.data.timedParkSlotNumber - object.data.timedParkSlotOccupied) : 0;
+				object.data.handicappedSlotFree = (object.data.handicappedSlotNumber > 0) ? (object.data.handicappedSlotNumber - object.data.handicappedSlotOccupied) : 0;
+				object.data.reservedSlotFree = (object.data.reservedSlotNumber > 0)? (object.data.reservedSlotNumber - object.data.reservedSlotOccupied) : 0;
 			    $scope.sDetails = object;
 			    $scope.initStreetOccupancyDiagram(object);
 				break;
@@ -2069,28 +2124,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			break;	
 		}
 	};
-	
-	$scope.fixAllStreetsOccupancy = function(){
-    	// For Streets
-		//var toHideStreets = $scope.map.shapes;
-    	//for(var i = 0; i < $scope.mapStreets.length; i++){
-    	//	toHideStreets[$scope.mapStreets[i].id].setMap(null);
-    	//	var object = $scope.mapStreets[i];
-    	//	object.stroke.color = $scope.getOccupancyColor(object.data.occupancyRate);	//averageOccupation1012
-    	//	$scope.occupancyStreets.push(object);
-    	//}
-    	//$scope.mapStreets = [];
-		$scope.switchStreetMapObject(1, null);
-		// For Structures
-    	for (var i = 0; i < $scope.mapParkingStructureMarkers.length; i++){
-    		var myIcon = $scope.getOccupancyIcon($scope.mapParkingStructureMarkers[i].data.averageOccupation1012, 2);
-    		var object = $scope.mapParkingStructureMarkers[i];
-    		object.icon = myIcon;
-    		$scope.occupancyParkingStructureMarkers.push(object);
-    	};
-    	$scope.mapParkingStructureMarkers = [];
-    	
-    };
     
     // Method switchStreetMapObject: used to switch (in map) from street object to occupancy-street object
     $scope.switchStreetMapObject = function(type, newList){
@@ -2123,7 +2156,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		object.stroke.color = $scope.correctColor(object.data.color);
     	    		tmpStreets.push(object);
     	    	}
-    	    	$scope.mapStreets = angular.copy(tmpStreets);
+    	    	angular.copy(tmpStreets, $scope.mapStreets);
     			break;
     		case 4:
     			var tmpStreets = [];
@@ -2133,7 +2166,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		object.stroke.color = $scope.getOccupancyColor(object.data.occupancyRate);	//averageOccupation1012
     	    		tmpStreets.push(object);
     	    	}
-    	    	$scope.occupancyStreets = angular.copy(tmpStreets);
+    	    	angular.copy(tmpStreets, $scope.occupancyStreets);
     			break;	
     		default:break;
     	}
@@ -2183,7 +2216,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		object.stroke.color = $scope.correctColor(object.data.color);
     	    		tmpZones.push(object);
     	    	}
-    	    	$scope.mapZones = angular.copy(tmpZones);
+    	    	angular.copy(tmpZones, $scope.mapZones);
     			break;
     		case 4:
     			var tmpZones = [];
@@ -2197,7 +2230,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		object.data.slotOccupied = Math.round(object.data.slotNumber * zoneOccupancy / 100);
     	    		tmpZones.push(object);
     	    	}
-    	    	$scope.occupancyZones = angular.copy(tmpZones);
+    	    	angular.copy(tmpZones, $scope.occupancyZones);
     			break;	
     		default:break;
     	}
@@ -2240,7 +2273,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		object.fill.color = $scope.correctColor(object.data.color);
     	    		tmpAreas.push(object);
     	    	}
-    	    	$scope.mapAreas = angular.copy(tmpAreas);
+    	    	angular.copy(tmpAreas, $scope.mapAreas);
     			break;
     		case 4:
     			var tmpAreas = [];
@@ -2255,7 +2288,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		object.data.slotOccupied = Math.round(object.data.slotNumber * areaOccupancy / 100);
     	    		tmpAreas.push(object);
     	    	}
-    	    	$scope.occupancyAreas = angular.copy(tmpAreas);
+    	    	angular.copy(tmpAreas, $scope.occupancyAreas);
     			break;	
     		default:break;
     	}
@@ -2266,7 +2299,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	switch(type){
     		case 1:
     			for (var i = 0; i < $scope.mapParkingStructureMarkers.length; i++){
-    	    		var myIcon = $scope.getOccupancyIcon($scope.mapParkingStructureMarkers[i].data.averageOccupation1012, 2);
+    	    		var myIcon = $scope.getOccupancyIcon($scope.mapParkingStructureMarkers[i].data.occupancyRate, 2);
     	    		var object = $scope.mapParkingStructureMarkers[i];
     	    		object.icon = myIcon;
     	    		$scope.occupancyParkingStructureMarkers.push(object);
@@ -2282,53 +2315,35 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    	$scope.occupancyParkingStructureMarkers = [];
     			break;
     		case 3:
-    			var tmpStructs = [];
-    	    	for(var i = 0; i < $scope.mapParkingStructureMarkers.length; i++){
-    	    		var object = newList[i];
-    	    		object.icon = $scope.psMarkerIcon;
-    	    		tmpStructs.push(object);
+    			//var tmpStructs = [];
+    	    	for(var i = 0; i < newList.length; i++){
+    	    		//var object = newList[i];
+    	    		$scope.mapParkingStructureMarkers[i].icon = $scope.psMarkerIcon;
     	    	}
-    	    	$scope.mapParkingStructureMarkers = angular.copy(tmpStructs);
+    	    	//$scope.mapParkingStructureMarkers = [];
+    	    	//angular.copy(tmpStructs, $scope.mapParkingStructureMarkers);
     			break;
     		case 4:
-    			var tmpStructs = [];
-    	    	for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
-    	    		var object = newList[i];
-    	    		var myIcon = $scope.getOccupancyIcon($scope.mapParkingStructureMarkers[i].data.averageOccupation1012, 2);
-    	    		object.icon = myIcon;
-    	    		tmpStructs.push(object);
+    			//var tmpStructs = [];
+    	    	for(var i = 0; i <  newList.length; i++){
+    	    		//var object = newList[i];
+    	    		var myIcon = $scope.getOccupancyIcon(newList[i].data.occupancyRate, 2);
+    	    		$scope.occupancyParkingStructureMarkers[i].icon = myIcon;
+    	    		//tmpStructs.push(object);
     	    	}
-    	    	$scope.occupancyParkingStructureMarkers = angular.copy(tmpStructs);
+    	    	//$scope.occupancyParkingStructureMarkers = [];
+    	    	//angular.copy(tmpStructs, $scope.occupancyParkingStructureMarkers);
     			break;	
     		default:
     			break;
     	}
     	
     };
-    
-    $scope.fixAllStreetsSupply = function(){
-    	// For Streets
-    	//var toHideStreets = $scope.map.shapes;
-    	//for(var i = 0; i < $scope.occupancyStreets.length; i++){
-    	//	toHideStreets[$scope.occupancyStreets[i].id].setMap(null);
-    	//	var object = $scope.occupancyStreets[i];
-    	//	object.stroke.color = $scope.correctColor(object.data.color);
-    	//	$scope.mapStreets.push(object);
-    	//}
-    	//$scope.occupancyStreets = [];
-    	$scope.switchStreetMapObject(2, null);
-    	// For Structures
-    	for (var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
-    		var object = $scope.occupancyParkingStructureMarkers[i];
-    		object.icon = $scope.psMarkerIcon;
-    		$scope.mapParkingStructureMarkers.push(object);
-    	};
-    	$scope.occupancyParkingStructureMarkers = [];
-    };
+
     
     $scope.getOccupancyColor = function(value){
     	if(value == -1){
-    		return $scope.lightgreen;
+    		return $scope.lightgray;
     	} else {
 	    	if(value < 25){
 	    		return $scope.green;
@@ -2346,7 +2361,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     $scope.getOccupancyIcon = function(value, type){
     	var image_url="";
-    	if(value < 25){
+    	if(value == -1){
+    		switch(type){
+    			case 1: break;
+    			case 2:
+    				image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_np.png";
+    				break;
+    			case 3: break;
+    			default: break;
+    		}
+    	} else if(value < 25){
     		switch(type){
     			case 1: break;
     			case 2:

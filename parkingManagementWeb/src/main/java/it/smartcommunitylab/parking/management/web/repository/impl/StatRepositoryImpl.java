@@ -299,7 +299,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		for (YearStat stat : stats) {
 			StatKey key = stat.getKey().toStatKey();
 			StatValue value = stat.toStatValue();
-			logger.info(String.format("key %s, value %s", key.toString(), value.toString()));
+			//logger.info(String.format("key %s, value %s", key.toString(), value.toString()));
 			map.put(key, value.merge(map.get(key)));
 		}
 		for (StatKey key : map.keySet()) {
