@@ -49,7 +49,7 @@
 									<td align="left"><label><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
 								</tr>
 								<tr><!-- ng-show="isPmVisible()" -->
-									<td align="left"><label><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers()">&nbsp;{{ 'view_parkingmeters' | i18n }}</label></td>
+									<td align="left"><label><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers()" ng-disabled="dashboard_topics=='occupation'">&nbsp;{{ 'view_parkingmeters' | i18n }}</label></td>
 								</tr>
 							</table>
 						</div>
