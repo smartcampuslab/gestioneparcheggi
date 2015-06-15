@@ -10,6 +10,7 @@
 <link href="css/colorpicker.css" rel="stylesheet" />
 <link href="css/angular-awesome-slider.min.css" rel="stylesheet" type="text/css">
 <link href="css/style.css" rel="stylesheet" />
+<link href="css/angular-spinkit.min.css" rel="stylesheet" />
 <link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
 
 <!-- required libraries -->
@@ -27,6 +28,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="lib/bootstrap-colorpicker-module.js"></script>
 <script src="lib/ui-bootstrap-tpls.min.js"></script>
+<script src="lib/angular-spinkit.min.js"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
 <script src="i18n/angular-locale_en-EN.js"></script>

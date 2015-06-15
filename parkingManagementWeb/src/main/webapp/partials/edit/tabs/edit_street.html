@@ -427,7 +427,7 @@
 		  		<div class="panel-body">
 		  			<div class="form-group" ng-show="!isEditing && s_areaId.visible">
 				    	<label for="area1">{{ 'street_area_name' | i18n }}</label>
-				    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myNewArea" ng-required="!isEditing && s_areaId.required">
+				    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myNewArea" ng-required="!isEditing && s_areaId.required" ng-change="getAreaPM(myNewArea)">
 				    		<option value="">{{ 'street_area_placeholder' | i18n }}</option>
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
@@ -509,7 +509,7 @@
 					</div>
 				 	<div class="form-group" ng-show="isEditing && s_areaId.visible">
 				    	<label for="area">{{ 'street_area_name' | i18n }}</label>
-				    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="isEditing && s_areaId.required">
+				    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="isEditing && s_areaId.required" ng-change="getAreaPM(myArea)">
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 					</div>

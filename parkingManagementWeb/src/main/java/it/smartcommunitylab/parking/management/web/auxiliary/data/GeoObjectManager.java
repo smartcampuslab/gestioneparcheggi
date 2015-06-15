@@ -118,8 +118,8 @@ public class GeoObjectManager {
 		//if (skip > 0) query.skip(skip);
 
 		List<Street> listaObj = new ArrayList<Street>();
-		storageManager.setAppId(inCriteria.get("agency").toString());
-		List<StreetBean> myStreets = storageManager.getAllStreets();
+		//storageManager.setAppId(inCriteria.get("agency").toString());
+		List<StreetBean> myStreets = storageManager.getAllStreets(inCriteria.get("agency").toString());
 		for(int i = 0; i < myStreets.size(); i++){
 			Street s = castPMStreetBeanToStreet(myStreets.get(i));
 			if(circle != null){
@@ -153,8 +153,8 @@ public class GeoObjectManager {
 		//logger.error(String.format("Search Parking limit %s, skip %s, query %s, class %s", limit, skip, query.getHint(), type));
 		
 		List<Parking> listaObj = new ArrayList<Parking>();
-		storageManager.setAppId(inCriteria.get("agency").toString());
-		List<ParkingStructureBean> myStructures = storageManager.getAllParkingStructure();
+		//storageManager.setAppId(inCriteria.get("agency").toString());
+		List<ParkingStructureBean> myStructures = storageManager.getAllParkingStructure(inCriteria.get("agency").toString());
 		
 		for(int i = 0; i < myStructures.size(); i++){
 			Parking p = castPMStructureBeanToParking(myStructures.get(i));

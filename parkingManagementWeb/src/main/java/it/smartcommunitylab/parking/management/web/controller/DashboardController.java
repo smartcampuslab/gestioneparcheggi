@@ -78,89 +78,90 @@ public class DashboardController {
 	}
 	
 
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/street")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/street")
 	public @ResponseBody
-	List<StreetBean> getAllStreets() {
-		return storage.getAllStreets();
+	List<StreetBean> getAllStreets(@PathVariable String appId) {
+		return storage.getAllStreets(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/street")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/street")
 	public @ResponseBody
-	List<StreetBean> getAllStreetsNS() {
-		return storage.getAllStreets();
+	List<StreetBean> getAllStreetsNS(@PathVariable String appId) {
+		return storage.getAllStreets(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/parkingmeter")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/parkingmeter")
 	public @ResponseBody
-	List<ParkingMeterBean> getAllParkingMeters() {
-		return storage.getAllParkingMeters();
+	List<ParkingMeterBean> getAllParkingMeters(@PathVariable String appId) {
+		return storage.getAllParkingMeters(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/parkingmeter")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/parkingmeter")
 	public @ResponseBody
-	List<ParkingMeterBean> getAllParkingMetersNS() {
-		return storage.getAllParkingMeters();
+	List<ParkingMeterBean> getAllParkingMetersNS(@PathVariable String appId) {
+		return storage.getAllParkingMeters(appId);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/area/{aid}")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/area/{aid}")
 	public @ResponseBody
-	RateAreaBean getRateArea(@PathVariable("aid") String aid,
+	RateAreaBean getRateArea(@PathVariable String appId,
+			@PathVariable("aid") String aid,
 			@RequestBody RateAreaBean area) throws NotFoundException {
-		return storage.getAreaById(aid);
+		return storage.getAreaById(aid, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/area")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/area")
 	public @ResponseBody
-	List<RateAreaBean> getAllRateArea() {
-		return storage.getAllArea();
+	List<RateAreaBean> getAllRateArea(@PathVariable String appId) {
+		return storage.getAllArea(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/area")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/area")
 	public @ResponseBody
-	List<RateAreaBean> getAllRateAreaNS() {
-		return storage.getAllArea();
+	List<RateAreaBean> getAllRateAreaNS(@PathVariable String appId) {
+		return storage.getAllArea(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/zone")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/zone")
 	public @ResponseBody
-	List<ZoneBean> getAllZone() {
-		return storage.getAllZone();
+	List<ZoneBean> getAllZone(@PathVariable String appId) {
+		return storage.getAllZone(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/zone")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/zone")
 	public @ResponseBody
-	List<ZoneBean> getAllZoneNS() {
-		return storage.getAllZone();
+	List<ZoneBean> getAllZoneNS(@PathVariable String appId) {
+		return storage.getAllZone(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/bikepoint")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/bikepoint")
 	public @ResponseBody
-	List<BikePointBean> getAllBikePoints() {
-		return storage.getAllBikePoints();
+	List<BikePointBean> getAllBikePoints(@PathVariable String appId) {
+		return storage.getAllBikePoints(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/bikepoint")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/bikepoint")
 	public @ResponseBody
-	List<BikePointBean> getAllBikePointsNS() {
-		return storage.getAllBikePoints();
+	List<BikePointBean> getAllBikePointsNS(@PathVariable String appId) {
+		return storage.getAllBikePoints(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/parkingstructure")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/parkingstructure")
 	public @ResponseBody
-	List<ParkingStructureBean> getAllParkingStructure() {
-		return storage.getAllParkingStructure();
+	List<ParkingStructureBean> getAllParkingStructure(@PathVariable String appId) {
+		return storage.getAllParkingStructure(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/parkingstructure")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/parkingstructure")
 	public @ResponseBody
-	List<ParkingStructureBean> getAllParkingStructureNS() {
-		return storage.getAllParkingStructure();
+	List<ParkingStructureBean> getAllParkingStructureNS(@PathVariable String appId) {
+		return storage.getAllParkingStructure(appId);
 	}
 	
 	// New Part for occupancy data

@@ -528,9 +528,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	$scope.areaMapReady = false;
 		var allAreas = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "area", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allAreas);
 	    	//console.log("rateAreas retrieved from db: " + JSON.stringify(result));
@@ -546,9 +547,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	$scope.getAreaByIdFromDb = function(id){
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/"+ id, null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "area/"+ id, null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/"+ id, null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("rateArea by id retrieved from db: " + JSON.stringify(result));
 	    	return result;
@@ -594,9 +596,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.streetMapReady = false;
 		var allStreet = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSService.getProxy(method, "street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/street", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allStreet);
 	    	//console.log("streets retrieved from db: " + JSON.stringify(result));
@@ -615,9 +618,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.pmMapReady = false;
 		var allPmeters = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allPmeters);
 	    	//console.log("ParkingMeters retrieved from db: " + JSON.stringify(result));
@@ -639,9 +643,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.psMapReady = false;
 		var allPstructs = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allPstructs);
 	    	console.log("ParkingStructures retrieved from db: " + JSON.stringify(result));
@@ -661,9 +666,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.zoneMapReady = false;
 		var allZones = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "zone", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allZones);
 	    	//console.log("Zone retrieved from db: " + JSON.stringify(result));
@@ -682,9 +688,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.bpMapReady = false;
 		var allBpoints = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 	    	angular.copy(result, allBpoints);
 	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
@@ -1653,11 +1660,17 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.getPmsFromArea = function(list, area){
 		var myPmsInArea = [];
 		for(var i = 0; i < list.length; i++){
-			if(list[i].areaId == area.id){
-				myPmsInArea.push(list[i]);
+			if(area != null){
+				if(list[i].areaId == area.id){
+					myPmsInArea.push(list[i]);
+				}
 			}
 		}
 		return myPmsInArea;
+	};
+	
+	$scope.getAreaPM = function(area){
+		$scope.myPms = $scope.getPmsFromArea(sharedDataService.getSharedLocalPms(), area);
 	};
 	
 	// Streets
@@ -1674,6 +1687,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
 		$scope.allZones = sharedDataService.getSharedLocalZones();
 		$scope.allPms = sharedDataService.getSharedLocalPms();
+		angular.copy($scope.allPms, $scope.myPms);
 		$scope.setMyLineGeometry(null);
 		angular.copy($scope.allZones, $scope.myZones);
 		
@@ -1769,6 +1783,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 		} else {
+			$scope.myNewArea = {};
 			poly.setPath([]);										// here I clear the old path
 			poly.visible = true;									// here I show the polyline for creation
 			if($scope.editGStreet != null){
@@ -2425,6 +2440,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 			
 			var id = area.id;
+			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
 			
 			var decimalFee = $scope.correctDecimal(area.fee, 1);
@@ -2446,7 +2462,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Area data : " + value);
 			
 		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + id, null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "area/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated street: " + result);
 		    	if(result != null){ // == "OK"){
@@ -2486,6 +2502,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
 			
 			var id = street.id;
+			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
 			
 			var data = {
@@ -2513,7 +2530,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Street data : " + value);
 			
 		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated street: " + result);
 		    	if(result != null){ // == "OK"){
@@ -2537,6 +2554,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.showUpdatingErrorMessage = false;
 			
 			var id = pm.id;
+			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
 			
 			var data = {
@@ -2553,7 +2571,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Parkingmeter data : " + value);
 			
 		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter/" + id, null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated parkinMeter: " + result);
 		    	if(result != null){ // == "OK"){
@@ -2587,6 +2605,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.setMyPaymentoErrMode(false);
 				
 				var id = ps.id;
+				var appId = sharedDataService.getConfAppId();
 				var method = 'PUT';
 				
 				var data = {
@@ -2609,7 +2628,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    if($scope.showLog) console.log("Parkingmeter data : " + value);
 				
 				//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + id, null, $scope.authHeaders, value);
-			   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure/" + id, null, $scope.authHeaders, value);
+			   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + id, null, $scope.authHeaders, value);
 			    myDataPromise.then(function(result){
 			    	console.log("Updated parkingStructure: " + result);
 			    	if(result != null){ // == "OK"){
@@ -2650,6 +2669,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 			
 			var id = zone.id;
+			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
 			
 			var data = {
@@ -2668,7 +2688,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Zone data : " + value);
 			
 		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + id, null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "zone/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated Zone: " + result);
 		    	if(result != null){ // == "OK"){
@@ -2691,6 +2711,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.showUpdatingBPErrorMessage = false;
 			
 			var id = $scope.bikePoint.id;
+			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
 			var bp = $scope.bikePoint;
 			
@@ -2707,7 +2728,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Bikepoint data : " + value);
 			
 		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated bikepoint: " + result);
 		    	if(result != null){//== "OK"){
@@ -2806,6 +2827,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.deleteArea = function(area){
 		$scope.showDeletingAErrorMessage = false;
 		var method = 'DELETE';
+		var appId = sharedDataService.getConfAppId();
 		
 		// area removing from gmap
 		var toDelArea = $scope.vAreaMap.shapes;
@@ -2823,7 +2845,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + area.id , null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted area: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2840,6 +2862,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.deleteStreet = function(street){
 		$scope.showDeletingSErrorMessage = false;
 		var method = 'DELETE';
+		var appId = sharedDataService.getConfAppId();
 		
 		// street removing from gmap
 		var toDelStreet = $scope.vStreetMap.shapes;
@@ -2848,7 +2871,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
 		
     	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + street.rateAreaId + "/" + street.id , null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "street/" + street.rateAreaId + "/" + street.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + street.rateAreaId + "/" + street.id , null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted street: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2865,9 +2888,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.deletePMeter = function(pMeter){
 		$scope.showDeletingPMErrorMessage = false;
 		var method = 'DELETE';
+		var appId = sharedDataService.getConfAppId();
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted parkingmeter: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2884,9 +2908,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.deletePStruct = function(pStruct){
 		$scope.showDeletingPSErrorMessage = false;
 		var method = 'DELETE';
+		var appId = sharedDataService.getConfAppId();
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure/" + pStruct.id, null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure/" + pStruct.id, null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + pStruct.id, null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted struct: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2903,6 +2928,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.deleteZone = function(zone){
 		$scope.showDeletingZErrorMessage = false;
 		var method = 'DELETE';
+		var appId = sharedDataService.getConfAppId();
 		
 		// zone removing from gmap
 		var toDelZone = $scope.vZoneMap.shapes;
@@ -2911,7 +2937,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
 		
     	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + zone.id, null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "zone/" + zone.id, null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + zone.id, null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted zone: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2928,9 +2954,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.deleteBPoint = function(bPoint){
 		$scope.showDeletingBPErrorMessage = false;
 		var method = 'DELETE';
+		var appId = sharedDataService.getConfAppId();
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
 	   	myDataPromise.then(function(result){
 	    	console.log("Deleted bikePoint: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -2977,6 +3004,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			//$scope.allNewAreas = [];	// Here I clear the array of area polygons
 			
 			var method = 'POST';
+			var appId = sharedDataService.getConfAppId();
 			
 			var decimalFee = $scope.correctDecimal(area.fee, 1);
 			var data = {
@@ -2995,7 +3023,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Area data : " + value);
 			
 		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "area", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Created area: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -3027,6 +3055,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
 			
 			var method = 'POST';
+			var appId = sharedDataService.getConfAppId();
 			var data = {
 				id_app: $scope.myAppId,
 				streetReference: street.streetReference,
@@ -3051,7 +3080,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Street data : " + value);
 			
 		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "street", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Created street: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -3078,7 +3107,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.showUpdatingErrorMessage = false;
 			
 			var method = 'POST';
-			
+			var appId = sharedDataService.getConfAppId();
 			var data = {
 				id_app: $scope.myAppId,
 				code: pm.code,
@@ -3092,7 +3121,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Parkingmeter data : " + value);
 			
 		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "parkingmeter", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Created parkinMeter: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -3125,7 +3154,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.setMyPaymentoErrMode(false);
 				
 				var method = 'POST';
-				
+				var appId = sharedDataService.getConfAppId();
 				var data = {
 					id_app: $scope.myAppId,
 					name: ps.name,
@@ -3145,7 +3174,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    if($scope.showLog) console.log("Parkingmeter data : " + value);
 				
 			   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, value);
-			   	var myDataPromise = invokeWSService.getProxy(method, "parkingstructure", null, $scope.authHeaders, value);
+			   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, value);
 			    myDataPromise.then(function(result){
 			    	console.log("Created parkingStructure: " + JSON.stringify(result));
 			    	if(result != null && result != ""){
@@ -3176,7 +3205,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			};
 			
 			var method = 'POST';
-			
+			var appId = sharedDataService.getConfAppId();
 			var data = {
 				id_app: $scope.myAppId,
 				name: zone.name,
@@ -3192,7 +3221,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Zone data : " + value);
 			
 		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "zone", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Created zone: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -3216,6 +3245,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			var method = 'POST';
 			var bp = $scope.bikePoint;
+			var appId = sharedDataService.getConfAppId();
 			
 			var data = {
 				id_app: $scope.myAppId,
@@ -3229,7 +3259,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Bikepoint data : " + value);
 			
 		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Create bikePoint: " + JSON.stringify(result));
 		    	if(result != null && result != ""){

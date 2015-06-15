@@ -69,211 +69,266 @@ public class EditingController {
 		return storage.getAppId();
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/street")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/street")
 	public @ResponseBody
-	StreetBean createStreet(@RequestBody StreetBean street) throws DatabaseException {
-		return storage.save(street);
+	StreetBean createStreet(@PathVariable("appId") String appId,
+			@RequestBody StreetBean street) throws DatabaseException {
+		return storage.save(street, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/street/{aid}/{sid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/street/{aid}/{sid}")
 	public @ResponseBody
-	boolean deleteStreet(@PathVariable("aid") String aid,
+	boolean deleteStreet(@PathVariable("appId") String appId,
+			@PathVariable("aid") String aid,
 			@PathVariable("sid") String sid) throws DatabaseException {
-		return storage.removeStreet(aid, sid);
+		return storage.removeStreet(aid, sid, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/street/{sid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/street/{sid}")
 	public @ResponseBody
-	StreetBean editStreet(@PathVariable("sid") String vid, @RequestBody StreetBean street)
+	StreetBean editStreet(@PathVariable("appId") String appId,
+			@PathVariable("sid") String vid, @RequestBody StreetBean street)
 			throws DatabaseException {
-		return storage.editStreet(street);
+		return storage.editStreet(street, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/street")
 	public @ResponseBody
 	List<StreetBean> getAllStreets() {
-		return storage.getAllStreets();
+		return storage.getAllStreets("all");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/street")
+	public @ResponseBody
+	List<StreetBean> getAllStreetsByAppId(@PathVariable("appId") String appId) {
+		return storage.getAllStreets(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/street")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/street")
 	public @ResponseBody
-	List<StreetBean> getAllStreetsNS() {
-		return storage.getAllStreets();
+	List<StreetBean> getAllStreetsNS(@PathVariable("appId") String appId) {
+		return storage.getAllStreets(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/parkingmeter")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingmeter")
 	public @ResponseBody
-	ParkingMeterBean createParkingMeter(@RequestBody ParkingMeterBean parkingMeter)
+	ParkingMeterBean createParkingMeter(@PathVariable("appId") String appId,
+			@RequestBody ParkingMeterBean parkingMeter)
 			throws DatabaseException {
-		return storage.save(parkingMeter);
+		return storage.save(parkingMeter, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingmeter")
 	public @ResponseBody
 	List<ParkingMeterBean> getAllParkingMeters() {
-		return storage.getAllParkingMeters();
+		return storage.getAllParkingMeters("all");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/parkingmeter")
+	public @ResponseBody
+	List<ParkingMeterBean> getAllParkingMetersByAppId(@PathVariable("appId") String appId) {
+		return storage.getAllParkingMeters(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/parkingmeter")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingmeter")
 	public @ResponseBody
-	List<ParkingMeterBean> getAllParkingMetersNS() {
-		return storage.getAllParkingMeters();
+	List<ParkingMeterBean> getAllParkingMetersNS(@PathVariable("appId") String appId) {
+		return storage.getAllParkingMeters(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/parkingmeter/{aid}/{pid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/parkingmeter/{aid}/{pid}")
 	public @ResponseBody
-	boolean deleteParkingMeter(@PathVariable("aid") String aid,
+	boolean deleteParkingMeter(@PathVariable("appId") String appId,
+			@PathVariable("aid") String aid,
 			@PathVariable("pid") String pid) {
-		return storage.removeParkingMeter(aid, pid);
+		return storage.removeParkingMeter(aid, pid, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/parkingmeter/{pid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/parkingmeter/{pid}")
 	public @ResponseBody
-	ParkingMeterBean editParkingMeter(@PathVariable("pid") String pid,
+	ParkingMeterBean editParkingMeter(@PathVariable("appId") String appId,
+			@PathVariable("pid") String pid,
 			@RequestBody ParkingMeterBean parkingMeter) throws DatabaseException {
-		return storage.editParkingMeter(parkingMeter);
+		return storage.editParkingMeter(parkingMeter, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/area")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/area")
 	public @ResponseBody
-	RateAreaBean createRateArea(@RequestBody RateAreaBean area) {
-		return storage.save(area);
+	RateAreaBean createRateArea(@PathVariable("appId") String appId,
+			@RequestBody RateAreaBean area) {
+		return storage.save(area, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/area/{aid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/area/{aid}")
 	public @ResponseBody
-	RateAreaBean editRateArea(@PathVariable("aid") String aid,
+	RateAreaBean editRateArea(@PathVariable("appId") String appId,
+			@PathVariable("aid") String aid,
 			@RequestBody RateAreaBean area) throws NotFoundException {
-		return storage.editArea(area);
+		return storage.editArea(area, appId);
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/area/{aid}")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/area/{aid}")
 	public @ResponseBody
-	RateAreaBean getRateArea(@PathVariable("aid") String aid,
+	RateAreaBean getRateArea(@PathVariable("appId") String appId,
+			@PathVariable("aid") String aid,
 			@RequestBody RateAreaBean area) throws NotFoundException {
-		return storage.getAreaById(aid);
+		return storage.getAreaById(aid, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/area")
 	public @ResponseBody
 	List<RateAreaBean> getAllRateArea() {
-		return storage.getAllArea();
+		return storage.getAllArea("all");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/area")
+	public @ResponseBody
+	List<RateAreaBean> getAllRateAreaByAppId(@PathVariable("appId") String appId) {
+		return storage.getAllArea(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/area")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area")
 	public @ResponseBody
-	List<RateAreaBean> getAllRateAreaNS() {
-		return storage.getAllArea();
+	List<RateAreaBean> getAllRateAreaNS(@PathVariable("appId") String appId) {
+		return storage.getAllArea(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/area/{aid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/area/{aid}")
 	public @ResponseBody
-	boolean deleteRateArea(@PathVariable("aid") String aid) {
-		return storage.removeArea(aid);
+	boolean deleteRateArea(@PathVariable("appId") String appId,
+			@PathVariable("aid") String aid) {
+		return storage.removeArea(aid, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/zone")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/zone")
 	public @ResponseBody
-	ZoneBean createZone(@RequestBody ZoneBean zone) throws DatabaseException {
-		return storage.save(zone);
+	ZoneBean createZone(@PathVariable("appId") String appId,
+			@RequestBody ZoneBean zone) throws DatabaseException {
+		return storage.save(zone, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/zone")
 	public @ResponseBody
 	List<ZoneBean> getAllZone() {
-		return storage.getAllZone();
+		return storage.getAllZone("all");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/zone")
+	public @ResponseBody
+	List<ZoneBean> getAllZoneByAppId(@PathVariable("appId") String appId) {
+		return storage.getAllZone(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/zone")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone")
 	public @ResponseBody
-	List<ZoneBean> getAllZoneNS() {
-		return storage.getAllZone();
+	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId) {
+		return storage.getAllZone(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/zone/{zid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/zone/{zid}")
 	public @ResponseBody
-	ZoneBean editZone(@PathVariable("zid") String zid,
+	ZoneBean editZone(@PathVariable("appId") String appId,
+			@PathVariable("zid") String zid,
 			@RequestBody ZoneBean zone) throws NotFoundException {
 		System.out.println(String.format("Zone to edit id:%s; name:%s; submacro:%s ", zone.getId(), zone.getName(), zone.getSubmacro()));
-		return storage.editZone(zone);
+		return storage.editZone(zone, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/zone/{zid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/zone/{zid}")
 	public @ResponseBody
-	boolean deleteZone(@PathVariable("zid") String zid) {
-		return storage.removeZone(zid);
+	boolean deleteZone(@PathVariable("appId") String appId,
+			@PathVariable("zid") String zid) {
+		return storage.removeZone(zid, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/bikepoint")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/bikepoint")
 	public @ResponseBody
-	BikePointBean createBikePoint(@RequestBody BikePointBean puntobici)
+	BikePointBean createBikePoint(@PathVariable("appId") String appId,
+			@RequestBody BikePointBean puntobici)
 			throws DatabaseException {
-		return storage.save(puntobici);
+		return storage.save(puntobici, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/bikepoint")
 	public @ResponseBody
 	List<BikePointBean> getAllBikePoints() {
-		return storage.getAllBikePoints();
+		return storage.getAllBikePoints("all");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/bikepoint")
+	public @ResponseBody
+	List<BikePointBean> getAllBikePointsByAllId(@PathVariable("appId") String appId) {
+		return storage.getAllBikePoints(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/bikepoint")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/bikepoint")
 	public @ResponseBody
-	List<BikePointBean> getAllBikePointsNS() {
-		return storage.getAllBikePoints();
+	List<BikePointBean> getAllBikePointsNS(@PathVariable("appId") String appId) {
+		return storage.getAllBikePoints(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/bikepoint/{pbid}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/bikepoint/{pbid}")
 	public @ResponseBody
-	boolean deleteBikePoint(@PathVariable("pbid") String pbid) {
-		return storage.removeBikePoint(pbid);
+	boolean deleteBikePoint(@PathVariable("appId") String appId,
+			@PathVariable("pbid") String pbid) {
+		return storage.removeBikePoint(pbid, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/bikepoint/{pbid}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/bikepoint/{pbid}")
 	public @ResponseBody
-	BikePointBean editBikePoint(@PathVariable("pbid") String pbid,
+	BikePointBean editBikePoint(@PathVariable("appId") String appId,
+			@PathVariable("pbid") String pbid,
 			@RequestBody BikePointBean bici) throws NotFoundException {
-		return storage.editBikePoint(bici);
+		return storage.editBikePoint(bici, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/parkingstructure")
+	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingstructure")
 	public @ResponseBody
 	ParkingStructureBean createParkingStructure(
+			@PathVariable("appId") String appId,
 			@RequestBody ParkingStructureBean entityBean)
 			throws DatabaseException {
-		return storage.save(entityBean);
+		return storage.save(entityBean, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingstructure")
 	public @ResponseBody
 	List<ParkingStructureBean> getAllParkingStructure() {
-		return storage.getAllParkingStructure();
+		return storage.getAllParkingStructure("all");
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/parkingstructure")
+	public @ResponseBody
+	List<ParkingStructureBean> getAllParkingStructure(@PathVariable("appId") String appId) {
+		return storage.getAllParkingStructure(appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/parkingstructure")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingstructure")
 	public @ResponseBody
-	List<ParkingStructureBean> getAllParkingStructureNS() {
-		return storage.getAllParkingStructure();
+	List<ParkingStructureBean> getAllParkingStructureNS(@PathVariable("appId") String appId) {
+		return storage.getAllParkingStructure(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/parkingstructure/{id}")
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/parkingstructure/{id}")
 	public @ResponseBody
-	boolean deleteParkingStructure(@PathVariable String id) {
-		return storage.removeParkingStructure(id);
+	boolean deleteParkingStructure(@PathVariable("appId") String appId, 
+			@PathVariable String id) {
+		return storage.removeParkingStructure(id, appId);
 	}
 
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/parkingstructure/{id}")
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/parkingstructure/{id}")
 	public @ResponseBody
-	ParkingStructureBean editParkingStructure(@PathVariable String id,
+	ParkingStructureBean editParkingStructure(@PathVariable("appId") String appId,
+			@PathVariable String id,
 			@RequestBody ParkingStructureBean entityBean)
 			throws NotFoundException {
-		return storage.editParkingStructure(entityBean);
+		return storage.editParkingStructure(entityBean, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/data")

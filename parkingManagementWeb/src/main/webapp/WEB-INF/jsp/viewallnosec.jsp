@@ -8,6 +8,7 @@
 <link href="../css/bootstrap-theme.min.css" rel="stylesheet" />
 <link href="../css/modaldialog.css" rel="stylesheet" />
 <link href="../css/colorpicker.css" rel="stylesheet" />
+<link href="../css/angular-spinkit.min.css" rel="stylesheet" />
 <link href="../imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
 
 <!-- required libraries -->
@@ -18,6 +19,7 @@
 <script src="../js/dialogs.min.js" type="text/javascript"></script>
 <script src="../lib/angular-route.js"></script>
 <script src="../lib/angular-sanitize.js"></script>
+<script src="../lib/angular-spinkit.min.js"></script>
 
 <script src="../i18n/angular-locale_it-IT.js"></script>
 

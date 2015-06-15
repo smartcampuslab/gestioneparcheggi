@@ -928,9 +928,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		$scope.areaMapReady = false;
 		var allAreas = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 				
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSServiceNS.getProxy(method, "area", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allAreas);
 			console.log("rateAreas retrieved from db: " + JSON.stringify(result));
@@ -948,9 +949,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		$scope.streetMapReady = false;
 		var allStreet = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSServiceNS.getProxy(method, "street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/street", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
 		    console.log("streets retrieved from db: " + JSON.stringify(result));
@@ -966,9 +968,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	    var markers = [];
 		var allParkingMeters = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSServiceNS.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingmeter", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allParkingMeters);
 		  	console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
@@ -990,9 +993,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var markers = [];
 		var allParkingStructures = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSServiceNS.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allParkingStructures);
 		    console.log("Parking Structures retrieved from db: " + JSON.stringify(result));
@@ -1011,9 +1015,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var markers = [];
 		var allBikePoints = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allBikePoints);
 	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
@@ -1034,9 +1039,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		$scope.zoneMapReady = false;
 		var allZones = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSServiceNS.getProxy(method, "zone", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/zone", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allZones);
 			console.log("Zone retrieved from db: " + JSON.stringify(result));

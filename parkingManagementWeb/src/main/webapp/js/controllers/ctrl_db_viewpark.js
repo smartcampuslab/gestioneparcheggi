@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-var pmControllers = angular.module('pmControllers', ['googlechart','angularAwesomeSlider']);
+var pmControllers = angular.module('pmControllers', ['googlechart','angularAwesomeSlider','angular-spinkit']);
 pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize',
                                 function($scope, $route, $$rootScope, $filter, localize) {
 	
@@ -60,6 +60,9 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	};
 	
 	$scope.updateSearch = function(){
+		//$scope.setAllMapObjectLoaded(false);
+		$scope.setAllMapObjectLoaded(true);
+		//$dialogs.load("","");
 	    console.log("Visualizzazione: " + $scope.vis);
 	    console.log("Anno: " + $scope.year);
 	    console.log("Mesi: " + $scope.monthSliderValue);
@@ -150,6 +153,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     var showPs = false;
     var showBp = false;
     var showZones = false;
+    $scope.allMapObjectLoaded = false;
     
     $scope.isAreaVisible = function(){
     	return showArea;
@@ -173,6 +177,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 
     $scope.isZonesVisible = function(){
     	return showZones;
+    };
+    
+    $scope.setAllMapObjectLoaded = function(value){
+    	$scope.allMapObjectLoaded = value;
+    };
+    
+    $scope.getAllMapObjectLoaded = function(){
+    	return $scope.allMapObjectLoaded;
     };
     
     $scope.initComponents = function(){
@@ -920,6 +932,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         		markers[i].icon = myIcon;
     		}
     	}
+    	$scope.setAllMapObjectLoaded(true);
     	return markers;
     };
     
@@ -1097,6 +1110,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				tmpStreets.push(street);
 			}
 		}
+		$scope.setAllMapObjectLoaded(true);
 		return tmpStreets;
 	};
 	
@@ -1259,9 +1273,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.areaMapReady = false;
 		var allAreas = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 				
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "area", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allAreas);
 			//console.log("rateAreas retrieved from db: " + JSON.stringify(result));
@@ -1279,9 +1294,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.streetMapReady = false;
 		var allStreet = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/street", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
 		    //console.log("streets retrieved from db: " + JSON.stringify(result));
@@ -1545,9 +1561,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    var markers = [];
 		var allParkingMeters = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "parkingmeter", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/parkingmeter", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allParkingMeters);
 		  	//console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
@@ -1572,9 +1589,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var markers = [];
 		var allParkingStructures = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 			
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "parkingstructure", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allParkingStructures);
 		    console.log("Parking Structures retrieved from db: " + JSON.stringify(result));
@@ -1593,9 +1611,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var markers = [];
 		var allBikePoints = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allBikePoints);
 	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
@@ -1617,9 +1636,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.zoneMapReady = false;
 		var allZones = [];
 		var method = 'GET';
-			
+		var appId = sharedDataService.getConfAppId();
+		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "zone", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/zone", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allZones);
 			console.log("Zone retrieved from db: " + JSON.stringify(result));

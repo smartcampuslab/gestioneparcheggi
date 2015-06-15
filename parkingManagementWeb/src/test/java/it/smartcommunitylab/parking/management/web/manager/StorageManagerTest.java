@@ -60,8 +60,8 @@ public class StorageManagerTest {
 
 	@Test
 	public void getParcometri() {
-		manager.setAppId(appId);
-		Assert.assertTrue(manager.getAllParkingMeters().size() > 0);
+		//manager.setAppId(appId);
+		Assert.assertTrue(manager.getAllParkingMeters(appId).size() > 0);
 	}
 
 	@Test
@@ -131,7 +131,7 @@ public class StorageManagerTest {
 		area.setTimeSlot("08:00 - 18:00");
 		area.setSmsCode("567");
 		area.setGeometry(areaGeo);
-		area = manager.save(area);
+		area = manager.save(area,appId);
 		
 		RateAreaBean area2 = new RateAreaBean();
 		area2.setId_app(appId);
@@ -141,7 +141,7 @@ public class StorageManagerTest {
 		area2.setTimeSlot("10:00 - 14:00");
 		area2.setSmsCode("1234");
 		area2.setGeometry(areaGeo2);
-		area2 = manager.save(area2);
+		area2 = manager.save(area2,appId);
 		
 		RateAreaBean area3 = new RateAreaBean();
 		area3.setId_app(appId);
@@ -150,7 +150,7 @@ public class StorageManagerTest {
 		area3.setFee(new Float(1.50));
 		area3.setTimeSlot("08:00 - 20:00");
 		area3.setSmsCode("1235");
-		area3 = manager.save(area3);
+		area3 = manager.save(area3,appId);
 		
 		// Geo Zone creation
 		PolygonBean polz1 = new PolygonBean();
@@ -183,7 +183,7 @@ public class StorageManagerTest {
 		z.setSubmacro("B");
 		z.setColor("33cc66");
 		z.setGeometry(polz1);
-		z = manager.save(z);
+		z = manager.save(z,appId);
 		
 		PolygonBean polz2 = new PolygonBean();
 		PointBean pbz21 = new PointBean();
@@ -215,7 +215,7 @@ public class StorageManagerTest {
 		z2.setSubmacro("A");
 		z2.setColor("990033");
 		z2.setGeometry(polz2);
-		z2 = manager.save(z2);
+		z2 = manager.save(z2,appId);
 		
 		PolygonBean polz3 = new PolygonBean();
 		PointBean pbz31 = new PointBean();
@@ -243,7 +243,7 @@ public class StorageManagerTest {
 		z3.setSubmacro("A");
 		z3.setColor("ffddee");
 		z3.setGeometry(polz3);
-		z3 = manager.save(z3);
+		z3 = manager.save(z3,appId);
 		
 		// Streets Creation
 		PointBean pbes1 = new PointBean();
@@ -532,26 +532,26 @@ public class StorageManagerTest {
 		pb3.setGeometry(geo3);
 		
 		try {
-			manager.save(s);
-			manager.save(s2);
-			manager.save(s3);
-			manager.save(s4);
-			manager.save(s5);
-			manager.save(p);
-			manager.save(p2);
-			manager.save(p3);
-			manager.save(p4);
-			manager.save(p5);
-			manager.save(p6);
-			manager.save(p7);
-			manager.save(p8);
-			manager.save(p9);
-			manager.save(p10);
-			manager.save(ps);
-			manager.save(ps2);
-			manager.save(pb);
-			manager.save(pb2);
-			manager.save(pb3);
+			manager.save(s,appId);
+			manager.save(s2,appId);
+			manager.save(s3,appId);
+			manager.save(s4,appId);
+			manager.save(s5,appId);
+			manager.save(p,appId);
+			manager.save(p2,appId);
+			manager.save(p3,appId);
+			manager.save(p4,appId);
+			manager.save(p5,appId);
+			manager.save(p6,appId);
+			manager.save(p7,appId);
+			manager.save(p8,appId);
+			manager.save(p9,appId);
+			manager.save(p10,appId);
+			manager.save(ps,appId);
+			manager.save(ps2,appId);
+			manager.save(pb,appId);
+			manager.save(pb2,appId);
+			manager.save(pb3,appId);
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -576,10 +576,10 @@ public class StorageManagerTest {
 			e.printStackTrace();
 		}
 		
-		Assert.assertTrue(manager.getAllStreets(area).size() == 2);
-		Assert.assertTrue(manager.getAllParkingMeters(area2).size() == 3);
-		Assert.assertTrue(manager.getAllParkingStructure().size() == 2);
-		Assert.assertTrue(manager.getAllBikePoints().size() == 3);
+		Assert.assertTrue(manager.getAllStreets(area,appId).size() == 2);
+		Assert.assertTrue(manager.getAllParkingMeters(area2,appId).size() == 3);
+		Assert.assertTrue(manager.getAllParkingStructure(appId).size() == 2);
+		Assert.assertTrue(manager.getAllBikePoints(appId).size() == 3);
 		// Filter street for zone
 		Assert.assertTrue(manager.getAllStreets(z).size() == 2);
 		
@@ -589,7 +589,7 @@ public class StorageManagerTest {
 	public void saveTn() throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException {
-		manager.setAppId(appIdTn);
+		//manager.setAppId(appIdTn);
 		
 		// Rate Area Creation
 		
@@ -640,7 +640,7 @@ public class StorageManagerTest {
 		area.setTimeSlot("08:00 - 19:30");
 		area.setSmsCode("726");
 		area.setGeometry(areaGeo);
-		area = manager.save(area);
+		area = manager.save(area, appIdTn);
 		
 		// Geo Zone creation
 		PolygonBean polz1 = new PolygonBean();
@@ -674,7 +674,7 @@ public class StorageManagerTest {
 		z.setColor("e3e427");
 		z.setType("zona tm trento");
 		z.setGeometry(polz1);
-		z = manager.save(z);
+		z = manager.save(z,appIdTn);
 		
 		
 		// Streets Creation
@@ -805,14 +805,14 @@ public class StorageManagerTest {
 		pb3.setGeometry(geo3);
 		
 		try {
-			manager.save(s);
-			manager.save(s2);
-			manager.save(p);
-			manager.save(p2);
-			manager.save(p3);
-			manager.save(pb);
-			manager.save(pb2);
-			manager.save(pb3);
+			manager.save(s,appIdTn);
+			manager.save(s2,appIdTn);
+			manager.save(p,appIdTn);
+			manager.save(p2,appIdTn);
+			manager.save(p3,appIdTn);
+			manager.save(pb,appIdTn);
+			manager.save(pb2,appIdTn);
+			manager.save(pb3,appIdTn);
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -834,9 +834,9 @@ public class StorageManagerTest {
 			e.printStackTrace();
 		}
 		
-		Assert.assertTrue(manager.getAllStreets(area).size() == 2);
-		Assert.assertTrue(manager.getAllParkingMeters(area).size() == 3);
-		Assert.assertTrue(manager.getAllBikePoints().size() == 3);
+		Assert.assertTrue(manager.getAllStreets(area, appIdTn).size() == 2);
+		Assert.assertTrue(manager.getAllParkingMeters(area,appIdTn).size() == 3);
+		Assert.assertTrue(manager.getAllBikePoints(appIdTn).size() == 3);
 		// Filter street for zone
 		Assert.assertTrue(manager.getAllStreets(z).size() == 2);
 		
@@ -851,36 +851,36 @@ public class StorageManagerTest {
 		
 		manager.setAppId(appId);
 		
-		List<ZoneBean> zones = manager.getAllZone();
+		List<ZoneBean> zones = manager.getAllZone(appIdTn);
 		for(ZoneBean z : zones){
-			manager.removeZone(z.getId());
+			manager.removeZone(z.getId(),appIdTn);
 		}
 		
-		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters();
+		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appIdTn);
 		for(ParkingMeterBean pm : parkingMeters){
-			manager.removeParkingMeter(pm.getAreaId(), pm.getId());
+			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn);
 		}
 		
-		List<ParkingStructureBean> parkingStructs = manager.getAllParkingStructure();
+		List<ParkingStructureBean> parkingStructs = manager.getAllParkingStructure(appIdTn);
 		for(ParkingStructureBean ps : parkingStructs){
-			manager.removeParkingStructure(ps.getId());
+			manager.removeParkingStructure(ps.getId(),appIdTn);
 		}
 		
-		List<BikePointBean> bikePoints = manager.getAllBikePoints();
+		List<BikePointBean> bikePoints = manager.getAllBikePoints(appIdTn);
 		for(BikePointBean bp : bikePoints){
-			manager.removeBikePoint(bp.getId());
+			manager.removeBikePoint(bp.getId(),appIdTn);
 		}
 		
-		List<RateAreaBean> areas = manager.getAllArea();
+		List<RateAreaBean> areas = manager.getAllArea(appIdTn);
 		for(RateAreaBean area : areas){
-			manager.removeArea(area.getId());
+			manager.removeArea(area.getId(),appIdTn);
 		}
 		
-		Assert.assertTrue(manager.getAllArea().size() == 0);
-		Assert.assertTrue(manager.getAllParkingMeters().size() == 0);
-		Assert.assertTrue(manager.getAllParkingStructure().size() == 0);
-		Assert.assertTrue(manager.getAllZone().size() == 0);
-		Assert.assertTrue(manager.getAllBikePoints().size() == 0);
+		Assert.assertTrue(manager.getAllArea(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllParkingMeters(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllParkingStructure(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllZone(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllBikePoints(appIdTn).size() == 0);
 		
 	}
 	
@@ -892,31 +892,31 @@ public class StorageManagerTest {
 		
 		manager.setAppId(appIdTn);
 		
-		List<ZoneBean> zones = manager.getAllZone();
+		List<ZoneBean> zones = manager.getAllZone(appIdTn);
 		for(ZoneBean z : zones){
-			manager.removeZone(z.getId());
+			manager.removeZone(z.getId(),appIdTn);
 		}
 		
-		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters();
+		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appIdTn);
 		for(ParkingMeterBean pm : parkingMeters){
-			manager.removeParkingMeter(pm.getAreaId(), pm.getId());
+			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn);
 		}
 		
-		List<BikePointBean> bikePoints = manager.getAllBikePoints();
+		List<BikePointBean> bikePoints = manager.getAllBikePoints(appIdTn);
 		for(BikePointBean bp : bikePoints){
-			manager.removeBikePoint(bp.getId());
+			manager.removeBikePoint(bp.getId(),appIdTn);
 		}
 		
-		List<RateAreaBean> areas = manager.getAllArea();
+		List<RateAreaBean> areas = manager.getAllArea(appIdTn);
 		for(RateAreaBean area : areas){
-			manager.removeArea(area.getId());
+			manager.removeArea(area.getId(),appIdTn);
 		}
 		
-		Assert.assertTrue(manager.getAllArea().size() == 0);
-		Assert.assertTrue(manager.getAllParkingMeters().size() == 0);
-		Assert.assertTrue(manager.getAllParkingStructure().size() == 0);
-		Assert.assertTrue(manager.getAllZone().size() == 0);
-		Assert.assertTrue(manager.getAllBikePoints().size() == 0);
+		Assert.assertTrue(manager.getAllArea(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllParkingMeters(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllParkingStructure(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllZone(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllBikePoints(appIdTn).size() == 0);
 		
 	}
 

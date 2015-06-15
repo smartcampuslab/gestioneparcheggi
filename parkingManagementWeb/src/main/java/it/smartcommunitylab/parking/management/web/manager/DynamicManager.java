@@ -836,7 +836,25 @@ public class DynamicManager {
 			double freeOccRate = 0;
 			double paidOccRate = 0;
 			double timedOccRate = 0;
-			int[] parks = {s.getFreeParkSlotNumber()+s.getFreeParkSlotSignNumber(), s.getPaidSlotNumber(), s.getTimedParkSlotNumber()};
+			int freeParks = 0;
+			int paidSlotParks = 0;
+			int timedParks = 0;
+			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotSignNumber() != null){
+				freeParks = s.getFreeParkSlotNumber()+s.getFreeParkSlotSignNumber();
+			} else {
+				if(s.getFreeParkSlotNumber() != null){
+					freeParks = s.getFreeParkSlotNumber();
+				} else {
+					freeParks = s.getFreeParkSlotSignNumber();
+				}
+			}
+			if(s.getPaidSlotNumber() != null){
+				paidSlotParks = s.getPaidSlotNumber();
+			}
+			if(s.getTimedParkSlotNumber() != null){
+				timedParks = s.getTimedParkSlotNumber();
+			}
+			int[] parks = {freeParks, paidSlotParks, timedParks};
 			int multipark = countElements(parks);
 			if(valueType == 1){
 				occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
@@ -855,14 +873,14 @@ public class DynamicManager {
 			}
 			s.setOccupancyRate(occRate);
 			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
-			if(s.getFreeParkSlotNumber() > 0){
+			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotNumber() > 0){
 				if(multipark > 1){
 					s.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * freeOccRate / 100));
 				} else {
 					s.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * occRate / 100));
 				}
 			}
-			if(s.getFreeParkSlotSignNumber() > 0){
+			if(s.getFreeParkSlotSignNumber() != null && s.getFreeParkSlotSignNumber() > 0){
 				if(multipark > 1){
 					s.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * freeOccRate / 100));
 				} else {
@@ -870,14 +888,14 @@ public class DynamicManager {
 				}
 				
 			}
-			if(s.getPaidSlotNumber() > 0){
+			if(s.getPaidSlotNumber() != null && s.getPaidSlotNumber() > 0){
 				if(multipark > 1){
 					s.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * paidOccRate / 100));
 				} else {
 					s.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * occRate / 100));
 				}
 			}
-			if(s.getTimedParkSlotNumber() > 0){
+			if(s.getTimedParkSlotNumber() != null && s.getTimedParkSlotNumber() > 0){
 				if(multipark > 1){
 					s.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * timedOccRate / 100));
 				} else {

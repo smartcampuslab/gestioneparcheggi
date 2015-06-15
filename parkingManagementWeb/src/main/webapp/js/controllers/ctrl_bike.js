@@ -108,9 +108,10 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	$scope.areaMapReady = false;
 		var allAreas = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSService.getProxy(method, "area", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 	    	angular.copy(result, allAreas);
 	    	console.log("rateAreas retrieved from db: " + JSON.stringify(result));
@@ -139,9 +140,10 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.bpMapReady = false;
 		var allBpoints = [];
 		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, null);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 	    	angular.copy(result, allBpoints);
 	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
@@ -383,6 +385,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var id = $scope.bikePoint.id;
 			var method = 'PUT';
 			var bp = $scope.bikePoint;
+			var appId = sharedDataService.getConfAppId();
 			
 			var data = {
 				id: bp.id,
@@ -397,7 +400,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Bikepoint data : " + value);
 			
 		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint/" + id, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated bikepoint: " + result);
 		    	if(result != null){//== "OK"){
@@ -423,6 +426,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			var method = 'POST';
 			var bp = $scope.bikePoint;
+			var appId = sharedDataService.getConfAppId();
 			
 			var data = {
 				id_app: $scope.myAppId,
@@ -436,7 +440,7 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    if($scope.showLog) console.log("Bikepoint data : " + value);
 			
 		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Create bikePoint: " + JSON.stringify(result));
 		    	if(result != null && result != ""){
@@ -467,9 +471,10 @@ pm.controller('BikeCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.deleteBPoint = function(bPoint){
 		$scope.showDeletingBPErrorMessage = false;
 		var method = 'DELETE';
+		var appId = sharedDataService.getConfAppId();
 		
 	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, "bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + bPoint.id , null, $scope.authHeaders, null);
 	   	myDataPromise.then(function(result){
 	    	console.log("Deleted bikePoint: " + JSON.stringify(result));
 	    	if(result != null && result != ""){

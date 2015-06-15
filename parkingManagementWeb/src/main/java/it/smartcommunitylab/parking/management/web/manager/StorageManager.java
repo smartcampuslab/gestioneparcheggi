@@ -72,7 +72,7 @@ public class StorageManager {
 	}
 
 	// RateArea Methods
-	public RateAreaBean save(RateAreaBean a) {
+	public RateAreaBean save(RateAreaBean a, String appId) {
 		RateArea area = ModelConverter.convert(a, RateArea.class);
 		area = processId(area, RateArea.class);
 		area.setId_app(appId);
@@ -81,7 +81,7 @@ public class StorageManager {
 		return a;
 	}
 
-	public RateAreaBean editArea(RateAreaBean a) throws NotFoundException {
+	public RateAreaBean editArea(RateAreaBean a, String appId) throws NotFoundException {
 		RateArea area = findById(a.getId(), RateArea.class);
 		area.setName(a.getName());
 		area.setColor(a.getColor());
@@ -102,31 +102,33 @@ public class StorageManager {
 		return a;
 	}
 
-	public List<RateAreaBean> getAllArea() {
+	public List<RateAreaBean> getAllArea(String appId) {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
 		//logger.error(String.format("Area app id: %s", appId));
 		for (RateArea a : mongodb.findAll(RateArea.class)) {
-			if(a != null && a.getId_app().compareTo(appId) == 0){
+			if(a != null && appId.compareTo("all") == 0){
+				result.add(ModelConverter.convert(a, RateAreaBean.class));
+			} else if(a != null && a.getId_app().compareTo(appId) == 0){
 				result.add(ModelConverter.convert(a, RateAreaBean.class));
 			}
 		}
 		return result;
 	}
 	
-	public RateAreaBean getAreaById(String areaId) {
+	public RateAreaBean getAreaById(String areaId, String appId) {
 		RateArea a = mongodb.findById(areaId, RateArea.class);
 		RateAreaBean ra = ModelConverter.convert(a, RateAreaBean.class);
 		return ra;
 	}
 	
-	public boolean removeArea(String areaId) {
+	public boolean removeArea(String areaId, String appId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(areaId);
 		
-		RateAreaBean ra = getAreaById(areaId);
+		RateAreaBean ra = getAreaById(areaId, appId);
 		
 		// Here I save the dataLog of the streets removing
-		for(StreetBean sb : getAllStreets(ra)){
+		for(StreetBean sb : getAllStreets(ra, appId)){
 			DataLogBean dl = new DataLogBean();
 			dl.setObjId("@" + sb.getId_app() + "@street@" + sb.getId());
 			dl.setType("street");
@@ -143,19 +145,19 @@ public class StorageManager {
 	}
 
 	// ParkingMeter Methods
-	public List<ParkingMeterBean> getAllParkingMeters() {
+	public List<ParkingMeterBean> getAllParkingMeters(String appId) {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 
-		for (RateAreaBean temp : getAllArea()) {
+		for (RateAreaBean temp : getAllArea(appId)) {
 			if(temp != null && temp.getId_app().compareTo(appId) == 0){
-				result.addAll(getAllParkingMeters(temp));
+				result.addAll(getAllParkingMeters(temp, appId));
 			}
 		}
 
 		return result;
 	}
 
-	public List<ParkingMeterBean> getAllParkingMeters(RateAreaBean ab) {
+	public List<ParkingMeterBean> getAllParkingMeters(RateAreaBean ab, String appId) {
 		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 
@@ -212,7 +214,7 @@ public class StorageManager {
 		return null;
 	}
 
-	public boolean removeParkingMeter(String areaId, String parcometroId) {
+	public boolean removeParkingMeter(String areaId, String parcometroId, String appId) {
 		RateArea area = mongodb.findById(areaId, RateArea.class);
 		ParkingMeter p = new ParkingMeter();
 		p.setId(parcometroId);
@@ -232,7 +234,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public ParkingMeterBean editParkingMeter(ParkingMeterBean pb)
+	public ParkingMeterBean editParkingMeter(ParkingMeterBean pb, String appId)
 			throws DatabaseException {
 		RateArea area = mongodb.findById(pb.getAreaId(), RateArea.class);
 		boolean founded = false;
@@ -253,14 +255,14 @@ public class StorageManager {
 		if (!founded) {
 			ParkingMeterBean todel = findParkingMeter(pb.getId());
 			if (todel != null) {
-				removeParkingMeter(todel.getAreaId(), pb.getId());
+				removeParkingMeter(todel.getAreaId(), pb.getId(), appId);
 			}
-			pb = save(pb);
+			pb = save(pb, appId);
 		}
 		return pb;
 	}
 
-	public ParkingMeterBean save(ParkingMeterBean p) throws DatabaseException {
+	public ParkingMeterBean save(ParkingMeterBean p, String appId) throws DatabaseException {
 		ParkingMeter parcometro = ModelConverter.convert(p, ParkingMeter.class);
 		parcometro = processId(parcometro, ParkingMeter.class);
 		parcometro.setId_app(appId);
@@ -282,12 +284,14 @@ public class StorageManager {
 	}
 
 	// Street Methods
-	public List<StreetBean> getAllStreets() {
+	public List<StreetBean> getAllStreets(String appId) {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		//logger.error("I am in GET ALL STREETS");
-		for (RateAreaBean temp : getAllArea()) {
-			if(temp != null && temp.getId_app().compareTo(appId) == 0){
-				result.addAll(getAllStreets(temp));
+		for (RateAreaBean temp : getAllArea(appId)) {
+			if(temp != null && appId.compareTo("all") == 0){
+				result.addAll(getAllStreets(temp, "all"));
+			} else if(temp != null && temp.getId_app().compareTo(appId) == 0){
+				result.addAll(getAllStreets(temp, appId));
 			}
 		}
 
@@ -299,13 +303,18 @@ public class StorageManager {
 	 * @param ab: rateArea where find the streets
 	 * @return List of StreetBean in the specific area
 	 */
-	public List<StreetBean> getAllStreets(RateAreaBean ab) {
+	public List<StreetBean> getAllStreets(RateAreaBean ab, String appId) {
 		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
 		List<StreetBean> result = new ArrayList<StreetBean>();
 
 		if (area.getStreets() != null) {
 			for (Street tmp : area.getStreets()) {
-				if(tmp != null && tmp.getId_app().compareTo(appId) == 0){
+				if(tmp != null && appId.compareTo("all") == 0){
+					StreetBean s = ModelConverter.toStreetBean(area, tmp);
+					s.setRateAreaId(ab.getId());
+					s.setColor(area.getColor());
+					result.add(s);
+				} else if(tmp != null && tmp.getId_app().compareTo(appId) == 0){
 					StreetBean s = ModelConverter.toStreetBean(area, tmp);
 					//StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
 					s.setRateAreaId(ab.getId());
@@ -419,7 +428,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public StreetBean editStreet(StreetBean sb) throws DatabaseException {
+	public StreetBean editStreet(StreetBean sb, String appId) throws DatabaseException {
 		RateArea area = mongodb.findById(sb.getRateAreaId(), RateArea.class);
 		boolean founded = false;
 		if (area.getStreets() != null) {
@@ -460,15 +469,15 @@ public class StorageManager {
 		if (!founded) {
 			StreetBean todel = findStreet(sb.getId());
 			if (todel != null) {
-				removeStreet(todel.getRateAreaId(), sb.getId());
+				removeStreet(todel.getRateAreaId(), sb.getId(), appId);
 			}
-			sb = save(sb);
+			sb = save(sb, appId);
 		}
 
 		return sb;
 	}
 
-	public boolean removeStreet(String areaId, String streetId) {
+	public boolean removeStreet(String areaId, String streetId, String appId) {
 		RateArea area = mongodb.findById(areaId, RateArea.class);
 		//Street s = new Street();
 		//s.setId(streetId);
@@ -495,7 +504,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public StreetBean save(StreetBean s) throws DatabaseException {
+	public StreetBean save(StreetBean s, String appId) throws DatabaseException {
 		Street street = ModelConverter.convert(s, Street.class);
 		street = processId(street, Street.class);
 		street.setZones(s.getZones());
@@ -534,7 +543,7 @@ public class StorageManager {
 	}
 
 	// BikePoint Methods
-	public BikePointBean editBikePoint(BikePointBean pb)
+	public BikePointBean editBikePoint(BikePointBean pb, String appId)
 			throws NotFoundException {
 		BikePoint bici = findById(pb.getId(), BikePoint.class);
 		bici.setName(pb.getName());
@@ -546,7 +555,7 @@ public class StorageManager {
 		return pb;
 	}
 	
-	public boolean removeBikePoint(String puntobiciId) {
+	public boolean removeBikePoint(String puntobiciId, String appId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(puntobiciId);
 		
@@ -564,7 +573,7 @@ public class StorageManager {
 		return true;
 	}
 
-	public BikePointBean save(BikePointBean bp) {
+	public BikePointBean save(BikePointBean bp, String appId) {
 		BikePoint puntoBici = ModelConverter.convert(bp, BikePoint.class);
 		puntoBici = processId(puntoBici, BikePoint.class);
 		puntoBici.setId_app(appId);
@@ -592,10 +601,12 @@ public class StorageManager {
 		return bp;
 	}
 
-	public List<BikePointBean> getAllBikePoints() {
+	public List<BikePointBean> getAllBikePoints(String appId) {
 		List<BikePointBean> result = new ArrayList<BikePointBean>();
 		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
-			if(bp != null && bp.getId_app().compareTo(appId) == 0){
+			if(bp != null && appId.compareTo("all") == 0){
+				result.add(ModelConverter.convert(bp, BikePointBean.class));
+			} else if(bp != null && bp.getId_app().compareTo(appId) == 0){
 			//logger.info(String.format("Bike point found : %s", pb.toString()));
 				result.add(ModelConverter.convert(bp, BikePointBean.class));
 			}
@@ -608,7 +619,7 @@ public class StorageManager {
 	 * @param name: name of the BikePoints to find;
 	 * @return List of BikePointBean found;
 	 */
-	public List<BikePointBean> getBikePointsByName(String name) {
+	public List<BikePointBean> getBikePointsByName(String name, String appId) {
 		List<BikePointBean> result = new ArrayList<BikePointBean>();
 		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
 			if(bp != null && bp.getId_app().compareTo(appId) == 0){
@@ -621,7 +632,7 @@ public class StorageManager {
 	}
 
 	// ParkingStructure Methods
-	public boolean removeParkingStructure(String id) {
+	public boolean removeParkingStructure(String id, String appId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(id);
 		
@@ -639,7 +650,7 @@ public class StorageManager {
 		return true;
 	}
 
-	public ParkingStructureBean save(ParkingStructureBean entityBean) {
+	public ParkingStructureBean save(ParkingStructureBean entityBean, String appId) {
 		ParkingStructure entity = ModelConverter.convert(entityBean,
 				ParkingStructure.class);
 		entity = processId(entity, ParkingStructure.class);
@@ -668,18 +679,19 @@ public class StorageManager {
 		return entityBean;
 	}
 
-	public List<ParkingStructureBean> getAllParkingStructure() {
+	public List<ParkingStructureBean> getAllParkingStructure(String appId) {
 		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
 		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
-			if(entity != null && entity.getId_app().compareTo(appId) == 0){
+			if(entity != null && appId.compareTo("all") == 0){
+				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+			} else if(entity != null && entity.getId_app().compareTo(appId) == 0){
 				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
 			}
 		}
 		return result;
 	}
 	
-	public ParkingStructureBean findParkingStructure(
-			String id) throws NotFoundException {
+	public ParkingStructureBean findParkingStructure(String id) throws NotFoundException {
 		ParkingStructure entity = findById(id,ParkingStructure.class);
 		ParkingStructureBean ps = null;
 		if(entity != null){
@@ -705,8 +717,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public ParkingStructureBean editParkingStructure(
-			ParkingStructureBean entityBean) throws NotFoundException {
+	public ParkingStructureBean editParkingStructure(ParkingStructureBean entityBean, String appId) throws NotFoundException {
 		ParkingStructure entity = findById(entityBean.getId(),
 				ParkingStructure.class);
 		entity.setFee(entityBean.getFee());
@@ -727,7 +738,7 @@ public class StorageManager {
 	}
 	
 	// Zone Methods
-	public ZoneBean save(ZoneBean z) {
+	public ZoneBean save(ZoneBean z, String appId) {
 		Zone zona = ModelConverter.convert(z, Zone.class);
 		zona = processId(zona, Zone.class);
 		zona.setId_app(appId);
@@ -736,10 +747,12 @@ public class StorageManager {
 		return z;
 	}
 
-	public List<ZoneBean> getAllZone() {
+	public List<ZoneBean> getAllZone(String appId) {
 		List<ZoneBean> result = new ArrayList<ZoneBean>();
 		for (Zone z : mongodb.findAll(Zone.class)) {
-			if(z != null && z.getId_app().compareTo(appId) == 0){
+			if(z != null && appId.compareTo(appId) == 0){
+				result.add(ModelConverter.convert(z, ZoneBean.class));
+			} else if(z != null && z.getId_app().compareTo(appId) == 0){
 				result.add(ModelConverter.convert(z, ZoneBean.class));
 			}
 		}
@@ -750,7 +763,7 @@ public class StorageManager {
 	 * @param name: name of the zone to search
 	 * @return List of ZoneBean found
 	 */
-	public List<ZoneBean> getZoneByName(String name) {
+	public List<ZoneBean> getZoneByName(String name, String appId) {
 		List<ZoneBean> result = new ArrayList<ZoneBean>();
 		for (Zone z : mongodb.findAll(Zone.class)) {
 			if(z != null && z.getId_app().compareTo(appId) == 0){
@@ -762,7 +775,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public ZoneBean editZone(ZoneBean z) throws NotFoundException {
+	public ZoneBean editZone(ZoneBean z, String appId) throws NotFoundException {
 		Zone zona = findById(z.getId(), Zone.class);
 		zona.setName(z.getName());
 		zona.setColor(z.getColor());
@@ -789,7 +802,7 @@ public class StorageManager {
 		return z;
 	}
 
-	public boolean removeZone(String zonaId) {
+	public boolean removeZone(String zonaId, String appId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(zonaId);
 		
@@ -811,7 +824,7 @@ public class StorageManager {
 			    	logger.info(String.format("Finded zona: %s", value));
 			    	iterator.remove();
 			    	try {
-						editStreet(s);
+						editStreet(s, appId);
 					} catch (DatabaseException e) {
 						// TODO Auto-generated catch block
 						logger.error(String.format("Error in update street: %s", e.getMessage()));
