@@ -60,8 +60,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	};
 	
 	$scope.updateSearch = function(){
-		//$scope.setAllMapObjectLoaded(false);
-		$scope.setAllMapObjectLoaded(true);
+		$scope.setAllMapObjectLoaded(false);
+		//$scope.setAllMapObjectLoaded(true);
 		//$dialogs.load("","");
 	    console.log("Visualizzazione: " + $scope.vis);
 	    console.log("Anno: " + $scope.year);

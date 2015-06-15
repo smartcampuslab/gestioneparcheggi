@@ -123,6 +123,17 @@
 				</div>
 				<!-- <div class="col-md-7"> -->
 				<div ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}">
+<!-- 					<div class="panel panel-danger" ng-show="!getAllMapObjectLoaded()" style="height: 40px"> -->
+<!-- 						<div class="panel-body"> -->
+<!-- 							<table width="100%"> -->
+<!-- 								<tr> -->
+<!-- 									<td width="20%">Aggiornamento mappa in corso</td> -->
+<!-- 									<td width="80%"><circle-spinner></circle-spinner></td> -->
+<!-- 								</tr> -->
+<!-- 							</table> -->
+							
+<!-- 						</div> -->
+<!-- 					</div>		 -->
 <!-- 					<div ng-show="!getAllMapObjectLoaded()"> -->
 <!-- 						<rotating-plane-spinner></rotating-plane-spinner> -->
 
@@ -145,6 +156,12 @@
 <!-- 						<word-press-spinner></word-press-spinner> -->
 						
 <!-- 						<fading-circle-spinner></fading-circle-spinner> -->
+<!-- 					</div> -->
+<!-- 					<div modal="!getAllMapObjectLoaded()"> -->
+<!-- 					    <div class="modal-body"> -->
+<!-- 					    	Caricamento mappa in corso -->
+<!-- 					        <circle-spinner></circle-spinner> -->
+<!-- 					    </div> -->
 <!-- 					</div> -->
 					<map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}">
 						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showDetails(event, pm, 1, 0)" ><!-- on-click="showInfoWindow(event, 'pm')" -->
