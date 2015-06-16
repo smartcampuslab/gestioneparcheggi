@@ -215,6 +215,32 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		//HolidaysManager holidaysManager = new HolidaysManager();
 		//return holidaysManager.isAHoliday(c, appId);
 	//}
+	
+	/**
+	 * Method completeSequence: used to add to a list all the element between the stard-end extreme passed in input 
+	 * @param extreme: start-end element passed in input
+	 * @return the complete list from start to end (in a List of String)
+	 */
+	private List<String> completeSequence(byte[] extreme){
+		List<String> complete = new ArrayList<String>();
+		if(extreme != null && extreme.length > 0){
+			int diff = extreme[(extreme.length -1)] - extreme[0];
+			if(diff > 1){
+				for(int i = 0; i <= diff; i++){
+					int value = extreme[0] + i;
+					complete.add("" + value);
+				}
+			} else {
+				if(extreme.length > 1){
+					complete.add("" + extreme[0]);
+					complete.add("" + extreme[1]);
+				} else {
+					complete.add("" + extreme[0]);
+				}
+			}
+		} 
+		return complete;
+	}
 
 	private Query createQuery(
 			String objectId, 
@@ -252,18 +278,26 @@ public class StatRepositoryImpl implements StatCustomRepository {
 
 		List<String> monthKeys = new ArrayList<String>();
 		if (months != null && months.length > 0) {
-			for (byte month : months) {
+			List<String> myMonths = completeSequence(months);
+			for (String month : myMonths) {
 				monthKeys.add("months."+month);
 			}
+//			for (byte month : months) {
+//				monthKeys.add("months."+month);
+//			}
 		} else {
 			monthKeys.add("all");
 		}	
 		
 		List<String> dayKeys = new ArrayList<String>();
 		if (days != null && days.length > 0) {
-			for (byte day : days) {
+			List<String> myDays = completeSequence(days);
+			for (String day : myDays) {
 				dayKeys.add("days."+day);
 			}
+//			for (byte day : days) {
+//				dayKeys.add("days."+day);
+//			}
 		} else {
 			if (wd) {
 				dayKeys.add("wd");
@@ -274,13 +308,18 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		}
 		List<String> hourKeys = new ArrayList<String>();
 		if (hours != null && hours.length > 0) {
-			for (byte hour : hours) {
+			List<String> myHours = completeSequence(hours);
+			for (String hour : myHours) {
 				hourKeys.add("hours."+hour);
 			}
+//			for (byte hour : hours) {
+//				hourKeys.add("hours."+hour);
+//			}
 		} else {
 			hourKeys.add("all");
 		}
 		mergeFields(monthKeys, dayKeys, hourKeys, query.fields());
+//		logger.info("Filter creation merged fields :" + query.toString());
 		return query;
 	}
 
