@@ -69,14 +69,6 @@ public class DashboardController {
 	private void init() throws IOException {
 		markerIconStorage = new MarkerIconStorage();
 	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/appid")
-	public @ResponseBody
-	String setAppId(@RequestBody String appId) throws DatabaseException {
-		storage.setAppId(appId);
-		return storage.getAppId();
-	}
-	
 
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/street")
 	public @ResponseBody

@@ -60,8 +60,9 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	};
 	
 	$scope.updateSearch = function(){
-		$scope.setAllMapObjectLoaded(false);
-		//$scope.setAllMapObjectLoaded(true);
+		$scope.loadMapsObject();
+		//$scope.setAllMapObjectLoaded(false);
+		//$scope.loadModal();
 		//$dialogs.load("","");
 	    console.log("Visualizzazione: " + $scope.vis);
 	    console.log("Anno: " + $scope.year);
@@ -109,8 +110,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 
 }]);
 
-pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', 
-                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) {
+pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', 
+                          function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, $location, $filter) {
 
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection 
 	
@@ -144,6 +145,23 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.authHeaders = {
 	    'Accept': 'application/json;charset=UTF-8'
+	};
+	
+	$scope.progress = 25;
+	
+	$scope.loadMapsObject = function(){
+		$scope.progress += 25;
+		$dialogs.wait("Caricamento mappa...",$scope.progress);
+	};
+	
+	$scope.updateLoadingMapState = function(){
+		$scope.progress += 25;
+    	$rootScope.$broadcast('dialogs.wait.progress',{msg: "Caricamento mappa...",'progress': $scope.progress});
+	};
+	
+	$scope.closeLoadingMap = function(){
+		$scope.progress = 100;
+    	$rootScope.$broadcast('dialogs.wait.complete');
 	};
 	
 	// ----------------------- Block to read conf params and show/hide elements -----------------------
@@ -932,7 +950,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         		markers[i].icon = myIcon;
     		}
     	}
-    	$scope.setAllMapObjectLoaded(true);
+    	//$scope.setAllMapObjectLoaded(true);
+    	//$scope.closeModal();
+    	$scope.closeLoadingMap();
     	return markers;
     };
     
@@ -1110,7 +1130,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				tmpStreets.push(street);
 			}
 		}
-		$scope.setAllMapObjectLoaded(true);
+		//$scope.setAllMapObjectLoaded(true);
+		//$scope.closeModal();
+		$scope.closeLoadingMap();
 		return tmpStreets;
 	};
 	
@@ -1261,6 +1283,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.initWs = function(){
+		$scope.loadMapsObject();	// To show modal waiting spinner
 		$scope.parkingMetersMarkers = [];
 		$scope.parkingStructureMarkers = [];
 	   	$scope.initPage();
@@ -1345,6 +1368,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
 		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    $scope.updateLoadingMapState();
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
 		    if(showStreets){
@@ -1381,6 +1405,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		myDataPromise.then(function(result){
 		    angular.copy(result, allParks);
 		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    $scope.updateLoadingMapState();
 		    
 		    if(showPs){
 		    	for (var i = 0; i <  allParks.length; i++) {

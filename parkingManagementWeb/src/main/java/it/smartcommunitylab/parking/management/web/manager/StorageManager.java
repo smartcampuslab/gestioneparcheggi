@@ -60,17 +60,6 @@ public class StorageManager {
 	@Autowired
 	private MongoTemplate mongodb;
 
-	private String appId = "";
-	
-	public String getAppId() {
-		return appId;
-	}
-
-	public void setAppId(String appId) {
-		this.appId = appId;
-		System.out.println("Manager App id = " + this.appId);
-	}
-
 	// RateArea Methods
 	public RateAreaBean save(RateAreaBean a, String appId) {
 		RateArea area = ModelConverter.convert(a, RateArea.class);
@@ -331,7 +320,7 @@ public class StorageManager {
 	 * @param z: zone where find the streets
 	 * @return List of StreetBean in the specific zone
 	 */
-	public List<StreetBean> getAllStreets(ZoneBean z) {
+	public List<StreetBean> getAllStreets(ZoneBean z, String appId) {
 		//RateArea area = mongodb.findById(ab.getId(), RateArea.class);
 		List<RateArea> areas = mongodb.findAll(RateArea.class);
 		//List<Zone> zones = mongodb.findAll(Zone.class);
@@ -363,7 +352,7 @@ public class StorageManager {
 	 * @param z: zone where find the streets
 	 * @return List of StreetBean in the specific area and zone
 	 */
-	public List<StreetBean> getAllStreets(RateAreaBean ab, ZoneBean z) {
+	public List<StreetBean> getAllStreets(RateAreaBean ab, ZoneBean z, String appId) {
 		//RateArea area = mongodb.findById(ab.getId(), RateArea.class);
 		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
 		List<StreetBean> result = new ArrayList<StreetBean>();
@@ -705,7 +694,7 @@ public class StorageManager {
 	 * @param name: name of the structure to find
 	 * @return List of ParkingStructureBean with the specific name
 	 */
-	public List<ParkingStructureBean> getParkingStructureByName(String name) {
+	public List<ParkingStructureBean> getParkingStructureByName(String name, String appId) {
 		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
 		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
 			if(entity != null && entity.getId_app().compareTo(appId) == 0){
@@ -750,7 +739,7 @@ public class StorageManager {
 	public List<ZoneBean> getAllZone(String appId) {
 		List<ZoneBean> result = new ArrayList<ZoneBean>();
 		for (Zone z : mongodb.findAll(Zone.class)) {
-			if(z != null && appId.compareTo(appId) == 0){
+			if(z != null && appId.compareTo("all") == 0){
 				result.add(ModelConverter.convert(z, ZoneBean.class));
 			} else if(z != null && z.getId_app().compareTo(appId) == 0){
 				result.add(ModelConverter.convert(z, ZoneBean.class));
@@ -808,7 +797,7 @@ public class StorageManager {
 		
 		ZoneBean z = ModelConverter.convert(mongodb.findById(zonaId, Zone.class), ZoneBean.class);
 		
-		List<StreetBean> streets = getAllStreets(z);
+		List<StreetBean> streets = getAllStreets(z, appId);
 		for(StreetBean s : streets){
 			List<String> zones = s.getZones();
 //			for(String zb : zones){

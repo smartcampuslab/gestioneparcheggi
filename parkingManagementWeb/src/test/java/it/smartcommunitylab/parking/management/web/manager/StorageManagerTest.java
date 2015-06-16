@@ -69,7 +69,7 @@ public class StorageManagerTest {
 			IllegalArgumentException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException {
 		
-		manager.setAppId(appId);
+		//manager.setAppId(appId);
 		
 		// Rate Area Creation
 		
@@ -581,7 +581,7 @@ public class StorageManagerTest {
 		Assert.assertTrue(manager.getAllParkingStructure(appId).size() == 2);
 		Assert.assertTrue(manager.getAllBikePoints(appId).size() == 3);
 		// Filter street for zone
-		Assert.assertTrue(manager.getAllStreets(z).size() == 2);
+		Assert.assertTrue(manager.getAllStreets(z, appId).size() == 2);
 		
 	}
 	
@@ -838,7 +838,7 @@ public class StorageManagerTest {
 		Assert.assertTrue(manager.getAllParkingMeters(area,appIdTn).size() == 3);
 		Assert.assertTrue(manager.getAllBikePoints(appIdTn).size() == 3);
 		// Filter street for zone
-		Assert.assertTrue(manager.getAllStreets(z).size() == 2);
+		Assert.assertTrue(manager.getAllStreets(z, appIdTn).size() == 2);
 		
 	}
 	
@@ -849,7 +849,7 @@ public class StorageManagerTest {
 			NoSuchMethodException, InvocationTargetException,
 			JsonGenerationException, JsonMappingException, IOException {
 		
-		manager.setAppId(appId);
+		//manager.setAppId(appId);
 		
 		List<ZoneBean> zones = manager.getAllZone(appIdTn);
 		for(ZoneBean z : zones){
@@ -890,7 +890,7 @@ public class StorageManagerTest {
 			NoSuchMethodException, InvocationTargetException,
 			JsonGenerationException, JsonMappingException, IOException {
 		
-		manager.setAppId(appIdTn);
+		//manager.setAppId(appIdTn);
 		
 		List<ZoneBean> zones = manager.getAllZone(appIdTn);
 		for(ZoneBean z : zones){
@@ -926,7 +926,7 @@ public class StorageManagerTest {
 			NoSuchMethodException, InvocationTargetException,
 			JsonGenerationException, JsonMappingException, IOException {
 		
-		manager.setAppId(appId);
+		//manager.setAppId(appId);
 		
 		ParkingMeterBean p = new ParkingMeterBean();
 		p.setAreaId("tt");

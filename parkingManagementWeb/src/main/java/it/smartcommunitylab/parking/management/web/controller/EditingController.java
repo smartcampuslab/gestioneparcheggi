@@ -54,20 +54,6 @@ public class EditingController {
 	private void init() throws IOException {
 		markerIconStorage = new MarkerIconStorage();
 	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/appid")
-	public @ResponseBody
-	String setAppId(@RequestBody String appId) throws DatabaseException {
-		storage.setAppId(appId);
-		return storage.getAppId();
-	}
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/rest/nosec/appid")
-	public @ResponseBody
-	String setNSAppId(@RequestBody String appId) throws DatabaseException {
-		storage.setAppId(appId);
-		return storage.getAppId();
-	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/street")
 	public @ResponseBody

@@ -5,6 +5,24 @@
 <!-- 	<div class="panel-body"> -->
 		<!--<form name="viewForm"  > ng-init="initWs()" -->
 			<div class="row" ng-controller="ViewDashboardCtrlPark" ng-init="initWs()">
+<!-- 				<script type="text/ng-template" id="myLoadingContent.html"> -->
+<!--         			<div class="modal-header"> -->
+<!--             			<h3 class="modal-title">Caricamento in corso</h3> -->
+<!--         			</div> -->
+<!--         			<div class="modal-body"> -->
+<!--             			<circle-spinner></circle-spinner> -->
+<!--         			</div> -->
+<!-- 				</script> -->
+<!-- 				<div class="panel panel-danger" ng-show="!getAllMapObjectLoaded()" style="height: 40px"> -->
+<!-- 					<div class="panel-body"> -->
+<!-- 						<table width="100%"> -->
+<!-- 							<tr> -->
+<!-- 								<td width="20%">Aggiornamento mappa in corso</td> -->
+<!-- 								<td width="80%"><circle-spinner width='40' height='40'></circle-spinner></td> -->
+<!-- 							</tr> -->
+<!-- 						</table> -->
+<!-- 					</div> -->
+<!-- 				</div>	 -->
 				<div class="col-md-2" >
 					<div class="panel panel-danger">
 <!-- 						<div class="panel-heading">
@@ -122,18 +140,7 @@
 					</div>	
 				</div>
 				<!-- <div class="col-md-7"> -->
-				<div ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}">
-<!-- 					<div class="panel panel-danger" ng-show="!getAllMapObjectLoaded()" style="height: 40px"> -->
-<!-- 						<div class="panel-body"> -->
-<!-- 							<table width="100%"> -->
-<!-- 								<tr> -->
-<!-- 									<td width="20%">Aggiornamento mappa in corso</td> -->
-<!-- 									<td width="80%"><circle-spinner></circle-spinner></td> -->
-<!-- 								</tr> -->
-<!-- 							</table> -->
-							
-<!-- 						</div> -->
-<!-- 					</div>		 -->
+				<div ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}">	
 <!-- 					<div ng-show="!getAllMapObjectLoaded()"> -->
 <!-- 						<rotating-plane-spinner></rotating-plane-spinner> -->
 
