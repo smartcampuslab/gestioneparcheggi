@@ -1,4 +1,4 @@
 <div>
-    <div ng-show="showDashboardMenuLink" ng-include="'partials/dashboard/viewpark.html'"></div>
-	<div ng-show="!showDashboardMenuLink"  ng-include="'partials/edit/parkediting.html'"></div>
+    <div ng-if="showDashboardMenuLink" ng-include="'partials/dashboard/viewpark.html'"></div>
+	<div ng-if="!showDashboardMenuLink"  ng-include="'partials/edit/parkediting.html'"></div>
 </div>

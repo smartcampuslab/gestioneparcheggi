@@ -16,6 +16,8 @@
 package it.smartcommunitylab.parking.management.web.manager;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.bean.CompactParkingStructureBean;
+import it.smartcommunitylab.parking.management.web.bean.CompactStreetBean;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingLog;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
@@ -924,6 +926,146 @@ public class DynamicManager {
 		}
 
 		return parkings;
+	}
+	
+	/**
+	 * Method getOccupationChangesFromAllStreets: used to get the streets occupation from db and organize the
+	 * result in a list of "Compact" object only with the dynamic data (occupation and slots composition)
+	 * @param appId: appId of app
+	 * @param type: tupe of the object
+	 * @param params: parameters for the occupation filter
+	 * @param years: year limit for the occupation filter
+	 * @param months: month limit for the occupation filter
+	 * @param dayType: day type (working or weekend) for the occupation filter
+	 * @param days: weekday number limit for the occupation filter
+	 * @param hours: hour limit for the occupation filter
+	 * @param valueType: type of the filtered value (last value or aggregate value)
+	 * @return List of CompactStreetBean with the most useful data
+	 */
+	public List<CompactStreetBean> getOccupationChangesFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
+		List<CompactStreetBean> corrStreets = new ArrayList<CompactStreetBean>();
+		String sId = "";
+		for(StreetBean s : streets){
+			CompactStreetBean cs = new CompactStreetBean();
+			sId = getCorrectId(s.getId(), "street", appId);
+			double occRate = 0;
+			double freeOccRate = 0;
+			double paidOccRate = 0;
+			double timedOccRate = 0;
+			int freeParks = 0;
+			int paidSlotParks = 0;
+			int timedParks = 0;
+			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotSignNumber() != null){
+				freeParks = s.getFreeParkSlotNumber()+s.getFreeParkSlotSignNumber();
+			} else {
+				if(s.getFreeParkSlotNumber() != null){
+					freeParks = s.getFreeParkSlotNumber();
+				} else {
+					freeParks = s.getFreeParkSlotSignNumber();
+				}
+			}
+			if(s.getPaidSlotNumber() != null){
+				paidSlotParks = s.getPaidSlotNumber();
+			}
+			if(s.getTimedParkSlotNumber() != null){
+				timedParks = s.getTimedParkSlotNumber();
+			}
+			int[] parks = {freeParks, paidSlotParks, timedParks};
+			int multipark = countElements(parks);
+			if(valueType == 1){
+				occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+				if(multipark > 1){
+					freeOccRate = getOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+					paidOccRate = getOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
+					timedOccRate = getOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+				}
+			} else {
+				occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+				if(multipark > 1){
+					freeOccRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+					paidOccRate = getAverageOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
+					timedOccRate = getAverageOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+				}
+			}
+			cs.setId(s.getId());
+			cs.setSlotNumber(s.getSlotNumber());
+			cs.setOccupancyRate(occRate);
+			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
+			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotNumber() > 0){
+				cs.setFreeParkSlotNumber(s.getFreeParkSlotNumber());
+				if(multipark > 1){
+					cs.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * freeOccRate / 100));
+				} else {
+					cs.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * occRate / 100));
+				}
+			}
+			if(s.getFreeParkSlotSignNumber() != null && s.getFreeParkSlotSignNumber() > 0){
+				cs.setFreeParkSlotSignNumber(s.getFreeParkSlotSignNumber());
+				if(multipark > 1){
+					cs.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * freeOccRate / 100));
+				} else {
+					cs.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * occRate / 100));
+				}
+				
+			}
+			if(s.getPaidSlotNumber() != null && s.getPaidSlotNumber() > 0){
+				cs.setPaidSlotNumber(s.getPaidSlotNumber());
+				if(multipark > 1){
+					cs.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * paidOccRate / 100));
+				} else {
+					cs.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * occRate / 100));
+				}
+			}
+			if(s.getTimedParkSlotNumber() != null && s.getTimedParkSlotNumber() > 0){
+				cs.setTimedParkSlotNumber(s.getTimedParkSlotNumber());
+				if(multipark > 1){
+					cs.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * timedOccRate / 100));
+				} else {
+					cs.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * occRate / 100));
+				}
+			}
+			corrStreets.add(cs);
+		}
+
+		return corrStreets;
+	}
+	
+	/**
+	 * Method getOccupatinChangesFromAllParkings: used to retrieve the occupancy information from the db and organize the
+	 * result in a list of "Compact" object only with the dynamic data (occupation and slots composition)
+	 * @param appId: appId of app
+	 * @param type: tupe of the object
+	 * @param params: parameters for the occupation filter
+	 * @param years: year limit for the occupation filter
+	 * @param months: month limit for the occupation filter
+	 * @param dayType: day type (working or weekend) for the occupation filter
+	 * @param days: weekday number limit for the occupation filter
+	 * @param hours: hour limit for the occupation filter
+	 * @param valueType: type of the filtered value (last value or aggregate value)
+	 * @return List of CompactParkingStructureBean with the most useful data
+	 */
+	public List<CompactParkingStructureBean> getOccupationChangesFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
+		List<CompactParkingStructureBean> correctedParkings = new ArrayList<CompactParkingStructureBean>();
+		String pId = "";
+		for(ParkingStructureBean p : parkings){
+			CompactParkingStructureBean cp = new CompactParkingStructureBean();
+			double occRate = 0;
+			pId = getCorrectId(p.getId(), "parking", appId);
+			if(valueType == 1){
+				occRate = getOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+			} else {
+				occRate = getAverageOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+			}
+			cp.setId(p.getId());
+			cp.setOccupancyRate(occRate);
+			cp.setSlotNumber(p.getSlotNumber());
+			cp.setSlotOccupied((int)Math.round(p.getSlotNumber() * occRate / 100));
+			correctedParkings.add(cp);
+		}
+
+		return correctedParkings;
 	}
 	
 	public String getCorrectId(String id, String type, String appId){
