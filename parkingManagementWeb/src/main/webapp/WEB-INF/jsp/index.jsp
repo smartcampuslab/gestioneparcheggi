@@ -118,6 +118,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 <!--             <li class="{{ isHomeActive() }}"><a href="#/" ng-click="home()">{{ 'menu_bar-home' | i18n }}</a></li> -->
 			<li class="{{ isHomeDashboardActive() }}" ng-show="showDashboardMenuLink"><a href="#/dashboard/home" ng-click="setHomeDashboardActive()">{{ 'menu_bar-homedashboard' | i18n }}</a></li>
             <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
+            <li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
             <li class="{{ isHomeAuxActive() }}"><a href="#/aux/home" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li>
 <!--             <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li> -->
 <!--             <li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li> -->
@@ -157,8 +158,8 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 									
 <!-- 								</div> -->
 <!-- 							</div> -->
-							<div class="row" ng-show="isHomeParkActive() == 'active'"><!-- style="height: 150px;" -->
-								<div class="col-md-2" >
+							<div class="row" ng-show="isHomeParkActive() == 'active'" ><!--   style="height: 150px;" -->
+								<div class="col-md-2" ng-show="false">
 									<div class="panel panel-primary" align="left">
 										<div class="panel-heading">
 											<h5 class="panel-title">{{ 'park_menu_list' | i18n }}</h5>
@@ -173,7 +174,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 										</div>
 									</div>
 								</div>
-								<div class="col-md-10">
+								<div class="col-md-12">
 									<div ng-view class="row" ng-hide="isNewPractice()" >{{ 'loading_text'| i18n }}...</div>
 								</div>
 							</div>

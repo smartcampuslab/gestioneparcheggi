@@ -1047,6 +1047,14 @@
     "value": "Posti occupati",
     "description": "Testo label posti occupati area in dashboard"
 }, {
+    "key": "space_filter_title",
+    "value": "Zone di sosta interessate",
+    "description": "Testo label posti occupati area in dashboard"
+}, {
+    "key": "occupation_filter_title",
+    "value": "Visualizza OCCUPAZIONE",
+    "description": "Testo label posti occupati area in dashboard"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {

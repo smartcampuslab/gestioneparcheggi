@@ -61,7 +61,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	
 	$scope.updateSearch = function(){
 		$scope.loadMapsObject();
-		$scope.alignSelectedObjects();
+		//$scope.alignSelectedObjects();
 		//$scope.setAllMapObjectLoaded(false);
 		//$scope.loadModal();
 		//$dialogs.load("","");
@@ -144,6 +144,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.occupancyZones = [];
 	$scope.occupancyParkingMeterMarkers = [];
 	$scope.occupancyParkingStructureMarkers = [];
+	$scope.mapStreetSelectedMarkers = [];
 	
 	$scope.lightgray = "#B0B0B0";//"#81EBBA";
 	$scope.green = "#31B404";
@@ -155,6 +156,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
 	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
 	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
+	$scope.streetMarkerIcon = "imgs/street_marker.png";					// icon for street marker
 	
 	$scope.authHeaders = {
 	    'Accept': 'application/json;charset=UTF-8'
@@ -478,9 +480,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    longitude: 11.037440299987793
 	};
 	
+	var myStyles =[
+	    {
+	    	featureType: "poi",
+	        elementType: "labels",
+	        stylers: [
+	            { visibility: "off" }
+	        ]
+	    },
+	    {
+	    	featureType: "transit.station",
+	    	elementType: "all",
+	        stylers: [
+	            { visibility: "off" }
+	        ]
+	    }
+	];
+	
 	$scope.mapOption = {
 		center : sharedDataService.getConfMapCenter(),	//"[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
-		zoom : parseInt(sharedDataService.getConfMapZoom())
+		zoom : parseInt(sharedDataService.getConfMapZoom()),
+		styles : myStyles
 	};
 	
 	
@@ -530,6 +550,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.switchZoneMapObject(1, null);
 				$scope.switchAreaMapObject(1, null);
 				$scope.switchParkingMapObject(1, null);
+				// Hide the parkingMeters and uncheck the checkBox
+				if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
+					var object = $scope.mapParkingMetersSelectedMarkers[0];
+					object.options.animation = "";
+					$scope.mapParkingMetersMarkers.push(object);
+					$scope.mapParkingMetersSelectedMarkers = [];
+				}
+				$scope.hideParkingMetersMarkers();
+				$scope.dashboard_space.parkingmeter = false;
 				break;
 			case "receipts": 
 				break;
@@ -647,7 +676,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var object = {};
 			angular.copy($scope.mapSelectedAreas[0], object);
 			object.stroke.weight = 3;
-			$scope.occupancyAreas.push(object);
 			toHideArea[$scope.mapSelectedAreas[0].id].setMap(null);
 			$scope.mapSelectedAreas = [];
 		}
@@ -1120,7 +1148,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						gpath: $scope.correctPointsGoogle(poligons[j].points),
 						stroke: {
 						    color: aColor, //$scope.correctColor(areas[i].color),
-						    weight: 3
+						    weight: 3,
+						    opacity: 0.7
 						},
 						data: areas[i],
 						info_windows_pos: $scope.correctPointGoogle(poligons[j].points[1]),
@@ -1131,7 +1160,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						visible: visible,
 						fill: {
 						    color: aColor, //$scope.correctColor(areas[i].color),
-						    opacity: 0.7
+						    opacity: 0.5
 						}
 					};
 					if(firstInit){	// I use this code only the first time I show the zone occupancy data
@@ -1174,7 +1203,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					gpath: $scope.correctPointsGoogle(poligons.points),
 					stroke: {
 					    color: sColor,
-					    weight: (visible) ? 3 : 0
+					    weight: (visible) ? 3 : 0,
+					    opacity: 0.7
 					},
 					data: streets[i],
 					area: myAreaS,
@@ -1221,7 +1251,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					gpath: $scope.correctPointsGoogle(poligons.points),
 					stroke: {
 					    color: zColor,//$scope.correctColor(zones[i].color),
-					    weight: 3
+					    weight: 3,
+					    opacity: 0.7
 					},
 					data: zones[i],
 					info_windows_cod: "z" + zones[i].id,
@@ -1232,7 +1263,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					visible: visible,
 					fill: {
 					    color: zColor,//$scope.correctColor(zones[i].color),
-					    opacity: 0.7
+					    opacity: 0.5
 					}
 				};	
 				if(firstInit){	// I use this code only the first time I show the zone occupancy data
@@ -2007,7 +2038,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 3:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
-				object.stroke.weight = 10;
+				object.stroke.weight = 4;	//10
+				object.stroke.opacity = 1.0;
 				var toDelStreet = $scope.map.shapes;
 			    toDelStreet[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
 			    if(theme == 0){
@@ -2024,12 +2056,28 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    }
 			    }
 			    $scope.mapSelectedStreets.push(object);
+			    // Here I add the street marker icon
+			    var streetMarker = {
+					id: 0 + "sm",
+					position: object.path[1].latitude + "," + object.path[1].longitude,
+					options: { 
+						draggable: false,
+					  	visible: true,
+					   	map: null
+					},
+					icon: $scope.streetMarkerIcon,
+					data: object,
+					showWindow: false
+				};
+			    $scope.mapStreetSelectedMarkers.push(streetMarker);
 			    $scope.showStreetDet();
 				$scope.sDetails = object;
 				break;
 			case 4:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
-				object.stroke.weight = 10;
+				object.stroke.weight = 3;	//10
+				object.stroke.opacity = 1.0;
+				object.fill.opacity = 0.8;
 				var toDelZones = $scope.map.shapes;
 			    toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
 			    if(theme == 0){
@@ -2051,7 +2099,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 5:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
-				object.stroke.weight = 10;
+				object.stroke.weight = 3;
+				object.stroke.opacity = 1.0;
+				object.fill.opacity = 0.8;
 				var toDelAreas = $scope.map.shapes;
 			    toDelAreas[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
 			    if(theme == 0){
@@ -2100,17 +2150,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var toDelStreet = $scope.map.shapes;
 	    	toDelStreet[object.id].setMap(null);
 	    	object.stroke.weight = 3;
+	    	object.stroke.opacity = 0.7;
 	    	if($scope.mapStreets.length > 0){
 	    		$scope.mapStreets.push(object);
 	    	} else {
 	    		$scope.occupancyStreets.push(object);
 	    	}
+	    	$scope.mapStreetSelectedMarkers = [];
 			break;
 		case 4:
 			$scope.mapSelectedZones = [];
 			var toDelZone = $scope.map.shapes;
 	    	toDelZone[object.id].setMap(null);
 	    	object.stroke.weight = 3;
+	    	object.stroke.opacity = 0.7;
+			object.fill.opacity = 0.5;
 	    	if($scope.mapZones.length > 0){
 	    		$scope.mapZones.push(object);
 	    	} else {
@@ -2122,6 +2176,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var toDelArea = $scope.map.shapes;
 	    	toDelArea[object.id].setMap(null);
 	    	object.stroke.weight = 3;
+	    	object.stroke.opacity = 0.7;
+	    	object.fill.opacity = 0.5;
 	    	if($scope.mapAreas.length > 0){
 	    		$scope.mapAreas.push(object);
 	    	} else {
@@ -2162,7 +2218,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 3:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
-				object.stroke.weight = 10;
+				object.stroke.weight = 4; //10;
+				object.stroke.opacity = 1.0;
 				var toDelStreet = $scope.map.shapes;
 			    toDelStreet[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
 			    for(var i = 0; i < $scope.occupancyStreets.length; i++){
@@ -2178,12 +2235,28 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				object.data.timedParkSlotFree = (object.data.timedParkSlotNumber > 0) ? (object.data.timedParkSlotNumber - object.data.timedParkSlotOccupied) : 0;
 				object.data.handicappedSlotFree = (object.data.handicappedSlotNumber > 0) ? (object.data.handicappedSlotNumber - object.data.handicappedSlotOccupied) : 0;
 				object.data.reservedSlotFree = (object.data.reservedSlotNumber > 0)? (object.data.reservedSlotNumber - object.data.reservedSlotOccupied) : 0;
-			    $scope.sDetails = object;
+				 // Here I add the street marker icon
+			    var streetMarker = {
+					id: 0 + "sm",
+					position: object.path[1].latitude + "," + object.path[1].longitude,
+					options: { 
+						draggable: false,
+					  	visible: true,
+					   	map: null
+					},
+					icon: $scope.streetMarkerIcon,
+					data: object,
+					showWindow: false
+				};
+			    $scope.mapStreetSelectedMarkers.push(streetMarker);
+				$scope.sDetails = object;
 			    $scope.initStreetOccupancyDiagram(object);
 				break;
 			case 4:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
-				object.stroke.weight = 10;
+				object.stroke.weight = 3; //10;
+				object.stroke.opacity = 1.0;
+				object.fill.opacity = 0.8;
 				var toDelZones = $scope.map.shapes;
 			    toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
 			    if(theme == 0){
@@ -2206,7 +2279,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 5:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
-				object.stroke.weight = 10;
+				object.stroke.weight = 3; //10;
+				object.stroke.opacity = 1.0;
+				object.fill.opacity = 0.8;
 				var toDelAreas = $scope.map.shapes;
 			    toDelAreas[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
 			    if(theme == 0){
@@ -2256,6 +2331,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var toDelStreet = $scope.map.shapes;
 	    	toDelStreet[object.id].setMap(null);
 	    	object.stroke.weight = 3;
+	    	object.stroke.opacity = 0.7;
 	    	if($scope.mapStreets.length > 0){
 	    		$scope.mapStreets.push(object);
 	    	} else {
@@ -2267,6 +2343,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var toDelZone = $scope.map.shapes;
 	    	toDelZone[object.id].setMap(null);
 	    	object.stroke.weight = 3;
+	    	object.stroke.opacity = 0.7;
+			object.fill.opacity = 0.5;
 	    	if($scope.mapZones.length > 0){
 	    		$scope.mapZones.push(object);
 	    	} else {
@@ -2278,6 +2356,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var toDelArea = $scope.map.shapes;
 	    	toDelArea[object.id].setMap(null);
 	    	object.stroke.weight = 3;
+	    	object.stroke.opacity = 0.7;
+	    	object.fill.opacity = 0.5;
 	    	if($scope.mapAreas.length > 0){
 	    		$scope.mapAreas.push(object);
 	    	} else {
@@ -2310,6 +2390,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.closeAllDetails = function(theme){
 		$scope.detailsOpened = false;
 		$scope.occupancyOpened = false;
+		$scope.mapStreetSelectedMarkers = [];
 		if($scope.mapParkingMetersSelectedMarkers.length > 0){
 			$scope.fixIfAlreadySelected($scope.mapParkingMetersSelectedMarkers, 1, theme);
 		}
@@ -2360,6 +2441,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var toDelStreet = $scope.map.shapes;
 		    	toDelStreet[object.id].setMap(null);
 		    	object.stroke.weight = 3;
+		    	object.stroke.opacity = 0.7;
 		    	if(theme == 0){
 		    		$scope.mapStreets.push(object);
 		    	} else {
@@ -2374,6 +2456,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var toDelZone = $scope.map.shapes;
 		    	toDelZone[object.id].setMap(null);
 		    	object.stroke.weight = 3;
+		    	object.stroke.opacity = 0.7;
+		    	object.fill.opacity = 0.5;
 		    	if(theme == 0){
 		    		$scope.mapZones.push(object);
 		    	} else {
@@ -2388,6 +2472,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var toDelArea = $scope.map.shapes;
 		    	toDelArea[object.id].setMap(null);
 		    	object.stroke.weight = 3;
+		    	object.stroke.opacity = 0.7;
+		    	object.fill.opacity = 0.5;
 		    	if(theme == 0){
 		    		$scope.mapAreas.push(object);
 		    	} else {
@@ -2401,6 +2487,23 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // Method switchStreetMapObject: used to switch (in map) from street object to occupancy-street object
     $scope.switchStreetMapObject = function(type, newList){
+    	if($scope.mapSelectedStreets != null && $scope.mapSelectedStreets.length > 0){
+    		$scope.mapStreetSelectedMarkers = [];
+    		$scope.detailsOpened = false;	// I close the details column
+    		$scope.occupancyOpened = false;
+			var toHideStreet = $scope.map.shapes;
+			var object = {};
+			angular.copy($scope.mapSelectedStreets[0], object);
+			object.stroke.weight = 3;
+			object.stroke.opacity = 0.7;
+			if(type == 1 || type == 3){
+				$scope.mapStreets.push(object);
+			} else {
+				$scope.occupancyStreets.push(object);
+			}
+			toHideStreet[$scope.mapSelectedStreets[0].id].setMap(null);
+			$scope.mapSelectedStreets = [];
+		}
     	var toHideStreets = $scope.map.shapes;
     	switch(type){
     		case 1:
@@ -2458,6 +2561,23 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // Method switchZoneMapObject: used to switch (in map) from zone object to occupancy-zone object
     $scope.switchZoneMapObject = function(type, newList){
+    	if($scope.mapSelectedZones != null && $scope.mapSelectedZones.length > 0){
+    		$scope.detailsOpened = false;	// I close the details column
+    		$scope.occupancyOpened = false;
+			var toHideZone = $scope.map.shapes;
+			var object = {};
+			angular.copy($scope.mapSelectedZones[0], object);
+			object.stroke.weight = 3;
+			object.stroke.opacity = 0.7;
+	    	object.fill.opacity = 0.5;
+			if(type == 1 || type == 3){
+				$scope.mapZones.push(object);
+			} else {
+				$scope.occupancyZones.push(object);
+			}
+			toHideZone[$scope.mapSelectedZones[0].id].setMap(null);
+			$scope.mapSelectedZones = [];
+		}
     	var toHideZones = $scope.map.shapes;
     	switch(type){
     		case 1:
@@ -2515,6 +2635,23 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     // Method switchAreaMapObject: used to switch (in map) from area object to occupancy-area object
     $scope.switchAreaMapObject = function(type, newList){
     	var toHideAreas = $scope.map.shapes;
+    	if($scope.mapSelectedAreas != null && $scope.mapSelectedAreas.length > 0){
+    		$scope.detailsOpened = false;	// I close the details column
+    		$scope.occupancyOpened = false;
+			var toHideArea = $scope.map.shapes;
+			var object = {};
+			angular.copy($scope.mapSelectedAreas[0], object);
+			object.stroke.weight = 3;
+			object.stroke.opacity = 0.7;
+	    	object.fill.opacity = 0.5;
+			if(type == 1 || type == 3){
+				$scope.mapAreas.push(object);
+			} else {
+				$scope.occupancyAreas.push(object);
+			}
+			toHideArea[$scope.mapSelectedAreas[0].id].setMap(null);
+			$scope.mapSelectedAreas = [];
+		}
     	switch(type){
     		case 1:
     			for(var i = 0; i < $scope.mapAreas.length; i++){
@@ -2574,6 +2711,18 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // Method switchParkingMapObject: used to switch (in map) from parking object to occupancy-parking object
     $scope.switchParkingMapObject = function(type, newList){
+    	if($scope.mapParkingStructureSelectedMarkers != null && $scope.mapParkingStructureSelectedMarkers.length > 0){
+    		$scope.detailsOpened = false;	// I close the details column
+    		$scope.occupancyOpened = false;
+    		var object = $scope.mapParkingStructureSelectedMarkers[0];
+    		object.options.animation = "";
+    		if(type == 1 || type == 3){
+    			$scope.mapParkingStructureMarkers.push(object);
+    		} else {
+    			$scope.occupancyParkingStructureMarkers.push(object);
+    		}
+			$scope.mapParkingStructureSelectedMarkers = [];
+		}
     	switch(type){
     		case 1:
     			for (var i = 0; i < $scope.mapParkingStructureMarkers.length; i++){
