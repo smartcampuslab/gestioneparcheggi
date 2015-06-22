@@ -691,8 +691,11 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			case 1 : 
 				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
-				myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
-				//myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				if(appId == 'rv'){
+					myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
+				} else {
+					myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				}
 				cid = "c" + marker.id;
 				break;
 			case 2 : 

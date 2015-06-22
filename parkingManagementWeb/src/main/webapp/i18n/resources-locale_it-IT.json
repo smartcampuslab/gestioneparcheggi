@@ -84,7 +84,7 @@
     "description": "Titolo pannello per visualizzazione"
 }, {
     "key": "view_hide_block_title",
-    "value": "Mostra/Nascondi",
+    "value": "Visualizza",
     "description": "Titolo pannello per impostazione di visualizzazione oggetti sulla mappa"
 }, {
     "key": "loading_text",
@@ -1062,6 +1062,10 @@
     "key": "euro_hour",
     "value": "€/ora",
     "description": "Simbolo tariffa oraria"
+}, {
+    "key": "add_new_object",
+    "value": "AGGIUNGI",
+    "description": "Testo pulsante aggiungi in edit parcheggi"
 }, {
     "key": "time_vis",
     "value": "Visualizzazione"

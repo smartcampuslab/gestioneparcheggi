@@ -64,7 +64,13 @@
 				<div class="col-md-6" ng-show="!viewModeBP">
 							<div class="panel panel-info" align="center">
 								<div class="panel-heading">
-									<h5 class="panel-title">{{ 'bp_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-info btn-xs" ng-click="setBpEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+									<table width="100%">
+										<tr>
+											<td align="left"><h5 class="panel-title">{{ 'bp_list' | i18n }}</h5></td>
+											<td align="right"><button type="button" class="btn btn-info" ng-click="setBpEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+										</tr>
+									</table>
+<!-- 									<h5 class="panel-title">{{ 'bp_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-info btn-xs" ng-click="setBpEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
 								</div>
 								<div class="panel-body">
 									<div class="alert alert-danger" ng-show="showDeletingBPErrorMessage">{{ 'err_in_delete_bikepoint' | i18n }}</div>
@@ -72,20 +78,20 @@
 										<table class="table table-striped" style="width: 100%">
 											<tr ng-show="bpointWS.length != 0">
 												<th width="43%"><span ng-show="bp_name.visible">{{ 'bp_name' | i18n }}</span></th>
-												<th width="22%"><span ng-show="bp_slotNumber.visible">{{ 'bp_slots' | i18n }}</span></th>
-												<th width="15%"><span ng-show="bp_bikeNumber.visible">{{ 'bp_bikes' | i18n }}</span></th>
-												<th width="20%">{{ 'operations' | i18n }}</th>
+												<th width="22%" class="myCenter"><span ng-show="bp_slotNumber.visible">{{ 'bp_slots' | i18n }}</span></th>
+												<th width="15%" class="myCenter"><span ng-show="bp_bikeNumber.visible">{{ 'bp_bikes' | i18n }}</span></th>
+												<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 											</tr>
 											<tbody class="animate-repeat"
 												ng-repeat="bpoint in bpointWS | filter:q | orderBy:'name' | startFrom:currentPage*maxBPoints | limitTo:maxBPoints">
 												<tr>
 													<td width="43%" align="left"><span ng-show="bp_name.visible">{{bpoint.name}}</span></td>
-													<td width="22%" align="left"><span ng-show="bp_slotNumber.visible">{{bpoint.slotNumber}}</span></td>
+													<td width="22%" align="center"><span ng-show="bp_slotNumber.visible">{{bpoint.slotNumber}}</span></td>
 													<td width="15%" align="center"><span ng-show="bp_bikeNumber.visible">{{bpoint.bikeNumber}}</span></td>
-													<td width="20%" align="left">
-														<a href ng-click="setBpDetails(bpoint)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-														<a href ng-click="setBpEdit(bpoint)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-														<a href ng-click="setBpRemove(bpoint)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+													<td width="20%" align="center">
+														<a href type="button" class="btn btn-primary btn-xs" ng-click="setBpDetails(bpoint)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+														<a href type="button" class="btn btn-primary btn-xs" ng-click="setBpEdit(bpoint)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+														<a href type="button" class="btn btn-primary btn-xs" ng-click="setBpRemove(bpoint)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 													</td>
 												</tr>
 											</tbody>
@@ -112,30 +118,31 @@
 				  		<div class="panel-body">	
 				  			<table width="100%">
 								<tr ng-show="bp_name.visible">
-									<td width="45%"><strong>{{ 'bp_name' | i18n }}:</strong></td>
-									<td width="55%">{{ bikePoint.name }}</td>
+									<td class="detailsViewBikeSX">{{ 'bp_name' | i18n }}:</td>
+									<td class="detailsViewBikeDX">{{ bikePoint.name }}</td>
 								</tr>
 								<tr ng-show="bp_slotNumber.visible">	
-									<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
-									<td>{{ bikePoint.slotNumber }}</td>
+									<td class="detailsViewBikeSX">{{ 'bp_slots' | i18n }}:</td>
+									<td class="detailsViewBikeDX">{{ bikePoint.slotNumber }}</td>
 								</tr>
 								<tr ng-show="bp_bikeNumber.visible">	
-									<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
-									<td>{{ bikePoint.bikeNumber }}</td>
+									<td class="detailsViewBikeSX">{{ 'bp_bikes' | i18n }}:</td>
+									<td class="detailsViewBikeDX">{{ bikePoint.bikeNumber }}</td>
 								</tr>
 								<tr ng-show="bp_geometry.visible">
-									<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
-									<td>{{ myGeometry }}</td>
+									<td class="detailsViewBikeSX">{{ 'pm_geometry' | i18n }}:</td>
+									<td class="detailsViewBikeDX">{{ myGeometry }}</td>
 								</tr>
 					   		</table>
 					   		<hr>
-						   	<table width="95%">			
+						   	<table width="100%">			
 								<tr>
-									<td width="50%" align="right">
-										<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>	
+									<td width="80%" align="right">
+									<td width="10%" align="center">
+										<button type="button" class="btn btn-danger btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>	
 									</td>
-									<td width="50%" align="left">
-										<button type="button" class="btn btn-default btn-lg" ng-click="setBpEdit(bikePoint)">{{ 'text_btn_edit' | i18n  }}</button>
+									<td width="10%" align="center">
+										<button type="button" class="btn btn-info btn-lg" ng-click="setBpEdit(bikePoint)">{{ 'text_btn_edit' | i18n  }}</button>
 									</td>
 								</tr>
 							</table>
@@ -194,20 +201,22 @@
 							</div>
 						</div>
 						<div class="alert alert-danger" ng-show="showUpdatingBPErrorMessage">{{ 'err_in_update_bikepoint' | i18n }}</div>
-				   		<table width="95%">			
+				   		<table width="97%">			
 						   	<tr>
-						   		<td width="34%"></td>
-						   		<td width="32%" align="center">
-						   			<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
+						   		<td width="85%"></td>
+						   		<td width="8%" align="right">
+						   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
 						   		</td>
-						   		<td width="34%" align="right">
-						   			<button type="button" class="btn btn-default btn-lg" ng-click="updateBpoint(form, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-						   			<button type="button" class="btn btn-default btn-lg" ng-click="createBpoint(form, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+						   		<td width="7%" align="right">
+						   			<button type="button" class="btn btn-info btn-lg" ng-click="updateBpoint(form, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+						   			<button type="button" class="btn btn-info btn-lg" ng-click="createBpoint(form, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 						   		</td>
+							</tr>
+							<tr>
+								<td colspan="3">&nbsp;</td>
 							</tr>
 						</table>
 				   	</div>
-				   	
 			   	</form>
 			</div>
 		</div>

@@ -237,7 +237,13 @@
 		<div class="col-md-6" ng-show="!viewModeS">
 			<div class="panel panel-success" align="center">
 				<div class="panel-heading">
-					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+					<table width="100%">
+						<tr>
+							<td align="left"><h5 class="panel-title">{{ 'street_list' | i18n }}</h5></td>
+							<td align="right"><button type="button" class="btn btn-success" ng-click="setSEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+						</tr>
+					</table>
+<!-- 					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
 				</div>
 				<div class="panel-body">
 					<div class="alert alert-danger" ng-show="showDeletingSErrorMessage">{{ 'err_in_delete_street' | i18n }}</div>
@@ -258,7 +264,7 @@
 						    			</select>
 						    		</div>	
 						    	</th>
-								<th width="20%">{{ 'operations' | i18n }}</th>
+								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
 								ng-repeat="street in filtered = (streetWS | filter:q | filter:streetAreaFilter) | orderBy:['name', 'area_name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
@@ -268,10 +274,10 @@
 									<td width="15%" align="left">{{street.slotNumber}}</td>
 									<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
 									<td width="25%" align="center">{{street.area_name}}</td>
-									<td width="20%" align="left">
-										<a href ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-										<a href ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-										<a href ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+									<td width="20%" align="center">
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 									</td>
 								</tr>
 							</tbody>
@@ -298,120 +304,111 @@
 		  		<div class="panel-body">	
 		  			<table width="100%">
 						<tr ng-show="s_streetRef.visible">
-							<td width="45%"><strong>{{ 'street_name' | i18n }}:</strong></td>
-							<td width="55%">{{ viewStreet.streetReference }}</td>
+							<td class="detailsViewStreetSX">{{ 'street_name' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.streetReference }}</td>
 						</tr>
 						<tr ng-show="s_slotNum.visible">	
-							<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
-							<td>{{ viewStreet.slotNumber }}</td>
+							<td class="detailsViewStreetSX">{{ 'street_totalslot' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.slotNumber }}</td>
 						</tr>
 						<tr ng-show="s_handicappedSlot.visible">	
-							<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
-							<td>{{ viewStreet.handicappedSlotNumber }}</td>
+							<td class="detailsViewStreetSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.handicappedSlotNumber }}</td>
 						</tr>
 						<tr ng-show="s_reservedSlot.visible">	
-							<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
-							<td>{{ viewStreet.reservedSlotNumber }}</td>
+							<td class="detailsViewStreetSX">{{ 'street_reserved_slot' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.reservedSlotNumber }}</td>
 						</tr>
 						<tr ng-show="s_timedSlot.visible">	
-							<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
-							<td>{{ viewStreet.timedParkSlotNumber }}</td>
+							<td class="detailsViewStreetSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.timedParkSlotNumber }}</td>
 						</tr>
 						<tr ng-show="s_freeSlot.visible">	
-							<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
-							<td>{{ viewStreet.freeParkSlotNumber }}</td>
+							<td class="detailsViewStreetSX">{{ 'street_freepark_slot' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.freeParkSlotNumber }}</td>
 						</tr>
 						<tr ng-show="s_freeSlotSign.visible">	
-							<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
-							<td>{{ viewStreet.freeParkSlotSignNumber }}</td>
+							<td class="detailsViewStreetSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.freeParkSlotSignNumber }}</td>
 						</tr>
 						<tr ng-show="s_unusuableSlot.visible">	
-							<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
-							<td>{{ viewStreet.unusuableSlotNumber }}</td>
+							<td class="detailsViewStreetSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.unusuableSlotNumber }}</td>
 						</tr>
 						<tr ng-show="s_subscrition.visible">	
-							<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
-							<td>{{ viewStreet.subscritionAllowedPark | boolToString}}</td>
+							<td class="detailsViewStreetSX">{{ 'street_subscription_allowed' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.subscritionAllowedPark | boolToString}}</td>
 						</tr>
-<!-- 						<tr ng-show="s_areaId.visible">	 -->
-<!-- 							<td> -->
-<!-- 								<strong>{{ 'street_area_name' | i18n }}:</strong> -->
-<!-- 							</td> -->
-<!-- 							<td>	  -->
-<!-- 								{{ myArea.name }}  -->
-<!-- 								<span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span> -->
-<!-- 							</td> -->
-<!-- 						</tr> -->
+						<tr ng-show="s_geometry.visible">	
+							<td class="detailsViewStreetSX">{{ 'street_geometry' | i18n }}</td>
+							<td class="detailsViewStreetSX">{{ myLineGeometry }}</td>
+						</tr>
 						<tr ng-show="s_pms.visible">	
-							<td valign="top">
-								<strong>{{ 'street_pm' | i18n }}:</strong>
+							<td class="detailsViewStreetSX">
+								{{ 'street_pm' | i18n }}:
 							</td>
-							<td>
+							<td class="detailsViewStreetDX">
 								<table width="100%">
 									<tr ng-repeat="p in viewStreet.myPms track by p.code">
-										<td width="30%">{{ p.code }}</td>
-										<td width="70%">{{ p.note }}</td>
+										<td width="15%">{{ p.code }}</td>
+										<td width="85%">{{ p.note }}</td>
 									</tr>
 								</table>
 							</td>
 						</tr>
 						<tr ng-show="s_zones.visible">	
-							<td valign="top">
-								<strong>{{ 'street_zone' | i18n }}:</strong>
+							<td class="detailsViewStreetSX">
+								{{ 'street_zone' | i18n }}:
 							</td>
-							<td>
+							<td class="detailsViewStreetDX">
 								<table width="100%">
 									<tr ng-repeat="z in viewStreet.myZones track by z.id">
-										<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
-										<td width="80%">{{ z.name }} - {{ z.submacro }}</td>
+										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
+										<td width="85%">{{ z.name }} - {{ z.submacro }}</td>
 									</tr>
 								</table>
 							</td>
 						</tr>
 						<tr ng-show="s_areaId.visible">
-					       	<td colspan="2">
-					       		<strong>{{ 'street_area_name' | i18n }}:</strong>
-					       		<div class="panel panel-default">
-									<div class="panel-body">
-										<table width="100%">
-											<tr>
-												<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-												<td width="55%">{{ myArea.name }}</td>
-											</tr>
-											<tr>	
-												<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-												<td>{{ myArea.fee }}</td>
-											</tr>
-											<tr>	
-												<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-												<td>{{ myArea.timeSlot }}</td>
-											</tr>
-											<tr>	
-												<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-												<td>{{ myArea.smsCode }}</td>
-											</tr>
-											<tr>	
-												<td><strong>{{ 'area_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span></td>
-											</tr>
-										</table>
-									</div>
-								</div>	
-							</td>
+						    <td colspan="2" class="detailsTableColSpan">
+						        <hr/>
+						    </td>
 						</tr>
-						<tr ng-show="s_geometry.visible">	
-							<td><strong>{{ 'street_geometry' | i18n }}</strong></td>
-							<td>{{ myLineGeometry }}</td>
+						<tr ng-show="s_areaId.visible">
+						    <td colspan="2" class="detailsTableColSpan">
+						       	{{ 'street_area_name' | i18n }}
+						  	</td>
+						</tr>
+						<tr ng-show="s_areaId.visible">
+							<td class="detailsViewStreetSX">{{ 'area_name' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ myArea.name }}</td>
+						</tr>
+						<tr ng-show="s_areaId.visible">	
+							<td class="detailsViewStreetSX">{{ 'area_rate' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ myArea.fee }}</td>
+						</tr>
+						<tr ng-show="s_areaId.visible">	
+							<td class="detailsViewStreetSX">{{ 'area_time' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ myArea.timeSlot }}</td>
+						</tr>
+						<tr ng-show="s_areaId.visible">	
+							<td class="detailsViewStreetSX">{{ 'area_sms' | i18n }}:</td>
+							<td class="detailsViewStreetDX">{{ myArea.smsCode }}</td>
+						</tr>
+						<tr ng-show="s_areaId.visible">	
+							<td class="detailsViewStreetSX">{{ 'area_color' | i18n }}</td>
+							<td class="detailsViewStreetDX"><span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span></td>
 						</tr>
 			   		</table>
 			   		<hr>
 				   	<table width="95%">			
 						<tr>
-							<td width="50%" align="right">
-								<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>	
+							<td width="80%" align="right"></td>
+							<td width="10%" align="center">
+								<button type="button" class="btn btn-danger btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
-							<td width="50%" align="left">
-								<button type="button" class="btn btn-default btn-lg" ng-click="setSEdit(viewStreet)">{{ 'text_btn_edit' | i18n  }}</button>
+							<td width="10%" align="right">
+								<button type="button" class="btn btn-success btn-lg" ng-click="setSEdit(viewStreet)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>
@@ -561,18 +558,21 @@
 <!-- 					</div> -->
 				</div>
 				<div class="alert alert-danger" ng-show="showUpdatingSErrorMessage">{{ 'err_in_update_street' | i18n }}</div>
-		   		<table width="95%">			
+		   		<table width="97%">			
 				   	<tr>
-				   		<td width="34%"></td>
-				   		<td width="32%" align="center">
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>
+				   		<td width="85%"></td>
+				   		<td width="8%" align="center">
+				   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>
 				   		</td>
-				   		<td width="34%" align="right">
+				   		<td width="7%" align="right">
 <!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
 <!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, eStreet, myArea, myZones, myPms)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, eStreet, myNewArea, myZones, myPms)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-success btn-lg" ng-click="updateStreet(form, eStreet, myArea, myZones, myPms)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-success btn-lg" ng-click="createStreet(form, eStreet, myNewArea, myZones, myPms)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
+					</tr>
+					<tr>
+						<td colspan="3">&nbsp;</td>
 					</tr>
 				</table>
 		   	</div>

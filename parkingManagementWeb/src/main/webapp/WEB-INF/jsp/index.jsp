@@ -140,6 +140,81 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		vertical-align: middle;
 	}
 	
+	td.detailsViewBikeSX{
+		width: 45%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsViewBikeDX{
+		width: 55%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	
+	td.detailsViewZoneSX{
+		width: 45%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsViewZoneDX{
+		width: 55%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	
+	td.detailsViewStructSX{
+		width: 45%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsViewStructDX{
+		width: 55%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	
+	td.detailsViewParkmeterSX{
+		width: 45%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsViewParkmeterDX{
+		width: 55%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	
+	td.detailsViewStreetSX{
+		width: 45%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsViewStreetDX{
+		width: 55%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	
 	div.left-filter {
 		font-size: medium;
 	}

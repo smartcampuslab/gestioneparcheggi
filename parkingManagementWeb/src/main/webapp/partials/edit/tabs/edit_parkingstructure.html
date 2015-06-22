@@ -142,7 +142,13 @@
 		<div class="col-md-6" ng-show="!viewModePS">
 			<div class="panel panel-success" align="center">
 				<div class="panel-heading">
-					<h5 class="panel-title">{{ 'ps_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setPsEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+					<table width="100%">
+						<tr>
+							<td align="left"><h5 class="panel-title">{{ 'ps_list' | i18n }}</h5></td>
+							<td align="right"><button type="button" class="btn btn-success" ng-click="setPsEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+						</tr>
+					</table>				
+<!-- 					<h5 class="panel-title">{{ 'ps_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setPsEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
 				</div>
 				<div class="panel-body">
 					<div class="alert alert-danger" ng-show="showDeletingPSErrorMessage">{{ 'err_in_delete_parkingstructure' | i18n }}</div>
@@ -153,7 +159,7 @@
 								<th width="40%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 	<!-- 							<th width="35%">{{ 'ps_time' | i18n }}</th> -->
 								<th width="5%"><span ng-show="ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
-								<th width="20%">{{ 'operations' | i18n }}</th>
+								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
 								ng-repeat="pstruct in pstructWS | filter:q | orderBy:'name' | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
@@ -162,10 +168,10 @@
 									<td width="40%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
 	<!-- 								<td width="35%" align="center">{{pstruct.timeSlot}}</td> -->
 									<td width="5%" align="center"><span ng-show="ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
-									<td width="20%" align="left">
-										<a href ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-										<a href ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-										<a href ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+									<td width="20%" align="center">
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 									</td>
 								</tr>
 							</tbody>
@@ -192,58 +198,59 @@
 		  		<div class="panel-body">	
 		  			<table width="100%">
 						<tr ng-show="ps_name.visible">
-							<td width="45%"><strong>{{ 'ps_name' | i18n }}:</strong></td>
-							<td width="55%">{{ viewParkingStructure.name }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_name' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.name }}</td>
 						</tr>
 						<tr ng-show="ps_address.visible">	
-							<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
-							<td>{{ viewParkingStructure.streetReference }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_address' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.streetReference }}</td>
 						</tr>
 						<tr ng-show="ps_fee.visible">
-							<td><strong>{{ 'ps_fee' | i18n }}:</strong></td>
-							<td>{{ viewParkingStructure.fee }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_fee' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.fee }}</td>
 						</tr>
 						<tr ng-show="ps_timeSlot.visible">	
-							<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
-							<td>{{ viewParkingStructure.timeSlot }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_time' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.timeSlot }}</td>
 						</tr>
 						<tr ng-show="ps_phone.visible">	
-							<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
-							<td>{{ viewParkingStructure.phoneNumber }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_phone' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.phoneNumber }}</td>
 						</tr>
 						<tr ng-show="ps_management.visible">	
-							<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
-							<td>{{ viewParkingStructure.managementMode }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_management_mode' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.managementMode }}</td>
 						</tr>
 						<tr ng-show="ps_payment.visible">	
-							<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
-							<td>{{ myPaymentMode }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_payment_mode' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ myPaymentMode }}</td>
 						</tr>
 						<tr ng-show="ps_slotNumber.visible">	
-							<td><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
-							<td>{{ viewParkingStructure.slotNumber }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_totalslot' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.slotNumber }}</td>
 						</tr>
 						<tr ng-show="ps_handicappedSlot.visible">	
-							<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
-							<td>{{ viewParkingStructure.handicappedSlotNumber }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_handicapped_slot' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.handicappedSlotNumber }}</td>
 						</tr>
 						<tr ng-show="ps_unusuableSlot.visible">	
-							<td><strong>{{ 'ps_unusuable_slot' | i18n }}</strong></td>
-							<td>{{ viewParkingStructure.unusuableSlotNumber }}</td>
+							<td class="detailsViewStructSX">{{ 'ps_unusuable_slot' | i18n }}</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.unusuableSlotNumber }}</td>
 						</tr>
 						<tr ng-show="ps_geometry.visible">
-							<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
-							<td>{{ myGeometry }}</td>
+							<td class="detailsViewStructSX">{{ 'pm_geometry' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ myGeometry }}</td>
 						</tr>
 			   		</table>
 			   		<hr>
 				   	<table width="95%">			
 						<tr>
-							<td width="50%" align="right">
-								<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>	
+							<td width="80%" align="right"></td>
+							<td width="10%" align="center">
+								<button type="button" class="btn btn-danger btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
-							<td width="50%" align="left">
-								<button type="button" class="btn btn-default btn-lg" ng-click="setPsEdit(viewParkingStructure)">{{ 'text_btn_edit' | i18n  }}</button>
+							<td width="10%" align="left">
+								<button type="button" class="btn btn-success btn-lg" ng-click="setPsEdit(viewParkingStructure)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>
@@ -357,16 +364,19 @@
 				 
 				</div>
 				<div class="alert alert-danger" ng-show="showUpdatingPSErrorMessage">{{ 'err_in_update_parkingstructure' | i18n }}</div>
-		   		<table width="95%">			
+		   		<table width="97%">			
 				   	<tr>
-				   		<td width="34%"></td>
-				   		<td width="32%" align="center">
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>
+				   		<td width="85%"></td>
+				   		<td width="8%" align="center">
+				   			<button type="button" class="btn btn-danger btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>
 				   		</td>
-				   		<td width="34%" align="right">
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePstruct(form, parkingStructure, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   		<td width="7%" align="right">
+				   			<button type="button" class="btn btn-success btn-lg" ng-click="updatePstruct(form, parkingStructure, myPayment, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-success btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
+					</tr>
+					<tr>
+						<td colspan="3">&nbsp;</td>
 					</tr>
 				</table>
 		   	</div>

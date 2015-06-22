@@ -126,7 +126,13 @@
 				<div class="col-md-6" ng-show="!viewModePM">
 					<div class="panel panel-success" align="center">
 						<div class="panel-heading">
-							<h5 class="panel-title">{{ 'pm_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setPmEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5>
+							<table width="100%">
+								<tr>
+									<td align="left"><h5 class="panel-title">{{ 'pm_list' | i18n }}</h5></td>
+									<td align="right"><button type="button" class="btn btn-success" ng-click="setPmEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+								</tr>
+							</table>
+<!-- 							<h5 class="panel-title">{{ 'pm_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setPmEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
 						</div>
 						<div class="panel-body">
 							<div class="alert alert-danger" ng-show="showDeletingPMErrorMessage">{{ 'err_in_delete_parkingmeter' | i18n }}</div>
@@ -135,14 +141,14 @@
 									<tr ng-show="pmeterWS.length != 0">
 										<th width="15%"><span ng-show="pm_code.visible">{{ 'pm_code' | i18n }}</span></th>
 										<th width="20%"><span ng-show="pm_note.visible">{{ 'pm_note' | i18n }}</span></th>
-										<th width="18%">
+										<th width="18%" class="myCenter">
 											<span ng-show="pm_status.visible">{{ 'pm_status' | i18n }}</span> 
 											<a href ng-click="showPmStatusFilter()" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 											<a href ng-click="hidePmStatusFilter()" ng-show="showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 											<select id="f_pm_status" ng-show="showStatusPmFilter" class="form-control" ng-options="s.filter as s.descrizione for s in allPmStatusFilter" ng-model="pmStatusFilter">
 					    					</select>
 										</th>
-										<th width="22%" colspan="2">
+										<th width="22%" colspan="2" class="myCenter">
 											<span ng-show="pm_rateArea.visible">{{ 'pm_area_name' | i18n }}</span>&nbsp;
 											<a href ng-click="showPmAreaFilter()" ng-show="!showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 											<a href ng-click="hidePmAreaFilter()" ng-show="showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -152,7 +158,7 @@
 						    					<option ng-repeat="a in allPmAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
 						    				</select>
 										</th>
-										<th width="25%"><span>{{ 'operations' | i18n }}</span></th>
+										<th width="25%" class="myCenter"><span>{{ 'operations' | i18n }}</span></th>
 									</tr>
 									<tbody class="animate-repeat"
 										ng-repeat="pmeter in filtered = (pmeterWS | filter:q | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:'code' | startFrom:currentPage*maxPmeters | limitTo:maxPmeters">
@@ -166,10 +172,10 @@
 											</td>
 											<td align="center"><div class="colorBox" ng-show="pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
 											<td align="center"><span ng-show="pm_rateArea.visible">{{pmeter.area_name}}</span></td>
-											<td align="left">
-												<a href ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-												<a href ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-												<a href ng-click="setPmRemove(pmeter)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+											<td align="center">
+												<a href type="button" class="btn btn-primary btn-xs" ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+												<a href type="button" class="btn btn-primary btn-xs" ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+												<a href type="button" class="btn btn-primary btn-xs" ng-click="setPmRemove(pmeter)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 											</td>
 										</tr>
 	<!-- 									<tr class="success" ng-show="pmeter.status=='ACTIVE'"> -->
@@ -208,75 +214,64 @@
 			  		<div class="panel-body">	
 			  			<table width="100%">
 							<tr ng-show="pm_code.visible">
-								<td width="40%"><strong>{{ 'pm_code' | i18n }}:</strong></td>
-								<td width="60%"> {{ viewParckingMeter.code }}</td>
+								<td class="detailsViewParkmeterSX">{{ 'pm_code' | i18n }}:</td>
+								<td class="detailsViewParkmeterDX"> {{ viewParckingMeter.code }}</td>
 							</tr>
 							<tr ng-show="pm_note.visible">	
-								<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
-								<td> {{ viewParckingMeter.note }}</td>
+								<td class="detailsViewParkmeterSX">{{ 'pm_note' | i18n }}:</td>
+								<td class="detailsViewParkmeterDX">{{ viewParckingMeter.note }}</td>
 							</tr>
 							<tr ng-show="pm_status.visible">
-								<td>
-									<strong>{{ 'pm_status' | i18n }}:</strong>
-								</td>
-								<td>	 
+								<td class="detailsViewParkmeterSX">{{ 'pm_status' | i18n }}:</td>
+								<td class="detailsViewParkmeterDX">	 
 									<span ng-show="viewParckingMeter.status=='ACTIVE'">Attivo</span>
 									<span ng-show="viewParckingMeter.status!='ACTIVE'">Disattivo</span>
 								</td>
 							</tr>
-<!-- 							<tr ng-show="pm_rateArea.visible">	 -->
-<!-- 								<td> -->
-<!-- 									<strong>{{ 'pm_area_name' | i18n }}:</strong> -->
-<!-- 								</td> -->
-<!-- 								<td>	  -->
-<!-- 									{{ myArea.name }}  -->
-<!-- 									<span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span> -->
-<!-- 								</td> -->
-<!-- 							</tr> -->
-							<tr ng-show="pm_rateArea.visible">
-			        			<td colspan="2">
-			        				<strong>{{ 'pm_area_name' | i18n }}:</strong>
-			        				<div class="panel panel-default">
-										<div class="panel-body">
-											<table width="100%">
-												<tr>
-													<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-													<td width="55%">{{ myArea.name }}</td>
-												</tr>
-												<tr>	
-													<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-													<td>{{ myArea.fee }}</td>
-												</tr>
-												<tr>	
-													<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-													<td>{{ myArea.timeSlot }}</td>
-												</tr>
-												<tr>	
-													<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-													<td>{{ myArea.smsCode }}</td>
-												</tr>
-												<tr>	
-													<td><strong>{{ 'area_color' | i18n }}</strong></td>
-													<td><span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span></td>
-												</tr>
-									   		</table>
-										</div>
-									</div>	
-								</td>
-							</tr>
 							<tr ng-show="pm_geometry.visible">
-								<td><strong>{{ 'pm_geometry' | i18n }}:</strong></td>
-								<td>{{ myGeometry }}</td>
+								<td class="detailsViewParkmeterSX">{{ 'pm_geometry' | i18n }}:</td>
+								<td class="detailsViewParkmeterDX">{{ myGeometry }}</td>
+							</tr>
+							<tr ng-show="pm_rateArea.visible">
+							    <td colspan="2" class="detailsTableColSpan">
+							        <hr/>
+							    </td>
+						    </tr>
+						    <tr ng-show="pm_rateArea.visible">
+						       <td colspan="2" class="detailsTableColSpan">
+						        	{{ 'pm_area_name' | i18n }}
+						    	</td>
+						    </tr>
+							<tr ng-show="pm_rateArea.visible">
+								<td class="detailsViewParkmeterSX">{{ 'area_name' | i18n }}:</td>
+								<td class="detailsViewParkmeterDX">{{ myArea.name }}</td>
+							</tr>
+							<tr ng-show="pm_rateArea.visible">	
+								<td class="detailsViewParkmeterSX">{{ 'area_rate' | i18n }}:</td>
+								<td class="detailsViewParkmeterDX">{{ myArea.fee }}</td>
+							</tr>
+							<tr ng-show="pm_rateArea.visible">	
+								<td class="detailsViewParkmeterSX">{{ 'area_time' | i18n }}:</td>
+								<td class="detailsViewParkmeterDX">{{ myArea.timeSlot }}</td>
+							</tr>
+							<tr ng-show="pm_rateArea.visible">	
+								<td class="detailsViewParkmeterSX">{{ 'area_sms' | i18n }}:</td>
+								<td class="detailsViewParkmeterDX">{{ myArea.smsCode }}</td>
+							</tr>
+							<tr ng-show="pm_rateArea.visible">	
+								<td class="detailsViewParkmeterSX">{{ 'area_color' | i18n }}</td>
+								<td class="detailsViewParkmeterDX"><span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span></td>
 							</tr>
 				   		</table>
 				   		<hr>
 					   	<table width="95%">			
 							<tr>
-								<td width="50%" align="right">
-									<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>	
+								<td width="80%" align="right">
+								<td width="10%" align="center">
+									<button type="button" class="btn btn-danger btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>	
 								</td>
-								<td width="50%" align="left">
-									<button type="button" class="btn btn-default btn-lg" ng-click="setPmEdit(viewParckingMeter)">{{ 'text_btn_edit' | i18n  }}</button>
+								<td width="10%" align="left">
+									<button type="button" class="btn btn-success btn-lg" ng-click="setPmEdit(viewParckingMeter)">{{ 'text_btn_edit' | i18n  }}</button>
 								</td>
 							</tr>
 						</table>
@@ -341,16 +336,19 @@
 					</div>
 				</div>
 				<div class="alert alert-danger" ng-show="showUpdatingErrorMessage">{{ 'err_in_update_parkingmeter' | i18n }}</div>
-		   		<table width="95%">			
+		   		<table width="97%">			
 				   	<tr>
-				   		<td width="34%"></td>
-				   		<td width="32%" align="center">
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>
+				   		<td width="85%"></td>
+				   		<td width="8%" align="center">
+				   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>
 				   		</td>
-				   		<td width="34%" align="right">
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="updatePmeter(form, parckingMeter, myStatus, myArea, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   			<button type="button" class="btn btn-default btn-lg" ng-click="createPmeter(form, parckingMeter, myStatus, myArea, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   		<td width="7%" align="right">
+				   			<button type="button" class="btn btn-success btn-lg" ng-click="updatePmeter(form, parckingMeter, myStatus, myArea, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-success btn-lg" ng-click="createPmeter(form, parckingMeter, myStatus, myArea, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
+					</tr>
+					<tr>
+						<td colspan="3">&nbsp;</td>
 					</tr>
 				</table>
 		   	</div>

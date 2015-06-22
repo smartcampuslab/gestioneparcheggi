@@ -1094,7 +1094,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					gpath: $scope.correctPointsGoogle(area.geometry[j].points),
 					stroke: {
 					    color: $scope.correctColor(area.color),
-					    weight: 10
+					    weight: 4
 					},
 					data:area,
 					info_windows_pos: $scope.correctPointGoogle(area.geometry[j].points[1]),
@@ -1105,7 +1105,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					visible: true,
 					fill: {
 					    color: $scope.correctColor(area.color),
-					    opacity: 0.9
+					    opacity: 0.8
 					}
 				};
 				$scope.mySpecialAreas.push($scope.myAreaPol);
@@ -1302,7 +1302,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				draggable: false,
 				animation: ""	//1 "BOUNCE"
 			},
-			icon: $scope.useSelectedIcon($scope.getCorrectPmIconByAreaName(myAreaP.name))
+			icon: (appId == 'rv') ? $scope.useSelectedIcon($scope.getCorrectPmIconByAreaName(myAreaP.name)) : $scope.pmMarkerIcon
 			//icon: baseUrl+'/marker/'+company+'/parcometro/'+((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor)	//$scope.pmMarkerIcon
 		};
 		$scope.mySpecialPMMarkers.push($scope.mySpecialMarker);
@@ -1423,7 +1423,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				gpath: $scope.correctPointsGoogle(zone.geometry.points),
 				stroke: {
 				    color: $scope.correctColor(zone.color),
-				    weight: 10
+				    weight: 4
 				},
 				data: zone,
 				info_windows_pos: $scope.correctPointGoogle(zone.geometry.points[1]),
@@ -1434,7 +1434,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				visible: true,
 				fill: {
 				    color: $scope.correctColor(zone.color),
-				    opacity: 0.9
+				    opacity: 0.8
 				}
 			};
 			$scope.mySpecialZones.push($scope.myZonePol);
@@ -2093,7 +2093,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					visible: true,
 					fill: {
 					    color: $scope.correctColor(zone.color),
-					    opacity: 0.7
+					    opacity: 0.4
 					}
 				};
 			}	
@@ -3689,7 +3689,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						visible: true,
 						fill: {
 						    color: $scope.correctColor(areas[i].color),
-						    opacity: 0.7
+						    opacity: 0.4
 						}
 					};
 					$scope.polygons.push(area);
@@ -3805,7 +3805,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					visible: true,
 					fill: {
 					    color: $scope.correctColor(zones[i].color),
-					    opacity: 0.7
+					    opacity: 0.4
 					}
 				};
 				$scope.zone_polygons.push(zone);
@@ -3961,8 +3961,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
 				title = marker.code;
-				myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
-				//myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm != null && myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				if(appId == 'rv'){ 
+					myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
+				} else {
+					myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm != null && myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				}
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon;
@@ -4080,19 +4083,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.addMarkerToMap($scope.map);
 		$scope.mapReady = true;
 		//$scope.$apply();
-	};
-	
-	$scope.setStreetMarker = function(street){
-		street.stroke.weight = 4;	//10
-		street.stroke.opacity = 1.0;
-		var toDelStreet = $scope.map.shapes;
-	    toDelStreet[street.id].setMap(null);		// I can access dinamically the value of the object shapes for street
-		for(var i = 0; i < $scope.mapStreets.length; i++){
-		  	if($scope.geoStreets[i].id == street.id){
-		   		$scope.geoStreets.splice(i, 1);
-		    }
-		}
-	    $scope.mySpecialStreets.push(street);
 	};
 	
 	$scope.getCorrectPmIconByAreaName = function(areaName){
