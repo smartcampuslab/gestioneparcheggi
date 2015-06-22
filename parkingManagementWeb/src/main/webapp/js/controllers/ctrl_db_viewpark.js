@@ -1609,7 +1609,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streets", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
-		    console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    $scope.updateLoadingMapState();
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
@@ -1646,7 +1646,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancychanged/" + idApp + "/streets", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
-		    console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    $scope.updateLoadingMapState();
 		    
 		    allStreet = $scope.mergeStreetsObjects(allStreet, oldStreets);
