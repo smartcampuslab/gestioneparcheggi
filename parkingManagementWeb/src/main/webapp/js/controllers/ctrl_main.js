@@ -229,6 +229,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     };
     
     $scope.setViewAllActive = function(){
+    	parkhome = "";
     	homeSubPark = "";
         editingPark = "";
         editingBike = "";

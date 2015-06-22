@@ -33,7 +33,7 @@
 						        </div>
 						    </info-window>
 						</marker>
-						<marker ng-repeat="sbp in mySpecialBPMarkers" id="{{ sbp.id }}" position="{{ sbp.pos }}" icon="{{ bpMarkerIcon }}" visible="{{ sbp.visible }}" animation="{{ sbp.options.animation }}" on-click="showInfoWindow(event, 'sbp')" >
+						<marker ng-repeat="sbp in mySpecialBPMarkers" id="{{ sbp.id }}" position="{{ sbp.pos }}" icon="{{ sbp.icon }}" visible="{{ sbp.visible }}" animation="{{ sbp.options.animation }}" on-click="showInfoWindow(event, 'sbp')" >
 							<info-window id="sbp" visible-on-marker="{{ sbp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>

@@ -429,6 +429,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.mySpecialZones = [];
     $scope.mySpecialPMMarkers = [];
     $scope.mySpecialPSMarkers = [];
+    $scope.mapStreetSelectedMarkers = [];
     
     // global variable used to store the map objects istances (with ng-map is the only way to manage more maps in an html page) 
     $scope.vAreaMap = null;
@@ -594,6 +595,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	$scope.getStreetsFromDb = function(){
 		$scope.streetMapReady = false;
+		$scope.mapStreetSelectedMarkers = [];
 		var allStreet = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
@@ -1024,6 +1026,20 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	$scope.useSelectedIcon = function(icon){
+		if(icon.indexOf("_outline") > -1){
+			icon = icon.substring(0, icon.length - 12);
+		}
+		return icon + ".png";
+	};	
+	
+	$scope.useNormalIcon = function(icon){
+		if(icon.indexOf(".png") > -1){
+			icon = icon.substring(0, icon.length - 4);
+		}
+		return icon + "_outline.png";
+	};
+	
 	// View management
 	// RateArea
 	$scope.setADetails = function(area){
@@ -1171,7 +1187,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				gpath: $scope.correctPointsGoogle(street.geometry.points),
 				stroke: {
 				    color: $scope.correctColor(street.color),
-				    weight: 10
+				    weight: 4
 				},
 				data: street,
 				area: myAreaS,
@@ -1187,6 +1203,20 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			$scope.mySpecialStreets.push($scope.myStreetLine);
 		}
+		// Here I add the street marker icon
+	    var streetMarker = {
+			id: 0 + "sm",
+			position: street.geometry.points[1].lat + "," + street.geometry.points[1].lng,
+			options: { 
+				draggable: false,
+			  	visible: true,
+			   	map: null
+			},
+			icon: $scope.streetMarkerIcon,
+			data: street,
+			showWindow: false
+		};
+	    $scope.mapStreetSelectedMarkers.push(streetMarker);
 		
 		$scope.viewModeS = true;
 		$scope.editModeS = false;
@@ -1270,9 +1300,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			visible:true,
 			options: { 
 				draggable: false,
-				animation: "BOUNCE"	//1
+				animation: ""	//1 "BOUNCE"
 			},
-			icon: baseUrl+'/marker/'+company+'/parcometro/'+((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor)	//$scope.pmMarkerIcon
+			icon: $scope.useSelectedIcon($scope.getCorrectPmIconByAreaName(myAreaP.name))
+			//icon: baseUrl+'/marker/'+company+'/parcometro/'+((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor)	//$scope.pmMarkerIcon
 		};
 		$scope.mySpecialPMMarkers.push($scope.mySpecialMarker);
 		
@@ -1338,9 +1369,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			visible: true,
 			options: { 
 				draggable: false,
-				animation: 	"BOUNCE"  //1
+				animation: 	""  //1 "BOUNCE"
 			},
-			icon: $scope.psMarkerIcon
+			icon: $scope.useSelectedIcon($scope.psMarkerIcon)
 		};
 		$scope.mySpecialPSMarkers.push($scope.mySpecialPSMarker);
 		
@@ -1469,9 +1500,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			visible: true,
 			options: { 
 				draggable: false,
-				animation: "BOUNCE"	//1
+				animation: ""	//1 "BOUNCE"
 			},
-			icon: $scope.bpMarkerIcon
+			icon: $scope.useSelectedIcon($scope.bpMarkerIcon)
 		};
 		$scope.mySpecialBPMarkers.push(mySpecialBPMarker);
 		
@@ -3280,9 +3311,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	//$scope.map = {};
 	
-	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
-	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
-	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
+	//$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
+	$scope.pmMarkerIcon = "imgs/parkingMeterIcons/parcometro_general.png";			// icon for parkingMeter object
+	//$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
+	$scope.psMarkerIcon = "imgs/structIcons/parking_structures_general_outline.png";	// icon for parkingStructure object
+	//$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
+	$scope.bpMarkerIcon = "imgs/bikeIcons/bicicle_outline.png";				// icon for bikePoint object
+	$scope.streetMarkerIcon = "imgs/street_marker.png";					// icon for street marker
 	
 	$scope.refreshMap = function(map) {
         //optional param if you want to refresh you can pass null undefined or false or empty arg
@@ -3926,7 +3961,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
 				title = marker.code;
-				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm != null && myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
+				//myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm != null && myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon;
@@ -4045,6 +4081,38 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.mapReady = true;
 		//$scope.$apply();
 	};
+	
+	$scope.setStreetMarker = function(street){
+		street.stroke.weight = 4;	//10
+		street.stroke.opacity = 1.0;
+		var toDelStreet = $scope.map.shapes;
+	    toDelStreet[street.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+		for(var i = 0; i < $scope.mapStreets.length; i++){
+		  	if($scope.geoStreets[i].id == street.id){
+		   		$scope.geoStreets.splice(i, 1);
+		    }
+		}
+	    $scope.mySpecialStreets.push(street);
+	};
+	
+	$scope.getCorrectPmIconByAreaName = function(areaName){
+    	var myIcon = "";
+    	switch(areaName){
+    		case "Rossa":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_red_outline.png";
+    			break;
+    		case "Gialla":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_yellow_outline.png";
+    			break;
+    		case "Arancio (Ospedale)":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_orange_outline.png";
+    			break;
+    		default:
+    			break;
+    		
+    	}
+    	return myIcon;
+    };
 	   
     // --------------------------- End Section for Anni Residenza, Anzianità lavorativa e Disabilità -------------------------
             

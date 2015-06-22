@@ -114,6 +114,7 @@
 						</div>
 					</info-window>
      			</shape>
+     			<marker ng-repeat="smSel in mapStreetSelectedMarkers" id="{{ smSel.id }}" position="{{ smSel.position }}" icon="{{ smSel.icon }}" on-click="hideDetails(event, smSel.data, 3)" ></marker>
      			<shape name="polyline" ng-repeat="s in mySpecialStreets" id="{{ s.id }}" path="{{ s.gpath }}" 
          			geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showInfoWindow(event, s.info_windows_cod)">
      				<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">

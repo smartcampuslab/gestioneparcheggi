@@ -154,7 +154,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.violet = "#8904B1";
 	
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
-	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
+	//$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
+	$scope.psMarkerIcon = "imgs/structIcons/parking_structures_general_outline.png";	// icon for parkingStructure object
 	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
 	$scope.streetMarkerIcon = "imgs/street_marker.png";					// icon for street marker
 	
@@ -179,9 +180,100 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$rootScope.$broadcast('dialogs.wait.complete');
 	};
 	
-	// ------------------------------- Block for semaphores in ws call -----------------------------
-	$scope.streetSemaphoreFree = true;
+	// --------------- Block for title of the map (describe the element showed in the map ------------------
+	$scope.title_map = "Offerta di sosta: Vie";
+	$scope.update_title_map = function(inverse, type, exlude){
+		switch ($scope.dashboard_topics){
+			case "parkSupply": 
+				$scope.title_map = "Offerta di sosta: ";
+				if(!inverse){
+					$scope.controlCheckedArea("");
+				} else {
+					if(type == "rate_area"){
+						if(exlude != "rate_area"){
+							$scope.title_map += "Aree Tariffarie, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "macrozone"){
+						if(exlude != "macrozone"){
+							$scope.title_map += "Macrozone, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "microzone"){
+						if(exlude != "microzone"){
+							$scope.title_map += "Vie, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "parkingstructs"){
+						if(exlude != "parkingstructs"){
+							$scope.title_map += "Strutture Parcheggio, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "parkingmeter"){
+						if(exlude != "parkingmeter"){
+							$scope.title_map += "Parcometri, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+				}
+				break;
+			case "occupation": 
+				$scope.title_map = "Occupazione: ";
+				if(!inverse){
+					$scope.controlCheckedArea("");
+				} else {
+					if(type == "rate_area"){
+						if(exlude != "rate_area"){
+							$scope.title_map += "Aree Tariffarie, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "macrozone"){
+						if(exlude != "macrozone"){
+							$scope.title_map += "Macrozone, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "microzone"){
+						if(exlude != "microzone"){
+							$scope.title_map += "Vie, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "parkingstructs"){
+						if(exlude != "parkingstructs"){
+							$scope.title_map += "Strutture Parcheggio, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+				}
+				break;
+			default: break;
+		}
+		$scope.title_map = $scope.title_map.substring(0, $scope.title_map.length - 2);
+	};
 	
+	$scope.controlCheckedArea = function(exlude){
+		if($scope.dashboard_space.rate_area && (exlude != "rate_area")){
+			$scope.title_map += "Aree Tariffarie, ";
+		}
+		if($scope.dashboard_space.macrozone && (exlude != "macrozone")){
+			$scope.title_map += "Macrozone, ";
+		}
+		if($scope.dashboard_space.microzone && (exlude != "microzone")){
+			$scope.title_map += "Vie, ";
+		}
+		if($scope.dashboard_space.parkingstructs && (exlude != "parkingstructs")){
+			$scope.title_map += "Strutture Parcheggio, ";
+		}
+		if($scope.dashboard_space.parkingmeter && (exlude != "parkingmeter")){
+			$scope.title_map += "Parcometri, ";
+		}
+	};
 	
 	// ---------------------------------------------------------------------------------------------
 	
@@ -569,6 +661,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			case "budget": 
 				break;
 		}
+		$scope.update_title_map(false, "", "");
 	};
 	
 	// ------------------------------- Utility methods ----------------------------------------
@@ -744,8 +837,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.changeParkingMetersMarkers = function(){
 		if(!$scope.dashboard_space.parkingmeter){ //$scope.mapelements.parkingmeters
 			$scope.showParkingMetersMarkers();
+			$scope.update_title_map(true, "parkingmeter", "");
 		} else {
 			$scope.hideParkingMetersMarkers();
+			$scope.update_title_map(true, "parkingmeter", "parkingmeter");
 		}
 	};
 
@@ -776,6 +871,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.hideParkingStructuresMarkers(2);
 			}
     	}
+    	if(!$scope.dashboard_space.parkingstructs){
+    		$scope.update_title_map(true, "parkingstructs", "");
+    	} else {
+    		$scope.update_title_map(true, "parkingstructs", "parkingstructs");
+    	}
 	};
     
     $scope.showParkingStructuresMarkers = function(type) {
@@ -794,6 +894,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	}
     	$scope.detailsOpened = false;
     	$scope.occupancyOpened = false;
+    	$scope.mapStreetSelectedMarkers = [];
     	//$scope.$apply();
     };
     
@@ -801,8 +902,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.changeBikePointsMarkers = function(){
 		if(!$scope.mapelements.bikepoints){
 			$scope.showBikePointsMarkers();
+			$scope.update_title_map(true, "bike_point", "");
 		} else {
 			$scope.hideBikePointsMarkers();
+			$scope.update_title_map(true, "bike_point", "bike_point");
 		}
 	};
     
@@ -815,6 +918,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.mapBikePointMarkers = [];//$scope.setAllMarkersMap($scope.parkingMetersMarkers, null, false);
     	$scope.detailsOpened = false;
     	$scope.occupancyOpened = false;
+    	$scope.mapStreetSelectedMarkers = [];
         //$scope.refreshMap();
         //$scope.$apply();
     };
@@ -835,16 +939,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.hideAreaPolygons(2);
 			}
     	}
+    	if(!$scope.dashboard_space.rate_area){
+    		$scope.update_title_map(true, "rate_area", "");
+    	} else {
+    		$scope.update_title_map(true, "rate_area", "rate_area");
+    	}
 	};
     
     $scope.showAreaPolygons = function(type) {
     	if(type == 1){
-    		$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, true, type);
+    		$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, true, type, false, false);
     	} else {
     		if($scope.occupancyAreas.length == 0){
-    			$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, true, type, true);
+    			$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, true, type, true, false);
     		} else {
-    			$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, true, type, false);
+    			$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, true, type, false, false);
     		}
     	}
     	//$scope.refreshMap();
@@ -870,13 +979,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     $scope.hideAreaPolygons = function(type) {
     	if(type == 1){
-    		$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, false, type, false);
+    		$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, false, type, false, false);
     	} else {
-    		$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, false, type, false);
+    		$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, false, type, false, false);
     	}
     	$scope.hideAllAreas($scope.areaWS);
     	$scope.detailsOpened = false;
     	$scope.occupancyOpened = false;
+    	$scope.mapStreetSelectedMarkers = [];
 
     };
     
@@ -896,29 +1006,35 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.hideZonePolygons(2);
 			}
     	}
+    	if(!$scope.dashboard_space.macrozone){
+    		$scope.update_title_map(true, "macrozone", "");
+    	} else {
+    		$scope.update_title_map(true, "macrozone", "macrozone");
+    	}
 	};
     
     $scope.showZonePolygons = function(type) {
     	if(type == 1){
-    		$scope.mapZones = $scope.initZonesOnMap($scope.zoneWS, true, type, false);
+    		$scope.mapZones = $scope.initZonesOnMap($scope.zoneWS, true, type, false, false);
     	} else {
     		if($scope.occupancyZones.length == 0){
-    			$scope.occupancyZones = $scope.initZonesOnMap($scope.zoneWS, true, type, true);
+    			$scope.occupancyZones = $scope.initZonesOnMap($scope.zoneWS, true, type, true, false);
     		} else {
-    			$scope.occupancyZones = $scope.initZonesOnMap($scope.zoneWS, true, type, false);
+    			$scope.occupancyZones = $scope.initZonesOnMap($scope.zoneWS, true, type, false, false);
     		}
     	}
     };
     
     $scope.hideZonePolygons = function(type) {
     	if(type == 1){
-    		$scope.mapZones = $scope.initZonesOnMap($scope.zoneWS, false, type, false);
+    		$scope.mapZones = $scope.initZonesOnMap($scope.zoneWS, false, type, false, false);
     	} else {
-    		$scope.occupancyZones = $scope.initZonesOnMap($scope.zoneWS, false, type, false);
+    		$scope.occupancyZones = $scope.initZonesOnMap($scope.zoneWS, false, type, false, false);
     	}
     	$scope.hideAllZones();
     	$scope.detailsOpened = false;
     	$scope.occupancyOpened = false;
+    	$scope.mapStreetSelectedMarkers = [];
     };
     
     // Show/hide streets polygons
@@ -937,6 +1053,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     			$scope.hideStreetPolylines(2);
     		}
 		}
+    	if(!$scope.dashboard_space.microzone){
+    		$scope.update_title_map(true, "microzone", "");
+    	} else {
+    		$scope.update_title_map(true, "microzone", "microzone");
+    	}
 	};
     
     $scope.showStreetPolylines = function(type) {
@@ -958,6 +1079,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.hideAllStreets();
     	$scope.detailsOpened = false;
     	$scope.occupancyOpened = false;
+    	$scope.mapStreetSelectedMarkers = [];
         //$scope.refreshMap();
         //$scope.$apply();
     };
@@ -1052,6 +1174,25 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         $scope.map.control.getGMap().setZoom(5);
         $scope.map.control.getGMap().setZoom(14);
     };
+    
+    $scope.getCorrectPmIconByAreaName = function(areaName){
+    	var myIcon = "";
+    	switch(areaName){
+    		case "Rossa":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_red_outline.png";
+    			break;
+    		case "Gialla":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_yellow_outline.png";
+    			break;
+    		case "Arancio (Ospedale)":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_orange_outline.png";
+    			break;
+    		default:
+    			break;
+    		
+    	}
+    	return myIcon;
+    };
 	
 	var createMarkers = function(i, marker, type) {
 		//------ To be configured in external conf file!!!!!------
@@ -1075,7 +1216,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			case 1 : 
 				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
-				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
+				//myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				cid = "c" + marker.id;
 				break;
 			case 2 : 
@@ -1124,7 +1266,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return ret;
 	};
 	  
-	$scope.initAreasOnMap = function(areas, visible, type, firstInit){
+	$scope.initAreasOnMap = function(areas, visible, type, firstInit, firstTime){
 		var area = {};
 		var poligons = {};
 		var tmpAreas = [];
@@ -1171,7 +1313,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					tmpAreas.push(area);
 				}
 			}
-		}	
+		}
+		if(!firstTime){
+			$scope.closeLoadingMap();
+		}
 		return tmpAreas;
 	};
 	
@@ -1228,7 +1373,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return tmpStreets;
 	};
 	
-	$scope.initZonesOnMap = function(zones, visible, type, firstInit){
+	$scope.initZonesOnMap = function(zones, visible, type, firstInit, firstTime){
 		var zone = {};
 		var poligons = {};
 		var tmpZones = [];
@@ -1273,6 +1418,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				}
 				tmpZones.push(zone);
 			}
+		}
+		if(!firstTime){
+			$scope.closeLoadingMap();
 		}
 		return tmpZones;
 	};
@@ -1400,7 +1548,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    
 			$scope.areaWS = allAreas;
 			if(showArea){
-			    $scope.initAreasOnMap($scope.areaWS, false, 1, false);
+			    $scope.initAreasOnMap($scope.areaWS, false, 1, false, true);
 			}    
 			sharedDataService.setSharedLocalAreas($scope.areaWS);
 			$scope.getParkingMetersFromDb();
@@ -1443,6 +1591,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
 	$scope.getOccupancyStreetsFromDb = function(year, month, weekday, dayType, hour, valueType){
 		$scope.streetMapReady = false;
+		var isFirstTime = false;
 		var allStreet = [];
 		var idApp = sharedDataService.getConfAppId();
 		var method = 'GET';
@@ -1469,10 +1618,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	$scope.updateStreetOccupancy($scope.streetWS);
 			}
 		    if(showZones){
-		    	$scope.updateZoneOccupancy();
+		    	$scope.updateZoneOccupancy(true);
 		    }
 		    if(showArea){
-		    	$scope.updateAreaOccupancy();
+		    	$scope.updateAreaOccupancy(true);
 		    }
 		});
 	};
@@ -1508,10 +1657,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	$scope.updateStreetOccupancy($scope.streetWS);
 			}
 		    if(showZones){
-		    	$scope.updateZoneOccupancy();
+		    	$scope.updateZoneOccupancy(false);
 		    }
 		    if(showArea){
-		    	$scope.updateAreaOccupancy();
+		    	$scope.updateAreaOccupancy(false);
 		    }
 		});
 	};
@@ -1780,20 +1929,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	// Method updateZoneOccupancy: update all zone maps Object elements with new occupation data retrieved from db
-	$scope.updateZoneOccupancy = function(){
+	$scope.updateZoneOccupancy = function(firstTime){
 		if($scope.dashboard_space.macrozone){	// I check if the zone check is selected
 		    if($scope.dashboard_topics == "parkSupply"){
 		   		if($scope.mapZones.length == 0){
-		   			$scope.mapZones = $scope.initZonesOnMap($scope.zoneWS, true, 1, false);
+		   			$scope.mapZones = $scope.initZonesOnMap($scope.zoneWS, true, 1, fals, firstTime);
 		   		} else {
-		   			var tmpZ = $scope.initZonesOnMap($scope.zoneWS, true, 1, false);
+		   			var tmpZ = $scope.initZonesOnMap($scope.zoneWS, true, 1, false, firstTime);
 		   			$scope.switchZoneMapObject(3, tmpZ);
 		   		}
 		   	} else {
 		   		if($scope.occupancyZones.length == 0){
-		   			$scope.occupancyZones = $scope.initZonesOnMap($scope.zoneWS, true, 2, false);
+		   			$scope.occupancyZones = $scope.initZonesOnMap($scope.zoneWS, true, 2, false, firstTime);
 		   		} else {
-		   			var tmpZ = $scope.initZonesOnMap($scope.zoneWS, true, 2, false);
+		   			var tmpZ = $scope.initZonesOnMap($scope.zoneWS, true, 2, false, firstTime);
 		   	    	$scope.switchZoneMapObject(4, tmpZ);
 		    	}
 		    }
@@ -1801,20 +1950,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	// Method updateAreaOccupancy: update all area maps Object elements with new occupation data retrieved from db
-	$scope.updateAreaOccupancy = function(){
+	$scope.updateAreaOccupancy = function(firstTime){
 		if($scope.dashboard_space.rate_area){	// I check if the area check is selected
 		    if($scope.dashboard_topics == "parkSupply"){
 		   		if($scope.mapAreas.length == 0){
-		   			$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, true, 1, false);
+		   			$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, true, 1, false, firstTime);
 		   		} else {
-		   			var tmpA = $scope.initAreasOnMap($scope.areaWS, true, 1, false);
+		   			var tmpA = $scope.initAreasOnMap($scope.areaWS, true, 1, false, firstTime);
 		   			$scope.switchAreaMapObject(3, tmpA);
 		   		}
 		   	} else {
 		   		if($scope.occupancyAreas.length == 0){
-		   			$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, true, 2, false);
+		   			$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, true, 2, false, firstTime);
 		   		} else {
-		   			var tmpA = $scope.initAreasOnMap($scope.areaWS, true, 2, false);
+		   			var tmpA = $scope.initAreasOnMap($scope.areaWS, true, 2, false, firstTime);
 		   	    	$scope.switchAreaMapObject(4, tmpA);
 		    	}
 		    }
@@ -1932,7 +2081,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			$scope.zoneWS = $scope.correctMyZones(allZones);
 		 	sharedDataService.setSharedLocalZones($scope.zoneWS);
 		    if(showZones){
-		    	$scope.initZonesOnMap($scope.zoneWS, false, 1, false);
+		    	$scope.initZonesOnMap($scope.zoneWS, false, 1, false, true);
 		    }
 		    //$scope.getStreetsFromDb();
 		    var d = new Date();
@@ -2012,7 +2161,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				}
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
 				$scope.showPMDet();
-				object.options.animation = "BOUNCE";
+				//object.options.animation = "BOUNCE";
+				object.icon = $scope.useSelectedIcon(object.icon);
 				$scope.mapParkingMetersSelectedMarkers.push(object);
 				$scope.pmDetails = object;
 				break;
@@ -2032,7 +2182,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				}	
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
 				$scope.showPSDet();
-				object.options.animation = "BOUNCE";
+				//object.options.animation = "BOUNCE";
+				object.icon = $scope.useSelectedIcon(object.icon);
 				$scope.mapParkingStructureSelectedMarkers.push(object);
 				$scope.psDetails = object;
 				break;
@@ -2128,8 +2279,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.hideDetails = function(event, object, type){
 		$scope.detailsOpened = false;
+		$scope.occupancyOpened = false;
 		switch(type){
 		case 1:
+			object.icon = $scope.useNormalIcon(object.icon);
 			if($scope.mapParkingMetersMarkers.length > 0){
 				$scope.mapParkingMetersMarkers.push(object);
 			} else {
@@ -2138,6 +2291,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			$scope.mapParkingMetersSelectedMarkers = [];
 			break;
 		case 2:
+			object.icon = $scope.useNormalIcon(object.icon);
 			if($scope.mapParkingStructureMarkers.length > 0){
 				$scope.mapParkingStructureMarkers.push(object);
 			} else {
@@ -2187,6 +2341,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		};
 	};
 	
+	$scope.useSelectedIcon = function(icon){
+		if(icon.indexOf("_outline") > -1){
+			icon = icon.substring(0, icon.length - 12);
+		}
+		return icon + ".png";
+	};	
+	
+	$scope.useNormalIcon = function(icon){
+		if(icon.indexOf(".png") > -1){
+			icon = icon.substring(0, icon.length - 4);
+		}
+		return icon + "_outline.png";
+	};
+	
 	$scope.showOccupancy = function(event, object, type, theme){
 		$scope.theme = theme;	// used in close details panel
 		switch(type){
@@ -2198,7 +2366,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				}
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
 				$scope.showPMDet();
-				object.options.animation = "BOUNCE";
+				//object.options.animation = "BOUNCE";
+				object.icon = $scope.useSelectedIcon(object.icon);
 				$scope.mapParkingMetersSelectedMarkers.push(object);
 				//$scope.pmDetails = object;
 				// here i call the method that init the pie diagram
@@ -2211,7 +2380,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				}
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
 				$scope.showPSDet();
-				object.options.animation = "BOUNCE";
+				//object.options.animation = "BOUNCE";
+				object.icon = $scope.useSelectedIcon(object.icon);
 				$scope.mapParkingStructureSelectedMarkers.push(object);
 				$scope.psDetails = object;
 				$scope.initPsOccupancyDiagram(object);
@@ -2414,7 +2584,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		case 1:
 			if(list.length > 0){
 				var object = list[0];
-				object.options.animation = "";
+				//object.options.animation = "";
+				object.icon = $scope.useNormalIcon(object.icon);
 				if(theme == 0){
 					$scope.mapParkingMetersMarkers.push(object);
 				} else {
@@ -2426,7 +2597,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		case 2:
 			if(list.length > 0){
 				var object = list[0];
-				object.options.animation = "";
+				//object.options.animation = "";
+				object.icon = $scope.useNormalIcon(object.icon);
 				if(theme == 0){
 					$scope.mapParkingStructureMarkers.push(object);
 				} else {
@@ -2792,7 +2964,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		switch(type){
     			case 1: break;
     			case 2:
-    				image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_np.png";
+    				//image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_np.png";
+    				image_url = "imgs/structIcons/parking_structures_gray_outline.png";
     				break;
     			case 3: break;
     			default: break;
@@ -2801,7 +2974,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		switch(type){
     			case 1: break;
     			case 2:
-    				image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_green.png";
+    				//image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_green.png";
+    				image_url = "imgs/structIcons/parking_structures_green_outline.png";
     				break;
     			case 3: break;
     			default: break;
@@ -2810,7 +2984,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		switch(type){
 				case 1: break;
 				case 2:
-					image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_yellow.png";
+					//image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_yellow.png";
+					image_url = "imgs/structIcons/parking_structures_yellow_outline.png";
 					break;
 				case 3: break;
 				default: break;
@@ -2819,7 +2994,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		switch(type){
 				case 1: break;
 				case 2:
-					image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_orange.png";
+					//image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_orange.png";
+					image_url = "imgs/structIcons/parking_structures_orange_outline.png";
 					break;
 				case 3: break;
 				default: break;
@@ -2828,7 +3004,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		switch(type){
 				case 1: break;
 				case 2:
-					image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_red.png";
+					//image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_red.png";
+					image_url = "imgs/structIcons/parking_structures_red_outline.png";
 					break;
 				case 3: break;
 				default: break;
@@ -2837,7 +3014,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		switch(type){
 				case 1: break;
 				case 2:
-					image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_violet.png";
+					//image_url = "imgs/markerIcons/ps_occupancy/parcheggioStruttura_violet.png";
+					image_url = "imgs/structIcons/parking_structures_violet_outline.png";
 					break;
 				case 3: break;
 				default: break;

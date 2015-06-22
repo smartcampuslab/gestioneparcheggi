@@ -13,8 +13,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	$scope.bikePointMarkers = [];
 	
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
-	$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
-	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
+	//$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
+	$scope.psMarkerIcon = "imgs/structIcons/parking_structures_general_outline.png";	// icon for parkingStructure object
+	//$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
+	$scope.bpMarkerIcon = "imgs/bikeIcons/bicicle_outline.png";				// icon for bikePoint object
 	
 	$scope.authHeaders = {
 	    'Accept': 'application/json;charset=UTF-8'
@@ -647,6 +649,25 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
         $scope.map.control.getGMap().setZoom(5);
         $scope.map.control.getGMap().setZoom(14);
     };
+    
+    $scope.getCorrectPmIconByAreaName = function(areaName){
+    	var myIcon = "";
+    	switch(areaName){
+    		case "Rossa":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_red_outline.png";
+    			break;
+    		case "Gialla":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_yellow_outline.png";
+    			break;
+    		case "Arancio (Ospedale)":
+    			myIcon = "imgs/parkingMeterIcons/parchimetro_orange_outline.png";
+    			break;
+    		default:
+    			break;
+    		
+    	}
+    	return myIcon;
+    };
 	
 	var createMarkers = function(i, marker, type) {
 		//------ To be configured in external conf file!!!!!------
@@ -670,7 +691,8 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			case 1 : 
 				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
-				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
+				//myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				cid = "c" + marker.id;
 				break;
 			case 2 : 

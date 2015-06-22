@@ -93,6 +93,61 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
     	border-color: rgba(0,0,0,.2);
 	}
 	
+	td.detailsTableSX {
+		width: 40%;
+		height: 20px;
+		font-weight: normal;
+		text-align: right;
+		vertical-align: middle;
+	}
+	td.detailsTableCX {
+		width: 10%;
+		height: 20px;
+		text-align: right;
+		vertical-align: middle;
+	}
+	td.detailsTableDX {
+		width: 50%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsTableColSpan {
+		width: 100%;
+		height: 20px;
+		text-align: center;
+		font-weight: bold;
+		text-transform: uppercase;
+		vertical-align: middle;
+	}
+	th.myCenter {
+		text-align: center;
+	}
+	
+	td.detailsViewAreaSX{
+		width: 45%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsViewAreaDX{
+		width: 55%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	
+	div.left-filter {
+		font-size: medium;
+	}
+	
+	label.left-filter {
+		font-size: small;
+	}
+	
 	div #panelMap {
       position: absolute;
       top: 5px;

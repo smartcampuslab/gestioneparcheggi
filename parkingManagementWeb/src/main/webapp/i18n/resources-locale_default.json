@@ -928,7 +928,7 @@
     "description": "Title icona filtro per stato"
 }, {
     "key": "element_details",
-    "value": "Dettagli",
+    "value": "DETTAGLI",
     "description": "Title panel object details"
 }, {
     "key": "park_parkSupply",
@@ -1055,6 +1055,14 @@
     "value": "Visualizza OCCUPAZIONE",
     "description": "Testo label posti occupati area in dashboard"
 }, {
+    "key": "left_filter_title",
+    "value": "IMPOSTA FILTRO",
+    "description": "Testo label filtro di sinistra in dashboard"
+}, {
+    "key": "euro_hour",
+    "value": "€/ora",
+    "description": "Simbolo tariffa oraria"
+}, { 
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {
@@ -1092,7 +1100,7 @@
     "value": "Festivo"
 }, {
     "key": "custom_vis",
-    "value": "Seleziona"
+    "value": "Definisci periodo"
 }, {
     "key": "morning_vis",
     "value": "Matt"
