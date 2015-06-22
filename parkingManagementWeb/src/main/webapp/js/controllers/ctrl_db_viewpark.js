@@ -1489,7 +1489,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var street = s_object;
 		street.freeParkSlotNumber = (s_object.freeParkSlotNumber != null && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotNumber : 0;
 		street.freeParkSlotSignNumber = (s_object.freeParkSlotSignNumber != null && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignNumber : 0;
-		street.paidSlotNumber = (s_object.paidSlotNumber != null && s_object.freeParkSlotSignNumber > 0) ? s_object.paidSlotNumber : 0;
+		street.paidSlotNumber = (s_object.paidSlotNumber != null && s_object.paidSlotNumber > 0) ? s_object.paidSlotNumber : 0;
 		street.timedParkSlotNumber = (s_object.timedParkSlotNumber != null && s_object.timedParkSlotNumber > 0) ? s_object.timedParkSlotNumber : 0;
 		street.handicappedSlotNumber = (s_object.handicappedSlotNumber != null && s_object.handicappedSlotNumber > 0) ? s_object.handicappedSlotNumber : 0;
 		street.reservedSlotNumber = (s_object.reservedSlotNumber != null && s_object.reservedSlotNumber > 0) ? s_object.reservedSlotNumber : 0;
@@ -1591,7 +1591,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
 	$scope.getOccupancyStreetsFromDb = function(year, month, weekday, dayType, hour, valueType){
 		$scope.streetMapReady = false;
-		var isFirstTime = false;
 		var allStreet = [];
 		var idApp = sharedDataService.getConfAppId();
 		var method = 'GET';
@@ -1610,7 +1609,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streets", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
-		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    $scope.updateLoadingMapState();
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
@@ -1647,7 +1646,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancychanged/" + idApp + "/streets", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
-		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    $scope.updateLoadingMapState();
 		    
 		    allStreet = $scope.mergeStreetsObjects(allStreet, oldStreets);

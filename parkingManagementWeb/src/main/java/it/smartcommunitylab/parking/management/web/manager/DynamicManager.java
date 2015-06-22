@@ -1025,6 +1025,12 @@ public class DynamicManager {
 					cs.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * occRate / 100));
 				}
 			}
+			if(s.getReservedSlotNumber() != null && s.getReservedSlotNumber() > 0){
+				cs.setReservedSlotNumber(s.getReservedSlotNumber());
+			}
+			if(s.getHandicappedSlotNumber() != null && s.getHandicappedSlotNumber() > 0){
+				cs.setHandicappedSlotNumber(s.getHandicappedSlotNumber());
+			}
 			corrStreets.add(cs);
 		}
 
