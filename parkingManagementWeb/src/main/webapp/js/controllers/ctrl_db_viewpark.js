@@ -542,7 +542,61 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	}
     };
     // ---------------------- End Block to read conf params and show/hide elements ---------------------
-	
+    
+    $scope.tabIndex = 0;
+    $scope.viewparktabs = [ 
+        { title:'Mappa', index: 1, content:"partials/dashboard/tabs/viewpark_map.html" },
+        { title:'Lista', index: 2, content:"partials/dashboard/tabs/viewpark_list.html", disabled:false }
+    ];
+    
+    $scope.setIndex = function($index){
+       	$scope.tabIndex = $index;
+    };
+    
+    $scope.maxStreets = 8;
+    
+    $scope.currentPage = 0;
+    $scope.numberOfPages = function(type, list){
+       	if(type == 1){
+       		if($scope.areaWS != null){
+       			return Math.ceil($scope.areaWS.length/$scope.maxAreas);
+       		} else {
+       			return 0;
+      		}
+       	} else if(type == 2) {
+       		if($scope.streetWS != null){
+       			return Math.ceil(list.length/$scope.maxStreets);
+       		} else {
+       			return 0;
+     		}
+       	} else if(type == 3){
+       		if($scope.pmeterWS != null){
+       			return Math.ceil(list.length/$scope.maxPmeters);
+       		} else {
+       			return 0;
+     		}
+       	} else if(type == 4){
+       		if($scope.pstructWS != null){
+       			return Math.ceil($scope.pstructWS.length/$scope.maxPStructs);
+       		} else {
+       			return 0;
+     		}
+       	} else if(type == 5){
+       		if($scope.zoneWS != null){
+       			return Math.ceil($scope.zoneWS.length/$scope.maxZones);
+       		} else {
+       			return 0;
+     		}
+       	} else if(type == 6){
+       		if($scope.bpointWS != null){
+       			return Math.ceil($scope.bpointWS.length/$scope.maxBPoints);
+       		} else {
+       			return 0;
+     		}
+       	}
+    };
+    
+    
 	$scope.cash_mode = "CASH";
     $scope.automated_teller_mode = "AUTOMATED_TELLER";
     $scope.prepaid_card_mode = "PREPAID_CARD";

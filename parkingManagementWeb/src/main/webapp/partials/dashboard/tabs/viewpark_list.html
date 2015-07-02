@@ -1,0 +1,215 @@
+<div class="row" ng-controller="ViewDashboardCtrlPark" ng-init="initWsView()">
+	<div class="col-md-2 left-filter" >
+		<h4><strong>{{ 'left_filter_title' | i18n }}</strong></h4>
+		<div>
+			<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
+			<table width="100%">
+				<tr>
+					<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics" value="parkSupply" ng-change="changeDashboardView()" ng-disabled="disableThemes">&nbsp;{{ 'park_parkSupply' | i18n }}</label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics" value="occupation" ng-change="changeDashboardView()" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_receipts' | i18n }}</span></label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_timeCost' | i18n }}</span></label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="park&ride" type="radio" ng-model="dashboard_topics" value="pr" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_pr' | i18n }}</span></label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="balance" type="radio" ng-model="dashboard_topics" value="budget" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_budget' | i18n }}</span></label></td>
+				</tr>
+			</table>
+			<p style="font-size:3px">&nbsp;</p>
+			<h5><strong>{{ 'space_filter_title' | i18n }}</strong></h5>
+			<table width="100%">
+				<tr><!-- ng-show="isAreaVisible()" -->
+					<td align="left"><label class="left-filter"><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons(dashboard_topics)">&nbsp;{{ 'view_areas' | i18n }}</label></td>
+				</tr>
+				<tr><!-- ng-show="isZonesVisible()" -->
+					<td align="left"><label class="left-filter"><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons(dashboard_topics)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
+				</tr>
+				<tr><!-- ng-show="isStreetVisible()" -->
+					<td align="left"><label class="left-filter"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
+				</tr>
+				<tr><!--  ng-show="isPsVisible()" -->
+					<td align="left"><label class="left-filter"><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
+				</tr>
+				<tr><!-- ng-show="isPmVisible()" -->
+					<td align="left"><label class="left-filter"><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers()" ng-disabled="dashboard_topics=='occupation'">&nbsp;<span ng-if="dashboard_topics=='occupation'" style="color:gray">{{ 'view_parkingmeters' | i18n }}</span><span ng-if="dashboard_topics!='occupation'" style="color:#333">{{ 'view_parkingmeters' | i18n }}</span></label></td>
+				</tr>
+			</table>
+			<p style="font-size:3px">&nbsp;</p>
+		</div>
+		<div ng-show="dashboard_topics=='occupation'">
+			<h5><strong>{{ 'occupation_filter_title' | i18n }}</strong></h5>
+			<table width="100%" ng-controller="TimeFilterCtrl">
+                <tr>
+                    <td align="left">
+                        <select class="form-control input-sm" ng-model="vis" ng-change="updateSearch()">
+                            <option ng-repeat="v in visOptions" value="{{v}}">{{ v | i18n}}</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr ng-if="vis=='vis_medium' || vis=='vis_last_value'">
+                    <td align="left">
+                        <label class="left-filter">{{'year_vis'|i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
+                        <select class="form-control input-sm" ng-model="year" ng-change="updateYear(year)">
+                            <option value="">{{'all_years_vis'|i18n}}</option>
+                            <option ng-repeat="y in years" value="{{y}}">{{y}}</option>
+                        </select>
+                    </td>
+                </tr>
+				<tr ng-if="vis=='vis_medium' || vis=='vis_medium_year' || vis=='vis_last_value'">
+					<td align="left">
+						<label class="left-filter">{{'month_vis'| i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
+                        <br/><br/>
+						<input ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" ng-change="updateMonth(monthSliderValue)" /><!-- ng-change="updateSearch()" -->
+						<br/>
+					</td>
+				</tr>
+                <tr ng-if="vis !='vis_medium_day'">
+					<td align="left">
+                        <label class="left-filter">{{'day_vis'|i18n}}</label>
+                        <div>
+                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="wd" ng-change="updateSearch()">{{'wd_vis'|i18n}}</label>
+                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="we" ng-change="updateSearch()">{{'we_vis'|i18n}}</label>
+                        </div>
+                        <div><label class="left-filter"><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="custom">{{'custom_vis'|i18n}}</label></div><!-- ng-change="updateSearch()" -->
+                    </td>
+                </tr>
+                <tr ng-if="vis !='vis_medium_day' && dayOptions.value=='custom'">
+                    <td align="left">
+                       	<br/>
+                        <input ng-model="daySliderValue" type="text" id="daySlider" slider options="daySliderOptions" ng-change="updateDay(daySliderValue)" />
+                        <br/>
+                    </td>
+                </tr>
+                <tr>
+					<td align="left">
+                        <label class="left-filter">{{'hour_vis'|i18n}}</label>
+                        <div>
+                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="morning" ng-change="updateSearch()">{{'morning_vis'|i18n}}</label>
+                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="afternoon" ng-change="updateSearch()">{{'afternoon_vis'|i18n}}</label>
+                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="night" ng-change="updateSearch()">{{'night_vis'|i18n}}</label>
+                        </div>
+                     	<div><label class="left-filter"><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="custom">{{'custom_vis'|i18n}}</label></div><!-- ng-change="updateSearch()" -->
+                    </td>
+                </tr>
+				<tr ng-if="hourOptions.value=='custom'">
+					<td align="left">
+						<br/><br/>
+                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateHour(hourSliderValue)" />
+                    </td>
+				</tr>
+			</table>
+<!-- 						</div> -->
+		</div>	
+	</div>
+	<div ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" align="center">
+		<div class="tablewrapper">
+			<table class="table table-striped" style="width: 100%">
+				<tr ng-show="streetWS.length != 0">
+					<th width="35%">{{ 'street_name' | i18n }}</th>
+					<th width="15%">{{ 'street_slots' | i18n }}</th>
+					<th width="30%" colspan="2">{{ 'street_area_name' | i18n }}</th>
+					<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
+				</tr>
+				<tbody class="animate-repeat"
+						ng-repeat="street in streetWS | orderBy:['name', 'area_name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+					<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+					<tr>
+						<td width="35%" align="left">{{street.streetReference}}</td>
+						<td width="15%" align="left">{{street.slotNumber}}</td>
+						<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
+						<td width="25%" align="center">{{street.area_name}}</td>
+						<td width="20%" align="center">
+							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+						</td>
+					</tr>
+				</tbody>
+				<tr ng-show="areaWS.length == 0">
+					<td colspan="5"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+				</tr>
+			</table>
+		</div>
+		<button class="btn btn-success"
+			ng-disabled="currentPage == 0"
+			ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+			{{currentPage+1}}/{{numberOfPages(2, streetWS)}}
+		<button class="btn btn-success"
+			ng-disabled="currentPage >= filtered.length/maxStreets - 1"
+			ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>	
+				
+<!-- 					<map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}"> -->
+<!-- 						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showDetails(event, pm, 1, 0)" >on-click="showInfoWindow(event, 'pm')" -->
+<!-- 						</marker> -->
+<!-- 						<marker ng-repeat="pmSel in mapParkingMetersSelectedMarkers" id="{{ pmSel.id }}" animation="{{ pmSel.options.animation }}" position="{{ pmSel.position }}" icon="{{ pmSel.icon }}" on-click="hideDetails(event, pmSel, 1)" ></marker>on-click="showInfoWindow(event, 'pm')" -->
+<!-- 						<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ ps.icon }}" on-click="showDetails(event, ps, 2, 0)" >on-click="showInfoWindow(event, 'ps')" -->
+<!-- 						</marker> -->
+<!-- 						<marker ng-repeat="psSel in mapParkingStructureSelectedMarkers" id="{{ psSel.id }}" animation="{{ psSel.options.animation }}" position="{{ psSel.position }}" icon="{{ psSel.icon }}" on-click="hideDetails(event, psSel, 2)" >on-click="showInfoWindow(event, 'ps')" -->
+<!-- 						</marker> -->
+<!-- 						<marker ng-repeat="psOcc in occupancyParkingStructureMarkers" id="{{ psOcc.id }}" position="{{ psOcc.position }}" icon="{{ psOcc.icon }}" on-click="showOccupancy(event, psOcc, 2, 1)" >on-click="showInfoWindow(event, 'ps')" -->
+<!-- 						</marker> -->
+<!-- 						<marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')" > -->
+<!-- 							<info-window id="bp" visible-on-marker="{{ bp.id }}"> -->
+<!-- 						        <div ng-non-bindable=""> -->
+<!-- 						          	<div id="siteNotice"></div> -->
+<!-- 						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bp_name.visible">{{ bp.data.name }}</span></h4> -->
+<!-- 							        <div id="bodyContent"> -->
+<!-- 							        	<table> -->
+<!-- 											<tr ng-show="bp_slotNumber.visible"> -->
+<!-- 							        			<td><strong>{{ 'bp_slots' | i18n }}:</strong></td> -->
+<!-- 							        			<td>&nbsp;{{ bp.data.slotNumber }}</td> -->
+<!-- 							        		</tr> -->
+<!-- 							        		<tr ng-show="bp_bikeNumber.visible"> -->
+<!-- 							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td> -->
+<!-- 							        			<td>&nbsp;{{ bp.data.bikeNumber }}</td> -->
+<!-- 							        		</tr> -->
+<!-- 							        	</table> -->
+<!-- 							        </div> -->
+<!-- 						        </div> -->
+<!-- 						    </info-window> -->
+<!-- 						</marker> -->
+<!-- 						<shape name="polyline" ng-repeat="s in mapStreets" id="{{ s.id }}" path="{{ s.gpath }}"  -->
+<!--          					geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="{{ s.stroke.opacity }}" stroke-weight="{{ s.stroke.weight }}" on-click="showDetails(event, s, 3, 0)"> on-click="showInfoWindow(event, s.info_windows_cod)" -->
+<!--      					</shape> -->
+<!--      					<shape name="polyline" ng-repeat="sSel in mapSelectedStreets" id="{{ sSel.id }}" path="{{ sSel.gpath }}"  -->
+<!--          					geodesic="{{ sSel.geodesic }}" stroke-color="{{ sSel.stroke.color }}" stroke-opacity="{{ sSel.stroke.opacity }}" stroke-weight="{{ sSel.stroke.weight }}" on-click="hideDetails(event, sSel, 3)">on-click="showInfoWindow(event, s.info_windows_cod)" -->
+<!--      					</shape> -->
+<!--      					<marker ng-repeat="smSel in mapStreetSelectedMarkers" id="{{ smSel.id }}" position="{{ smSel.position }}" icon="{{ smSel.icon }}" on-click="hideDetails(event, smSel.data, 3)" ></marker> -->
+<!--      					<shape name="polyline" ng-repeat="sOcc in occupancyStreets" id="{{ sOcc.id }}" path="{{ sOcc.gpath }}"  -->
+<!--          					geodesic="{{ sOcc.geodesic }}" stroke-color="{{ sOcc.stroke.color }}" stroke-opacity="{{ sOcc.stroke.opacity }}" stroke-weight="{{ sOcc.stroke.weight }}" on-click="showOccupancy(event, sOcc, 3, 1)"> on-click="showInfoWindow(event, s.info_windows_cod)" -->
+<!--      					</shape> -->
+<!-- 						<shape name="polygon" ng-repeat="z in mapZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}" -->
+<!--          					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" -->
+<!--          					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0)">on-click="showInfoWindow(event, z.info_windows_cod)" -->
+<!--      					</shape> -->
+<!--      					<shape name="polygon" ng-repeat="zSel in mapSelectedZones" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}" -->
+<!--          					geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zSel.stroke.weight }}" -->
+<!--          					fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4)">on-click="showInfoWindow(event, z.info_windows_cod)" -->
+<!--      					</shape> -->
+<!--      					<shape name="polygon" ng-repeat="zOcc in occupancyZones" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}" -->
+<!--          					geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zOcc.stroke.weight }}" -->
+<!--          					fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showOccupancy(event, zOcc, 4, 1)">on-click="showInfoWindow(event, z.info_windows_cod)" -->
+<!--      					</shape> -->
+<!--      					<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}" -->
+<!--          					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="{{ a.stroke.opacity }}" stroke-weight="{{ a.stroke.weight }}" -->
+<!--          					fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showDetails(event, a, 5, 0)">on-click="showInfoWindow(event, a.info_windows_cod)" -->
+<!--      					</shape> -->
+<!--      					<shape name="polygon" ng-repeat="aSel in mapSelectedAreas" id="{{ aSel.id }}" path="{{ aSel.gpath }}" visible="{{ aSel.visible }}" -->
+<!--          					geodesic="{{ aSel.geodesic }}" stroke-color="{{ aSel.stroke.color }}" stroke-opacity="{{ aSel.stroke.opacity }}" stroke-weight="{{ aSel.stroke.weight }}" -->
+<!--          					fill-color="{{ aSel.fill.color }}" fill-opacity="{{ aSel.fill.opacity }}" on-click="hideDetails(event, aSel, 5)">on-click="showInfoWindow(event, aSel.info_windows_cod)" -->
+<!--      					</shape> -->
+<!--      					<shape name="polygon" ng-repeat="aOcc in occupancyAreas" id="{{ aOcc.id }}" path="{{ aOcc.gpath }}" visible="{{ aOcc.visible }}" -->
+<!--          					geodesic="{{ aOcc.geodesic }}" stroke-color="{{ aOcc.stroke.color }}" stroke-opacity="{{ aOcc.stroke.opacity }}" stroke-weight="{{ aOcc.stroke.weight }}" -->
+<!--          					fill-color="{{ aOcc.stroke.color }}" fill-opacity="{{ aOcc.fill.opacity }}" on-click="showOccupancy(event, aOcc, 5, 1)">on-click="showInfoWindow(event, z.info_windows_cod)" -->
+<!--      					</shape> -->
+<!-- 					</map> -->
+	</div>
+</div>
