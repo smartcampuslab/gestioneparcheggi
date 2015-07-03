@@ -55,6 +55,8 @@ pm.service('sharedDataService', function(){
 	this.infoPanelStatesAss = false;	// default value: the panel is closed
 	this.infoPanelStatesLoc = false;	// default value: the panel is closed
 	
+	this.isInList = false;
+	
 //	this.searchTab = '';
 //	this.searchOpt = '';
 //	this.searchVal = '';
@@ -108,6 +110,14 @@ pm.service('sharedDataService', function(){
 	
 	this.setSurname = function(value){
 		this.surname = value;
+	};
+	
+	this.setIsInList = function(value){
+		this.isInList = value;
+	};
+	
+	this.getIsInList = function(){
+		return this.isInList;
 	};
 	
 	this.isLoading = function(){

@@ -73,6 +73,12 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	    border: 0;
 	}
 	
+	div.listwrapper {
+		height: 580px; 
+		overflow-y: auto;
+		margin-bottom: 10px;
+	}
+	
 	div.tablewrapper {
 		height: 490px; 
 		overflow-y: auto;
@@ -119,6 +125,26 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		text-align: center;
 		font-weight: bold;
 		text-transform: uppercase;
+		vertical-align: middle;
+	}
+	td.detailsListTableSX {
+		width: 45%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsListTableCX {
+		width: 5%;
+		height: 20px;
+		text-align: right;
+		vertical-align: middle;
+	}
+	td.detailsListTableDX {
+		width: 50%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
 		vertical-align: middle;
 	}
 	th.myCenter {

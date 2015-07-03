@@ -541,8 +541,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		}
     	}
     };
-    // ---------------------- End Block to read conf params and show/hide elements ---------------------
-    
+    // ---------------------- End Block to read conf params and show/hide elements ---------------------   
     $scope.tabIndex = 0;
     $scope.viewparktabs = [ 
         { title:'Mappa', index: 1, content:"partials/dashboard/tabs/viewpark_map.html" },
@@ -550,10 +549,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     ];
     
     $scope.setIndex = function($index){
+    	if($index > 0){
+    		sharedDataService.setIsInList(true);
+    	} else {
+    		sharedDataService.setIsInList(false);
+    	}
        	$scope.tabIndex = $index;
     };
     
-    $scope.maxStreets = 8;
+    $scope.maxStreets = 13;
+    $scope.maxZones = 13;
     
     $scope.currentPage = 0;
     $scope.numberOfPages = function(type, list){
@@ -668,6 +673,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			parkingstructs : false
 		};
 		
+		$scope.dashboard_space_list = "microzone";
 		
 		$scope.dashboard_topics = "parkSupply";
 //		{
@@ -680,6 +686,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 //		};
 		
 	};
+	
+	$scope.showZList = false;
+	$scope.showSList = true;
+	$scope.showAList = false;
+	$scope.showPSList = false;
 	
 	$scope.changeDashboardView = function(){
 		switch($scope.dashboard_topics){
@@ -717,6 +728,35 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 		$scope.update_title_map(false, "", "");
 	};
+	
+	$scope.showZoneList = function(){
+		$scope.showZList = true;
+		$scope.showSList = false;
+		$scope.showAList = false;
+		$scope.showPSList = false;
+	};
+	
+	$scope.showAreaList = function(){
+		$scope.showAList = true;
+		$scope.showZList = false;
+		$scope.showSList = false;
+		$scope.showPSList = false;
+	};
+	
+	$scope.showStreetList = function(){
+		$scope.showSList = true;
+		$scope.showZList = false;
+		$scope.showAList = false;
+		$scope.showPSList = false;
+	};
+	
+	$scope.showStructList = function(){
+		$scope.showPSList = true;
+		$scope.showZList = false;
+		$scope.showSList = false;
+		$scope.showAList = false;
+	};
+	
 	
 	// ------------------------------- Utility methods ----------------------------------------
 	$scope.correctColor = function(value){
@@ -1427,6 +1467,18 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return tmpStreets;
 	};
 	
+	$scope.updateZonesOccupancy = function(){
+		for(var i = 0; i < $scope.zoneWS.length; i++){
+			var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.zoneWS[i].id);
+			$scope.zoneWS[i].occupancy = zoneOccupancy;
+			$scope.zoneWS[i].zColor = $scope.getOccupancyColor(zoneOccupancy);
+			var slotsInZone = $scope.getTotalSlotsInZone($scope.zoneWS[i].id);
+			$scope.zoneWS[i].slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone(zones[i].id);
+			$scope.zoneWS[i].slotOccupied = slotsInZone[1];
+		}
+	};
+	
+	
 	$scope.initZonesOnMap = function(zones, visible, type, firstInit, firstTime){
 		var zone = {};
 		var poligons = {};
@@ -1706,14 +1758,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    allStreet = $scope.mergeStreetsObjects(allStreet, oldStreets);
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
-		    if(showStreets){
-		    	$scope.updateStreetOccupancy($scope.streetWS);
-			}
-		    if(showZones){
-		    	$scope.updateZoneOccupancy(false);
-		    }
-		    if(showArea){
-		    	$scope.updateAreaOccupancy(false);
+		    var isInList = sharedDataService.getIsInList();
+		    if(!isInList){
+			    if(showStreets){
+			    	$scope.updateStreetOccupancy($scope.streetWS);
+				}
+			    if(showZones){
+			    	$scope.updateZoneOccupancy(false);
+			    }
+			    if(showArea){
+			    	$scope.updateAreaOccupancy(false);
+			    }
+		    } else {
+		    	$scope.updateZonesOccupancy();
+		    	$scope.closeLoadingMap();
 		    }
 		});
 	};
@@ -2473,7 +2531,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				};
 			    $scope.mapStreetSelectedMarkers.push(streetMarker);
 				$scope.sDetails = object;
-			    $scope.initStreetOccupancyDiagram(object);
+			    $scope.initStreetOccupancyDiagram(object, 1);
 				break;
 			case 4:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
@@ -2521,6 +2579,43 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    }
 			    }
 			    $scope.mapSelectedAreas.push(object);
+			    $scope.showAreaDet();
+				$scope.aDetails = object;
+				$scope.initAreaOccupancyDiagram(object);
+				break;	
+		};
+		$scope.occupancyOpened = true;
+		return object;
+	};
+	
+	$scope.showOccupancyInList = function(object, type){
+		switch(type){
+			case 1:
+				$scope.showPMDet();
+				$scope.pmDetails = object;
+				break;
+			case 2:
+				$scope.showPSDet();
+				$scope.psDetails = object;
+				$scope.initPsOccupancyDiagram(object);
+				break;
+			case 3:
+			    $scope.showStreetDet();
+				object.freeParkSlotSignFree = (object.freeParkSlotSignNumber > 0) ? (object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied) : 0;
+				object.freeParkSlotFree = (object.freeParkSlotNumber > 0) ? (object.freeParkSlotNumber - object.freeParkSlotOccupied) : 0;
+				object.paidSlotFree = (object.paidSlotNumber > 0 ) ? (object.paidSlotNumber - object.paidSlotOccupied) : 0;
+				object.timedParkSlotFree = (object.timedParkSlotNumber > 0) ? (object.timedParkSlotNumber - object.timedParkSlotOccupied) : 0;
+				object.handicappedSlotFree = (object.handicappedSlotNumber > 0) ? (object.handicappedSlotNumber - object.handicappedSlotOccupied) : 0;
+				object.reservedSlotFree = (object.reservedSlotNumber > 0)? (object.reservedSlotNumber - object.reservedSlotOccupied) : 0;
+				$scope.sDetails = object;
+			    $scope.initStreetOccupancyDiagram(object, 2);
+				break;
+			case 4:
+			    $scope.showZoneDet();
+				$scope.zDetails = object;
+				$scope.initZoneOccupancyDiagram(object);
+				break;
+			case 5:
 			    $scope.showAreaDet();
 				$scope.aDetails = object;
 				$scope.initAreaOccupancyDiagram(object);
@@ -2629,6 +2724,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		if($scope.mapSelectedAreas.length > 0){
 			$scope.fixIfAlreadySelected($scope.mapSelectedAreas, 5, theme);
 		}
+	};
+	
+	$scope.closeAllDetailsList = function(){
+		$scope.detailsOpened = false;
+		$scope.occupancyOpened = false;
 	};
 	
 	// Method used to check if an element is already selected
@@ -3215,12 +3315,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
       	"displayed": true
     };    
     
-    $scope.initStreetOccupancyDiagram = function(street){
+    $scope.initStreetOccupancyDiagram = function(street, type){
       	$scope.chartStreetOccupancy.data = [["Posti", "number"]];
       	$scope.chartStreetFreeParkAvailability.data = [["Posti liberi", "number"]];
       	$scope.chartStreetOccupiedParkComposition.data = [["Posti occupati", "number"]];
-      	
-      	var object = street.data;
+      	var object = null;
+      	if(type == 1){
+      		object = street.data;
+      	} else {
+      		object = street;
+      	}
       	// for Total slot
     	var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
     	var dataOcc = [ "Occupati", object.slotOccupied ];
@@ -3349,4 +3453,35 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     };
 	
    // ---------------------------------------------- End block Utilization diagrams --------------------------------------
+    
+   // ---------------------------------------------- Block for info panels ----------------------------------------------
+    
+    $scope.showInfo = function(value){
+    	switch(value){
+    		case 0:
+    			$scope.showInfo_0 = true;
+    			break;
+    		case 1:
+    			$scope.showInfo_1 = true;
+    			break;
+    		default:
+				break;
+    	}	
+    };
+    
+    $scope.hideInfo = function(value){
+    	switch(value){
+    		case 0:
+    			$scope.showInfo_0 = false;
+    			break;
+    		case 1:
+    			$scope.showInfo_1 = false;
+    			break;
+    		default:
+				break;
+    	}	
+    };
+   
+   // ------------------------------------------ End of block for info panels -------------------------------------------
+    
 }]);

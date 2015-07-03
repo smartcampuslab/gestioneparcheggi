@@ -1066,6 +1066,18 @@
     "key": "add_new_object",
     "value": "AGGIUNGI",
     "description": "Testo pulsante aggiungi in edit parcheggi"
+}, {
+    "key": "info_1",
+    "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario",
+    "description": "Testo pannello informativo per occupazione parcheggi"
+}, {
+    "key": "info_close",
+    "value": "CHIUDI",
+    "description": "Link per chiusura pannello informativo"
+}, {
+    "key": "info_alt_title",
+    "value": "Visualizza informazioni",
+    "description": "Testo per attributo alt o title del link per il pannello informativo"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"
