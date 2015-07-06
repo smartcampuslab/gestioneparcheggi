@@ -28,12 +28,15 @@ import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.manager.CSVManager;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -64,6 +67,9 @@ public class DashboardController {
 	
 	@Autowired
 	DynamicManager dynamic;
+	
+	@Autowired
+	CSVManager csvManager;
 
 	MarkerIconStorage markerIconStorage;
 
@@ -279,6 +285,21 @@ public class DashboardController {
 		response.getOutputStream().write(icon);
 		response.getOutputStream().flush();
 	}
+	
+	// --------------------------------- Part for csv files creation ------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/street/csv")
+	public @ResponseBody
+	String createStreetCSV(HttpServletRequest request, @RequestBody ArrayList<OccupancyStreet> data) {
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		try {
+			csvManager.create_file_streets(data, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per vie: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	// ------------------------------ End of part for csv files creation --------------------------------
 	
 
 }

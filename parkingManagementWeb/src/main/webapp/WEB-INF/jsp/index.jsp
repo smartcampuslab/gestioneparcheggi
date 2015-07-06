@@ -147,6 +147,32 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		text-align: left;
 		vertical-align: middle;
 	}
+	td.detailsCompressTableSX {
+		width: 25%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsCompressTableCX {
+		width: 3%;
+		height: 20px;
+		text-align: right;
+		vertical-align: middle;
+	}
+	td.detailsCompressTableDX {
+		width: 32%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsCompressTableDiagram {
+		width: 40%;
+		font-weight: bold;
+		text-align: center;
+		vertical-align: middle;
+	}
 	th.myCenter {
 		text-align: center;
 	}
