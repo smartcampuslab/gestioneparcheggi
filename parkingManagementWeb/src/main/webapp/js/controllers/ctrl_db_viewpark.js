@@ -3533,21 +3533,38 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	}	
     };
    
-   // ------------------------------------------ End of block for info panels -------------------------------------------
+    // ------------------------------------------ End of block for info panels -------------------------------------------
+    $scope.streetCvsFile = "";
+    $scope.zoneCvsFile = "";
     
     $scope.getStreetOccupancyCsv = function(){
-		$scope.areaMapReady = false;
 		var method = 'POST';
 		//var appId = sharedDataService.getConfAppId();
 		
 		var value = JSON.stringify($scope.streetWS);
-	    if($scope.showLog) console.log("Street list data : " + value);
+	    //console.log("Street list data : " + value);
 		
 	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "street/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
-	    	
+	    	$scope.streetCvsFile = result;
+	    });	
+		
+	};
+	
+	$scope.getZoneOccupancyCsv = function(){
+		var method = 'POST';
+		//var appId = sharedDataService.getConfAppId();
+		
+		var value = JSON.stringify($scope.zoneWS);
+	    console.log("Zone list data : " + value);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "zone/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.zoneCvsFile = result;
 	    });	
 		
 	};

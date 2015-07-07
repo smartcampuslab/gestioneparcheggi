@@ -40,6 +40,7 @@
     <url-pattern>/imgs/*</url-pattern>
     <url-pattern>/img/*</url-pattern>
     <url-pattern>/pdf/*</url-pattern>
+    <url-pattern>/csv/*</url-pattern>
     <url-pattern>/upload/*</url-pattern>
     <url-pattern>/css/*</url-pattern>
     <url-pattern>/lib/*</url-pattern>

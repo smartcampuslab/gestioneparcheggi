@@ -33,6 +33,7 @@ import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
+import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
 import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 import java.io.IOException;
@@ -44,6 +45,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -289,16 +292,147 @@ public class DashboardController {
 	// --------------------------------- Part for csv files creation ------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/street/csv")
 	public @ResponseBody
-	String createStreetCSV(HttpServletRequest request, @RequestBody ArrayList<OccupancyStreet> data) {
+	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in street csv creation.");
+		ArrayList<OccupancyStreet> streetData = new ArrayList<OccupancyStreet>();
 		String createdFile = "";
+		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		logger.info("Current path: " + path);
+		
+		JSONArray streetList = new JSONArray(data);
+		logger.info("Street list size: " + streetList.length());
+    	
+	    for(int i = 0; i < streetList.length(); i++){
+	    	//String practiceString = "{ \"id\": \"";
+	    	JSONObject street = streetList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = street.getString("id");
+	    	String id_app = street.getString("id_app");
+	    	String streetReference = street.getString("streetReference");
+	    	Integer slotNumber = street.getInt("slotNumber");
+	    	Integer handicappedSlotNumber = street.getInt("handicappedSlotNumber");
+	    	Integer handicappedSlotOccupied = street.getInt("handicappedSlotOccupied");
+	    	Integer reservedSlotNumber = street.getInt("reservedSlotNumber");
+	    	Integer reservedSlotOccupied = street.getInt("reservedSlotOccupied");
+	    	Integer timedParkSlotNumber = street.getInt("timedParkSlotNumber");
+	    	Integer timedParkSlotOccupied = street.getInt("timedParkSlotOccupied");
+	    	Integer freeParkSlotNumber = street.getInt("freeParkSlotNumber");
+	    	Integer freeParkSlotOccupied = (!street.isNull("freeParkSlotOccupied")) ? street.getInt("freeParkSlotOccupied") : 0;
+	    	Integer freeParkSlotSignNumber = street.getInt("freeParkSlotSignNumber");
+	    	Integer freeParkSlotSignOccupied = street.getInt("freeParkSlotSignOccupied");
+	    	Integer paidSlotNumber = street.getInt("paidSlotNumber");
+	    	Integer paidSlotOccupied = street.getInt("paidSlotOccupied");
+	    	Integer unusuableSlotNumber = (!street.isNull("unusuableSlotNumber")) ? street.getInt("unusuableSlotNumber") : 0;
+	    	Boolean subscritionAllowedPark = street.getBoolean("subscritionAllowedPark");
+	    	String rateAreaId = street.getString("rateAreaId");
+	    	String color = street.getString("color");
+	    	Integer occupancyRate = street.getInt("occupancyRate");
+	    	Integer freeParkOccupied = street.getInt("freeParkOccupied");
+	    	Integer slotOccupied = street.getInt("slotOccupied");
+	    	String area_name = street.getString("area_name");
+	    	String area_color = street.getString("area_color");
+	    	OccupancyStreet os = new OccupancyStreet();
+	    	os.setId(id);
+	    	os.setId_app(id_app);
+	    	os.setStreetReference(streetReference);
+	    	os.setSlotNumber(slotNumber);
+	    	os.setHandicappedSlotNumber(handicappedSlotNumber);
+	    	os.setHandicappedSlotOccupied(handicappedSlotOccupied);
+	    	os.setReservedSlotNumber(reservedSlotNumber);
+	    	os.setReservedSlotOccupied(reservedSlotOccupied);
+	    	os.setTimedParkSlotNumber(timedParkSlotNumber);
+	    	os.setTimedParkSlotOccupied(timedParkSlotOccupied);
+	    	os.setFreeParkSlotNumber(freeParkSlotNumber);
+	    	os.setFreeParkSlotOccupied(freeParkSlotOccupied);
+	    	os.setFreeParkSlotSignNumber(freeParkSlotSignNumber);
+	    	os.setFreeParkSlotSignOccupied(freeParkSlotSignOccupied);
+	    	os.setPaidSlotNumber(paidSlotNumber);
+	    	os.setPaidSlotOccupied(paidSlotOccupied);
+	    	os.setUnusuableSlotNumber(unusuableSlotNumber);
+	    	os.setSubscritionAllowedPark(subscritionAllowedPark);
+	    	os.setRateAreaId(rateAreaId);
+	    	os.setColor(color);
+	    	os.setOccupancyRate(occupancyRate);
+	    	os.setFreeParkOccupied(freeParkOccupied);
+	    	os.setSlotOccupied(slotOccupied);
+	    	os.setArea_name(area_name);
+	    	os.setArea_color(area_color);
+	    	streetData.add(os);
+	    }	
+		
 		try {
-			csvManager.create_file_streets(data, path);
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_file_streets(streetData, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per vie: " + e.getMessage());
 		}
+
+//		response.setHeader("Content-Disposition",
+//				"attachment; filename=\"street_data.csv\"");
+//		response.setContentLength(return_data.length);
+//		response.setContentType("application/csv");
+//		try {
+//			response.getOutputStream().write(return_data);
+//			response.getOutputStream().flush();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
 		return createdFile;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/zone/csv")
+	public @ResponseBody
+	String createZoneCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in zone csv creation.");
+		ArrayList<OccupancyZone> zoneData = new ArrayList<OccupancyZone>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray zoneList = new JSONArray(data);
+		logger.info("Zone list size: " + zoneList.length());
+    	
+	    for(int i = 0; i < zoneList.length(); i++){
+	    	//String practiceString = "{ \"id\": \"";
+	    	JSONObject zone = zoneList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = zone.getString("id");
+	    	String id_app = zone.getString("id_app");
+	    	String name = zone.getString("name");
+	    	String macro = zone.getString("submacro");
+	    	Integer slotNumber = zone.getInt("slotNumber");
+	    	String color = zone.getString("color");
+	    	String type = zone.getString("type");
+	    	String note = zone.getString("note");
+	    	Integer occupancy = zone.getInt("occupancy");
+	    	Integer slotOccupied = zone.getInt("slotOccupied");
+	    	
+	    	OccupancyZone oz = new OccupancyZone();
+	    	oz.setId(id);
+	    	oz.setId_app(id_app);
+	    	oz.setName(name);
+	    	oz.setSubmacro(macro);
+	    	oz.setSlotNumber(slotNumber);
+	    	oz.setColor(color);
+	    	oz.setType(type);
+	    	oz.setNote(note);
+	    	oz.setOccupancy(occupancy);
+	    	oz.setSlotOccupied(slotOccupied);
+	    	zoneData.add(oz);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_file_zones(zoneData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per zone: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	
 	// ------------------------------ End of part for csv files creation --------------------------------
 	
 

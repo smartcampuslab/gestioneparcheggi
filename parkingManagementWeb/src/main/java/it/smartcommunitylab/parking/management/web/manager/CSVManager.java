@@ -1,6 +1,22 @@
+/*******************************************************************************
+ * Copyright 2015 Fondazione Bruno Kessler
+ * 
+ *    Licensed under the Apache License, Version 2.0 (the "License");
+ *    you may not use this file except in compliance with the License.
+ *    You may obtain a copy of the License at
+ * 
+ *        http://www.apache.org/licenses/LICENSE-2.0
+ * 
+ *    Unless required by applicable law or agreed to in writing, software
+ *    distributed under the License is distributed on an "AS IS" BASIS,
+ *    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ *    See the License for the specific language governing permissions and
+ *    limitations under the License.
+ ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
+import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -23,12 +39,12 @@ public class CSVManager {
 		// TODO Auto-generated constructor stub
 	}
 	
-	//@SuppressWarnings("restriction")
+	// Method used to create the csv file for the street occupation
 	public String create_file_streets(ArrayList<OccupancyStreet> streets, String path) throws FileNotFoundException, UnsupportedEncodingException{
-			
 		String name = FILE_NAME + "Street.csv";
+		String long_name = path + "/" + name;
 		try {
-			FileWriter writer = new FileWriter(path + name);
+			FileWriter writer = new FileWriter(long_name);
 			
 			// Added the table cols headers
 			writer.append("Nome");
@@ -54,7 +70,7 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getAreaName());	// to convert to area name
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getOccupation() + "");
+				writer.append(s.getOccupancyRate() + "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -69,15 +85,63 @@ public class CSVManager {
 				writer.append(CSV_NEWLINE);
 			}
 			
+			//String arr = writer.toString();
+			//ba = arr.getBytes();
 			writer.flush();
 			writer.close();
 			
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			logger.error("Error in csv creation: " + e1);
+			logger.error("Error in street csv creation: " + e1);
 		}
-		return name;
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the zone occupation
+	public String create_file_zones(ArrayList<OccupancyZone> zones, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "Zone.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Macro");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupazione");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(OccupancyZone z : zones){
+				writer.append(z.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSubmacro());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getOccupancy() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSlotOccupied() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			
+			//String arr = writer.toString();
+			//ba = arr.getBytes();
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in zone csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
 	}
 
 }

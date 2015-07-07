@@ -24,7 +24,6 @@ public class OccupancyStreet {
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String streetReference;
 	private String areaName;
-	private Integer occupation;
 	private Integer slotNumber;
 	private Integer handicappedSlotNumber;	// off_h
 	private Integer handicappedSlotOccupied;
@@ -39,8 +38,16 @@ public class OccupancyStreet {
 	private Integer paidSlotNumber;			// off_p
 	private Integer paidSlotOccupied;
 	private Integer unusuableSlotNumber;	// off_in
+	private boolean subscritionAllowedPark;
+	private String rateAreaId;				// I need this field in data log
+	private String color;
 	private List<String> zones;
 	private List<String> parkingMeters;
+	private Integer occupancyRate;
+	private Integer freeParkOccupied;
+	private Integer slotOccupied;
+	private String area_name;
+	private String area_color;
 
 	public String getId() {
 		return id;
@@ -62,16 +69,56 @@ public class OccupancyStreet {
 		return areaName;
 	}
 
-	public Integer getOccupation() {
-		return occupation;
-	}
-
 	public void setAreaName(String areaName) {
 		this.areaName = areaName;
 	}
 
-	public void setOccupation(Integer occupation) {
-		this.occupation = occupation;
+	public String getColor() {
+		return color;
+	}
+
+	public Integer getOccupancyRate() {
+		return occupancyRate;
+	}
+
+	public Integer getFreeParkOccupied() {
+		return freeParkOccupied;
+	}
+
+	public Integer getSlotOccupied() {
+		return slotOccupied;
+	}
+
+	public String getArea_name() {
+		return area_name;
+	}
+
+	public String getArea_color() {
+		return area_color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
+	public void setOccupancyRate(Integer occupancyRate) {
+		this.occupancyRate = occupancyRate;
+	}
+
+	public void setFreeParkOccupied(Integer freeParkOccupied) {
+		this.freeParkOccupied = freeParkOccupied;
+	}
+
+	public void setSlotOccupied(Integer slotOccupied) {
+		this.slotOccupied = slotOccupied;
+	}
+
+	public void setArea_name(String area_name) {
+		this.area_name = area_name;
+	}
+
+	public void setArea_color(String area_color) {
+		this.area_color = area_color;
 	}
 
 	public String getStreetReference() {
@@ -220,13 +267,29 @@ public class OccupancyStreet {
 		this.parkingMeters = parkingMeters;
 	}
 	
+	public boolean isSubscritionAllowedPark() {
+		return subscritionAllowedPark;
+	}
+
+	public String getRateAreaId() {
+		return rateAreaId;
+	}
+
+	public void setSubscritionAllowedPark(boolean subscritionAllowedPark) {
+		this.subscritionAllowedPark = subscritionAllowedPark;
+	}
+
+	public void setRateAreaId(String rateAreaId) {
+		this.rateAreaId = rateAreaId;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"id_app\":\"" + getId_app() + "\",";
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"areaName\":\"" + getAreaName() + "\",";
-		json += "\"occupation\":\"" + getOccupation() + "\",";
+		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
 		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
 		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";

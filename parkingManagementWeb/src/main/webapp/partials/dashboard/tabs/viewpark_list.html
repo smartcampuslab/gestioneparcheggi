@@ -167,7 +167,9 @@
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="left">
-						<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">CSV</button>
+						<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">crea CSV</button>
+						&nbsp;&nbsp;
+						<a class="btn btn-success" target="_blank" href="{{ streetCvsFile }}">Scarica CSV</a>
 					</td>
 				</tr>
 			</table>	
@@ -225,6 +227,8 @@
 					</td>
 					<td width="33%" align="left">
 						<button class="btn btn-success" ng-click="getZoneOccupancyCsv()">CSV</button>
+						&nbsp;&nbsp;
+						<a class="btn btn-success" target="_blank" href="{{ zoneCvsFile }}">Scarica CSV</a>
 					</td>
 				</tr>
 			</table>
