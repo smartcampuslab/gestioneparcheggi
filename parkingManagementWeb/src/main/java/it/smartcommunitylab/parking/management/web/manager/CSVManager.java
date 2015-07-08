@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
+import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
 
@@ -31,7 +33,7 @@ import org.springframework.stereotype.Service;
 public class CSVManager {
 	
 	private static final Logger logger = Logger.getLogger(CSVManager.class);
-	private static final String FILE_NAME = "exportedList";
+	private static final String FILE_NAME = "report";
 	private static final String CSV_SEPARATOR = ",";
 	private static final String CSV_NEWLINE = "\n";
 
@@ -140,6 +142,98 @@ public class CSVManager {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in zone csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the area occupation
+	public String create_file_areas(ArrayList<OccupancyRateArea> areas, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "Area.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tariffa");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupazione");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(OccupancyRateArea a : areas){
+				writer.append(a.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getFee() + "");	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getOccupancy() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getSlotOccupied() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			
+			//String arr = writer.toString();
+			//ba = arr.getBytes();
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in area csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the parking structures occupation
+	public String create_file_structs(ArrayList<OccupancyParkingStructure> structures, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "Structure.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Indirizzo");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupazione");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(OccupancyParkingStructure ps : structures){
+				writer.append(ps.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getStreetReference());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getOccupancyRate() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getSlotOccupied() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			
+			//String arr = writer.toString();
+			//ba = arr.getBytes();
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in structures csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
 	}

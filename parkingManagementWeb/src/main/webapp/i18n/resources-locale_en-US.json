@@ -1079,6 +1079,14 @@
     "value": "Visualizza informazioni",
     "description": "Testo per attributo alt o title del link per il pannello informativo"
 }, {
+    "key": "csv_btn_create",
+    "value": "Crea CSV",
+    "description": "Testo bottone per creazione del file csv"
+}, {
+    "key": "csv_link_alt_title",
+    "value": "Scarica file csv",
+    "description": "Testo per attributo alt o title del link per il download del file csv"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {

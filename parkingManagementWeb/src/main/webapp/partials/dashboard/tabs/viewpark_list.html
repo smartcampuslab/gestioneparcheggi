@@ -105,6 +105,71 @@
                         <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateHour(hourSliderValue)" />
                     </td>
 				</tr>
+				<tr>
+					<td>
+						<hr/>
+					</td>
+				</tr>
+				<tr ng-if="showSList">
+					<td>
+						<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">{{ 'csv_btn_create' | i18n }}</button>
+					</td>
+				</tr>
+				<tr ng-if="showSList">
+					<td>
+						&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr ng-if="showSList && streetCvsFile!=''">	
+					<td>
+						<a target="_blank" href="{{ streetCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ streetCvsFileName }}</a>
+					</td>	
+				</tr>
+				<tr ng-if="showZList">
+					<td>
+						<button class="btn btn-success" ng-click="getZoneOccupancyCsv()">{{ 'csv_btn_create' | i18n }}</button>
+					</td>
+				</tr>
+				<tr ng-if="showZList">
+					<td>
+						&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr ng-if="showZList && zoneCvsFile!=''">	
+					<td>
+						<a target="_blank" href="{{ zoneCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ zoneCvsFileName }}</a>
+					</td>	
+				</tr>
+				<tr ng-if="showAList">
+					<td>
+						<button class="btn btn-success" ng-click="getAreaOccupancyCsv()">{{ 'csv_btn_create' | i18n }}</button>
+					</td>
+				</tr>
+				<tr ng-if="showAList">
+					<td>
+						&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr ng-if="showAList && areaCvsFile!=''">	
+					<td>
+						<a target="_blank" href="{{ areaCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ areaCvsFileName }}</a>
+					</td>	
+				</tr>
+				<tr ng-if="showPSList">
+					<td>
+						<button class="btn btn-success" ng-click="getStructureOccupancyCsv()">{{ 'csv_btn_create' | i18n }}</button>
+					</td>
+				</tr>
+				<tr ng-if="showPSList">
+					<td>
+						&nbsp;&nbsp;
+					</td>
+				</tr>
+				<tr ng-if="showPSList && structCvsFile!=''">	
+					<td>
+						<a target="_blank" href="{{ structCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ structCvsFileName }}</a>
+					</td>	
+				</tr>
 			</table>
 <!-- 						</div> -->
 		</div>	
@@ -167,9 +232,9 @@
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="left">
-						<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">crea CSV</button>
-						&nbsp;&nbsp;
-						<a class="btn btn-success" target="_blank" href="{{ streetCvsFile }}">Scarica CSV</a>
+<!-- 						<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">Crea CSV</button> -->
+<!-- 						&nbsp;&nbsp; -->
+<!-- 						<a class="btn btn-success" target="_blank" href="{{ streetCvsFile }}">Scarica CSV</a> -->
 					</td>
 				</tr>
 			</table>	
@@ -226,14 +291,12 @@
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="left">
-						<button class="btn btn-success" ng-click="getZoneOccupancyCsv()">CSV</button>
-						&nbsp;&nbsp;
-						<a class="btn btn-success" target="_blank" href="{{ zoneCvsFile }}">Scarica CSV</a>
+<!-- 						<button class="btn btn-success" ng-click="getZoneOccupancyCsv()">Crea CSV</button> -->
+<!-- 						&nbsp;&nbsp; -->
+<!-- 						<a class="btn btn-success" target="_blank" href="{{ zoneCvsFile }}">Scarica CSV</a> -->
 					</td>
 				</tr>
-			</table>
-			
-					
+			</table>		
 		</div>
 		<div ng-show="showAList">
 			<div class="tablewrapper">
@@ -275,13 +338,25 @@
 					</tr>
 				</table>
 			</div>
-			<button class="btn btn-success"
-				ng-disabled="currentPage == 0"
-				ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-				{{currentPage+1}}/{{numberOfPages(1)}}
-			<button class="btn btn-success"
-				ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
-				ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-success"
+							ng-disabled="currentPage == 0"
+							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPage+1}}/{{numberOfPages(1)}}
+						<button class="btn btn-success"
+							ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
+							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="left">
+<!-- 						<button class="btn btn-success" ng-click="getAreaOccupancyCsv()">Crea CSV</button> -->
+<!-- 						&nbsp;&nbsp; -->
+<!-- 						<a class="btn btn-success" target="_blank" href="{{ areaCvsFile }}">Scarica CSV</a> -->
+					</td>
+				</tr>
+			</table>	
 		</div>
 		<div ng-show="showPSList">
 			<div class="tablewrapper">
@@ -324,13 +399,25 @@
 					</tr>
 				</table>
 			</div>
-			<button class="btn btn-success"
-					ng-disabled="currentPage == 0"
-					ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-				{{currentPage+1}}/{{numberOfPages(4)}}
-			<button class="btn btn-success"
-					ng-disabled="currentPage >= pstructWS.length/maxPStructs - 1"
-					ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-success"
+								ng-disabled="currentPage == 0"
+								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPage+1}}/{{numberOfPages(4)}}
+						<button class="btn btn-success"
+								ng-disabled="currentPage >= pstructWS.length/maxPStructs - 1"
+								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="left">
+<!-- 						<button class="btn btn-success" ng-click="getStructureOccupancyCsv()">Crea CSV</button> -->
+<!-- 						&nbsp;&nbsp; -->
+<!-- 						<a class="btn btn-success" target="_blank" href="{{ structCvsFile }}">Scarica CSV</a> -->
+					</td>
+				</tr>
+			</table>
 		</div>	
 				
 <!-- 					<map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}"> -->

@@ -32,6 +32,8 @@ import it.smartcommunitylab.parking.management.web.manager.CSVManager;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
 import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
@@ -304,32 +306,31 @@ public class DashboardController {
 		logger.info("Street list size: " + streetList.length());
     	
 	    for(int i = 0; i < streetList.length(); i++){
-	    	//String practiceString = "{ \"id\": \"";
 	    	JSONObject street = streetList.getJSONObject(i);
 	    	//logger.error(String.format("Street Data: %s", street.toString()));
 	    	String id = street.getString("id");
 	    	String id_app = street.getString("id_app");
 	    	String streetReference = street.getString("streetReference");
-	    	Integer slotNumber = street.getInt("slotNumber");
-	    	Integer handicappedSlotNumber = street.getInt("handicappedSlotNumber");
-	    	Integer handicappedSlotOccupied = street.getInt("handicappedSlotOccupied");
-	    	Integer reservedSlotNumber = street.getInt("reservedSlotNumber");
-	    	Integer reservedSlotOccupied = street.getInt("reservedSlotOccupied");
-	    	Integer timedParkSlotNumber = street.getInt("timedParkSlotNumber");
-	    	Integer timedParkSlotOccupied = street.getInt("timedParkSlotOccupied");
-	    	Integer freeParkSlotNumber = street.getInt("freeParkSlotNumber");
+	    	Integer slotNumber = (!street.isNull("slotNumber")) ? street.getInt("slotNumber") : 0;
+	    	Integer handicappedSlotNumber = (!street.isNull("handicappedSlotNumber")) ? street.getInt("handicappedSlotNumber") : 0;
+	    	Integer handicappedSlotOccupied = (!street.isNull("handicappedSlotOccupied")) ? street.getInt("handicappedSlotOccupied") : 0;
+	    	Integer reservedSlotNumber = (!street.isNull("reservedSlotNumber")) ? street.getInt("reservedSlotNumber") : 0;
+	    	Integer reservedSlotOccupied = (!street.isNull("reservedSlotOccupied")) ? street.getInt("reservedSlotOccupied") : 0;
+	    	Integer timedParkSlotNumber = (!street.isNull("timedParkSlotNumber")) ? street.getInt("timedParkSlotNumber") : 0;
+	    	Integer timedParkSlotOccupied = (!street.isNull("timedParkSlotOccupied")) ? street.getInt("timedParkSlotOccupied") : 0;
+	    	Integer freeParkSlotNumber = (!street.isNull("freeParkSlotNumber")) ? street.getInt("freeParkSlotNumber") : 0;
 	    	Integer freeParkSlotOccupied = (!street.isNull("freeParkSlotOccupied")) ? street.getInt("freeParkSlotOccupied") : 0;
-	    	Integer freeParkSlotSignNumber = street.getInt("freeParkSlotSignNumber");
-	    	Integer freeParkSlotSignOccupied = street.getInt("freeParkSlotSignOccupied");
-	    	Integer paidSlotNumber = street.getInt("paidSlotNumber");
-	    	Integer paidSlotOccupied = street.getInt("paidSlotOccupied");
+	    	Integer freeParkSlotSignNumber = (!street.isNull("freeParkSlotSignNumber")) ? street.getInt("freeParkSlotSignNumber") : 0;
+	    	Integer freeParkSlotSignOccupied = (!street.isNull("freeParkSlotSignOccupied")) ? street.getInt("freeParkSlotSignOccupied") : 0;
+	    	Integer paidSlotNumber = (!street.isNull("paidSlotNumber")) ? street.getInt("paidSlotNumber") : 0;
+	    	Integer paidSlotOccupied = (!street.isNull("paidSlotOccupied")) ? street.getInt("paidSlotOccupied") : 0;
 	    	Integer unusuableSlotNumber = (!street.isNull("unusuableSlotNumber")) ? street.getInt("unusuableSlotNumber") : 0;
-	    	Boolean subscritionAllowedPark = street.getBoolean("subscritionAllowedPark");
+	    	Boolean subscritionAllowedPark = (!street.isNull("subscritionAllowedPark")) ? street.getBoolean("subscritionAllowedPark") : false;
 	    	String rateAreaId = street.getString("rateAreaId");
 	    	String color = street.getString("color");
-	    	Integer occupancyRate = street.getInt("occupancyRate");
-	    	Integer freeParkOccupied = street.getInt("freeParkOccupied");
-	    	Integer slotOccupied = street.getInt("slotOccupied");
+	    	Integer occupancyRate = (!street.isNull("occupancyRate")) ? street.getInt("occupancyRate") : -1;
+	    	Integer freeParkOccupied = (!street.isNull("freeParkOccupied")) ? street.getInt("freeParkOccupied") : -1;
+	    	Integer slotOccupied = (!street.isNull("slotOccupied")) ? street.getInt("slotOccupied") : -1;
 	    	String area_name = street.getString("area_name");
 	    	String area_color = street.getString("area_color");
 	    	OccupancyStreet os = new OccupancyStreet();
@@ -395,30 +396,28 @@ public class DashboardController {
 		logger.info("Zone list size: " + zoneList.length());
     	
 	    for(int i = 0; i < zoneList.length(); i++){
-	    	//String practiceString = "{ \"id\": \"";
 	    	JSONObject zone = zoneList.getJSONObject(i);
 	    	//logger.error(String.format("Street Data: %s", street.toString()));
 	    	String id = zone.getString("id");
 	    	String id_app = zone.getString("id_app");
 	    	String name = zone.getString("name");
 	    	String macro = zone.getString("submacro");
-	    	Integer slotNumber = zone.getInt("slotNumber");
 	    	String color = zone.getString("color");
 	    	String type = zone.getString("type");
 	    	String note = zone.getString("note");
-	    	Integer occupancy = zone.getInt("occupancy");
-	    	Integer slotOccupied = zone.getInt("slotOccupied");
-	    	
+	    	Integer occupancy = (!zone.isNull("occupancy")) ? zone.getInt("occupancy") : 0;
+	    	Integer slotNumber = (!zone.isNull("slotNumber")) ? zone.getInt("slotNumber") : 0;
+	    	Integer slotOccupied = (!zone.isNull("slotOccupied")) ? zone.getInt("slotOccupied") : 0;
 	    	OccupancyZone oz = new OccupancyZone();
 	    	oz.setId(id);
 	    	oz.setId_app(id_app);
 	    	oz.setName(name);
 	    	oz.setSubmacro(macro);
-	    	oz.setSlotNumber(slotNumber);
 	    	oz.setColor(color);
 	    	oz.setType(type);
 	    	oz.setNote(note);
 	    	oz.setOccupancy(occupancy);
+	    	oz.setSlotNumber(slotNumber);
 	    	oz.setSlotOccupied(slotOccupied);
 	    	zoneData.add(oz);
 	    }	
@@ -432,6 +431,111 @@ public class DashboardController {
 		return createdFile;
 	}
 	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/area/csv")
+	public @ResponseBody
+	String createAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in area csv creation.");
+		ArrayList<OccupancyRateArea> areaData = new ArrayList<OccupancyRateArea>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray areaList = new JSONArray(data);
+		logger.info("Area list size: " + areaList.length());
+    	
+	    for(int i = 0; i < areaList.length(); i++){
+	    	JSONObject area = areaList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = area.getString("id");
+	    	String id_app = area.getString("id_app");
+	    	String name = area.getString("name");
+	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
+	    	String timeSlot = area.getString("timeSlot");
+	    	String smsCode = area.getString("smsCode");
+	    	String color = area.getString("color");
+	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
+	    	Integer occupancy = (!area.isNull("occupancy")) ? area.getInt("occupancy") : 0;
+	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
+	    	Integer slotOccupied = (!area.isNull("slotOccupied")) ? area.getInt("slotOccupied") : 0;
+	    	OccupancyRateArea oa = new OccupancyRateArea();
+	    	oa.setId(id);
+	    	oa.setId_app(id_app);
+	    	oa.setName(name);
+	    	oa.setFee(fee);
+	    	oa.setTimeSlot(timeSlot);
+	    	oa.setSmsCode(smsCode);
+	    	oa.setColor(color);
+	    	oa.setNote(note);
+	    	oa.setOccupancy(occupancy);
+	    	oa.setSlotNumber(slotNumber);
+	    	oa.setSlotOccupied(slotOccupied);
+	    	areaData.add(oa);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_file_areas(areaData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/parkingstructures/csv")
+	public @ResponseBody
+	String createStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in parkingstructures csv creation.");
+		ArrayList<OccupancyParkingStructure> structData = new ArrayList<OccupancyParkingStructure>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray structList = new JSONArray(data);
+		logger.info("Structs list size: " + structList.length());
+    	
+	    for(int i = 0; i < structList.length(); i++){
+	    	JSONObject struct = structList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = struct.getString("id");
+	    	String id_app = struct.getString("id_app");
+	    	String name = struct.getString("name");
+	    	String streetReference = struct.getString("streetReference");
+	    	String managementMode = struct.getString("managementMode");
+	    	String phoneNumber = struct.getString("phoneNumber");
+	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
+	    	String timeSlot = struct.getString("timeSlot");
+	    	Integer occupancyRate = (!struct.isNull("occupancyRate")) ? struct.getInt("occupancyRate") : 0;
+	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
+	    	Integer slotOccupied = (!struct.isNull("slotOccupied")) ? struct.getInt("slotOccupied") : 0;
+	    	Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
+	    	Integer handicappedSlotOccupied = (!struct.isNull("handicappedSlotOccupied")) ? struct.getInt("handicappedSlotOccupied") : 0;
+	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
+	    	OccupancyParkingStructure ops = new OccupancyParkingStructure();
+	    	ops.setId(id);
+	    	ops.setId_app(id_app);
+	    	ops.setName(name);
+	    	ops.setStreetReference(streetReference);
+	    	ops.setManagementMode(managementMode);
+	    	ops.setPhoneNumber(phoneNumber);
+	    	ops.setFee(fee);
+	    	ops.setTimeSlot(timeSlot);
+	    	ops.setOccupancyRate(occupancyRate);
+	    	ops.setSlotNumber(slotNumber);
+	    	ops.setSlotOccupied(slotOccupied);
+	    	ops.setHandicappedSlotNumber(handicappedSlotNumber);
+	    	ops.setHandicappedSlotOccupied(handicappedSlotOccupied);
+	    	ops.setUnusuableSlotNumber(unusuableSlotNumber);
+	    	structData.add(ops);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_file_structs(structData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
+		}
+		return createdFile;
+	}	
 	
 	// ------------------------------ End of part for csv files creation --------------------------------
 	
