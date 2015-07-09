@@ -30,9 +30,12 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.log4j.Logger;
 
 public class MarkerIconStorage {
 
+	private static final Logger logger = Logger.getLogger(MarkerIconStorage.class);
+	
 	private static final String ICON_FOLDER = "imgs/markerIcons/";
 	private static final String TEMPLATE_FILE = "defaultTemplate.png";
 	private static final String TEMPLATE_PREFIX = "template_";
@@ -74,6 +77,7 @@ public class MarkerIconStorage {
 
 	public byte[] getMarkerIcon(String basePath, String company, String entity,
 			String color) throws IOException {
+		//logger.info(String.format("In getMarkerIcon: %s, %s, %s", company, entity, color));
 		if (color == null) {
 			return getTemplateMarker(basePath, company, entity);
 		}
@@ -162,9 +166,11 @@ public class MarkerIconStorage {
 
 	private void generateColoredMarker(String basePath, String company,
 			String entity, String color) throws IOException {
+		//logger.info(String.format("In generateColoredMarker: %s, %s, %s, %s", basePath, company, entity, color));
 		List<String> markerDetails = getMarkerIconDetails(company, entity);
 		String markerIcon = TEMPLATE_FILE;
 		Color colorSample = DEFAULT_TEMPLATE_SAMPLE_COLOR;
+		//logger.info(String.format("Sample color: %s, (%s, %s, %s)", colorSample.getRGB(), colorSample.getRed(), colorSample.getGreen(), colorSample.getBlue()));
 		if (new File(basePath + ICON_FOLDER + TEMPLATE_PREFIX + entity
 				+ TEMPLATE_EXT).exists()) {
 			markerIcon = TEMPLATE_PREFIX + entity + TEMPLATE_EXT;
@@ -172,11 +178,13 @@ public class MarkerIconStorage {
 			if (colorSample == null) {
 				colorSample = DEFAULT_TEMPLATE_SAMPLE_COLOR;
 			}
+			//logger.info(String.format("Sample color: %s, (%s, %s, %s)", colorSample.getRGB(), colorSample.getRed(), colorSample.getGreen(), colorSample.getBlue()));
 		}
 		if (markerDetails != null) {
 			markerIcon = markerDetails.get(0);
 			colorSample = new Color(Integer.parseInt(markerDetails.get(1), 16));
 		}
+		//logger.info(String.format("Sample color: %s, (%s, %s, %s)", colorSample.getRGB(), colorSample.getRed(), colorSample.getGreen(), colorSample.getBlue()));
 		BufferedImage templateIcon = ImageIO.read(new File(getIconFolder(
 				basePath, ICON_FOLDER_TEMPLATE) + markerIcon));
 		BufferedImage coloredMarker = changeColor(templateIcon, colorSample,
@@ -199,6 +207,7 @@ public class MarkerIconStorage {
 
 	private static BufferedImage changeColor(BufferedImage image, Color mask,
 			Color replacement) {
+		//logger.info(String.format("In changeColor: %s, %s, %s", image, mask, replacement));
 		BufferedImage destImage = new BufferedImage(image.getWidth(),
 				image.getHeight(), BufferedImage.TYPE_INT_ARGB);
 
@@ -210,6 +219,8 @@ public class MarkerIconStorage {
 			for (int j = 0; j < destImage.getHeight(); j++) {
 
 				int destRGB = destImage.getRGB(i, j);
+				
+				//logger.info(String.format("mask rgb: %d, dest rgb: %d", mask.getRGB(), destRGB));
 
 				if (matches(mask.getRGB(), destRGB)) {
 					int rgbnew = getNewPixelRGB(replacement.getRGB(), destRGB);
@@ -224,6 +235,7 @@ public class MarkerIconStorage {
 	private static int getNewPixelRGB(int replacement, int destRGB) {
 		float[] destHSB = getHSBArray(destRGB);
 		float[] replHSB = getHSBArray(replacement);
+		//logger.info(String.format("getNewPixelRGB: %d, %d", replacement, destRGB));
 
 		int rgbnew = Color.HSBtoRGB(replHSB[HUE], replHSB[SATURATION],
 				destHSB[BRIGHTNESS]);
@@ -233,9 +245,11 @@ public class MarkerIconStorage {
 	private static boolean matches(int maskRGB, int destRGB) {
 		float[] hsbMask = getHSBArray(maskRGB);
 		float[] hsbDest = getHSBArray(destRGB);
-
+		//logger.info(String.format("hsbMask: %s, hsbDest: %s", hsbMask, hsbDest));
+		
 		if (hsbMask[HUE] == hsbDest[HUE]
 				&& hsbMask[SATURATION] == hsbDest[SATURATION]
+				&& hsbMask[BRIGHTNESS] == hsbDest[BRIGHTNESS]	//nb: remove to have an icon with best bordes
 				&& getRGBArray(destRGB)[ALPHA] != TRANSPARENT) {
 
 			return true;

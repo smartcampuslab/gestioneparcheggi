@@ -1313,8 +1313,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			case 1 : 
 				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
-				myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
-				//myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				//myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
+				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				cid = "c" + marker.id;
 				break;
 			case 2 : 
@@ -2294,9 +2294,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.showDetails = function(event, object, type, theme){
+		
 		$scope.theme = theme;	// used in close details panel
 		switch(type){
 			case 1:
+				var company = "";
+				var appId = sharedDataService.getConfAppId();
+				if(appId == 'rv'){ 
+					company = "amr";
+				} else {
+					company = "tm";
+				}
+				var baseUrl = "rest/nosec";
+				var defaultMarkerColor = "FF0000";
+				var myAreaPm = {};
+				
 				if(theme == 0){
 					for(var i = 0; i < $scope.mapParkingMetersMarkers.length; i++){
 						if($scope.mapParkingMetersMarkers[i].id == object.id){
@@ -2313,7 +2325,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
 				$scope.showPMDet();
 				//object.options.animation = "BOUNCE";
-				object.icon = $scope.useSelectedIcon(object.icon);
+				//object.icon = $scope.useSelectedIcon(object.icon);
+				myAreaPm = $scope.getLocalAreaById(object.data.areaId);
+				object.icon = baseUrl+'/marker/'+company+'/parcometroneg/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				$scope.mapParkingMetersSelectedMarkers.push(object);
 				$scope.pmDetails = object;
 				break;
@@ -2433,7 +2447,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.occupancyOpened = false;
 		switch(type){
 		case 1:
-			object.icon = $scope.useNormalIcon(object.icon);
+			var company = "";
+			var appId = sharedDataService.getConfAppId();
+			if(appId == 'rv'){ 
+				company = "amr";
+			} else {
+				company = "tm";
+			}
+			var baseUrl = "rest/nosec";
+			var defaultMarkerColor = "FF0000";
+			var myAreaPm = {};
+			myAreaPm = $scope.getLocalAreaById(object.data.areaId);
+			//object.options.animation = "";
+			//object.icon = $scope.useNormalIcon(object.icon);
+			object.icon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+			//object.icon = $scope.useNormalIcon(object.icon);
 			if($scope.mapParkingMetersMarkers.length > 0){
 				$scope.mapParkingMetersMarkers.push(object);
 			} else {
@@ -2777,8 +2805,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		case 1:
 			if(list.length > 0){
 				var object = list[0];
+				var company = "";
+				var appId = sharedDataService.getConfAppId();
+				if(appId == 'rv'){ 
+					company = "amr";
+				} else {
+					company = "tm";
+				}
+				var baseUrl = "rest/nosec";
+				var defaultMarkerColor = "FF0000";
+				var myAreaPm = {};
+				myAreaPm = $scope.getLocalAreaById(object.data.areaId);
 				//object.options.animation = "";
-				object.icon = $scope.useNormalIcon(object.icon);
+				//object.icon = $scope.useNormalIcon(object.icon);
+				object.icon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				if(theme == 0){
 					$scope.mapParkingMetersMarkers.push(object);
 				} else {

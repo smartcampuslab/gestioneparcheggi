@@ -1302,8 +1302,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				draggable: false,
 				animation: ""	//1 "BOUNCE"
 			},
-			icon: (appId == 'rv') ? $scope.useSelectedIcon($scope.getCorrectPmIconByAreaName(myAreaP.name)) : $scope.pmMarkerIcon
-			//icon: baseUrl+'/marker/'+company+'/parcometro/'+((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor)	//$scope.pmMarkerIcon
+			//icon: (appId == 'rv') ? $scope.useSelectedIcon($scope.getCorrectPmIconByAreaName(myAreaP.name)) : $scope.pmMarkerIcon
+			icon: baseUrl+'/marker/'+company+'/parcometroneg/'+((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor)	//$scope.pmMarkerIcon
 		};
 		$scope.mySpecialPMMarkers.push($scope.mySpecialMarker);
 		
@@ -3961,11 +3961,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				//myIcon = $scope.pmMarkerIcon;
 				myAreaPm = $scope.getLocalAreaById(marker.areaId);
 				title = marker.code;
-				if(appId == 'rv'){ 
-					myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
-				} else {
+				//if(appId == 'rv'){ 
+				//	myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
+				//} else {
 					myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm != null && myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
-				}
+				//}
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon;

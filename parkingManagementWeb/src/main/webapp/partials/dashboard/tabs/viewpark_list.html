@@ -241,7 +241,7 @@
 		
 		</div>
 		<div ng-show="showZList">
-			<div class="tablewrapper">
+			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="zoneWS.length != 0">
 						<th width="20%"><span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span></th>
@@ -299,7 +299,7 @@
 			</table>		
 		</div>
 		<div ng-show="showAList">
-			<div class="tablewrapper">
+			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="areaWS.length != 0">
 						<th width="15%"><span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span></th>
@@ -359,7 +359,7 @@
 			</table>	
 		</div>
 		<div ng-show="showPSList">
-			<div class="tablewrapper">
+			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="pstructWS.length != 0">
 						<th width="15%"><span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span></th>
@@ -550,45 +550,91 @@
 			</div>
 			<div ng-show="isPSDetShow()">
 				<table width="100%">
-					<tr>
-						<td class="detailsCompressTableSX">{{ 'ps_name' | i18n }}:</td>
-						<td class="detailsCompressTableCX"></td>
-						<td class="detailsCompressTableDX">{{ psDetails.name }}</td>
-						<td class="detailsCompressTableDiagram" rowspan="6">
+					<tr valign="top">
+						<td align="left">
+							<table width="100%">
+								<tr>
+									<td class="detailsCompressTableSX">{{ 'ps_name' | i18n }}:</td>
+									<td class="detailsCompressTableCX"></td>
+									<td class="detailsCompressTableDX">{{ psDetails.name }}</td>
+								</tr>
+								 <tr ng-show="ps_address.visible">
+						        	<td class="detailsCompressTableSX">{{ 'ps_address' | i18n }}:</td>
+						        	<td class="detailsCompressTableCX"></td>
+						        	<td class="detailsCompressTableDX">&nbsp;{{ psDetails.streetReference }}</td>
+						        </tr>
+								<tr>
+								<tr ng-show="pm_rateArea.visible">
+						   			<td colspan="3" class="detailsTableColSpan">
+						   				<hr/>
+						   			</td>
+						   		</tr>
+						   		<tr ng-show="pm_rateArea.visible">
+						   			<td colspan="3" class="detailsTableColSpan">
+										{{ 'ps_slots' | i18n }}
+						  			</td>
+								</tr>
+								<tr ng-show="ps_slotNumber.visible">
+									<td class="detailsCompressTableSX">{{ 'ps_totalslot' | i18n }}:</td>
+									<td class="detailsCompressTableCX"></td>
+									<td class="detailsCompressTableDX">{{ psDetails.slotNumber }}</td>
+								</tr>
+								<tr>
+									<td class="detailsCompressTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
+									<td class="detailsCompressTableCX"></td>
+									<td class="detailsCompressTableDX">
+										&nbsp;
+										<span ng-show="isCorrectNumber(psDetails.slotOccupied)">{{ psDetails.slotOccupied }}</span>
+										<span ng-show="!isCorrectNumber(psDetails.slotOccupied)">n.p.</span>
+									</td>
+								</tr>	
+							</table>
+						</td>
+						<td valign="middle" align="center">
 							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.slotOccupied)"/>
 						</td>
 					</tr>
-			        <tr ng-show="ps_address.visible">
-			        	<td class="detailsCompressTableSX">{{ 'ps_address' | i18n }}:</td>
-			        	<td class="detailsCompressTableCX"></td>
-			        	<td class="detailsCompressTableDX">&nbsp;{{ psDetails.streetReference }}</td>
-			        </tr>
-					<tr>
-					<tr ng-show="pm_rateArea.visible">
-			   			<td colspan="3" class="detailsTableColSpan">
-			   				<hr/>
-			   			</td>
-			   		</tr>
-			   		<tr ng-show="pm_rateArea.visible">
-			   			<td colspan="3" class="detailsTableColSpan">
-							{{ 'ps_slots' | i18n }}
-			  			</td>
-					</tr>
-					<tr ng-show="ps_slotNumber.visible">
-						<td class="detailsCompressTableSX">{{ 'ps_totalslot' | i18n }}:</td>
-						<td class="detailsCompressTableCX"></td>
-						<td class="detailsCompressTableDX">{{ psDetails.slotNumber }}</td>
-					</tr>
-					<tr>
-						<td class="detailsCompressTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
-						<td class="detailsCompressTableCX"></td>
-						<td class="detailsCompressTableDX">
-							&nbsp;
-							<span ng-show="isCorrectNumber(psDetails.slotOccupied)">{{ psDetails.slotOccupied }}</span>
-							<span ng-show="!isCorrectNumber(psDetails.slotOccupied)">n.p.</span>
-						</td>
-					</tr>
 				</table>
+<!-- 				<table width="100%"> -->
+<!-- 					<tr> -->
+<!-- 						<td class="detailsCompressTableSX">{{ 'ps_name' | i18n }}:</td> -->
+<!-- 						<td class="detailsCompressTableCX"></td> -->
+<!-- 						<td class="detailsCompressTableDX">{{ psDetails.name }}</td> -->
+<!-- 						<td class="detailsCompressTableDiagram" rowspan="6"> -->
+<!-- 							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.slotOccupied)"/> -->
+<!-- 						</td> -->
+<!-- 					</tr> -->
+<!-- 			        <tr ng-show="ps_address.visible"> -->
+<!-- 			        	<td class="detailsCompressTableSX">{{ 'ps_address' | i18n }}:</td> -->
+<!-- 			        	<td class="detailsCompressTableCX"></td> -->
+<!-- 			        	<td class="detailsCompressTableDX">&nbsp;{{ psDetails.streetReference }}</td> -->
+<!-- 			        </tr> -->
+<!-- 					<tr> -->
+<!-- 					<tr ng-show="pm_rateArea.visible"> -->
+<!-- 			   			<td colspan="3" class="detailsTableColSpan"> -->
+<!-- 			   				<hr/> -->
+<!-- 			   			</td> -->
+<!-- 			   		</tr> -->
+<!-- 			   		<tr ng-show="pm_rateArea.visible"> -->
+<!-- 			   			<td colspan="3" class="detailsTableColSpan"> -->
+<!-- 							{{ 'ps_slots' | i18n }} -->
+<!-- 			  			</td> -->
+<!-- 					</tr> -->
+<!-- 					<tr ng-show="ps_slotNumber.visible"> -->
+<!-- 						<td class="detailsCompressTableSX">{{ 'ps_totalslot' | i18n }}:</td> -->
+<!-- 						<td class="detailsCompressTableCX"></td> -->
+<!-- 						<td class="detailsCompressTableDX">{{ psDetails.slotNumber }}</td> -->
+<!-- 					</tr> -->
+<!-- 					<tr> -->
+<!-- 						<td class="detailsCompressTableSX">{{ 'ps_occupiedslot' | i18n }}:</td> -->
+<!-- 						<td class="detailsCompressTableCX"></td> -->
+<!-- 						<td class="detailsCompressTableDX"> -->
+<!-- 							&nbsp; -->
+<!-- 							<span ng-show="isCorrectNumber(psDetails.slotOccupied)">{{ psDetails.slotOccupied }}</span> -->
+<!-- 							<span ng-show="!isCorrectNumber(psDetails.slotOccupied)">n.p.</span> -->
+<!-- 						</td> -->
+<!-- 					</tr> -->
+<!-- 				</table> -->
 				
 			</div>
 			<div ng-show="isStreetDetShow()">
