@@ -112,64 +112,29 @@
 				</tr>
 				<tr ng-if="showSList">
 					<td>
-						<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">{{ 'csv_btn_create' | i18n }}</button>
-					</td>
-				</tr>
-				<tr ng-if="showSList">
-					<td>
-						&nbsp;&nbsp;
-					</td>
-				</tr>
-				<tr ng-if="showSList && streetCvsFile!=''">	
-					<td>
-						<a target="_blank" href="{{ streetCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ streetCvsFileName }}</a>
-					</td>	
-				</tr>
-				<tr ng-if="showZList">
-					<td>
-						<button class="btn btn-success" ng-click="getZoneOccupancyCsv()">{{ 'csv_btn_create' | i18n }}</button>
+						<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 				<tr ng-if="showZList">
 					<td>
-						&nbsp;&nbsp;
-					</td>
-				</tr>
-				<tr ng-if="showZList && zoneCvsFile!=''">	
-					<td>
-						<a target="_blank" href="{{ zoneCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ zoneCvsFileName }}</a>
-					</td>	
-				</tr>
-				<tr ng-if="showAList">
-					<td>
-						<button class="btn btn-success" ng-click="getAreaOccupancyCsv()">{{ 'csv_btn_create' | i18n }}</button>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 				<tr ng-if="showAList">
 					<td>
-						&nbsp;&nbsp;
-					</td>
-				</tr>
-				<tr ng-if="showAList && areaCvsFile!=''">	
-					<td>
-						<a target="_blank" href="{{ areaCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ areaCvsFileName }}</a>
-					</td>	
-				</tr>
-				<tr ng-if="showPSList">
-					<td>
-						<button class="btn btn-success" ng-click="getStructureOccupancyCsv()">{{ 'csv_btn_create' | i18n }}</button>
+						<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 				<tr ng-if="showPSList">
 					<td>
-						&nbsp;&nbsp;
+						<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
-				<tr ng-if="showPSList && structCvsFile!=''">	
-					<td>
-						<a target="_blank" href="{{ structCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ structCvsFileName }}</a>
-					</td>	
-				</tr>
+<!-- 				<tr ng-if="showPSList && structCvsFile!=''">	 -->
+<!-- 					<td> -->
+<!-- 						<a target="_blank" href="{{ structCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ structCvsFileName }}</a> -->
+<!-- 					</td>	 -->
+<!-- 				</tr> -->
 			</table>
 <!-- 						</div> -->
 		</div>	
@@ -539,7 +504,7 @@
 					<tr>	
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
+						<td class="detailsTableDX">{{ pmDetails.area.fee }} Euro/ora</td>
 					</tr>
 					<tr>	
 						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
@@ -550,47 +515,58 @@
 			</div>
 			<div ng-show="isPSDetShow()">
 				<table width="100%">
-					<tr valign="top">
-						<td align="left">
+					<tr>
+						<td width="45%" align="left" valign="middle">
 							<table width="100%">
 								<tr>
-									<td class="detailsCompressTableSX">{{ 'ps_name' | i18n }}:</td>
-									<td class="detailsCompressTableCX"></td>
-									<td class="detailsCompressTableDX">{{ psDetails.name }}</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'ps_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ psDetails.name }}</td>
+									<td class="detailsListTableCXS"></td>
 								</tr>
 								 <tr ng-show="ps_address.visible">
-						        	<td class="detailsCompressTableSX">{{ 'ps_address' | i18n }}:</td>
-						        	<td class="detailsCompressTableCX"></td>
-						        	<td class="detailsCompressTableDX">&nbsp;{{ psDetails.streetReference }}</td>
+								 	<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableSXS">{{ 'ps_address' | i18n }}:</td>
+						        	<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableDXS">{{ psDetails.streetReference }}</td>
+						        	<td class="detailsListTableCXS"></td>
 						        </tr>
 								<tr>
 								<tr ng-show="pm_rateArea.visible">
-						   			<td colspan="3" class="detailsTableColSpan">
+									<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanS">
 						   				<hr/>
 						   			</td>
+						   			<td class="detailsListTableCXS"></td>
 						   		</tr>
 						   		<tr ng-show="pm_rateArea.visible">
-						   			<td colspan="3" class="detailsTableColSpan">
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
 										{{ 'ps_slots' | i18n }}
 						  			</td>
+						  			<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr ng-show="ps_slotNumber.visible">
-									<td class="detailsCompressTableSX">{{ 'ps_totalslot' | i18n }}:</td>
-									<td class="detailsCompressTableCX"></td>
-									<td class="detailsCompressTableDX">{{ psDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'ps_totalslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ psDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
-									<td class="detailsCompressTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
-									<td class="detailsCompressTableCX"></td>
-									<td class="detailsCompressTableDX">
-										&nbsp;
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'ps_occupiedslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
 										<span ng-show="isCorrectNumber(psDetails.slotOccupied)">{{ psDetails.slotOccupied }}</span>
 										<span ng-show="!isCorrectNumber(psDetails.slotOccupied)">n.p.</span>
 									</td>
+									<td class="detailsListTableCXS"></td>
 								</tr>	
 							</table>
 						</td>
-						<td valign="middle" align="center">
+						<td width="55%" valign="middle" align="center">
 							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.slotOccupied)"/>
 						</td>
 					</tr>
@@ -639,50 +615,60 @@
 			</div>
 			<div ng-show="isStreetDetShow()">
 				<table width="100%">
-					<tr>
+					<tr valign="top">
 						<td width="33%">
 							<table width="100%">
 								<tr>
-						        	<td class="detailsListTableSX">{{ 'street_name' | i18n }}:</td>
-						        	<td class="detailsListTableCX"></td>
-						        	<td class="detailsListTableDX">&nbsp;{{ sDetails.streetReference }}</td>
+									<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableSXS">{{ 'street_name' | i18n }}:</td>
+						        	<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableDXS">&nbsp;{{ sDetails.streetReference }}</td>
+						        	<td class="detailsListTableCXS"></td>
 						        </tr>
 						        <tr>
-							        <td colspan="3" class="detailsTableColSpan">
+						        	<td class="detailsListTableCXS"></td>
+							        <td colspan="3" class="detailsTableColSpanS">
 							        	<hr/>
 							        </td>
+							        <td class="detailsListTableCXS"></td>
 							    </tr>
 						   		<tr>
-						   			<td colspan="3" class="detailsTableColSpan">
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
 						   				{{ 'street_slots' | i18n }}
 						   			</td>
+						   			<td class="detailsListTableCXS"></td>
 						   		</tr>
 								<tr ng-show="s_slotNum.visible">
-									<td class="detailsListTableSX">{{ 'street_totalslot' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'street_totalslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ sDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
-									<td class="detailsListTableSX">{{ 'street_occupiedslot' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'street_occupiedslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
 										<span ng-show="sDetails.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
 										<span ng-show="sDetails.occupancyRate != -1">{{ sDetails.slotOccupied }}</span>
 									</td>
+									<td class="detailsListTableCXS"></td>
 								</tr>
 							</table>	
 						</td>
 						<td width="34%">
 							<table width="100%">
 								<tr>
-						   			<td colspan="3" class="detailsTableColSpan">
+						   			<td colspan="3" class="detailsTableColSpanLeft">
 						   				{{ 'street_free_slots' | i18n }}
 						  			</td>
 						   		</tr>
 								<tr>
 									<td class="detailsListTableSX">{{ 'street_freepark_slot_signed_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;
+									<td class="detailsListTableDX">
 										<span ng-show="sDetails.freeParkSlotSignFree > 0">{{ sDetails.freeParkSlotSignFree }}</span>
 										<span ng-show="sDetails.freeParkSlotSignFree == 0">{{ sDetails.freeParkSlotFree }}</span>
 									</td>
@@ -690,36 +676,36 @@
 								<tr>
 									<td class="detailsListTableSX">{{ 'street_paid_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.paidSlotFree }}</td>
+									<td class="detailsListTableDX">{{ sDetails.paidSlotFree }}</td>
 								</tr>
 									<tr ng-show="s_timedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_timedpark_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.timedParkSlotFree }}</td>
+									<td class="detailsListTableDX">{{ sDetails.timedParkSlotFree }}</td>
 								</tr>
 								<tr ng-show="s_handicappedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_handicapped_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.handicappedSlotFree }}</td>
+									<td class="detailsListTableDX">{{ sDetails.handicappedSlotFree }}</td>
 								</tr>
 								<tr>
 									<td class="detailsListTableSX">{{ 'street_reserved_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.reservedSlotFree }}</td>
+									<td class="detailsListTableDX">{{ sDetails.reservedSlotFree }}</td>
 								</tr>
 							</table>
 						</td>
 						<td width="33%">
 							<table width="100%">
 								<tr>
-									<td colspan="3" class="detailsTableColSpan">
+									<td colspan="3" class="detailsTableColSpanLeft">
 									    {{ 'street_occupied_slots' | i18n }}
 									</td>
 								</tr>
 								<tr>
 									<td class="detailsListTableSX">{{ 'street_freepark_slot_signed_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;
+									<td class="detailsListTableDX">
 										<span ng-show="sDetails.freeParkSlotSignOccupied > 0">{{ sDetails.freeParkSlotSignOccupied }}</span>
 										<span ng-show="sDetails.freeParkSlotSignOccupied == 0">{{ sDetails.freeParkSlotOccupied }}</span>
 									</td>
@@ -727,25 +713,24 @@
 								<tr>
 									<td class="detailsListTableSX">{{ 'street_paid_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.paidSlotOccupied }}</td>
+									<td class="detailsListTableDX">{{ sDetails.paidSlotOccupied }}</td>
 								</tr>
 								<tr ng-show="s_timedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_timedpark_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.timedParkSlotOccupied }}</td>
+									<td class="detailsListTableDX">{{ sDetails.timedParkSlotOccupied }}</td>
 								</tr>
 								<tr ng-show="s_handicappedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_handicapped_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.handicappedSlotOccupied }}</td>
+									<td class="detailsListTableDX">{{ sDetails.handicappedSlotOccupied }}</td>
 								</tr>
 								<tr>
 									<td class="detailsListTableSX">{{ 'street_reserved_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ sDetails.reservedSlotOccupied }}</td>
+									<td class="detailsListTableDX">{{ sDetails.reservedSlotOccupied }}</td>
 								</tr>
-							</table>
-											
+							</table>				
 						</td>
 					</tr>
 					<tr>
@@ -848,55 +833,110 @@
 				<div ng-show="isZoneDetShow()">
 					<table width="100%">
 						<tr>
-							<td class="detailsCompressTableSX">{{ 'zone_name' | i18n }}:</td>
-							<td class="detailsCompressTableCX"></td>
-							<td class="detailsCompressTableDX">&nbsp;{{ zDetails.name }} - {{ zDetails.submacro }}</td>
-							<td class="detailsCompressTableDiagram" rowspan="6">
+							<td width="40%" valign="top">
+								<table width="100%">
+									<tr>
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableDXS">{{ zDetails.name }} - {{ zDetails.submacro }}</td>
+										<td class="detailsListTableCXS"></td>
+									</tr>
+									<tr>
+							        	<td class="detailsListTableCXS"></td>
+								        <td colspan="3" class="detailsTableColSpanS">
+								        	<hr/>
+								        </td>
+								        <td class="detailsListTableCXS"></td>
+								    </tr>
+							   		<tr>
+							   			<td class="detailsListTableCXS"></td>
+							   			<td colspan="3" class="detailsTableColSpanLeftS">
+							   				{{ 'street_slots' | i18n }}
+							   			</td>
+							   			<td class="detailsListTableCXS"></td>
+							   		</tr>
+									<tr>
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
+										<td class="detailsListTableCXS"></td>
+									</tr>
+									<tr>
+										<td class="detailsListTableCXS"></td>
+									   	<td class="detailsListTableSXS">{{ 'zone_occupied_slots' | i18n }}:</td>
+									   	<td class="detailsListTableCXS"></td>
+									   	<td class="detailsListTableDXS">
+									   		<span ng-show="isCorrectNumber(zDetails.slotOccupied)">{{ zDetails.slotOccupied }}</span>
+									   		<span ng-show="!isCorrectNumber(zDetails.slotOccupied)">n.p.</span>
+									   	</td>
+									   	<td class="detailsListTableCXS"></td>
+									</tr>
+								</table>
+							</td>
+							<td width="60%" valign="top">
 								<div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
 							</td>
 						</tr>
-						<tr>
-							<td class="detailsCompressTableSX">{{ 'zone_total_slots' | i18n }}:</td>
-							<td class="detailsCompressTableCX"></td>
-							<td class="detailsCompressTableDX">&nbsp;{{ zDetails.slotNumber }}</td>
-						</tr>
-						<tr>
-						   	<td class="detailsCompressTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
-						   	<td class="detailsCompressTableCX"></td>
-						   	<td class="detailsCompressTableDX">
-						   		&nbsp;<span ng-show="isCorrectNumber(zDetails.slotOccupied)">{{ zDetails.slotOccupied }}</span>
-						   		&nbsp;<span ng-show="!isCorrectNumber(zDetails.slotOccupied)">n.p.</span>
-						   	</td>
-						</tr>
 					</table>
+					
 				</div>
 				<div ng-show="isAreaDetShow()">
 					<table width="100%">
-				        <tr>	
-							<td class="detailsCompressTableSX">{{ 'area_name' | i18n }}:</td>
-							<td class="detailsCompressTableCX"></td>
-							<td class="detailsCompressTableDX">{{ aDetails.name }}</td>
-							<td class="detailsCompressTableDiagram" rowspan="6">
+						<tr>
+							<td width="40%">
+								<table width="100%">	
+							        <tr>	
+							        	<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableSXS">{{ 'area_name' | i18n }}:</td>
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableDXS">{{ aDetails.name }}</td>
+										<td class="detailsListTableCXS"></td>
+									</tr>
+									<tr ng-show="a_fee.visible">
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
+										<td class="detailsListTableCXS"></td>
+									</tr>
+									<tr>
+							        	<td class="detailsListTableCXS"></td>
+								        <td colspan="3" class="detailsTableColSpanS">
+								        	<hr/>
+								        </td>
+								        <td class="detailsListTableCXS"></td>
+								    </tr>
+							   		<tr>
+							   			<td class="detailsListTableCXS"></td>
+							   			<td colspan="3" class="detailsTableColSpanLeftS">
+							   				{{ 'street_slots' | i18n }}
+							   			</td>
+							   			<td class="detailsListTableCXS"></td>
+							   		</tr>
+									<tr>
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableSXS">{{ 'area_total_slots' | i18n }}:</td>
+										<td class="detailsListTableCXS"></td>
+										<td class="detailsListTableDXS">{{ aDetails.slotNumber }}</td>
+										<td class="detailsListTableCXS"></td>
+									</tr>
+									<tr>
+										<td class="detailsListTableCXS"></td>
+									   	<td class="detailsListTableSXS">{{ 'area_occupied_slots' | i18n }}:</td>
+									   	<td class="detailsListTableCXS"></td>
+									   	<td class="detailsListTableDXS">
+									   		<span ng-show="isCorrectNumber(aDetails.slotOccupied)">{{ aDetails.slotOccupied }}</span>
+									   		<span ng-show="!isCorrectNumber(aDetails.slotOccupied)">n.p.</span>
+									   	</td>
+									   	<td class="detailsListTableCXS"></td>
+									</tr>
+								</table>
+							</td>
+							<td width="60%">
 								<div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" /> 
 							</td>
-						</tr>
-						<tr ng-show="a_fee.visible">	
-							<td class="detailsCompressTableSX">{{ 'area_rate' | i18n }}:</td>
-							<td class="detailsCompressTableCX"></td>
-							<td class="detailsCompressTableDX">{{ aDetails.fee }}</td>
-						</tr>
-						<tr>
-							<td class="detailsCompressTableSX">{{ 'area_total_slots' | i18n }}:</td>
-							<td class="detailsCompressTableCX"></td>
-							<td class="detailsCompressTableDX">&nbsp;{{ aDetails.slotNumber }}</td>
-						</tr>
-						<tr>
-						   	<td class="detailsCompressTableSX">{{ 'area_occupied_slots' | i18n }}:</td>
-						   	<td class="detailsCompressTableCX"></td>
-						   	<td class="detailsCompressTableDX">
-						   		&nbsp;<span ng-show="isCorrectNumber(aDetails.slotOccupied)">{{ aDetails.slotOccupied }}</span>
-						   		&nbsp;<span ng-show="!isCorrectNumber(aDetails.slotOccupied)">n.p.</span>
-						   	</td>
 						</tr>
 					</table>
 				</div>        

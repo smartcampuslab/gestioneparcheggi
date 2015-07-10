@@ -23,7 +23,6 @@ public class OccupancyStreet {
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String streetReference;
-	private String areaName;
 	private Integer slotNumber;
 	private Integer handicappedSlotNumber;	// off_h
 	private Integer handicappedSlotOccupied;
@@ -65,14 +64,6 @@ public class OccupancyStreet {
 		this.id_app = id_app;
 	}
 	
-	public String getAreaName() {
-		return areaName;
-	}
-
-	public void setAreaName(String areaName) {
-		this.areaName = areaName;
-	}
-
 	public String getColor() {
 		return color;
 	}
@@ -288,7 +279,7 @@ public class OccupancyStreet {
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"id_app\":\"" + getId_app() + "\",";
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
-		json += "\"areaName\":\"" + getAreaName() + "\",";
+		json += "\"area_name\":\"" + getArea_name() + "\",";
 		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
 		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";

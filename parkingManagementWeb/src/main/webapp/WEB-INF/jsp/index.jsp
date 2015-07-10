@@ -127,8 +127,16 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		text-transform: uppercase;
 		vertical-align: middle;
 	}
+	td.detailsTableColSpanLeft {
+		width: 100%;
+		height: 20px;
+		text-align: left;
+		font-weight: bold;
+		text-transform: uppercase;
+		vertical-align: middle;
+	}
 	td.detailsListTableSX {
-		width: 45%;
+		width: 30%;
 		height: 20px;
 		font-weight: normal;
 		text-align: left;
@@ -141,7 +149,43 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		vertical-align: middle;
 	}
 	td.detailsListTableDX {
-		width: 50%;
+		width: 65%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsTableColSpanS {
+		width: 90%;
+		height: 20px;
+		text-align: center;
+		font-weight: bold;
+		text-transform: uppercase;
+		vertical-align: middle;
+	}
+	td.detailsTableColSpanLeftS {
+		width: 90%;
+		height: 20px;
+		text-align: left;
+		font-weight: bold;
+		text-transform: uppercase;
+		vertical-align: middle;
+	}
+	td.detailsListTableSXS {
+		width: 30%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsListTableCXS {
+		width: 5%;
+		height: 20px;
+		text-align: right;
+		vertical-align: middle;
+	}
+	td.detailsListTableDXS {
+		width: 55%;
 		height: 20px;
 		font-weight: bold;
 		text-align: left;

@@ -368,18 +368,6 @@ public class DashboardController {
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per vie: " + e.getMessage());
 		}
-
-//		response.setHeader("Content-Disposition",
-//				"attachment; filename=\"street_data.csv\"");
-//		response.setContentLength(return_data.length);
-//		response.setContentType("application/csv");
-//		try {
-//			response.getOutputStream().write(return_data);
-//			response.getOutputStream().flush();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
 		return createdFile;
 	}
 	

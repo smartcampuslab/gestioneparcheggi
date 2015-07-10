@@ -70,9 +70,9 @@ public class CSVManager {
 			for(OccupancyStreet s : streets){
 				writer.append(s.getStreetReference());
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getAreaName());	// to convert to area name
+				writer.append(s.getArea_name());	// to convert to area name
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getOccupancyRate() + "");
+				writer.append((s.getOccupancyRate() != -1) ? (s.getOccupancyRate() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -125,7 +125,7 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(z.getSubmacro());	// to convert to area name
 				writer.append(CSV_SEPARATOR);
-				writer.append(z.getOccupancy() + "");
+				writer.append((z.getOccupancy() != -1) ? (z.getOccupancy() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
 				writer.append(z.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -171,7 +171,7 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getFee() + "");	// to convert to area name
 				writer.append(CSV_SEPARATOR);
-				writer.append(a.getOccupancy() + "");
+				writer.append((a.getOccupancy() != -1) ? (a.getOccupancy() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -217,11 +217,11 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getStreetReference());	// to convert to area name
 				writer.append(CSV_SEPARATOR);
-				writer.append(ps.getOccupancyRate() + "");
+				writer.append((ps.getOccupancyRate() != -1) ? (ps.getOccupancyRate() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
-				writer.append(ps.getSlotOccupied() + "");
+				writer.append((ps.getSlotOccupied() >= 0) ? (ps.getSlotOccupied() + "") : "0");
 				writer.append(CSV_NEWLINE);
 			}
 			

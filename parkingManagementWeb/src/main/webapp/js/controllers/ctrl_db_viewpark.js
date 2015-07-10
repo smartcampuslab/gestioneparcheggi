@@ -3597,7 +3597,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.streetCvsFile = result;
-	    	$scope.streetCvsFileName = result.substring(4, result.length);
+	    	window.location.href = $scope.streetCvsFile;
 	    });	
 	};
 	
@@ -3611,7 +3611,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneCvsFile = result;
-	    	$scope.zoneCvsFileName = result.substring(4, result.length);
+	    	window.location.href = $scope.zoneCvsFile;
 	    });	
 	};
 	
@@ -3627,7 +3627,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.areaCvsFile = result;
-	    	$scope.areaCvsFileName = result.substring(4, result.length);
+	    	window.location.href = $scope.areaCvsFile;
 	    });	
 	};
 	
@@ -3642,7 +3642,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.structCvsFile = result;
-	    	$scope.structCvsFileName = result.substring(4, result.length);
+//	    	$scope.structCvsFileName = result.substring(4, result.length);
+	    	window.location.href = $scope.structCvsFile;
 	    });	
 	};
     
