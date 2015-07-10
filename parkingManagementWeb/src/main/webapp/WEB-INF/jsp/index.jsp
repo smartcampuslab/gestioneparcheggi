@@ -42,6 +42,7 @@
 <!-- <script src="js/controllers/ctrl_view.js"></script> -->
 <script src="js/controllers/ctrl_view_gmap.js"></script>
 <script src="js/controllers/ctrl_db_viewpark.js"></script>
+<script src="js/controllers/ctrl_aux.js"></script>
 
 <script src="js/filters.js?1001"></script>
 <script src="js/services.js?1001"></script>

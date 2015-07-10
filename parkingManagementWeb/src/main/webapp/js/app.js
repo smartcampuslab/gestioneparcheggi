@@ -86,7 +86,12 @@ pm.config(['$routeProvider', '$locationProvider',
 //    		templateUrl: 'partials/view/viewallgmapnosec.html',
 //    		controller: 'ViewCtrlGmap',
 //    		controllerAs: 'view_ctrl_gmap'
-//    	})  	
+//    	})
+    	.when('/aux/logs', {
+    		templateUrl: 'partials/aux/logs.html',
+    		controller: 'AuxCtrl',
+    		controllerAs: 'aux_ctrl'
+    	})
     	.otherwise({
     		redirectTo:'/'
     	});

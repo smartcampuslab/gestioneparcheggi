@@ -1087,6 +1087,10 @@
     "value": "Scarica file csv",
     "description": "Testo per attributo alt o title del link per il download del file csv"
 }, {
+    "key": "logs_link_text",
+    "value": "Logs",
+    "description": "Testo per per pulsante logs - ausiliari"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {
