@@ -1090,6 +1090,38 @@
     "key": "logs_link_text",
     "value": "Logs",
     "description": "Testo per per pulsante logs - ausiliari"
+}, {
+    "key": "log_objId",
+    "value": "Id Oggetto",
+    "description": "intestazione colonna id oggetto in lista log globali"
+}, {
+    "key": "log_type",
+    "value": "Tipo",
+    "description": "intestazione colonna tipo oggetto in lista log globali"
+}, {
+    "key": "log_time",
+    "value": "Ora",
+    "description": "intestazione colonna ora oggetto in lista log globali"
+}, {
+    "key": "log_author",
+    "value": "Autore",
+    "description": "intestazione colonna autore oggetto in lista log globali"
+}, {
+    "key": "log_value",
+    "value": "Valore",
+    "description": "intestazione colonna valore oggetto in lista log globali"
+}, {
+    "key": "no_logs_in_lists",
+    "value": "Nessun log trovato",
+    "description": "messaggio nessun valore in lista log globali"
+}, {
+    "key": "parking_type_in_lists",
+    "value": "Parcheggio",
+    "description": "Valore per tipo oggetto parcheggio"
+}, {
+    "key": "street_type_in_lists",
+    "value": "Via",
+    "description": "Valore per tipo oggetto via"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"

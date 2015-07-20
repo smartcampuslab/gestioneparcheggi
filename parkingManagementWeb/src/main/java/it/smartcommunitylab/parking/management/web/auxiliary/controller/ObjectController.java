@@ -38,7 +38,7 @@ public class ObjectController  {
 
 	private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
-	private static final int DEFAULT_COUNT = 10;
+	private static final int DEFAULT_COUNT = 100;
 	
 	@Autowired
 	private GeoObjectManager dataService; 
@@ -47,12 +47,43 @@ public class ObjectController  {
 	public @ResponseBody String ping() {
 		return "pong";
 	} 
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/all/{skip}") 
+	public @ResponseBody List<DataLogBean> getAllLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
+		if (count == null) count = DEFAULT_COUNT;
+		//return logMongoStorage.getParkingLogsById(id, agency, count);
+		return dataService.getAllLogs(agency, count, skip);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/all") 
+	public @ResponseBody int countAllLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+		//if (count == null) count = DEFAULT_COUNT;
+		//return logMongoStorage.getParkingLogsById(id, agency, count);
+		return dataService.countAllLogs(agency);
+	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/parkings/{skip}") 
+	public @ResponseBody List<DataLogBean> getAllParkingLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
+		if (count == null) count = DEFAULT_COUNT;
+		//return logMongoStorage.getParkingLogsById(id, agency, count);
+		return dataService.getAllParkingLogs(agency, count, skip);
+	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/parking/{id:.*}") 
 	public @ResponseBody List<DataLogBean> getParkingLogs(@PathVariable String agency, @PathVariable String id, @RequestParam(required=false) Integer count) {
 		if (count == null) count = DEFAULT_COUNT;
 		//return logMongoStorage.getParkingLogsById(id, agency, count);
 		return dataService.getParkingLogsByIdDyn(id, agency, count);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/parking") 
+	public @ResponseBody int countParkingLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+		return dataService.countAllParkingLogs(agency);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/streets/{skip}") 
+	public @ResponseBody List<DataLogBean> getAllStreetLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
+		if (count == null) count = DEFAULT_COUNT;
+		//return logMongoStorage.getStreetLogsById(id, agency, count);
+		return dataService.getAllStreetLogs(agency, count, skip);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/street/{id:.*}") 
 	public @ResponseBody List<DataLogBean> getStreetLogs(@PathVariable String agency, @PathVariable String id, @RequestParam(required=false) Integer count) {
@@ -60,7 +91,11 @@ public class ObjectController  {
 		//return logMongoStorage.getStreetLogsById(id, agency, count);
 		return dataService.getStreetLogsByIdDyn(id, agency, count);
 	}
-
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/street") 
+	public @ResponseBody int countStreetLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+		return dataService.countAllStreetLogs(agency);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/user/{id:.*}") 
 	public @ResponseBody List<DataLogBean> getUserLogs(@PathVariable String agency, @PathVariable String id, @RequestParam(required=false) Integer count) {
 		if (count == null) count = DEFAULT_COUNT;

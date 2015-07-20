@@ -75,7 +75,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	}
 	
 	div.listwrapper {
-		height: 580px; 
+		height: 900px; 
 		overflow-y: auto;
 		margin-bottom: 10px;
 	}

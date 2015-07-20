@@ -43,8 +43,6 @@ import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -52,10 +50,6 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 // Manager used to store the dynamic data
 @Service("storageDynamicManager")
@@ -653,8 +647,26 @@ public class DynamicManager {
 	}
 
 	
-	public List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
-		Query query = Query.query(Criteria.where("value.id").is(id).and("value.agency").is(agency)).limit(count);
+	public List<DataLogBean> getLogsById(String id, String agency, int count, int skip, String type) {
+		//logger.info(String.format("in getLogById: id=%s, agency=%s, count=%d, skip=%d, type=%s", id, agency, count, skip, type));
+		Query query = null;
+		if(id == null){
+			if(count == -1){
+				if(type.compareTo("all") == 0){
+					query = Query.query(Criteria.where("value.agency").is(agency));
+				} else {
+					query = Query.query(Criteria.where("value.agency").is(agency).and("type").is(type));
+				}
+			} else {
+				if(type.compareTo("all") == 0){
+					query = Query.query(Criteria.where("value.agency").is(agency)).skip(skip).limit(count);
+				} else {
+					query = Query.query(Criteria.where("value.agency").is(agency).and("type").is(type)).skip(skip).limit(count);
+				}
+			}
+		} else {
+			query = Query.query(Criteria.where("value.id").is(id).and("value.agency").is(agency)).limit(count);
+		}
 		query.sort().on("time", Order.DESCENDING);
 		//query.with(new Sort(Sort.Direction.DESC, "time"));
 		//return mongodb.find(query, DataLog.class);
@@ -664,6 +676,29 @@ public class DynamicManager {
 //			myLogBean.add(ModelConverter.convert(myLog.get(i), DataLogBean.class));
 //		}
 		return myLog;
+	}
+	
+	public int countLogsById(String id, String agency, int count, int skip, String type) {
+		//logger.info(String.format("in getLogById: id=%s, agency=%s, count=%d, skip=%d, type=%s", id, agency, count, skip, type));
+		Query query = null;
+		if(id == null){
+			if(count == -1){
+				if(type.compareTo("all") == 0){
+					query = Query.query(Criteria.where("value.agency").is(agency));
+				} else {
+					query = Query.query(Criteria.where("value.agency").is(agency).and("type").is(type));
+				}
+			} else {
+				if(type.compareTo("all") == 0){
+					query = Query.query(Criteria.where("value.agency").is(agency)).skip(skip).limit(count);
+				} else {
+					query = Query.query(Criteria.where("value.agency").is(agency).and("type").is(type)).skip(skip).limit(count);
+				}
+			}
+		} else {
+			query = Query.query(Criteria.where("value.id").is(id).and("value.agency").is(agency)).limit(count);
+		}
+		return (int) mongodb.count(query, DataLogBean.class);
 	}
 	
 	public List<DataLogBean> getLogsByAuthor(String authorId, String agency, int count) {

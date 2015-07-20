@@ -22,7 +22,6 @@ import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
-import it.smartcommunitylab.parking.management.web.bean.StreetLog;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
@@ -31,8 +30,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
-
-import javax.annotation.PostConstruct;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -89,20 +86,45 @@ public class GeoObjectManager {
 		long currTime = System.currentTimeMillis();
 		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId);
 	}
-	
-	public List<DataLogBean> getStreetLogsByIdDyn(String id, String agency, int count) {
-		return getLogsById(id, agency, count, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
-	}
-	public List<DataLogBean> getParkingLogsByIdDyn(String id, String agency, int count) {
-		return getLogsById(id, agency, count, Parking.class.getCanonicalName());
-	}
 
+	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
+		return dynamicManager.getLogsById(null, agency, count, skip, "all");
+	}
+	
+	public int countAllLogs(String agency) {
+		return dynamicManager.countLogsById(null, agency, -1, 0, "all");
+	}
+	
 	private List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
-		return dynamicManager.getLogsById(id, agency, count, type);
+		return dynamicManager.getLogsById(id, agency, count, 0, type);
 	}
 	
 	public List<DataLogBean> getLogsByAuthorDyn(String authorId, String agency, int count) {
 		return dynamicManager.getLogsByAuthor(authorId, agency, count);
+	}
+	
+	public int countAllStreetLogs(String agency) {
+		return dynamicManager.countLogsById(null, agency, -1, 0, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+	}
+	
+	public List<DataLogBean> getAllStreetLogs(String agency, int count, int skip) {
+		return dynamicManager.getLogsById(null, agency, count, skip, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+	}
+	
+	public List<DataLogBean> getStreetLogsByIdDyn(String id, String agency, int count) {
+		return getLogsById(id, agency, count, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+	}
+	
+	public int countAllParkingLogs(String agency) {
+		return dynamicManager.countLogsById(null, agency, -1, 0, Parking.class.getCanonicalName());
+	}
+	
+	public List<DataLogBean> getAllParkingLogs(String agency, int count, int skip) {
+		return dynamicManager.getLogsById(null, agency, count, skip, Parking.class.getCanonicalName());
+	}
+	
+	public List<DataLogBean> getParkingLogsByIdDyn(String id, String agency, int count) {
+		return getLogsById(id, agency, count, Parking.class.getCanonicalName());
 	}
 	
 	// -------------------- Methods from geoStorage ---------------------------
