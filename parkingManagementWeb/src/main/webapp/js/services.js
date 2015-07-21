@@ -38,6 +38,9 @@ pm.service('sharedDataService', function(){
 	this.isTest = false;
 	this.userId = '';
 	
+	this.inGlobalLogPage = false;
+	this.inParkLogPage = false;
+	this.inStreetLogPage = false;
 	
 	// Shared time variables
 	//-------------------------------------------------------------
@@ -133,6 +136,29 @@ pm.service('sharedDataService', function(){
 		this.utente.codiceFiscale;
 	};
 	
+	this.setInGlobalLogPage = function(value){
+		this.inGlobalLogPage = value;
+	};
+	
+	this.isInGlobalLogPage = function(){
+		return this.inGlobalLogPage;
+	};
+	
+	this.setInParkLogPage = function(value){
+		this.inParkLogPage = value;
+	};
+	
+	this.isInParkLogPage = function(){
+		return this.inParkLogPage;
+	};
+	
+	this.setInStreetLogPage = function(value){
+		this.inStreetLogPage = value;
+	};
+	
+	this.isInStreetLogPage = function(){
+		return this.inStreetLogPage;
+	};
 	
 //	this.getUserIdentity = function(){
 //		return this.utente.codiceFiscale;

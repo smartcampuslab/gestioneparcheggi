@@ -1111,6 +1111,10 @@
     "value": "Valore",
     "description": "intestazione colonna valore oggetto in lista log globali"
 }, {
+    "key": "log_object_name",
+    "value": "Nome oggetto",
+    "description": "intestazione colonna nome oggetto in lista log globali"
+}, {
     "key": "no_logs_in_lists",
     "value": "Nessun log trovato",
     "description": "messaggio nessun valore in lista log globali"
@@ -1122,6 +1126,50 @@
     "key": "street_type_in_lists",
     "value": "Via",
     "description": "Valore per tipo oggetto via"
+}, {
+    "key": "log_total_slot",
+    "value": "Posti totali",
+    "description": "label per posti totali parcheggio"
+}, {
+    "key": "log_slot_occupied_on_total",
+    "value": "Posti occupati",
+    "description": "label per posti occupati in parcheggio"
+}, {
+    "key": "log_slot_unavailable",
+    "value": "Posti non disponibili",
+    "description": "label per posti non disponibili in parcheggio"
+}, {
+    "key": "log_slot_free",
+    "value": "Posti gratuiti",
+    "description": "label per posti gratuiti in via"
+}, {
+    "key": "log_slot_occupied_on_free",
+    "value": "Posti gratuiti occupati",
+    "description": "label per posti gratuiti occupati in via"
+}, {
+    "key": "log_slot_paying",
+    "value": "Posti a pagamento",
+    "description": "label per posti a pagamento in via"
+}, {
+    "key": "log_slot_occupied_on_paying",
+    "value": "Posti a pagamento occupati",
+    "description": "label per posti a pagamento occupati in via"
+}, {
+    "key": "log_slot_timed",
+    "value": "Posti a disco orario",
+    "description": "label per posti a disco orario in via"
+}, {
+    "key": "log_slot_occupied_on_timed",
+    "value": "Posti a disco orario occupati",
+    "description": "label per posti a disco orario occupati in via"
+}, {
+    "key": "log_slot_handicapped",
+    "value": "Posti per disabili",
+    "description": "label per posti per disabili in via"
+}, {
+    "key": "link_filter_log_title",
+    "value": "Filtra per oggetto",
+    "description": "titolo icona per filtro su oggetti in log"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"

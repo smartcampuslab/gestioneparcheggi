@@ -57,7 +57,7 @@ $provide.value("$locale", {
     "medium": "MMM d, y h:mm:ss a",
     "mediumDate": "MMM d, y",
     "mediumTime": "h:mm:ss a",
-    "short": "M/d/yy h:mm a",
+    "short": "dd/MM/yy HH:mm",//"M/d/yy h:mm a",
     "shortDate": "d/M/yyyy",
     "shortTime": "h:mm a"
   },

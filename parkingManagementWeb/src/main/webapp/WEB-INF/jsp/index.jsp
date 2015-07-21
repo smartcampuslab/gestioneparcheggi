@@ -75,7 +75,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	}
 	
 	div.listwrapper {
-		height: 900px; 
+		height: 580px; 
 		overflow-y: auto;
 		margin-bottom: 10px;
 	}
@@ -86,8 +86,20 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		margin-bottom: 10px;
 	}
 	
+	div.logwrapper {
+		height: 680px; 
+		overflow-y: auto;
+		margin-bottom: 10px;
+	}
+	
 	.angular-google-map-container {
 		height: 700px; 
+	}
+	
+	pre {
+		outline: 1px solid #ccc; 
+		padding: 5px; 
+		margin: 5px; 
 	}
 	
 	.colorBox {   

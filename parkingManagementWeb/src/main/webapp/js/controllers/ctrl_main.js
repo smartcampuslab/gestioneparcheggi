@@ -127,6 +127,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	dashboard = "active";
     	parkhome = "";
     	auxhome = "";
+    	sharedDataService.setInGlobalLogPage(false);
     };
     
     $scope.isHomeDashboardActive = function(){
@@ -164,6 +165,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	viewingAll = "";
         //window.document.location = "./";
         $scope.showHome();
+        sharedDataService.setInGlobalLogPage(false);
     };
     
     $scope.setHomeParkActive = function(){
@@ -178,6 +180,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	editingPark = "active";
     	editingBike = "";
     	viewingAll = "";
+    	sharedDataService.setInGlobalLogPage(false);
     };
     
     $scope.isHomeParkActive = function(){
@@ -234,6 +237,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
         editingPark = "";
         editingBike = "";
         viewingAll = "active";
+        sharedDataService.setInGlobalLogPage(false);
     };
     
     $scope.isViewAllActive = function(){
@@ -246,6 +250,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
         sharedDataService.setSurname(null);
         sharedDataService.setBase64(null);
         $scope.user_token = null;
+        sharedDataService.setInGlobalLogPage(false);
         
     	window.location.href = "logout";
     };
