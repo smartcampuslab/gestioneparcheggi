@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
+import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
@@ -237,5 +238,60 @@ public class CSVManager {
 		}
 		return "csv/" + name;	//ba
 	}
+	
+	// Method used to create the csv file for the logs history
+		public String create_file_log(ArrayList<DataLogBean> logs, String path) throws FileNotFoundException, UnsupportedEncodingException{
+			String name = FILE_NAME + "Log.csv";
+			String long_name = path + "/" + name;
+			try {
+				FileWriter writer = new FileWriter(long_name);
+				
+				// Added the table cols headers
+				writer.append("Id oggetto");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Tipo");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Autore");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Ora");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Valore");
+				writer.append(CSV_NEWLINE);
+				
+				// Add the list of data in a table
+				for(DataLogBean l : logs){
+					writer.append(l.getObjId());
+					writer.append(CSV_SEPARATOR);
+					writer.append(l.getType());
+					writer.append(CSV_SEPARATOR);
+					writer.append(l.getAuthor());
+					writer.append(CSV_SEPARATOR);
+					writer.append(l.getTime() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(correctValue(l.getValue() + ""));
+					//writer.append(l.getValueToString());
+					writer.append(CSV_NEWLINE);
+				}
+				
+				//String arr = writer.toString();
+				//ba = arr.getBytes();
+				writer.flush();
+				writer.close();
+				
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				logger.error("Error in log csv creation: " + e1);
+			}
+			return "csv/" + name;	//ba
+		}
+		
+		private String correctValue(String value){
+			String to_clean = value.toString();
+			String cleaned = to_clean.replaceAll("{", "");
+			cleaned = cleaned.replaceAll("}", "");
+			cleaned = cleaned.replaceAll(",", "-");
+			return cleaned;
+		}
 
 }

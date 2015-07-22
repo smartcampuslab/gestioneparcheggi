@@ -184,12 +184,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.viewDetails = function(log){
 		$scope.showDetails = true;
+		$scope.showFiltered = false;
 		$scope.logDetails = log;
 		$scope.json_log_value = JSON.stringify(log, undefined, 4);
 	};
 	
 	$scope.closeDetails = function(){
 		$scope.showDetails = false;
+		$scope.showFiltered = true;
 		$scope.logDetails = {};
 	};
 	
@@ -202,6 +204,39 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.filterForLog = null;
 		$scope.showFiltered = false;
 	};
+	
+	$scope.currentPage = 0;
+	$scope.currentFilterPage = 0;
+	$scope.numberOfPages = function(list){
+       	if(list != null){
+       		return Math.ceil(list.length/$scope.maxLogs);
+       	} else {
+       		return 0;
+     	}
+	};  
+	
+	// --------------------------------------------- Block for csv ---------------------------------------------
+	$scope.globalLogCvsFile = "";
+	
+	$scope.getAllLogCsv = function(){
+		var method = 'POST';
+		//var appId = sharedDataService.getConfAppId();
+		var value = JSON.stringify($scope.globalLogs);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeAuxWSService.getProxy(method, "globallogs/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.globalLogCvsFile = result;
+	    	window.location.href = $scope.globalLogCvsFile;
+	    });	
+	};
+	
+	
+	
+	
+	// ------------------------------------------- End of block for csv ----------------------------------------
+	
 	
     
     

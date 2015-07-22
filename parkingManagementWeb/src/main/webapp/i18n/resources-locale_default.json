@@ -1170,6 +1170,14 @@
     "key": "link_filter_log_title",
     "value": "Filtra per oggetto",
     "description": "titolo icona per filtro su oggetti in log"
+}, {
+    "key": "log_filtered_list",
+    "value": "Lista log oggetto",
+    "description": "titolo pagina lista log filtrati"
+}, {
+    "key": "log_details",
+    "value": "Dettagli Log",
+    "description": "titolo pagina dettaglio log"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"

@@ -648,7 +648,7 @@ public class DynamicManager {
 
 	
 	public List<DataLogBean> getLogsById(String id, String agency, int count, int skip, String type) {
-		//logger.info(String.format("in getLogById: id=%s, agency=%s, count=%d, skip=%d, type=%s", id, agency, count, skip, type));
+		logger.info(String.format("in getLogById: id=%s, agency=%s, count=%d, skip=%d, type=%s", id, agency, count, skip, type));
 		Query query = null;
 		if(id == null){
 			if(count == -1){

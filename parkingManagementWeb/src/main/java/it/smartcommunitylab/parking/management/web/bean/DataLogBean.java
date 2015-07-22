@@ -96,6 +96,14 @@ public class DataLogBean {
 	public Map<String, Object> getValue() {
 		return value;
 	}
+	
+	//public String getValueToString(){
+	//	String to_clean = this.value.toString();
+	//	String cleaned = to_clean.replaceAll("{", "");
+	//	cleaned = cleaned.replaceAll("}", "");
+	//	cleaned = cleaned.replaceAll(",", "-");
+	//	return cleaned;
+	//}
 
 	public void setValue(Map<String, Object> value) {
 		this.value = value;
