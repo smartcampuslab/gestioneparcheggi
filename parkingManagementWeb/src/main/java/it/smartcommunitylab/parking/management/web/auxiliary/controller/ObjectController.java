@@ -41,7 +41,8 @@ import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.CSVManager;
-import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
+import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
+import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
 
 @Controller
 public class ObjectController  {
@@ -52,6 +53,9 @@ public class ObjectController  {
 	
 	@Autowired
 	private GeoObjectManager dataService; 
+	
+	@Autowired
+	private DataLogRepositoryDao dataLogRepo;
 	
 	@Autowired
 	CSVManager csvManager;
@@ -68,6 +72,19 @@ public class ObjectController  {
 		return dataService.getAllLogs(agency, count, skip);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/all") 
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+		if (count == null) count = DEFAULT_COUNT;
+		//return logMongoStorage.getParkingLogsById(id, agency, count);
+		return dataLogRepo.findByAgency(agency);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/tplog/all/{id:.*}") 
+	public @ResponseBody DataLogBean getStreetLogByLogId(@PathVariable String id) {
+		//return logMongoStorage.getStreetLogsById(id, agency, count);
+		return dataService.getLogById(id);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/all") 
 	public @ResponseBody int countAllLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
 		//if (count == null) count = DEFAULT_COUNT;
@@ -75,6 +92,10 @@ public class ObjectController  {
 		return dataService.countAllLogs(agency);
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings") 
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPParkingLogs(@PathVariable String agency) {
+		return dataLogRepo.findByAgencyAndType(agency, Parking.class.getCanonicalName());
+	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/parkings/{skip}") 
 	public @ResponseBody List<DataLogBean> getAllParkingLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
 		if (count == null) count = DEFAULT_COUNT;
@@ -92,6 +113,10 @@ public class ObjectController  {
 		return dataService.countAllParkingLogs(agency);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets") 
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency) {
+		return dataLogRepo.findByAgencyAndType(agency, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/streets/{skip}") 
 	public @ResponseBody List<DataLogBean> getAllStreetLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
 		if (count == null) count = DEFAULT_COUNT;
@@ -176,49 +201,51 @@ public class ObjectController  {
 	    	String objId = log.getString("objId");
 	    	String author = log.getString("author");
 	    	Long time = log.getLong("time");
-	    	String time_slot = log.getString("timeSlot");
-	    	String week_day = log.getString("week_day");
-	    	String month = log.getString("month");
-	    	String year = log.getString("year");
+	    	String time_slot = (!log.isNull("timeSlot")) ? log.getString("timeSlot") : "";
+	    	String week_day = (!log.isNull("week_day")) ? log.getString("week_day") : "";
+	    	String month = (!log.isNull("month")) ? log.getString("month") : "";
+	    	String year = (!log.isNull("year")) ? log.getString("year") : "";
 	    	String type = log.getString("type");
 	    	Boolean deleted = log.getBoolean("deleted");
 	    	Boolean holyday = log.getBoolean("holyday");
-	    	JSONObject value = log.getJSONObject("value");
+	    	JSONObject value = (!log.isNull("value")) ? log.getJSONObject("value") : null;
 	    	Map<String, Object> log_value = new HashMap<String, Object>();
-	    	if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0){
-		    	log_value.put("id", value.getString("id"));
-		    	log_value.put("name", value.getString("name"));
-		    	log_value.put("description", value.getString("description"));
-		    	log_value.put("user", value.getInt("user"));
-		    	log_value.put("agency", value.getString("agency"));
-		    	log_value.put("position", value.get("position"));
-		    	log_value.put("updateTime", value.getLong("updateTime"));
-		    	log_value.put("slotsFree", (!value.isNull("slotsFree")) ? value.getInt("slotsFree") : 0);
-		    	log_value.put("slotsOccupiedOnFree", (!value.isNull("slotsOccupiedOnFree")) ? value.getInt("slotsOccupiedOnFree") : 0);
-		    	log_value.put("slotsTimed", (!value.isNull("slotsTimed")) ? value.getInt("slotsTimed") : 0);
-		    	log_value.put("slotsOccupiedOnTimed", (!value.isNull("slotsOccupiedOnTimed")) ? value.getInt("slotsOccupiedOnTimed") : 0);
-		    	log_value.put("slotsPaying", (!value.isNull("slotsPaying")) ? value.getInt("slotsPaying") : 0);
-		    	log_value.put("slotsOccupiedOnPaying", (!value.isNull("slotsOccupiedOnPaying")) ? value.getInt("slotsOccupiedOnPaying") : 0);
-		    	log_value.put("slotsHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
-		    	log_value.put("slotsOccupiedOnHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
-		    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
-		    	log_value.put("polyline", value.getString("polyline"));
-		    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
-		    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
-		    	log_value.put("areaId", value.getString("areaId"));
-	    	} else {
-	    		log_value.put("id", value.getString("id"));
-		    	log_value.put("name", value.getString("name"));
-		    	log_value.put("description", value.getString("description"));
-		    	log_value.put("user", value.getInt("user"));
-		    	log_value.put("agency", value.getString("agency"));
-		    	log_value.put("position", value.get("position"));
-		    	log_value.put("updateTime", value.getLong("updateTime"));
-		    	log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
-		    	log_value.put("slotsOccupiedOnTotal", (!value.isNull("slotsOccupiedOnTotal")) ? value.getInt("slotsOccupiedOnTotal") : 0);
-		    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
-		    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
-		    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
+	    	if(value != null){
+		    	if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0){
+			    	log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
+			    	log_value.put("name", (!value.isNull("name")) ? value.getString("name") : "n.p.");
+			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
+			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
+			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
+			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
+			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
+			    	log_value.put("slotsFree", (!value.isNull("slotsFree")) ? value.getInt("slotsFree") : 0);
+			    	log_value.put("slotsOccupiedOnFree", (!value.isNull("slotsOccupiedOnFree")) ? value.getInt("slotsOccupiedOnFree") : 0);
+			    	log_value.put("slotsTimed", (!value.isNull("slotsTimed")) ? value.getInt("slotsTimed") : 0);
+			    	log_value.put("slotsOccupiedOnTimed", (!value.isNull("slotsOccupiedOnTimed")) ? value.getInt("slotsOccupiedOnTimed") : 0);
+			    	log_value.put("slotsPaying", (!value.isNull("slotsPaying")) ? value.getInt("slotsPaying") : 0);
+			    	log_value.put("slotsOccupiedOnPaying", (!value.isNull("slotsOccupiedOnPaying")) ? value.getInt("slotsOccupiedOnPaying") : 0);
+			    	log_value.put("slotsHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
+			    	log_value.put("slotsOccupiedOnHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
+			    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	log_value.put("polyline", (!value.isNull("polyline")) ? value.getString("polyline") : "n.p.");
+			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
+			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
+			    	log_value.put("areaId", (!value.isNull("areaId")) ? value.getString("areaId") : "n.p.");
+		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Parking") == 0){
+		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
+			    	log_value.put("name", (!value.isNull("name")) ? value.getString("name") : "n.p.");
+			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
+			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
+			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
+			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
+			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
+			    	log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
+			    	log_value.put("slotsOccupiedOnTotal", (!value.isNull("slotsOccupiedOnTotal")) ? value.getInt("slotsOccupiedOnTotal") : 0);
+			    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
+			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
+		    	}
 	    	}
 	    	DataLogBean dl = new DataLogBean();
 	    	dl.setId(id);

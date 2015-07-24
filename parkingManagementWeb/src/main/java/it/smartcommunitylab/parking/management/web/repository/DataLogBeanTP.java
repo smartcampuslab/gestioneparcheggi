@@ -13,21 +13,24 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  ******************************************************************************/
-package it.smartcommunitylab.parking.management.web.bean;
+package it.smartcommunitylab.parking.management.web.repository;
 
 import java.util.Map;
 
+import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.Document;
 
-public class DataLogBean {
-
+@Document(collection="dataLogBean") 	 	
+public class DataLogBeanTP {
+	
+	@Id
 	private String id;
+	
 	private String objId;
-	//private PointBean location;
 	private String type;
 	private Long time;
 	private String author;
 	private String agency;
-//	private Integer version;
 	private boolean deleted;
 	//new fields added in 12/5/2015 from MB
 	private String year;
@@ -37,85 +40,62 @@ public class DataLogBean {
 	private boolean isHolyday;	//true if is an holyday day (in ita = festivo)
 
 	private String valueString;
-	private Map<String, Object> value;
-	
+	//private Map<String, Object> value;
+
+	public DataLogBeanTP() {
+		super();		
+	}
+
+	public DataLogBeanTP(String id, String objId, String type, Long time,
+			String author, String agency, boolean deleted, String year, String month,
+			String week_day, String timeSlot, boolean isHolyday,
+			String valueString){
+			//Map<String, Object> value) {
+		super();
+		this.id = id;
+		this.objId = objId;
+		this.type = type;
+		this.time = time;
+		this.author = author;
+		this.agency = agency;
+		this.deleted = deleted;
+		this.year = year;
+		this.month = month;
+		this.week_day = week_day;
+		this.timeSlot = timeSlot;
+		this.isHolyday = isHolyday;
+		//this.value = value;
+		this.valueString = valueString;
+	}
+
 	public String getId() {
 		return id;
 	}
-	
+
 	public String getObjId() {
 		return objId;
 	}
 
-	//public PointBean getLocation() {
-	//	return location;
-	//}
-	
 	public String getType() {
 		return type;
 	}
-	
+
 	public Long getTime() {
 		return time;
 	}
-	
-//	public Integer getVersion() {
-//		return version;
-//	}
-	
-	public boolean isDeleted() {
-		return deleted;
-	}
-	
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public void setObjId(String objId) {
-		this.objId = objId;
-	}
-	
-	//public void setLocation(PointBean location) {
-	//	this.location = location;
-	//}
-	
-	public void setType(String type) {
-		this.type = type;
-	}
-	
-	public void setTime(Long time) {
-		this.time = time;
-	}
-//	public void setVersion(Integer version) {
-//		this.version = version;
-//	}
-	
-	public void setDeleted(boolean deleted) {
-		this.deleted = deleted;
-	}
 
-	public Map<String, Object> getValue() {
-		return value;
-	}
-
-
-	public void setValue(Map<String, Object> value) {
-		this.value = value;
-	}
-	
 	public String getAuthor() {
 		return author;
 	}
 
-	public void setAuthor(String author) {
-		this.author = author;
+	public boolean isDeleted() {
+		return deleted;
 	}
-	
-	// new setter and getter methods added in 12/5/2015 from MB
+
 	public String getYear() {
 		return year;
 	}
-	
+
 	public String getMonth() {
 		return month;
 	}
@@ -132,10 +112,42 @@ public class DataLogBean {
 		return isHolyday;
 	}
 
+	//public Map<String, Object> getValue() {
+	//	return value;
+	//}
+	
+	public String getValueString() {
+		return valueString;
+	}
+
+	public void setId(String id) {
+		this.id = id;
+	}
+
+	public void setObjId(String objId) {
+		this.objId = objId;
+	}
+
+	public void setType(String type) {
+		this.type = type;
+	}
+
+	public void setTime(Long time) {
+		this.time = time;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
+	public void setDeleted(boolean deleted) {
+		this.deleted = deleted;
+	}
+
 	public void setYear(String year) {
 		this.year = year;
 	}
-	
+
 	public void setMonth(String month) {
 		this.month = month;
 	}
@@ -151,21 +163,30 @@ public class DataLogBean {
 	public void setHolyday(boolean isHolyday) {
 		this.isHolyday = isHolyday;
 	}
-	
-	public String getValueString() {
-		return valueString;
-	}
 
+	//public void setValue(Map<String, Object> value) {
+	//	this.value = value;
+	//}
+	
 	public void setValueString(String valueString) {
 		this.valueString = valueString;
 	}
-
+	
 	public String getAgency() {
 		return agency;
 	}
 
 	public void setAgency(String agency) {
 		this.agency = agency;
+	}
+
+	@Override
+	public String toString() {
+		return "DataLogBeanTP [id=" + id + ", objId=" + objId + ", type="
+				+ type + ", time=" + time + ", author=" + author + ", deleted="
+				+ deleted + ", year=" + year + ", month=" + month
+				+ ", week_day=" + week_day + ", timeSlot=" + timeSlot
+				+ ", isHolyday=" + isHolyday  + ", agency=" + agency + "]"; //+ ", value=" + value
 	}
 	
 }

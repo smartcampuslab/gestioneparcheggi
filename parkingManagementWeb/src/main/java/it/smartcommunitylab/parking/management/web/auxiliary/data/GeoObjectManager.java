@@ -25,9 +25,12 @@ import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
+import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -52,6 +55,8 @@ public class GeoObjectManager {
 	private StorageManager storageManager;
 	@Autowired
 	private DynamicManager dynamicManager;
+	@Autowired
+	private DataLogRepositoryDao dataLogRepo;
 	@Autowired
 	private MongoTemplate mongodb;
 	
@@ -89,6 +94,10 @@ public class GeoObjectManager {
 
 	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
 		return dynamicManager.getLogsById(null, agency, count, skip, "all");
+	}
+	
+	public DataLogBean getLogById(String id) {
+		return dynamicManager.getLogByLogId(id);
 	}
 	
 	public int countAllLogs(String agency) {

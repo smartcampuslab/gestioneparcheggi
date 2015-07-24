@@ -288,9 +288,8 @@ public class CSVManager {
 		
 		private String correctValue(String value){
 			String to_clean = value.toString();
-			String cleaned = to_clean.replaceAll("{", "");
-			cleaned = cleaned.replaceAll("}", "");
-			cleaned = cleaned.replaceAll(",", "-");
+			String cleaned = to_clean.replaceAll(",", " / ");
+			cleaned = cleaned.substring(1, cleaned.length()-1);
 			return cleaned;
 		}
 

@@ -44,6 +44,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
@@ -371,6 +372,7 @@ public class DynamicManager {
 					dl.setType(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
 					dl.setTime(timestamp);
 					dl.setAuthor(authorId);
+					dl.setAgency(agencyId);
 					// set new fields ---------
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(timestamp);
@@ -389,6 +391,9 @@ public class DynamicManager {
 					@SuppressWarnings("unchecked")
 					Map<String,Object> map = ModelConverter.convert(s, Map.class);
 					dl.setValue(map);
+					JSONObject tmpVal = new JSONObject(map);
+					dl.setValueString(tmpVal.toString());
+					logger.info(String.format("Value String: %s", tmpVal.toString()));
 					//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 					mongodb.save(dl);
 					logger.error(String.format("Updated street: %s", temp.toString()));
@@ -613,6 +618,7 @@ public class DynamicManager {
 		dl.setType(Parking.class.getCanonicalName());
 		dl.setTime(timestamp);
 		dl.setAuthor(authorId);
+		dl.setAgency(agencyId);
 		// set new fields ---------
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(timestamp);
@@ -637,6 +643,8 @@ public class DynamicManager {
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(p, Map.class);
 		dl.setValue(map);
+		JSONObject tmpVal = new JSONObject(map);
+		dl.setValueString(tmpVal.toString());
 		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 		mongodb.save(dl);
 		// Update Stat report
@@ -668,13 +676,18 @@ public class DynamicManager {
 			query = Query.query(Criteria.where("value.id").is(id).and("value.agency").is(agency)).limit(count);
 		}
 		query.sort().on("time", Order.DESCENDING);
-		//query.with(new Sort(Sort.Direction.DESC, "time"));
-		//return mongodb.find(query, DataLog.class);
 		List<DataLogBean> myLog = mongodb.find(query, DataLogBean.class);
+		//List<DataLogBean> myLog = mongodb.findAll(DataLogBean.class);
 //		List<DataLogBean> myLogBean = new ArrayList<DataLogBean>();
 //		for(int i = 0; i < myLog.size(); i++){
 //			myLogBean.add(ModelConverter.convert(myLog.get(i), DataLogBean.class));
 //		}
+		return myLog;
+	}
+	
+	public DataLogBean getLogByLogId(String id) {
+		//logger.info(String.format("in getLogByLogId: id=%s", id));
+		DataLogBean myLog = mongodb.findById(id, DataLogBean.class);
 		return myLog;
 	}
 	

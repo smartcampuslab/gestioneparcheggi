@@ -1,0 +1,136 @@
+<div class="col-md-12" align="center" ><!-- style="height: 250px" -->
+	<div ng-show="showDetails">
+		<h4 align="left"><strong>{{ 'log_details' | i18n }}</strong></h4>
+		<table class="table table-striped" style="width: 100%">
+			<tr>
+				<td width="30%"><strong>{{ 'log_objId' | i18n }}</strong></td>
+				<td>{{ logDetails.objId }}</td>
+			</tr>
+			<tr>
+				<td width="30%"><strong>{{ 'log_object_name' | i18n }}</strong></td>
+				<td>{{ logDetails.value.name }}</td>
+			</tr>
+			<tr>
+				<td width="30%"><strong>{{ 'log_type' | i18n }}</strong></td>
+				<td>{{ 'street_type_in_lists' | i18n }}</td>
+			</tr>
+			<tr>
+				<td width="30%"><strong>{{ 'log_time' | i18n }}</strong></td>
+				<td>{{ (logDetails.time | date:'short') }}</td>
+			</tr>
+			<tr>
+				<td width="30%"><strong>{{ 'log_author' | i18n }}</strong></td>
+				<td>{{ logDetails.author }}</td>
+			</tr>
+			<tr>
+				<td colspan="2"><strong>{{ 'log_value' | i18n }}</strong></td>
+			</tr>
+			<tr>
+				<td colspan="2">
+<!-- 					<div class="well"> -->
+						<table width="100%">
+							<tr>
+								<td width="30%"><strong>{{ 'log_slot_free' | i18n }}</strong></td>
+								<td>{{logDetails.value.slotsFree}}</td>
+							</tr>
+							<tr>
+								<td width="30%"><strong>{{ 'log_slot_occupied_on_free' | i18n }}</strong></td>
+								<td>{{logDetails.value.slotsOccupiedOnFree}}</td>
+							</tr>
+							<tr>
+								<td width="30%"><strong>{{ 'log_slot_paying' | i18n }}</strong></td>
+								<td>{{logDetails.value.slotsPaying}}</td>
+							</tr>
+							<tr>
+								<td width="30%"><strong>{{ 'log_slot_occupied_on_paying' | i18n }}</strong></td>
+								<td>{{logDetails.value.slotsOccupiedOnPaying}}</td>
+							</tr>
+							<tr>
+								<td width="30%"><strong>{{ 'log_slot_timed' | i18n }}</strong></td>
+								<td>{{logDetails.value.slotsTimed}}</td>
+							</tr>
+							<tr>
+								<td width="30%"><strong>{{ 'log_slot_occupied_on_timed' | i18n }}</strong></td>
+								<td>{{logDetails.value.slotsOccupiedOnTimed}}</td>
+							</tr>
+							<tr>
+								<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
+								<td>{{logDetails.value.slotsHandicapped}}</td>
+							</tr>
+						</table>
+<!-- 					</div> -->
+				</td>
+			</tr>
+<!-- 			<tr> -->
+<!-- 				<td colspan="2"><strong>{{ 'log_value' | i18n }}</strong></td> -->
+<!-- 			</tr> -->
+<!-- 			<tr> -->
+<!-- 				<td colspan="2"><pre ng-bind-html="json_log_value"></pre></td> -->
+<!-- 			</tr> -->
+		</table>
+		<table style="width: 100%">
+			<tr>
+				<td align="right">
+					<button type="button" class="btn btn-danger btn-lg" ng-click="closeDetails(3)">{{ 'text_btn_close' | i18n  }}</button>
+				</td>
+			</tr>	
+		</table>
+	</div>
+	<div ng-show="!showDetails">
+		<div class="logwrapper">
+			<table class="table table-striped" style="width: 100%">
+				<tr ng-show="streetLogs.length != 0">
+					<th width="25%">{{ 'log_objId' | i18n }}</th>
+					<th width="15%">{{ 'log_type' | i18n }}</th>
+					<th width="15%">{{ 'log_time' | i18n }}</th>
+					<th width="15%">{{ 'log_author' | i18n }}</th>
+					<th width="25%">{{ 'log_value' | i18n }}</th>
+					<th width="5%"></th>
+				</tr>
+				<tbody class="animate-repeat"
+					ng-repeat="log in streetLogs | orderBy:'-time' | startFrom:currentPage*maxLogs | limitTo:maxLogs">
+				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+				<tr>
+					<td width="25%" align="left">{{log.objId}}</td>
+					<td width="15%" align="left">
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'parking_type_in_lists' | i18n }}</span>
+						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'street_type_in_lists' | i18n }}</span>
+					</td>
+					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
+					<td width="15%" align="left">{{log.author}}</td>
+					<td width="60%" align="left">
+<!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsTotal: {{log.value.slotsTotal}}, slotsOccupied: {{log.value.slotsOccupiedOnTotal}}, slotsUnavailable: {{log.value.slotsUnavailable}}</span> -->
+<!-- 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsFree: {{log.value.slotsFree}}, slotsOccupiedOnFree: {{log.value.slotsOccupiedOnFree}}, slotsPaying: {{log.value.slotsPaying}}, slotsOccupiedOnPaying: {{log.value.slotsOccupiedOnPaying}}, slotsTimed: {{log.value.slotsTimed}}, slotsOccupiedOnTimed: {{log.value.slotsOccupiedOnTimed}}, slotsHandicapped: {{log.value.slotsHandicapped}}</span> -->
+						{{log.value.name}}
+					</td>
+					<td width="5%" align="center">
+						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewDetails(3, log)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+					</td>
+				</tr>
+				</tbody>
+				<tr ng-show="streetLogs.length == 0">
+					<td colspan="6"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td>
+				</tr>
+			</table>
+		</div>
+		<table width="100%">
+			<tr>
+				<td width="33%"></td>
+				<td width="34%" align="center">
+					<button class="btn btn-success"
+						ng-disabled="currentPage == 0"
+						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+						{{currentPage+1}}/{{logStreetCountsPage}}
+					<button class="btn btn-success"
+						ng-disabled="currentPage >= streetLogs.length/maxLogs - 1"
+						ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+				</td>
+				<td width="33%" align="left">
+	<!-- 				<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">Crea CSV</button> -->
+	<!-- 				&nbsp;&nbsp; -->
+	<!-- 				<a class="btn btn-success" target="_blank" href="{{ streetCvsFile }}">Scarica CSV</a> -->
+				</td>
+			</tr>
+		</table>	
+	</div>
+</div>

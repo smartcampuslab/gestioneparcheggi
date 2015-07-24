@@ -56,7 +56,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     // For default
     $scope.initGlobalLogs = function(){
     	$scope.showDetails = false;
-    	$scope.countAllLogsInDb();
+    	$scope.showFiltered = false;
+    	//$scope.countAllLogsInDb();
+    	$scope.getAllLogsFromDbTP();
     };
     
     $scope.countAllLogsInDb = function(){
@@ -86,7 +88,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				$scope.globalLogs = $scope.globalLogs.concat(result);
 			    if(skip < $scope.logCounts && sharedDataService.isInGlobalLogPage()){
 			    	skip += 100;
-			    	$scope.getAllLogsFromDb(skip);
+			   	$scope.getAllLogsFromDb(skip);
 			    } else {
 			    	console.log("All log finded: last skip = " + skip);
 			    }
@@ -96,10 +98,53 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		}
 	};
 	
+	$scope.getAllLogsFromDbTP = function(){
+		$scope.globalLogs = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+			var partialLogs = result;//$scope.globalLogs.concat(result);
+			var corrLog = null;
+			for(var i = 0; i < partialLogs.length; i++){
+				corrLog = {
+					id:	partialLogs[i].id,
+					objId: partialLogs[i].objId,
+					type: partialLogs[i].type,
+					time: partialLogs[i].time,
+					author: partialLogs[i].author,
+					agency: partialLogs[i].agency,
+			        deleted: partialLogs[i].deleted,
+			        year: partialLogs[i].year,
+			        month: partialLogs[i].month,
+			        week_day: partialLogs[i].week_day,
+			        timeSlot: partialLogs[i].tileSlot,
+			        holyday: partialLogs[i].holyday,
+			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
+				};
+				//console.log("corrLog: " + JSON.stringify(corrLog));
+				$scope.globalLogs.push(corrLog);
+			}	
+			$scope.logCounts =  partialLogs.length;
+		    $scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
+		});
+	};
+	
+	// Method cleanStringFroJSON: used to clean the saved valueString to be accepted in JSON.parse function
+	$scope.cleanStringForJSON = function(value){
+		var corrected = "";
+		if(value != null){
+			corrected = value.replace(/\n\t|NumberLong|\(|\)/g, "");
+			//console.log("corrected " + corrected);
+		};
+		return corrected;
+	};
+	
 	// For parking
 	$scope.initParkLogs = function(){
 		$scope.showDetails = false;
-    	$scope.countAllParkLogsInDb();
+    	//$scope.countAllParkLogsInDb();
+		$scope.getAllParkLogsFromDbTP();
     };
 	
 	$scope.countAllParkLogsInDb = function(){
@@ -139,10 +184,43 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		}
 	};
 	
+	$scope.getAllParkLogsFromDbTP = function(){
+		$scope.parkLogs = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/parkings", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+			var partialLogs = result;
+			var corrLog = null;
+			for(var i = 0; i < partialLogs.length; i++){
+				corrLog = {
+					id:	partialLogs[i].id,
+					objId: partialLogs[i].objId,
+					type: partialLogs[i].type,
+					time: partialLogs[i].time,
+					author: partialLogs[i].author,
+					agency: partialLogs[i].agency,
+			        deleted: partialLogs[i].deleted,
+			        year: partialLogs[i].year,
+			        month: partialLogs[i].month,
+			        week_day: partialLogs[i].week_day,
+			        timeSlot: partialLogs[i].tileSlot,
+			        holyday: partialLogs[i].holyday,
+			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
+				};
+				//console.log("corrLog: " + JSON.stringify(corrLog));
+				$scope.parkLogs.push(corrLog);
+			}
+			$scope.logParkCounts = partialLogs.length;
+		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
+		});
+	};
+	
 	// For street
 	$scope.initStreetLogs = function(){
 		$scope.showDetails = false;
-    	$scope.countAllStreetLogsInDb();
+    	//$scope.countAllStreetLogsInDb();
+		$scope.getAllStreetLogsFromDbTP();
     };
 	
 	$scope.countAllStreetLogsInDb = function(){
@@ -182,16 +260,52 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		}
 	};
 	
-	$scope.viewDetails = function(log){
+	$scope.getAllStreetLogsFromDbTP = function(){
+		$scope.streetLogs = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/streets", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+			var partialLogs = result;
+			var corrLog = null;
+			for(var i = 0; i < partialLogs.length; i++){
+				corrLog = {
+					id:	partialLogs[i].id,
+					objId: partialLogs[i].objId,
+					type: partialLogs[i].type,
+					time: partialLogs[i].time,
+					author: partialLogs[i].author,
+					agency: partialLogs[i].agency,
+			        deleted: partialLogs[i].deleted,
+			        year: partialLogs[i].year,
+			        month: partialLogs[i].month,
+			        week_day: partialLogs[i].week_day,
+			        timeSlot: partialLogs[i].tileSlot,
+			        holyday: partialLogs[i].holyday,
+			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
+				};
+				//console.log("corrLog: " + JSON.stringify(corrLog));
+				$scope.streetLogs.push(corrLog);
+			}
+			$scope.logStreetCounts = partialLogs.length;
+		    $scope.logStreetCountsPage = Math.ceil($scope.logStreetCounts / $scope.maxLogs);
+		});
+	};
+	
+	$scope.viewDetails = function(type, log){
 		$scope.showDetails = true;
-		$scope.showFiltered = false;
+		if(type == 1){
+			$scope.showFiltered = false;
+		}
 		$scope.logDetails = log;
 		$scope.json_log_value = JSON.stringify(log, undefined, 4);
 	};
 	
-	$scope.closeDetails = function(){
+	$scope.closeDetails = function(type){
 		$scope.showDetails = false;
-		$scope.showFiltered = true;
+		if(type == 1){
+			$scope.showFiltered = true;
+		}
 		$scope.logDetails = {};
 	};
 	
@@ -232,12 +346,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    });	
 	};
 	
-	
-	
-	
 	// ------------------------------------------- End of block for csv ----------------------------------------
-	
-	
     
     
 }]);    
