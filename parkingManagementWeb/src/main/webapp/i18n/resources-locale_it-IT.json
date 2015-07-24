@@ -1027,6 +1027,10 @@
     "value": "Occupazione media",
     "description": "Label per valore occupazione media per oggetto strada in dashboard"
 }, {
+    "key": "street_occupation_not_present",
+    "value": "n.p.",
+    "description": "Testo dato non presente per valore occupazione media strada in dashboard"
+}, {
     "key": "zone_total_slots",
     "value": "Posti totali",
     "description": "Testo label posti totali zona in dashboard"
@@ -1034,38 +1038,6 @@
     "key": "zone_occupied_slots",
     "value": "Posti occupati",
     "description": "Testo label posti occupati zona in dashboard"
-}, {
-    "key": "street_occupation_not_present",
-    "value": "n.p.",
-    "description": "Testo dato non presente per valore occupazione media strada in dashboard"
-}, {
-    "key": "log_slot_free",
-    "value": "Posti gratuiti",
-    "description": "label per posti gratuiti in via"
-}, {
-    "key": "log_slot_occupied_on_free",
-    "value": "Posti gratuiti occupati",
-    "description": "label per posti gratuiti occupati in via"
-}, {
-    "key": "log_slot_paying",
-    "value": "Posti a pagamento",
-    "description": "label per posti a pagamento in via"
-}, {
-    "key": "log_slot_occupied_on_paying",
-    "value": "Posti a pagamento occupati",
-    "description": "label per posti a pagamento occupati in via"
-}, {
-    "key": "log_slot_timed",
-    "value": "Posti a disco orario",
-    "description": "label per posti a disco orario in via"
-}, {
-    "key": "log_slot_occupied_on_timed",
-    "value": "Posti a disco orario occupati",
-    "description": "label per posti a disco orario occupati in via"
-}, {
-    "key": "log_slot_handicapped",
-    "value": "Posti per disabili",
-    "description": "label per posti per disabili in via"
 }, {
     "key": "area_total_slots",
     "value": "Posti totali",
@@ -1111,13 +1083,33 @@
     "value": "Crea CSV",
     "description": "Testo bottone per creazione del file csv"
 }, {
+    "key": "new_log_street",
+    "value": "Crea Log Via",
+    "description": "Titolo pannello in creazione log via"
+}, {
+    "key": "street_name_log",
+    "value": "Nome via",
+    "description": "Label per select in creazione log via"
+}, {
+    "key": "street_log_placeholder",
+    "value": "Seleziona il nome della via",
+    "description": "Placeholder per select in creazione log via"
+}, {
+    "key": "street_name_select_err_required",
+    "value": "Campo 'Nome via' obbligatorio",
+    "description": "Placeholder per select in creazione log via"
+}, {
     "key": "csv_link_alt_title",
     "value": "Scarica file csv",
     "description": "Testo per attributo alt o title del link per il download del file csv"
 }, {
-    "key": "logs_link_text",
-    "value": "Logs",
-    "description": "Testo per per pulsante logs - ausiliari"
+    "key": "view_logs_link_text",
+    "value": "Visualizza Logs",
+    "description": "Testo per per pulsante view logs - ausiliari"
+}, {
+    "key": "new_logs_link_text",
+    "value": "Aggiungi Logs",
+    "description": "Testo per per pulsante new logs - ausiliari"
 }, {
     "key": "log_objId",
     "value": "Id Oggetto",
@@ -1166,6 +1158,34 @@
     "key": "log_slot_unavailable",
     "value": "Posti non disponibili",
     "description": "label per posti non disponibili in parcheggio"
+}, {
+    "key": "log_slot_free",
+    "value": "Posti gratuiti",
+    "description": "label per posti gratuiti in via"
+}, {
+    "key": "log_slot_occupied_on_free",
+    "value": "Posti gratuiti occupati",
+    "description": "label per posti gratuiti occupati in via"
+}, {
+    "key": "log_slot_paying",
+    "value": "Posti a pagamento",
+    "description": "label per posti a pagamento in via"
+}, {
+    "key": "log_slot_occupied_on_paying",
+    "value": "Posti a pagamento occupati",
+    "description": "label per posti a pagamento occupati in via"
+}, {
+    "key": "log_slot_timed",
+    "value": "Posti a disco orario",
+    "description": "label per posti a disco orario in via"
+}, {
+    "key": "log_slot_occupied_on_timed",
+    "value": "Posti a disco orario occupati",
+    "description": "label per posti a disco orario occupati in via"
+}, {
+    "key": "log_slot_handicapped",
+    "value": "Posti per disabili",
+    "description": "label per posti per disabili in via"
 }, {
     "key": "link_filter_log_title",
     "value": "Filtra per oggetto",
@@ -1229,4 +1249,5 @@
 }, {
     "key": "hour_vis",
     "value": "Fascia oraria"
-}]
+}
+]

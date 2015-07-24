@@ -1,0 +1,6 @@
+<tabset ng-controller="AuxCtrl">
+	<tab  ng-repeat="tab in addtabs" heading="{{ tab.title }}" active="tab.active" disabled="tab.disabled"  select="setAddIndex($index)">
+		<br>
+		<div ng-include="tab.content"></div>
+	</tab>
+</tabset>

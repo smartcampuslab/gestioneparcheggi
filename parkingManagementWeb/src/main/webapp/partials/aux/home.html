@@ -1,7 +1,7 @@
 <div class="well" align="center"><!-- style="height: 250px" -->
 	<table  style="width: 98%"><!-- ng-init="retrieveUserData()" style="width: 98%" -->
 		<tr>
-			<th>
+			<th colspan="2">
 				<strong>{{ 'app_home_aux_info' | i18n }}</strong>
 			</th>
 		</tr>
@@ -9,7 +9,7 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="100%" align="justify">
+			<td width="100%" colspan="2" align="justify">
 				{{ 'app_home_aux_info_text' | i18n }}
 			</td>
 		</tr>
@@ -17,8 +17,11 @@
 			<td>&nbsp;</td>
 		</tr>
 		<tr>
-			<td width="100%" align="left">
-				<a href="#/aux/logs" type="button" class="btn btn-primary" >{{ 'logs_link_text' | i18n }}</a>
+			<td width="12%" align="left">
+				<a href="#/aux/logs" type="button" class="btn btn-primary" >{{ 'view_logs_link_text' | i18n }}</a>
+			</td>
+			<td width="88%" align="left">
+				<a href="#/aux/add" type="button" class="btn btn-primary" >{{ 'new_logs_link_text' | i18n }}</a>
 			</td>
 		</tr>
 	</table>

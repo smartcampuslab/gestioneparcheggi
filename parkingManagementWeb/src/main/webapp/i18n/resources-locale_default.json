@@ -1087,9 +1087,13 @@
     "value": "Scarica file csv",
     "description": "Testo per attributo alt o title del link per il download del file csv"
 }, {
-    "key": "logs_link_text",
-    "value": "Logs",
-    "description": "Testo per per pulsante logs - ausiliari"
+    "key": "view_logs_link_text",
+    "value": "Visualizza Logs",
+    "description": "Testo per per pulsante view logs - ausiliari"
+}, {
+    "key": "new_logs_link_text",
+    "value": "Aggiungi Logs",
+    "description": "Testo per per pulsante new logs - ausiliari"
 }, {
     "key": "log_objId",
     "value": "Id Oggetto",
@@ -1178,6 +1182,22 @@
     "key": "log_details",
     "value": "Dettagli Log",
     "description": "titolo pagina dettaglio log"
+}, {
+    "key": "new_log_street",
+    "value": "Crea Log Via",
+    "description": "Titolo pannello in creazione log via"
+}, {
+    "key": "street_name_log",
+    "value": "Nome via",
+    "description": "Label per select in creazione log via"
+}, {
+    "key": "street_log_placeholder",
+    "value": "Seleziona il nome della via",
+    "description": "Placeholder per select in creazione log via"
+}, {
+    "key": "street_name_select_err_required",
+    "value": "Campo 'Nome via' obbligatorio",
+    "description": "Placeholder per select in creazione log via"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"
