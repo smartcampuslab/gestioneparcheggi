@@ -159,24 +159,28 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
-	public @ResponseBody void updateParking(@RequestBody Parking parking, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParking(@RequestBody Parking parking, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//dataService.updateParkingData(parking, agency, userId);
 			dataService.updateDynamicParkingData(parking, agency, userId);
+			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "KO";
 		}
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/{id}/{userId:.*}") 
-	public @ResponseBody void updateStreet(@RequestBody Street street, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreet(@RequestBody Street street, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//dataService.updateStreetData(street, agency, userId);
 			dataService.updateDynamicStreetData(street, agency, userId);
+			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			return "KO";
 		}
 	}
 	

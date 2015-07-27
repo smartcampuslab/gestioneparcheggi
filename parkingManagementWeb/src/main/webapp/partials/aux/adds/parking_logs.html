@@ -1,120 +1,97 @@
-<div class="col-md-12" align="center" ><!-- style="height: 250px" -->
-	<div ng-show="showDetails">
-		<h4 align="left"><strong>{{ 'log_details' | i18n }}</strong></h4>
-		<table class="table table-striped" style="width: 100%">
-			<tr>
-				<td width="30%"><strong>{{ 'log_objId' | i18n }}</strong></td>
-				<td>{{ logDetails.objId }}</td>
-			</tr>
-			<tr>
-				<td width="30%"><strong>{{ 'log_object_name' | i18n }}</strong></td>
-				<td>{{ logDetails.value.name }}</td>
-			</tr>
-			<tr>
-				<td width="30%"><strong>{{ 'log_type' | i18n }}</strong></td>
-				<td>{{ 'parking_type_in_lists' | i18n }}</td>
-			</tr>
-			<tr>
-				<td width="30%"><strong>{{ 'log_time' | i18n }}</strong></td>
-				<td>{{ (logDetails.time | date:'short') }}</td>
-			</tr>
-			<tr>
-				<td width="30%"><strong>{{ 'log_author' | i18n }}</strong></td>
-				<td>{{ logDetails.author }}</td>
-			</tr>
-			<tr>
-				<td colspan="2"><strong>{{ 'log_value' | i18n }}</strong></td>
-			</tr>
-			<tr>
-				<td colspan="2">
-<!-- 					<div class="well"> -->
-						<table width="100%">
-							<tr>
-								<td width="30%"><strong>{{ 'log_total_slot' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsTotal}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_occupied_on_total' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsOccupiedOnTotal}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsUnavailable}}</td>
-							</tr>
-						</table>
-<!-- 					</div> -->
-				</td>
-			</tr>
-<!-- 			<tr> -->
-<!-- 				<td colspan="2"><strong>{{ 'log_value' | i18n }}</strong></td> -->
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<td colspan="2"><pre ng-bind-html="json_log_value"></pre></td> -->
-<!-- 			</tr> -->
-		</table>
-		<table style="width: 100%">
-			<tr>	
-				<td align="right">
-					<button type="button" class="btn btn-danger btn-lg" ng-click="closeDetails(2)">{{ 'text_btn_close' | i18n  }}</button>
-				</td>
-			</tr>	
-		</table>
-	</div>
-	<div ng-show="!showDetails">
-		<div class="logwrapper">
-			<table class="table table-striped" style="width: 100%">
-				<tr ng-show="parkLogs.length != 0">
-					<th width="25%">{{ 'log_objId' | i18n }}</th>
-					<th width="15%">{{ 'log_type' | i18n }}</th>
-					<th width="15%">{{ 'log_time' | i18n }}</th>
-					<th width="15%">{{ 'log_author' | i18n }}</th>
-					<th width="25%">{{ 'log_object_name' | i18n }}</th>
-					<th width="5%"></th>
-				</tr>
-				<tbody class="animate-repeat"
-					ng-repeat="log in parkLogs | orderBy:'-time' | startFrom:currentPage*maxLogs | limitTo:maxLogs">
-				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
-				<tr>
-					<td width="25%" align="left">{{log.objId}}</td>
-					<td width="15%" align="left">
-						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'parking_type_in_lists' | i18n }}</span>
-						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'street_type_in_lists' | i18n }}</span>
-					</td>
-					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
-					<td width="15%" align="left">{{log.author}}</td>
-					<td width="25%" align="left">
-<!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsTotal: {{log.value.slotsTotal}}, slotsOccupied: {{log.value.slotsOccupiedOnTotal}}, slotsUnavailable: {{log.value.slotsUnavailable}}</span> -->
-<!-- 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsFree: {{log.value.slotsFree}}, slotsOccupiedOnFree: {{log.value.slotsOccupiedOnFree}}, slotsPaying: {{log.value.slotsPaying}}, slotsOccupiedOnPaying: {{log.value.slotsOccupiedOnPaying}}, slotsTimed: {{log.value.slotsTimed}}, slotsOccupiedOnTimed: {{log.value.slotsOccupiedOnTimed}}, slotsHandicapped: {{log.value.slotsHandicapped}}</span> -->
-						{{log.value.name}}
-					</td>
-					<td width="5%" align="center">
-						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewDetails(2, log)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-					</td>
-				</tr>
-				</tbody>
-				<tr ng-show="parkLogs.length == 0">
-					<td colspan="6"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td>
-				</tr>
-			</table>
-		</div>
-		<table width="100%">
-			<tr>
-				<td width="33%"></td>
-				<td width="34%" align="center">
-					<button class="btn btn-success"
-						ng-disabled="currentPage == 0"
-						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-						{{currentPage+1}}/{{logParkCountsPage}}
-					<button class="btn btn-success"
-						ng-disabled="currentPage >= parkLogs.length/maxLogs - 1"
-						ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
-				</td>
-				<td width="33%" align="left">
-	<!-- 				<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">Crea CSV</button> -->
-	<!-- 				&nbsp;&nbsp; -->
-	<!-- 				<a class="btn btn-success" target="_blank" href="{{ streetCvsFile }}">Scarica CSV</a> -->
-				</td>
-			</tr>
-		</table>	
-	</div>
+<div class="col-md-12">
+	<form role="form" name="form" ng-init="initParkLogCreation()">
+		<div class="panel panel-default" width="90%">
+		   	<div class="panel-heading">
+		    	<h3 class="panel-title"><strong>{{ 'new_log_parking' | i18n }}</strong></h3>
+		  	</div>
+		  	<div class="panel-body">
+		  		<div class="form-group">
+			    	<label for="parkN">{{ 'parking_name_log' | i18n }}</label>
+			    	<select id="parkN" name="parkN" class="form-control" ng-options="p as p.name for p in allParking" ng-model="myParking" required ng-change="getParkDetailData(myParking)">
+			    		<option value="">{{ 'parking_log_placeholder' | i18n }}</option>
+			    	</select>
+			   		<div class="alert alert-danger" ng-show="!isInit && form.parkN.$error.required">{{ 'parking_name_select_err_required' | i18n }}</div>
+				</div>
+				<table width="100%" ng-show="parkLoadedAndSelected">
+					<tr>
+						<td><strong>{{ 'park_id' | i18n }}</strong></td>
+						<td>{{ myParkingDetails.id }}</td>
+					</tr>
+					<tr>
+						<td><strong>{{ 'park_name' | i18n }}</strong></td>
+						<td>{{ myParkingDetails.name }}</td>
+					</tr>
+					<tr>
+						<td colspan="2"><hr/></td>
+					</tr>
+				</table>
+				<div class="form-group" ng-show="parkLoadedAndSelected">
+					<label for="totalSlot">{{ 'parking_user_log' | i18n }}</label>
+			    	<input id="totalSlot" type="text" class="form-control" name="sUserLog" ng-model="myParkingDetails.user" ng-pattern="onlyNumbers" placeholder="{{ 'street_usercode_placeholder' | i18n }}" required >
+				   	<div class="alert alert-danger" ng-show="!isInit && form.sUserLog.$error.required">{{ 'parking_userlog_err_required' | i18n }}</div>
+				   	<div class="alert alert-danger" ng-show="!isInit && form.sUserLog.$error.pattern">{{ 'parking_userlog_pattern' | i18n }}</div>
+				</div>
+				<div class="form-group" ng-show="parkLoadedAndSelected">
+			    	<label for="logtime">{{ 'parking_time_log' | i18n }}:</label>&nbsp;
+			    	<input id="logtime" name="pLogTime" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myParkingDetails.loghour" is-open="sLogtime.open" ng-click="sLogtime.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required />
+			    	<div class="alert alert-danger" ng-show="!isInit && form.pLogTime.$error.required">{{ 'parking_timelog_err_required' | i18n }}</div>
+			    </div>
+			    <div class="form-group" ng-show="parkLoadedAndSelected">	
+			   		<input type="text" class="form-control" name="pLogOra" id="time" ng-model="myParkingDetails.logtime" placeholder="HH:mm:ss" ng-pattern="timePattern" required>
+			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div>
+			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.pattern">{{ 'log_time_error_pattern' | i18n }}</div>
+			   	</div>
+				<div ng-show="parkLoadedAndSelected">
+				   	<label for="totalSlot">{{ 'parking_slots' | i18n }}</label>
+				   	<div class="panel panel-default" width="90%">
+				   		<div class="panel-body">
+				   			<table width="100%">
+				   				<tr>
+				   					<td width="25%"><strong>{{ 'parking_totalslot' | i18n }}</strong></td>
+				   					<td width="5%">{{ myParkingDetails.slotsTotal }}</td>
+				   					<td width="20%"><strong>{{ 'parking_occupied_slot' | i18n }}</strong></td>
+				   					<td width="50%"><input id="occupiedSlot" type="text" class="form-control" name="pOccupiedslot" ng-model="myParkingDetails.slotsOccupiedOnTotal" ng-pattern="onlyNumbers" placeholder="{{ 'parking_slotoccupied_placeholder' | i18n }}" required ></td>
+				   				</tr>
+				   				<tr ng-show="!isInit && form.pOccupiedslot.$error.pattern">
+				   					<td colspan="3" width="50%"></td>
+				   					<td align="center">
+				   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_pattern' | i18n }}</div>
+				   					</td>
+				   				</tr>
+				   				<tr ng-show="!isInit && form.pOccupiedslot.$error.required">
+				   					<td colspan="3" width="50%"></td>
+				   					<td align="center">
+				   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_required' | i18n }}</div>
+				   					</td>
+				   				</tr>
+				   				<tr>
+				   					<td><strong>{{ 'parking_unavailable_slot' | i18n }}</strong></td>
+				   					<td>{{ myParkingDetails.slotsUnavailable }}</td>
+				   					<td></td>
+				   					<td></td>
+				   				</tr>
+				   			</table>
+				   	</div>
+				</div>
+				<div class="alert alert-danger" ng-show="showUpdatingPErrorMessage">{{ 'err_in_log_parking_inserting' | i18n }}</div>
+				<div class="alert alert-success" ng-show="showUpdatingPSuccessMessage">{{ 'succ_in_log_parking_inserting' | i18n }}</div>
+		   		<table width="97%">			
+				   	<tr>
+				   		<td width="85%"></td>
+				   		<td width="8%" align="center">
+<!-- 				   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button> -->
+				   			<a href="#/aux/home" type="button" class="btn btn-danger btn-lg" >{{ 'text_btn_close' | i18n }}</a>
+				   		</td>
+				   		<td width="7%" align="right">
+<!-- 				   		<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
+<!-- 				   		<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
+				   			<button type="button" class="btn btn-success btn-lg" ng-click="insertParkingLog(form, myParkingDetails)">{{ 'text_btn_save' | i18n  }}</button>
+				   		</td>
+					</tr>
+					<tr>
+						<td colspan="3">&nbsp;</td>
+					</tr>
+				</table>
+		   	</div>
+	   	</form>
 </div>

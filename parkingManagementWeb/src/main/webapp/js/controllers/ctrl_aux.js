@@ -12,11 +12,56 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     $scope.showFiltered = false;
     $scope.maxLogs = 15;
     
+    $scope.onlyNumbers = /^\d+$/;
+    $scope.timePattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
+    
     $scope.logtabs = [ 
         { title:'Log generale', index: 1, content:"partials/aux/logs/global_logs.html" },
         { title:'Log vie', index: 2, content:"partials/aux/logs/street_logs.html" },
         { title:'Log parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html" }
     ];
+    
+ // ------------------ Start datetimepicker section -----------------------
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        //$scope.dt = null;
+    };
+
+    // Disable weekend selection
+    $scope.disabled = function(date, mode) {
+         return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
+
+    $scope.toggleMin = function() {
+         $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.dateOptions = {
+        formatYear: 'yyyy',
+        startingDay: 1,
+        showWeeks: 'false'
+    };
+
+    $scope.initDate = new Date();
+    $scope.formats = ['shortDate', 'dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy'];
+    $scope.format = $scope.formats[0];
+    
+    $scope.getPlaceHolder = function(){
+	    var local_placeholder = '';
+    	if(sharedDataService.getUsedLanguage() == 'ita'){
+	    	local_placeholder = "gg/MM/aaaa";
+	    } else if(sharedDataService.getUsedLanguage() == 'eng'){
+	    	local_placeholder = "dd/MM/yyyy";
+	    }
+    	return local_placeholder;
+    };
+              
+    //---------------- End datetimepicker section------------
     
     $scope.setIndex = function($index){
     	switch($index){
@@ -363,55 +408,235 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method initStreetLogCreation: used to init the creation street page log
 	$scope.initStreetLogCreation = function(){
+		$scope.showUpdatingSErrorMessage = false;
+		$scope.showUpdatingSSuccessMessage = false;
+		$scope.isInit = true;
 		$scope.getStreetsFromDb();
 	};
 	
-	// Method getStreetsFromDb: used to init the input select in log creation
+	$scope.initParkLogCreation = function(){
+		$scope.showUpdatingPErrorMessage = false;
+		$scope.showUpdatingPSuccessMessage = false;
+		$scope.isInit = true;
+		$scope.getParkingsFromDb();
+	};
+	
+	// Method getStreetsFromDb: used to init the input select in street log creation
 	$scope.getStreetsFromDb = function(){
 		$scope.allStreet = [];
-		var allStreet = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 		
-	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
-		var myDataPromise = invokeWSService.getProxy(method, appId + "/street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
-	    	angular.copy(result, allStreet);
-	    	$scope.allStreet = $scope.initStreetsObjects(allStreet);
+	    	angular.copy(result, $scope.allStreet);
 	    	$scope.streetLoadedAndSelected = false;
 	    });
 	};
 	
-	$scope.initStreetsObjects = function(streets){
-		var myStreets = [];
-		for(var i = 0; i < streets.length; i++){
-			var zones = [];
-			var pms = [];
-			var area = $scope.getLocalAreaById(streets[i].rateAreaId);
-			var mystreet = streets[i];
-			mystreet.area_name = area.name;
-			mystreet.area_color= area.color;
-			mystreet.myZones = zones;
-			mystreet.myPms = pms;
-			myStreets.push(mystreet);
-		}
-		return myStreets;
-	};
-	
-	$scope.getLocalAreaById = function(id){
-		var find = false;
-		var myAreas = sharedDataService.getSharedLocalAreas();
-		for(var i = 0; i < myAreas.length && !find; i++){
-			if(myAreas[i].id == id){
-				find = true;
-				return myAreas[i];
-			}
-		}
+	// Method getParksFromDb: used to init the input select in park log creation
+	$scope.getParkingsFromDb = function(){
+		$scope.allParking = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings", null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	angular.copy(result, $scope.allParking);
+	    	$scope.parkLoadedAndSelected = false;
+	    });
 	};
 	
 	$scope.getDetailData = function(street){
 		$scope.myStreetDetails = street;
 		$scope.streetLoadedAndSelected = true;
+		// to hide the messages (error or success)
+		$scope.showUpdatingSErrorMessage = false;
+		$scope.showUpdatingSSuccessMessage = false;
 	};
+	
+	$scope.getParkDetailData = function(park){
+		$scope.myParkingDetails = park;
+		$scope.parkLoadedAndSelected = true;
+		// to hide the messages (error or success)
+		$scope.showUpdatingPErrorMessage = false;
+		$scope.showUpdatingPSuccessMessage = false;
+	};
+	
+	// Method insertStreetLog: used to insert in the db (table dataLogBean) a new street log
+	$scope.insertStreetLog = function(form, myStreetDetails){
+		$scope.showUpdatingSErrorMessage = false;
+		$scope.showUpdatingSSuccessMessage = false;
+		if(form.$invalid){
+			$scope.isInit = false;
+		} else {
+			var method = 'POST';
+			var appId = sharedDataService.getConfAppId();
+			var logId = myStreetDetails.id;
+			var user = myStreetDetails.user;
+			var streetLogDet = {
+				id: myStreetDetails.id, 
+				agency: myStreetDetails.agency, 
+				position: myStreetDetails.position, 
+				name: myStreetDetails.name, 
+				description: myStreetDetails.description,
+				updateTime: $scope.getLogMillis(myStreetDetails.loghour, myStreetDetails.logtime), 
+				user: parseInt(myStreetDetails.user), 
+				slotsFree: parseInt(myStreetDetails.slotsFree), 
+				slotsOccupiedOnFree: parseInt(myStreetDetails.slotsOccupiedOnFree), 
+				slotsPaying: parseInt(myStreetDetails.slotsPaying), 
+				slotsOccupiedOnPaying: parseInt(myStreetDetails.slotsOccupiedOnPaying), 
+				slotsTimed: parseInt(myStreetDetails.slotsTimed), 
+				slotsOccupiedOnTimed: parseInt(myStreetDetails.slotsOccupiedOnTimed), 
+				slotsHandicapped: parseInt(myStreetDetails.slotsHandicapped), 
+				slotsOccupiedOnHandicapped: parseInt(myStreetDetails.slotsOccupiedOnHandicapped),
+				slotsUnavailable: parseInt(myStreetDetails.slotsUnavailable), 
+				polyline: myStreetDetails.polyline, 
+				areaId: myStreetDetails.areaId,
+				version: myStreetDetails.version,
+				lastChange:myStreetDetails.lastChange
+			};
+			
+			var value = JSON.stringify(streetLogDet);
+			console.log("streetLogDet: " + value);
+			
+		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets/" + logId + "/" + user, null, $scope.authHeaders, value);
+		    myDataPromise.then(function(result){
+		    	console.log("Insert street log: " + JSON.stringify(result));
+		    	if(result == "OK"){
+		    		$scope.showUpdatingSErrorMessage = false;
+		    		$scope.showUpdatingSSuccessMessage = true;
+		    	} else {
+		    		$scope.showUpdatingSErrorMessage = true;
+		    		$scope.showUpdatingSSuccessMessage = false;
+		    	}
+		    });	
+		}
+	};
+	
+	// Method insertParkingLog: used to insert in the db (table dataLogBean) a new parking log
+	$scope.insertParkingLog = function(form, myParkingDetails){
+		$scope.showUpdatingPErrorMessage = false;
+		$scope.showUpdatingPSuccessMessage = false;
+		if(form.$invalid){
+			$scope.isInit = false;
+		} else {
+			var method = 'POST';
+			var appId = sharedDataService.getConfAppId();
+			var logId = myParkingDetails.id;
+			var user = myParkingDetails.user;
+			var parkingLogDet = {
+				id: myParkingDetails.id, 
+				agency: myParkingDetails.agency, 
+				position: myParkingDetails.position, 
+				name: myParkingDetails.name, 
+				description: myParkingDetails.description,
+				updateTime: $scope.getLogMillis(myParkingDetails.loghour, myParkingDetails.logtime), 
+				user: parseInt(myParkingDetails.user), 
+				slotsTotal: parseInt(myParkingDetails.slotsTotal), 
+				slotsOccupiedOnTotal: parseInt(myParkingDetails.slotsOccupiedOnTotal),
+				slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), 
+				lastChange:myParkingDetails.lastChange
+			};
+			
+			var value = JSON.stringify(parkingLogDet);
+			console.log("parkingLogDet: " + value);
+			
+		   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings/" + logId + "/" + user, null, $scope.authHeaders, value);
+		    myDataPromise.then(function(result){
+		    	console.log("Insert parking log: " + JSON.stringify(result));
+		    	if(result == "OK"){
+		    		$scope.showUpdatingPErrorMessage = false;
+		    		$scope.showUpdatingPSuccessMessage = true;
+		    	} else {
+		    		$scope.showUpdatingPErrorMessage = true;
+		    		$scope.showUpdatingPSuccessMessage = false;
+		    	}
+		    });	
+		}
+	};
+	
+	// Method composeLogId: method used to compose the correct log id with the object type, app id and the log id
+	$scope.composeLogId = function(type, appId, logId){
+		if(type == 1){
+			return "street@" + appId + "@" + logId;
+		} else {
+			return "parking@" + appId + "@" + logId;
+		}
+	};
+	
+	$scope.correctDateIt = function(date){
+    	if(date != null){
+	    	if(date instanceof Date){
+	    		// if date is a Date
+	    		var correct = "";
+	       		var day = date.getDate();
+	       		var month = date.getMonth() + 1;
+	       		var year = date.getFullYear();
+	       		correct = $scope.addZero(day) + "/" + $scope.addZero(month) + "/" + year;
+	       		return correct;
+	    	} else {
+	    		// if date is a String
+		       	if(date.indexOf("/") > -1){
+		       		var res = date.split("/");
+		       		var correct = "";
+		       		correct = $scope.addZero(res[0]) + "/" + $scope.addZero(res[1]) + "/" + res[2];
+		       		return correct;
+		      	} else {
+		        	if(date != null){
+		        		var res = date.split("-");
+		        		var correct = "";
+		        	   	correct = $scope.addZero(res[2]) + "/" + $scope.addZero(res[1]) + "/" + res[0];
+		        	   	return correct;
+		        	} else {
+		            	return date;
+		            }
+		        }
+	    	}
+    	} else {
+    		return date;
+    	}
+    };
+            
+    $scope.castToDate = function(stringDate){
+    	if(stringDate != null && stringDate!= "" ){
+    		var res = stringDate.split("-");
+    		var month = parseInt(res[1]) - 1; // the month start from 0 to 11;
+    		return new Date(res[0], month, res[2]);
+    	} else {
+    		return null;
+    	}
+    };
+    
+    $scope.addZero = function(value){
+    	var string_val = '';
+    	if(value < 10){
+    		string_val = value.toString();
+    		if(string_val.length < 2){
+    			string_val = '0' + value.toString();
+    		}
+    	} else {
+    		string_val = value.toString();
+    	}
+    	return string_val;
+    };
+    
+    $scope.getLogMillis = function(date, time){
+    	var millis = 0;
+    	var res = time.split(":");
+   		var hours = res[0];
+   		var minutes = res[1];
+   		var seconds = res[2];
+    	
+    	if(date instanceof Date){
+    		// if date is a Date
+       		date.setHours(hours);
+       		date.setMinutes(minutes);
+       		date.setSeconds(seconds);
+       		millis = date.getTime();
+    	}
+    	return millis;
+    };
     
 }]);    

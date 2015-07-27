@@ -1199,6 +1199,174 @@
     "value": "Dettagli Log",
     "description": "titolo pagina dettaglio log"
 }, {
+    "key": "street_timedslotoccupied_placeholder",
+    "value": "Inserire numero posti occupati a disco orario",
+    "description": "Placeholder per posti disco orario occupati in creazione log via"
+}, {
+    "key": "street_paidslotoccupied_placeholder",
+    "value": "Inserire numero posti occupati a pagamento",
+    "description": "Placeholder per posti a pagamento occupati in creazione log via"
+}, {
+    "key": "street_freeslotoccupied_placeholder",
+    "value": "Inserire numero posti occupati tra i gratuiti",
+    "description": "Placeholder per posti gratuiti occupati in creazione log via"
+}, {
+    "key": "street_usercode_placeholder",
+    "value": "Inserisci il codice utente",
+    "description": "Placeholder per codice utente in creazione log via"
+}, {
+    "key": "street_user_log",
+    "value": "Codice Utente",
+    "description": "Label codice utente in creazione log via"
+}, {
+    "key": "street_time_log",
+    "value": "Ora Log",
+    "description": "Label orario in creazione log via"
+}, {
+    "key": "street_timelog_err_required",
+    "value": "Campo ora log obbligatorio",
+    "description": "Messaggio orario log mancante in creazione log via"
+}, {
+	"key": "datepicker_button_today",
+	"value": "Oggi",
+	"description": "Testo pulsante datapicker per oggi"
+}, {
+	"key": "datepicker_button_canc",
+	"value": "Cancella",
+	"description": "Testo pulsante datapicker per cancella"
+}, {
+	"key": "datepicker_button_close",
+	"value": "Chiudi",
+	"description": "Testo pulsante datapicker per chiudi"
+}, {
+	"key": "log_time_error_required",
+	"value": "Ora obbligatoria",
+	"description": "Messaggio ora log mancante in creazione log via"
+}, {
+	"key": "log_time_error_pattern",
+	"value": "Ora non corretta. Inserire un  orario nel formato hh:mm:ss",
+	"description": "Messaggio ora log non corretta in creazione log via"
+}, {
+	"key": "street_userlog_err_required",
+	"value": "Campo user log obbligatorio",
+	"description": "Messaggio user log mancante in creazione log via"
+}, {
+	"key": "street_userlog_pattern",
+	"value": "Campo user log non corretto: iserire un valore numerico",
+	"description": "Messaggio user log non corretta in creazione log via"
+}, {
+	"key": "err_in_log_street_inserting",
+	"value": "Errore nell'inserimento del log: DB non pronto. Riprovare piu' tardi",
+	"description": "Messaggio errore in db in creazione log via"
+}, {
+	"key": "succ_in_log_street_inserting",
+	"value": "Inserimento nuovo log avvenuto con successo",
+	"description": "Messaggio successo in creazione log via in db"
+}, {
+    "key": "new_log_parking",
+    "value": "Crea Log Parcheggio",
+    "description": "Titolo pannello in creazione log parcheggio"
+}, {
+    "key": "parking_name_log",
+    "value": "Nome parcheggio",
+    "description": "Label per select in creazione log parcheggio"
+}, {
+    "key": "parking_log_placeholder",
+    "value": "Seleziona il nome del parcheggio",
+    "description": "Placeholder per select in creazione log parcheggio"
+}, {
+    "key": "parking_name_select_err_required",
+    "value": "Campo 'Nome parcheggio' obbligatorio",
+    "description": "Placeholder per select in creazione log parcheggio"
+}, {
+    "key": "park_id",
+    "value": "Id",
+    "description": "Label id parcheggio in creazione log parcheggio"
+}, {
+    "key": "park_name",
+    "value": "Nome",
+    "description": "Label nome parcheggio in creazione log parcheggio"
+}, {
+    "key": "parking_user_log",
+    "value": "Codice Utente",
+    "description": "Label codice utente in creazione log parcheggio"
+}, {
+    "key": "parking_time_log",
+    "value": "Ora Log",
+    "description": "Label orario in creazione log parcheggio"
+}, {
+    "key": "parking_timelog_err_required",
+    "value": "Campo ora log obbligatorio",
+    "description": "Messaggio orario log mancante in creazione log parcheggio"
+}, {
+	"key": "parking_userlog_err_required",
+	"value": "Campo user log obbligatorio",
+	"description": "Messaggio user log mancante in creazione log parcheggio"
+}, {
+	"key": "parking_userlog_pattern",
+	"value": "Campo user log non corretto: iserire un valore numerico",
+	"description": "Messaggio user log non corretta in creazione log parcheggio"
+}, {
+	"key": "err_in_log_parking_inserting",
+	"value": "Errore nell'inserimento del log: DB non pronto. Riprovare piu' tardi",
+	"description": "Messaggio errore in db in creazione log parcheggio"
+}, {
+	"key": "succ_in_log_parking_inserting",
+	"value": "Inserimento nuovo log avvenuto con successo",
+	"description": "Messaggio successo in creazione log parcheggio in db"
+}, {
+	"key": "parking_slots",
+	"value": "Posti",
+	"description": "Titolo pannello posti in creazione log parcheggio"
+}, {
+	"key": "parking_totalslot",
+	"value": "Posti totali",
+	"description": "Label per campo posti totali in creazione log parcheggio"
+}, {
+	"key": "parking_occupied_slot",
+	"value": "Posti occupati",
+	"description": "Label per campo posti occupati in creazione log parcheggio"
+}, {
+	"key": "parking_slotoccupied_placeholder",
+	"value": "Inerire il numero di posti occupati",
+	"description": "Valore placeholder per campo posti occupati in creazione log parcheggio"
+}, {
+	"key": "parking_unavailable_slot",
+	"value": "Posti non disponibili",
+	"description": "Label per campo posti non disponibili in creazione log parcheggio"
+}, {
+	"key": "log_parking_occupied_error_pattern",
+	"value": "Valore non corretto nel campo 'posti occupati'. Inserire un valore numerico",
+	"description": "Messaggio campo posti non corretto in creazione log parcheggio"
+}, {
+	"key": "log_parking_occupied_error_required",
+	"value": "Campo 'posti occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti obbligatorio in creazione log parcheggio"
+}, {
+	"key": "log_street_occupied_timed_error_pattern",
+	"value": "Campo 'posti disco orario occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti disco orario non corretto in creazione log parcheggio"
+}, {
+	"key": "log_street_occupied_timed_error_required",
+	"value": "Campo 'posti disco orario occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti disco orario obbligatorio in creazione log parcheggio"
+}, {
+	"key": "log_street_occupied_free_error_pattern",
+	"value": "Campo 'posti gratuiti occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti gratuiti non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_free_error_required",
+	"value": "Campo 'posti gratuiti occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti gratuiti obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_paid_error_pattern",
+	"value": "Campo 'posti a pagamento occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti a pagamento non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_paid_error_required",
+	"value": "Campo 'posti a pagamento occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti a pagamento obbligatorio in creazione log via"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {
