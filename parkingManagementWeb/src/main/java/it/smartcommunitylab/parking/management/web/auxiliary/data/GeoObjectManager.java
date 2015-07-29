@@ -30,7 +30,6 @@ import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryD
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -78,18 +77,24 @@ public class GeoObjectManager {
 		return searchStreets(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
 	}
 	
-	public void updateDynamicStreetData(Street s, String agencyId, String authorId) throws Exception, NotFoundException {
+	public void updateDynamicStreetData(Street s, String agencyId, String authorId, boolean sysLog) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
+		if(s.getUpdateTime() != null){
+			currTime = s.getUpdateTime();
+		}
 		//currTime = 1419462000000L; // Christmas Day 2014
 		//currTime = 1428271200000L; // Easter Monday 2015
 		//currTime = 1431813600000L; // A Sunday
 		//currTime = 1432543500000L;	// Today at 10.45 am
-		dynamicManager.editStreetAux(s, currTime, agencyId, authorId);
+		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, sysLog);
 	}
 	
-	public void updateDynamicParkingData(Parking object, String agencyId, String authorId) throws Exception, NotFoundException {
+	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, boolean sysLog) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
-		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId);
+		if(object.getUpdateTime() != null){
+			currTime = object.getUpdateTime();
+		}
+		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog);
 	}
 
 	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
@@ -112,6 +117,17 @@ public class GeoObjectManager {
 		return dynamicManager.getLogsByAuthor(authorId, agency, count);
 	}
 	
+	public List<DataLogBeanTP> findAllLogsByAgency(String agency){
+		List<DataLogBeanTP> correctedLogs = new ArrayList<DataLogBeanTP>();
+		List<DataLogBeanTP> logs = dataLogRepo.findByAgency(agency);
+		for(int i = 0; i < logs.size(); i++){
+			if(!logs.get(i).isDeleted()){
+				correctedLogs.add(logs.get(i));
+			}
+		}
+		return correctedLogs;
+	};
+	
 	public int countAllStreetLogs(String agency) {
 		return dynamicManager.countLogsById(null, agency, -1, 0, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
 	}
@@ -124,6 +140,17 @@ public class GeoObjectManager {
 		return getLogsById(id, agency, count, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
 	}
 	
+	public List<DataLogBeanTP> getStreetLogsByAgency(String agency){
+		List<DataLogBeanTP> correctedStreetLogs = new ArrayList<DataLogBeanTP>();
+		List<DataLogBeanTP> streetLogs = dataLogRepo.findByType(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+		for(int i = 0; i < streetLogs.size(); i++){
+			if(streetLogs.get(i) != null && !streetLogs.get(i).isDeleted() && streetLogs.get(i).getAgency() != null && streetLogs.get(i).getAgency().compareTo(agency) == 0){
+				correctedStreetLogs.add(streetLogs.get(i));
+			}
+		}
+		return correctedStreetLogs;
+	};
+	
 	public int countAllParkingLogs(String agency) {
 		return dynamicManager.countLogsById(null, agency, -1, 0, Parking.class.getCanonicalName());
 	}
@@ -135,6 +162,17 @@ public class GeoObjectManager {
 	public List<DataLogBean> getParkingLogsByIdDyn(String id, String agency, int count) {
 		return getLogsById(id, agency, count, Parking.class.getCanonicalName());
 	}
+	
+	public List<DataLogBeanTP> getParkingLogsByAgency(String agency){
+		List<DataLogBeanTP> correctedParkingLogs = new ArrayList<DataLogBeanTP>();
+		List<DataLogBeanTP> parkingLogs = dataLogRepo.findByType(Parking.class.getCanonicalName());
+		for(int i = 0; i < parkingLogs.size(); i++){
+			if(parkingLogs.get(i) != null && !parkingLogs.get(i).isDeleted() && parkingLogs.get(i).getAgency() != null && parkingLogs.get(i).getAgency().compareTo(agency) == 0){
+				correctedParkingLogs.add(parkingLogs.get(i));
+			}
+		}
+		return correctedParkingLogs;
+	};
 	
 	// -------------------- Methods from geoStorage ---------------------------
 	

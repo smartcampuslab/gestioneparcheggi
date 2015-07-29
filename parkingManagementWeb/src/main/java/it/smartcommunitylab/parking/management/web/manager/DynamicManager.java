@@ -333,7 +333,7 @@ public class DynamicManager {
 		return vb;
 	}
 
-	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId) throws DatabaseException {
+	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, boolean sysLog) throws DatabaseException {
 		String[] ids = s.getId().split("@");
 		String pmId = ids[2];
 		s.setUpdateTime(timestamp);
@@ -383,6 +383,7 @@ public class DynamicManager {
 					dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
 					boolean isHolyday = repo.isAHoliday(cal, temp.getId_app());
 					dl.setHolyday(isHolyday);
+					dl.setSystemLog(sysLog);
 					//---------------------------
 					//Integer oldVersion = getLastVersion(dl.getObjId());
 					//dl.setVersion(new Integer(oldVersion.intValue() + 1));
@@ -598,7 +599,7 @@ public class DynamicManager {
 		return entityBean;
 	}
 	
-	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId) throws NotFoundException {
+	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -629,6 +630,7 @@ public class DynamicManager {
 		dl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
 		boolean isHolyday = repo.isAHoliday(cal, entity.getId_app());
 		dl.setHolyday(isHolyday);
+		dl.setSystemLog(sysLog);
 		//---------------------------
 		//Integer oldVersion = getLastVersion(dl.getObjId());
 		//dl.setVersion(new Integer(oldVersion.intValue() + 1));

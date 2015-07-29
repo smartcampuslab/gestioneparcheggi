@@ -15,8 +15,6 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.repository;
 
-import java.util.Map;
-
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -38,9 +36,9 @@ public class DataLogBeanTP {
 	private String week_day;
 	private String timeSlot;	//time of operation (start a slot of one hour)
 	private boolean isHolyday;	//true if is an holyday day (in ita = festivo)
+	private boolean isSystemLog;	//true if inserted with the form in parkingManagementWeb app
 
 	private String valueString;
-	//private Map<String, Object> value;
 
 	public DataLogBeanTP() {
 		super();		
@@ -48,9 +46,8 @@ public class DataLogBeanTP {
 
 	public DataLogBeanTP(String id, String objId, String type, Long time,
 			String author, String agency, boolean deleted, String year, String month,
-			String week_day, String timeSlot, boolean isHolyday,
+			String week_day, String timeSlot, boolean isHolyday, boolean isSystemLog,
 			String valueString){
-			//Map<String, Object> value) {
 		super();
 		this.id = id;
 		this.objId = objId;
@@ -64,7 +61,7 @@ public class DataLogBeanTP {
 		this.week_day = week_day;
 		this.timeSlot = timeSlot;
 		this.isHolyday = isHolyday;
-		//this.value = value;
+		this.isSystemLog = isSystemLog;
 		this.valueString = valueString;
 	}
 
@@ -111,10 +108,6 @@ public class DataLogBeanTP {
 	public boolean isHolyday() {
 		return isHolyday;
 	}
-
-	//public Map<String, Object> getValue() {
-	//	return value;
-	//}
 	
 	public String getValueString() {
 		return valueString;
@@ -164,10 +157,6 @@ public class DataLogBeanTP {
 		this.isHolyday = isHolyday;
 	}
 
-	//public void setValue(Map<String, Object> value) {
-	//	this.value = value;
-	//}
-	
 	public void setValueString(String valueString) {
 		this.valueString = valueString;
 	}
@@ -179,14 +168,22 @@ public class DataLogBeanTP {
 	public void setAgency(String agency) {
 		this.agency = agency;
 	}
+	
+	public boolean isSystemLog() {
+		return isSystemLog;
+	}
+
+	public void setSystemLog(boolean isSystemLog) {
+		this.isSystemLog = isSystemLog;
+	}
 
 	@Override
 	public String toString() {
 		return "DataLogBeanTP [id=" + id + ", objId=" + objId + ", type="
 				+ type + ", time=" + time + ", author=" + author + ", deleted="
 				+ deleted + ", year=" + year + ", month=" + month
-				+ ", week_day=" + week_day + ", timeSlot=" + timeSlot
-				+ ", isHolyday=" + isHolyday  + ", agency=" + agency + "]"; //+ ", value=" + value
+				+ ", week_day=" + week_day + ", timeSlot=" + timeSlot + ", isHolyday=" + isHolyday
+				+ ", isSystemLog=" + isSystemLog  + ", agency=" + agency + "]";
 	}
 	
 }

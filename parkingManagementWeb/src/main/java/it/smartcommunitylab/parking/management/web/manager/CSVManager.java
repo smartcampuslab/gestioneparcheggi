@@ -25,7 +25,10 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -249,22 +252,51 @@ public class CSVManager {
 				// Added the table cols headers
 				writer.append("Id oggetto");
 				writer.append(CSV_SEPARATOR);
+				writer.append("Nome");
+				writer.append(CSV_SEPARATOR);
 				writer.append("Tipo");
 				writer.append(CSV_SEPARATOR);
 				writer.append("Autore");
 				writer.append(CSV_SEPARATOR);
 				writer.append("Ora");
 				writer.append(CSV_SEPARATOR);
-				writer.append("Valore");
+				writer.append("Ora(millisecondi)");
+				writer.append(CSV_SEPARATOR);
+				//writer.append("Valore");
+				writer.append("Posti Gratuiti");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti Occupati Gratuiti");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti a Pagamento");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti Occupati a Pagamento");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti a Disco Orario");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti Occupati a Disco Orario");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti per Disabili");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti Occupati per Disabili");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti Totali");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti Occupati Totali");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti Non Disponibili");
 				writer.append(CSV_NEWLINE);
 				
 				// Add the list of data in a table
 				for(DataLogBean l : logs){
 					writer.append(l.getObjId());
 					writer.append(CSV_SEPARATOR);
-					writer.append(l.getType());
+					writer.append(getNameFromValue(l.getValue() + ""));
+					writer.append(CSV_SEPARATOR);
+					writer.append((l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0) ? "Via" : "Parcheggio Struttura");
 					writer.append(CSV_SEPARATOR);
 					writer.append(l.getAuthor());
+					writer.append(CSV_SEPARATOR);
+					writer.append(correctDateTime(l.getTime()));
 					writer.append(CSV_SEPARATOR);
 					writer.append(l.getTime() + "");
 					writer.append(CSV_SEPARATOR);
@@ -273,8 +305,6 @@ public class CSVManager {
 					writer.append(CSV_NEWLINE);
 				}
 				
-				//String arr = writer.toString();
-				//ba = arr.getBytes();
 				writer.flush();
 				writer.close();
 				
@@ -287,10 +317,90 @@ public class CSVManager {
 		}
 		
 		private String correctValue(String value){
+			String freeSlots = "0";
+			String occupiedFreeSlots = "0";
+			String payingSlots = "0";
+			String occupiedPayingSlots = "0";
+			String timedSlots = "0";
+			String occupiedTimedSlots = "0";
+			String handicappedSlots = "0";
+			String occupiedHandicappedSlots = "0";
+			String totalSlots = "0";
+			String occupiedTotalSlots = "0";
+			String unavailableSlots = "0";
 			String to_clean = value.toString();
-			String cleaned = to_clean.replaceAll(",", " / ");
-			cleaned = cleaned.substring(1, cleaned.length()-1);
+			//logger.error("Value in CSV: " + to_clean);
+			String completeVals[] = to_clean.split(",");
+			for(String s : completeVals){
+				if(s.contains("slotsFree")){
+					freeSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsOccupiedOnFree")){
+					occupiedFreeSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsPaying")){
+					payingSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsOccupiedOnPaying")){
+					occupiedPayingSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsTimed")){
+					timedSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsOccupiedOnTimed")){
+					occupiedTimedSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsHandicapped")){
+					handicappedSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsOccupiedOnHandicapped")){
+					occupiedHandicappedSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsTotal")){
+					totalSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsOccupiedOnTotal")){
+					occupiedTotalSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+				if(s.contains("slotsUnavailable")){
+					unavailableSlots = s.substring(s.indexOf("=") + 1, s.length());
+				}
+			}
+			
+			//String cleaned = to_clean.replaceAll(",", " / ");
+			//cleaned = cleaned.substring(1, cleaned.length()-1);
+			String cleaned = freeSlots + "," + occupiedFreeSlots + "," +
+					payingSlots + "," + occupiedPayingSlots + "," +
+					timedSlots + "," + occupiedTimedSlots + "," +
+					handicappedSlots + "," + occupiedHandicappedSlots + "," +
+					totalSlots + "," + occupiedTotalSlots + "," +
+					unavailableSlots;
 			return cleaned;
+		}
+		
+		// Method getNameFromValue: extract the object name from the value
+		private String getNameFromValue(String value){
+			String name = "";
+			String to_clean = value.toString();
+			//logger.error("Value in CSV: " + to_clean);
+			String completeVals[] = to_clean.split(",");
+			for(String s : completeVals){
+				if(s.contains("name")){
+					name = s.substring(s.indexOf("=") + 1, s.length());
+				}
+			}
+			return name;
+		}
+		
+		// Method correctDateTime: used to cast the long milliseconds value in a formatted date
+		private String correctDateTime(Long millis){
+			if(millis != null){
+				Date data = new Date(millis);
+				DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+				return df.format(data);
+			} else {
+				return "n.p.";
+			}
 		}
 
 }

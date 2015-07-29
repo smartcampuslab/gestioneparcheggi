@@ -174,6 +174,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			        week_day: partialLogs[i].week_day,
 			        timeSlot: partialLogs[i].tileSlot,
 			        holyday: partialLogs[i].holyday,
+			        isSystemLog: partialLogs[i].systemLog,
 			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
 				};
 				//console.log("corrLog: " + JSON.stringify(corrLog));
@@ -260,6 +261,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			        week_day: partialLogs[i].week_day,
 			        timeSlot: partialLogs[i].tileSlot,
 			        holyday: partialLogs[i].holyday,
+			        isSystemLog: partialLogs[i].systemLog,
 			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
 				};
 				//console.log("corrLog: " + JSON.stringify(corrLog));
@@ -336,6 +338,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			        week_day: partialLogs[i].week_day,
 			        timeSlot: partialLogs[i].tileSlot,
 			        holyday: partialLogs[i].holyday,
+			        isSystemLog: partialLogs[i].systemLog,
 			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
 				};
 				//console.log("corrLog: " + JSON.stringify(corrLog));
@@ -449,6 +452,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getDetailData = function(street){
 		$scope.myStreetDetails = street;
+		$scope.initTimeValues();
 		$scope.streetLoadedAndSelected = true;
 		// to hide the messages (error or success)
 		$scope.showUpdatingSErrorMessage = false;
@@ -457,16 +461,31 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getParkDetailData = function(park){
 		$scope.myParkingDetails = park;
+		$scope.initParkTimeValues();
 		$scope.parkLoadedAndSelected = true;
 		// to hide the messages (error or success)
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
 	};
 	
+	$scope.initTimeValues = function(){
+		var now = new Date();
+		$scope.myStreetDetails.loghour = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear();
+		$scope.myStreetDetails.logtime = $scope.addZero(now.getHours()) + ":" + $scope.addZero(now.getMinutes()) + ":" + $scope.addZero(now.getSeconds());
+	};
+	
+	$scope.initParkTimeValues = function(){
+		var now = new Date();
+		$scope.myParkingDetails.loghour = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear();
+		$scope.myParkingDetails.logtime = $scope.addZero(now.getHours()) + ":" + $scope.addZero(now.getMinutes()) + ":" + $scope.addZero(now.getSeconds());
+	};
+	
 	// Method insertStreetLog: used to insert in the db (table dataLogBean) a new street log
 	$scope.insertStreetLog = function(form, myStreetDetails){
 		$scope.showUpdatingSErrorMessage = false;
 		$scope.showUpdatingSSuccessMessage = false;
+		if($scope.checkCorrectSlots(myStreetDetails)){
+			
 		if(form.$invalid){
 			$scope.isInit = false;
 		} else {
@@ -497,11 +516,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				lastChange:myStreetDetails.lastChange
 			};
 			
+			var params = {
+				isSysLog: true	
+			};
 			var value = JSON.stringify(streetLogDet);
 			console.log("streetLogDet: " + value);
 			
 		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets/" + logId + "/" + user, null, $scope.authHeaders, value);
+		   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets/" + logId + "/" + user, params, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Insert street log: " + JSON.stringify(result));
 		    	if(result == "OK"){
@@ -513,47 +535,53 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		    	}
 		    });	
 		}
+		}
 	};
 	
 	// Method insertParkingLog: used to insert in the db (table dataLogBean) a new parking log
 	$scope.insertParkingLog = function(form, myParkingDetails){
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
-		if(form.$invalid){
-			$scope.isInit = false;
-		} else {
-			var method = 'POST';
-			var appId = sharedDataService.getConfAppId();
-			var logId = myParkingDetails.id;
-			var user = myParkingDetails.user;
-			var parkingLogDet = {
-				id: myParkingDetails.id, 
-				agency: myParkingDetails.agency, 
-				position: myParkingDetails.position, 
-				name: myParkingDetails.name, 
-				description: myParkingDetails.description,
-				updateTime: $scope.getLogMillis(myParkingDetails.loghour, myParkingDetails.logtime), 
-				user: parseInt(myParkingDetails.user), 
-				slotsTotal: parseInt(myParkingDetails.slotsTotal), 
-				slotsOccupiedOnTotal: parseInt(myParkingDetails.slotsOccupiedOnTotal),
-				slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), 
-				lastChange:myParkingDetails.lastChange
-			};
-			
-			var value = JSON.stringify(parkingLogDet);
-			console.log("parkingLogDet: " + value);
-			
-		   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings/" + logId + "/" + user, null, $scope.authHeaders, value);
-		    myDataPromise.then(function(result){
-		    	console.log("Insert parking log: " + JSON.stringify(result));
-		    	if(result == "OK"){
-		    		$scope.showUpdatingPErrorMessage = false;
-		    		$scope.showUpdatingPSuccessMessage = true;
-		    	} else {
-		    		$scope.showUpdatingPErrorMessage = true;
-		    		$scope.showUpdatingPSuccessMessage = false;
-		    	}
-		    });	
+		if($scope.checkCorrectParkSlots(myParkingDetails)){
+			if(form.$invalid){
+				$scope.isInit = false;
+			} else {
+				var method = 'POST';
+				var appId = sharedDataService.getConfAppId();
+				var logId = myParkingDetails.id;
+				var user = myParkingDetails.user;
+				var parkingLogDet = {
+					id: myParkingDetails.id, 
+					agency: myParkingDetails.agency, 
+					position: myParkingDetails.position, 
+					name: myParkingDetails.name, 
+					description: myParkingDetails.description,
+					updateTime: $scope.getLogMillis(myParkingDetails.loghour, myParkingDetails.logtime), 
+					user: parseInt(myParkingDetails.user), 
+					slotsTotal: parseInt(myParkingDetails.slotsTotal), 
+					slotsOccupiedOnTotal: parseInt(myParkingDetails.slotsOccupiedOnTotal),
+					slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), 
+					lastChange:myParkingDetails.lastChange
+				};
+				
+				var params = {
+					isSysLog: true	
+				};
+				var value = JSON.stringify(parkingLogDet);
+				console.log("parkingLogDet: " + value);
+				
+			   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings/" + logId + "/" + user, params, $scope.authHeaders, value);
+			    myDataPromise.then(function(result){
+			    	console.log("Insert parking log: " + JSON.stringify(result));
+			    	if(result == "OK"){
+			    		$scope.showUpdatingPErrorMessage = false;
+			    		$scope.showUpdatingPSuccessMessage = true;
+			    	} else {
+			    		$scope.showUpdatingPErrorMessage = true;
+			    		$scope.showUpdatingPSuccessMessage = false;
+			    	}
+			    });	
+			}
 		}
 	};
 	
@@ -622,6 +650,53 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	return string_val;
     };
     
+    // Method checkCorrectSlots: used to check if the street occupancy values are correct
+    $scope.checkCorrectSlots = function(street_details){
+    	$scope.showMaxErrorFree = false;
+    	$scope.showMaxErrorPaing = false;
+    	$scope.showMaxErrorTimed = false;
+    	var available_free = street_details.slotsFree;
+    	var available_paying = street_details.slotsPaying;
+    	var available_timed = street_details.slotsTimed;
+    	if(available_free!= null && available_free >= 0){
+    		if(available_free < street_details.slotsOccupiedOnFree){
+    			$scope.showMaxErrorFree = true;
+    		}
+    	}
+    	if(available_paying!= null && available_paying >= 0){
+    		if(available_paying < street_details.slotsOccupiedOnPaying){
+    			$scope.showMaxErrorPaing = true;
+    		}
+    	}
+    	if(available_timed!= null && available_timed >= 0){
+    		if(available_timed < street_details.slotsOccupiedOnTimed){
+    			$scope.showMaxErrorTimed = true;
+    		}
+    	}
+    	if($scope.showMaxErrorFree || $scope.showMaxErrorPaing || $scope.showMaxErrorTimed){
+    		return false;
+    	} else {
+    		return true;
+    	}
+    };
+    
+    // Method checkCorrectParkSlots: used to check if the parking occupancy value is correct
+    $scope.checkCorrectParkSlots = function(park_details){
+    	$scope.showMaxError = false;
+    	var available = park_details.slotsTotal;
+    	if(available!= null && available >= 0){
+    		if(available < park_details.slotsOccupiedOnTotal){
+    			$scope.showMaxError = true;
+    		}
+    	}
+    	if($scope.showMaxError){
+    		return false;
+    	} else {
+    		return true;
+    	}
+    };
+    
+    // Method getLogMillis: used to cast a date value in a long milliseconds
     $scope.getLogMillis = function(date, time){
     	var millis = 0;
     	var res = time.split(":");
@@ -635,8 +710,20 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
        		date.setMinutes(minutes);
        		date.setSeconds(seconds);
        		millis = date.getTime();
+    	} else {
+    		var d = date.split("/");
+    		var dd = d[0];
+    		var mm = (parseInt(d[1]) - 1) + "";
+    		var yy = d[2];
+    		var nDate = new Date();
+    		nDate.setFullYear(yy, mm, dd);
+    		nDate.setHours(hours);
+       		nDate.setMinutes(minutes);
+       		nDate.setSeconds(seconds);
+       		millis = nDate.getTime();
     	}
     	return millis;
     };
+    
     
 }]);    

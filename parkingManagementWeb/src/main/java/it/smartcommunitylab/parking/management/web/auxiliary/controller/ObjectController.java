@@ -76,7 +76,8 @@ public class ObjectController  {
 	public @ResponseBody Iterable<DataLogBeanTP> getAllTPLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
 		if (count == null) count = DEFAULT_COUNT;
 		//return logMongoStorage.getParkingLogsById(id, agency, count);
-		return dataLogRepo.findByAgency(agency);
+		//return dataLogRepo.findByAgency(agency);
+		return dataService.findAllLogsByAgency(agency);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/tplog/all/{id:.*}") 
@@ -94,7 +95,8 @@ public class ObjectController  {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings") 
 	public @ResponseBody Iterable<DataLogBeanTP> getAllTPParkingLogs(@PathVariable String agency) {
-		return dataLogRepo.findByAgencyAndType(agency, Parking.class.getCanonicalName());
+		return dataService.getParkingLogsByAgency(agency);
+		//return dataLogRepo.findByTypeAndAgencyAllIgnoreCase(Parking.class.getCanonicalName(), agency);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/parkings/{skip}") 
 	public @ResponseBody List<DataLogBean> getAllParkingLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
@@ -115,7 +117,8 @@ public class ObjectController  {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets") 
 	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency) {
-		return dataLogRepo.findByAgencyAndType(agency, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+		return dataService.getStreetLogsByAgency(agency);
+		//return dataLogRepo.findByTypeAndAgencyAllIgnoreCase(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName(), agency);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/streets/{skip}") 
 	public @ResponseBody List<DataLogBean> getAllStreetLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
@@ -142,7 +145,7 @@ public class ObjectController  {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/streets") 
 	public @ResponseBody List<Street> getStreets(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.error("I'm in get all street - auxiliary app!!!");
+		logger.info("I'm in get all street - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
 			return dataService.getStreets(agency, lat, lon, radius);
 		} 
@@ -151,7 +154,7 @@ public class ObjectController  {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkings") 
 	public @ResponseBody List<Parking> getParkings(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.error("I'm in get all parkings - auxiliary app!!!");
+		logger.info("I'm in get all parkings - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
 			return dataService.getParkings(agency, lat, lon, radius);
 		} 
@@ -159,10 +162,9 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
-	public @ResponseBody String updateParking(@RequestBody Parking parking, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=false) boolean isSysLog, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			//dataService.updateParkingData(parking, agency, userId);
-			dataService.updateDynamicParkingData(parking, agency, userId);
+			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -172,10 +174,10 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/{id}/{userId:.*}") 
-	public @ResponseBody String updateStreet(@RequestBody Street street, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreet(@RequestBody Street street, @RequestParam(required=false) boolean isSysLog, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			//dataService.updateStreetData(street, agency, userId);
-			dataService.updateDynamicStreetData(street, agency, userId);
+			//logger.error("Update street Log: isSysLog = " + isSysLog );
+			dataService.updateDynamicStreetData(street, agency, userId, isSysLog);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block

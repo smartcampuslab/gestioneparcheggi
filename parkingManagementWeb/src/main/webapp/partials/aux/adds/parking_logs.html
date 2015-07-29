@@ -50,7 +50,7 @@
 				   					<td width="25%"><strong>{{ 'parking_totalslot' | i18n }}</strong></td>
 				   					<td width="5%">{{ myParkingDetails.slotsTotal }}</td>
 				   					<td width="20%"><strong>{{ 'parking_occupied_slot' | i18n }}</strong></td>
-				   					<td width="50%"><input id="occupiedSlot" type="text" class="form-control" name="pOccupiedslot" ng-model="myParkingDetails.slotsOccupiedOnTotal" ng-pattern="onlyNumbers" placeholder="{{ 'parking_slotoccupied_placeholder' | i18n }}" required ></td>
+				   					<td width="50%"><input id="occupiedSlot" type="number" class="form-control" name="pOccupiedslot" ng-model="myParkingDetails.slotsOccupiedOnTotal" ng-pattern="onlyNumbers" placeholder="{{ 'parking_slotoccupied_placeholder' | i18n }}" min="0" required ng-change="checkCorrectParkSlots(myParkingDetails)"></td>
 				   				</tr>
 				   				<tr ng-show="!isInit && form.pOccupiedslot.$error.pattern">
 				   					<td colspan="3" width="50%"></td>
@@ -62,6 +62,18 @@
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
 				   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_required' | i18n }}</div>
+				   					</td>
+				   				</tr>
+				   				<tr ng-show="!isInit && form.pOccupiedslot.$error.min">
+				   					<td colspan="3" width="50%"></td>
+				   					<td align="center">
+				   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_min' | i18n }}</div>
+				   					</td>
+				   				</tr>
+				   				<tr ng-show="showMaxError">
+				   					<td colspan="3" width="50%"></td>
+				   					<td align="center">
+				   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_max' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr>

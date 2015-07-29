@@ -27,17 +27,18 @@ public class DataLogBean {
 	private Long time;
 	private String author;
 	private String agency;
-//	private Integer version;
 	private boolean deleted;
 	//new fields added in 12/5/2015 from MB
 	private String year;
 	private String month;
 	private String week_day;
-	private String timeSlot;	//time of operation (start a slot of one hour)
-	private boolean isHolyday;	//true if is an holyday day (in ita = festivo)
+	private String timeSlot;		//time of operation (start a slot of one hour)
+	private boolean isHolyday;		//true if is an holyday day (in ita = festivo)
+	private boolean isSystemLog;	//true if inserted with the form in parkingManagementWeb app
 
 	private String valueString;
 	private Map<String, Object> value;
+	
 	
 	public String getId() {
 		return id;
@@ -58,10 +59,6 @@ public class DataLogBean {
 	public Long getTime() {
 		return time;
 	}
-	
-//	public Integer getVersion() {
-//		return version;
-//	}
 	
 	public boolean isDeleted() {
 		return deleted;
@@ -86,9 +83,6 @@ public class DataLogBean {
 	public void setTime(Long time) {
 		this.time = time;
 	}
-//	public void setVersion(Integer version) {
-//		this.version = version;
-//	}
 	
 	public void setDeleted(boolean deleted) {
 		this.deleted = deleted;
@@ -166,6 +160,14 @@ public class DataLogBean {
 
 	public void setAgency(String agency) {
 		this.agency = agency;
+	}
+
+	public boolean isSystemLog() {
+		return isSystemLog;
+	}
+
+	public void setSystemLog(boolean isSystemLog) {
+		this.isSystemLog = isSystemLog;
 	}
 	
 }

@@ -147,6 +147,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.occupancyParkingStructureMarkers = [];
 	$scope.mapStreetSelectedMarkers = [];
 	
+	$scope.myTmpZoneOccupation = [];	//MB28072015: added this variable to manage average zone occupation
+	$scope.useAverageZoneOccupation = true;	// to remove this feature set the variable to false
+	
 	$scope.lightgray = "#B0B0B0";//"#81EBBA";
 	$scope.green = "#31B404";
 	$scope.yellow = "#F7FE2E";
@@ -1441,6 +1444,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				myZones.push(zone);
 			}
 			
+//			if(streets[i].occupancyRate == -1){
+//				var found = false;
+//				for(var x = 0; x < $scope.myTmpZoneOccupation.length; x++){
+//					if(myZones[0].id == $scope.myTmpZoneOccupation[x].id){
+//						streets[i].occupancyRate = $scope.myTmpZoneOccupation[x].occupancy;
+//						found = true;
+//					}
+//				}
+//				if(!found){
+//					var zVal = {
+//						id: myZones[0].id,
+//						occupancy: Math.floor($scope.getStreetsInZoneOccupancy(myZones[0].id))	// here I calculate the zone average occupancy
+//					};
+//					$scope.myTmpZoneOccupation.push(zVal);
+//					streets[i].occupancyRate = zVal.occupancy;
+//				}
+//				//streets[i].occupancyRate = $scope.getStreetsInZoneOccupancy(myZones[0].id);	// average occupation for zone
+//			}
 			if(type == 1){
 				sColor = $scope.correctColor(streets[i].color);
 			} else if(type == 2){
@@ -1731,8 +1752,30 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    angular.copy(result, allStreet);
 		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    $scope.updateLoadingMapState();
-		    	
+		    $scope.myTmpZoneOccupation = [];
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
+		    if($scope.useAverageZoneOccupation){
+			    for(var i = 0; i < $scope.streetWS.length; i++){
+				    if($scope.streetWS[i].occupancyRate == -1){
+						var found = false;
+						for(var x = 0; x < $scope.myTmpZoneOccupation.length; x++){
+							if($scope.streetWS[i].myZones[0].id == $scope.myTmpZoneOccupation[x].id){
+								$scope.streetWS[i].occupancyRate = $scope.myTmpZoneOccupation[x].occupancy;
+								found = true;
+							}
+						}
+						if(!found){
+							var zVal = {
+								id: $scope.streetWS[i].myZones[0].id,
+								occupancy: Math.floor($scope.getStreetsInZoneOccupancy($scope.streetWS[i].myZones[0].id))	// here I calculate the zone average occupancy
+							};
+							$scope.myTmpZoneOccupation.push(zVal);
+							$scope.streetWS[i].occupancyRate = zVal.occupancy;
+						}
+				    }
+			    }
+		    }
+		    
 		    if(showStreets){
 		    	$scope.updateStreetOccupancy($scope.streetWS);
 			}
@@ -1777,10 +1820,31 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    angular.copy(result, allStreet);
 		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    $scope.updateLoadingMapState();
-		    
-		    allStreet = $scope.mergeStreetsObjects(allStreet, oldStreets);
-		    	
+		    $scope.myTmpZoneOccupation = [];
+		    allStreet = $scope.mergeStreetsObjects(allStreet, oldStreets);	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
+		    if($scope.useAverageZoneOccupation){
+			    for(var i = 0; i < $scope.streetWS.length; i++){
+				    if($scope.streetWS[i].occupancyRate == -1){
+						var found = false;
+						for(var x = 0; x < $scope.myTmpZoneOccupation.length; x++){
+							if($scope.streetWS[i].myZones[0].id == $scope.myTmpZoneOccupation[x].id){
+								$scope.streetWS[i].occupancyRate = $scope.myTmpZoneOccupation[x].occupancy;
+								found = true;
+							}
+						}
+						if(!found){
+							var zVal = {
+								id: $scope.streetWS[i].myZones[0].id,
+								occupancy: Math.floor($scope.getStreetsInZoneOccupancy($scope.streetWS[i].myZones[0].id))	// here I calculate the zone average occupancy
+							};
+							$scope.myTmpZoneOccupation.push(zVal);
+							$scope.streetWS[i].occupancyRate = zVal.occupancy;
+						}
+				    }
+			    }
+		    }
+		    
 		    var isInList = sharedDataService.getIsInList();
 		    if(!isInList){
 			    if(showStreets){

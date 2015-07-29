@@ -1343,13 +1343,29 @@
 	"value": "Campo 'posti occupati' obbligatorio. Inserire un valore numerico",
 	"description": "Messaggio campo posti obbligatorio in creazione log parcheggio"
 }, {
+	"key": "log_parking_occupied_error_min",
+	"value": "Valore non corretto nel campo 'posti occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti non corretto in creazione log parcheggio per valore troppo piccolo"
+}, {
+	"key": "log_parking_occupied_error_max",
+	"value": "Valore non corretto nel campo 'posti occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti non corretto in creazione log parcheggio per valore troppo grande"
+}, {
 	"key": "log_street_occupied_timed_error_pattern",
 	"value": "Campo 'posti disco orario occupati' non corretto. Inserire un valore numerico",
-	"description": "Messaggio campo posti disco orario non corretto in creazione log parcheggio"
+	"description": "Messaggio campo posti disco orario non corretto in creazione log via"
 }, {
 	"key": "log_street_occupied_timed_error_required",
 	"value": "Campo 'posti disco orario occupati' obbligatorio. Inserire un valore numerico",
-	"description": "Messaggio campo posti disco orario obbligatorio in creazione log parcheggio"
+	"description": "Messaggio campo posti disco orario obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_timed_error_min",
+	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore maggiore.",
+	"description": "Messaggio errore campo posti disco orario obbligatorio in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_timed_error_max",
+	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore minore.",
+	"description": "Messaggio errore campo posti disco orario obbligatorio in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_free_error_pattern",
 	"value": "Campo 'posti gratuiti occupati' non corretto. Inserire un valore numerico",
@@ -1359,6 +1375,14 @@
 	"value": "Campo 'posti gratuiti occupati' obbligatorio. Inserire un valore numerico",
 	"description": "Messaggio campo posti gratuiti obbligatorio in creazione log via"
 }, {
+	"key": "log_street_occupied_free_error_min",
+	"value": "Valore non corretto nel campo 'posti gratuiti occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti gratuiti obbligatorio in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_free_error_max",
+	"value": "Valore non corretto nel campo 'posti gratuiti occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti gratuiti obbligatorio in creazione log via per valore troppo grande"
+}, {
 	"key": "log_street_occupied_paid_error_pattern",
 	"value": "Campo 'posti a pagamento occupati' non corretto. Inserire un valore numerico",
 	"description": "Messaggio campo posti a pagamento non corretto in creazione log via"
@@ -1366,6 +1390,30 @@
 	"key": "log_street_occupied_paid_error_required",
 	"value": "Campo 'posti a pagamento occupati' obbligatorio. Inserire un valore numerico",
 	"description": "Messaggio campo posti a pagamento obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_paid_error_min",
+	"value": "Valore non corretto nel campo 'posti a pagamento occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti a pagamento obbligatorio in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_paid_error_max",
+	"value": "Valore non corretto nel campo 'posti a pagamento occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti a pagamento obbligatorio in creazione log via per valore troppo grande"
+}, {
+	"key": "system_log_alt_title",
+	"value": "Log inserito da sistema",
+	"description": "Titolo alt per icona log di sistema"
+}, {
+	"key": "log_insertion",
+	"value": "Log inserito da",
+	"description": "Label per campo tipo inserimento log"
+}, {
+	"key": "log_system_insertion_value",
+	"value": "form di sistema",
+	"description": "Valore per tipo inserimento log"
+}, {
+	"key": "log_client_insertion_value",
+	"value": "app client",
+	"description": "Valore per tipo inserimento log"
 }, {
     "key": "time_vis",
     "value": "Visualizzazione"

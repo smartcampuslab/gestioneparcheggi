@@ -23,6 +23,13 @@
 				<td>{{ logDetails.author }}</td>
 			</tr>
 			<tr>
+				<td width="30%"><strong>{{ 'log_insertion' | i18n }}</strong></td>
+				<td>
+					<span ng-show="logDetails.isSystemLog">{{ 'log_system_insertion_value' | i18n }}</span>
+					<span ng-show="!logDetails.isSystemLog">{{ 'log_client_insertion_value' | i18n }}</span>
+				</td>
+			</tr>
+			<tr>
 				<td colspan="2"><strong>{{ 'log_value' | i18n }}</strong></td>
 			</tr>
 			<tr>
@@ -64,25 +71,27 @@
 		<div class="logwrapper">
 			<table class="table table-striped" style="width: 100%">
 				<tr ng-show="parkLogs.length != 0">
-					<th width="25%">{{ 'log_objId' | i18n }}</th>
+					<th width="3%"></th>
+					<th width="24%">{{ 'log_objId' | i18n }}</th>
 					<th width="15%">{{ 'log_type' | i18n }}</th>
 					<th width="15%">{{ 'log_time' | i18n }}</th>
 					<th width="15%">{{ 'log_author' | i18n }}</th>
-					<th width="25%">{{ 'log_object_name' | i18n }}</th>
+					<th width="23%">{{ 'log_object_name' | i18n }}</th>
 					<th width="5%"></th>
 				</tr>
 				<tbody class="animate-repeat"
 					ng-repeat="log in parkLogs | orderBy:'-time' | startFrom:currentPage*maxLogs | limitTo:maxLogs">
 				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 				<tr>
-					<td width="25%" align="left">{{log.objId}}</td>
+					<td width="3%"><i class="glyphicon glyphicon-import" ng-show="log.isSystemLog" title="{{ 'system_log_alt_title' | i18n }}" alt="{{ 'system_log_alt_title' | i18n }}"></i></td>
+					<td width="24%" align="left">{{log.objId}}</td>
 					<td width="15%" align="left">
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'parking_type_in_lists' | i18n }}</span>
 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'street_type_in_lists' | i18n }}</span>
 					</td>
 					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
 					<td width="15%" align="left">{{log.author}}</td>
-					<td width="25%" align="left">
+					<td width="23%" align="left">
 <!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsTotal: {{log.value.slotsTotal}}, slotsOccupied: {{log.value.slotsOccupiedOnTotal}}, slotsUnavailable: {{log.value.slotsUnavailable}}</span> -->
 <!-- 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsFree: {{log.value.slotsFree}}, slotsOccupiedOnFree: {{log.value.slotsOccupiedOnFree}}, slotsPaying: {{log.value.slotsPaying}}, slotsOccupiedOnPaying: {{log.value.slotsOccupiedOnPaying}}, slotsTimed: {{log.value.slotsTimed}}, slotsOccupiedOnTimed: {{log.value.slotsOccupiedOnTimed}}, slotsHandicapped: {{log.value.slotsHandicapped}}</span> -->
 						{{log.value.name}}
@@ -93,7 +102,7 @@
 				</tr>
 				</tbody>
 				<tr ng-show="parkLogs.length == 0">
-					<td colspan="6"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td>
+					<td colspan="7"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td>
 				</tr>
 			</table>
 		</div>
