@@ -143,6 +143,18 @@
                                         <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateHour(hourSliderValue)" />
                                     </td>
 								</tr>
+								<tr ng-if="dashboard_topics=='occupation'">
+									<td>
+				                        <a href ng-click="showOtherSettings(!isOtherSettingsShow())" title="{{ 'link_view_title' | i18n }}" alt="{{ 'link_view_title' | i18n }}">
+				                        	<h5><i class="glyphicon glyphicon-wrench"></i>&nbsp;<strong>{{'other_settings'|i18n}}</strong></h5>
+				                        </a>
+				                        <table width="100%" ng-show="isOtherSettingsShow()" >
+											<tr>
+												<td align="left"><label class="left-filter"><input id="averageZoneOcc" type="checkbox" ng-model="useAverageZoneOccupation" ng-change="setAverageZoneValue(useAverageZoneOccupation);updateSearch()">&nbsp;{{ 'use_average_zone_occ' | i18n }}</label></td>
+											</tr>
+										</table>
+									</td>
+								</tr>
 							</table>
 <!-- 						</div> -->
 					</div>	
@@ -245,17 +257,8 @@
          					geodesic="{{ aOcc.geodesic }}" stroke-color="{{ aOcc.stroke.color }}" stroke-opacity="{{ aOcc.stroke.opacity }}" stroke-weight="{{ aOcc.stroke.weight }}"
          					fill-color="{{ aOcc.stroke.color }}" fill-opacity="{{ aOcc.fill.opacity }}" on-click="showOccupancy(event, aOcc, 5, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      					</shape>
-					</map>
-					<div ng-if="dashboard_topics=='occupation'">
-                        <a href ng-click="showOtherSettings(!isOtherSettingsShow())" title="{{ 'link_view_title' | i18n }}" alt="{{ 'link_view_title' | i18n }}">
-                        	<h5><i class="glyphicon glyphicon-wrench"></i>&nbsp;<strong>{{'other_settings'|i18n}}</strong></h5>
-                        </a>
-                        <table width="100%" ng-show="isOtherSettingsShow()" ng-controller="TimeFilterCtrl">
-							<tr>
-								<td align="left"><label class="left-filter"><input id="averageZoneOcc" type="checkbox" ng-model="useAverageZoneOccupation" ng-change="setAverageZoneValue(useAverageZoneOccupation);updateSearch()">&nbsp;{{ 'use_average_zone_occ' | i18n }}</label></td>
-							</tr>
-						</table>
-					</div>
+					</map>			
+				</div>
 				</div>
 				<div class="col-md-2" ng-show="detailsOpened || occupancyOpened">
 					<div ng-show="detailsOpened" >
