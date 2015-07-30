@@ -148,7 +148,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.mapStreetSelectedMarkers = [];
 	
 	$scope.myTmpZoneOccupation = [];	//MB28072015: added this variable to manage average zone occupation
-	$scope.useAverageZoneOccupation = true;	// to remove this feature set the variable to false
+	$scope.useAverageZoneOccupation = false;	// to remove this feature set the variable to false
+	var showOtherFilterSettings = false;
+	
+	$scope.setAverageZoneValue = function(value){
+		$scope.useAverageZoneOccupation = value;
+	};
+	
+	$scope.showOtherSettings = function(value){
+		showOtherFilterSettings = value;
+	};
+	
+	$scope.isOtherSettingsShow = function(){
+		return showOtherFilterSettings;
+	};
 	
 	$scope.lightgray = "#B0B0B0";//"#81EBBA";
 	$scope.green = "#31B404";

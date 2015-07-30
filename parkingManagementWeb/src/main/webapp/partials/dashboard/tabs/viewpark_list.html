@@ -105,38 +105,44 @@
                         <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateHour(hourSliderValue)" />
                     </td>
 				</tr>
+<!-- 				<tr> -->
+<!-- 					<td> -->
+<!-- 						<hr/> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
 				<tr>
 					<td>
-						<hr/>
-					</td>
-				</tr>
-				<tr ng-if="showSList">
-					<td>
-						<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-					</td>
-				</tr>
-				<tr ng-if="showZList">
-					<td>
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-					</td>
-				</tr>
-				<tr ng-if="showAList">
-					<td>
-						<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-					</td>
-				</tr>
-				<tr ng-if="showPSList">
-					<td>
-						<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-					</td>
-				</tr>
-<!-- 				<tr ng-if="showPSList && structCvsFile!=''">	 -->
+                    	<a href ng-click="showOtherSettings(!isOtherSettingsShow())" title="{{ 'link_view_title' | i18n }}" alt="{{ 'link_view_title' | i18n }}">
+                        	<h5><i class="glyphicon glyphicon-wrench"></i>&nbsp;<strong>{{'other_settings'|i18n}}</strong></h5>
+                        </a>
+                        <table width="100%" ng-show="isOtherSettingsShow()">
+							<tr>
+								<td align="left"><label class="left-filter"><input id="averageZoneOcc" type="checkbox" ng-model="useAverageZoneOccupation" ng-change="setAverageZoneValue(useAverageZoneOccupation);updateSearch()">&nbsp;{{ 'use_average_zone_occ' | i18n }}</label></td>
+							</tr>
+						</table>
+					</td>	
+				</tr>		
+<!-- 				<tr ng-if="showSList"> -->
 <!-- 					<td> -->
-<!-- 						<a target="_blank" href="{{ structCvsFile }}" alt="{{ 'csv_link_alt_title' | i18n }}" title="{{ 'csv_link_alt_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ structCvsFileName }}</a> -->
-<!-- 					</td>	 -->
+<!-- 						<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr ng-if="showZList"> -->
+<!-- 					<td> -->
+<!-- 						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr ng-if="showAList"> -->
+<!-- 					<td> -->
+<!-- 						<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				<tr ng-if="showPSList"> -->
+<!-- 					<td> -->
+<!-- 						<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a> -->
+<!-- 					</td> -->
 <!-- 				</tr> -->
 			</table>
-<!-- 						</div> -->
 		</div>	
 	</div>
 	<div class="col-md-10" align="center" ng-show="!occupancyOpened"><!--  ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" -->
@@ -196,10 +202,29 @@
 							ng-disabled="currentPage >= filtered.length/maxStreets - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
-					<td width="33%" align="left">
-<!-- 						<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">Crea CSV</button> -->
-<!-- 						&nbsp;&nbsp; -->
-<!-- 						<a class="btn btn-success" target="_blank" href="{{ streetCvsFile }}">Scarica CSV</a> -->
+					<td width="33%" align="right">
+						<table>
+							<tr ng-if="showSList">
+								<td>
+									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								</td>
+							</tr>
+							<tr ng-if="showZList">
+								<td>
+									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								</td>
+							</tr>
+							<tr ng-if="showAList">
+								<td>
+									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								</td>
+							</tr>
+							<tr ng-if="showPSList">
+								<td>
+									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								</td>
+							</tr>
+						</table>
 					</td>
 				</tr>
 			</table>	

@@ -1059,6 +1059,14 @@
     "value": "IMPOSTA FILTRO",
     "description": "Testo label filtro di sinistra in dashboard"
 }, {
+	"key": "other_settings",
+	"value": "Altre Impostazioni",
+	"description": "Label per altre impostazioni in settaggio filtro occupazione"
+}, {
+	"key": "use_average_zone_occ",
+	"value": "Occupazione Media di Zona",
+	"description": "Label per checkbox di occupazione media di zona in filtro occupazione"
+}, {
     "key": "euro_hour",
     "value": "€/ora",
     "description": "Simbolo tariffa oraria"
