@@ -56,7 +56,7 @@ public class MonthStat {
 		}
 	}
 	public DayStat day(int day) {
-		if (days != null && days.containsKey(day)) return days.get(day);
+		if (days != null && days.containsKey((byte)day)) return days.get((byte)day);	// MB31072015: forced cast to byte to retrieve the correct object
 		return new DayStat();
 	}
 	

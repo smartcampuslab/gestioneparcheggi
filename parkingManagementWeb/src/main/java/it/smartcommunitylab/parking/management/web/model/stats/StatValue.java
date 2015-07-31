@@ -20,19 +20,22 @@ public class StatValue {
 	private int count = 0;
 	private double aggregateValue = 0;
 	private double lastValue = 0;
+	private double sumValue = 0;
 	private long lastUpdate = 0;
 	
 	public void insert(double value, long timestamp) {
 		lastUpdate = timestamp;
 		lastValue = value;
 		aggregateValue = (aggregateValue * count + value)/(++count);
+		sumValue = sumValue + value;
 	}
 	
-	public StatValue(int count, double aggregateValue, double lastValue, long lastUpdate) {
+	public StatValue(int count, double aggregateValue, double lastValue, double sumValue, long lastUpdate) {
 		super();
 		this.count = count;
 		this.aggregateValue = aggregateValue;
 		this.lastValue = lastValue;
+		this.sumValue = sumValue;
 		this.lastUpdate = lastUpdate;
 	}
 	public StatValue() {
@@ -62,11 +65,18 @@ public class StatValue {
 	public void setLastUpdate(long lastUpdate) {
 		this.lastUpdate = lastUpdate;
 	}
+	public double getSumValue() {
+		return sumValue;
+	}
+	public void setSumValue(double sumValue) {
+		this.sumValue = sumValue;
+	}
 
 	public StatValue merge(StatValue v) {
 		if (v != null) {
 			if (count > 0 || v.count > 0) {
 				aggregateValue = (aggregateValue * count + v.aggregateValue * v.count) / (count + v.count);
+				sumValue = sumValue + v.sumValue;
 			}
 			count += v.count;
 			if (lastUpdate < v.lastUpdate) {
@@ -82,14 +92,15 @@ public class StatValue {
 	}
 
 	public StatValue copy() {
-		return new StatValue(count, aggregateValue, lastValue, lastUpdate); 
+		return new StatValue(count, aggregateValue, lastValue, sumValue, lastUpdate); 
 	}
 
 	@Override
 	public String toString() {
 		return "StatValue [count=" + count + ", aggregateValue="
-				+ aggregateValue + ", lastValue=" + lastValue + ", lastUpdate="
-				+ lastUpdate + "]";
+				+ aggregateValue + ", lastValue=" + lastValue
+				+ ", sumValue=" + sumValue
+				+ ", lastUpdate=" + lastUpdate + "]";
 	}
 	
 }

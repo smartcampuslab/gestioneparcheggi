@@ -37,6 +37,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
@@ -160,6 +161,15 @@ public class ObjectController  {
 		} 
 		return dataService.getParkings(agency);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkingmeters") 
+	public @ResponseBody List<ParkMeter> getParkingMeters(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+		logger.info("I'm in get all parkingmeterss - auxiliary app!!!");
+		if (lat != null && lon != null && radius != null) {
+			return dataService.getParkingMeters(agency, lat, lon, radius);
+		} 
+		return dataService.getParkingMeters(agency);
+	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
 	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=false) boolean isSysLog, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
@@ -178,6 +188,19 @@ public class ObjectController  {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
 			dataService.updateDynamicStreetData(street, agency, userId, isSysLog);
+			return "OK";
+		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "KO";
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/{id}/{userId:.*}") 
+	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=false) boolean isSysLog, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+		try {
+			//logger.error("Update street Log: isSysLog = " + isSysLog );
+			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block

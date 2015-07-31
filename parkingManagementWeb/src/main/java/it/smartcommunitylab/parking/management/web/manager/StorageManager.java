@@ -133,7 +133,7 @@ public class StorageManager {
 		return true;
 	}
 
-	// ParkingMeter Methods
+	// ParkMeter Methods
 	public List<ParkingMeterBean> getAllParkingMeters(String appId) {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 

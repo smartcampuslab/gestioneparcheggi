@@ -16,10 +16,13 @@
 package it.smartcommunitylab.parking.management.web.manager;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.bean.CompactParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.CompactStreetBean;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingLog;
+import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
+import it.smartcommunitylab.parking.management.web.bean.ProfitLogBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
@@ -30,6 +33,7 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
@@ -85,6 +89,55 @@ public class DynamicManager {
 			}
 		}
 		return result;
+	}
+	
+	// ParkingMeter Methods
+	public List<ParkingMeterBean> getAllParkingMeters(String appId) {
+		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
+
+		for (RateAreaBean temp : getAllAreaInAppId(appId)) {
+			if(temp != null && temp.getId_app().compareTo(appId) == 0){
+				result.addAll(getAllParkingMeters(temp, appId));
+			}
+		}
+
+		return result;
+	}
+	
+	public List<ParkingMeterBean> getAllParkingMeters(RateAreaBean ab, String appId) {
+		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
+		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
+
+		if (area.getParkingMeters() != null) {
+			for (ParkingMeter tmp : area.getParkingMeters()) {
+				if(tmp.getId_app() != null && tmp.getId_app().compareTo(appId) == 0){
+				ParkingMeterBean p = ModelConverter.convert(tmp,
+						ParkingMeterBean.class);
+					p.setAreaId(ab.getId());
+					p.setColor(area.getColor());
+					result.add(p);
+				}
+			}
+		}
+		return result;
+	}
+	
+	public ParkingMeterBean findParkingMeter(String parcometroId) {
+		List<RateArea> aree = mongodb.findAll(RateArea.class);
+		ParkingMeter p = new ParkingMeter();
+		for (RateArea area : aree) {
+			if (area.getParkingMeters() != null) {
+				p.setId(parcometroId);
+				int index = area.getParkingMeters().indexOf(p);
+				if (index != -1) {
+					ParkingMeterBean result = ModelConverter.convert(area
+							.getParkingMeters().get(index), ParkingMeterBean.class);
+					result.setAreaId(area.getId());
+					return result;
+				}
+			}
+		}
+		return null;
 	}
 
 	// Street Methods
@@ -655,6 +708,58 @@ public class DynamicManager {
 		double statValue = findOccupationRate(total, occupied, 0, 0, 1);
 		repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
 	}
+	
+	public void editParkingMeterAux(ParkMeter pm, Long timestamp, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
+		String[] ids = pm.getId().split("@");
+		String pmId = ids[2];
+		pm.setUpdateTime(timestamp);
+		pm.setUser(Integer.valueOf(authorId));
+		
+		ParkingMeterBean entity = findParkingMeter(pmId);
+		//mongodb.save(entity);
+		
+		ProfitLogBean pl = new ProfitLogBean();
+		pl.setObjId(pm.getId());
+		pl.setType(ParkMeter.class.getCanonicalName());
+		pl.setFromTime(timestamp);
+		pl.setToTime(timestamp);
+		pl.setAuthor(authorId);
+		pl.setAgency(agencyId);
+		// set new fields ---------
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp);
+		pl.setYear(cal.get(Calendar.YEAR) + "");
+		pl.setMonth((cal.get(Calendar.MONTH) + 1) + "");
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		pl.setWeek_day(dayOfWeek + "");
+		pl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
+		boolean isHolyday = repo.isAHoliday(cal, entity.getId_app());
+		pl.setHolyday(isHolyday);
+		pl.setSystemLog(sysLog);
+		//---------------------------
+		//Integer oldVersion = getLastVersion(dl.getObjId());
+		//dl.setVersion(new Integer(oldVersion.intValue() + 1));
+		//if(entity.getGeometry() != null){
+		//	PointBean point = new PointBean();
+		//	point.setLat(entity.getGeometry().getLat());
+		//	point.setLng(entity.getGeometry().getLng());
+		//	dl.setLocation(point);
+		//}
+		pl.setDeleted(false);
+		//dl.setContent(entity.toJSON());
+		@SuppressWarnings("unchecked")
+		Map<String,Object> map = ModelConverter.convert(pm, Map.class);
+		pl.setValue(map);
+		JSONObject tmpVal = new JSONObject(map);
+		pl.setValueString(tmpVal.toString());
+		mongodb.save(pl);
+		// Update Profit Stat report
+		//int[] total = {p.getSlotsTotal()};
+		//int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
+		//double statValue = findOccupationRate(total, occupied, 0, 0, 1);
+		int profit = pm.getProfit();
+		repo.updateStats(pm.getId(), pm.getAgency(), pl.getType(), null, profit, timestamp);
+	}
 
 	
 	public List<DataLogBean> getLogsById(String id, String agency, int count, int skip, String type) {
@@ -851,6 +956,64 @@ public class DynamicManager {
 		}
 	}
 	
+	/**
+	 * Method getLastProfitFromObject: retrieve the last profit value of a specific object in a specific time range
+	 * @param objectId: id of the stored object
+	 * @param appId: app id of the object
+	 * @param type: class type of the object
+	 * @param params: Map object with useful parameters (in this first version we consider all null)
+	 * @param years: year range
+	 * @param months: month range
+	 * @param days: day range
+	 * @param hours: hour range
+	 * @return double average occupation rate retrieved with the specific parameters
+	 */
+	public double getLastProfitFromObject(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		Map<StatKey, StatValue> res = null;
+		StatKey key = new StatKey(objectId, appId,type);
+		if(dayType != null && dayType.compareTo("wd") == 0){
+			res = repo.findStatsWD(objectId, appId, type, params, years, months, hours);
+		} else if(dayType != null && dayType.compareTo("we") == 0){
+			res = repo.findStatsWE(objectId, appId, type, params, years, months, hours);
+		} else {
+			res = repo.findStats(objectId, appId, type, params, years, months, days, hours);
+		}
+		if(!res.isEmpty()){
+			return res.get(key).getLastValue();
+		} else {
+			return -1.0;
+		}
+	}
+	
+	/**
+	 * Method getSumProfitFromObject: retrieve the total profit of a specific object in a specific time range
+	 * @param objectId: id of the stored object
+	 * @param appId: app id of the object
+	 * @param type: class type of the object
+	 * @param params: Map object with useful parameters (in this first version we consider all null)
+	 * @param years: year range
+	 * @param months: month range
+	 * @param days: day range
+	 * @param hours: hour range
+	 * @return double average occupation rate retrieved with the specific parameters
+	 */
+	public double getSumProfitFromObject(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		Map<StatKey, StatValue> res = null;
+		StatKey key = new StatKey(objectId, appId,type);
+		if(dayType != null && dayType.compareTo("wd") == 0){
+			res = repo.findStatsWD(objectId, appId, type, params, years, months, hours);
+		} else if(dayType != null && dayType.compareTo("we") == 0){
+			res = repo.findStatsWE(objectId, appId, type, params, years, months, hours);
+		} else {
+			res = repo.findStats(objectId, appId, type, params, years, months, days, hours);
+		}
+		if(!res.isEmpty()){
+			return res.get(key).getSumValue();
+		} else {
+			return -1.0;
+		}
+	}
+	
 	public StreetBean getOccupationRateFromStreet(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		StreetBean s = findStreet(objectId);
 		String sId = getCorrectId(objectId, "street", appId);
@@ -982,6 +1145,36 @@ public class DynamicManager {
 		}
 
 		return parkings;
+	}
+	
+	/**
+	 * Method getProfitFromAllParkingMeters: used to obtain the profit value from all the parkingmeters
+	 * @param appId: app id of the logge user (rv or tn)
+	 * @param type: type of the object
+	 * @param params: parameter to semplify the research
+	 * @param years: years limit for searched data
+	 * @param months: months limit for searched data
+	 * @param dayType: day type: working or not
+	 * @param days: days limit for searched data
+	 * @param hours: hours limit for searched data
+	 * @param valueType: type of searched value: last profit or profit sum
+	 * @return
+	 */
+	public List<ParkingMeterBean> getProfitFromAllParkingMeters(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+		List<ParkingMeterBean> parkingmeters = getAllParkingMeters(appId);
+		String pId = "";
+		for(ParkingMeterBean pm : parkingmeters){
+			double profitVal = 0;
+			pId = getCorrectId(pm.getId(), "parkingmeter", appId);
+			if(valueType == 1){
+				profitVal = getLastProfitFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+			} else {
+				profitVal = getSumProfitFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+			}
+			pm.setProfit(profitVal);
+		}
+
+		return parkingmeters;
 	}
 	
 	/**

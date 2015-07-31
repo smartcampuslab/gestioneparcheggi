@@ -82,7 +82,7 @@ public class YearStat {
 	}
 	
 	public MonthStat month(int month){
-		if (months != null && months.containsKey(month)) return months.get(month);
+		if (months != null && months.containsKey((byte)month)) return months.get((byte)month);	// MB31072015: forced cast to byte to retrieve the correct object
 		return new MonthStat();
 	}
 }

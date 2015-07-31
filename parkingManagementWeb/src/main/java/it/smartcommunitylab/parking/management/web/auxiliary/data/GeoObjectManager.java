@@ -16,9 +16,11 @@
 package it.smartcommunitylab.parking.management.web.auxiliary.data;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.auxiliary.services.PolylineEncoder;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
@@ -77,6 +79,14 @@ public class GeoObjectManager {
 		return searchStreets(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
 	}
 	
+	public List<ParkMeter> getParkingMeters(String agency) throws Exception { 
+		return searchParkingMeters((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
+	}
+	
+	public List<ParkMeter> getParkingMeters(String agency, double lat, double lon, double radius) throws Exception {
+		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+	}
+	
 	public void updateDynamicStreetData(Street s, String agencyId, String authorId, boolean sysLog) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(s.getUpdateTime() != null){
@@ -95,6 +105,14 @@ public class GeoObjectManager {
 			currTime = object.getUpdateTime();
 		}
 		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog);
+	}
+	
+	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog) throws Exception, NotFoundException {
+		long currTime = System.currentTimeMillis();
+		if(object.getUpdateTime() != null){
+			currTime = object.getUpdateTime();
+		}
+		dynamicManager.editParkingMeterAux(object, currTime, agencyId, authorId, sysLog);
 	}
 
 	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
@@ -240,6 +258,32 @@ public class GeoObjectManager {
 		return listaObj; //find(query, cls);
 	}
 	
+	public List<ParkMeter> searchParkingMeters(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
+		return searchParkingMeters(circle, inCriteria, 0, 0);//circle,
+	}
+	
+	public List<ParkMeter> searchParkingMeters(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle	
+		//logger.error(String.format("Search Parking limit %s, skip %s, query %s, class %s", limit, skip, query.getHint(), type));
+		
+		List<ParkMeter> listaObj = new ArrayList<ParkMeter>();
+		//storageManager.setAppId(inCriteria.get("agency").toString());
+		List<ParkingMeterBean> myParkingMeters = storageManager.getAllParkingMeters(inCriteria.get("agency").toString());
+		
+		for(int i = 0; i < myParkingMeters.size(); i++){
+			ParkMeter pm = castPMeterBeanToParkingMeter(myParkingMeters.get(i));
+			if(circle != null){
+				// here I have to create a specific filter for position distances from circle center and distances < radius
+				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), pm.getPosition()[0], pm.getPosition()[1],'K') <= circle.getRadius()){
+					listaObj.add(pm);
+				}
+			} else {
+				listaObj.add(pm);
+			}
+		}
+		
+		return listaObj; //find(query, cls);
+	}
+	
 	@SuppressWarnings("unused")
 	private static <T> Criteria createSearchCriteria(Class<T> cls, Circle circle, Map<String, Object> inCriteria) { //Circle circle
 		Criteria criteria = new Criteria();
@@ -359,7 +403,21 @@ public class GeoObjectManager {
 		p.setDescription(park.getFee() + ", " + park.getManagementMode());
 		return p;
 	}
-
+	
+	private ParkMeter castPMeterBeanToParkingMeter(ParkingMeterBean pmeter){
+		//logger.error(String.format("Park to be casted : %s", park.toJSON()));
+		ParkMeter p = new ParkMeter();
+		p.setId("parkingmeter@" + pmeter.getId_app() + "@" + pmeter.getId());
+		p.setAgency(pmeter.getId_app());
+		p.setCode(pmeter.getCode() + "");
+		p.setNote(pmeter.getNote());
+		if(pmeter.getGeometry()!= null){
+			p.setPosition(new double[]{pmeter.getGeometry().getLat(), pmeter.getGeometry().getLng()});
+		}
+		p.setStatus(pmeter.getStatus().toString());
+		p.setAreaId(pmeter.getAreaId());
+		return p;
+	}
 	
 	private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
 		double theta = lon1 - lon2;

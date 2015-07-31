@@ -59,7 +59,7 @@ public class DayStat {
 	}
 	
 	public StatValue hour(int hour) {
-		if(hours != null && hours.containsKey(hour)) return hours.get(hour);
+		if(hours != null && hours.containsKey((byte)hour)) return hours.get((byte)hour);	// MB31072015: forced cast to byte to retrieve the correct object
 		return null;
 	}
 }

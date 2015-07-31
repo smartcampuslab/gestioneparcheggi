@@ -100,7 +100,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	}
 
 	public void updateStats(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp) {
-		StatValue stat = new StatValue(1, value, value, timestamp);
+		StatValue stat = new StatValue(1, value, value, value, timestamp);
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(timestamp);
 		//boolean isHoliday = isHoliday(c, appId);
