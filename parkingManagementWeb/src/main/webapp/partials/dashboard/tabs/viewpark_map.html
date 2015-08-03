@@ -39,7 +39,7 @@
 									<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics" value="occupation" ng-change="changeDashboardView()" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td>
 								</tr>
 								<tr>
-									<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_receipts' | i18n }}</span></label></td>
+									<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView()" ng-disabled="disableThemes">&nbsp;{{ 'park_receipts' | i18n }}</label></td>
 								</tr>
 								<tr>
 									<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_timeCost' | i18n }}</span></label></td>
@@ -78,7 +78,7 @@
 							<p style="font-size:3px">&nbsp;</p>
 <!-- 						</div> -->
 					</div>
-					<div ng-show="dashboard_topics=='occupation'">
+					<div ng-show="dashboard_topics=='occupation' || dashboard_topics=='receipts'">
 <!-- 					<div class="panel panel-danger" ng-show="dashboard_topics=='occupation'"> -->
 <!-- 						<div class="panel-body dashboard-panel"> -->
 							<h5><strong>{{ 'occupation_filter_title' | i18n }}</strong></h5>

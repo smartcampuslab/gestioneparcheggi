@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.controller;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.CompactParkingStructureBean;
@@ -36,6 +37,7 @@ import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructu
 import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 import java.io.IOException;
@@ -230,6 +232,22 @@ public class DashboardController {
 	List<CompactStreetBean> getAllStreetChangedOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
 		String type = Street.class.getCanonicalName();
 		return dynamic.getOccupationChangesFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkingmeters")
+	public @ResponseBody
+	List<ParkingMeterBean> getAllParkingMetersProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+		String type = ParkMeter.class.getCanonicalName();
+//		int year_f = (year!= null && year.length > 0) ? year[0] : 0;
+//		int year_t = (year!= null && year.length > 1) ? year[1] : 0;
+//		int month_f = (month!= null && month.length > 0) ? month[0] : 0;
+//		int month_t = (month!= null && month.length > 1) ? month[1] : 0;
+//		int weekday_f = (weekday!= null && weekday.length > 0) ? weekday[0] : 0;
+//		int weekday_t = (weekday!= null && weekday.length > 1) ? weekday[1] : 0;
+//		int hour_f = (hour!= null && hour.length > 0) ? hour[0] : 0;
+//		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
+//		logger.info(String.format("Parameters retrieved in back-end request for parkingmeters: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_f, weekday_t, hour_f, hour_t, valueType));
+		return dynamic.getProfitFromAllParkingMeters(appId, type, null, year, month, dayType, weekday, hour, valueType);
 	}
 	
 
