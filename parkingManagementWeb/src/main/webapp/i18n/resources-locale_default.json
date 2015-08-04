@@ -1071,6 +1071,10 @@
     "value": "€/ora",
     "description": "Simbolo tariffa oraria"
 }, {
+    "key": "euro",
+    "value": "€",
+    "description": "Simbolo euro per valore tariffario"
+}, {
     "key": "add_new_object",
     "value": "AGGIUNGI",
     "description": "Testo pulsante aggiungi in edit parcheggi"
@@ -1422,6 +1426,10 @@
 	"key": "log_client_insertion_value",
 	"value": "app client",
 	"description": "Valore per tipo inserimento log"
+}, { 
+	"key": "pm_profit",
+	"value": "Incasso",
+	"description": "Label per valore di incasso parcometro"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"
