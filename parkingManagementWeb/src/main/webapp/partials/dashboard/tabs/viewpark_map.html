@@ -234,6 +234,9 @@
      					<shape name="polyline" ng-repeat="sOcc in occupancyStreets" id="{{ sOcc.id }}" path="{{ sOcc.gpath }}" 
          					geodesic="{{ sOcc.geodesic }}" stroke-color="{{ sOcc.stroke.color }}" stroke-opacity="{{ sOcc.stroke.opacity }}" stroke-weight="{{ sOcc.stroke.weight }}" on-click="showOccupancy(event, sOcc, 3, 1)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
      					</shape>
+     					<shape name="polyline" ng-repeat="sProf in profitStreets" id="{{ sProf.id }}" path="{{ sProf.gpath }}" 
+         					geodesic="{{ sProf.geodesic }}" stroke-color="{{ sProf.stroke.color }}" stroke-opacity="{{ sProf.stroke.opacity }}" stroke-weight="{{ sProf.stroke.weight }}" on-click="showProfitDetails(event, sProf, 3, 2)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
+     					</shape>
 						<shape name="polygon" ng-repeat="z in mapZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
          					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
@@ -245,6 +248,10 @@
      					<shape name="polygon" ng-repeat="zOcc in occupancyZones" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
          					geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zOcc.stroke.weight }}"
          					fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showOccupancy(event, zOcc, 4, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     					</shape>
+     					<shape name="polygon" ng-repeat="zProf in profitZones" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
+         					geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zProf.stroke.weight }}"
+         					fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showOccupancy(event, zProf, 4, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      					</shape>
      					<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="{{ a.stroke.opacity }}" stroke-weight="{{ a.stroke.weight }}"
@@ -1033,13 +1040,12 @@
 										<tr>
 								        	<td class="detailsTableSX">{{ 'street_name' | i18n }}:</td>
 								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
+								        	<td class="detailsTableDX">{{ sDetails.data.streetReference }}</td>
 								        </tr>
 										<tr ng-show="s_pms.visible">	
-											<td>
-												<strong>{{ 'street_pm' | i18n }}:</strong>
-											</td>
-											<td>
+											<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
+											<td class="detailsTableCX"></td>
+											<td class="detailsTableDX">
 												<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code }};</span>
 											</td>
 										</tr>
@@ -1103,13 +1109,19 @@
 						        				{{ 'street_slots' | i18n }}
 						        			</td>
 						        		</tr>
+						        		<tr ng-show="s_timedSlot.visible">
+						        			<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+								        	<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
+										</tr>
 <!-- 									<tr ng-show="s_handicappedSlot.visible"> -->
 <!-- 										<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td> -->
 <!-- 										<td>&nbsp;{{ sDetails.data.handicappedSlotNumber }}</td> -->
 <!-- 									</tr> -->
 										<tr ng-show="s_timedSlot.visible">
-											<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
-											<td>&nbsp;{{ sDetails.data.timedParkSlotNumber }}</td>
+											<td class="detailsTableSX">{{ 'street_paid_slot' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+								        	<td class="detailsTableDX">{{ sDetails.data.paidSlotNumber }}</td>
 										</tr>
 <!-- 									<tr ng-show="s_freeSlot.visible"> -->
 <!-- 										<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td> -->
@@ -1124,6 +1136,19 @@
 						        				<hr/>
 						        			</td>
 						        		</tr>
+						        		<tr>
+						        			<td colspan="3" class="detailsTableColSpan">
+						        				{{ 'street_profits' | i18n }}
+						        			</td>
+						        		</tr>
+						        		<tr>
+											<td class="detailsTableSX">{{ 'street_profit' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+											<td class="detailsTableDX">
+												<span ng-if="sDetails.data.profit != -1">{{ correctEuroCent(sDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+												<span ng-if="sDetails.data.profit == -1">n.p.</span>
+											</td>
+										</tr>
 										
 								    </table>
 								</div>

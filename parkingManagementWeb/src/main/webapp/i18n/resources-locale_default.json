@@ -1431,6 +1431,14 @@
 	"value": "Incasso",
 	"description": "Label per valore di incasso parcometro"
 }, { 
+	"key": "street_profit",
+	"value": "Incasso",
+	"description": "Label per valore di incasso via"
+}, { 
+	"key": "street_profits",
+	"value": "Incassi",
+	"description": "Titolo sezione incasso via"
+}, { 
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {
