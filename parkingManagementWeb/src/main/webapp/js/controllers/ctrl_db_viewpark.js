@@ -772,13 +772,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		switch($scope.dashboard_topics){
 			case "parkSupply": 
 				// Show profit objects (with specifics colors)
-				$scope.dashboard_space = {
-					rate_area : false,
-					macrozone : false,
-					microzone : true,
-					parkingmeter : false,
-					parkingstructs : false
-				};
+				$scope.dashboard_space.microzone = true;
+				$scope.dashboard_space.parkingmeter = false;
 				// Show parkingManagement objects
 				$scope.switchStreetMapObject(2, null, false);
 				$scope.switchZoneMapObject(2, null);
@@ -795,6 +790,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case "occupation": 
 				// Show occupation objects (with specifics colors)
+				$scope.dashboard_space.microzone = true;
+				$scope.dashboard_space.parkingmeter = false;
 				$scope.switchStreetMapObject(1, null, false);
 				$scope.switchZoneMapObject(1, null);
 				$scope.switchAreaMapObject(1, null);
@@ -811,13 +808,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case "receipts": 
 				// Show profit objects (with specifics colors)
-				$scope.dashboard_space = {
-					rate_area : false,
-					macrozone : false,
-					microzone : false,
-					parkingmeter : true,
-					parkingstructs : false
-				};
+				$scope.dashboard_space.microzone = false;
+				$scope.dashboard_space.parkingmeter = true;
 				$scope.showProfitPMMarkers();	// here I show the parkingMeter on he map
 				$scope.switchStreetMapObject(5, null, true);
 				$scope.switchZoneMapObject(5, null);
@@ -1149,11 +1141,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			} else {
 				$scope.hideAreaPolygons(1);
 			}
-    	} else {
+    	} else if(dashboardTopic == "occupation"){
     		if(!$scope.dashboard_space.rate_area){
 				$scope.showAreaPolygons(2);
 			} else {
 				$scope.hideAreaPolygons(2);
+			}
+    	} else if(dashboardTopic == "receipts"){
+    		if(!$scope.dashboard_space.rate_area){
+				$scope.showAreaPolygons(3);
+			} else {
+				$scope.hideAreaPolygons(3);
 			}
     	}
     	if(!$scope.dashboard_space.rate_area){
@@ -1166,11 +1164,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.showAreaPolygons = function(type) {
     	if(type == 1){
     		$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, true, type, false, false);
-    	} else {
+    	} else if(type == 2){
     		if($scope.occupancyAreas.length == 0){
     			$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, true, type, true, false);
     		} else {
     			$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, true, type, false, false);
+    		}
+    	} else if(type == 3){
+    		if($scope.profitAreas.length == 0){
+    			$scope.profitAreas = $scope.initAreasOnMap($scope.areaWS, true, type, true, false);
+    		} else {
+    			$scope.profitAreas = $scope.initAreasOnMap($scope.areaWS, true, type, false, false);
     		}
     	}
     	//$scope.refreshMap();
@@ -1197,8 +1201,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.hideAreaPolygons = function(type) {
     	if(type == 1){
     		$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, false, type, false, false);
-    	} else {
+    	} else if(type == 2){
     		$scope.occupancyAreas = $scope.initAreasOnMap($scope.areaWS, false, type, false, false);
+    	} else if(type == 3){
+    		$scope.profitAreas = $scope.initAreasOnMap($scope.areaWS, false, type, false, false);
     	}
     	$scope.hideAllAreas($scope.areaWS);
     	$scope.detailsOpened = false;
@@ -1530,11 +1536,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		
 		for(var i = 0; i < areas.length; i++){
 			var areaOccupancy = 0;
+			var areaProfit = [];
 			if(type == 1){
 				aColor = $scope.correctColor(areas[i].color);
 			} else if(type == 2){
 				areaOccupancy = $scope.getStreetsInAreaOccupancy(areas[i].id);
 				aColor = $scope.getOccupancyColor(areaOccupancy);
+			} else if(type == 3){
+				areaProfit = $scope.getPMsInAreaProfit(areas[i].id);
+				aColor = $scope.getProfitColor(areaProfit[0]);
 			}
 			
 			if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
@@ -1566,6 +1576,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						area.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(areas[i].id);
 						area.data.slotOccupied = slotsInArea[1]; //Math.round(area.data.slotNumber * areaOccupancy / 100);
 					}
+					area.data.profit = areaProfit[0];
+					area.data.pmsInArea = areaProfit[1];
 					tmpAreas.push(area);
 				}
 			}
@@ -2319,6 +2331,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};
 	
+	// Method getStreetsInZoneProfit: used to retrieve the profit data from the streets that compose a zone
 	$scope.getStreetsInZoneProfit = function(z_id){
 		var totalProfit = 0;
 		var streetsInZone = 0;
@@ -2327,11 +2340,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			for(var i = 0; i < $scope.profitStreets.length; i++){
 				var found = false;
 				for(var j = 0; (j < $scope.profitStreets[i].zones.length) && !found; j++){
-					if($scope.profitStreets[i].zones[j] == z_id){
+					if($scope.profitStreets[i].zones[j].id == z_id){
 						found = true;
 						streetsInZone += 1;
-						if($scope.profitStreets[i].profit > -1){
-							totalProfit += $scope.profitStreets[i].profit;
+						if($scope.profitStreets[i].data.profit > -1){
+							totalProfit += $scope.profitStreets[i].data.profit;
 							noData = false;
 						}
 					}
@@ -2367,6 +2380,30 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			return totalOccupancy / streetsInArea;
 		} else {
 			return -1;
+		}
+	};
+	
+	$scope.getPMsInAreaProfit = function(a_id){
+		var totalProfit = 0;
+		var pmsInArea = 0;
+		var noData = true;
+		if($scope.parkingMeterWS != null && $scope.parkingMeterWS.length > 0){
+			//var found = false;
+			for(var i = 0; i < $scope.parkingMeterWS.length; i++){// && !found
+				if($scope.parkingMeterWS[i].areaId == a_id){
+					//found = true;
+					pmsInArea += 1;
+					if($scope.parkingMeterWS[i].profit > 0){
+						totalProfit += $scope.parkingMeterWS[i].profit;
+						noData = false;
+					}
+				}
+			}
+		}
+		if(pmsInArea != 0 && !noData){
+			return [totalProfit, pmsInArea]; // / pmsInArea;
+		} else {
+			return [-1, pmsInArea];
 		}
 	};
 	
@@ -2566,14 +2603,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		   			$scope.mapAreas = $scope.initAreasOnMap($scope.areaWS, true, 1, false, firstTime);
 		   		} else {
 		   			var tmpA = $scope.initAreasOnMap($scope.areaWS, true, 1, false, firstTime);
-		   			$scope.switchAreaMapObject(3, tmpA);
+		   			$scope.switchAreaMapObject(5, tmpA);
 		   		}
 		   	} else {
 		   		if($scope.profitAreas.length == 0){
 		   			$scope.profitAreas = $scope.initAreasOnMap($scope.areaWS, true, 3, false, firstTime);
 		   		} else {
 		   			var tmpA = $scope.initAreasOnMap($scope.areaWS, true, 3, false, firstTime);
-		   	    	$scope.switchAreaMapObject(4, tmpA);
+		   	    	$scope.switchAreaMapObject(6, tmpA);
 		    	}
 		    }
 		}
@@ -2949,8 +2986,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	object.stroke.opacity = 0.7;
 	    	if($scope.mapStreets.length > 0){
 	    		$scope.mapStreets.push(object);
-	    	} else {
+	    	} else if($scope.occupancyStreets.length > 0){
 	    		$scope.occupancyStreets.push(object);
+	    	} else if($scope.profitStreets.length > 0){
+	    		$scope.profitStreets.push(object);
 	    	}
 	    	$scope.mapStreetSelectedMarkers = [];
 			break;
@@ -2963,8 +3002,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			object.fill.opacity = 0.5;
 	    	if($scope.mapZones.length > 0){
 	    		$scope.mapZones.push(object);
-	    	} else {
+	    	} else if($scope.occupancyZones.length > 0){
 	    		$scope.occupancyZones.push(object);
+	    	} else if($scope.profitZones.length > 0){
+	    		$scope.profitZones.push(object);
 	    	}
 			break;
 		case 5:
@@ -2976,8 +3017,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	object.fill.opacity = 0.5;
 	    	if($scope.mapAreas.length > 0){
 	    		$scope.mapAreas.push(object);
-	    	} else {
+	    	} else if($scope.occupancyAreas.length > 0){
 	    		$scope.occupancyAreas.push(object);
+	    	} else if($scope.profitAreas.length > 0){
+	    		$scope.profitAreas.push(object);
 	    	}
 			break;	
 		};
@@ -3302,17 +3345,23 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    		$scope.mapZones.splice(i, 1);
 				    	}
 				    }
-			    } else {
+			    } else if(theme == 1){
 			    	for(var i = 0; i < $scope.occupancyZones.length; i++){
 				    	if($scope.occupancyZones[i].id == object.id){
 				    		$scope.occupancyZones.splice(i, 1);
+				    	}
+				    }
+			    } else if(theme == 2){
+			    	for(var i = 0; i < $scope.profitZones.length; i++){
+				    	if($scope.profitZones[i].id == object.id){
+				    		$scope.profitZones.splice(i, 1);
 				    	}
 				    }
 			    }
 			    $scope.mapSelectedZones.push(object);
 			    $scope.showZoneDet();
 				$scope.zDetails = object;
-				$scope.initZoneOccupancyDiagram(object, 1);
+				//$scope.initZoneOccupancyDiagram(object, 1);
 				break;
 			case 5:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
@@ -3327,17 +3376,23 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    		$scope.mapAreas.splice(i, 1);
 				    	}
 				    }
-			    } else {
+			    } else if(theme == 1){
 			    	for(var i = 0; i < $scope.occupancyAreas.length; i++){
 				    	if($scope.occupancyAreas[i].id == object.id){
 				    		$scope.occupancyAreas.splice(i, 1);
+				    	}
+				    }
+			    } else if(theme == 2){
+			    	for(var i = 0; i < $scope.profitAreas.length; i++){
+				    	if($scope.profitAreas[i].id == object.id){
+				    		$scope.profitAreas.splice(i, 1);
 				    	}
 				    }
 			    }
 			    $scope.mapSelectedAreas.push(object);
 			    $scope.showAreaDet();
 				$scope.aDetails = object;
-				$scope.initAreaOccupancyDiagram(object);
+				//$scope.initAreaOccupancyDiagram(object);
 				break;	
 		};
 		$scope.profitOpened = true;
@@ -3463,8 +3518,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	object.fill.opacity = 0.5;
 		    	if(theme == 0){
 		    		$scope.mapZones.push(object);
-		    	} else {
+		    	} else if(theme == 1){
 		    		$scope.occupancyZones.push(object);
+		    	} else if(theme == 2){
+		    		$scope.profitZones.push(object);
 		    	}
 			}
 			$scope.mapSelectedZones = [];
@@ -3479,8 +3536,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	object.fill.opacity = 0.5;
 		    	if(theme == 0){
 		    		$scope.mapAreas.push(object);
-		    	} else {
+		    	} else if(theme == 1){
 		    		$scope.occupancyAreas.push(object);
+		    	} else if(theme == 2){
+		    		$scope.profitAreas.push(object);
 		    	}
 			}
 			$scope.mapSelectedAreas = [];
@@ -3633,38 +3692,67 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	object.fill.opacity = 0.5;
 			if(type == 1 || type == 3){
 				$scope.mapZones.push(object);
-			} else {
+			} else if (type == 2 || type == 4){
 				$scope.occupancyZones.push(object);
+			} else if (type == 5 || type == 6){
+				$scope.profitZones.push(object);
 			}
 			toHideZone[$scope.mapSelectedZones[0].id].setMap(null);
 			$scope.mapSelectedZones = [];
 		}
     	var toHideZones = $scope.map.shapes;
     	switch(type){
-    		case 1:
-    			for(var i = 0; i < $scope.mapZones.length; i++){
-    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
-    	    		var object = $scope.mapZones[i];
-    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapZones[i].id);
-    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
-    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
-    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.mapZones[i].id);
-    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
-    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
-    	    		$scope.occupancyZones.push(object);
-    	    	}
-    	    	$scope.mapZones = [];
+    		case 1: // from availability/profit to occupancy
+    			if($scope.mapZones != null && $scope.mapZones.length > 0){
+	    			for(var i = 0; i < $scope.mapZones.length; i++){
+	    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
+	    	    		var object = $scope.mapZones[i];
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapZones[i].id);
+	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
+	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		$scope.occupancyZones.push(object);
+	    	    	}
+	    			$scope.mapZones = [];
+    			}
+    			if($scope.profitZones != null && $scope.profitZones.length > 0){
+	    			for(var i = 0; i < $scope.profitZones.length; i++){
+	    	    		toHideZones[$scope.profitZones[i].id].setMap(null);
+	    	    		var object = $scope.profitZones[i];
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.profitZones[i].id);
+	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
+	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.profitZones[i].id);
+	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		$scope.occupancyZones.push(object);
+	    	    	}
+	    			$scope.profitZones = [];
+    			}
     			break;
-    		case 2:
-    			for(var i = 0; i < $scope.occupancyZones.length; i++){
-    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
-    	    		var object = $scope.occupancyZones[i];
-    	    		object.stroke.color = $scope.correctColor(object.data.color);
-    	    		$scope.mapZones.push(object);
-    	    	}
-    	    	$scope.occupancyZones = [];
+    		case 2: // from occupancy/profit to availability
+    			if($scope.occupancyZones != null && $scope.occupancyZones.length > 0){
+	    			for(var i = 0; i < $scope.occupancyZones.length; i++){
+	    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
+	    	    		var object = $scope.occupancyZones[i];
+	    	    		object.stroke.color = $scope.correctColor(object.data.color);
+	    	    		$scope.mapZones.push(object);
+	    	    	}
+	    	    	$scope.occupancyZones = [];
+    			}
+    			if($scope.profitZones != null && $scope.profitZones.length > 0){
+    				for(var i = 0; i < $scope.profitZones.length; i++){
+        	    		toHideZones[$scope.profitZones[i].id].setMap(null);
+        	    		var object = $scope.profitZones[i];
+        	    		object.stroke.color = $scope.correctColor(object.data.color);
+        	    		$scope.mapZones.push(object);
+        	    	}
+        	    	$scope.profitZones = [];
+    			}
     			break;
-    		case 3:
+    		case 3: // from availability to availability
     			var tmpZones = [];
     	    	for(var i = 0; i < $scope.mapZones.length; i++){
     	    		toHideZones[$scope.mapZones[i].id].setMap(null);
@@ -3674,7 +3762,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    	}
     	    	angular.copy(tmpZones, $scope.mapZones);
     			break;
-    		case 4:
+    		case 4: // from occupancy to occupancy
     			var tmpZones = [];
     	    	for(var i = 0; i < $scope.occupancyZones.length; i++){
     	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
@@ -3688,7 +3776,43 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		tmpZones.push(object);
     	    	}
     	    	angular.copy(tmpZones, $scope.occupancyZones);
-    			break;	
+    			break;
+    		case 5: // from availability/occupancy to profit
+    			if($scope.mapZones != null && $scope.mapZones.length > 0){
+	    			for(var i = 0; i < $scope.mapZones.length; i++){
+	    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
+	    	    		var object = $scope.mapZones[i];
+	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.mapZones[i].id);
+	    	    		object.stroke.color = $scope.getProfitColor(zoneProfit);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getProfitColor(zoneProfit);
+	    	    		$scope.profitZones.push(object);
+	    	    	}
+	    			$scope.mapZones = [];
+    			}
+    			if($scope.occupancyZones != null && $scope.occupancyZones.length > 0){
+	    			for(var i = 0; i < $scope.occupancyZones.length; i++){
+	    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
+	    	    		var object = $scope.occupancyZones[i];
+	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.occupancyZones[i].id);
+	    	    		object.stroke.color = $scope.getProfitColor(zoneProfit);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getProfitColor(zoneProfit);
+	    	    		$scope.profitZones.push(object);
+	    	    	}
+	    			$scope.occupancyZones = [];
+    			}
+    			break;
+    		case 6: // from profit to profit
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.profitZones.length; i++){
+    	    		toHideZones[$scope.profitZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.profitZones[i].id);
+    	    		object.stroke.color = $scope.getOccupancyColor(zoneProfit);	//Here I have to add the streets that compose the zone
+    	    		object.fill.color = $scope.getOccupancyColor(zoneProfit);
+    	    		tmpZones.push(object);
+    	    	}
+    	    	angular.copy(tmpZones, $scope.profitZones);
+    			break;
     		default:break;
     	}
     };
@@ -3708,39 +3832,70 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	object.fill.opacity = 0.5;
 			if(type == 1 || type == 3){
 				$scope.mapAreas.push(object);
-			} else {
+			} else if(type == 2 || type == 4){
 				$scope.occupancyAreas.push(object);
+			} else if(type == 5 || type == 6){
+				$scope.profitAreas.push(object);
 			}
 			toHideArea[$scope.mapSelectedAreas[0].id].setMap(null);
 			$scope.mapSelectedAreas = [];
 		}
     	switch(type){
-    		case 1:
-    			for(var i = 0; i < $scope.mapAreas.length; i++){
-    	    		toHideAreas[$scope.mapAreas[i].id].setMap(null);
-    	    		var object = $scope.mapAreas[i];
-    	    		var myAreaId = $scope.cleanAreaId($scope.mapAreas[i].id);
-    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
-    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
-    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
-    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
-    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
-    	    		$scope.occupancyAreas.push(object);
-    	    	}
-    	    	$scope.mapAreas = [];
+    		case 1: // from availability/profit to occupancy
+    			if($scope.mapAreas != null && $scope.mapAreas.length > 0){
+	    			for(var i = 0; i < $scope.mapAreas.length; i++){
+	    	    		toHideAreas[$scope.mapAreas[i].id].setMap(null);
+	    	    		var object = $scope.mapAreas[i];
+	    	    		var myAreaId = $scope.cleanAreaId($scope.mapAreas[i].id);
+	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+	    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
+	    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
+	    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
+	    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
+	    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+	    	    		$scope.occupancyAreas.push(object);
+	    	    	}
+	    	    	$scope.mapAreas = [];
+    			}
+    			if($scope.profitAreas != null && $scope.profitAreas.length > 0){
+	    			for(var i = 0; i < $scope.profitAreas.length; i++){
+	    	    		toHideAreas[$scope.profitAreas[i].id].setMap(null);
+	    	    		var object = $scope.profitAreas[i];
+	    	    		var myAreaId = $scope.cleanAreaId($scope.profitAreas[i].id);
+	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+	    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
+	    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
+	    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
+	    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
+	    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+	    	    		$scope.occupancyAreas.push(object);
+	    	    	}
+	    	    	$scope.profitAreas = [];
+    			}
     			break;
-    		case 2:
-    			for(var i = 0; i < $scope.occupancyAreas.length; i++){
-    	    		toHideAreas[$scope.occupancyAreas[i].id].setMap(null);
-    	    		var object = $scope.occupancyAreas[i];
-    	    		object.stroke.color = $scope.correctColor(object.data.color);
-    	    		object.fill.color = $scope.correctColor(object.data.color);
-    	    		$scope.mapAreas.push(object);
-    	    	}
-    	    	$scope.occupancyAreas = [];
+    		case 2: // from occupancy/profit to availability
+    			if($scope.occupancyAreas != null && $scope.occupancyAreas.length > 0){
+    				for(var i = 0; i < $scope.occupancyAreas.length; i++){
+    					toHideAreas[$scope.occupancyAreas[i].id].setMap(null);
+    					var object = $scope.occupancyAreas[i];
+    					object.stroke.color = $scope.correctColor(object.data.color);
+    					object.fill.color = $scope.correctColor(object.data.color);
+    					$scope.mapAreas.push(object);
+    				}
+    				$scope.occupancyAreas = [];
+    			}
+    			if($scope.profitAreas != null && $scope.profitAreas.length > 0){
+    				for(var i = 0; i < $scope.profitAreas.length; i++){
+    					toHideAreas[$scope.profitAreas[i].id].setMap(null);
+    					var object = $scope.profitAreas[i];
+    					object.stroke.color = $scope.correctColor(object.data.color);
+    					object.fill.color = $scope.correctColor(object.data.color);
+    					$scope.mapAreas.push(object);
+    				}
+    				$scope.profitAreas = [];
+    			}
     			break;
-    		case 3:
+    		case 3: // from availability to availability
     			var tmpAreas = [];
     	    	for(var i = 0; i < $scope.mapAreas.length; i++){
     	    		toHideAreas[$scope.mapAreas[i].id].setMap(null);
@@ -3751,7 +3906,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    	}
     	    	angular.copy(tmpAreas, $scope.mapAreas);
     			break;
-    		case 4:
+    		case 4: // from occupancy to occupancy
     			var tmpAreas = [];
     	    	for(var i = 0; i < $scope.occupancyAreas.length; i++){
     	    		toHideAreas[$scope.occupancyAreas[i].id].setMap(null);
@@ -3766,7 +3921,46 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		tmpAreas.push(object);
     	    	}
     	    	angular.copy(tmpAreas, $scope.occupancyAreas);
-    			break;	
+    			break;
+    		case 5: // from availability/occupancy to profit
+    			if($scope.mapAreas != null && $scope.mapAreas.length > 0){
+	    			for(var i = 0; i < $scope.mapAreas.length; i++){
+	    	    		toHideAreas[$scope.mapAreas[i].id].setMap(null);
+	    	    		var object = $scope.mapAreas[i];
+	    	    		var myAreaId = $scope.cleanAreaId($scope.mapAreas[i].id);
+	    	    		var areaProfit = $scope.getPMsInAreaProfit(myAreaId);
+	    	    		object.stroke.color = $scope.getProfitColor(areaProfit[0]);	//Here I have to add the streets that compose the area
+	    	    		object.fill.color = $scope.getProfitColor(areaProfit[0]);
+	    	    		$scope.profitAreas.push(object);
+	    	    	}
+	    	    	$scope.mapAreas = [];
+    			}
+    			if($scope.occupancyAreas != null && $scope.occupancyAreas.length > 0){
+    				for(var i = 0; i < $scope.occupancyAreas.length; i++){
+	    	    		toHideAreas[$scope.occupancyAreas[i].id].setMap(null);
+	    	    		var object = $scope.occupancyAreas[i];
+	    	    		var myAreaId = $scope.cleanAreaId($scope.occupancyAreas[i].id);
+	    	    		var areaProfit = $scope.getPMsInAreaProfit(myAreaId);
+	    	    		object.stroke.color = $scope.getProfitColor(areaProfit[0]);	//Here I have to add the streets that compose the area
+	    	    		object.fill.color = $scope.getProfitColor(areaProfit[0]);
+	    	    		$scope.profitAreas.push(object);
+	    	    	}
+	    	    	$scope.occupancyAreas = [];
+    			}
+    			break;
+    		case 6: // from profit to profit
+    			var tmpAreas = [];
+    	    	for(var i = 0; i < $scope.profitAreas.length; i++){
+    	    		toHideAreas[$scope.profitAreas[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		var myAreaId = $scope.cleanAreaId($scope.profitAreas[i].id);
+    	    		var areaProfit = $scope.getPMsInAreaProfit(myAreaId);
+    	    		object.stroke.color = $scope.getProfitColor(areaProfit[0]);	//Here I have to add the streets that compose the area
+    	    		object.fill.color = $scope.getProfitColor(areaProfit[0]);
+    	    		tmpAreas.push(object);
+    	    	}
+    	    	angular.copy(tmpAreas, $scope.profitAreas);
+    			break;
     		default:break;
     	}
     };

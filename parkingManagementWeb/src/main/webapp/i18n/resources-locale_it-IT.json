@@ -1439,6 +1439,22 @@
 	"value": "Incassi",
 	"description": "Titolo sezione incasso via"
 }, {
+	"key": "zone_paid_slots",
+	"value": "Posti a pagamento",
+	"description": "Label per posti a pagamento in sezione incasso zona"
+}, {
+	"key": "zone_profit", 
+	"value": "Incasso",
+	"description": "Label per valore di incasso zona"
+}, {
+	"key": "area_total_pms", 
+	"value": "Num. Parcometri",
+	"description": "Label per numero parcometri in area"
+}, {
+	"key": "area_profit", 
+	"value": "Incasso",
+	"description": "Label per valore di incasso area"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {

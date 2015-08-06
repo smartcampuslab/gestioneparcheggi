@@ -251,7 +251,7 @@
      					</shape>
      					<shape name="polygon" ng-repeat="zProf in profitZones" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
          					geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zProf.stroke.weight }}"
-         					fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showOccupancy(event, zProf, 4, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         					fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showProfitDetails(event, zProf, 4, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      					</shape>
      					<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="{{ a.stroke.opacity }}" stroke-weight="{{ a.stroke.weight }}"
@@ -264,6 +264,10 @@
      					<shape name="polygon" ng-repeat="aOcc in occupancyAreas" id="{{ aOcc.id }}" path="{{ aOcc.gpath }}" visible="{{ aOcc.visible }}"
          					geodesic="{{ aOcc.geodesic }}" stroke-color="{{ aOcc.stroke.color }}" stroke-opacity="{{ aOcc.stroke.opacity }}" stroke-weight="{{ aOcc.stroke.weight }}"
          					fill-color="{{ aOcc.stroke.color }}" fill-opacity="{{ aOcc.fill.opacity }}" on-click="showOccupancy(event, aOcc, 5, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     					</shape>
+     					<shape name="polygon" ng-repeat="aProf in profitAreas" id="{{ aProf.id }}" path="{{ aProf.gpath }}" visible="{{ aProf.visible }}"
+         					geodesic="{{ aProf.geodesic }}" stroke-color="{{ aProf.stroke.color }}" stroke-opacity="{{ aProf.stroke.opacity }}" stroke-weight="{{ aProf.stroke.weight }}"
+         					fill-color="{{ aProf.stroke.color }}" fill-opacity="{{ aProf.fill.opacity }}" on-click="showProfitDetails(event, aProf, 5, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      					</shape>
 					</map>			
 				</div>
@@ -1165,15 +1169,25 @@
 								    		<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotNumber }}</td>
 								    	</tr>
 										<tr>
-								        	<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+								        	<td class="detailsTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+								        	<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotPaid }}</td>
+								        </tr>
+								        <tr>
+						        			<td colspan="3" class="detailsTableColSpan">
+						        				<hr/>
+						        			</td>
+						        		</tr>
+								        <tr>
+								        	<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
 								        	<td class="detailsTableCX"></td>
 								        	<td class="detailsTableDX">
-								        		&nbsp;<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
-								        		&nbsp;<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+								        		<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+												<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
 								        	</td>
 								        </tr>
 								    </table>
-								    <div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" /> 
+<!-- 								    <div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />  -->
 								</div>
 								<div ng-show="isAreaDetShow()">
 									<table width="100%">
@@ -1192,16 +1206,26 @@
 								    		<td class="detailsTableCX"></td>
 								    		<td class="detailsTableDX">&nbsp;{{ aDetails.data.slotNumber }}</td>
 								    	</tr>
+								    	<tr>
+								    		<td class="detailsTableSX">{{ 'area_total_pms' | i18n }}:</td>
+								    		<td class="detailsTableCX"></td>
+								    		<td class="detailsTableDX">&nbsp;{{ aDetails.data.pmsInArea }}</td>
+								    	</tr>
 										<tr>
-								        	<td class="detailsTableSX">{{ 'area_occupied_slots' | i18n }}:</td>
+						        			<td colspan="3" class="detailsTableColSpan">
+						        				<hr/>
+						        			</td>
+						        		</tr>
+								        <tr>
+								        	<td class="detailsTableSX">{{ 'area_profit' | i18n }}:</td>
 								        	<td class="detailsTableCX"></td>
 								        	<td class="detailsTableDX">
-								        		&nbsp;<span ng-show="isCorrectNumber(aDetails.data.slotOccupied)">{{ aDetails.data.slotOccupied }}</span>
-								        		&nbsp;<span ng-show="!isCorrectNumber(aDetails.data.slotOccupied)">n.p.</span>
+								        		<span ng-if="aDetails.data.profit != -1">&nbsp;{{ correctEuroCent(aDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+												<span ng-if="aDetails.data.profit == -1">&nbsp;n.p.</span>
 								        	</td>
 								        </tr>
 								    </table>
-								    <div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" /> 
+								    <!-- <div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />  -->
 								</div>        
 <!-- 							</div> -->
 <!-- 						</div> -->
