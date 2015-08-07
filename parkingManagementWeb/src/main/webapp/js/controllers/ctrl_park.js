@@ -2575,6 +2575,28 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	var showPMErrorCode = false;
+	
+	$scope.isPMErrorCodeShowed = function(){
+		return showPMErrorCode;
+	};
+	
+	// Method checkIfAlreadyExist: used to check i a pm code is already used
+	$scope.checkIfAlreadyExist = function(pm_code){
+		var found = false;
+		if(!$scope.isEditing){
+			for(var i = 0; ((i < $scope.pmeterWS.length) && !found); i++){
+				if($scope.pmeterWS[i].code == pm_code){
+					found = true;
+				}
+			}
+		}
+		if(found){
+			showPMErrorCode = true;
+		} else {
+			showPMErrorCode = false;
+		}
+	};
 	
 	// Update parkingMeter Object
 	$scope.updatePmeter = function(form, pm, status, area, geometry){
@@ -3131,7 +3153,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// ParkingMeter
 	$scope.createPmeter = function(form, pm, status, area, geometry){
-		if(!form.$valid){
+		if(!form.$valid || showPMErrorCode){
 			$scope.isInit=false;
 		} else {
 			$scope.isInit=true;

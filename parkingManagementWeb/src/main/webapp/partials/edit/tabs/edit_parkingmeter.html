@@ -288,8 +288,9 @@
 		  		<div class="panel-body">	
 				   	<div class="form-group" ng-show="pm_code.visible">
 				    	<label for="code">{{ 'pm_code' | i18n }}</label>
-				    	<input id="code" type="text" class="form-control" name="pCode" ng-model="parckingMeter.code" ng-required="pm_code.required" placeholder="{{ 'pm_code_placeholder' | i18n }}" >
+				    	<input id="code" type="text" class="form-control" name="pCode" ng-model="parckingMeter.code" ng-required="pm_code.required" placeholder="{{ 'pm_code_placeholder' | i18n }}" ng-change="checkIfAlreadyExist(parckingMeter.code)">
 				   		<div class="alert alert-danger" ng-show="!isInit && form.pCode.$error.required">{{ 'parkingmeter_code_err_required' | i18n }}</div>
+				   		<div class="alert alert-danger" ng-show="isPMErrorCodeShowed()">{{ 'parkingmeter_code_err_already_exist' | i18n }}</div>
 				   	</div>
 				   	<div class="form-group" ng-show="pm_note.visible">
 				    	<label for="note">{{ 'pm_note' | i18n }}</label>

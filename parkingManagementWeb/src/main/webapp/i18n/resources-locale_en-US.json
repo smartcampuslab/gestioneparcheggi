@@ -271,6 +271,10 @@
     "value": "Campo Codice Parcometro obbligatorio",
     "description": "Messaggio errore campo codice parcometro obbligatorio"
 }, {
+    "key": "parkingmeter_code_err_already_exist",
+    "value": "Codice Parcometro gia' in uso. Utilizzare un codice diverso.",
+    "description": "Messaggio errore campo codice parcometro gia' in uso"
+}, {
     "key": "parkingmeter_note_err_required",
     "value": "Campo Note Parcometro obbligatorio",
     "description": "Messaggio errore campo note parcometro obbligatorio"
