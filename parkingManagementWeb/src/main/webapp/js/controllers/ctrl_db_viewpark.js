@@ -1635,12 +1635,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 			var parkingMeters = streets[i].myPms;
 			var totalProfit = 0;
+			var totalTickets = 0;
 			if(parkingMeters != null){
 				for(var j = 0; j < parkingMeters.length; j++){
 					if(parkingMeters[j] != null){
-						var profit = $scope.getActualPmProfit(parkingMeters[j].id);
+						var profit = $scope.getActualPmProfit(parkingMeters[j].id)[0];
+						var tickets = $scope.getActualPmProfit(parkingMeters[j].id)[1];
 						if(profit != -1){
 							totalProfit += profit;
+							totalTickets += tickets;
 						}
 					}
 				}
@@ -1649,6 +1652,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				streets[i].profit = -1;
 			} else {
 				streets[i].profit = totalProfit;
+			}
+			if(totalTickets == 0){
+				streets[i].tickets = -1;
+			} else {
+				streets[i].tickets = totalTickets;
 			}
 			
 //			if(streets[i].occupancyRate == -1){
@@ -1719,7 +1727,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				found = true;
 			}
 		}
-		return pmdata.profit;
+		return [pmdata.profit, pmdata.tickets];
 	};
 	
 	$scope.updateZonesOccupancy = function(){

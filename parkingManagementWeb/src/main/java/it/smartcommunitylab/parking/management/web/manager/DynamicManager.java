@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.bean.CompactParkingStructureBean;
@@ -65,6 +66,9 @@ public class DynamicManager {
 	private static final String paidSlotType = "@paid";
 	private static final String timedSlotType = "@timed";
 	private static final String handicappedSlotType = "@handicapped";
+	
+	private static final String profit = "@profit";
+	private static final String tickets = "@tickets";
 
 	@Autowired
 	private MongoTemplate mongodb;
@@ -652,6 +656,7 @@ public class DynamicManager {
 		return entityBean;
 	}
 	
+	// Method editParkingStructureAux: used to save a DataLogBean object for the new occupancy data in a parkingStructure
 	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
@@ -709,7 +714,58 @@ public class DynamicManager {
 		repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
 	}
 	
-	public void editParkingMeterAux(ParkMeter pm, Long timestamp, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
+	// Method editParkStructProfitAux: used to save a ProfitLogBean object for the new profit data in a parkingStructure
+	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
+		String[] ids = p.getId().split("@");
+		String pmId = ids[2];
+		p.setUpdateTime(timestamp);
+		p.setUser(Integer.valueOf(authorId));
+		
+		ParkingStructure entity = findById(pmId,ParkingStructure.class);
+		// Dynamic data
+		//entity.setSlotOccupied(p.getSlotsOccupiedOnTotal());
+		//entity.setUnusuableSlotNumber(p.getSlotsUnavailable());
+		//entity.setLastChange(timestamp);
+		//mongodb.save(entity);
+		
+		ProfitLogBean pl = new ProfitLogBean();
+		pl.setObjId(p.getId());
+		pl.setType(ParkStruct.class.getCanonicalName());
+		pl.setFromTime(startTime);
+		pl.setToTime(timestamp);
+		pl.setAuthor(authorId);
+		pl.setAgency(agencyId);
+		// set new fields ---------
+		Calendar cal = Calendar.getInstance();
+		cal.setTimeInMillis(timestamp);
+		pl.setYear(cal.get(Calendar.YEAR) + "");
+		pl.setMonth((cal.get(Calendar.MONTH) + 1) + "");
+		int dayOfWeek = cal.get(Calendar.DAY_OF_WEEK);
+		pl.setWeek_day(dayOfWeek + "");
+		pl.setTimeSlot(cal.get(Calendar.HOUR_OF_DAY) + "");
+		boolean isHolyday = repo.isAHoliday(cal, entity.getId_app());
+		pl.setHolyday(isHolyday);
+		pl.setSystemLog(sysLog);
+		//---------------------------
+		pl.setDeleted(false);
+		//dl.setContent(entity.toJSON());
+		@SuppressWarnings("unchecked")
+		Map<String,Object> map = ModelConverter.convert(p, Map.class);
+		pl.setValue(map);
+		JSONObject tmpVal = new JSONObject(map);
+		pl.setValueString(tmpVal.toString());
+		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
+		mongodb.save(pl);
+		// Update Stat report
+		//int[] total = {p.getSlotsTotal()};
+		//int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
+		//double statValue = findOccupationRate(total, occupied, 0, 0, 1);
+		int profit = p.getProfit();
+		repo.updateStats(p.getId(), p.getAgency(), pl.getType(), null, profit, timestamp);
+	}
+	
+	// Method editParkingMeterAux: used to save a ProfitLogBean object for the new profit data in a parkingMeter
+	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
 		String[] ids = pm.getId().split("@");
 		String pmId = ids[2];
 		pm.setUpdateTime(timestamp);
@@ -721,7 +777,7 @@ public class DynamicManager {
 		ProfitLogBean pl = new ProfitLogBean();
 		pl.setObjId(pm.getId());
 		pl.setType(ParkMeter.class.getCanonicalName());
-		pl.setFromTime(timestamp);
+		pl.setFromTime(startTime);
 		pl.setToTime(timestamp);
 		pl.setAuthor(authorId);
 		pl.setAgency(agencyId);
@@ -757,8 +813,10 @@ public class DynamicManager {
 		//int[] total = {p.getSlotsTotal()};
 		//int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
 		//double statValue = findOccupationRate(total, occupied, 0, 0, 1);
-		int profit = pm.getProfit();
-		repo.updateStats(pm.getId(), pm.getAgency(), pl.getType(), null, profit, timestamp);
+		int profitVal = pm.getProfit();
+		int ticketsVal = pm.getTickets();
+		repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
+		repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
 	}
 
 	
@@ -1008,7 +1066,10 @@ public class DynamicManager {
 			res = repo.findStats(objectId, appId, type, params, years, months, days, hours);
 		}
 		if(!res.isEmpty()){
-			return res.get(key).getSumValue();
+			StatValue val = res.get(key);
+			double sum = val.getCount() * val.getAggregateValue(); 
+			return sum;
+			//return res.get(key).getSumValue();
 		} else {
 			return -1.0;
 		}
@@ -1165,13 +1226,17 @@ public class DynamicManager {
 		String pId = "";
 		for(ParkingMeterBean pm : parkingmeters){
 			double profitVal = 0;
+			int ticketsNum = 0;
 			pId = getCorrectId(pm.getId(), "parkingmeter", appId);
 			if(valueType == 1){
-				profitVal = getLastProfitFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+				profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+				ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
 			} else {
-				profitVal = getSumProfitFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
 			}
 			pm.setProfit(profitVal);
+			pm.setTickets(ticketsNum);
 		}
 
 		return parkingmeters;

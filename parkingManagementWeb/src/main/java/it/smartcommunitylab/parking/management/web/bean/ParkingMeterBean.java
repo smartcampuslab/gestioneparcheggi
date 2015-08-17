@@ -27,6 +27,7 @@ public class ParkingMeterBean {
 	private PointBean geometry;
 	private String color;
 	private double profit;
+	private int tickets;
 
 	public String getId() {
 		return id;
@@ -98,6 +99,14 @@ public class ParkingMeterBean {
 
 	public void setProfit(double profit) {
 		this.profit = profit;
+	}
+
+	public int getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(int tickets) {
+		this.tickets = tickets;
 	}
 	
 }

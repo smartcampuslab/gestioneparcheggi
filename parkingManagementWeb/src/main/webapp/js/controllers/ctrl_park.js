@@ -1848,6 +1848,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		//$scope.resizeMap("editStreet");
 	};
 	
+	var pmEditCode = 0; // used in edit to check if a new code is already used
+	
 	// ParkingMeters
 	$scope.setPmEdit = function(parkingMeter){
 		$scope.editPmMarkers = [];
@@ -1863,6 +1865,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(parkingMeter != null){
 			$scope.isEditing = true;
 			$scope.isInit = false;
+			pmEditCode = parkingMeter.code;	// Here I temporary store the value of the actual code
 			angular.copy(parkingMeter, $scope.parckingMeter);
 			if(parkingMeter.status == "ACTIVE"){
 				$scope.myStatus = $scope.listaStati[0];
@@ -2588,6 +2591,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			for(var i = 0; ((i < $scope.pmeterWS.length) && !found); i++){
 				if($scope.pmeterWS[i].code == pm_code){
 					found = true;
+				}
+			}
+		} else {
+			if(pm_code != pmEditCode){
+				for(var i = 0; ((i < $scope.pmeterWS.length) && !found); i++){
+					if($scope.pmeterWS[i].code == pm_code){
+						found = true;
+					}
 				}
 			}
 		}

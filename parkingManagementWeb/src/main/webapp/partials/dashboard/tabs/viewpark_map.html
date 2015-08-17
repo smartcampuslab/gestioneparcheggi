@@ -997,6 +997,14 @@
 												<span ng-if="pmDetails.data.profit == -1">n.p.</span>
 											</td>
 										</tr>
+										<tr>	
+											<td class="detailsTableSX">{{ 'pm_tickets' | i18n }}:</td>
+											<td class="detailsTableCX"></td>
+											<td class="detailsTableDX">
+												<span ng-if="pmDetails.data.tickets != -1">{{ pmDetails.data.tickets }}</span>
+												<span ng-if="pmDetails.data.tickets == -1">n.p.</span>
+											</td>
+										</tr>
 						        	</table>
 								</div>
 								<div ng-show="isPSDetShow()">
@@ -1151,6 +1159,14 @@
 											<td class="detailsTableDX">
 												<span ng-if="sDetails.data.profit != -1">{{ correctEuroCent(sDetails.data.profit) }}{{ 'euro' | i18n }}</span>
 												<span ng-if="sDetails.data.profit == -1">n.p.</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="detailsTableSX">{{ 'street_tickets' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+											<td class="detailsTableDX">
+												<span ng-if="sDetails.data.tickets > -1">{{ sDetails.data.tickets }}</span>
+												<span ng-if="sDetails.data.tickets <= -1">n.p.</span>
 											</td>
 										</tr>
 										

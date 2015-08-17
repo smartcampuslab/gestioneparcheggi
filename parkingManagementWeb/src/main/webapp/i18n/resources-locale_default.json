@@ -1435,9 +1435,17 @@
 	"value": "Incasso",
 	"description": "Label per valore di incasso parcometro"
 }, { 
+	"key": "pm_tickets",
+	"value": "N.Ticket",
+	"description": "Label per numero ticket emessi da parcometro"
+}, { 
 	"key": "street_profit",
 	"value": "Incasso",
 	"description": "Label per valore di incasso via"
+}, { 
+	"key": "street_tickets",
+	"value": "N.Ticket",
+	"description": "Label per numero ticket emessi in via"
 }, { 
 	"key": "street_profits",
 	"value": "Incassi",

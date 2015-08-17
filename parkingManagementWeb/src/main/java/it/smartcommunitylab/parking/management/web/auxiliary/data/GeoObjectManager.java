@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.data;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
@@ -107,12 +108,28 @@ public class GeoObjectManager {
 		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog);
 	}
 	
-	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog) throws Exception, NotFoundException {
+	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog, Long from, Long to) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
-		if(object.getUpdateTime() != null){
+		Long startTime = null;
+		if(from != null && to != null){
+			currTime = to;
+			startTime = from;
+		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingMeterAux(object, currTime, agencyId, authorId, sysLog);
+		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, sysLog);
+	}
+	
+	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, boolean sysLog, Long from, Long to) throws Exception, NotFoundException {
+		long currTime = System.currentTimeMillis();
+		Long startTime = null;
+		if(from != null && to != null){
+			currTime = to;
+			startTime = from;
+		} else if(object.getUpdateTime() != null){
+			currTime = object.getUpdateTime();
+		}
+		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, sysLog);
 	}
 
 	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {

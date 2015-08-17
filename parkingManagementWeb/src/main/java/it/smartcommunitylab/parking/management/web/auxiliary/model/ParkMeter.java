@@ -17,7 +17,8 @@ public class ParkMeter implements Serializable{
 	private Integer user;
 	private String areaId;
 	
-	private int profit;	// in eurocent
+	private int profit;		// in eurocent
+	private int tickets;	// number of tickets printed from a parking meter
 
 	public String getId() {
 		return id;
@@ -99,6 +100,14 @@ public class ParkMeter implements Serializable{
 		this.areaId = areaId;
 	}
 
+	public int getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(int tickets) {
+		this.tickets = tickets;
+	}
+
 	public String toJSON() {
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -115,7 +124,8 @@ public class ParkMeter implements Serializable{
 		json += "\"note\":\"" + getNote() + "\",";
 		json += "\"status\":\"" + getStatus() + "\",";
 		json += "\"areaId\":\"" + getAreaId() + "\",";
-		json += "\"profit\":" + getProfit() + "";
+		json += "\"profit\":" + getProfit() + "\",";
+		json += "\"tickets\":" + getTickets() + "";
 		json += "}";
 		return json;
 	}
