@@ -757,11 +757,10 @@ public class DynamicManager {
 		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 		mongodb.save(pl);
 		// Update Stat report
-		//int[] total = {p.getSlotsTotal()};
-		//int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
-		//double statValue = findOccupationRate(total, occupied, 0, 0, 1);
-		int profit = p.getProfit();
-		repo.updateStats(p.getId(), p.getAgency(), pl.getType(), null, profit, timestamp);
+		int profitVal = p.getProfit();
+		int ticketsVal = p.getTickets();
+		repo.updateStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
+		repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
 	}
 	
 	// Method editParkingMeterAux: used to save a ProfitLogBean object for the new profit data in a parkingMeter
@@ -1240,6 +1239,27 @@ public class DynamicManager {
 		}
 
 		return parkingmeters;
+	}
+	
+	public List<ParkingStructureBean> getProfitFromAllParkStructs(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+		List<ParkingStructureBean> parkstructs = getAllParkingStructureInAppId(null, appId);
+		String pId = "";
+		for(ParkingStructureBean p : parkstructs){
+			double profitVal = 0;
+			int ticketsNum = 0;
+			pId = getCorrectId(p.getId(), "parkstruct", appId);
+			if(valueType == 1){
+				profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+				ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+			} else {
+				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+			}
+			p.setProfit(profitVal);
+			p.setTickets(ticketsNum);
+		}
+
+		return parkstructs;
 	}
 	
 	/**

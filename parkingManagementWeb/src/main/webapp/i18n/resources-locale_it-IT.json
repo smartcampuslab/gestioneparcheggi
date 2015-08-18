@@ -1439,6 +1439,14 @@
 	"value": "N. Ticket",
 	"description": "Label per numero ticket emessi da parcometro"
 }, { 
+	"key": "ps_profit",
+	"value": "Incasso",
+	"description": "Label per valore di incasso struttura parcheggio"
+}, { 
+	"key": "ps_tickets",
+	"value": "N.Ticket",
+	"description": "Label per numero ticket emessi da struttura parcheggio"
+}, { 
 	"key": "street_profit",
 	"value": "Incasso",
 	"description": "Label per valore di incasso via"
@@ -1459,6 +1467,10 @@
 	"value": "Incasso",
 	"description": "Label per valore di incasso zona"
 }, {
+	"key": "zone_tickets", 
+	"value": "N.Ticket",
+	"description": "Label per numero ticket emessi in zona"
+}, {
 	"key": "area_total_pms", 
 	"value": "Num. Parcometri",
 	"description": "Label per numero parcometri in area"
@@ -1466,6 +1478,10 @@
 	"key": "area_profit", 
 	"value": "Incasso",
 	"description": "Label per valore di incasso area"
+}, {
+	"key": "area_tickets", 
+	"value": "N.Ticket",
+	"description": "Label per numero ticket emessi in area"
 }, {
     "key": "time_vis",
     "value": "Visualizzazione"

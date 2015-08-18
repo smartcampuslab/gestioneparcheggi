@@ -18,7 +18,7 @@ package it.smartcommunitylab.parking.management.web.auxiliary.model;
 import java.io.Serializable;
 
 public class ParkStruct implements Serializable  {
-	private static final long serialVersionUID = 8076535734041609036L;
+	private static final long serialVersionUID = 8076535734041609333L;
 
 	// From GeoObject
 	private String id;

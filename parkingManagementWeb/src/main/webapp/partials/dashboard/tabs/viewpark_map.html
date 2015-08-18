@@ -204,6 +204,8 @@
 						</marker>
 						<marker ng-repeat="psOcc in occupancyParkingStructureMarkers" id="{{ psOcc.id }}" position="{{ psOcc.position }}" icon="{{ psOcc.icon }}" on-click="showOccupancy(event, psOcc, 2, 1)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 						</marker>
+						<marker ng-repeat="psProf in profitParkingStructureMarkers" id="{{ psProf.id }}" position="{{ psProf.position }}" icon="{{ psProf.icon }}" on-click="showProfitDetails(event, psProf, 2, 2)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
+						</marker>
 						<marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')" >
 							<info-window id="bp" visible-on-marker="{{ bp.id }}">
 						        <div ng-non-bindable="">
@@ -366,7 +368,6 @@
 	<!-- 							    		<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td> -->
 	<!-- 							    		<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td> -->
 	<!-- 							    	</tr> -->
-										<tr>
 										<tr>
 						        			<td colspan="3" class="detailsTableColSpan">
 						        				<hr/>
@@ -653,7 +654,6 @@
 								        	<td class="detailsTableCX"></td>
 								        	<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
 								        </tr>
-										<tr>
 										<tr ng-show="pm_rateArea.visible">
 						        			<td colspan="3" class="detailsTableColSpan">
 						        				<hr/>
@@ -1019,33 +1019,33 @@
 								        	<td class="detailsTableCX"></td>
 								        	<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
 								        </tr>
-										<tr>
+								        <tr ng-show="ps_slotNumber.visible">
+											<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
+											<td class="detailsTableCX"></td>
+											<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
+										</tr>
 										<tr ng-show="pm_rateArea.visible">
 						        			<td colspan="3" class="detailsTableColSpan">
 						        				<hr/>
 						        			</td>
 						        		</tr>
-						        		<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'ps_slots' | i18n }}
-						        			</td>
-						        		</tr>
-											<tr ng-show="ps_slotNumber.visible">
-												<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
-												<td class="detailsTableCX"></td>
-												<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
-											</tr>
-											<tr>
-												<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
-												<td class="detailsTableCX"></td>
-												<td class="detailsTableDX">
-													&nbsp;
-													<span ng-show="isCorrectNumber(psDetails.data.slotOccupied)">{{ psDetails.data.slotOccupied }}</span>
-								        			<span ng-show="!isCorrectNumber(psDetails.data.slotOccupied)">n.p.</span>
-												</td>
-											</tr>
-										</table>
-								    <div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.data.slotOccupied)"/>
+										<tr>
+											<td class="detailsTableSX">{{ 'ps_profit' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+											<td class="detailsTableDX">
+												<span ng-if="psDetails.data.profit != -1">{{ correctEuroCent(psDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+												<span ng-if="psDetails.data.profit == -1">n.p.</span>
+											</td>
+										</tr>
+										<tr>
+											<td class="detailsTableSX">{{ 'ps_tickets' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+											<td class="detailsTableDX">
+												<span ng-if="psDetails.data.tickets > -1">{{ psDetails.data.tickets }}</span>
+												<span ng-if="psDetails.data.tickets <= -1">n.p.</span>
+											</td>
+										</tr>	
+									</table>
 								</div>
 								<div ng-show="isStreetDetShow()">
 									<table width="100%">
@@ -1202,6 +1202,14 @@
 												<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
 								        	</td>
 								        </tr>
+								         <tr>
+								        	<td class="detailsTableSX">{{ 'zone_tickets' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+								        	<td class="detailsTableDX">
+								        		<span ng-if="zDetails.data.tickets > 0">&nbsp;{{ zDetails.data.tickets }}</span>
+												<span ng-if="zDetails.data.tickets <= 0">&nbsp;n.p.</span>
+								        	</td>
+								        </tr>
 								    </table>
 <!-- 								    <div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />  -->
 								</div>
@@ -1238,6 +1246,14 @@
 								        	<td class="detailsTableDX">
 								        		<span ng-if="aDetails.data.profit != -1">&nbsp;{{ correctEuroCent(aDetails.data.profit) }}{{ 'euro' | i18n }}</span>
 												<span ng-if="aDetails.data.profit == -1">&nbsp;n.p.</span>
+								        	</td>
+								        </tr>
+								        <tr>
+								        	<td class="detailsTableSX">{{ 'area_tickets' | i18n }}:</td>
+								        	<td class="detailsTableCX"></td>
+								        	<td class="detailsTableDX">
+								        		<span ng-if="aDetails.data.tickets > 0">&nbsp;{{ aDetails.data.tickets }}</span>
+												<span ng-if="aDetails.data.tickets <= 0">&nbsp;n.p.</span>
 								        	</td>
 								        </tr>
 								    </table>
