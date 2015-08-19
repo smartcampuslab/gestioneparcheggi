@@ -1,45 +1,45 @@
-<div class="row" ng-controller="ViewDashboardCtrlPark" ng-init="initWsView()">
+<div class="row" ng-controller="ViewDashboardCtrlPark" ng-init="initWsView(2)">
 	<div class="col-md-2 left-filter" >
 		<h4><strong>{{ 'left_filter_title' | i18n }}</strong></h4>
 		<div>
-<!-- 			<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5> -->
-<!-- 			<table width="100%"> -->
-<!-- 				<tr> -->
-<!-- 					<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics" value="parkSupply" ng-change="changeDashboardView()" ng-disabled="disableThemes">&nbsp;{{ 'park_parkSupply' | i18n }}</label></td> -->
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics" value="occupation" ng-change="changeDashboardView()" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td> -->
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_receipts' | i18n }}</span></label></td> -->
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_timeCost' | i18n }}</span></label></td> -->
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td align="left"><label class="left-filter"><input id="park&ride" type="radio" ng-model="dashboard_topics" value="pr" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_pr' | i18n }}</span></label></td> -->
-<!-- 				</tr> -->
-<!-- 				<tr> -->
-<!-- 					<td align="left"><label class="left-filter"><input id="balance" type="radio" ng-model="dashboard_topics" value="budget" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_budget' | i18n }}</span></label></td> -->
-<!-- 				</tr> -->
-<!-- 			</table> -->
-<!-- 			<p style="font-size:3px">&nbsp;</p> -->
+			<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
+			<table width="100%">
+				<tr>
+					<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics_list" value="parkSupply" ng-change="changeDashboardView(2)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_parkSupply' | i18n }}</label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics_list" value="occupation" ng-change="changeDashboardView(2)" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics_list" value="receipts" ng-change="changeDashboardView(2)" ng-disabled="disableThemes">&nbsp;{{ 'park_receipts' | i18n }}</span></label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics_list" value="timeCost" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_timeCost' | i18n }}</span></label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="park&ride" type="radio" ng-model="dashboard_topics_list" value="pr" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_pr' | i18n }}</span></label></td>
+				</tr>
+				<tr>
+					<td align="left"><label class="left-filter"><input id="balance" type="radio" ng-model="dashboard_topics_list" value="budget" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_budget' | i18n }}</span></label></td>
+				</tr>
+			</table>
+			<p style="font-size:3px">&nbsp;</p>
 			<h5><strong>{{ 'space_filter_title' | i18n }}</strong></h5>
 			<table width="100%">
 				<tr><!-- ng-show="isAreaVisible()" -->
-					<td align="left"><label class="left-filter"><input id="rateArea" type="radio" ng-model="dashboard_space_list" value="rate_area" ng-click="showAreaList()">&nbsp;{{ 'view_areas' | i18n }}</label></td>
+					<td align="left"><label class="left-filter"><input id="rateArea" type="radio" ng-model="dashboard_space_list" value="rate_area" ng-click="showAreaList(dashboard_topics_list)">&nbsp;{{ 'view_areas' | i18n }}</label></td>
 				</tr>
 				<tr><!-- ng-show="isZonesVisible()" -->
-					<td align="left"><label class="left-filter"><input id="zones" type="radio" ng-model="dashboard_space_list" value="macrozone" ng-click="showZoneList()">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
+					<td align="left"><label class="left-filter"><input id="zones" type="radio" ng-model="dashboard_space_list" value="macrozone" ng-click="showZoneList(dashboard_topics_list)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
 				</tr>
 				<tr><!-- ng-show="isStreetVisible()" -->
-					<td align="left"><label class="left-filter"><input id="streets" type="radio" ng-model="dashboard_space_list" value="microzone" ng-click="showStreetList()">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
+					<td align="left"><label class="left-filter"><input id="streets" type="radio" ng-model="dashboard_space_list" value="microzone" ng-click="showStreetList(dashboard_topics_list)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
 				</tr>
 				<tr><!--  ng-show="isPsVisible()" -->
-					<td align="left"><label class="left-filter"><input id="pStruct" type="radio" ng-model="dashboard_space_list" value="parkingstructs" ng-click="showStructList()">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
+					<td align="left"><label class="left-filter"><input id="pStruct" type="radio" ng-model="dashboard_space_list" value="parkingstructs" ng-click="showStructList(dashboard_topics_list)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
 				</tr>
 				<tr><!-- ng-show="isPmVisible()" -->
-					<td align="left"><label class="left-filter"><input id="pMeters" type="radio" ng-model="dashboard_space_list" value="parkingmeter" ng-click="changeParkingMetersMarkers()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'view_parkingmeters' | i18n }}</span></label></td>
+					<td align="left"><label class="left-filter"><input id="pMeters" type="radio" ng-model="dashboard_space_list" value="parkingmeter" ng-click="changeParkingMetersMarkers(dashboard_topics_list)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'view_parkingmeters' | i18n }}</span></label></td>
 				</tr>
 			</table>
 			<p style="font-size:3px">&nbsp;</p>
@@ -145,8 +145,8 @@
 			</table>
 		</div>	
 	</div>
-	<div class="col-md-10" align="center" ng-show="!occupancyOpened"><!--  ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" -->
-		<div ng-show="showSList">
+	<div class="col-md-10" align="center" ng-show="!occupancyOpened && !profitOpened"><!--  ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" -->
+		<div ng-show="showSList && showOccupationLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="streetWS.length != 0">
@@ -228,8 +228,88 @@
 					</td>
 				</tr>
 			</table>	
-		
 		</div>
+		<div ng-show="showSList && showProfitLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="streetWS.length != 0">
+						<th width="16%">{{ 'street_name' | i18n }}</th>
+						<th width="12%">{{ 'street_area_name' | i18n }}</th><!-- colspan="2" -->
+						<th width="10%" colspan="2">{{ 'element_profit' | i18n }}</th>
+						<th width="10%">{{ 'street_slots' | i18n }} Tot</th>
+						<th width="10%" >{{ 'street_paid_slot' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(1)"></th>
+						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tr ng-show="showInfo_1==true">
+						<td colspan="10"><div class="alert alert-info">{{ 'info_1' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(1)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
+					</tr>
+					<tbody class="animate-repeat"
+							ng-repeat="street in profitStreetsList | orderBy:['-profit', 'name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						<tr>
+							<td width="16%" align="left">{{street.streetReference}}</td>
+	<!--						<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td> {{area.color}} -->
+							<td width="12%" align="left">{{street.area_name}}</td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(street.profit)}"></div></td><!-- {{area.color}} -->
+							<td width="5%" align="left">
+								<span ng-show="street.profit > -1">{{ street.profit }}</span>
+								<span ng-show="street.profit <= -1">n.p.</span>
+							</td>
+							<td width="10%" align="left">{{street.slotNumber}}</td>
+							<td width="10%" align="left">{{street.paidSlotNumber}}</td>
+							<td width="5%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
+	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="areaWS.length == 0">
+						<td colspan="10"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-success"
+							ng-disabled="currentPage == 0"
+							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPage+1}}/{{numberOfPages(2, profitStreetsList)}}
+						<button class="btn btn-success"
+							ng-disabled="currentPage >= filtered.length/maxStreets - 1"
+							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<table>
+							<tr ng-if="showSList">
+								<td>
+									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								</td>
+							</tr>
+							<tr ng-if="showZList">
+								<td>
+									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								</td>
+							</tr>
+							<tr ng-if="showAList">
+								<td>
+									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								</td>
+							</tr>
+							<tr ng-if="showPSList">
+								<td>
+									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								</td>
+							</tr>
+						</table>
+					</td>
+				</tr>
+			</table>	
+		</div>
+		
 		<div ng-show="showZList">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
@@ -476,8 +556,8 @@
 <!--      					</shape> -->
 <!-- 					</map> -->
 	</div>
-	<div class="col-md-10" align="center" ng-show="occupancyOpened">
-		<div>
+	<div class="col-md-10" align="center" ng-show="occupancyOpened || profitOpened">
+		<div ng-show="occupancyOpened">
 <!-- 	<div class="panel panel-danger" > -->
 <!-- 		<div class="panel-heading"> -->
 			<div class="alert alert-danger">

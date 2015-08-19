@@ -83,7 +83,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
  	    	}	
 	    }
 	    console.log("Fascia oraria: " + $scope.hourSliderValue);
-	    if($scope.dashboard_topics == "occupation"){
+	    if($scope.dashboard_topics == "occupation" || $scope.dashboard_topics_list == "occupation"){
 		    switch($scope.vis){
 		    	case "vis_last_value": 
 		    		//$scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1);
@@ -118,7 +118,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    		break;
 		    	default: break;	
 		    }
-	    } else if($scope.dashboard_topics == "receipts"){
+	    } else if($scope.dashboard_topics == "receipts" || $scope.dashboard_topics_list == "receipts"){
 	    	switch($scope.vis){
 		    	case "vis_last_value": 
 		    		$scope.getProfitPMFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, false);
@@ -162,6 +162,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.mapBikePointMarkers = [];
 	$scope.streetWS = [];
 	$scope.pstructWS = [];
+	$scope.allDataStructWS = [];
 	$scope.mapStreets = [];
 	$scope.mapZones = [];
 	$scope.mapAreas = [];
@@ -179,6 +180,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.profitZones = [];
 	$scope.profitParkingMeterMarkers = [];
 	$scope.profitParkingStructureMarkers = [];
+	$scope.profitStructWS = [];
+	
+	$scope.profitStreetsList = [];
 	
 	$scope.myTmpZoneOccupation = [];	//MB28072015: added this variable to manage average zone occupation
 	$scope.useAverageZoneOccupation = false;	// to remove this feature set the variable to false
@@ -206,7 +210,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.blue = "#383BEE";
 	
 	$scope.pmMarkerIcon = "imgs/markerIcons/parcometro.png";			// icon for parkingMeter object
-	//$scope.psMarkerIcon = "imgs/markerIcons/parcheggioStruttura.png";	// icon for parkingStructure object
 	$scope.psMarkerIcon = "imgs/structIcons/parking_structures_general_outline.png";	// icon for parkingStructure object
 	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
 	$scope.streetMarkerIcon = "imgs/street_marker.png";					// icon for street marker
@@ -683,6 +686,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
        		} else {
        			return 0;
      		}
+       	} else if(type == 7){
+       		if($scope.profitStreetsList != null){
+       			return Math.ceil(list.length/$scope.maxStreets);
+       		} else {
+       			return 0;
+     		}
        	}
     };
     
@@ -740,7 +749,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	
-	$scope.initPage = function(){
+	$scope.initPage = function(type){
 		
 		$scope.dashboard_space = {
 			rate_area : false,
@@ -751,8 +760,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		};
 		
 		$scope.dashboard_space_list = "microzone";
+		if(type == 1){
+			$scope.dashboard_topics = "parkSupply";
+		} else {
+			$scope.dashboard_topics_list = "occupation";
+		}
 		
-		$scope.dashboard_topics = "parkSupply";
 //		{
 //			parkSupply : true,
 //			occupation : false,
@@ -769,86 +782,125 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.showAList = false;
 	$scope.showPSList = false;
 	
-	$scope.changeDashboardView = function(){
-		switch($scope.dashboard_topics){
-			case "parkSupply": 
-				// Show profit objects (with specifics colors)
-				$scope.dashboard_space.microzone = true;
-				$scope.dashboard_space.parkingmeter = false;
-				// Show parkingManagement objects
-				$scope.switchStreetMapObject(2, null, false);
-				$scope.switchZoneMapObject(2, null);
-				$scope.switchAreaMapObject(2, null);
-				$scope.switchParkingMapObject(2, null);
-				// Hide the parkingMeters and uncheck the checkBox
-				if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
-					var object = $scope.mapParkingMetersSelectedMarkers[0];
-					object.options.animation = "";
-					$scope.mapParkingMetersMarkers.push(object);
-					$scope.mapParkingMetersSelectedMarkers = [];
-				}
-				$scope.hideParkingMetersMarkers();
-				break;
-			case "occupation": 
-				// Show occupation objects (with specifics colors)
-				$scope.dashboard_space.microzone = true;
-				$scope.dashboard_space.parkingmeter = false;
-				$scope.switchStreetMapObject(1, null, false);
-				$scope.switchZoneMapObject(1, null);
-				$scope.switchAreaMapObject(1, null);
-				$scope.switchParkingMapObject(1, null);
-				// Hide the parkingMeters and uncheck the checkBox
-				if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
-					var object = $scope.mapParkingMetersSelectedMarkers[0];
-					object.options.animation = "";
-					$scope.mapParkingMetersMarkers.push(object);
-					$scope.mapParkingMetersSelectedMarkers = [];
-				}
-				$scope.hideParkingMetersMarkers();
-				$scope.dashboard_space.parkingmeter = false;
-				break;
-			case "receipts": 
-				// Show profit objects (with specifics colors)
-				$scope.dashboard_space.microzone = false;
-				$scope.dashboard_space.parkingmeter = true;
-				$scope.showProfitPMMarkers();	// here I show the parkingMeter on he map
-				$scope.switchStreetMapObject(5, null, true);
-				$scope.switchZoneMapObject(5, null);
-				$scope.switchAreaMapObject(5, null);
-				$scope.switchParkingMapObject(5, null);
-				break;
-			case "timeCost": 
-				break;
-			case "pr": 
-				break;
-			case "budget": 
-				break;
+	$scope.showOccupationLists = true;
+	$scope.showProfitLists = false;
+	
+	
+	$scope.changeDashboardView = function(type){
+		if(type == 1){
+			switch($scope.dashboard_topics){
+				case "parkSupply": 
+					// Show profit objects (with specifics colors)
+					$scope.dashboard_space.microzone = true;
+					$scope.dashboard_space.parkingmeter = false;
+					// Show parkingManagement objects
+					$scope.switchStreetMapObject(2, null, false);
+					$scope.switchZoneMapObject(2, null);
+					$scope.switchAreaMapObject(2, null);
+					$scope.switchParkingMapObject(2, null);
+					// Hide the parkingMeters and uncheck the checkBox
+					if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
+						var object = $scope.mapParkingMetersSelectedMarkers[0];
+						object.options.animation = "";
+						$scope.mapParkingMetersMarkers.push(object);
+						$scope.mapParkingMetersSelectedMarkers = [];
+					}
+					$scope.hideParkingMetersMarkers();
+					break;
+				case "occupation": 
+					// Show occupation objects (with specifics colors)
+					$scope.dashboard_space.microzone = true;
+					$scope.dashboard_space.parkingmeter = false;
+					$scope.switchStreetMapObject(1, null, false);
+					$scope.switchZoneMapObject(1, null);
+					$scope.switchAreaMapObject(1, null);
+					$scope.switchParkingMapObject(1, null);
+					// Hide the parkingMeters and uncheck the checkBox
+					if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
+						var object = $scope.mapParkingMetersSelectedMarkers[0];
+						object.options.animation = "";
+						$scope.mapParkingMetersMarkers.push(object);
+						$scope.mapParkingMetersSelectedMarkers = [];
+					}
+					$scope.hideParkingMetersMarkers();
+					$scope.dashboard_space.parkingmeter = false;
+					break;
+				case "receipts": 
+					// Show profit objects (with specifics colors)
+					$scope.dashboard_space.microzone = false;
+					$scope.dashboard_space.parkingmeter = true;
+					$scope.showProfitPMMarkers();	// here I show the parkingMeter on he map
+					$scope.switchStreetMapObject(5, null, true);
+					$scope.switchZoneMapObject(5, null);
+					$scope.switchAreaMapObject(5, null);
+					$scope.switchParkingMapObject(5, null);
+					break;
+				case "timeCost": 
+					break;
+				case "pr": 
+					break;
+				case "budget": 
+					break;
+			}
+		} else {
+			switch($scope.dashboard_topics_list){
+				case "parkSupply": 
+					break;
+				case "occupation": 
+					// Show occupation objects (with specifics colors)
+					$scope.dashboard_space_list = "microzone";
+					break;
+				case "receipts": 
+					// Show profit objects (with specifics colors)
+					$scope.dashboard_space_list = "parkingmeter";
+					break;
+				case "timeCost": 
+					break;
+				case "pr": 
+					break;
+				case "budget": 
+					break;
+			}
 		}
 		$scope.update_title_map(false, "", "");
 	};
 	
-	$scope.showZoneList = function(){
+	$scope.switchListShowType = function(type){
+		if(type == "occupation"){
+			$scope.showOccupationLists = true;
+			$scope.showProfitLists = false;
+		} else if(type == "receipts"){
+			$scope.showOccupationLists = false;
+			$scope.showProfitLists = true;
+		}
+	};
+	
+	$scope.showZoneList = function(type){
+		$scope.switchListShowType(type);
 		$scope.showZList = true;
 		$scope.showSList = false;
 		$scope.showAList = false;
 		$scope.showPSList = false;
 	};
 	
-	$scope.showAreaList = function(){
+	$scope.showAreaList = function(type){
+		$scope.switchListShowType(type);
 		$scope.showAList = true;
 		$scope.showZList = false;
 		$scope.showSList = false;
 		$scope.showPSList = false;
 	};
 	
-	$scope.showStreetList = function(){
+	$scope.showStreetList = function(type){
+		$scope.switchListShowType(type);
 		$scope.showSList = true;
 		$scope.showZList = false;
 		$scope.showAList = false;
 		$scope.showPSList = false;
 	};
 	
-	$scope.showStructList = function(){
+	$scope.showStructList = function(type){
+		$scope.switchListShowType(type);
 		$scope.showPSList = true;
 		$scope.showZList = false;
 		$scope.showSList = false;
@@ -1338,22 +1390,22 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     $scope.showStreetPolylines = function(type) {
     	if(type == 1){
-    		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true, type);
+    		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true, type)[0];
     	} else if(type == 2) {
-    		$scope.occupancyStreets = $scope.initStreetsOnMap($scope.streetWS, true, type);
+    		$scope.occupancyStreets = $scope.initStreetsOnMap($scope.streetWS, true, type)[0];
     	} else if(type == 3){
-    		$scope.profitStreets = $scope.initStreetsOnMap($scope.streetWS, true, type);
+    		$scope.profitStreets = $scope.initStreetsOnMap($scope.streetWS, true, type)[0];
     	}
     	//$scope.refreshMap();
     };
     
     $scope.hideStreetPolylines = function(type) {
     	if(type == 1){
-    		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, false, type);
+    		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, false, type)[0];
     	} else if(type == 2){
-    		$scope.occupancyStreets = $scope.initStreetsOnMap($scope.streetWS, false, type);
+    		$scope.occupancyStreets = $scope.initStreetsOnMap($scope.streetWS, false, type)[0];
     	} else if(type == 3){
-    		$scope.profitStreets = $scope.initStreetsOnMap($scope.streetWS, false, type);
+    		$scope.profitStreets = $scope.initStreetsOnMap($scope.streetWS, false, type)[0];
     	}
     	$scope.hideAllStreets();
     	$scope.detailsOpened = false;
@@ -1512,8 +1564,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 2 : 
 				myIcon = $scope.psMarkerIcon; 
-				var averageOccupation = Math.floor((Math.random() * 100) + 1);
-				marker.averageOccupation1012 = averageOccupation;
+				//var averageOccupation = Math.floor((Math.random() * 100) + 1);
+				//marker.averageOccupation1012 = averageOccupation;
 				//myIcon = $scope.getOccupancyIcon(averageOccupation, 2);
 				//marker.slotOccupied = Math.floor(marker.slotNumber * averageOccupation / 100);
 				break;
@@ -1521,12 +1573,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				myIcon = $scope.bpMarkerIcon;
 				break;
 			case 4 :
+				myIcon = $scope.getOccupancyIcon(marker.occupancyRate, 2);	//get the correct profit icon from the ps profit value
+				break;
+				break;
+			case 5 :
 				color = $scope.getProfitColor(marker.profit);
 				//myIcon = $scope.getCorrectPmIconByAreaName(myAreaPm.name);
 				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((marker.profit != null) ? $scope.plainColor(color) : defaultMarkerColor);
 				cid = "c" + marker.id;
 				break;
-			case 5 :
+			case 6 :
 				//myIcon = $scope.psMarkerIcon;
 				myIcon = $scope.getProfitIcon(marker.profit, 2);	//get the correct profit icon from the ps profit value
 				break;
@@ -1734,7 +1790,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		//$scope.setAllMapObjectLoaded(true);
 		//$scope.closeModal();
 		$scope.closeLoadingMap();
-		return tmpStreets;
+		return [tmpStreets, streets];
 	};
 	
 	$scope.getActualPmProfit = function(pmId){
@@ -1934,11 +1990,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myPMs;
 	};
 	
-	$scope.initWsView = function(){
+	$scope.initWsView = function(type){
 		$scope.loadMapsObject();	// To show modal waiting spinner
 		$scope.parkingMetersMarkers = [];
 		$scope.parkingStructureMarkers = [];
-	   	$scope.initPage();
+	   	$scope.initPage(type);
 	   	$scope.initComponents();
 		$scope.mapReady = false;
 		$scope.getAreasFromDb();
@@ -1982,7 +2038,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
 		    if(showStreets){
-		    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true, 1);
+		    	$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, true, 1)[0];
 			}
 		});
 	};
@@ -2099,7 +2155,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    
 		    if(showPm){
 		    	for (var i = 0; i <  $scope.parkingMeterWS.length; i++) {
-		    		markers.push(createMarkers(i, $scope.parkingMeterWS[i], 4));
+		    		markers.push(createMarkers(i, $scope.parkingMeterWS[i], 5));
 		    	}
 		    	angular.copy(markers, $scope.parkingMetersMarkers);
 		    }
@@ -2152,12 +2208,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    console.log("pss profit retrieved from db: " + JSON.stringify(result));	//if($scope.showLogs)
 		    //$scope.updateLoadingMapState();
 		    $scope.profitStructWS = allPSs;
+		    $scope.allDataStructWS = $scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS);	// here I obtain an object with correct occupancy and profit data
 		    
 			if(showPs){
-				for (var i = 0; i <  allPSs.length; i++) {
-			    	markers.push(createMarkers(i, allPSs[i], 5));
+				for (var i = 0; i <  $scope.allDataStructWS.length; i++) {
+			    	markers.push(createMarkers(i, $scope.allDataStructWS[i], 6));
 			    }
-			   	angular.copy(markers, $scope.profitParkingStructureMarkers);
+			   	angular.copy(markers, $scope.parkingStructureMarkers);
 			   	$scope.updateParkProfit();
 			}
 		});
@@ -2262,7 +2319,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    
 			if(showPs){
 				for (var i = 0; i <  allParks.length; i++) {
-			    	markers.push(createMarkers(i, allParks[i], 2));
+			    	markers.push(createMarkers(i, allParks[i], 4));
 			    }
 			   	angular.copy(markers, $scope.parkingStructureMarkers);
 			   	$scope.updateParkOccupancy();
@@ -2300,13 +2357,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    
 		    allParks = $scope.mergeParksObjects(allParks, oldParks);
 		    $scope.actualParks = allParks;
-		    $scope.pstructWS = allParks;
+		    $scope.pstructWS = allParks;   
+		    $scope.allDataStructWS = $scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS);	// here I obtain an object with correct occupancy and profit data
 		    
 		    //var isInList = sharedDataService.getIsInList();
 		    //if(!isInList){
 			    if(showPs){
-			    	for (var i = 0; i <  allParks.length; i++) {
-				    	markers.push(createMarkers(i, allParks[i], 2));
+			    	for (var i = 0; i <  $scope.allDataStructWS.length; i++) {
+				    	markers.push(createMarkers(i, $scope.allDataStructWS[i], 4));
 				    }
 			    	angular.copy(markers, $scope.parkingStructureMarkers);
 			    	$scope.updateParkOccupancy();
@@ -2395,6 +2453,42 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 		return mergedParks;
 		
+	};
+	
+	// Method mergeParkDbData: used to merge the db data from occupancy park and profit park
+	$scope.mergeParkDbData = function(occupancyStructs, profitStructs){
+		var mergedStructs = [];
+		for(var i = 0; i < occupancyStructs.length; i++){
+			var found = false;
+			for(var j = 0; ((j < profitStructs.length) && !found); j++){
+				if(occupancyStructs[i].id == profitStructs[j].id){
+					found = true;
+					var p = {
+						id: occupancyStructs[i].id,
+						id_app: occupancyStructs[i].id_app,
+						name: occupancyStructs[i].name,
+						streetReference: occupancyStructs[i].streetReference,
+						managementMode: occupancyStructs[i].managementMode,
+						fee: occupancyStructs[i].fee,
+						timeSlot: occupancyStructs[i].timeSlot,
+						slotNumber: occupancyStructs[i].slotNumber,
+						slotOccupied: occupancyStructs[i].slotOccupied,
+						handicappedSlotNumber: occupancyStructs[i].handicappedSlotNumber,
+						handicappedSlotOccupied: occupancyStructs[i].handicappedSlotOccupied,
+						unusuableSlotNumber: occupancyStructs[i].unusuableSlotNumber,
+						geometry: occupancyStructs[i].geometry,
+						paymentMode: occupancyStructs[i].paymentMode,
+						phoneNumber: occupancyStructs[i].phoneNumber,
+						lastChange: profitStructs[j].lastChange,
+						occupancyRate: occupancyStructs[i].occupancyRate,
+						profit : profitStructs[j].profit,
+						tickets : profitStructs[j].tickets
+					};
+					mergedStructs.push(p);
+				}
+			}
+		}
+		return mergedStructs;
 	};
 	
 	// Method getStreetsInZoneOccupancy: used to get the occupancy of the streets in a specific zone
@@ -2602,16 +2696,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		if($scope.dashboard_space.microzone){	// I check if the street check is selected
 		    if($scope.dashboard_topics == "parkSupply"){
 		   		if($scope.mapStreets.length == 0){
-		   			$scope.mapStreets = $scope.initStreetsOnMap(streets, true, 1);
+		   			$scope.mapStreets = $scope.initStreetsOnMap(streets, true, 1)[0];
 		   		} else {
-		   			var tmpS = $scope.initStreetsOnMap(streets, true, 1);
+		   			var tmpS = $scope.initStreetsOnMap(streets, true, 1)[0];
 		   			$scope.switchStreetMapObject(3, tmpS, false);
 		   		}
 		   	} else {
 		   		if($scope.occupancyStreets.length == 0){
-		   			$scope.occupancyStreets = $scope.initStreetsOnMap(streets, true, 2);
+		   			$scope.occupancyStreets = $scope.initStreetsOnMap(streets, true, 2)[0];
 		   		} else {
-		   			var tmpS = $scope.initStreetsOnMap(streets, true, 2);
+		   			var tmpS = $scope.initStreetsOnMap(streets, true, 2)[0];
 		   	    	$scope.switchStreetMapObject(4, tmpS, false);
 		    	}
 		    }
@@ -2684,20 +2778,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method updateStreetOccupancy: update all street maps Object elements with new occupation data retrieved from db
 	$scope.updateStreetProfit = function(firstTime, show){
 		if($scope.dashboard_space.microzone){	// I check if the street check is selected
-		    if($scope.dashboard_topics == "parkSupply"){
-		   		if($scope.mapStreets.length == 0){
-		   			$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, show, 1);
-		   		} else {
-		   			var tmpS = $scope.initStreetsOnMap($scope.streetWS, show, 1);
-		   			$scope.switchStreetMapObject(5, tmpS, false);
-		   		}
-		   	} else {
-		   		if($scope.profitStreets.length == 0){
-		   			$scope.profitStreets = $scope.initStreetsOnMap($scope.streetWS, show, 3);
-		   		} else {
-		   			var tmpS = $scope.initStreetsOnMap($scope.streetWS, show, 3);
-		   	    	$scope.switchStreetMapObject(6, tmpS, false);
-		    	}
+		    if($scope.dashboard_topics_list == "receipts"){
+		    	$scope.profitStreetsList = $scope.initStreetsOnMap($scope.streetWS, show, 3)[1];
+		    } else {
+				if($scope.dashboard_topics == "parkSupply"){
+			   		if($scope.mapStreets.length == 0){
+			   			$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, show, 1)[0];
+			   		} else {
+			   			var tmpS = $scope.initStreetsOnMap($scope.streetWS, show, 1)[0];
+			   			$scope.switchStreetMapObject(5, tmpS, false);
+			   		}
+			   	} else {
+			   		if($scope.profitStreets.length == 0){
+			   			$scope.profitStreets = $scope.initStreetsOnMap($scope.streetWS, show, 3)[0];
+			   		} else {
+			   			var tmpS = $scope.initStreetsOnMap($scope.streetWS, show, 3)[0];
+			   	    	$scope.switchStreetMapObject(6, tmpS, false);
+			    	}
+			    }
 		    }
 		}
 	};
@@ -3199,7 +3297,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				object.icon = $scope.useSelectedIcon(object.icon);
 				$scope.mapParkingStructureSelectedMarkers.push(object);
 				$scope.psDetails = object;
-				$scope.initPsOccupancyDiagram(object);
+				$scope.initPsOccupancyDiagram(object, 1);
 				break;
 			case 3:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
@@ -3301,7 +3399,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			case 2:
 				$scope.showPSDet();
 				$scope.psDetails = object;
-				$scope.initPsOccupancyDiagram(object);
+				$scope.initPsOccupancyDiagram(object, 0);
 				break;
 			case 3:
 			    $scope.showStreetDet();

@@ -1483,6 +1483,14 @@
 	"value": "N.Ticket",
 	"description": "Label per numero ticket emessi in area"
 }, {
+	"key": "element_profit", 
+	"value": "Incasso",
+	"description": "Label per valore di incasso in elemento in lista"
+}, {
+	"key": "element_tickets", 
+	"value": "N.Ticket",
+	"description": "Label per numero ticket emessi in elemento in lista"
+}, {
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {
