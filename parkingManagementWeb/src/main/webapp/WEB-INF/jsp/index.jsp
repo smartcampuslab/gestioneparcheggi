@@ -168,6 +168,26 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		text-align: left;
 		vertical-align: middle;
 	}
+	td.detailsNumberListTableSX {
+		width: 55%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsNumberListTableCX {
+		width: 5%;
+		height: 20px;
+		text-align: right;
+		vertical-align: middle;
+	}
+	td.detailsNumberListTableDX {
+		width: 40%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
 	td.detailsTableColSpanS {
 		width: 90%;
 		height: 20px;
@@ -199,6 +219,26 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	}
 	td.detailsListTableDXS {
 		width: 55%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsNumberListTableSXS {
+		width: 45%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsNumberListTableCXS {
+		width: 5%;
+		height: 20px;
+		text-align: right;
+		vertical-align: middle;
+	}
+	td.detailsNumberListTableDXS {
+		width: 40%;
 		height: 20px;
 		font-weight: bold;
 		text-align: left;

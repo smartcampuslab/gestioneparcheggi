@@ -559,6 +559,10 @@
     "value": "Parcometro",
     "description": "Label campo parcometro per oggetto strada"
 }, {
+    "key": "street_pms",
+    "value": "Lista Parcometri",
+    "description": "Label campo parcometri per oggetto strada"
+}, {
     "key": "street_geometry",
     "value": "Posizione",
     "description": "Label geometry per strada"
@@ -1046,6 +1050,10 @@
     "key": "area_total_slots",
     "value": "Posti totali",
     "description": "Testo label posti totali area in dashboard"
+}, {
+    "key": "area_paid_slots",
+    "value": "Posti a pagamento",
+    "description": "Testo label posti a pagamento in area in dashboard"
 }, {
     "key": "area_occupied_slots",
     "value": "Posti occupati",
