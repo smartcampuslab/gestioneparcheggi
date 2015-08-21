@@ -327,7 +327,7 @@ public class DashboardController {
 	}
 	
 	// --------------------------------- Part for csv files creation ------------------------------------
-	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/street/csv")
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/street/csv")
 	public @ResponseBody
 	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
 		logger.info("I am in street csv creation.");
@@ -406,7 +406,7 @@ public class DashboardController {
 		return createdFile;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/zone/csv")
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/zone/csv")
 	public @ResponseBody
 	String createZoneCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
 		logger.info("I am in zone csv creation.");
@@ -454,7 +454,7 @@ public class DashboardController {
 		return createdFile;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/area/csv")
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/area/csv")
 	public @ResponseBody
 	String createAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
 		logger.info("I am in area csv creation.");
@@ -504,7 +504,7 @@ public class DashboardController {
 		return createdFile;
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/parkingstructures/csv")
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/parkingstructures/csv")
 	public @ResponseBody
 	String createStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
 		logger.info("I am in parkingstructures csv creation.");

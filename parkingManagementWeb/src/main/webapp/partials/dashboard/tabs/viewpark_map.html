@@ -1,10 +1,5 @@
-<!-- <div class="panel panel-danger"> -->
-<!-- 	<div class="panel-heading"> -->
-<!-- 		<h4 class="panel-title">{{ 'viewAllPanelTitle' | i18n }}</h4> -->
-<!-- 	</div> -->
-<!-- 	<div class="panel-body"> -->
-		<!--<form name="viewForm"  > ng-init="initWs()" -->
-			<div class="row" ng-controller="ViewDashboardCtrlPark" ng-init="initWsView(1)">
+<div class="row" ng-controller="ViewDashboardCtrlPark" ng-init="initWsView(1)">
+
 <!-- 				<script type="text/ng-template" id="myLoadingContent.html"> -->
 <!--         			<div class="modal-header"> -->
 <!--             			<h3 class="modal-title">Caricamento in corso</h3> -->
@@ -23,69 +18,60 @@
 <!-- 						</table> -->
 <!-- 					</div> -->
 <!-- 				</div>	 -->
-				<div class="col-md-2 left-filter" >
+
+
+			<div class="col-md-2 left-filter" >
 					<h4><strong>{{ 'left_filter_title' | i18n }}</strong></h4>
 					<div>
-<!-- 					<div class="panel panel-danger"> -->
-<!-- 						<div class="panel-heading"> -->
-							<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
-<!-- 						</div> -->
-<!--  						<div class="panel-body dashboard-panel"> -->
-							<table width="100%">
-								<tr>
-									<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics" value="parkSupply" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_parkSupply' | i18n }}</label></td>
-								</tr>
-								<tr>
-									<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics" value="occupation" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td>
-								</tr>
-								<tr>
-									<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_receipts' | i18n }}</label></td>
-								</tr>
-								<tr>
-									<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_timeCost' | i18n }}</span></label></td>
-								</tr>
-								<tr>
-									<td align="left"><label class="left-filter"><input id="park&ride" type="radio" ng-model="dashboard_topics" value="pr" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_pr' | i18n }}</span></label></td>
-								</tr>
-								<tr>
-									<td align="left"><label class="left-filter"><input id="balance" type="radio" ng-model="dashboard_topics" value="budget" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_budget' | i18n }}</span></label></td>
-								</tr>
-							</table>
-							<p style="font-size:3px">&nbsp;</p>
-<!-- 						</div> -->
+						<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
+						<table width="100%">
+							<tr>
+								<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics" value="parkSupply" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_parkSupply' | i18n }}</label></td>
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics" value="occupation" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td>
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_receipts' | i18n }}</label></td>
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_timeCost' | i18n }}</span></label></td>
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="park&ride" type="radio" ng-model="dashboard_topics" value="pr" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_pr' | i18n }}</span></label></td>
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="balance" type="radio" ng-model="dashboard_topics" value="budget" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_budget' | i18n }}</span></label></td>
+							</tr>
+						</table>
+						<p style="font-size:3px">&nbsp;</p>
 					</div>
 					<div>
-<!-- 					<div class="panel panel-danger"> -->
-<!-- 						<div class="panel-body  dashboard-panel"> -->
-							<h5><strong>{{ 'space_filter_title' | i18n }}</strong></h5>
-							<table width="100%">
-								<tr><!-- ng-show="isAreaVisible()" -->
-									<td align="left"><label class="left-filter"><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons(dashboard_topics)">&nbsp;{{ 'view_areas' | i18n }}</label></td>
-								</tr>
-								<tr><!-- ng-show="isZonesVisible()" -->
-									<td align="left"><label class="left-filter"><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons(dashboard_topics)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
-								</tr>
-								<tr><!-- ng-show="isStreetVisible()" -->
-									<td align="left"><label class="left-filter"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
-								</tr>
-								<tr><!--  ng-show="isPsVisible()" -->
-									<td align="left"><label class="left-filter"><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
-								</tr>
-								<tr><!-- ng-show="isPmVisible()" -->
-									<td align="left"><label class="left-filter"><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers(dashboard_topics)" ng-disabled="dashboard_topics=='occupation'">&nbsp;<span ng-if="dashboard_topics=='occupation'" style="color:gray">{{ 'view_parkingmeters' | i18n }}</span><span ng-if="dashboard_topics!='occupation'" style="color:#333">{{ 'view_parkingmeters' | i18n }}</span></label></td>
-								</tr>
-							</table>
-							<p style="font-size:3px">&nbsp;</p>
-<!-- 						</div> -->
+						<h5><strong>{{ 'space_filter_title' | i18n }}</strong></h5>
+						<table width="100%">
+							<tr>
+								<td align="left"><label class="left-filter"><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons(dashboard_topics)">&nbsp;{{ 'view_areas' | i18n }}</label></td>
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons(dashboard_topics)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers(dashboard_topics)" ng-disabled="dashboard_topics=='occupation'">&nbsp;<span ng-if="dashboard_topics=='occupation'" style="color:gray">{{ 'view_parkingmeters' | i18n }}</span><span ng-if="dashboard_topics!='occupation'" style="color:#333">{{ 'view_parkingmeters' | i18n }}</span></label></td>
+							</tr>
+						</table>
+						<p style="font-size:3px">&nbsp;</p>
 					</div>
 					<div ng-show="dashboard_topics=='occupation' || dashboard_topics=='receipts'">
-<!-- 					<div class="panel panel-danger" ng-show="dashboard_topics=='occupation'"> -->
-<!-- 						<div class="panel-body dashboard-panel"> -->
 							<h5><strong>{{ 'occupation_filter_title' | i18n }}</strong></h5>
 							<table width="100%" ng-controller="TimeFilterCtrl">
                                 <tr>
                                     <td align="left">
-<!--                                         <label>{{'time_vis'|i18n}}</label> -->
                                         <select class="form-control input-sm" ng-model="vis" ng-change="updateSearch()">
                                             <option ng-repeat="v in visOptions" value="{{v}}">{{ v | i18n}}</option>
                                         </select>
@@ -104,7 +90,7 @@
 									<td align="left">
 										<label class="left-filter">{{'month_vis'| i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
                                         <br/><br/>
-										<input ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" ng-change="updateMonth(monthSliderValue)" /><!-- ng-change="updateSearch()" -->
+										<input ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" ng-change="updateMonth(monthSliderValue)" /><!-- ng-change="updateSearch()"  -->
 										<br/>
 									</td>
 								</tr>
@@ -138,7 +124,6 @@
                                 </tr>
 								<tr ng-if="hourOptions.value=='custom'">
 									<td align="left">
-<!-- 										<label>{{'hour_vis'|i18n}}</label> -->
 										<br/><br/>
                                         <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateHour(hourSliderValue)" />
                                     </td>
@@ -156,10 +141,10 @@
 									</td>
 								</tr>
 							</table>
-<!-- 						</div> -->
 					</div>	
 				</div>
 				<!-- <div class="col-md-7"> -->
+			<!-- <div>ng-init="initWsView(1)" -->
 				<div ng-class="{'col-md-10':!detailsOpened && !occupancyOpened && !profitOpened, 'col-md-8':detailsOpened || occupancyOpened || profitOpened}">	
 <!-- 					<div ng-show="!getAllMapObjectLoaded()"> -->
 <!-- 						<rotating-plane-spinner></rotating-plane-spinner> -->
@@ -197,7 +182,7 @@
 						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showDetails(event, pm, 1, 0)" ><!-- on-click="showInfoWindow(event, 'pm')" -->
 						</marker>
 						<marker ng-repeat="pmSel in mapParkingMetersSelectedMarkers" id="{{ pmSel.id }}" animation="{{ pmSel.options.animation }}" position="{{ pmSel.position }}" icon="{{ pmSel.icon }}" on-click="hideDetails(event, pmSel, 1)" ></marker><!-- on-click="showInfoWindow(event, 'pm')" -->
-						<marker ng-repeat="pmProf in profitParkingMeterMarkers" id="{{ pmProf.id }}" animation="{{ pmProf.options.animation }}" position="{{ pmProf.position }}" icon="{{ pmProf.icon }}" on-click="showProfitDetails(event, pmProf, 1, 2)" ></marker>
+						<marker ng-repeat="pmProf in profitParkingMetersMarkers" id="{{ pmProf.id }}" animation="{{ pmProf.options.animation }}" position="{{ pmProf.position }}" icon="{{ pmProf.icon }}" on-click="showProfitDetails(event, pmProf, 1, 2)" ></marker>
 						<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ ps.icon }}" on-click="showDetails(event, ps, 2, 0)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 						</marker>
 						<marker ng-repeat="psSel in mapParkingStructureSelectedMarkers" id="{{ psSel.id }}" animation="{{ psSel.options.animation }}" position="{{ psSel.position }}" icon="{{ psSel.icon }}" on-click="hideDetails(event, psSel, 2)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
@@ -1267,4 +1252,4 @@
 			</div>
 <!-- 		</form> -->
 <!-- 	</div> -->
-<!-- </div> -->
+</div> 
