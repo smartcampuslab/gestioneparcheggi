@@ -365,6 +365,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// ---------------------------------------------------------------------------------------------
 	
+	$scope.$on('mapInitialized', function(evt, map) {
+    	switch(map.id){
+	    	case "viewMap":
+	    		$scope.map = map;
+	    		break;
+	    	default: break;
+    	}
+    });
+	
 	// ----------------------- Block to read conf params and show/hide elements -----------------------
     var showArea = false;
     var showStreets = false;
@@ -639,8 +648,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.setIndex = function($index){
     	if($index > 0){
     		sharedDataService.setIsInList(true);
+    		$scope.initWsView(2);
     	} else {
     		sharedDataService.setIsInList(false);
+    		$scope.initWsView(1);
     	}
        	$scope.tabIndex = $index;
     };
