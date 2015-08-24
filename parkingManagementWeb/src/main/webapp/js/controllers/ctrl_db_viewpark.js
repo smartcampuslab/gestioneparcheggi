@@ -2226,7 +2226,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkingmeters", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allPMs);
-		    console.log("pms profit retrieved from db: " + JSON.stringify(result));	//if($scope.showLogs)
+		    //console.log("pms profit retrieved from db: " + JSON.stringify(result));	//if($scope.showLogs)
 		    //$scope.updateLoadingMapState();
 		    $scope.parkingMeterWS = $scope.initPMObjects(allPMs);
 		    
@@ -2280,7 +2280,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkstructs", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allPSs);
-		    console.log("pss profit retrieved from db: " + JSON.stringify(result));	//if($scope.showLogs)
+		    //console.log("pss profit retrieved from db: " + JSON.stringify(result));	//if($scope.showLogs)
 		    //$scope.updateLoadingMapState();
 		    $scope.profitStructWS = allPSs;
 		    $scope.allDataStructWS = $scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS);	// here I obtain an object with correct occupancy and profit data
@@ -2616,7 +2616,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var totalTickets = 0;
 		var streetsInZone = 0;
 		var myPms = [];
-		if($scope.profitStreets != null && $scope.profitStreets.length > 0){
+		if($scope.profitStreets != null && $scope.profitStreets.length > 0){				// map page case
 			for(var i = 0; i < $scope.profitStreets.length; i++){
 				var found = false;
 				for(var j = 0; (j < $scope.profitStreets[i].zones.length && !found); j++){ 
@@ -2628,6 +2628,25 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 								if($scope.profitStreets[i].pms[x] != null){
 									if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
 										myPms.push($scope.profitStreets[i].pms[x].id);
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		} else if($scope.profitStreetsList != null && $scope.profitStreetsList.length > 0){	// list page case
+			for(var i = 0; i < $scope.profitStreetsList.length; i++){
+				var found = false;
+				for(var j = 0; (j < $scope.profitStreetsList[i].zones.length && !found); j++){ 
+					if($scope.profitStreetsList[i].zones[j] == z_id){
+						found = true;
+						streetsInZone += 1;
+						if($scope.profitStreetsList[i].myPms != null && $scope.profitStreetsList[i].myPms.length > 0){
+							for(var x = 0; x < $scope.profitStreetsList[i].myPms.length; x++){
+								if($scope.profitStreetsList[i].myPms[x] != null){
+									if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreetsList[i].myPms[x].id)){
+										myPms.push($scope.profitStreetsList[i].myPms[x].id);
 									}
 								}
 							}
@@ -4943,6 +4962,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.structCvsFile = "";
     $scope.structCvsFileName = "";
     
+    $scope.streetProfitCvsFile = "";
+    $scope.pmProfitCvsFile = "";
+    $scope.zoneProfitCvsFile = "";
+    $scope.areaProfitCvsFile = "";
+    $scope.structProfitCvsFile = "";
+    
+    // ------------------------------------------- Block for occupancy CSV creation --------------------------------------
     $scope.getStreetOccupancyCsv = function(){
 		var method = 'POST';
 		//var appId = sharedDataService.getConfAppId();
@@ -4973,8 +4999,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.getAreaOccupancyCsv = function(){
 		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		
 		var value = JSON.stringify($scope.areaWS);
 	    console.log("Area list data : " + value);
 		
@@ -4989,7 +5013,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.getStructureOccupancyCsv = function(){
 		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
 		var value = JSON.stringify($scope.pstructWS);
 	    console.log("Structure list data : " + value);
 		
@@ -5002,22 +5025,75 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	window.location.href = $scope.structCvsFile;
 	    });	
 	};
+	// --------------------------------------------- End of block for occupancy CSV creation ----------------------------------------
 	
-	// -------------------------------------------------------- New part for profit ---------------------------------------------------------
-	
+	// ------------------------------------------------ New block for profit CSV creation --------------------------------------------
 	$scope.getStreetProfitCsv = function(){
 		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
 		var value = JSON.stringify($scope.profitStreetsList);
 		
 	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/street/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
-	    	$scope.streetCvsFile = result;
-	    	window.location.href = $scope.streetCvsFile;
+	    	$scope.streetProfitCvsFile = result;
+	    	window.location.href = $scope.streetProfitCvsFile;
 	    });	
 	};
 	
+	$scope.getPMProfitCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.parkingMeterWS);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingmeter/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.pmProfitCvsFile = result;
+	    	window.location.href = $scope.pmProfitCvsFile;
+	    });	
+	};
+	
+	$scope.getZoneProfitCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.profitZonesList);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/zone/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.zoneProfitCvsFile = result;
+	    	window.location.href = $scope.zoneProfitCvsFile;
+	    });	
+	};
+	
+	$scope.getAreaProfitCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.profitAreaList);
+	    console.log("Profit area list data : " + value);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/area/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.areaProfitCvsFile = result;
+	    	window.location.href = $scope.areaProfitCvsFile;
+	    });	
+	};
+	
+	$scope.getStructureProfitCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.profitStructWS);
+	    console.log("Profit structure list data : " + value);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingstructures/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.structProfitCvsFile = result;
+	    	window.location.href = $scope.structProfitCvsFile;
+	    });	
+	};
+	// ---------------------------------------------- End of block for profit CSV creation ------------------------------------------
     
 }]);

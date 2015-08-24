@@ -20,6 +20,11 @@ import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructu
 import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
+import it.smartcommunitylab.parking.management.web.model.ProfitParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.ProfitParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.ProfitRateArea;
+import it.smartcommunitylab.parking.management.web.model.ProfitStreet;
+import it.smartcommunitylab.parking.management.web.model.ProfitZone;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -87,7 +92,6 @@ public class CSVManager {
 				writer.append(s.getPaidSlotOccupied() + "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getTimedParkSlotOccupied() + "");
-				writer.append(CSV_SEPARATOR);
 				writer.append(CSV_NEWLINE);
 			}
 			
@@ -243,164 +247,410 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the logs history
-		public String create_file_log(ArrayList<DataLogBean> logs, String path) throws FileNotFoundException, UnsupportedEncodingException{
-			String name = FILE_NAME + "Log.csv";
-			String long_name = path + "/" + name;
-			try {
-				FileWriter writer = new FileWriter(long_name);
-				
-				// Added the table cols headers
-				writer.append("Id oggetto");
+	public String create_file_log(ArrayList<DataLogBean> logs, String path)
+			throws FileNotFoundException, UnsupportedEncodingException {
+		String name = FILE_NAME + "Log.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+
+			// Added the table cols headers
+			writer.append("Id oggetto");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tipo");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Autore");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Ora");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Ora(millisecondi)");
+			writer.append(CSV_SEPARATOR);
+			// writer.append("Valore");
+			writer.append("Posti Gratuiti");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati Gratuiti");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti a Pagamento");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati a Pagamento");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti a Disco Orario");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati a Disco Orario");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti per Disabili");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati per Disabili");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Non Disponibili");
+			writer.append(CSV_NEWLINE);
+
+			// Add the list of data in a table
+			for (DataLogBean l : logs) {
+				writer.append(l.getObjId());
 				writer.append(CSV_SEPARATOR);
-				writer.append("Nome");
+				writer.append(getNameFromValue(l.getValue() + ""));
 				writer.append(CSV_SEPARATOR);
-				writer.append("Tipo");
+				writer.append((l
+						.getType()
+						.compareTo(
+								"it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0) ? "Via"
+						: "Parcheggio Struttura");
 				writer.append(CSV_SEPARATOR);
-				writer.append("Autore");
+				writer.append(l.getAuthor());
 				writer.append(CSV_SEPARATOR);
-				writer.append("Ora");
+				writer.append(correctDateTime(l.getTime()));
 				writer.append(CSV_SEPARATOR);
-				writer.append("Ora(millisecondi)");
+				writer.append(l.getTime() + "");
 				writer.append(CSV_SEPARATOR);
-				//writer.append("Valore");
-				writer.append("Posti Gratuiti");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti Occupati Gratuiti");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti a Pagamento");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti Occupati a Pagamento");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti a Disco Orario");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti Occupati a Disco Orario");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti per Disabili");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti Occupati per Disabili");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti Totali");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti Occupati Totali");
-				writer.append(CSV_SEPARATOR);
-				writer.append("Posti Non Disponibili");
+				writer.append(correctValue(l.getValue() + ""));
+				// writer.append(l.getValueToString());
 				writer.append(CSV_NEWLINE);
-				
-				// Add the list of data in a table
-				for(DataLogBean l : logs){
-					writer.append(l.getObjId());
-					writer.append(CSV_SEPARATOR);
-					writer.append(getNameFromValue(l.getValue() + ""));
-					writer.append(CSV_SEPARATOR);
-					writer.append((l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0) ? "Via" : "Parcheggio Struttura");
-					writer.append(CSV_SEPARATOR);
-					writer.append(l.getAuthor());
-					writer.append(CSV_SEPARATOR);
-					writer.append(correctDateTime(l.getTime()));
-					writer.append(CSV_SEPARATOR);
-					writer.append(l.getTime() + "");
-					writer.append(CSV_SEPARATOR);
-					writer.append(correctValue(l.getValue() + ""));
-					//writer.append(l.getValueToString());
-					writer.append(CSV_NEWLINE);
-				}
-				
-				writer.flush();
-				writer.close();
-				
-			} catch (IOException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-				logger.error("Error in log csv creation: " + e1);
 			}
-			return "csv/" + name;	//ba
+			writer.flush();
+			writer.close();
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in log csv creation: " + e1);
 		}
+		return "csv/" + name; // ba
+	}
 		
-		private String correctValue(String value){
-			String freeSlots = "0";
-			String occupiedFreeSlots = "0";
-			String payingSlots = "0";
-			String occupiedPayingSlots = "0";
-			String timedSlots = "0";
-			String occupiedTimedSlots = "0";
-			String handicappedSlots = "0";
-			String occupiedHandicappedSlots = "0";
-			String totalSlots = "0";
-			String occupiedTotalSlots = "0";
-			String unavailableSlots = "0";
-			String to_clean = value.toString();
-			//logger.error("Value in CSV: " + to_clean);
-			String completeVals[] = to_clean.split(",");
-			for(String s : completeVals){
-				if(s.contains("slotsFree")){
-					freeSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsOccupiedOnFree")){
-					occupiedFreeSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsPaying")){
-					payingSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsOccupiedOnPaying")){
-					occupiedPayingSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsTimed")){
-					timedSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsOccupiedOnTimed")){
-					occupiedTimedSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsHandicapped")){
-					handicappedSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsOccupiedOnHandicapped")){
-					occupiedHandicappedSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsTotal")){
-					totalSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsOccupiedOnTotal")){
-					occupiedTotalSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
-				if(s.contains("slotsUnavailable")){
-					unavailableSlots = s.substring(s.indexOf("=") + 1, s.length());
-				}
+	// Method used to create the csv file for the street profit
+	public String create_profit_file_streets(ArrayList<ProfitStreet> streets, String path) throws FileNotFoundException,
+			UnsupportedEncodingException {
+		String name = FILE_NAME + "ProfitStreet.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Area");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Incasso");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Num Ticket");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti a Pagamento");
+			writer.append(CSV_NEWLINE);
+
+			// Add the list of data in a table
+			for (ProfitStreet s : streets) {
+				writer.append(s.getStreetReference());
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getArea_name()); // to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append((s.getProfit() > -1) ? (s.getProfit() + "")
+						: "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((s.getTickets() > -1) ? (s.getTickets() + "")
+						: "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getPaidSlotNumber() + "");
+				writer.append(CSV_NEWLINE);
 			}
+			// String arr = writer.toString();
+			// ba = arr.getBytes();
+			writer.flush();
+			writer.close();
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in profit street csv creation: " + e1);
+		}
+		return "csv/" + name; // ba
+	}
+		
+		
+	// Method used to create the csv file for the parkingmeter profit
+	public String create_profit_file_parkingmeters(ArrayList<ProfitParkingMeter> parkingmeters, String path)
+			throws FileNotFoundException, UnsupportedEncodingException {
+		String name = FILE_NAME + "ProfitParkingMeter.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+
+			// Added the table cols headers
+			writer.append("Codice");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Note");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Stato");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Incasso");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Num Ticket");
+			writer.append(CSV_NEWLINE);
+
+			// Add the list of data in a table
+			for (ProfitParkingMeter p : parkingmeters) {
+				writer.append(p.getCode() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(cleanNewLineValue(p.getNote()));
+				writer.append(CSV_SEPARATOR);
+				writer.append(p.getStatus() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append((p.getProfit() > -1) ? (p.getProfit() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((p.getTickets() > -1) ? (p.getTickets() + "")	: "n.p.");
+				writer.append(CSV_NEWLINE);
+			}
+			// String arr = writer.toString();
+			// ba = arr.getBytes();
+			writer.flush();
+			writer.close();
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in profit street csv creation: " + e1);
+		}
+		return "csv/" + name; // ba
+	}
+	
+	// Method used to create the csv file for the zone profit
+	public String create_profit_file_zones(ArrayList<ProfitZone> zones, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "ProfitZone.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
 			
-			//String cleaned = to_clean.replaceAll(",", " / ");
-			//cleaned = cleaned.substring(1, cleaned.length()-1);
-			String cleaned = freeSlots + "," + occupiedFreeSlots + "," +
-					payingSlots + "," + occupiedPayingSlots + "," +
-					timedSlots + "," + occupiedTimedSlots + "," +
-					handicappedSlots + "," + occupiedHandicappedSlots + "," +
-					totalSlots + "," + occupiedTotalSlots + "," +
-					unavailableSlots;
-			return cleaned;
-		}
-		
-		// Method getNameFromValue: extract the object name from the value
-		private String getNameFromValue(String value){
-			String name = "";
-			String to_clean = value.toString();
-			//logger.error("Value in CSV: " + to_clean);
-			String completeVals[] = to_clean.split(",");
-			for(String s : completeVals){
-				if(s.contains("name")){
-					name = s.substring(s.indexOf("=") + 1, s.length());
-				}
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Macro");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Incasso");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Num Ticket");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(ProfitZone z : zones){
+				writer.append(z.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSubmacro());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append((z.getProfit() > -1) ? (z.getProfit() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((z.getTickets() > -1) ? (z.getTickets() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSlotNumber() + "");
+				writer.append(CSV_NEWLINE);
 			}
-			return name;
+			//String arr = writer.toString();
+			//ba = arr.getBytes();
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in profit zone csv creation: " + e1);
 		}
+		return "csv/" + name;	//ba
+	}
+
+	// Method used to create the csv file for the area profit
+	public String create_profit_file_areas(ArrayList<ProfitRateArea> areas, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "ProfitArea.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tariffa");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Incassi");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Num Ticket");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(ProfitRateArea a : areas){
+				writer.append(a.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getFee() + "");	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append((a.getProfit() > -1) ? (a.getProfit() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((a.getTickets() > -1) ? (a.getTickets() + "") : "n.p.");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in profit area csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the parking structures profit
+	public String create_profit_file_structs(ArrayList<ProfitParkingStructure> structures, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "ProfitStructure.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Indirizzo");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Incasso");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Num Ticket");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(ProfitParkingStructure ps : structures){
+				writer.append(ps.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getStreetReference());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getProfit() > -1) ? (ps.getProfit() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getTickets() > -1) ? (ps.getTickets() + "") : "n.p.");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in structures csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
 		
-		// Method correctDateTime: used to cast the long milliseconds value in a formatted date
-		private String correctDateTime(Long millis){
-			if(millis != null){
-				Date data = new Date(millis);
-				DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
-				return df.format(data);
-			} else {
-				return "n.p.";
+	private String correctValue(String value) {
+		String freeSlots = "0";
+		String occupiedFreeSlots = "0";
+		String payingSlots = "0";
+		String occupiedPayingSlots = "0";
+		String timedSlots = "0";
+		String occupiedTimedSlots = "0";
+		String handicappedSlots = "0";
+		String occupiedHandicappedSlots = "0";
+		String totalSlots = "0";
+		String occupiedTotalSlots = "0";
+		String unavailableSlots = "0";
+		String to_clean = value.toString();
+		// logger.error("Value in CSV: " + to_clean);
+		String completeVals[] = to_clean.split(",");
+		for (String s : completeVals) {
+			if (s.contains("slotsFree")) {
+				freeSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnFree")) {
+				occupiedFreeSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsPaying")) {
+				payingSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnPaying")) {
+				occupiedPayingSlots = s.substring(s.indexOf("=") + 1,
+						s.length());
+			}
+			if (s.contains("slotsTimed")) {
+				timedSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnTimed")) {
+				occupiedTimedSlots = s
+						.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsHandicapped")) {
+				handicappedSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnHandicapped")) {
+				occupiedHandicappedSlots = s.substring(s.indexOf("=") + 1,
+						s.length());
+			}
+			if (s.contains("slotsTotal")) {
+				totalSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnTotal")) {
+				occupiedTotalSlots = s
+						.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsUnavailable")) {
+				unavailableSlots = s.substring(s.indexOf("=") + 1, s.length());
 			}
 		}
+
+		// String cleaned = to_clean.replaceAll(",", " / ");
+		// cleaned = cleaned.substring(1, cleaned.length()-1);
+		String cleaned = freeSlots + "," + occupiedFreeSlots + ","
+				+ payingSlots + "," + occupiedPayingSlots + "," + timedSlots
+				+ "," + occupiedTimedSlots + "," + handicappedSlots + ","
+				+ occupiedHandicappedSlots + "," + totalSlots + ","
+				+ occupiedTotalSlots + "," + unavailableSlots;
+		return cleaned;
+	}
+		
+	// Method getNameFromValue: extract the object name from the value
+	private String getNameFromValue(String value) {
+		String name = "";
+		String to_clean = value.toString();
+		// logger.error("Value in CSV: " + to_clean);
+		String completeVals[] = to_clean.split(",");
+		for (String s : completeVals) {
+			if (s.contains("name")) {
+				name = s.substring(s.indexOf("=") + 1, s.length());
+			}
+		}
+		return name;
+	}
+		
+	// Method correctDateTime: used to cast the long milliseconds value in a formatted date
+	private String correctDateTime(Long millis) {
+		if (millis != null) {
+			Date data = new Date(millis);
+			DateFormat df = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+			return df.format(data);
+		} else {
+			return "n.p.";
+		}
+	}
+		
+	// Method cleanNewLineValue: used to remove the new line chars (\n) from a string
+	private String cleanNewLineValue(String data) {
+		String cleanedVal = data;
+		if (data.contains("\n")) {
+			cleanedVal = data.replaceAll("\n", " ");
+		}
+		return cleanedVal;
+	}
 
 }

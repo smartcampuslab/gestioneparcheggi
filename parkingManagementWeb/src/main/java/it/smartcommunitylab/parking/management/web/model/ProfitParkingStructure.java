@@ -15,7 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
-public class OccupancyParkingStructure {
+public class ProfitParkingStructure {
 
 	public static enum PaymentMode {
 		CASH, AUTOMATED_TELLER, PREPAID_CARD, PARCOMETRO
@@ -29,12 +29,11 @@ public class OccupancyParkingStructure {
 	private String fee;
 	private String timeSlot;
 	private Integer slotNumber;
-	private Integer slotOccupied;
 	private Integer handicappedSlotNumber;
-	private Integer handicappedSlotOccupied;
 	private Integer unusuableSlotNumber;
 	private String phoneNumber;
-	private Integer occupancyRate;
+	private Integer profit;
+	private Integer tickets;
 	
 	
 	public String getId_app() {
@@ -109,44 +108,36 @@ public class OccupancyParkingStructure {
 		this.id = id;
 	}
 
-	public Integer getSlotOccupied() {
-		return slotOccupied;
-	}
-
 	public Integer getHandicappedSlotNumber() {
 		return handicappedSlotNumber;
-	}
-
-	public Integer getHandicappedSlotOccupied() {
-		return handicappedSlotOccupied;
 	}
 
 	public Integer getUnusuableSlotNumber() {
 		return unusuableSlotNumber;
 	}
 
-	public void setSlotOccupied(Integer slotOccupied) {
-		this.slotOccupied = slotOccupied;
-	}
-
 	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
 		this.handicappedSlotNumber = handicappedSlotNumber;
-	}
-
-	public void setHandicappedSlotOccupied(Integer handicappedSlotOccupied) {
-		this.handicappedSlotOccupied = handicappedSlotOccupied;
 	}
 
 	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
 		this.unusuableSlotNumber = unusuableSlotNumber;
 	}
 
-	public Integer getOccupancyRate() {
-		return occupancyRate;
+	public Integer getProfit() {
+		return profit;
 	}
 
-	public void setOccupancyRate(Integer occupancyRate) {
-		this.occupancyRate = occupancyRate;
+	public void setProfit(Integer profit) {
+		this.profit = profit;
+	}
+
+	public Integer getTickets() {
+		return tickets;
+	}
+
+	public void setTickets(Integer tickets) {
+		this.tickets = tickets;
 	}
 
 	public String toJSON(){
@@ -156,11 +147,10 @@ public class OccupancyParkingStructure {
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"slotOccupied\":\"" + getSlotOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
-		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
-		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\"";
+		json += "\"profit\":\"" + getProfit() + "\",";
+		json += "\"tickets\":\"" + getTickets() + "\"";
 		json += "}";
 		return json;
 	}

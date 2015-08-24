@@ -17,7 +17,7 @@ package it.smartcommunitylab.parking.management.web.model;
 
 import java.util.List;
 
-public class OccupancyStreet {
+public class ProfitStreet {
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String streetReference;
@@ -40,9 +40,8 @@ public class OccupancyStreet {
 	private String color;
 	private List<String> zones;
 	private List<String> parkingMeters;
-	private Integer occupancyRate;
-	private Integer freeParkOccupied;
-	private Integer slotOccupied;
+	private Integer profit;
+	private Integer tickets;
 	private String area_name;
 	private String area_color;
 
@@ -66,16 +65,12 @@ public class OccupancyStreet {
 		return color;
 	}
 
-	public Integer getOccupancyRate() {
-		return occupancyRate;
+	public Integer getProfit() {
+		return profit;
 	}
 
-	public Integer getFreeParkOccupied() {
-		return freeParkOccupied;
-	}
-
-	public Integer getSlotOccupied() {
-		return slotOccupied;
+	public Integer getTickets() {
+		return tickets;
 	}
 
 	public String getArea_name() {
@@ -90,16 +85,12 @@ public class OccupancyStreet {
 		this.color = color;
 	}
 
-	public void setOccupancyRate(Integer occupancyRate) {
-		this.occupancyRate = occupancyRate;
+	public void setProfit(Integer profit) {
+		this.profit = profit;
 	}
 
-	public void setFreeParkOccupied(Integer freeParkOccupied) {
-		this.freeParkOccupied = freeParkOccupied;
-	}
-
-	public void setSlotOccupied(Integer slotOccupied) {
-		this.slotOccupied = slotOccupied;
+	public void setTickets(Integer tickets) {
+		this.tickets = tickets;
 	}
 
 	public void setArea_name(String area_name) {
@@ -128,10 +119,10 @@ public class OccupancyStreet {
 
 	@Override
 	public boolean equals(Object obj) {
-		if (!(obj instanceof OccupancyStreet)) {
+		if (!(obj instanceof ProfitStreet)) {
 			return false;
 		}
-		OccupancyStreet v = (OccupancyStreet) obj;
+		ProfitStreet v = (ProfitStreet) obj;
 
 		return v != null && this.id != null && v.getId().equals(this.id);
 	}
@@ -278,7 +269,8 @@ public class OccupancyStreet {
 		json += "\"id_app\":\"" + getId_app() + "\",";
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"area_name\":\"" + getArea_name() + "\",";
-		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
+		json += "\"profit\":\"" + getProfit() + "\",";
+		json += "\"tickets\":\"" + getTickets() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
 		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
 		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";

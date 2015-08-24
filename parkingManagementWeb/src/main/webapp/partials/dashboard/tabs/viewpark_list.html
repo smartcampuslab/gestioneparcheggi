@@ -176,29 +176,8 @@
 								ng-disabled="currentPage >= parkingMeterWS.length/maxPMeters - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
-					<td width="33%" align="left">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getPMProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>
@@ -260,28 +239,7 @@
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+						<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>	
@@ -341,28 +299,7 @@
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+						<a href class="btn btn-success" target="_blank" ng-click="getStreetProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>	
@@ -419,28 +356,7 @@
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
@@ -499,28 +415,7 @@
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
@@ -578,28 +473,7 @@
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+						<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>	
@@ -659,29 +533,8 @@
 							ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
-					<td width="33%" align="left">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getAreaProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>	
@@ -739,29 +592,8 @@
 								ng-disabled="currentPage >= pstructWS.length/maxPStructs - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
-					<td width="33%" align="left">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>
@@ -816,29 +648,8 @@
 								ng-disabled="currentPage >= profitStructWS.length/maxPStructs - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
-					<td width="33%" align="left">
-						<table>
-							<tr ng-if="showSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showZList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showAList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-							<tr ng-if="showPSList">
-								<td>
-									<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-								</td>
-							</tr>
-						</table>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getStructureProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>

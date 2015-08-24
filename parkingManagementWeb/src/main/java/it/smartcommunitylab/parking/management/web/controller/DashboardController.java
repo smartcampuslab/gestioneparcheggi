@@ -39,6 +39,11 @@ import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.ProfitParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.ProfitParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.ProfitRateArea;
+import it.smartcommunitylab.parking.management.web.model.ProfitStreet;
+import it.smartcommunitylab.parking.management.web.model.ProfitZone;
 import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 import java.io.IOException;
@@ -327,6 +332,7 @@ public class DashboardController {
 	}
 	
 	// --------------------------------- Part for csv files creation ------------------------------------
+	// --------------------------------------- Occupancy CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/street/csv")
 	public @ResponseBody
 	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
@@ -559,6 +565,283 @@ public class DashboardController {
 		}
 		return createdFile;
 	}	
+	
+	// ----------------------------------------- Profit CSV ---------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/street/csv")
+	public @ResponseBody
+	String createProfitStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in profit street csv creation.");
+		ArrayList<ProfitStreet> streetData = new ArrayList<ProfitStreet>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		logger.info("Current path: " + path);
+		
+		JSONArray streetList = new JSONArray(data);
+		logger.info("Street list size: " + streetList.length());
+    	
+	    for(int i = 0; i < streetList.length(); i++){
+	    	JSONObject street = streetList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = street.getString("id");
+	    	String id_app = street.getString("id_app");
+	    	String streetReference = street.getString("streetReference");
+	    	Integer slotNumber = (!street.isNull("slotNumber")) ? street.getInt("slotNumber") : 0;
+	    	Integer handicappedSlotNumber = (!street.isNull("handicappedSlotNumber")) ? street.getInt("handicappedSlotNumber") : 0;
+	    	Integer handicappedSlotOccupied = (!street.isNull("handicappedSlotOccupied")) ? street.getInt("handicappedSlotOccupied") : 0;
+	    	Integer reservedSlotNumber = (!street.isNull("reservedSlotNumber")) ? street.getInt("reservedSlotNumber") : 0;
+	    	Integer reservedSlotOccupied = (!street.isNull("reservedSlotOccupied")) ? street.getInt("reservedSlotOccupied") : 0;
+	    	Integer timedParkSlotNumber = (!street.isNull("timedParkSlotNumber")) ? street.getInt("timedParkSlotNumber") : 0;
+	    	Integer timedParkSlotOccupied = (!street.isNull("timedParkSlotOccupied")) ? street.getInt("timedParkSlotOccupied") : 0;
+	    	Integer freeParkSlotNumber = (!street.isNull("freeParkSlotNumber")) ? street.getInt("freeParkSlotNumber") : 0;
+	    	Integer freeParkSlotOccupied = (!street.isNull("freeParkSlotOccupied")) ? street.getInt("freeParkSlotOccupied") : 0;
+	    	Integer freeParkSlotSignNumber = (!street.isNull("freeParkSlotSignNumber")) ? street.getInt("freeParkSlotSignNumber") : 0;
+	    	Integer freeParkSlotSignOccupied = (!street.isNull("freeParkSlotSignOccupied")) ? street.getInt("freeParkSlotSignOccupied") : 0;
+	    	Integer paidSlotNumber = (!street.isNull("paidSlotNumber")) ? street.getInt("paidSlotNumber") : 0;
+	    	Integer paidSlotOccupied = (!street.isNull("paidSlotOccupied")) ? street.getInt("paidSlotOccupied") : 0;
+	    	Integer unusuableSlotNumber = (!street.isNull("unusuableSlotNumber")) ? street.getInt("unusuableSlotNumber") : 0;
+	    	Boolean subscritionAllowedPark = (!street.isNull("subscritionAllowedPark")) ? street.getBoolean("subscritionAllowedPark") : false;
+	    	String rateAreaId = street.getString("rateAreaId");
+	    	String color = street.getString("color");
+	    	Integer profit = (!street.isNull("profit")) ? street.getInt("profit") : -1;
+	    	Integer tickets = (!street.isNull("tickets")) ? street.getInt("tickets") : -1;
+	    	//Integer freeParkOccupied = (!street.isNull("freeParkOccupied")) ? street.getInt("freeParkOccupied") : -1;
+	    	//Integer slotOccupied = (!street.isNull("slotOccupied")) ? street.getInt("slotOccupied") : -1;
+	    	String area_name = street.getString("area_name");
+	    	String area_color = street.getString("area_color");
+	    	ProfitStreet ps = new ProfitStreet();
+	    	ps.setId(id);
+	    	ps.setId_app(id_app);
+	    	ps.setStreetReference(streetReference);
+	    	ps.setSlotNumber(slotNumber);
+	    	ps.setHandicappedSlotNumber(handicappedSlotNumber);
+	    	ps.setHandicappedSlotOccupied(handicappedSlotOccupied);
+	    	ps.setReservedSlotNumber(reservedSlotNumber);
+	    	ps.setReservedSlotOccupied(reservedSlotOccupied);
+	    	ps.setTimedParkSlotNumber(timedParkSlotNumber);
+	    	ps.setTimedParkSlotOccupied(timedParkSlotOccupied);
+	    	ps.setFreeParkSlotNumber(freeParkSlotNumber);
+	    	ps.setFreeParkSlotOccupied(freeParkSlotOccupied);
+	    	ps.setFreeParkSlotSignNumber(freeParkSlotSignNumber);
+	    	ps.setFreeParkSlotSignOccupied(freeParkSlotSignOccupied);
+	    	ps.setPaidSlotNumber(paidSlotNumber);
+	    	ps.setPaidSlotOccupied(paidSlotOccupied);
+	    	ps.setUnusuableSlotNumber(unusuableSlotNumber);
+	    	ps.setSubscritionAllowedPark(subscritionAllowedPark);
+	    	ps.setRateAreaId(rateAreaId);
+	    	ps.setColor(color);
+	    	ps.setProfit(profit);
+	    	ps.setTickets(tickets);
+	    	ps.setArea_name(area_name);
+	    	ps.setArea_color(area_color);
+	    	streetData.add(ps);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_profit_file_streets(streetData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV ricavi per vie: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/parkingmeter/csv")
+	public @ResponseBody
+	String createProfitPMCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in profit parkingmeter csv creation.");
+		ArrayList<ProfitParkingMeter> profitPMData = new ArrayList<ProfitParkingMeter>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray pmList = new JSONArray(data);
+		logger.info("ParkingMeters list size: " + pmList.length());
+    	
+	    for(int i = 0; i < pmList.length(); i++){
+	    	JSONObject pm = pmList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = pm.getString("id");
+	    	String id_app = pm.getString("id_app");
+	    	Integer code = pm.getInt("code");
+	    	String note = pm.getString("note");
+	    	String status = pm.getString("status");
+	    	String areaId = pm.getString("areaId");
+	    	Integer profit = (!pm.isNull("profit")) ? pm.getInt("profit") : 0;
+	    	Integer tickets = (!pm.isNull("tickets")) ? pm.getInt("tickets") : 0;
+	    	ProfitParkingMeter ppm = new ProfitParkingMeter();
+	    	ppm.setId(id);
+	    	ppm.setId_app(id_app);
+	    	ppm.setCode(code);
+	    	ppm.setNote(note);
+	    	if(status.compareTo("ACTIVE") == 0){
+	    		ppm.setStatus(ProfitParkingMeter.Status.ACTIVE);
+	    	} else {
+	    		ppm.setStatus(ProfitParkingMeter.Status.INACTIVE);
+	    	}
+	    	ppm.setAreaId(areaId);
+	    	ppm.setProfit(profit);
+	    	ppm.setTickets(tickets);
+	    	profitPMData.add(ppm);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_profit_file_parkingmeters(profitPMData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV incassi per parcometri: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/zone/csv")
+	public @ResponseBody
+	String createProfitZoneCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in profit zone csv creation.");
+		ArrayList<ProfitZone> zoneData = new ArrayList<ProfitZone>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray zoneList = new JSONArray(data);
+		logger.info("Zone list size: " + zoneList.length());
+    	
+	    for(int i = 0; i < zoneList.length(); i++){
+	    	JSONObject zone = zoneList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = zone.getString("id");
+	    	String id_app = zone.getString("id_app");
+	    	String name = zone.getString("name");
+	    	String macro = zone.getString("submacro");
+	    	String color = zone.getString("color");
+	    	String type = zone.getString("type");
+	    	String note = zone.getString("note");
+	    	Integer profit = (!zone.isNull("profit")) ? zone.getInt("profit") : 0;
+	    	Integer tickets = (!zone.isNull("tickets")) ? zone.getInt("tickets") : 0;
+	    	Integer slotNumber = (!zone.isNull("slotNumber")) ? zone.getInt("slotNumber") : 0;
+	    	ProfitZone pz = new ProfitZone();
+	    	pz.setId(id);
+	    	pz.setId_app(id_app);
+	    	pz.setName(name);
+	    	pz.setSubmacro(macro);
+	    	pz.setColor(color);
+	    	pz.setType(type);
+	    	pz.setNote(note);
+	    	pz.setProfit(profit);
+	    	pz.setTickets(tickets);	    	
+	    	pz.setSlotNumber(slotNumber);
+	    	zoneData.add(pz);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_profit_file_zones(zoneData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV incassi per zone: " + e.getMessage());
+		}
+		return createdFile;
+	}	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/area/csv")
+	public @ResponseBody
+	String createProfitAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in profit area csv creation.");
+		ArrayList<ProfitRateArea> areaData = new ArrayList<ProfitRateArea>();
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray areaList = new JSONArray(data);
+		logger.info("Area list size: " + areaList.length());
+    	
+	    for(int i = 0; i < areaList.length(); i++){
+	    	JSONObject area = areaList.getJSONObject(i);
+	    	String id = area.getString("id");
+	    	String id_app = area.getString("id_app");
+	    	String name = area.getString("name");
+	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
+	    	String timeSlot = area.getString("timeSlot");
+	    	String smsCode = area.getString("smsCode");
+	    	String color = area.getString("color");
+	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
+	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
+	    	Integer profit = (!area.isNull("profit")) ? area.getInt("profit") : 0;
+	    	Integer tickets = (!area.isNull("tickets")) ? area.getInt("tickets") : 0;
+	    	ProfitRateArea pa = new ProfitRateArea();
+	    	pa.setId(id);
+	    	pa.setId_app(id_app);
+	    	pa.setName(name);
+	    	pa.setFee(fee);
+	    	pa.setTimeSlot(timeSlot);
+	    	pa.setSmsCode(smsCode);
+	    	pa.setColor(color);
+	    	pa.setNote(note);
+	    	pa.setSlotNumber(slotNumber);
+	    	pa.setProfit(profit);
+	    	pa.setTickets(tickets);
+	    	areaData.add(pa);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_profit_file_areas(areaData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/parkingstructures/csv")
+	public @ResponseBody
+	String createProfitStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in profit parkingstructures csv creation.");
+		ArrayList<ProfitParkingStructure> structData = new ArrayList<ProfitParkingStructure>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray structList = new JSONArray(data);
+		logger.info("Profit structs list size: " + structList.length());
+    	
+	    for(int i = 0; i < structList.length(); i++){
+	    	JSONObject struct = structList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = struct.getString("id");
+	    	String id_app = struct.getString("id_app");
+	    	String name = struct.getString("name");
+	    	String streetReference = struct.getString("streetReference");
+	    	String managementMode = struct.getString("managementMode");
+	    	String phoneNumber = struct.getString("phoneNumber");
+	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
+	    	String timeSlot = struct.getString("timeSlot");
+	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
+	    	Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
+	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
+	    	Integer profit = (!struct.isNull("profit")) ? struct.getInt("profit") : 0;
+	    	Integer tickets = (!struct.isNull("tickets")) ? struct.getInt("tickets") : 0;
+	    	ProfitParkingStructure pps = new ProfitParkingStructure();
+	    	pps.setId(id);
+	    	pps.setId_app(id_app);
+	    	pps.setName(name);
+	    	pps.setStreetReference(streetReference);
+	    	pps.setManagementMode(managementMode);
+	    	pps.setPhoneNumber(phoneNumber);
+	    	pps.setFee(fee);
+	    	pps.setTimeSlot(timeSlot);
+	    	pps.setSlotNumber(slotNumber);
+	    	pps.setHandicappedSlotNumber(handicappedSlotNumber);
+	    	pps.setUnusuableSlotNumber(unusuableSlotNumber);
+	    	pps.setProfit(profit);
+	    	pps.setTickets(tickets);
+	    	structData.add(pps);
+	    }	
+		
+		try {
+			createdFile = csvManager.create_profit_file_structs(structData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
+		}
+		return createdFile;
+	}		
 	
 	// ------------------------------ End of part for csv files creation --------------------------------
 	
