@@ -87,7 +87,30 @@ pm.service('sharedDataService', function(){
          {value: true , title: 'Si'},
          {value: false , title: 'No'}
     ];
+    
+    // Array with extratime minute to find a park place in different case of occupancy level
+    this.extratime_wait = [
+         {occupancy:  0, difficulty_level: 'Null', extratime_estimation_min: 0, extratime_estimation_max: 0},
+         {occupancy:  10, difficulty_level: 'Null', extratime_estimation_min: 0, extratime_estimation_max: 0},
+         {occupancy:  20, difficulty_level: 'Null', extratime_estimation_min: 0, extratime_estimation_max: 0},
+         {occupancy:  30, difficulty_level: 'Null', extratime_estimation_min: 0, extratime_estimation_max: 0},
+         {occupancy:  40, difficulty_level: 'Null', extratime_estimation_min: 0, extratime_estimation_max: 0},
+         {occupancy:  50, difficulty_level: 'Null', extratime_estimation_min: 0, extratime_estimation_max: 0},
+         {occupancy:  60, difficulty_level: 'Low', extratime_estimation_min: 1, extratime_estimation_max: 1},
+         {occupancy:  70, difficulty_level: 'Medium', extratime_estimation_min: 1, extratime_estimation_max: 3},
+         {occupancy:  80, difficulty_level: 'High', extratime_estimation_min: 2, extratime_estimation_max: 5},
+         {occupancy:  90, difficulty_level: 'Very High', extratime_estimation_min: 3, extratime_estimation_max: 10},
+         {occupancy:  100, difficulty_level: 'Impossible', extratime_estimation_min: 5, extratime_estimation_max: 15},
+    ];
+    
+    this.setExtratimeWait = function(value){
+    	this.extratime_wait = value;
+    };
 	
+    this.getExtratimeWait = function(){
+    	return this.extratime_wait;
+    };
+    
 	// Get and Set methods
 	this.getUsedLanguage = function(){
 		var value = sessionStorage.language;

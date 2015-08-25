@@ -1,21 +1,21 @@
 <div class="row" ng-controller="ViewDashboardCtrlPark"> <!-- ng-init="initWsView(1)" -->
 	<div ng-show="isInListTab()">
-		<div class="col-md-2 left-filter" style="margin-top:15px">
+		<div class="col-md-2 left-filter"><!-- style="margin-top:10px" -->
 			<h4><strong>{{ 'left_filter_title' | i18n }}</strong></h4>
 			<div>
 				<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
 				<table width="100%">
 					<tr>
-						<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics_list" value="parkSupply" ng-change="changeDashboardView(2)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_parkSupply' | i18n }}</label></td>
+						<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics_list" value="parkSupply" ng-change="changeDashboardView(2)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_parkSupply' | i18n }}</span></label></td>
 					</tr>
 					<tr>
 						<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics_list" value="occupation" ng-change="changeDashboardView(2)" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td>
 					</tr>
 					<tr>
-						<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics_list" value="receipts" ng-change="changeDashboardView(2)" ng-disabled="disableThemes">&nbsp;{{ 'park_receipts' | i18n }}</span></label></td>
+						<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics_list" value="receipts" ng-change="changeDashboardView(2)" ng-disabled="disableThemes">&nbsp;{{ 'park_receipts' | i18n }}</label></td>
 					</tr>
 					<tr>
-						<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics_list" value="timeCost" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_timeCost' | i18n }}</span></label></td>
+						<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics_list" value="timeCost" ng-change="changeDashboardView(2)" ng-disabled="disableThemes">&nbsp;{{ 'park_timeCost' | i18n }}</label></td>
 					</tr>
 					<tr>
 						<td align="left"><label class="left-filter"><input id="park&ride" type="radio" ng-model="dashboard_topics_list" value="pr" ng-change="changeDashboardView()" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_pr' | i18n }}</span></label></td>
@@ -123,7 +123,7 @@
 		</div>
 	</div>
 	<div ng-show="!isInListTab()">
-		<div class="col-md-2 left-filter" style="margin-top:15px" >
+		<div class="col-md-2 left-filter" ><!-- style="margin-top:10px" -->
 					<h4><strong>{{ 'left_filter_title' | i18n }}</strong></h4>
 					<div>
 						<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
@@ -138,7 +138,7 @@
 								<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_receipts' | i18n }}</label></td>
 							</tr>
 							<tr>
-								<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_timeCost' | i18n }}</span></label></td>
+								<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_timeCost' | i18n }}</label></td>
 							</tr>
 							<tr>
 								<td align="left"><label class="left-filter"><input id="park&ride" type="radio" ng-model="dashboard_topics" value="pr" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_pr' | i18n }}</span></label></td>
@@ -170,7 +170,7 @@
 						</table>
 						<p style="font-size:3px">&nbsp;</p>
 					</div>
-					<div ng-show="dashboard_topics=='occupation' || dashboard_topics=='receipts'">
+					<div ng-show="dashboard_topics=='occupation' || dashboard_topics=='receipts' || dashboard_topics=='timeCost'">
 							<h5><strong>{{ 'occupation_filter_title' | i18n }}</strong></h5>
 							<table width="100%" ng-controller="TimeFilterCtrl">
                                 <tr>

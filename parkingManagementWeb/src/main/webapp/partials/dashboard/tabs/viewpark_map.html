@@ -145,7 +145,7 @@
 <!-- 				</div> -->
 				<!-- <div class="col-md-7"> -->
 			<div><!-- ng-init="initWsView(1)" -->
-				<div ng-class="{'col-md-12':!detailsOpened && !occupancyOpened && !profitOpened, 'col-md-10':detailsOpened || occupancyOpened || profitOpened}">	
+				<div ng-class="{'col-md-12':!detailsOpened && !occupancyOpened && !profitOpened && !timeCostOpened, 'col-md-10':detailsOpened || occupancyOpened || profitOpened || timeCostOpened}">	
 <!-- 					<div ng-show="!getAllMapObjectLoaded()"> -->
 <!-- 						<rotating-plane-spinner></rotating-plane-spinner> -->
 
@@ -224,6 +224,9 @@
      					<shape name="polyline" ng-repeat="sProf in profitStreets" id="{{ sProf.id }}" path="{{ sProf.gpath }}" 
          					geodesic="{{ sProf.geodesic }}" stroke-color="{{ sProf.stroke.color }}" stroke-opacity="{{ sProf.stroke.opacity }}" stroke-weight="{{ sProf.stroke.weight }}" on-click="showProfitDetails(event, sProf, 3, 2)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
      					</shape>
+     					<shape name="polyline" ng-repeat="sTime in timeCostStreets" id="{{ sTime.id }}" path="{{ sTime.gpath }}" 
+         					geodesic="{{ sTime.geodesic }}" stroke-color="{{ sTime.stroke.color }}" stroke-opacity="{{ sTime.stroke.opacity }}" stroke-weight="{{ sTime.stroke.weight }}" on-click="showTimeCostDetails(event, sTime, 3, 3)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
+     					</shape>
 						<shape name="polygon" ng-repeat="z in mapZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
          					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
@@ -239,6 +242,10 @@
      					<shape name="polygon" ng-repeat="zProf in profitZones" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
          					geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zProf.stroke.weight }}"
          					fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showProfitDetails(event, zProf, 4, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     					</shape>
+     					<shape name="polygon" ng-repeat="zTime in timeCostZones" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
+         					geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zTime.stroke.weight }}"
+         					fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showTimeCostDetails(event, zTime, 4, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      					</shape>
      					<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="{{ a.stroke.opacity }}" stroke-weight="{{ a.stroke.weight }}"
@@ -258,998 +265,1015 @@
      					</shape>
 					</map>			
 				</div>
-				<div class="col-md-2" ng-show="detailsOpened || occupancyOpened || profitOpened">
-					<div ng-show="detailsOpened" >
-<!-- 						<div class="panel panel-danger" > -->
-<!-- 							<div class="panel-heading"> -->
-							<div class="alert alert-danger">
-								<table width="100%">
-									<tr>
-										<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
-										<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></td>
-									</tr>
-								</table>
-							</div>	
-<!-- 							</div> -->
-<!-- 							<div class="panel-body dashboard-panel"> -->
-								<div ng-show="isPMDetShow()">
-									<table width="100%">
-										<tr>
-											<td class="detailsTableSX">{{ 'pm_code' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.data.code }}</td>
-										</tr>
-									    <tr ng-show="pm_note.visible">
-							      			<td class="detailsTableSX">{{ 'pm_note' | i18n }}:</td>
-							      			<td class="detailsTableCX"></td>
-						        			<td class="detailsTableDX">&nbsp;{{ pmDetails.data.note }}</td>
-						        		</tr>
-										<tr ng-show="pm_status.visible">
-						        			<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
-						        			<td class="detailsTableCX"></td>
-						        			<td class="detailsTableDX">
-						        				<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
-												<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
-											</td>	
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'pm_area_name' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.area.name }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(pmDetails.area.color)}"></span></td>
-										</tr>
-						        	</table>
-								</div>
-								<div ng-show="isPSDetShow()">
-									<table  width="100%">
-										<tr>
-											<td class="detailsTableSX">{{ 'ps_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ psDetails.data.name }}</td>
-										</tr>
-								        <tr ng-show="ps_address.visible">
-								        	<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
-								        </tr>
-										<tr ng-show="ps_fee.visible">
-								        	<td class="detailsTableSX">{{ 'ps_fee_details' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ psDetails.data.fee }}</td>
-								        </tr>
-								        <tr ng-show="ps_timeSlot.visible">
-								        	<td class="detailsTableSX">{{ 'ps_time' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ psDetails.data.timeSlot }}</td>
-								        </tr>
-	<!-- 							    	<tr ng-show="ps_phoneNumber.visible"> -->
-	<!-- 							    		<td><strong>{{ 'ps_phone' | i18n }}:</strong></td> -->
-	<!-- 							    		<td>&nbsp;{{ psDetails.data.phoneNumber }}</td> -->
-	<!-- 							    	</tr> -->
-	<!-- 							    	<tr ng-show="ps_management.visible"> -->
-	<!-- 							    		<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td> -->
-	<!-- 							    		<td>&nbsp;{{ psDetails.data.managementMode }}</td> -->
-	<!-- 							    	</tr> -->
-	<!-- 							    	<tr ng-show="ps_payment.visible"> -->
-	<!-- 							    		<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td> -->
-	<!-- 							    		<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td> -->
-	<!-- 							    	</tr> -->
-										<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'ps_slots' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr ng-show="ps_slotNumber.visible">
-											<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
-										</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ psDetails.data.slotOccupied }}</td>
-										</tr>
-	<!-- 								<tr ng-show="ps_handicappedSlot.visible">	 -->
-	<!-- 									<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td> -->
-	<!-- 									<td>{{ psDetails.data.handicappedSlotNumber }}</td> -->
-	<!-- 								</tr> -->
-	<!-- 								<tr ng-show="ps_unusuableSlot.visible">	 -->
-	<!-- 									<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td> -->
-	<!-- 									<td>{{ psDetails.data.unusuableSlotNumber }}</td> -->
-	<!-- 								</tr> -->
-								    </table>
-								</div>
-								<div ng-show="isStreetDetShow()">
-									<table width="100%">
-										<tr>
-								        	<td class="detailsTableSX">{{ 'street_name' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
-								        </tr>
-										<tr ng-show="s_pms.visible">	
-											<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">
-												<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code }};</span>
-	<!-- 											<table width="100%"> -->
-	<!-- 												<tr ng-repeat="p in sDetails.pms track by p.code"> -->
-	<!-- 													<td>{{ p.code }}</td>width="30%" -->
-	<!-- 													<td width="70%">{{ p.note }}</td> -->
-	<!-- 												</tr> -->
-	<!-- 											</table> -->
-											</td>
-										</tr>
-										<tr ng-show="s_zones.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr ng-show="s_zones.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'street_zone' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr ng-show="s_zones.visible">
-											<td colspan="3">
-												<table width="100%" ng-repeat="z in sDetails.zones track by z.id">
-													<tr>
-														<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
-														<td class="detailsTableCX"></td>
-														<td class="detailsTableDX">{{ z.name }}</td>
-													</tr>
-													<tr>	
-														<td class="detailsTableSX">{{ 'zone_submacro' | i18n }}:</td>
-														<td class="detailsTableCX"></td>
-														<td class="detailsTableDX">{{ z.submacro }}</td>
-													</tr>
-													<tr>	
-														<td class="detailsTableSX">{{ 'zone_color' | i18n }}:</td>
-														<td class="detailsTableCX"></td>
-														<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
-													</tr>
-												</table>
-											<td>			
-										</tr>
-										<tr ng-show="s_areaId.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr ng-show="s_areaId.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'street_area_name' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr ng-show="s_areaId.visible">
-											<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ sDetails.area.name }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ sDetails.area.fee }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_time' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ sDetails.area.timeSlot }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(sDetails.area.color)}"></span></td>
-										</tr>
-								       	<tr>
-								       		<td class="detailsTableSX">{{ 'street_average_occupation' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX"><span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
-												<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.occupancyRate }}</span></td>
-<!-- 								       		<td colspan="2"> -->
-<!-- 								       			<strong>{{ 'street_slots' | i18n }}:</strong> -->
-<!-- 										       		<div class="panel panel-default"> -->
-<!-- 														<div class="panel-body"> -->
-<!-- 														<table width="100%"> -->
-<!-- 											       			<tr ng-show="s_slotNum.visible"> -->
-<!-- 													        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td> -->
-<!-- 													        	<td>&nbsp;{{ sDetails.data.slotNumber }}</td> -->
-<!-- 													        </tr> -->
-<!-- 													        <tr> -->
-<!-- 													        	<td><strong>{{ 'street_occupiedslot' | i18n }}:</strong></td> -->
-<!-- 													        	<td>&nbsp;{{ sDetails.data.slotOccupied }}</td> -->
-<!-- 													        </tr> -->
-	<!-- 														<tr ng-show="s_handicappedSlot.visible"> -->
-	<!-- 												        	<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td> -->
-	<!-- 												        	<td>&nbsp;{{ sDetails.data.handicappedSlotNumber }}</td> -->
-	<!-- 												        </tr> -->
-	<!-- 												        <tr ng-show="s_timedSlot.visible"> -->
-	<!-- 												        	<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td> -->
-	<!-- 												        	<td>&nbsp;{{ sDetails.data.timedParkSlotNumber }}</td> -->
-	<!-- 												        </tr> -->
-	<!-- 												        <tr ng-show="s_freeSlot.visible"> -->
-	<!-- 												        	<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td> -->
-	<!-- 												        	<td>&nbsp;{{ sDetails.data.freeParkSlotNumber }}</td> -->
-	<!-- 												        </tr> -->
-	<!-- 												        <tr ng-show="s_unusuableSlot.visible"> -->
-	<!-- 												        	<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td> -->
-	<!-- 												        	<td>&nbsp;{{ sDetails.data.unusuableSlotNumber }}</td> -->
-	<!-- 												        </tr> -->
-<!-- 												        </table> -->
-<!-- 											        </div> -->
-<!-- 										        </div> -->
-<!-- 								       		</td> -->
-								       	</tr>
-								    </table>
-								</div>
-								<div ng-show="isZoneDetShow()">
-									<table width="100%">
-										<tr>
-								    		<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
-								    	</tr>
-								    	<tr ng-show="zone_type.visible">
-								    		<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ zDetails.data.type }}</td>
-								    	</tr>
-										<tr ng-show="zone_note.visible">
-								        	<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ zDetails.data.note }}</td>
-								        </tr>
-								        <tr ng-show="zone_color.visible">	
-											<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(zDetails.data.color)}"></span></td>
-										</tr>
-								    </table>
-								</div>
-								<div ng-show="isAreaDetShow()">
-									<table width="100%">
-								        <tr>	
-											<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.name }}</td>
-										</tr>
-										<tr ng-show="a_fee.visible">	
-											<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
-										</tr>
-										<tr ng-show="a_timeSlot.visible">	
-											<td class="detailsTableSX">{{ 'area_time' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.timeSlot }}</td>
-										</tr>
-										<tr ng-show="a_smsCode.visible">	
-											<td class="detailsTableSX">{{ 'area_sms' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.smsCode }}</td>
-										</tr>
-										<tr ng-show="a_color.visible">	
-											<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(aDetails.data.color)}"></span></td>
-										</tr>
-										<tr ng-show="a_note.visible">	
-											<td class="detailsTableSX">{{ 'area_note' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.note }}</td>
-										</tr>
-								    </table>
-								</div>        
-<!-- 							</div> -->
-<!-- 						</div> -->
-					</div>
-					<div ng-show="occupancyOpened">
-<!-- 						<div class="panel panel-danger" > -->
-<!-- 							<div class="panel-heading"> -->
-							<div class="alert alert-danger">
-								<table width="100%">
-									<tr>
-										<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
-										<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></td>
-									</tr>
-								</table>
-							</div>	
-<!-- 								<h5 class="panel-title">{{ 'element_occupancy' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></h5> -->
-<!-- 							</div> -->
-<!-- 							<div class="panel-body dashboard-panel"> -->
-								<div ng-show="isPMDetShow()">
-									<table width="100%">
-										<tr>
-											<td class="detailsTableSX">{{ 'pm_code' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.data.code }}</td>
-										</tr>
-									    <tr ng-show="pm_note.visible">
-							      			<td class="detailsTableSX">{{ 'pm_note' | i18n }}:</td>
-							      			<td class="detailsTableCX"></td>
-						        			<td class="detailsTableDX">&nbsp;{{ pmDetails.data.note }}</td>
-						        		</tr>
-										<tr ng-show="pm_status.visible">
-						        			<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
-						        			<td class="detailsTableCX"></td>
-						        			<td class="detailsTableDX">
-						        				<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
-												<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
-											</td>	
-						        		</tr>
-						        		<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'pm_area_name' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.area.name }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(pmDetails.area.color)}"></span></td>
-										</tr>
-						        	</table>
-								</div>
-								<div ng-show="isPSDetShow()">
-									<table width="100%">
-										<tr>
-											<td class="detailsTableSX">{{ 'ps_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ psDetails.data.name }}</td>
-										</tr>
-								        <tr ng-show="ps_address.visible">
-								        	<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
-								        </tr>
-										<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'ps_slots' | i18n }}
-						        			</td>
-						        		</tr>
-											<tr ng-show="ps_slotNumber.visible">
-												<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
-												<td class="detailsTableCX"></td>
-												<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
-											</tr>
-											<tr>
-												<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
-												<td class="detailsTableCX"></td>
-												<td class="detailsTableDX">
-													&nbsp;
-													<span ng-show="isCorrectNumber(psDetails.data.slotOccupied)">{{ psDetails.data.slotOccupied }}</span>
-								        			<span ng-show="!isCorrectNumber(psDetails.data.slotOccupied)">n.p.</span>
-												</td>
-											</tr>
-										</table>
-								    <div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.data.slotOccupied)"/>
-								</div>
-								<div ng-show="isStreetDetShow()">
-									<table width="100%">
-										<tr>
-								        	<td class="detailsTableSX">{{ 'street_name' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
-								        </tr>
-<!-- 										<tr ng-show="s_pms.visible">	 -->
-<!-- 											<td> -->
-<!-- 												<strong>{{ 'street_pm' | i18n }}:</strong> -->
-<!-- 											</td> -->
-<!-- 											<td> -->
-<!-- 												<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code }};</span> -->
-<!-- 											</td> -->
-<!-- 										</tr> -->
-<!-- 										<tr ng-show="s_zones.visible">	 -->
-<!-- 											<td colspan="2"> -->
-<!-- 									       		<strong>{{ 'street_zone' | i18n }}:</strong> -->
-<!-- 									       		<div class="panel panel-default"> -->
-<!-- 													<div class="panel-body"> -->
-<!-- 														<table width="100%" ng-repeat="z in sDetails.zones track by z.id"> -->
-<!-- 															<tr> -->
-<!-- 																<td width="45%"><strong>{{ 'zone_name' | i18n }}:</strong></td> -->
-<!-- 																<td width="55%">{{ z.name }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'zone_submacro' | i18n }}:</strong></td> -->
-<!-- 																<td>{{ z.submacro }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'zone_color' | i18n }}:</strong></td> -->
-<!-- 																<td><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td> -->
-<!-- 															</tr> -->
-<!-- 														</table> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 											</td> -->
-<!-- 										</tr> -->
-<!-- 										<tr ng-show="s_areaId.visible"> -->
-<!-- 									      	<td colspan="2"> -->
-<!-- 									       		<strong>{{ 'street_area_name' | i18n }}:</strong> -->
-<!-- 									       		<div class="panel panel-default"> -->
-<!-- 													<div class="panel-body"> -->
-<!-- 														<table width="100%"> -->
-<!-- 															<tr> -->
-<!-- 																<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td> -->
-<!-- 																<td width="55%">{{ sDetails.area.name }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'area_rate' | i18n }}:</strong></td> -->
-<!-- 																<td>{{ sDetails.area.fee }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'area_time' | i18n }}:</strong></td> -->
-<!-- 																<td>{{ sDetails.area.timeSlot }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'area_color' | i18n }}</strong></td> -->
-<!-- 																<td><span class="colorBox" ng-style="{'background-color': correctColor(sDetails.area.color)}"></span></td> -->
-<!-- 															</tr> -->
-<!-- 														</table> -->
-<!-- 													</div> -->
-<!-- 												</div>	 -->
-<!-- 											</td> -->
-<!-- 								       	</tr> -->
-										<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'street_slots' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr ng-show="s_slotNum.visible">
-											<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.slotNumber }}</td>
-										</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'street_occupiedslot' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;
-												<span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
-												<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.slotOccupied }}</span>
-											</td>
-										</tr>
-<!-- 									<tr ng-show="s_handicappedSlot.visible"> -->
-<!-- 										<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td> -->
-<!-- 										<td>&nbsp;{{ sDetails.data.handicappedSlotNumber }}</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr ng-show="s_timedSlot.visible"> -->
-<!-- 										<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td> -->
-<!-- 										<td>&nbsp;{{ sDetails.data.timedParkSlotNumber }}</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr ng-show="s_freeSlot.visible"> -->
-<!-- 										<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td> -->
-<!-- 										<td>&nbsp;{{ sDetails.data.freeParkSlotNumber }}</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr ng-show="s_unusuableSlot.visible"> -->
-<!-- 										<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td> -->
-<!-- 										<td>&nbsp;{{ sDetails.data.unusuableSlotNumber }}</td> -->
-<!-- 									</tr> -->
-										<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<div google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
-						        			</td>
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'street_free_slots' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'street_freepark_slot_signed_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;
-												<span ng-show="sDetails.data.freeParkSlotSignFree > 0">{{ sDetails.data.freeParkSlotSignFree }}</span>
-												<span ng-show="sDetails.data.freeParkSlotSignFree == 0">{{ sDetails.data.freeParkSlotFree }}</span>
-											</td>
-										</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'street_paid_slot_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.paidSlotFree }}</td>
-										</tr>
-										<tr ng-show="s_timedSlot.visible">
-											<td class="detailsTableSX">{{ 'street_timedpark_slot_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.timedParkSlotFree }}</td>
-										</tr>
-										<tr ng-show="s_handicappedSlot.visible">
-											<td class="detailsTableSX">{{ 'street_handicapped_slot_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.handicappedSlotFree }}</td>
-										</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'street_reserved_slot_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.reservedSlotFree }}</td>
-										</tr>
-<!-- 										        <div google-chart chart="chartStreetFreeParkAvailability" style="{{chart.cssStyle}}"/> -->
-								       	<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'street_occupied_slots' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'street_freepark_slot_signed_occupied_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;
-												<span ng-show="sDetails.data.freeParkSlotSignOccupied > 0">{{ sDetails.data.freeParkSlotSignOccupied }}</span>
-												<span ng-show="sDetails.data.freeParkSlotSignOccupied == 0">{{ sDetails.data.freeParkSlotOccupied }}</span>
-											</td>
-										</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'street_paid_slot_occupied_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.paidSlotOccupied }}</td>
-										</tr>
-										<tr ng-show="s_timedSlot.visible">
-											<td class="detailsTableSX">{{ 'street_timedpark_slot_occupied_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.timedParkSlotOccupied }}</td>
-										</tr>
-										<tr ng-show="s_handicappedSlot.visible">
-											<td class="detailsTableSX">{{ 'street_handicapped_slot_occupied_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.handicappedSlotOccupied }}</td>
-										</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'street_reserved_slot_occupied_db' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">&nbsp;{{ sDetails.data.reservedSlotOccupied }}</td>
-										</tr>
-<!-- 										        <div google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/> -->
-								    </table>
-								</div>
-								<div ng-show="isZoneDetShow()">
-									<table width="100%">
-										<tr>
-								    		<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
-								    	</tr>
-								    	<tr>
-								    		<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotNumber }}</td>
-								    	</tr>
-										<tr>
-								        	<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">
-								        		&nbsp;<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
-								        		&nbsp;<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
-								        	</td>
-								        </tr>
-								    </table>
-								    <div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" /> 
-								</div>
-								<div ng-show="isAreaDetShow()">
-									<table width="100%">
-								        <tr>	
-											<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.name }}</td>
-										</tr>
-										<tr ng-show="a_fee.visible">	
-											<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
-										</tr>
-										<tr>
-								    		<td class="detailsTableSX">{{ 'area_total_slots' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ aDetails.data.slotNumber }}</td>
-								    	</tr>
-										<tr>
-								        	<td class="detailsTableSX">{{ 'area_occupied_slots' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">
-								        		&nbsp;<span ng-show="isCorrectNumber(aDetails.data.slotOccupied)">{{ aDetails.data.slotOccupied }}</span>
-								        		&nbsp;<span ng-show="!isCorrectNumber(aDetails.data.slotOccupied)">n.p.</span>
-								        	</td>
-								        </tr>
-								    </table>
-								    <div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" /> 
-								</div>        
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 					</div>	 -->
-				</div>
-				<div ng-show="profitOpened">
-<!-- 						<div class="panel panel-danger" > -->
-<!-- 							<div class="panel-heading"> -->
-							<div class="alert alert-danger">
-								<table width="100%">
-									<tr>
-										<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
-										<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></td>
-									</tr>
-								</table>
-							</div>	
-<!-- 								<h5 class="panel-title">{{ 'element_occupancy' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)"><i class="glyphicon glyphicon-remove"></i></button></h5> -->
-<!-- 							</div> -->
-<!-- 							<div class="panel-body dashboard-panel"> -->
-								<div ng-show="isPMDetShow()">
-									<table width="100%">
-										<tr>
-											<td class="detailsTableSX">{{ 'pm_code' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.data.code }}</td>
-										</tr>
-									    <tr ng-show="pm_note.visible">
-							      			<td class="detailsTableSX">{{ 'pm_note' | i18n }}:</td>
-							      			<td class="detailsTableCX"></td>
-						        			<td class="detailsTableDX">&nbsp;{{ pmDetails.data.note }}</td>
-						        		</tr>
-										<tr ng-show="pm_status.visible">
-						        			<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
-						        			<td class="detailsTableCX"></td>
-						        			<td class="detailsTableDX">
-						        				<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
-												<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
-											</td>	
-						        		</tr>
-						        		<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'pm_area_name' | i18n }}
-						        			</td>
-						        		</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.area.name }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(pmDetails.area.color)}"></span></td>
-										</tr>
-										<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr>	
-											<td class="detailsTableSX">{{ 'pm_profit' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">
-												<span ng-if="pmDetails.data.profit != -1">{{ correctEuroCent(pmDetails.data.profit) }}{{ 'euro' | i18n }}</span>
-												<span ng-if="pmDetails.data.profit == -1">n.p.</span>
-											</td>
-										</tr>
-										<tr>	
-											<td class="detailsTableSX">{{ 'pm_tickets' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">
-												<span ng-if="pmDetails.data.tickets != -1">{{ pmDetails.data.tickets }}</span>
-												<span ng-if="pmDetails.data.tickets == -1">n.p.</span>
-											</td>
-										</tr>
-						        	</table>
-								</div>
-								<div ng-show="isPSDetShow()">
-									<table width="100%">
-										<tr>
-											<td class="detailsTableSX">{{ 'ps_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ psDetails.data.name }}</td>
-										</tr>
-								        <tr ng-show="ps_address.visible">
-								        	<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
-								        </tr>
-								        <tr ng-show="ps_slotNumber.visible">
-											<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
-										</tr>
-										<tr ng-show="pm_rateArea.visible">
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'ps_profit' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">
-												<span ng-if="psDetails.data.profit != -1">{{ correctEuroCent(psDetails.data.profit) }}{{ 'euro' | i18n }}</span>
-												<span ng-if="psDetails.data.profit == -1">n.p.</span>
-											</td>
-										</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'ps_tickets' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">
-												<span ng-if="psDetails.data.tickets > -1">{{ psDetails.data.tickets }}</span>
-												<span ng-if="psDetails.data.tickets <= -1">n.p.</span>
-											</td>
-										</tr>	
-									</table>
-								</div>
-								<div ng-show="isStreetDetShow()">
-									<table width="100%">
-										<tr>
-								        	<td class="detailsTableSX">{{ 'street_name' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">{{ sDetails.data.streetReference }}</td>
-								        </tr>
-										<tr ng-show="s_pms.visible">	
-											<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">
-												<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code }};</span>
-											</td>
-										</tr>
-<!-- 										<tr ng-show="s_zones.visible">	 -->
-<!-- 											<td colspan="2"> -->
-<!-- 									       		<strong>{{ 'street_zone' | i18n }}:</strong> -->
-<!-- 									       		<div class="panel panel-default"> -->
-<!-- 													<div class="panel-body"> -->
-<!-- 														<table width="100%" ng-repeat="z in sDetails.zones track by z.id"> -->
-<!-- 															<tr> -->
-<!-- 																<td width="45%"><strong>{{ 'zone_name' | i18n }}:</strong></td> -->
-<!-- 																<td width="55%">{{ z.name }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'zone_submacro' | i18n }}:</strong></td> -->
-<!-- 																<td>{{ z.submacro }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'zone_color' | i18n }}:</strong></td> -->
-<!-- 																<td><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td> -->
-<!-- 															</tr> -->
-<!-- 														</table> -->
-<!-- 													</div> -->
-<!-- 												</div> -->
-<!-- 											</td> -->
-<!-- 										</tr> -->
-<!-- 										<tr ng-show="s_areaId.visible"> -->
-<!-- 									      	<td colspan="2"> -->
-<!-- 									       		<strong>{{ 'street_area_name' | i18n }}:</strong> -->
-<!-- 									       		<div class="panel panel-default"> -->
-<!-- 													<div class="panel-body"> -->
-<!-- 														<table width="100%"> -->
-<!-- 															<tr> -->
-<!-- 																<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td> -->
-<!-- 																<td width="55%">{{ sDetails.area.name }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'area_rate' | i18n }}:</strong></td> -->
-<!-- 																<td>{{ sDetails.area.fee }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'area_time' | i18n }}:</strong></td> -->
-<!-- 																<td>{{ sDetails.area.timeSlot }}</td> -->
-<!-- 															</tr> -->
-<!-- 															<tr>	 -->
-<!-- 																<td><strong>{{ 'area_color' | i18n }}</strong></td> -->
-<!-- 																<td><span class="colorBox" ng-style="{'background-color': correctColor(sDetails.area.color)}"></span></td> -->
-<!-- 															</tr> -->
-<!-- 														</table> -->
-<!-- 													</div> -->
-<!-- 												</div>	 -->
-<!-- 											</td> -->
-<!-- 								       	</tr> -->
-										<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'street_slots' | i18n }}
-						        			</td>
-						        		</tr>
-						        		<tr ng-show="s_timedSlot.visible">
-						        			<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
-										</tr>
-<!-- 									<tr ng-show="s_handicappedSlot.visible"> -->
-<!-- 										<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td> -->
-<!-- 										<td>&nbsp;{{ sDetails.data.handicappedSlotNumber }}</td> -->
-<!-- 									</tr> -->
-										<tr ng-show="s_timedSlot.visible">
-											<td class="detailsTableSX">{{ 'street_paid_slot' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">{{ sDetails.data.paidSlotNumber }}</td>
-										</tr>
-<!-- 									<tr ng-show="s_freeSlot.visible"> -->
-<!-- 										<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td> -->
-<!-- 										<td>&nbsp;{{ sDetails.data.freeParkSlotNumber }}</td> -->
-<!-- 									</tr> -->
-<!-- 									<tr ng-show="s_unusuableSlot.visible"> -->
-<!-- 										<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td> -->
-<!-- 										<td>&nbsp;{{ sDetails.data.unusuableSlotNumber }}</td> -->
-<!-- 									</tr> -->
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-						        		<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				{{ 'street_profits' | i18n }}
-						        			</td>
-						        		</tr>
-						        		<tr>
-											<td class="detailsTableSX">{{ 'street_profit' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">
-												<span ng-if="sDetails.data.profit != -1">{{ correctEuroCent(sDetails.data.profit) }}{{ 'euro' | i18n }}</span>
-												<span ng-if="sDetails.data.profit == -1">n.p.</span>
-											</td>
-										</tr>
-										<tr>
-											<td class="detailsTableSX">{{ 'street_tickets' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">
-												<span ng-if="sDetails.data.tickets > -1">{{ sDetails.data.tickets }}</span>
-												<span ng-if="sDetails.data.tickets <= -1">n.p.</span>
-											</td>
-										</tr>
-										
-								    </table>
-								</div>
-								<div ng-show="isZoneDetShow()">
-									<table width="100%">
-										<tr>
-								    		<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
-								    	</tr>
-								    	<tr>
-								    		<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotNumber }}</td>
-								    	</tr>
-										<tr>
-								        	<td class="detailsTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotPaid }}</td>
-								        </tr>
-								        <tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-								        <tr>
-								        	<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">
-								        		<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) }}{{ 'euro' | i18n }}</span>
-												<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
-								        	</td>
-								        </tr>
-								         <tr>
-								        	<td class="detailsTableSX">{{ 'zone_tickets' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">
-								        		<span ng-if="zDetails.data.tickets > 0">&nbsp;{{ zDetails.data.tickets }}</span>
-												<span ng-if="zDetails.data.tickets <= 0">&nbsp;n.p.</span>
-								        	</td>
-								        </tr>
-								    </table>
-<!-- 								    <div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />  -->
-								</div>
-								<div ng-show="isAreaDetShow()">
-									<table width="100%">
-								        <tr>	
-											<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.name }}</td>
-										</tr>
-										<tr ng-show="a_fee.visible">	
-											<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
-											<td class="detailsTableCX"></td>
-											<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
-										</tr>
-										<tr>
-								    		<td class="detailsTableSX">{{ 'area_total_slots' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ aDetails.data.slotNumber }}</td>
-								    	</tr>
-								    	<tr>
-								    		<td class="detailsTableSX">{{ 'area_total_pms' | i18n }}:</td>
-								    		<td class="detailsTableCX"></td>
-								    		<td class="detailsTableDX">&nbsp;{{ aDetails.data.pmsInArea }}</td>
-								    	</tr>
-										<tr>
-						        			<td colspan="3" class="detailsTableColSpan">
-						        				<hr/>
-						        			</td>
-						        		</tr>
-								        <tr>
-								        	<td class="detailsTableSX">{{ 'area_profit' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">
-								        		<span ng-if="aDetails.data.profit != -1">&nbsp;{{ correctEuroCent(aDetails.data.profit) }}{{ 'euro' | i18n }}</span>
-												<span ng-if="aDetails.data.profit == -1">&nbsp;n.p.</span>
-								        	</td>
-								        </tr>
-								        <tr>
-								        	<td class="detailsTableSX">{{ 'area_tickets' | i18n }}:</td>
-								        	<td class="detailsTableCX"></td>
-								        	<td class="detailsTableDX">
-								        		<span ng-if="aDetails.data.tickets > 0">&nbsp;{{ aDetails.data.tickets }}</span>
-												<span ng-if="aDetails.data.tickets <= 0">&nbsp;n.p.</span>
-								        	</td>
-								        </tr>
-								    </table>
-								    <!-- <div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />  -->
-								</div>        
-<!-- 							</div> -->
-<!-- 						</div> -->
-<!-- 					</div>	 -->
-				</div>
-			
+	<div class="col-md-2" ng-show="detailsOpened || occupancyOpened || profitOpened || timeCostOpened">
+		<div ng-show="detailsOpened">
+			<div class="alert alert-danger">
+				<table width="100%">
+					<tr>
+						<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
+						<td align="right">
+							<button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</td>
+					</tr>
+				</table>
 			</div>
-<!-- 		</form> -->
-<!-- 	</div> -->
+			<div ng-show="isPMDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'pm_code' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ pmDetails.data.code }}</td>
+					</tr>
+				</table>
+				<table width="100%">	
+					<tr ng-show="pm_note.visible">
+						<td class="detailsTableSX">{{ 'pm_note' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ pmDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="pm_status.visible">
+						<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
+							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'pm_area_name' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ pmDetails.area.name }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span class="colorBox" ng-style="{'background-color': correctColor(pmDetails.area.color)}"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isPSDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'ps_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
+					</tr>
+				</table>
+				<table width="100%">	
+					<tr ng-show="ps_address.visible">
+						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
+					</tr>
+					<tr ng-show="ps_fee.visible">
+						<td class="detailsTableSX">{{ 'ps_fee_details' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ psDetails.data.fee }}</td>
+					</tr>
+					<tr ng-show="ps_timeSlot.visible">
+						<td class="detailsTableSX">{{ 'ps_time' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ psDetails.data.timeSlot }}</td>
+					</tr>
+					<!-- 							    	<tr ng-show="ps_phoneNumber.visible"> -->
+					<!-- 							    		<td><strong>{{ 'ps_phone' | i18n }}:</strong></td> -->
+					<!-- 							    		<td>&nbsp;{{ psDetails.data.phoneNumber }}</td> -->
+					<!-- 							    	</tr> -->
+					<!-- 							    	<tr ng-show="ps_management.visible"> -->
+					<!-- 							    		<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td> -->
+					<!-- 							    		<td>&nbsp;{{ psDetails.data.managementMode }}</td> -->
+					<!-- 							    	</tr> -->
+					<!-- 							    	<tr ng-show="ps_payment.visible"> -->
+					<!-- 							    		<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td> -->
+					<!-- 							    		<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td> -->
+					<!-- 							    	</tr> -->
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'ps_slots' | i18n }}</td>
+					</tr>
+					<tr ng-show="ps_slotNumber.visible">
+						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ psDetails.data.slotOccupied }}</td>
+					</tr>
+					<!-- 								<tr ng-show="ps_handicappedSlot.visible">	 -->
+					<!-- 									<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td> -->
+					<!-- 									<td>{{ psDetails.data.handicappedSlotNumber }}</td> -->
+					<!-- 								</tr> -->
+					<!-- 								<tr ng-show="ps_unusuableSlot.visible">	 -->
+					<!-- 									<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td> -->
+					<!-- 									<td>{{ psDetails.data.unusuableSlotNumber }}</td> -->
+					<!-- 								</tr> -->
+				</table>
+			</div>
+			<div ng-show="isStreetDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'street_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="s_pms.visible">
+						<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code }};</span>
+						</td>
+					</tr>
+					<tr ng-show="s_zones.visible">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="s_zones.visible">
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_zone' | i18n }}</td>
+					</tr>
+					<tr ng-show="s_zones.visible">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in sDetails.zones track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_submacro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.submacro }}</td>
+								</tr>
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_color' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">
+										<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span>
+									</td>
+								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="s_areaId.visible">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="s_areaId.visible">
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_area_name' | i18n }}</td>
+					</tr>
+					<tr ng-show="s_areaId.visible">
+						<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.area.name }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.area.fee }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_time' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.area.timeSlot }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span class="colorBox" ng-style="{'background-color': correctColor(sDetails.area.color)}"></span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_average_occupation' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
+							<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.occupancyRate }}</span>
+						</td>
+						<!-- 								       		<td colspan="2"> -->
+						<!-- 								       			<strong>{{ 'street_slots' | i18n }}:</strong> -->
+						<!-- 										       		<div class="panel panel-default"> -->
+						<!-- 														<div class="panel-body"> -->
+						<!-- 														<table width="100%"> -->
+						<!-- 											       			<tr ng-show="s_slotNum.visible"> -->
+						<!-- 													        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td> -->
+						<!-- 													        	<td>&nbsp;{{ sDetails.data.slotNumber }}</td> -->
+						<!-- 													        </tr> -->
+						<!-- 													        <tr> -->
+						<!-- 													        	<td><strong>{{ 'street_occupiedslot' | i18n }}:</strong></td> -->
+						<!-- 													        	<td>&nbsp;{{ sDetails.data.slotOccupied }}</td> -->
+						<!-- 													        </tr> -->
+						<!-- 														<tr ng-show="s_handicappedSlot.visible"> -->
+						<!-- 												        	<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td> -->
+						<!-- 												        	<td>&nbsp;{{ sDetails.data.handicappedSlotNumber }}</td> -->
+						<!-- 												        </tr> -->
+						<!-- 												        <tr ng-show="s_timedSlot.visible"> -->
+						<!-- 												        	<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td> -->
+						<!-- 												        	<td>&nbsp;{{ sDetails.data.timedParkSlotNumber }}</td> -->
+						<!-- 												        </tr> -->
+						<!-- 												        <tr ng-show="s_freeSlot.visible"> -->
+						<!-- 												        	<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td> -->
+						<!-- 												        	<td>&nbsp;{{ sDetails.data.freeParkSlotNumber }}</td> -->
+						<!-- 												        </tr> -->
+						<!-- 												        <tr ng-show="s_unusuableSlot.visible"> -->
+						<!-- 												        	<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td> -->
+						<!-- 												        	<td>&nbsp;{{ sDetails.data.unusuableSlotNumber }}</td> -->
+						<!-- 												        </tr> -->
+						<!-- 												        </table> -->
+						<!-- 											        </div> -->
+						<!-- 										        </div> -->
+						<!-- 								       		</td> -->
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+					</tr>
+				</table>	
+				<table width="100%">
+					<tr ng-show="zone_type.visible">
+						<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.type }}</td>
+					</tr>
+					<tr ng-show="zone_note.visible">
+						<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="zone_color.visible">
+						<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.data.color)}"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isAreaDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'area_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ aDetails.data.name }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="a_fee.visible">
+						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
+					</tr>
+					<tr ng-show="a_timeSlot.visible">
+						<td class="detailsTableSX">{{ 'area_time' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.timeSlot }}</td>
+					</tr>
+					<tr ng-show="a_smsCode.visible">
+						<td class="detailsTableSX">{{ 'area_sms' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.smsCode }}</td>
+					</tr>
+					<tr ng-show="a_color.visible">
+						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(aDetails.data.color)}"></span></td>
+					</tr>
+					<tr ng-show="a_note.visible">
+						<td class="detailsTableSX">{{ 'area_note' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.note }}</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div ng-show="occupancyOpened">
+			<div class="alert alert-danger">
+				<table width="100%">
+					<tr>
+						<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
+						<td align="right">
+							<button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button></td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isPMDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'pm_code' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ pmDetails.data.code }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="pm_note.visible">
+						<td class="detailsTableSX">{{ 'pm_note' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ pmDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="pm_status.visible">
+						<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
+							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
+						</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">{{ 'pm_area_name' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ pmDetails.area.name }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(pmDetails.area.color)}"></span></td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isPSDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'ps_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
+					</tr>
+				</table>
+				<table width="100%">	
+					<tr ng-show="ps_address.visible">
+						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">{{ 'ps_slots' | i18n }}</td>
+					</tr>
+					<tr ng-show="ps_slotNumber.visible">
+						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(psDetails.data.slotOccupied)">{{ psDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(psDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.slotOccupied)" />
+			</div>
+			<div ng-show="isStreetDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'street_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_slots' | i18n }}</td>
+					</tr>
+					<tr ng-show="s_slotNum.visible">
+						<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_occupiedslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX"> 
+							<span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
+							<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.slotOccupied }}</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<div google-chart chart="chartStreetOccupancy" style="" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_free_slots' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_freepark_slot_signed_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+						<span ng-show="sDetails.data.freeParkSlotSignFree > 0">{{ sDetails.data.freeParkSlotSignFree }}</span>
+						<span ng-show="sDetails.data.freeParkSlotSignFree == 0">{{ sDetails.data.freeParkSlotFree }}</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_paid_slot_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.paidSlotFree }}</td>
+					</tr>
+					<tr ng-show="s_timedSlot.visible">
+						<td class="detailsTableSX">{{ 'street_timedpark_slot_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{	sDetails.data.timedParkSlotFree }}</td>
+					</tr>
+					<tr ng-show="s_handicappedSlot.visible">
+						<td class="detailsTableSX">{{ 'street_handicapped_slot_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.handicappedSlotFree }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_reserved_slot_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.reservedSlotFree }}</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_occupied_slots' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_freepark_slot_signed_occupied_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX"> 
+							<span ng-show="sDetails.data.freeParkSlotSignOccupied > 0">{{ sDetails.data.freeParkSlotSignOccupied }}</span>
+							<span ng-show="sDetails.data.freeParkSlotSignOccupied == 0">{{ sDetails.data.freeParkSlotOccupied }}</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_paid_slot_occupied_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.paidSlotOccupied }}</td>
+					</tr>
+					<tr ng-show="s_timedSlot.visible">
+						<td class="detailsTableSX">{{ 'street_timedpark_slot_occupied_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.timedParkSlotOccupied }}</td>
+					</tr>
+					<tr ng-show="s_handicappedSlot.visible">
+						<td class="detailsTableSX">{{ 'street_handicapped_slot_occupied_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.handicappedSlotOccupied }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_reserved_slot_occupied_db' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.reservedSlotOccupied }}</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+			</div>
+			<div ng-show="isAreaDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'area_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ aDetails.data.name }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="a_fee.visible">
+						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(aDetails.data.slotOccupied)">{{ aDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(aDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div google-chart chart="chartAreaOccupancy" style="" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />
+			</div>
+		</div>
+		<div ng-show="profitOpened">
+			<div class="alert alert-danger">
+				<table width="100%">
+					<tr>
+						<td align="left"><h5 class="panel-title">{{	'element_details' | i18n }}</h5></td>
+						<td align="right">
+							<button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isPMDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'pm_code' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ pmDetails.data.code }}</td>
+					</tr>	
+					<tr ng-show="pm_note.visible">
+						<td class="detailsTitleTableSX">{{ 'pm_note' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ pmDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="pm_status.visible">
+						<td class="detailsTitleTableSX">{{ 'pm_status' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">
+							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
+							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
+						</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">{{ 'pm_area_name' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ pmDetails.area.name }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span class="colorBox" ng-style="{'background-color': correctColor(pmDetails.area.color)}"></span>
+						</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'pm_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="pmDetails.data.profit != -1">{{ correctEuroCent(pmDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="pmDetails.data.profit == -1">n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'pm_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="pmDetails.data.tickets != -1">{{	pmDetails.data.tickets }}</span>
+							<span ng-if="pmDetails.data.tickets == -1">n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isPSDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'ps_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="ps_address.visible">
+						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{	psDetails.data.streetReference }}</td>
+					</tr>
+					<tr ng-show="ps_slotNumber.visible">
+						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'ps_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="psDetails.data.profit != -1">{{ correctEuroCent(psDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="psDetails.data.profit == -1">n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'ps_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="psDetails.data.tickets > -1">{{ psDetails.data.tickets }}</span>
+							<span ng-if="psDetails.data.tickets <= -1">n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isStreetDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'street_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ sDetails.data.streetReference }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="s_pms.visible">
+						<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code	}};</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_slots' | i18n }}</td>
+					</tr>
+					<tr ng-show="s_timedSlot.visible">
+						<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
+					</tr>
+					<tr ng-show="s_timedSlot.visible">
+						<td class="detailsTableSX">{{ 'street_paid_slot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.paidSlotNumber }}</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_profits' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="sDetails.data.profit != -1">{{ correctEuroCent(sDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="sDetails.data.profit == -1">n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="sDetails.data.tickets > -1">{{ sDetails.data.tickets }}</span>
+							<span ng-if="sDetails.data.tickets <= -1">n.p.</span>
+						</td>
+					</tr>
+
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotPaid }}</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="zDetails.data.tickets > 0">&nbsp;{{ zDetails.data.tickets }}</span>
+							<span ng-if="zDetails.data.tickets <= 0">&nbsp;n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isAreaDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'area_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ aDetails.data.name }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="a_fee.visible">
+						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ aDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_total_pms' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ aDetails.data.pmsInArea }}</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="aDetails.data.profit != -1">&nbsp;{{ correctEuroCent(aDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="aDetails.data.profit == -1">&nbsp;n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="aDetails.data.tickets > 0">&nbsp;{{ aDetails.data.tickets }}</span>
+							<span ng-if="aDetails.data.tickets <= 0">&nbsp;n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+		</div>
+		<div ng-show="timeCostOpened">
+			<div class="alert alert-danger">
+				<table width="100%">
+					<tr>
+						<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
+						<td align="right">
+							<button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)">
+								<i class="glyphicon glyphicon-remove"></i>
+							</button></td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isPSDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'ps_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
+					</tr>
+				</table>
+				<table width="100%">	
+					<tr ng-show="ps_address.visible">
+						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="pm_rateArea.visible">
+						<td colspan="3" class="detailsTableColSpan">{{ 'ps_slots' | i18n }}</td>
+					</tr>
+					<tr ng-show="ps_slotNumber.visible">
+						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(psDetails.data.slotOccupied)">{{ psDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(psDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.slotOccupied)" />
+			</div>
+			<div ng-show="isStreetDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'street_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_slots' | i18n }}</td>
+					</tr>
+					<tr ng-show="s_slotNum.visible">
+						<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'street_occupiedslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX"> 
+							<span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
+							<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.slotOccupied }}</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<div google-chart chart="chartStreetOccupancy" style="" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'element_costTime' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'element_waiting_time' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="sDetails.data.extratime != null && sDetails.data.extratime.extratime_estimation_min == sDetails.data.extratime.extratime_estimation_max">{{ sDetails.data.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="sDetails.data.extratime != null && sDetails.data.extratime.extratime_estimation_min != sDetails.data.extratime.extratime_estimation_max">{{ sDetails.data.extratime.extratime_estimation_min }} - {{ sDetails.data.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="sDetails.data.extratime == null">n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+			</div>
+			<div ng-show="isAreaDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'area_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ aDetails.data.name }}</td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr ng-show="a_fee.visible">
+						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ aDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'area_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(aDetails.data.slotOccupied)">{{ aDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(aDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div google-chart chart="chartAreaOccupancy" style="" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />
+			</div>
+		</div>
+	</div>
 </div> 

@@ -113,20 +113,40 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	}
 	
 	td.detailsTableSX {
-		width: 40%;
+		width: 55%;
 		height: 20px;
 		font-weight: normal;
-		text-align: right;
+		text-align: left;
 		vertical-align: middle;
 	}
 	td.detailsTableCX {
-		width: 10%;
+		width: 5%;
 		height: 20px;
 		text-align: right;
 		vertical-align: middle;
 	}
 	td.detailsTableDX {
-		width: 50%;
+		width: 40%;
+		height: 20px;
+		font-weight: bold;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsTitleTableSX {
+		width: 35%;
+		height: 20px;
+		font-weight: normal;
+		text-align: left;
+		vertical-align: middle;
+	}
+	td.detailsTitleTableCX {
+		width: 5%;
+		height: 20px;
+		text-align: right;
+		vertical-align: middle;
+	}
+	td.detailsTitleTableDX {
+		width: 60%;
 		height: 20px;
 		font-weight: bold;
 		text-align: left;
