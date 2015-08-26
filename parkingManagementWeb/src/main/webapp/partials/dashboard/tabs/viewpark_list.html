@@ -121,7 +121,7 @@
 <!-- 		</div>	 -->
 <!-- 	</div> -->
 	<div > <!-- ng-init="initWsView(2)" -->
-	<div class="col-md-12" align="center" ng-show="!occupancyOpened && !profitOpened"><!--  ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" -->
+	<div class="col-md-12" align="center" ng-show="!occupancyOpened && !profitOpened  && !timeCostOpened"><!--  ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" -->
 		<div ng-show="showPMList && showProfitLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
@@ -300,6 +300,71 @@
 					</td>
 					<td width="33%" align="right">
 						<a href class="btn btn-success" target="_blank" ng-click="getStreetProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>	
+		</div>
+		<div ng-show="showSList && showTimeCostLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="streetWS.length != 0">
+						<th width="16%">{{ 'street_name' | i18n }}</th>
+						<th width="12%">{{ 'street_area_name' | i18n }}</th>
+						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
+						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
+						<th width="10%">{{ 'street_slots' | i18n }} Tot</th>
+						<th width="10%">{{ 'street_occupied_slots' | i18n }}</th>
+						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tr ng-show="showInfo_1==true">
+						<td colspan="10"><div class="alert alert-info">{{ 'info_1' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(1)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
+					</tr>
+					<tbody class="animate-repeat"
+							ng-repeat="street in streetWS | orderBy:['-occupancyRate', 'name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						<tr>
+							<td width="16%" align="left">{{street.streetReference}}</td>
+	<!--						<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td> {{area.color}} -->
+							<td width="12%" align="left">{{street.area_name}}</td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(street.extratime)}"></div></td><!-- {{area.color}} -->
+							<td width="10%" align="left">
+								<span ng-show="street.extratime != null && street.extratime.extratime_estimation_min != street.extratime.extratime_estimation_max">{{ street.extratime.extratime_estimation_min }} - {{ street.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="street.extratime != null && street.extratime.extratime_estimation_min == street.extratime.extratime_estimation_max">{{ street.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="street.occupancyRate == '-1'">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="street.occupancyRate != '-1'">{{ street.occupancyRate }}%</span>
+								<span ng-show="street.occupancyRate == '-1'">n.p.</span>
+							</td>
+							<td width="10%" align="left">{{street.slotNumber}}</td>
+							<td width="10%" align="left">{{street.slotOccupied}}</td>
+							<td width="5%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
+	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="areaWS.length == 0">
+						<td colspan="8"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-success"
+							ng-disabled="currentPage == 0"
+							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPage+1}}/{{numberOfPages(2, streetWS)}}
+						<button class="btn btn-success"
+							ng-disabled="currentPage >= filtered.length/maxStreets - 1"
+							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getStreetTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>	

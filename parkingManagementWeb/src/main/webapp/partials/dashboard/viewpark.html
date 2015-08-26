@@ -40,7 +40,7 @@
 						<td align="left"><label class="left-filter"><input id="pStruct" type="radio" ng-model="dashboard_space_list" value="parkingstructs" ng-click="showStructList(dashboard_topics_list)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
 					</tr>
 					<tr>
-						<td align="left"><label class="left-filter"><input id="pMeters" type="radio" ng-model="dashboard_space_list" value="parkingmeter" ng-click="showPMeterList(dashboard_topics_list)" ng-disabled="dashboard_topics_list=='occupation'">&nbsp;<span ng-if="dashboard_topics_list=='occupation'" style="color:gray">{{ 'view_parkingmeters' | i18n }}</span><span ng-if="dashboard_topics_list!='occupation'" style="color:#333">{{ 'view_parkingmeters' | i18n }}</span></label></td>
+						<td align="left"><label class="left-filter"><input id="pMeters" type="radio" ng-model="dashboard_space_list" value="parkingmeter" ng-click="showPMeterList(dashboard_topics_list)" ng-disabled="dashboard_topics_list=='occupation' || dashboard_topics_list=='timeCost'">&nbsp;<span ng-if="dashboard_topics_list=='occupation' || dashboard_topics_list=='timeCost'" style="color:gray">{{ 'view_parkingmeters' | i18n }}</span><span ng-if="dashboard_topics_list!='occupation' && dashboard_topics_list!='timeCost'" style="color:#333">{{ 'view_parkingmeters' | i18n }}</span></label></td>
 					</tr>
 				</table>
 				<p style="font-size:3px">&nbsp;</p>
@@ -165,7 +165,7 @@
 								<td align="left"><label class="left-filter"><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
 							</tr>
 							<tr>
-								<td align="left"><label class="left-filter"><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers(dashboard_topics)" ng-disabled="dashboard_topics=='occupation'">&nbsp;<span ng-if="dashboard_topics=='occupation'" style="color:gray">{{ 'view_parkingmeters' | i18n }}</span><span ng-if="dashboard_topics!='occupation'" style="color:#333">{{ 'view_parkingmeters' | i18n }}</span></label></td>
+								<td align="left"><label class="left-filter"><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers(dashboard_topics)" ng-disabled="dashboard_topics=='occupation' || dashboard_topics=='timeCost'">&nbsp;<span ng-if="dashboard_topics=='occupation' || dashboard_topics=='timeCost'" style="color:gray">{{ 'view_parkingmeters' | i18n }}</span><span ng-if="dashboard_topics!='occupation' && dashboard_topics!='timeCost'" style="color:#333">{{ 'view_parkingmeters' | i18n }}</span></label></td>
 							</tr>
 						</table>
 						<p style="font-size:3px">&nbsp;</p>

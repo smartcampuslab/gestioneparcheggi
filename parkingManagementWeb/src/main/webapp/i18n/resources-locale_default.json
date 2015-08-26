@@ -1508,7 +1508,7 @@
 	"description": "Label per tempo di attesa per parcheggio"
 }, { 
 	"key": "element_waiting_min", 
-	"value": "Min",
+	"value": "min",
 	"description": "Label per minuti di attesa per parcheggio"
 }, { 
     "key": "time_vis",
