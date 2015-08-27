@@ -27,7 +27,6 @@ import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
-import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.CSVManager;
@@ -38,12 +37,15 @@ import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructu
 import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
-import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.ProfitParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.ProfitParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ProfitRateArea;
 import it.smartcommunitylab.parking.management.web.model.ProfitStreet;
 import it.smartcommunitylab.parking.management.web.model.ProfitZone;
+import it.smartcommunitylab.parking.management.web.model.TimeCostParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.TimeCostRateArea;
+import it.smartcommunitylab.parking.management.web.model.TimeCostStreet;
+import it.smartcommunitylab.parking.management.web.model.TimeCostZone;
 import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 import java.io.IOException;
@@ -841,7 +843,243 @@ public class DashboardController {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
 		return createdFile;
-	}		
+	}
+	
+	// --------------------------------------- Time cost CSV --------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timeCost/street/csv")
+	public @ResponseBody
+	String createTimeCostStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in street time cost csv creation.");
+		ArrayList<TimeCostStreet> streetData = new ArrayList<TimeCostStreet>();
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		logger.info("Current path: " + path);
+		
+		JSONArray streetList = new JSONArray(data);
+		logger.info("Time cost street list size: " + streetList.length());
+    	
+	    for(int i = 0; i < streetList.length(); i++){
+	    	JSONObject street = streetList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = street.getString("id");
+	    	String id_app = street.getString("id_app");
+	    	String streetReference = street.getString("streetReference");
+	    	Integer slotNumber = (!street.isNull("slotNumber")) ? street.getInt("slotNumber") : 0;
+	    	Integer handicappedSlotNumber = (!street.isNull("handicappedSlotNumber")) ? street.getInt("handicappedSlotNumber") : 0;
+	    	Integer unusuableSlotNumber = (!street.isNull("unusuableSlotNumber")) ? street.getInt("unusuableSlotNumber") : 0;
+	    	Boolean subscritionAllowedPark = (!street.isNull("subscritionAllowedPark")) ? street.getBoolean("subscritionAllowedPark") : false;
+	    	String rateAreaId = street.getString("rateAreaId");
+	    	String color = street.getString("color");
+	    	Integer occupancyRate = (!street.isNull("occupancyRate")) ? street.getInt("occupancyRate") : -1;
+	    	Integer slotOccupied = (!street.isNull("slotOccupied")) ? street.getInt("slotOccupied") : -1;
+	    	JSONObject extratime = (!street.isNull("extratime")) ? street.getJSONObject("extratime") : null;
+	    	Integer minExtratime, maxExtratime;
+	    	minExtratime = maxExtratime = -1;
+	    	if(extratime != null) {
+	    		minExtratime = (!extratime.isNull("extratime_estimation_min")) ? extratime.getInt("extratime_estimation_min") : -1;
+		    	maxExtratime = (!extratime.isNull("extratime_estimation_max")) ? extratime.getInt("extratime_estimation_max") : -1;
+	    	}
+	    	String area_name = street.getString("area_name");
+	    	String area_color = street.getString("area_color");
+	    	TimeCostStreet ts = new TimeCostStreet();
+	    	ts.setId(id);
+	    	ts.setId_app(id_app);
+	    	ts.setStreetReference(streetReference);
+	    	ts.setSlotNumber(slotNumber);
+	    	ts.setHandicappedSlotNumber(handicappedSlotNumber);
+	    	ts.setUnusuableSlotNumber(unusuableSlotNumber);
+	    	ts.setSubscritionAllowedPark(subscritionAllowedPark);
+	    	ts.setRateAreaId(rateAreaId);
+	    	ts.setColor(color);
+	    	ts.setOccupancyRate(occupancyRate);
+	    	ts.setSlotOccupied(slotOccupied);
+	    	ts.setMinExtratime(minExtratime);
+	    	ts.setMaxExtratime(maxExtratime);
+	    	ts.setArea_name(area_name);
+	    	ts.setArea_color(area_color);
+	    	streetData.add(ts);
+	    }	
+		
+		try {
+			createdFile = csvManager.create_timeCost_file_streets(streetData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV con tempo di accesso per vie: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timeCost/zone/csv")
+	public @ResponseBody
+	String createTimeCostZoneCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in zone csv creation.");
+		ArrayList<TimeCostZone> zoneData = new ArrayList<TimeCostZone>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray zoneList = new JSONArray(data);
+		logger.info("Zone list size: " + zoneList.length());
+    	
+	    for(int i = 0; i < zoneList.length(); i++){
+	    	JSONObject zone = zoneList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = zone.getString("id");
+	    	String id_app = zone.getString("id_app");
+	    	String name = zone.getString("name");
+	    	String macro = zone.getString("submacro");
+	    	String color = zone.getString("color");
+	    	String type = zone.getString("type");
+	    	String note = zone.getString("note");
+	    	Integer occupancy = (!zone.isNull("occupancy")) ? zone.getInt("occupancy") : 0;
+	    	Integer slotNumber = (!zone.isNull("slotNumber")) ? zone.getInt("slotNumber") : 0;
+	    	Integer slotOccupied = (!zone.isNull("slotOccupied")) ? zone.getInt("slotOccupied") : 0;
+	    	JSONObject extratime = (!zone.isNull("extratime")) ? zone.getJSONObject("extratime") : null;
+	    	Integer minExtratime, maxExtratime;
+	    	minExtratime = maxExtratime = -1;
+	    	if(extratime != null) {
+	    		minExtratime = (!extratime.isNull("extratime_estimation_min")) ? extratime.getInt("extratime_estimation_min") : -1;
+		    	maxExtratime = (!extratime.isNull("extratime_estimation_max")) ? extratime.getInt("extratime_estimation_max") : -1;
+	    	}
+	    	TimeCostZone tz = new TimeCostZone();
+	    	tz.setId(id);
+	    	tz.setId_app(id_app);
+	    	tz.setName(name);
+	    	tz.setSubmacro(macro);
+	    	tz.setColor(color);
+	    	tz.setType(type);
+	    	tz.setNote(note);
+	    	tz.setOccupancy(occupancy);
+	    	tz.setSlotNumber(slotNumber);
+	    	tz.setSlotOccupied(slotOccupied);
+	    	tz.setMinExtratime(minExtratime);
+	    	tz.setMaxExtratime(maxExtratime);
+	    	zoneData.add(tz);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_timeCost_file_zones(zoneData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV costo di accesso per zone: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timeCost/area/csv")
+	public @ResponseBody
+	String createTimeCostAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in timeCost area csv creation.");
+		ArrayList<TimeCostRateArea> areaData = new ArrayList<TimeCostRateArea>();
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		JSONArray areaList = new JSONArray(data);
+		logger.info("Area list size: " + areaList.length());
+    	
+	    for(int i = 0; i < areaList.length(); i++){
+	    	JSONObject area = areaList.getJSONObject(i);
+	    	String id = area.getString("id");
+	    	String id_app = area.getString("id_app");
+	    	String name = area.getString("name");
+	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
+	    	String timeSlot = area.getString("timeSlot");
+	    	String smsCode = area.getString("smsCode");
+	    	String color = area.getString("color");
+	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
+	    	Integer occupancy = (!area.isNull("occupancy")) ? area.getInt("occupancy") : 0;
+	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
+	    	Integer slotOccupied = (!area.isNull("slotOccupied")) ? area.getInt("slotOccupied") : 0;
+	    	JSONObject extratime = (!area.isNull("extratime")) ? area.getJSONObject("extratime") : null;
+	    	Integer minExtratime, maxExtratime;
+	    	minExtratime = maxExtratime = -1;
+	    	if(extratime != null) {
+	    		minExtratime = (!extratime.isNull("extratime_estimation_min")) ? extratime.getInt("extratime_estimation_min") : -1;
+		    	maxExtratime = (!extratime.isNull("extratime_estimation_max")) ? extratime.getInt("extratime_estimation_max") : -1;
+	    	}
+	    	TimeCostRateArea ta = new TimeCostRateArea();
+	    	ta.setId(id);
+	    	ta.setId_app(id_app);
+	    	ta.setName(name);
+	    	ta.setFee(fee);
+	    	ta.setTimeSlot(timeSlot);
+	    	ta.setSmsCode(smsCode);
+	    	ta.setColor(color);
+	    	ta.setNote(note);
+	    	ta.setOccupancy(occupancy);
+	    	ta.setSlotNumber(slotNumber);
+	    	ta.setSlotOccupied(slotOccupied);
+	    	ta.setMinExtratime(minExtratime);
+	    	ta.setMaxExtratime(maxExtratime);
+	    	areaData.add(ta);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_timeCost_file_areas(areaData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timeCost/parkingstructures/csv")
+	public @ResponseBody
+	String createTimeCostStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in timeCost parkingstructures csv creation.");
+		ArrayList<TimeCostParkingStructure> structData = new ArrayList<TimeCostParkingStructure>();
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray structList = new JSONArray(data);
+		logger.info("Structs list size: " + structList.length());
+    	
+	    for(int i = 0; i < structList.length(); i++){
+	    	JSONObject struct = structList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = struct.getString("id");
+	    	String id_app = struct.getString("id_app");
+	    	String name = struct.getString("name");
+	    	String streetReference = struct.getString("streetReference");
+	    	String managementMode = struct.getString("managementMode");
+	    	String phoneNumber = struct.getString("phoneNumber");
+	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
+	    	String timeSlot = struct.getString("timeSlot");
+	    	Integer occupancyRate = (!struct.isNull("occupancyRate")) ? struct.getInt("occupancyRate") : 0;
+	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
+	    	Integer slotOccupied = (!struct.isNull("slotOccupied")) ? struct.getInt("slotOccupied") : 0;
+	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
+	    	JSONObject extratime = (!struct.isNull("extratime")) ? struct.getJSONObject("extratime") : null;
+	    	Integer minExtratime, maxExtratime;
+	    	minExtratime = maxExtratime = -1;
+	    	if(extratime != null) {
+	    		minExtratime = (!extratime.isNull("extratime_estimation_min")) ? extratime.getInt("extratime_estimation_min") : -1;
+		    	maxExtratime = (!extratime.isNull("extratime_estimation_max")) ? extratime.getInt("extratime_estimation_max") : -1;
+	    	}
+	    	TimeCostParkingStructure tps = new TimeCostParkingStructure();
+	    	tps.setId(id);
+	    	tps.setId_app(id_app);
+	    	tps.setName(name);
+	    	tps.setStreetReference(streetReference);
+	    	tps.setManagementMode(managementMode);
+	    	tps.setPhoneNumber(phoneNumber);
+	    	tps.setFee(fee);
+	    	tps.setTimeSlot(timeSlot);
+	    	tps.setOccupancyRate(occupancyRate);
+	    	tps.setSlotNumber(slotNumber);
+	    	tps.setSlotOccupied(slotOccupied);
+	    	tps.setUnusuableSlotNumber(unusuableSlotNumber);
+	    	tps.setMinExtratime(minExtratime);
+	    	tps.setMaxExtratime(maxExtratime);
+	    	structData.add(tps);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_timeCost_file_structs(structData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
+		}
+		return createdFile;
+	}	
 	
 	// ------------------------------ End of part for csv files creation --------------------------------
 	

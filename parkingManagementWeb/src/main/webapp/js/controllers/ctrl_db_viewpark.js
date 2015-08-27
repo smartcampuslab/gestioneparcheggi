@@ -2509,7 +2509,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    //console.log("pss profit retrieved from db: " + JSON.stringify(result));	//if($scope.showLogs)
 		    //$scope.updateLoadingMapState();
 		    $scope.profitStructWS = allPSs;
-		    $scope.allDataStructWS = $scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS);	// here I obtain an object with correct occupancy and profit data
+		    $scope.allDataStructWS = $scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS, 1);	// here I obtain an object with correct occupancy and profit data
 		    
 			if(showPs){
 				for (var i = 0; i <  $scope.allDataStructWS.length; i++) {
@@ -2691,25 +2691,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    
 		    allParks = $scope.mergeParksObjects(allParks, oldParks);
 		    $scope.actualParks = allParks;
-		    $scope.pstructWS = allParks;   
-		    $scope.allDataStructWS = $scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS);	// here I obtain an object with correct occupancy and profit data
+		    $scope.pstructWS = allParks;
+		    $scope.allDataStructWS = $scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS, cost_type);	// here I obtain an object with correct occupancy and profit data
 		    
-		    //var isInList = sharedDataService.getIsInList();
-		    //if(!isInList){
-			    if(showPs){
-			    	for (var i = 0; i <  $scope.allDataStructWS.length; i++) {
-				    	markers.push(createMarkers(i, $scope.allDataStructWS[i], 4));
-				    }
-			    	angular.copy(markers, $scope.parkingStructureMarkers);
-			    	if(cost_type == 1){ // case of occuppancy cost
-			    		$scope.updateParkOccupancy();
-			    	} else {			// case of time cost
-			    		$scope.updateParkTimeCost();
-			    	}
+			if(showPs){
+			    for (var i = 0; i <  $scope.allDataStructWS.length; i++) {
+				    markers.push(createMarkers(i, $scope.allDataStructWS[i], 4));
+				}
+			    angular.copy(markers, $scope.parkingStructureMarkers);
+			    if(cost_type == 1){ // case of occuppancy cost
+			    	$scope.updateParkOccupancy();
+			    } else {			// case of time cost
+			    	$scope.updateParkTimeCost();
 			    }
-		    //} else {
-		    //	$scope.updateParksOccupancy();
-		    //}
+			}
 		    if(callType == 1){
 		    	$scope.getBikePointFromDb(false);
 		    }
@@ -2794,13 +2789,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	// Method mergeParkDbData: used to merge the db data from occupancy park and profit park
-	$scope.mergeParkDbData = function(occupancyStructs, profitStructs){
+	$scope.mergeParkDbData = function(occupancyStructs, profitStructs, cost_type){
 		var mergedStructs = [];
 		for(var i = 0; i < occupancyStructs.length; i++){
 			var found = false;
+			var timeCost = {};
 			for(var j = 0; ((j < profitStructs.length) && !found); j++){
 				if(occupancyStructs[i].id == profitStructs[j].id){
 					found = true;
+					if(cost_type == 2){
+						timeCost = $scope.getExtratimeFromOccupancy(occupancyStructs[i].occupancyRate);
+					}
 					var p = {
 						id: occupancyStructs[i].id,
 						id_app: occupancyStructs[i].id_app,
@@ -2820,7 +2819,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						lastChange: profitStructs[j].lastChange,
 						occupancyRate: occupancyStructs[i].occupancyRate,
 						profit : profitStructs[j].profit,
-						tickets : profitStructs[j].tickets
+						tickets : profitStructs[j].tickets,
+						extratime: timeCost
 					};
 					mergedStructs.push(p);
 				}
@@ -3888,6 +3888,43 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.occupancyOpened = true;
 		return object;
 	};
+	
+	$scope.showTimeCostInList = function(object, type){
+		switch(type){
+			case 1:
+				$scope.showPMDet();
+				$scope.pmDetails = object;
+				break;
+			case 2:
+				$scope.showPSDet();
+				$scope.psDetails = object;
+				$scope.initPsOccupancyDiagram(object, 0);
+				break;
+			case 3:
+			    $scope.showStreetDet();
+				//object.freeParkSlotSignFree = (object.freeParkSlotSignNumber > 0) ? (object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied) : 0;
+				//object.freeParkSlotFree = (object.freeParkSlotNumber > 0) ? (object.freeParkSlotNumber - object.freeParkSlotOccupied) : 0;
+				//object.paidSlotFree = (object.paidSlotNumber > 0 ) ? (object.paidSlotNumber - object.paidSlotOccupied) : 0;
+				//object.timedParkSlotFree = (object.timedParkSlotNumber > 0) ? (object.timedParkSlotNumber - object.timedParkSlotOccupied) : 0;
+				//object.handicappedSlotFree = (object.handicappedSlotNumber > 0) ? (object.handicappedSlotNumber - object.handicappedSlotOccupied) : 0;
+				//object.reservedSlotFree = (object.reservedSlotNumber > 0)? (object.reservedSlotNumber - object.reservedSlotOccupied) : 0;
+				$scope.sDetails = object;
+			    $scope.initStreetOccupancyDiagram(object, 2);
+				break;
+			case 4:
+			    $scope.showZoneDet();
+				$scope.zDetails = object;
+				$scope.initZoneOccupancyDiagram(object, 2);
+				break;
+			case 5:
+			    $scope.showAreaDet();
+				$scope.aDetails = object;
+				$scope.initAreaOccupancyDiagram(object, 2);
+				break;	
+		};
+		$scope.timeCostOpened = true;
+		return object;
+	};	
 	
 	$scope.hideOccupancy = function(event, object, type){
 		$scope.occupancyOpened = false;
@@ -5853,6 +5890,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.areaProfitCvsFile = "";
     $scope.structProfitCvsFile = "";
     
+    $scope.streetTimeCostCvsFile = "";
+    $scope.zoneTimeCostCvsFile = "";
+    $scope.areaTimeCostCvsFile = "";
+    $scope.structTimeCostCvsFile = "";
+    
     // ------------------------------------------- Block for occupancy CSV creation --------------------------------------
     $scope.getStreetOccupancyCsv = function(){
 		var method = 'POST';
@@ -5912,7 +5954,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	// --------------------------------------------- End of block for occupancy CSV creation ----------------------------------------
 	
-	// ------------------------------------------------ New block for profit CSV creation --------------------------------------------
+	// -------------------------------------------------- Block for profit CSV creation ---------------------------------------------
 	$scope.getStreetProfitCsv = function(){
 		var method = 'POST';
 		var value = JSON.stringify($scope.profitStreetsList);
@@ -5955,7 +5997,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.getAreaProfitCsv = function(){
 		var method = 'POST';
 		var value = JSON.stringify($scope.profitAreaList);
-	    console.log("Profit area list data : " + value);
 		
 	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/area/csv", null, $scope.authHeaders, value);
@@ -5969,7 +6010,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.getStructureProfitCsv = function(){
 		var method = 'POST';
 		var value = JSON.stringify($scope.profitStructWS);
-	    console.log("Profit structure list data : " + value);
 		
 	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingstructures/csv", null, $scope.authHeaders, value);
@@ -5980,5 +6020,59 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    });	
 	};
 	// ---------------------------------------------- End of block for profit CSV creation ------------------------------------------
+	
+	// ------------------------------------------------ Block for time cost CSV creation ---------------------------------------------
+	$scope.getStreetTimeCostCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.streetWS);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/street/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.streetTimeCostCvsFile = result;
+	    	window.location.href = $scope.streetTimeCostCvsFile;
+	    });	
+	};
+	
+	$scope.getZoneTimeCostCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.zoneWS);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/zone/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.zoneTimeCostCvsFile = result;
+	    	window.location.href = $scope.zoneTimeCostCvsFile;
+	    });	
+	};
+	
+	$scope.getAreaTimeCostCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.areaWS);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/area/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.areaTimeCostCvsFile = result;
+	    	window.location.href = $scope.areaTimeCostCvsFile;
+	    });	
+	};
+	
+	$scope.getStructureTimeCostCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.allDataStructWS);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/parkingstructures/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.structTimeCostCvsFile = result;
+	    	window.location.href = $scope.structTimeCostCvsFile;
+	    });	
+	};
+	// -------------------------------------------- End of block for time cost CSV creation -----------------------------------------
     
 }]);

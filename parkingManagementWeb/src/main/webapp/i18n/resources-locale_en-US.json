@@ -1064,8 +1064,8 @@
     "description": "Testo label posti occupati area in dashboard"
 }, {
     "key": "occupation_filter_title",
-    "value": "Visualizza OCCUPAZIONE",
-    "description": "Testo label posti occupati area in dashboard"
+    "value": "Visualizza DATI",
+    "description": "Testo label dati di filto in dashboard"
 }, {
     "key": "left_filter_title",
     "value": "IMPOSTA FILTRO",
@@ -1500,7 +1500,7 @@
 	"description": "Label per numero ticket emessi in elemento in lista"
 }, { 
 	"key": "element_costTime", 
-	"value": "Costo di accesso",
+	"value": "Tempo di ricerca",
 	"description": "Label per costo di accesso in posto"
 }, { 
 	"key": "element_waiting_time", 

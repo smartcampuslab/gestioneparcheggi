@@ -25,6 +25,10 @@ import it.smartcommunitylab.parking.management.web.model.ProfitParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ProfitRateArea;
 import it.smartcommunitylab.parking.management.web.model.ProfitStreet;
 import it.smartcommunitylab.parking.management.web.model.ProfitZone;
+import it.smartcommunitylab.parking.management.web.model.TimeCostParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.TimeCostRateArea;
+import it.smartcommunitylab.parking.management.web.model.TimeCostStreet;
+import it.smartcommunitylab.parking.management.web.model.TimeCostZone;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -553,6 +557,212 @@ public class CSVManager {
 		}
 		return "csv/" + name;	//ba
 	}
+	
+	// Method used to create the csv file for the street time cost
+	public String create_timeCost_file_streets(ArrayList<TimeCostStreet> streets, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "TimeCostStreet.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Area");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tempo di accesso Min");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tempo di accesso Max");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupazione");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(TimeCostStreet s : streets){
+				writer.append(s.getStreetReference());
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getArea_name());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append((s.getMinExtratime() != -1) ? (s.getMinExtratime() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((s.getMaxExtratime() != -1) ? (s.getMaxExtratime() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((s.getOccupancyRate() != -1) ? (s.getOccupancyRate() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getSlotOccupied() + "");
+				writer.append(CSV_NEWLINE);
+			}		
+			//String arr = writer.toString();
+			//ba = arr.getBytes();
+			writer.flush();
+			writer.close();
+				
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in timeCost street csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the zone time cost
+	public String create_timeCost_file_zones(ArrayList<TimeCostZone> zones, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "TimeCostZone.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+				
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Macro");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tempo di accesso Min");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tempo di accesso Max");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupazione");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati");
+			writer.append(CSV_NEWLINE);
+				
+			// Add the list of data in a table
+			for(TimeCostZone z : zones){
+				writer.append(z.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSubmacro());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append((z.getMinExtratime() != -1) ? (z.getMinExtratime() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((z.getMaxExtratime() != -1) ? (z.getMaxExtratime() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((z.getOccupancy() != -1) ? (z.getOccupancy() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSlotOccupied() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error timeCost zone csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+
+	// Method used to create the csv file for the area time cost
+	public String create_timeCost_file_areas(ArrayList<TimeCostRateArea> areas, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "TimeCostArea.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tariffa");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tempo di accesso Min");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tempo di accesso Max");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupazione");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(TimeCostRateArea a : areas){
+				writer.append(a.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getFee() + "");	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append((a.getMinExtratime() != -1) ? (a.getMinExtratime() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((a.getMaxExtratime() != -1) ? (a.getMaxExtratime() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((a.getOccupancy() != -1) ? (a.getOccupancy() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getSlotOccupied() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in time cost area csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the parking structures occupation
+	public String create_timeCost_file_structs(ArrayList<TimeCostParkingStructure> structures, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "TimeCostStructure.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Indirizzo");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tempo di accesso Min");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tempo di accesso Max");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupazione");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(TimeCostParkingStructure ps : structures){
+				writer.append(ps.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getStreetReference());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getMinExtratime() != -1) ? (ps.getMinExtratime() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getMaxExtratime() != -1) ? (ps.getMaxExtratime() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getOccupancyRate() != -1) ? (ps.getOccupancyRate() + "") : "n.p.");
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getSlotOccupied() >= 0) ? (ps.getSlotOccupied() + "") : "0");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in timeCost structures csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}	
 		
 	private String correctValue(String value) {
 		String freeSlots = "0";

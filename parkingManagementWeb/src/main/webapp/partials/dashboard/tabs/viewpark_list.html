@@ -154,8 +154,6 @@
 							
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(pmeter, 1)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
@@ -201,7 +199,6 @@
 						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="16%" align="left">{{street.streetReference}}</td>
-	<!--						<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td> {{area.color}} -->
 							<td width="12%" align="left">{{street.area_name}}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(street.occupancyRate)}"></div></td><!-- {{area.color}} -->
 							<td width="5%" align="left">
@@ -215,8 +212,6 @@
 							<td width="9%" align="left">DO: {{street.timedParkSlotOccupied}}</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
@@ -261,7 +256,6 @@
 						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="20%" align="left">{{street.streetReference}}</td>
-	<!--						<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td> {{area.color}} -->
 							<td width="15%" align="left">{{street.area_name}}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(street.profit)}"></div></td><!-- {{area.color}} -->
 							<td width="12%" align="left">
@@ -276,13 +270,11 @@
 							<td width="15%" align="right">{{street.paidSlotNumber}}&nbsp;&nbsp;&nbsp;&nbsp;</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
 					<tr ng-show="areaWS.length == 0">
-						<td colspan="10"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+						<td colspan="8"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
 			</div>
@@ -324,13 +316,12 @@
 						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="16%" align="left">{{street.streetReference}}</td>
-	<!--						<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td> {{area.color}} -->
 							<td width="12%" align="left">{{street.area_name}}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(street.extratime)}"></div></td><!-- {{area.color}} -->
 							<td width="10%" align="left">
 								<span ng-show="street.extratime != null && street.extratime.extratime_estimation_min != street.extratime.extratime_estimation_max">{{ street.extratime.extratime_estimation_min }} - {{ street.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
 								<span ng-show="street.extratime != null && street.extratime.extratime_estimation_min == street.extratime.extratime_estimation_max">{{ street.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
-								<span ng-show="street.occupancyRate == '-1'">n.p.</span>
+								<span ng-show="street.extratime == null">n.p.</span>
 							</td>
 							<td width="10%" align="left">
 								<span ng-show="street.occupancyRate != '-1'">{{ street.occupancyRate }}%</span>
@@ -340,8 +331,6 @@
 							<td width="10%" align="left">{{street.slotOccupied}}</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-	<!-- 							<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
@@ -398,8 +387,6 @@
 							<td width="15%" align="left">{{zone.slotOccupied}}</td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(zone,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setZEdit(zone)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setZRemove(zone)"  alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
@@ -457,8 +444,6 @@
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(zone,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setZEdit(zone)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setZRemove(zone)"  alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
@@ -485,13 +470,72 @@
 				</tr>
 			</table>		
 		</div>
+		<div ng-show="showZList && showTimeCostLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS.length != 0">
+						<th width="20%"><span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span></th>
+						<th width="10%" class="myCenter"><span ng-show="zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
+						<th width="10%"><span ng-show="zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
+						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
+						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
+						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in zoneWS | filter:q | orderBy: ['-occupancy', 'name'] |  startFrom:currentPage*maxZones | limitTo:maxZones">
+				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						<tr>
+							<td width="20%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
+							<td width="10%" align="left"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(zone.extratime)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min != zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} - {{ zone.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min == zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="zone.extratime == null">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy}}%</span>
+								<span ng-show="zone.occupancy == '-1'">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="15%" align="left">{{zone.slotOccupied}}</td>
+							<td width="5%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(zone,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS.length == 0">
+						<td colspan="9"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-success"
+								ng-disabled="currentPage == 0"
+								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPage+1}}/{{numberOfPages(5)}}
+						<button class="btn btn-success"
+								ng-disabled="currentPage >= zoneWS.length/maxZones - 1"
+								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
 		<div ng-show="showAList && showOccupationLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="areaWS.length != 0">
 						<th width="15%"><span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span></th>
 						<th width="10%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-<!-- 						<th width="31%"><span ng-show="a_timeSlot.visible">{{ 'area_time' | i18n }}</span></th> -->
 						<th width="20%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="15%" align="left">{{ 'area_total_slots' | i18n }} Tot</th>
@@ -504,7 +548,6 @@
 						<tr>
 							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
 							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
-<!-- 							<td width="31%" align="left"><span ng-show="a_timeSlot.visible">{{area.timeSlot}}</span></td> -->
 							<td width="20%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(area.occupancy)}"></div></td>
 							<td width="10%" align="left">
@@ -515,8 +558,6 @@
 							<td width="15%" align="left">{{area.slotOccupied}}</td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(area,5)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setAEdit(area)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setARemove(area)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
@@ -549,7 +590,6 @@
 					<tr ng-show="profitAreaList.length != 0">
 						<th width="15%"><span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span></th>
 						<th width="10%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-<!-- 						<th width="31%"><span ng-show="a_timeSlot.visible">{{ 'area_time' | i18n }}</span></th> -->
 						<th width="20%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
 						<th width="10%">{{ 'element_tickets' | i18n }}</th>
@@ -562,7 +602,6 @@
 						<tr>
 							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
 							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
-<!-- 							<td width="31%" align="left"><span ng-show="a_timeSlot.visible">{{area.timeSlot}}</span></td> -->
 							<td width="20%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(area.profit)}"></div></td>
 							<td width="10%" align="left">
@@ -576,8 +615,6 @@
 							<td width="15%" align="left">{{area.slotNumber}}</td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(area,5)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setAEdit(area)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setARemove(area)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
@@ -604,6 +641,68 @@
 				</tr>
 			</table>	
 		</div>
+		<div ng-show="showAList && showTimeCostLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="areaWS.length != 0">
+						<th width="15%"><span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span></th>
+						<th width="10%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="15%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
+						<th width="20%" colspan="2">{{ 'element_costTime' | i18n }}</th>
+						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
+						<th width="10%" align="left">{{ 'area_total_slots' | i18n }} Tot</th>
+						<th width="10%" align="left">{{ 'area_occupied_slots' | i18n }}</th>
+						<th class="myCenter" width="10%">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="area in areaWS | filter:q | orderBy:['-occupancy', 'name'] | startFrom:currentPage*maxAreas | limitTo:maxAreas">
+			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						<tr>
+							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
+							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="15%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(area.extratime)}"></div></td>
+							<td width="15%" align="left">
+								<span ng-show="area.extratime != null && area.extratime.extratime_estimation_min != area.extratime.extratime_estimation_max">{{ area.extratime.extratime_estimation_min }} - {{ area.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="area.extratime != null && area.extratime.extratime_estimation_min == area.extratime.extratime_estimation_max">{{ area.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="area.extratime == null">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="area.occupancy != '-1'">{{area.occupancy}}%</span>
+								<span ng-show="area.occupancy == '-1'">n.p.</span>
+							</td>
+							<td width="10%" align="left">{{area.slotNumber}}</td>
+							<td width="10%" align="left">{{area.slotOccupied}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(area,5)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setAEdit(area)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
+<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setARemove(area)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="areaWS.length == 0">
+						<td colspan="9"><strong>{{ 'no_areas_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-success"
+							ng-disabled="currentPage == 0"
+							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPage+1}}/{{numberOfPages(1)}}
+						<button class="btn btn-success"
+							ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
+							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getAreaTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>	
+		</div>
 		<div ng-show="showPSList && showOccupationLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
@@ -621,7 +720,6 @@
 						<tr>
 							<td width="15%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="15%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
-	<!-- 					<td width="35%" align="center">{{pstruct.timeSlot}}</td> -->
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(pstruct.occupancyRate)}"></div></td><!-- {{area.color}} -->
 							<td width="5%" align="left">
 								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate }}%</span>
@@ -635,13 +733,11 @@
 							
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
 					<tr ng-show="pstructWS.length == 0">
-						<td colspan="5"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
+						<td colspan="7"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
 			</div>
@@ -691,8 +787,6 @@
 							<td width="15%" align="center"><span ng-show="ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp; -->
-<!-- 								<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a> -->
 							</td>
 						</tr>
 					</tbody>
@@ -718,9 +812,70 @@
 					</td>
 				</tr>
 			</table>
+		</div>
+		<div ng-show="showPSList && showTimeCostLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="pstructWS.length != 0">
+						<th width="20%"><span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span></th>
+						<th width="20%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
+						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
+						<th width="12%" class="myCenter"><span ng-show="ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
+						<th width="13%" class="myCenter">{{ 'ps_occupiedslot' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="pstruct in allDataStructWS | filter:q | orderBy:['-occupancyRate', 'name'] | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
+						<tr>
+							<td width="20%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
+							<td width="20%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(pstruct.extratime)}"></div></td><!-- {{area.color}} -->
+							<td width="10%" align="left">
+								<span ng-show="pstruct.extratime != null && pstruct.extratime.extratime_estimation_min != pstruct.extratime.extratime_estimation_max">{{ pstruct.extratime.extratime_estimation_min }} - {{ pstruct.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="pstruct.extratime != null && pstruct.extratime.extratime_estimation_min == pstruct.extratime.extratime_estimation_max">{{ pstruct.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="pstruct.extratime == null">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate }}%</span>
+								<span ng-show="pstruct.occupancyRate == '-1'">n.p.</span>
+							</td>
+							<td width="12%" align="center">{{pstruct.slotNumber}}</td>
+							<td width="13%" align="center">
+								<span ng-show="pstruct.occupancyRate >= 0">{{pstruct.slotOccupied}}</span>
+								<span ng-show="pstruct.occupancyRate < 0">n.p.</span>		
+							</td>
+							
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="pstructWS.length == 0">
+						<td colspan="8"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-success"
+								ng-disabled="currentPage == 0"
+								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPage+1}}/{{numberOfPages(4)}}
+						<button class="btn btn-success"
+								ng-disabled="currentPage >= allDataStructWS.length/maxPStructs - 1"
+								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getStructureTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>
 		</div>	
 	</div>
-	<div class="col-md-12" align="center" ng-show="occupancyOpened || profitOpened">
+	<div class="col-md-12" align="center" ng-show="occupancyOpened || profitOpened || timeCostOpened">
 		<div ng-show="occupancyOpened">
 			<div class="alert alert-danger">
 				<table width="100%">
@@ -874,8 +1029,7 @@
 <!-- 							<span ng-show="!isCorrectNumber(psDetails.slotOccupied)">n.p.</span> -->
 <!-- 						</td> -->
 <!-- 					</tr> -->
-<!-- 				</table> -->
-				
+<!-- 				</table> -->		
 			</div>
 			<div ng-show="isStreetDetShow()">
 				<table width="100%">
@@ -1002,18 +1156,18 @@
 							<hr/>
 						</td>
 					</tr>
-						<tr>
-							<td width="33%">
-							    <div google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
-							</td>
-							<td width="34%">
-							    <div google-chart chart="chartStreetFreeParkAvailability" style="{{chart.cssStyle}}"/>
-							</td>
-							<td width="33%">
-							    <div google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/>
-							</td>
-						</tr>
-					</table>										
+					<tr>
+						<td width="33%">
+						    <div google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
+						</td>
+						<td width="34%">
+						    <div google-chart chart="chartStreetFreeParkAvailability" style="{{chart.cssStyle}}"/>
+						</td>
+						<td width="33%">
+						    <div google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/>
+						</td>
+					</tr>
+				</table>										
 <!-- 						        		<tr> -->
 <!-- 						        			<td colspan="3" class="detailsTableColSpan"> -->
 <!-- 						        				<hr/> -->
@@ -1093,118 +1247,118 @@
 <!-- 										</tr> -->
 <!-- 										        <div google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/> -->
 <!-- 								    </table> -->
-				</div>
-				<div ng-show="isZoneDetShow()">
-					<table width="100%">
-						<tr>
-							<td width="40%" valign="top">
-								<table width="100%">
-									<tr>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS">{{ zDetails.name }} - {{ zDetails.submacro }}</td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-									<tr>
-							        	<td class="detailsListTableCXS"></td>
-								        <td colspan="3" class="detailsTableColSpanS">
-								        	<hr/>
-								        </td>
-								        <td class="detailsListTableCXS"></td>
-								    </tr>
-							   		<tr>
-							   			<td class="detailsListTableCXS"></td>
-							   			<td colspan="3" class="detailsTableColSpanLeftS">
-							   				{{ 'street_slots' | i18n }}
-							   			</td>
-							   			<td class="detailsListTableCXS"></td>
-							   		</tr>
-									<tr>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-									<tr>
-										<td class="detailsListTableCXS"></td>
-									   	<td class="detailsListTableSXS">{{ 'zone_occupied_slots' | i18n }}:</td>
-									   	<td class="detailsListTableCXS"></td>
-									   	<td class="detailsListTableDXS">
-									   		<span ng-show="isCorrectNumber(zDetails.slotOccupied)">{{ zDetails.slotOccupied }}</span>
-									   		<span ng-show="!isCorrectNumber(zDetails.slotOccupied)">n.p.</span>
-									   	</td>
-									   	<td class="detailsListTableCXS"></td>
-									</tr>
-								</table>
-							</td>
-							<td width="60%" valign="top">
-								<div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
-							</td>
-						</tr>
-					</table>
-					
-				</div>
-				<div ng-show="isAreaDetShow()">
-					<table width="100%">
-						<tr>
-							<td width="40%">
-								<table width="100%">	
-							        <tr>	
-							        	<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'area_name' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS">{{ aDetails.name }}</td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-									<tr ng-show="a_fee.visible">
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-									<tr>
-							        	<td class="detailsListTableCXS"></td>
-								        <td colspan="3" class="detailsTableColSpanS">
-								        	<hr/>
-								        </td>
-								        <td class="detailsListTableCXS"></td>
-								    </tr>
-							   		<tr>
-							   			<td class="detailsListTableCXS"></td>
-							   			<td colspan="3" class="detailsTableColSpanLeftS">
-							   				{{ 'street_slots' | i18n }}
-							   			</td>
-							   			<td class="detailsListTableCXS"></td>
-							   		</tr>
-									<tr>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'area_total_slots' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS">{{ aDetails.slotNumber }}</td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-									<tr>
-										<td class="detailsListTableCXS"></td>
-									   	<td class="detailsListTableSXS">{{ 'area_occupied_slots' | i18n }}:</td>
-									   	<td class="detailsListTableCXS"></td>
-									   	<td class="detailsListTableDXS">
-									   		<span ng-show="isCorrectNumber(aDetails.slotOccupied)">{{ aDetails.slotOccupied }}</span>
-									   		<span ng-show="!isCorrectNumber(aDetails.slotOccupied)">n.p.</span>
-									   	</td>
-									   	<td class="detailsListTableCXS"></td>
-									</tr>
-								</table>
-							</td>
-							<td width="60%">
-								<div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" /> 
-							</td>
-						</tr>
-					</table>
-				</div>        
 			</div>
+			<div ng-show="isZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td width="40%" valign="top">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }} - {{ zDetails.submacro }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+						        	<td class="detailsListTableCXS"></td>
+							        <td colspan="3" class="detailsTableColSpanS">
+							        	<hr/>
+							        </td>
+							        <td class="detailsListTableCXS"></td>
+							    </tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+								   	<td class="detailsListTableSXS">{{ 'zone_occupied_slots' | i18n }}:</td>
+								   	<td class="detailsListTableCXS"></td>
+								   	<td class="detailsListTableDXS">
+								   		<span ng-show="isCorrectNumber(zDetails.slotOccupied)">{{ zDetails.slotOccupied }}</span>
+								   		<span ng-show="!isCorrectNumber(zDetails.slotOccupied)">n.p.</span>
+								   	</td>
+								   	<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+						<td width="60%" valign="top">
+							<div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
+						</td>
+					</tr>
+				</table>
+					
+			</div>
+			<div ng-show="isAreaDetShow()">
+				<table width="100%">
+					<tr>
+						<td width="40%">
+							<table width="100%">	
+						        <tr>	
+						        	<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'area_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ aDetails.name }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="a_fee.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+						        	<td class="detailsListTableCXS"></td>
+							        <td colspan="3" class="detailsTableColSpanS">
+							        	<hr/>
+							        </td>
+							        <td class="detailsListTableCXS"></td>
+							    </tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'area_total_slots' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ aDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+								   	<td class="detailsListTableSXS">{{ 'area_occupied_slots' | i18n }}:</td>
+								   	<td class="detailsListTableCXS"></td>
+								   	<td class="detailsListTableDXS">
+								   		<span ng-show="isCorrectNumber(aDetails.slotOccupied)">{{ aDetails.slotOccupied }}</span>
+								   		<span ng-show="!isCorrectNumber(aDetails.slotOccupied)">n.p.</span>
+								   	</td>
+								   	<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+						<td width="60%">
+							<div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" /> 
+						</td>
+					</tr>
+				</table>
+			</div>        
+		</div>
 		<div ng-show="profitOpened">
 			<div class="alert alert-danger">
 				<table width="100%">
@@ -1437,143 +1591,480 @@
 			</div>
 			<div ng-show="isZoneDetShow()">
 				<table width="100%">
-						<tr>
-							<td width="33%" valign="bottom">
-								<table width="100%">
-									<tr>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS">{{ zDetails.name }} - {{ zDetails.submacro }}</td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-									<tr>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zDetails.color)}"></div></td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-							   		
+					<tr>
+						<td width="33%" valign="bottom">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }} - {{ zDetails.submacro }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zDetails.color)}"></div></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+						   		
 									
-								</table>
-							</td>
-							<td width="34%" valign="bottom">
-								<table width="100%">
-									<tr>
-							   			<td colspan="3" class="detailsTableColSpanLeft">
-							   				{{ 'street_slots' | i18n }}
-							   			</td>
-							   		</tr>
-									<tr>
-										<td class="detailsNumberListTableSX">{{ 'zone_total_slots' | i18n }}:</td>
-										<td class="detailsNumberListTableCX"></td>
-										<td class="detailsNumberListTableDX">{{ zDetails.slotNumber }}</td>
-									</tr>
-									<tr>
-									   	<td class="detailsNumberListTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
-									   	<td class="detailsNumberListTableCX"></td>
-									   	<td class="detailsNumberListTableDX">{{ zDetails.slotPaid }}</td>
-									</tr>
-								</table>
-							</td>
-							<td width="33%" valign="bottom">
-								<table width="100%">
-									<tr>
-							   			<td colspan="3" class="detailsTableColSpanLeft">
-							   				{{ 'zone_profit' | i18n }}
-							   			</td>
-							   		</tr>
-									<tr>
-										<td class="detailsListTableSX">{{ 'zone_profit' | i18n }}:</td>
-										<td class="detailsListTableCX"></td>
-										<td class="detailsListTableDX">
-											<span ng-if="zDetails.profit > 0">&nbsp;{{ correctEuroCent(zDetails.profit) }}{{ 'euro' | i18n }}</span>
-											<span ng-if="zDetails.profit <= 0">&nbsp;n.p.</span>
-										</td>
-									</tr>
-									<tr>
-									   	<td class="detailsListTableSX">{{ 'zone_tickets' | i18n }}:</td>
-									   	<td class="detailsListTableCX"></td>
-									   	<td class="detailsListTableDX">
-											<span ng-if="zDetails.tickets > 0">&nbsp;{{ zDetails.tickets }}</span>
-											<span ng-if="zDetails.tickets <= 0">&nbsp;n.p.</span>
-										</td>
-									</tr>
-								</table>
-							</td>		
-						</tr>
-					</table>	
-				</div>
-				<div ng-show="isAreaDetShow()">
-					<table width="100%">
-						<tr>
-							<td width="33%" valign="bottom">
-								<table width="100%">	
-							        <tr>	
-							        	<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'area_name' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS">{{ aDetails.name }}</td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-									<tr ng-show="a_fee.visible">
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
-										<td class="detailsListTableCXS"></td>
-										<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
-										<td class="detailsListTableCXS"></td>
-									</tr>
-								</table>
-							</td>
-							<td width="34%" valign="bottom">
-								<table width="100%">	
-							       	<tr>
-							   			<td colspan="3" class="detailsTableColSpanLeft">
-							   				{{ 'street_slots' | i18n }}
-							   			</td>
-							   		</tr>
-									<tr>
-										<td class="detailsNumberListTableSX">{{ 'area_total_slots' | i18n }}:</td>
-										<td class="detailsNumberListTableCX"></td>
-										<td class="detailsNumberListTableDX">{{ aDetails.slotNumber }}</td>
-									</tr>
-									<tr>
-									   	<td class="detailsNumberListTableSX">{{ 'area_total_pms' | i18n }}:</td>
-									   	<td class="detailsNumberListTableCX"></td>
-									   	<td class="detailsNumberListTableDX">{{ aDetails.pmsInArea }}</td>
-									</tr>
-								</table>
-							</td>
-							<td width="33%" valign="bottom">
-								<table width="100%">
-									<tr>
-							   			<td colspan="3" class="detailsTableColSpanLeft">
-							   				{{ 'area_profit' | i18n }}
-							   			</td>
-							   		</tr>
-									<tr>
-								        <td class="detailsListTableSX">{{ 'area_profit' | i18n }}:</td>
-								        <td class="detailsListTableCX"></td>
-								        <td class="detailsListTableDX">
-								        	<span ng-if="aDetails.profit > 0">&nbsp;{{ correctEuroCent(aDetails.profit) }}{{ 'euro' | i18n }}</span>
-											<span ng-if="aDetails.profit <= 0">&nbsp;n.p.</span>
-								        </td>
-								    </tr>
-								    <tr>
-								    	<td class="detailsListTableSX">{{ 'area_tickets' | i18n }}:</td>
-								    	<td class="detailsListTableCX"></td>
-								    	<td class="detailsListTableDX">
-								    		<span ng-if="aDetails.tickets > 0">&nbsp;{{ aDetails.tickets }}</span>
-											<span ng-if="aDetails.tickets <= 0">&nbsp;n.p.</span>
-								        </td>
-								    </tr>	
-								</table>
-							</td>
-						</tr>
-					</table>
-				</div>        
+							</table>
+						</td>
+						<td width="34%" valign="bottom">
+							<table width="100%">
+								<tr>
+						   			<td colspan="3" class="detailsTableColSpanLeft">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   		</tr>
+								<tr>
+									<td class="detailsNumberListTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+									<td class="detailsNumberListTableCX"></td>
+									<td class="detailsNumberListTableDX">{{ zDetails.slotNumber }}</td>
+								</tr>
+								<tr>
+								   	<td class="detailsNumberListTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
+								   	<td class="detailsNumberListTableCX"></td>
+								   	<td class="detailsNumberListTableDX">{{ zDetails.slotPaid }}</td>
+								</tr>
+							</table>
+						</td>
+						<td width="33%" valign="bottom">
+							<table width="100%">
+								<tr>
+						   			<td colspan="3" class="detailsTableColSpanLeft">
+						   				{{ 'zone_profit' | i18n }}
+						   			</td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableSX">{{ 'zone_profit' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">
+										<span ng-if="zDetails.profit > 0">&nbsp;{{ correctEuroCent(zDetails.profit) }}{{ 'euro' | i18n }}</span>
+										<span ng-if="zDetails.profit <= 0">&nbsp;n.p.</span>
+									</td>
+								</tr>
+								<tr>
+								   	<td class="detailsListTableSX">{{ 'zone_tickets' | i18n }}:</td>
+								   	<td class="detailsListTableCX"></td>
+								   	<td class="detailsListTableDX">
+										<span ng-if="zDetails.tickets > 0">&nbsp;{{ zDetails.tickets }}</span>
+										<span ng-if="zDetails.tickets <= 0">&nbsp;n.p.</span>
+									</td>
+								</tr>
+							</table>
+						</td>		
+					</tr>
+				</table>	
 			</div>
+			<div ng-show="isAreaDetShow()">
+				<table width="100%">
+					<tr>
+						<td width="33%" valign="bottom">
+							<table width="100%">	
+						        <tr>	
+						        	<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'area_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ aDetails.name }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="a_fee.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+						<td width="34%" valign="bottom">
+							<table width="100%">	
+						       	<tr>
+						   			<td colspan="3" class="detailsTableColSpanLeft">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   		</tr>
+								<tr>
+									<td class="detailsNumberListTableSX">{{ 'area_total_slots' | i18n }}:</td>
+									<td class="detailsNumberListTableCX"></td>
+									<td class="detailsNumberListTableDX">{{ aDetails.slotNumber }}</td>
+								</tr>
+								<tr>
+								   	<td class="detailsNumberListTableSX">{{ 'area_total_pms' | i18n }}:</td>
+								   	<td class="detailsNumberListTableCX"></td>
+								   	<td class="detailsNumberListTableDX">{{ aDetails.pmsInArea }}</td>
+								</tr>
+							</table>
+						</td>
+						<td width="33%" valign="bottom">
+							<table width="100%">
+								<tr>
+						   			<td colspan="3" class="detailsTableColSpanLeft">
+						   				{{ 'area_profit' | i18n }}
+						   			</td>
+						   		</tr>
+								<tr>
+							        <td class="detailsListTableSX">{{ 'area_profit' | i18n }}:</td>
+							        <td class="detailsListTableCX"></td>
+							        <td class="detailsListTableDX">
+							        	<span ng-if="aDetails.profit > 0">&nbsp;{{ correctEuroCent(aDetails.profit) }}{{ 'euro' | i18n }}</span>
+										<span ng-if="aDetails.profit <= 0">&nbsp;n.p.</span>
+							        </td>
+							    </tr>
+							    <tr>
+							    	<td class="detailsListTableSX">{{ 'area_tickets' | i18n }}:</td>
+							    	<td class="detailsListTableCX"></td>
+							    	<td class="detailsListTableDX">
+							    		<span ng-if="aDetails.tickets > 0">&nbsp;{{ aDetails.tickets }}</span>
+										<span ng-if="aDetails.tickets <= 0">&nbsp;n.p.</span>
+							        </td>
+							    </tr>	
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>        
+		</div>
+		<div ng-show="timeCostOpened">
+			<div class="alert alert-danger">
+				<table width="100%">
+					<tr>
+						<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
+						<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetailsList()"><i class="glyphicon glyphicon-remove"></i></button></td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isPSDetShow()">
+				<table width="100%">
+					<tr>
+						<td width="45%" align="left" valign="middle">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'ps_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ psDetails.name }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								 <tr ng-show="ps_address.visible">
+								 	<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableSXS">{{ 'ps_address' | i18n }}:</td>
+						        	<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableDXS">{{ psDetails.streetReference }}</td>
+						        	<td class="detailsListTableCXS"></td>
+						        </tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanS">
+						   				<hr/>
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+										{{ 'element_costTime' | i18n }}
+						  			</td>
+						  			<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'element_waiting_time' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span ng-show="psDetails.extratime != null && psDetails.extratime.extratime_estimation_min != psDetails.extratime.extratime_estimation_max">{{ psDetails.extratime.extratime_estimation_min }} - {{ psDetails.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="psDetails.extratime != null && psDetails.extratime.extratime_estimation_min == psDetails.extratime.extratime_estimation_max">{{ psDetails.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="psDetails.extratime == null">n.p.</span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanS">
+						   				<hr/>
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+										{{ 'ps_slots' | i18n }}
+						  			</td>
+						  			<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="ps_slotNumber.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'ps_totalslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ psDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'ps_occupiedslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span ng-show="isCorrectNumber(psDetails.slotOccupied)">{{ psDetails.slotOccupied }}</span>
+										<span ng-show="!isCorrectNumber(psDetails.slotOccupied)">n.p.</span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>	
+							</table>
+						</td>
+						<td width="55%" valign="middle" align="center">
+							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.slotOccupied)"/>
+						</td>
+					</tr>
+				</table>		
+			</div>
+			<div ng-show="isStreetDetShow()">
+				<table width="100%">
+					<tr valign="top">
+						<td width="45%" valign="top">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableSXS">{{ 'street_name' | i18n }}:</td>
+						        	<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableDXS">&nbsp;{{ sDetails.streetReference }}</td>
+						        	<td class="detailsListTableCXS"></td>
+						        </tr>
+						        <tr>
+						        	<td class="detailsListTableCXS"></td>
+							        <td colspan="3" class="detailsTableColSpanS">
+							        	<hr/>
+							        </td>
+							        <td class="detailsListTableCXS"></td>
+							    </tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+								<tr ng-show="s_slotNum.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'street_totalslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ sDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'street_occupiedslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span ng-show="sDetails.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
+										<span ng-show="sDetails.occupancyRate != -1">{{ sDetails.slotOccupied }}</span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanS">
+						   				<hr/>
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+										{{ 'element_costTime' | i18n }}
+						  			</td>
+						  			<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'element_waiting_time' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span ng-show="sDetails.extratime != null && sDetails.extratime.extratime_estimation_min != sDetails.extratime.extratime_estimation_max">{{ sDetails.extratime.extratime_estimation_min }} - {{ sDetails.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="sDetails.extratime != null && sDetails.extratime.extratime_estimation_min == sDetails.extratime.extratime_estimation_max">{{ sDetails.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="sDetails.extratime == null">n.p.</span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>	
+						</td>
+						<td width="55%" valign="top">
+							<table width="100%">
+								<tr ng-show="pm_rateArea.visible">
+									<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanS">
+						   				<div google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+							</table>
+						</td>
+					</tr>
+				</table>										
+			</div>
+			<div ng-show="isZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td width="40%" valign="top">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }} - {{ zDetails.submacro }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanS">
+						   				<hr/>
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+										{{ 'element_costTime' | i18n }}
+						  			</td>
+						  			<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'element_waiting_time' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span ng-show="zDetails.extratime != null && zDetails.extratime.extratime_estimation_min != zDetails.extratime.extratime_estimation_max">{{ zDetails.extratime.extratime_estimation_min }} - {{ zDetails.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="zDetails.extratime != null && zDetails.extratime.extratime_estimation_min == zDetails.extratime.extratime_estimation_max">{{ zDetails.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="zDetails.extratime == null">n.p.</span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+						        	<td class="detailsListTableCXS"></td>
+							        <td colspan="3" class="detailsTableColSpanS">
+							        	<hr/>
+							        </td>
+							        <td class="detailsListTableCXS"></td>
+							    </tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+								   	<td class="detailsListTableSXS">{{ 'zone_occupied_slots' | i18n }}:</td>
+								   	<td class="detailsListTableCXS"></td>
+								   	<td class="detailsListTableDXS">
+								   		<span ng-show="isCorrectNumber(zDetails.slotOccupied)">{{ zDetails.slotOccupied }}</span>
+								   		<span ng-show="!isCorrectNumber(zDetails.slotOccupied)">n.p.</span>
+								   	</td>
+								   	<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+						<td width="60%" valign="top">
+							<div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
+						</td>
+					</tr>
+				</table>
+				
+			</div>
+			<div ng-show="isAreaDetShow()">
+				<table width="100%">
+					<tr>
+						<td width="40%">
+							<table width="100%">	
+						        <tr>	
+						        	<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'area_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ aDetails.name }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="a_fee.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanS">
+						   				<hr/>
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+										{{ 'element_costTime' | i18n }}
+						  			</td>
+						  			<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'element_waiting_time' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span ng-show="aDetails.extratime != null && aDetails.extratime.extratime_estimation_min != aDetails.extratime.extratime_estimation_max">{{ aDetails.extratime.extratime_estimation_min }} - {{ aDetails.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="aDetails.extratime != null && aDetails.extratime.extratime_estimation_min == aDetails.extratime.extratime_estimation_max">{{ aDetails.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="aDetails.extratime == null">n.p.</span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+						        	<td class="detailsListTableCXS"></td>
+							        <td colspan="3" class="detailsTableColSpanS">
+							        	<hr/>
+							        </td>
+							        <td class="detailsListTableCXS"></td>
+							    </tr>
+						   		<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'area_total_slots' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ aDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+								   	<td class="detailsListTableSXS">{{ 'area_occupied_slots' | i18n }}:</td>
+								   	<td class="detailsListTableCXS"></td>
+								   	<td class="detailsListTableDXS">
+								   		<span ng-show="isCorrectNumber(aDetails.slotOccupied)">{{ aDetails.slotOccupied }}</span>
+								   		<span ng-show="!isCorrectNumber(aDetails.slotOccupied)">n.p.</span>
+								   	</td>
+								   	<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+						<td width="60%">
+							<div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" /> 
+						</td>
+					</tr>
+				</table>
+			</div>        
+		</div>
 	</div>
 	
 </div>
