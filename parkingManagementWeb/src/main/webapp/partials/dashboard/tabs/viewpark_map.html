@@ -182,16 +182,16 @@
 			<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showDetails(event, pm, 1, 0)" ><!-- on-click="showInfoWindow(event, 'pm')" -->
 			</marker>
 			<marker ng-repeat="pmSel in mapParkingMetersSelectedMarkers" id="{{ pmSel.id }}" animation="{{ pmSel.options.animation }}" position="{{ pmSel.position }}" icon="{{ pmSel.icon }}" on-click="hideDetails(event, pmSel, 1)" ></marker><!-- on-click="showInfoWindow(event, 'pm')" -->
-			<marker ng-repeat="pmProf in profitParkingMetersMarkers" id="{{ pmProf.id }}" animation="{{ pmProf.options.animation }}" position="{{ pmProf.position }}" icon="{{ pmProf.icon }}" on-click="showProfitDetails(event, pmProf, 1, 2)" ></marker>
+			<marker ng-repeat="pmProf in profitParkingMetersMarkers" id="{{ pmProf.id }}" animation="{{ pmProf.options.animation }}" position="{{ pmProf.position }}" icon="{{ pmProf.icon }}" on-click="showDetails(event, pmProf, 1, 2)" ></marker>
 			<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ ps.icon }}" on-click="showDetails(event, ps, 2, 0)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 			</marker>
 			<marker ng-repeat="psSel in mapParkingStructureSelectedMarkers" id="{{ psSel.id }}" animation="{{ psSel.options.animation }}" position="{{ psSel.position }}" icon="{{ psSel.icon }}" on-click="hideDetails(event, psSel, 2)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 			</marker>
-			<marker ng-repeat="psOcc in occupancyParkingStructureMarkers" id="{{ psOcc.id }}" position="{{ psOcc.position }}" icon="{{ psOcc.icon }}" on-click="showOccupancy(event, psOcc, 2, 1)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
+			<marker ng-repeat="psOcc in occupancyParkingStructureMarkers" id="{{ psOcc.id }}" position="{{ psOcc.position }}" icon="{{ psOcc.icon }}" on-click="showDetails(event, psOcc, 2, 1)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 			</marker>
-			<marker ng-repeat="psProf in profitParkingStructureMarkers" id="{{ psProf.id }}" position="{{ psProf.position }}" icon="{{ psProf.icon }}" on-click="showProfitDetails(event, psProf, 2, 2)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
+			<marker ng-repeat="psProf in profitParkingStructureMarkers" id="{{ psProf.id }}" position="{{ psProf.position }}" icon="{{ psProf.icon }}" on-click="showDetails(event, psProf, 2, 2)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 			</marker>
-			<marker ng-repeat="psTime in timeCostParkingStructureMarkers" id="{{ psTime.id }}" position="{{ psTime.position }}" icon="{{ psTime.icon }}" on-click="showTimeCostDetails(event, psTime, 2, 3)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
+			<marker ng-repeat="psTime in timeCostParkingStructureMarkers" id="{{ psTime.id }}" position="{{ psTime.position }}" icon="{{ psTime.icon }}" on-click="showDetails(event, psTime, 2, 3)" ><!-- on-click="showInfoWindow(event, 'ps')" -->
 			</marker>
 			<marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')" >
 				<info-window id="bp" visible-on-marker="{{ bp.id }}">
@@ -221,13 +221,13 @@
      		</shape>
      		<marker ng-repeat="smSel in mapStreetSelectedMarkers" id="{{ smSel.id }}" position="{{ smSel.position }}" icon="{{ smSel.icon }}" on-click="hideDetails(event, smSel.data, 3)" ></marker>
      		<shape name="polyline" ng-repeat="sOcc in occupancyStreets" id="{{ sOcc.id }}" path="{{ sOcc.gpath }}" 
-         		geodesic="{{ sOcc.geodesic }}" stroke-color="{{ sOcc.stroke.color }}" stroke-opacity="{{ sOcc.stroke.opacity }}" stroke-weight="{{ sOcc.stroke.weight }}" on-click="showOccupancy(event, sOcc, 3, 1)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
+         		geodesic="{{ sOcc.geodesic }}" stroke-color="{{ sOcc.stroke.color }}" stroke-opacity="{{ sOcc.stroke.opacity }}" stroke-weight="{{ sOcc.stroke.weight }}" on-click="showDetails(event, sOcc, 3, 1)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
      		</shape>
      		<shape name="polyline" ng-repeat="sProf in profitStreets" id="{{ sProf.id }}" path="{{ sProf.gpath }}" 
-         		geodesic="{{ sProf.geodesic }}" stroke-color="{{ sProf.stroke.color }}" stroke-opacity="{{ sProf.stroke.opacity }}" stroke-weight="{{ sProf.stroke.weight }}" on-click="showProfitDetails(event, sProf, 3, 2)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
+         		geodesic="{{ sProf.geodesic }}" stroke-color="{{ sProf.stroke.color }}" stroke-opacity="{{ sProf.stroke.opacity }}" stroke-weight="{{ sProf.stroke.weight }}" on-click="showDetails(event, sProf, 3, 2)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
      		</shape>
      		<shape name="polyline" ng-repeat="sTime in timeCostStreets" id="{{ sTime.id }}" path="{{ sTime.gpath }}" 
-         		geodesic="{{ sTime.geodesic }}" stroke-color="{{ sTime.stroke.color }}" stroke-opacity="{{ sTime.stroke.opacity }}" stroke-weight="{{ sTime.stroke.weight }}" on-click="showTimeCostDetails(event, sTime, 3, 3)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
+         		geodesic="{{ sTime.geodesic }}" stroke-color="{{ sTime.stroke.color }}" stroke-opacity="{{ sTime.stroke.opacity }}" stroke-weight="{{ sTime.stroke.weight }}" on-click="showDetails(event, sTime, 3, 3)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
      		</shape>
 			<shape name="polygon" ng-repeat="z in mapZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
@@ -239,15 +239,15 @@
      		</shape>
      		<shape name="polygon" ng-repeat="zOcc in occupancyZones" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
          		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zOcc.stroke.weight }}"
-         		fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showOccupancy(event, zOcc, 4, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showDetails(event, zOcc, 4, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polygon" ng-repeat="zProf in profitZones" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
          		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zProf.stroke.weight }}"
-         		fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showProfitDetails(event, zProf, 4, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showDetails(event, zProf, 4, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polygon" ng-repeat="zTime in timeCostZones" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
          		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zTime.stroke.weight }}"
-         		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showTimeCostDetails(event, zTime, 4, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          		geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="{{ a.stroke.opacity }}" stroke-weight="{{ a.stroke.weight }}"
@@ -259,15 +259,15 @@
      		</shape>
      		<shape name="polygon" ng-repeat="aOcc in occupancyAreas" id="{{ aOcc.id }}" path="{{ aOcc.gpath }}" visible="{{ aOcc.visible }}"
          		geodesic="{{ aOcc.geodesic }}" stroke-color="{{ aOcc.stroke.color }}" stroke-opacity="{{ aOcc.stroke.opacity }}" stroke-weight="{{ aOcc.stroke.weight }}"
-         		fill-color="{{ aOcc.stroke.color }}" fill-opacity="{{ aOcc.fill.opacity }}" on-click="showOccupancy(event, aOcc, 5, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		fill-color="{{ aOcc.stroke.color }}" fill-opacity="{{ aOcc.fill.opacity }}" on-click="showDetails(event, aOcc, 5, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polygon" ng-repeat="aProf in profitAreas" id="{{ aProf.id }}" path="{{ aProf.gpath }}" visible="{{ aProf.visible }}"
          		geodesic="{{ aProf.geodesic }}" stroke-color="{{ aProf.stroke.color }}" stroke-opacity="{{ aProf.stroke.opacity }}" stroke-weight="{{ aProf.stroke.weight }}"
-         		fill-color="{{ aProf.stroke.color }}" fill-opacity="{{ aProf.fill.opacity }}" on-click="showProfitDetails(event, aProf, 5, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		fill-color="{{ aProf.stroke.color }}" fill-opacity="{{ aProf.fill.opacity }}" on-click="showDetails(event, aProf, 5, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polygon" ng-repeat="aTime in timeCostAreas" id="{{ aTime.id }}" path="{{ aTime.gpath }}" visible="{{ aTime.visible }}"
          		geodesic="{{ aTime.geodesic }}" stroke-color="{{ aTime.stroke.color }}" stroke-opacity="{{ aTime.stroke.opacity }}" stroke-weight="{{ aTime.stroke.weight }}"
-         		fill-color="{{ aTime.stroke.color }}" fill-opacity="{{ aTime.fill.opacity }}" on-click="showTimeCostDetails(event, aTime, 5, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		fill-color="{{ aTime.stroke.color }}" fill-opacity="{{ aTime.fill.opacity }}" on-click="showDetails(event, aTime, 5, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
 		</map>			
 	</div>
@@ -1141,7 +1141,7 @@
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
 				</table>
-				<table width="95%">	
+				<table>	
 					<tr ng-show="ps_address.visible">
 						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
@@ -1200,7 +1200,7 @@
 						<td class="detailsTitleTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
 					</tr>
 				</table>	
-				<table width="100%">	
+				<table>	
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
@@ -1254,7 +1254,7 @@
 						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
 					</tr>
 				</table>	
-				<table width="95%">	
+				<table>	
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
@@ -1300,7 +1300,7 @@
 						<td class="detailsTitleTableDX">{{ aDetails.data.name }}</td>
 					</tr>
 				</table>	
-				<table width="95%">	
+				<table>	
 					<tr ng-show="a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
