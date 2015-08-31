@@ -26,6 +26,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.zone = {};
     $scope.bikePoint = {};
     
+    $scope.openingPeriods = [];
+    $scope.timePeriod = {};
+    
     $scope.multiSelSettings = {displayProp: 'name'-'submacro'};
     
     $scope.authHeaders = {
@@ -655,6 +658,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	
 	    	for (var i = 0; i <  allPstructs.length; i++) {
 	    		markers.push(createMarkers(i, allPstructs[i], 2));
+	    		allPstructs[i] = $scope.correctFeeData(allPstructs[i]);
 		    }
 	    	
 	    	$scope.pstructWS = allPstructs;
@@ -854,6 +858,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			correctedPm = false;
 		}
 		return correctedPm;
+	};
+	
+	$scope.correctFeeData = function(struct){
+		if(struct.fee_val != null){
+			struct.fee_val = struct.fee_val / 100 + "";
+			if(struct.fee_val.indexOf(".") > -1){
+				struct.fee_val = struct.fee_val.replace(".", ",");
+			}
+		}
+		return struct;
 	};
 	
 	$scope.checkIfPaymentChecked = function(value){
@@ -1325,6 +1339,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.mySpecialPSMarkers = [];
 		
 		$scope.viewParkingStructure = parkingStructure;
+		
+		if(parkingStructure.openingTime != null){
+			$scope.openingPeriods = parkingStructure.openingTime.period;
+		}
 		
 		var toRemLat = 0;
 		var toRemLng = 0;
@@ -1950,6 +1968,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(parkingStruct != null){
 			$scope.isEditing = true;
 			$scope.isInit = false;
+			
+			if(parkingStruct.openingTime != null){
+				$scope.openingPeriods = parkingStruct.openingTime.period;
+			}
+			
 			angular.copy(parkingStruct, $scope.parkingStructure);
 			for(var i = 0; i < parkingStruct.paymentMode.length; i++){
 				switch(parkingStruct.paymentMode[i]){
@@ -2650,6 +2673,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	$scope.addOpeningPeriod = function(period){
+		// controlli su periodo
+		var newPeriod = angular.copy(period);
+		$scope.openingPeriods.push(newPeriod);
+		$scope.timePeriod = {};
+	};
+	
+	$scope.deleteOpeningPeriod = function(period){
+		for(var i = 0; i < $scope.openingPeriods.length; i++){
+			if($scope.openingPeriods[i].from == period.from && $scope.openingPeriods[i].to == period.to){
+				$scope.openingPeriods.splice(i, 1);
+			}
+		}
+	};
+	
 	// Update ParkingStructure Object
 	$scope.updatePstruct = function(form, ps, paymode, geo){
 		if(!form.$valid){
@@ -2668,6 +2706,27 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.showUpdatingPSErrorMessage = false;
 				$scope.setMyPaymentoErrMode(false);
 				
+				var fee_eurocent = 0;
+				if(ps.fee_val != null){
+					if(ps.fee_val.indexOf(",") > -1){
+						ps.fee_val = ps.fee_val.replace(",", ".");
+					}
+					fee_eurocent = Number(ps.fee_val) * 100;
+				}
+				
+				// openingPeriod
+				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
+				if($scope.openingPeriods != null && $scope.openingPeriods.length > 0){
+					var cleanedPeriods = [];
+					for(var i = 0; i < $scope.openingPeriods.length; i++){
+						var cleanedPeriod = { from : $scope.openingPeriods[i].from, to: $scope.openingPeriods[i].to };
+						cleanedPeriods.push(cleanedPeriod);
+					}
+					openingPeriod = { 
+						period: cleanedPeriods	
+					};
+				}
+				
 				var id = ps.id;
 				var appId = sharedDataService.getConfAppId();
 				var method = 'PUT';
@@ -2677,15 +2736,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					id_app: ps.id_app,
 					name: ps.name,
 					streetReference: ps.streetReference,
-					fee: ps.fee,
-					timeSlot : ps.timeSlot,
+					fee_val: fee_eurocent,
+					fee_note: ps.fee_note,
+					timeSlot: ps.timeSlot,
+					openingTime: openingPeriod,
 					managementMode: ps.managementMode,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: $scope.correctMyPaymentMode(paymode),
 					slotNumber: ps.slotNumber,
 					handicappedSlotNumber: ps.handicappedSlotNumber,
 					unusuableSlotNumber: ps.unusuableSlotNumber,
-					geometry: $scope.correctMyGeometry(geo)
+					geometry: $scope.correctMyGeometry(geo),
+					parkAndRide: ps.parkAndRide
 				};
 				
 			    var value = JSON.stringify(data);
@@ -3217,21 +3279,45 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.showUpdatingPSErrorMessage = false;
 				$scope.setMyPaymentoErrMode(false);
 				
+				var fee_eurocent = 0;
+				if(ps.fee_val != null){
+					if(ps.fee_val.indexOf(",") > -1){
+						ps.fee_val = ps.fee_val.replace(",", ".");
+					}
+					fee_eurocent = Number(ps.fee_val) * 100;
+				}
+				
+				// openingPeriod
+				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
+				if($scope.openingPeriods != null && $scope.openingPeriods.length > 0){
+					var cleanedPeriods = [];
+					for(var i = 0; i < $scope.openingPeriods.length; i++){
+						var cleanedPeriod = { from : $scope.openingPeriods[i].from, to: $scope.openingPeriods[i].to };
+						cleanedPeriods.push(cleanedPeriod);
+					}
+					openingPeriod = { 
+						period: cleanedPeriods	
+					};
+				}
+				
 				var method = 'POST';
 				var appId = sharedDataService.getConfAppId();
 				var data = {
 					id_app: $scope.myAppId,
 					name: ps.name,
 					streetReference: ps.streetReference,
-					fee: ps.fee,
+					fee_val: fee_eurocent,
+					fee_note: ps.fee_note,
 					timeSlot : ps.timeSlot,
+					openingTime: openingPeriod,
 					managementMode: ps.managementMode,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: $scope.correctMyPaymentMode(paymode),
 					slotNumber: ps.slotNumber,
 					handicappedSlotNumber: ps.handicappedSlotNumber,
 					unusuableSlotNumber: ps.unusuableSlotNumber,
-					geometry: $scope.correctMyGeometry(geo)
+					geometry: $scope.correctMyGeometry(geo),
+					parkAndRide: ps.parkAndRide
 				};
 				
 			    var value = JSON.stringify(data);

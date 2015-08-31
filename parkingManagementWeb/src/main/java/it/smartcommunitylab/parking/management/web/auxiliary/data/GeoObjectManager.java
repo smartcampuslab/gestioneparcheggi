@@ -417,7 +417,7 @@ public class GeoObjectManager {
 		if(park.getGeometry()!= null){
 			p.setPosition(new double[]{park.getGeometry().getLat(), park.getGeometry().getLng()});
 		}
-		p.setDescription(park.getFee() + ", " + park.getManagementMode());
+		p.setDescription(park.getFee_val() + ", " + park.getManagementMode());
 		return p;
 	}
 	

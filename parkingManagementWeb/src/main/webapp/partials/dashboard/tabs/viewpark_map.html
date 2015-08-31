@@ -341,22 +341,38 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
-				</table>
-				<table width="100%">	
 					<tr ng-show="ps_address.visible">
-						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
-						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
+						<td class="detailsTitleTableSX">{{ 'ps_address' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.streetReference }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
 					</tr>
 					<tr ng-show="ps_fee.visible">
-						<td class="detailsTableSX">{{ 'ps_fee_details' | i18n }}:</td>
-						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ psDetails.data.fee }}</td>
+						<td class="detailsTitleTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td ng-if="psDetails.data.fee_val != null" class="detailsTitleTableDX">
+							{{ psDetails.data.fee_val }} {{ 'euro_hour' | i18n }}
+						</td>
+						<td ng-if="psDetails.data.fee_val == null" class="detailsTitleTableDX">
+							n.p.
+						</td>
+					</tr>
+					<tr ng-show="ps_fee.visible">
+						<td class="detailsTitleTableSX">{{ 'ps_fee_det_note' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.fee_note }}</td>
 					</tr>
 					<tr ng-show="ps_timeSlot.visible">
-						<td class="detailsTableSX">{{ 'ps_time' | i18n }}:</td>
-						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ psDetails.data.timeSlot }}</td>
+						<td class="detailsTitleTableSX">{{ 'ps_time' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td ng-if="psDetails.data.openingTime != null" class="detailsTitleTableDX">
+							<span ng-repeat="ops in psDetails.data.openingTime.period">{{ ops.from }} - {{ ops.to }};</span>
+						</td>
+						<td ng-if="psDetails.data.openingTime == null" class="detailsTitleTableDX">n.p.</td>
 					</tr>
 					<!-- 							    	<tr ng-show="ps_phoneNumber.visible"> -->
 					<!-- 							    		<td><strong>{{ 'ps_phone' | i18n }}:</strong></td> -->
@@ -370,6 +386,8 @@
 					<!-- 							    		<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td> -->
 					<!-- 							    		<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td> -->
 					<!-- 							    	</tr> -->
+				</table>
+				<table width="100%">	
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
@@ -386,7 +404,10 @@
 					<tr>
 						<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ psDetails.data.slotOccupied }}</td>
+						<td class="detailsTableDX">
+							<span ng-show="psDetails.data.slotOccupied >= 0">{{ psDetails.data.slotOccupied }}</span>
+							<span ng-show="psDetails.data.slotOccupied < 0">n.p.</span>
+						</td>
 					</tr>
 					<!-- 								<tr ng-show="ps_handicappedSlot.visible">	 -->
 					<!-- 									<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td> -->
@@ -649,13 +670,18 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
-				</table>
-				<table width="100%">	
 					<tr ng-show="ps_address.visible">
-						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
-						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
+						<td class="detailsTitleTableSX">{{ 'ps_address' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.streetReference }}</td>
 					</tr>
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
+					</tr>
+				</table>
+				<table width="100%">
 					<tr ng-show="pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
@@ -935,13 +961,18 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
+					<tr ng-show="ps_address.visible">
+						<td class="detailsTitleTableSX">{{ 'ps_address' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.streetReference }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
+					</tr>
 				</table>	
 				<table width="100%">	
-					<tr ng-show="ps_address.visible">
-						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
-						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{	psDetails.data.streetReference }}</td>
-					</tr>
 					<tr ng-show="ps_slotNumber.visible">
 						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
@@ -1140,13 +1171,18 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
-				</table>
-				<table>	
 					<tr ng-show="ps_address.visible">
-						<td class="detailsTableSX">{{ 'ps_address' | i18n }}:</td>
-						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ psDetails.data.streetReference }}</td>
+						<td class="detailsTitleTableSX">{{ 'ps_address' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.streetReference }}</td>
 					</tr>
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
+					</tr>
+				</table>
+				<table>			
 					<tr ng-show="pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />

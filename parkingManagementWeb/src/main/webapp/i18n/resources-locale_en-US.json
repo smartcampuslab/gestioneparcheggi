@@ -356,8 +356,28 @@
     "description": "Label telefono struttura"
 }, {
     "key": "ps_fee",
-    "value": "Tariffa sosta (euro/ora)",
+    "value": "Tariffa sosta",
     "description": "Label tariffa sosta in struttura"
+}, {
+    "key": "ps_fee_det_val",
+    "value": "Euro/Ora",
+    "description": "Label dettagli tariffa sosta oraria in struttura"
+}, {
+    "key": "ps_fee_det_note",
+    "value": "Note",
+    "description": "Label dettagli tariffa sosta note in struttura"
+}, {
+    "key": "ps_fee_val",
+    "value": "Tariffa sosta oraria",
+    "description": "Label tariffa sosta oraria in struttura"
+}, {
+    "key": "ps_fee_note",
+    "value": "Tariffa sosta note",
+    "description": "Label tariffa sosta note in struttura"
+}, {
+    "key": "ps_park_and_ride",
+    "value": "Parcheggio Park&Ride",
+    "description": "Label checkbox park and ride in parcheggio struttura"
 }, {
     "key": "parkingstructure_name_err_required",
     "value": "Campo Nome Struttura obbligatorio",
@@ -376,7 +396,7 @@
     "description": "Messaggio errore campo modalita' pagamento obbligatorio"
 }, {
     "key": "parkingstructure_fee_err_required",
-    "value": "Campo Tariffa sosta obbligatorio",
+    "value": "Campo Tariffa sosta 'euro/ora' o 'note' obbligatorio. Valorizzare almeno uno dei due campi",
     "description": "Messaggio errore campo tariffa obbligatorio"
 }, {
     "key": "parkingstructure_fee_err_pattern",
@@ -858,6 +878,30 @@
     "key": "ps_time_placeholder",
     "value": "Inserire l'orario di apertura della struttura (da - a) nel formato hh:mm",
     "description": "Testo placeholder campo orario struttura"
+}, {
+    "key": "ps_time_placeholder_from",
+    "value": "Inserire l'orario di apertura nel formato hh:mm",
+    "description": "Testo placeholder campo orario struttura"
+}, {
+    "key": "ps_time_placeholder_to",
+    "value": "Inserire l'orario di chiusura nel formato hh:mm",
+    "description": "Testo placeholder campo orario struttura"
+}, {
+    "key": "add_time_period",
+    "value": "Aggungi periodo apertura",
+    "description": "Testo placeholder campo orario struttura"
+}, {
+    "key": "ps_opening_from",
+    "value": "Dalle",
+    "description": "Testo placeholder campo orario struttura periodo da"
+}, {
+    "key": "ps_opening_to",
+    "value": "Alle",
+    "description": "Testo placeholder campo orario struttura periodo a"
+}, {
+    "key": "ps_time_period_delete",
+    "value": "Cancella",
+    "description": "Testo pulsante per cancellazione periodo apertura da lista"
 }, {
     "key": "ps_phone_placeholder",
     "value": "Inserire il numero di telefono della struttura",

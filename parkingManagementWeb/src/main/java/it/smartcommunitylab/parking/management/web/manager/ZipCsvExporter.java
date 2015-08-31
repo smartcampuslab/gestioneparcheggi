@@ -138,7 +138,7 @@ public class ZipCsvExporter implements Exporter {
 			}
 			result += "\"" + CSV_SEPARATOR;
 			result += "\"" + element.getPhoneNumber() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getFee() + "\"" + CSV_SEPARATOR
+					+ "\"" + element.getFee_val() + "\"" + CSV_SEPARATOR
 					+ geoToCsv(element.getGeometry()) + "\n";
 		}
 		return result;

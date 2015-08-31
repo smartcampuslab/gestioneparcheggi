@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
+import it.smartcommunitylab.parking.management.web.model.OpeningTime;
+
 import java.util.List;
 
 public class ParkingStructureBean {
@@ -24,8 +26,10 @@ public class ParkingStructureBean {
 	private String name;
 	private String streetReference;
 	private String managementMode;
-	private String fee;
+	private Integer fee_val;
+	private String fee_note;
 	private String timeSlot;
+	private OpeningTime openingTime;
 	private PointBean geometry;
 	private Integer slotNumber;
 	private Integer slotOccupied;
@@ -38,6 +42,7 @@ public class ParkingStructureBean {
 	private double occupancyRate;	// I use it only in the bean and not in the db object
 	private double profit;	// in eurocent
 	private int tickets;	// number of tickets
+	private boolean parkAndRide;
 	
 	public String getId_app() {
 		return id_app;
@@ -127,14 +132,6 @@ public class ParkingStructureBean {
 		this.phoneNumber = phoneNumber;
 	}
 
-	public String getFee() {
-		return fee;
-	}
-
-	public void setFee(String fee) {
-		this.fee = fee;
-	}
-
 	public PointBean getGeometry() {
 		return geometry;
 	}
@@ -191,6 +188,38 @@ public class ParkingStructureBean {
 		this.tickets = tickets;
 	}
 
+	public Integer getFee_val() {
+		return fee_val;
+	}
+
+	public String getFee_note() {
+		return fee_note;
+	}
+
+	public OpeningTime getOpeningTime() {
+		return openingTime;
+	}
+
+	public boolean isParkAndRide() {
+		return parkAndRide;
+	}
+
+	public void setFee_val(Integer fee_val) {
+		this.fee_val = fee_val;
+	}
+
+	public void setFee_note(String fee_note) {
+		this.fee_note = fee_note;
+	}
+
+	public void setOpeningTime(OpeningTime openingTime) {
+		this.openingTime = openingTime;
+	}
+
+	public void setParkAndRide(boolean parkAndRide) {
+		this.parkAndRide = parkAndRide;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -206,7 +235,8 @@ public class ParkingStructureBean {
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
 		json += "\"profit\":\"" + getProfit() + "\",";
-		json += "\"tickets\":\"" + getTickets() + "\"";
+		json += "\"tickets\":\"" + getTickets() + "\",";
+		json += "\"parkAndRide\":\"" + isParkAndRide() + "\"";
 		json += "}";
 		return json;
 	}

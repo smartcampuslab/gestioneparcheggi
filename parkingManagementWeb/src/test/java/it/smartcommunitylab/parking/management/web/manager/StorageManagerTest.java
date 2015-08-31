@@ -469,7 +469,7 @@ public class StorageManagerTest {
 		ps.setHandicappedSlotNumber(10);
 		ps.setUnusuableSlotNumber(5);
 		ps.setTimeSlot("05:00 - 00:00");
-		ps.setFee("2 euro/ora");
+		ps.setFee_note("2 euro/ora");
 		ps.setPhoneNumber("0464112233");
 		PointBean g11 = new PointBean();
 		g11.setLat(45.887509);
@@ -489,7 +489,7 @@ public class StorageManagerTest {
 		ps2.setHandicappedSlotNumber(10);
 		ps2.setUnusuableSlotNumber(5);
 		ps2.setTimeSlot("05:00 - 23:45");
-		ps2.setFee("2,5 euro/ora");
+		ps2.setFee_note("2,5 euro/ora");
 		ps2.setPhoneNumber("0464511233");	
 		PointBean g12 = new PointBean();
 		g12.setLat(45.891057);

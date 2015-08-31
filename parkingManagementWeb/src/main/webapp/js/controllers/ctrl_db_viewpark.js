@@ -2739,8 +2739,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						name: occupancyStructs[i].name,
 						streetReference: occupancyStructs[i].streetReference,
 						managementMode: occupancyStructs[i].managementMode,
-						fee: occupancyStructs[i].fee,
+						fee_val: $scope.correctFeeData(occupancyStructs[i].fee_val),
+						fee_note: occupancyStructs[i].fee_note,
 						timeSlot: occupancyStructs[i].timeSlot,
+						openingTime: occupancyStructs[i].openingTime,
 						slotNumber: occupancyStructs[i].slotNumber,
 						slotOccupied: occupancyStructs[i].slotOccupied,
 						handicappedSlotNumber: occupancyStructs[i].handicappedSlotNumber,
@@ -2751,6 +2753,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						phoneNumber: occupancyStructs[i].phoneNumber,
 						lastChange: profitStructs[j].lastChange,
 						occupancyRate: occupancyStructs[i].occupancyRate,
+						parkAndRide: occupancyStructs[i].parkAndRide,
 						profit : profitStructs[j].profit,
 						tickets : profitStructs[j].tickets,
 						extratime: timeCost
@@ -2760,6 +2763,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 		}
 		return mergedStructs;
+	};
+	
+	$scope.correctFeeData = function(fee_val){
+		if(fee_val != null){
+			fee_val =fee_val / 100 + "";
+			if(fee_val.indexOf(".") > -1){
+				fee_val = fee_val.replace(".", ",");
+			}
+		}
+		return fee_val;
 	};
 	
 	// Method getStreetsInZoneOccupancy: used to get the occupancy of the streets in a specific zone
@@ -4863,7 +4876,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     			}
     			if($scope.profitParkingStructureMarkers != null && $scope.profitParkingStructureMarkers.length > 0){
 	    			for (var i = 0; i < $scope.profitParkingStructureMarkers.length; i++){
-	    				var timeCost = $scope.getExtratimeFromOccupancy($scope.mapParkingStructureMarkers[i].data.occupancyRate);
+	    				var timeCost = $scope.getExtratimeFromOccupancy($scope.profitParkingStructureMarkers[i].data.occupancyRate);
 		    			var myIcon = $scope.getTimeCostIcon(timeCost, 2);
 	    	    		var object = $scope.profitParkingStructureMarkers[i];
 	    	    		object.icon = myIcon;
