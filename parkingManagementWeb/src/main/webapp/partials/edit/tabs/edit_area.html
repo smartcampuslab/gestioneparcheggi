@@ -187,88 +187,90 @@
 		</div>
 	</div>
 	<div ng-show="editModeA">
-		<form role="form" name="form">
-			<div class="panel panel-default" width="90%">
-		   		<div class="panel-heading">
-		    		<h3 class="panel-title"><strong>{{ 'edit_area' | i18n }}</strong></h3>
-		  		</div>
-		  		<div class="panel-body">
-		  			<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing" -->
-		  				<div id="panelMap" align ="center" ng-show="!isEditing">
-								<button ng-click="removeAllNewPolygons()" type="button" class="btn btn-default" >{{ 'btn_remove_all_polygons' | i18n }}</button>
-        						<button ng-click="removeLastNewPolygon()" type="button" class="btn btn-default" >{{ 'btn_remove_last_polygons' | i18n }}</button>
+		<div class="col-md-12">
+			<form role="form" name="form">
+				<div class="panel panel-default" width="90%">
+			   		<div class="panel-heading">
+			    		<h3 class="panel-title"><strong>{{ 'edit_area' | i18n }}</strong></h3>
+			  		</div>
+			  		<div class="panel-body">
+			  			<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing" -->
+			  				<div id="panelMap" align ="center" ng-show="!isEditing">
+									<button ng-click="removeAllNewPolygons()" type="button" class="btn btn-default" >{{ 'btn_remove_all_polygons' | i18n }}</button>
+	        						<button ng-click="removeLastNewPolygon()" type="button" class="btn btn-default" >{{ 'btn_remove_last_polygons' | i18n }}</button>
+							</div>
+	<!-- 						<ui-gmap-google-map id="11" center="aCreateMap.center" draggable="true" zoom="aCreateMap.zoom" options="aCreateMap.options" control="aCreateMap.control" bounds="aCreateMap.bounds" events="aCreateMap.events"> -->
+	<!-- 							<ui-gmap-polygon static="false" path="newArea.path" stroke="newArea.stroke" visible="newArea.visible" geodesic="newArea.geodesic" fill="newArea.fill" fit="false" editable="newArea.editable" draggable="newArea.draggable"></ui-gmap-polygon> -->
+	<!-- 						</ui-gmap-google-map> -->
+							<map id="editArea" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addAreaPath()" on-rightclick="addNewAreaPath()" ><!-- ng-show="resizeMap()" -->
+	<!-- 							<shape name="polygon" id="editAPolygon" path="{{ editGArea.gpath }}" visible="{{ editGArea.visible }}" editable="{{ editGArea.editable }}" -->
+	<!-- 			         			geodesic="{{ editGArea.geodesic }}" stroke-color="{{ editGArea.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ editGArea.stroke.weight }}" -->
+	<!-- 			         			fill-color="{{ editGArea.fill.color }}" fill-opacity="{{ editGArea.fill.opacity }}"> -->
+	<!-- 			    			</shape> -->
+				    			<shape name="polygon" ng-repeat="eA in editGAreas" id="{{ eA.id }}" path="{{ eA.gpath }}" visible="{{ eA.visible }}" editable="{{ eA.editable }}" draggable="{{ eA.draggable }}"
+				         			geodesic="{{ eA.geodesic }}" stroke-color="#000000" stroke-opacity="1.0" stroke-weight="{{ eA.stroke.weight }}" on-rightclick="removeAreaPath(event, eA)"
+				         			fill-color="#000000" fill-opacity="{{ eA.fill.opacity }}">
+				    			</shape>
+							</map>
 						</div>
-<!-- 						<ui-gmap-google-map id="11" center="aCreateMap.center" draggable="true" zoom="aCreateMap.zoom" options="aCreateMap.options" control="aCreateMap.control" bounds="aCreateMap.bounds" events="aCreateMap.events"> -->
-<!-- 							<ui-gmap-polygon static="false" path="newArea.path" stroke="newArea.stroke" visible="newArea.visible" geodesic="newArea.geodesic" fill="newArea.fill" fit="false" editable="newArea.editable" draggable="newArea.draggable"></ui-gmap-polygon> -->
-<!-- 						</ui-gmap-google-map> -->
-						<map id="editArea" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addAreaPath()" on-rightclick="addNewAreaPath()" ><!-- ng-show="resizeMap()" -->
-<!-- 							<shape name="polygon" id="editAPolygon" path="{{ editGArea.gpath }}" visible="{{ editGArea.visible }}" editable="{{ editGArea.editable }}" -->
-<!-- 			         			geodesic="{{ editGArea.geodesic }}" stroke-color="{{ editGArea.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ editGArea.stroke.weight }}" -->
-<!-- 			         			fill-color="{{ editGArea.fill.color }}" fill-opacity="{{ editGArea.fill.opacity }}"> -->
-<!-- 			    			</shape> -->
-			    			<shape name="polygon" ng-repeat="eA in editGAreas" id="{{ eA.id }}" path="{{ eA.gpath }}" visible="{{ eA.visible }}" editable="{{ eA.editable }}" draggable="{{ eA.draggable }}"
-			         			geodesic="{{ eA.geodesic }}" stroke-color="#000000" stroke-opacity="1.0" stroke-weight="{{ eA.stroke.weight }}" on-rightclick="removeAreaPath(event, eA)"
-			         			fill-color="#000000" fill-opacity="{{ eA.fill.opacity }}">
-			    			</shape>
-						</map>
+						<div class="form-group" >
+					    	<label for="geometryN" ng-show="a_geometry.visible">{{ 'area_geometry' | i18n }}</label>
+					    	<input id="geometryN" type="text" class="form-control" name="aGeometry" ng-model="myPolGeometry" ng-required="a_geometry.required" ng-show="a_geometry.visible" >
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aGeometry.$error.pattern">{{ 'area_geometry_err_pattern' | i18n }}</div>
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aGeometry.$error.required">{{ 'area_geometry_err_required' | i18n }}</div>
+						</div>
+					   	<div class="form-group" ng-show="a_name.visible">
+					    	<label for="name">{{ 'area_name' | i18n }}</label>
+					    	<input id="name" type="text" class="form-control" name="aName" ng-model="area.name" ng-required="a_name.required" placeholder="{{ 'area_name_placeholder' | i18n }}" >
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aName.$error.required">{{ 'area_name_err_required' | i18n }}</div>
+					   	</div>
+					   	<div class="form-group" ng-show="a_fee.visible">
+					    	<label for="fee">{{ 'area_rate' | i18n }}</label>
+					    	<input id="fee" type="text" class="form-control" name="aFee" ng-model="area.fee" ng-required="a_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aFee.$error.required">{{ 'area_fee_err_required' | i18n }}</div>
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aFee.$error.pattern">{{ 'area_fee_err_pattern' | i18n }}</div>
+					   	</div>
+					   	<div class="form-group" ng-show="a_timeSlot.visible">
+					    	<label for="time">{{ 'area_time' | i18n }}</label>
+					    	<input id="time" type="text" class="form-control" name="aTime" ng-model="area.timeSlot" ng-required="a_timeSlot.required" ng-pattern="periodPattern" placeholder="{{ 'area_time_placeholder' | i18n }}" >
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aTime.$error.required">{{ 'area_openingtime_err_required' | i18n }}</div>
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aTime.$error.pattern">{{ 'area_openingtime_err_pattern' | i18n }}</div>
+					   	</div>
+					   	<div class="form-group" ng-show="a_smsCode.visible">
+					    	<label for="sms">{{ 'area_sms' | i18n }}</label>
+					    	<input id="sms" type="text" class="form-control" name="aSms" ng-model="area.smsCode" ng-required="a_smsCode.required"  placeholder="{{ 'area_sms_placeholder' | i18n }}" >
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aSms.$error.required">{{ 'area_smscode_err_required' | i18n }}</div>
+					   	</div>
+					   	<div class="form-group" ng-show="a_note.visible">
+					    	<label for="note">{{ 'area_note' | i18n }}</label>
+					    	<input id="note" type="text" class="form-control" name="aNote" ng-model="area.note" ng-required="a_note.required"  placeholder="{{ 'area_note_placeholder' | i18n }}" >
+					   		<div class="alert alert-danger" ng-show="!isInit && form.aNote.$error.required">{{ 'area_note_err_required' | i18n }}</div>
+					   	</div>
+					   	<div class="form-group" ng-show="a_color.visible">
+					    	<label for="color">{{ 'area_color' | i18n }}</label>
+					    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="aColor" ng-model="myColor" ng-required="a_color.required" placeholder="{{ 'area_color_placeholder' | i18n }}" >
+					    	<div class="alert alert-danger" ng-show="!isInit && form.aColor.$error.required">{{ 'area_color_err_required' | i18n }}</div>
+					   	</div>
 					</div>
-					<div class="form-group" >
-				    	<label for="geometryN" ng-show="a_geometry.visible">{{ 'area_geometry' | i18n }}</label>
-				    	<input id="geometryN" type="text" class="form-control" name="aGeometry" ng-model="myPolGeometry" ng-required="a_geometry.required" ng-show="a_geometry.visible" >
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aGeometry.$error.pattern">{{ 'area_geometry_err_pattern' | i18n }}</div>
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aGeometry.$error.required">{{ 'area_geometry_err_required' | i18n }}</div>
-					</div>
-				   	<div class="form-group" ng-show="a_name.visible">
-				    	<label for="name">{{ 'area_name' | i18n }}</label>
-				    	<input id="name" type="text" class="form-control" name="aName" ng-model="area.name" ng-required="a_name.required" placeholder="{{ 'area_name_placeholder' | i18n }}" >
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aName.$error.required">{{ 'area_name_err_required' | i18n }}</div>
-				   	</div>
-				   	<div class="form-group" ng-show="a_fee.visible">
-				    	<label for="fee">{{ 'area_rate' | i18n }}</label>
-				    	<input id="fee" type="text" class="form-control" name="aFee" ng-model="area.fee" ng-required="a_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aFee.$error.required">{{ 'area_fee_err_required' | i18n }}</div>
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aFee.$error.pattern">{{ 'area_fee_err_pattern' | i18n }}</div>
-				   	</div>
-				   	<div class="form-group" ng-show="a_timeSlot.visible">
-				    	<label for="time">{{ 'area_time' | i18n }}</label>
-				    	<input id="time" type="text" class="form-control" name="aTime" ng-model="area.timeSlot" ng-required="a_timeSlot.required" ng-pattern="periodPattern" placeholder="{{ 'area_time_placeholder' | i18n }}" >
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aTime.$error.required">{{ 'area_openingtime_err_required' | i18n }}</div>
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aTime.$error.pattern">{{ 'area_openingtime_err_pattern' | i18n }}</div>
-				   	</div>
-				   	<div class="form-group" ng-show="a_smsCode.visible">
-				    	<label for="sms">{{ 'area_sms' | i18n }}</label>
-				    	<input id="sms" type="text" class="form-control" name="aSms" ng-model="area.smsCode" ng-required="a_smsCode.required"  placeholder="{{ 'area_sms_placeholder' | i18n }}" >
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aSms.$error.required">{{ 'area_smscode_err_required' | i18n }}</div>
-				   	</div>
-				   	<div class="form-group" ng-show="a_note.visible">
-				    	<label for="note">{{ 'area_note' | i18n }}</label>
-				    	<input id="note" type="text" class="form-control" name="aNote" ng-model="area.note" ng-required="a_note.required"  placeholder="{{ 'area_note_placeholder' | i18n }}" >
-				   		<div class="alert alert-danger" ng-show="!isInit && form.aNote.$error.required">{{ 'area_note_err_required' | i18n }}</div>
-				   	</div>
-				   	<div class="form-group" ng-show="a_color.visible">
-				    	<label for="color">{{ 'area_color' | i18n }}</label>
-				    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="aColor" ng-model="myColor" ng-required="a_color.required" placeholder="{{ 'area_color_placeholder' | i18n }}" >
-				    	<div class="alert alert-danger" ng-show="!isInit && form.aColor.$error.required">{{ 'area_color_err_required' | i18n }}</div>
-				   	</div>
-				</div>
-				<div class="alert alert-danger" ng-show="showUpdatingAErrorMessage">{{ 'err_in_update_area' | i18n }}</div>
-		   		<table width="97%">			
-				   	<tr>
-				   		<td width="85%"></td>
-				   		<td width="8%" align="right">
-							<button type="button" class="btn btn-danger btn-lg" ng-click="closeAView()">{{ 'text_btn_close' | i18n  }}</button>	
-						</td>
-				   		<td width="7%" align="right">
-				   			<button type="button" class="btn btn-success btn-lg" ng-click="updateArea(form, area, myColor)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- , editArea -->
-				   			<button type="button" class="btn btn-success btn-lg" ng-click="createArea(form, area, myColor)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
-				   		</td>
-					</tr>
-					<tr>
-						<td colspan="3">&nbsp;</td>
-					</tr>
-				</table>
-		   	</div>
-	   	</form>
+					<div class="alert alert-danger" ng-show="showUpdatingAErrorMessage">{{ 'err_in_update_area' | i18n }}</div>
+			   		<table width="97%">			
+					   	<tr>
+					   		<td width="85%"></td>
+					   		<td width="8%" align="right">
+								<button type="button" class="btn btn-danger btn-lg" ng-click="closeAView()">{{ 'text_btn_close' | i18n  }}</button>	
+							</td>
+					   		<td width="7%" align="right">
+					   			<button type="button" class="btn btn-success btn-lg" ng-click="updateArea(form, area, myColor)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- , editArea -->
+					   			<button type="button" class="btn btn-success btn-lg" ng-click="createArea(form, area, myColor)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   		</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+					</table>
+			   	</div>
+		   	</form>
+	   	</div>
 	</div>
 <!-- 	<div ng-show="viewModeA"> -->
 <!-- 		<div class="col-md-6" ng-show="aViewMapReady" > -->

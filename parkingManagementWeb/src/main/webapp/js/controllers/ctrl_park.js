@@ -89,6 +89,23 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.format = $scope.formats[0];
             
     $scope.tabIndex = 0;
+    // ----------------------- Start timepicker section ---------------------------
+    $scope.startTime = new Date(0);
+    $scope.endTime = new Date(0);
+    
+    $scope.ismeridian = false;
+    $scope.hstep = 1;	// hour step
+    $scope.mstep = 1;	// minute step
+    
+    $scope.clearTime = function() {
+        $scope.startTime = null;
+        $scope.endTime = null;        
+    };
+    
+    $scope.resetTime = function(date){
+    	$scope.startTime = date;
+    	$scope.endTime = date;
+    };
     
     // ----------------------- Block to read conf params and show/hide elements -----------------------
     var showArea = false;
@@ -134,6 +151,24 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	} else {
     		return "danger";
     	}
+    };
+    
+    $scope.errorTimePeriodStructure = false;
+    $scope.setErrorsPeriodTimeOverlap = function(value){
+    	$scope.errorTimePeriodStructure = value;
+    };
+    
+    $scope.isErrorsPeriodTimeOverlap = function(){
+    	return $scope.errorTimePeriodStructure;
+    };
+    
+    $scope.errorTimeFromToStructure = false;
+    $scope.setErrorsPeriodTimeFromTo = function(value){
+    	$scope.errorTimeFromToStructure = value;
+    };
+    
+    $scope.isErrorsPeriodTimeFromTo = function(){
+    	return $scope.errorTimeFromToStructure;
     };
     
     $scope.initComponents = function(){
@@ -1950,6 +1985,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// ParkingStructure
 	$scope.setPsEdit = function(parkingStruct){
+		var d = new Date(0);
+		d.setHours(0);
+		d.setMinutes(0);
+		$scope.startTime = d;
+		$scope.endTime = d;
+				
 		// Case create
 		$scope.isEditing = false;
 		$scope.isInit = true;
@@ -1963,6 +2004,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			prepaid_card_checked: false,
 			parcometro_checked: false
 		};
+		
+		$scope.openingPeriods = [];
 		
 		// Case edit
 		if(parkingStruct != null){
@@ -2673,11 +2716,71 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
-	$scope.addOpeningPeriod = function(period){
-		// controlli su periodo
-		var newPeriod = angular.copy(period);
-		$scope.openingPeriods.push(newPeriod);
-		$scope.timePeriod = {};
+	$scope.addOpeningPeriod = function(start, end){
+		var from = $scope.addZero(start.getHours()) + ":" + $scope.addZero(start.getMinutes());
+		var to = $scope.addZero(end.getHours()) + ":" + $scope.addZero(end.getMinutes());
+		var period = {from: from, to: to};
+		//var newPeriod = angular.copy(period);
+		var d = new Date(0);
+		d.setHours(0);
+		d.setMinutes(0);
+		// Controls on period
+		$scope.setErrorsPeriodTimeOverlap(false);
+		$scope.setErrorsPeriodTimeFromTo(false);
+		var inserted = false;
+		if(start.getTime() > end.getTime()){
+			$scope.setErrorsPeriodTimeFromTo(true);
+		} else {
+			if($scope.openingPeriods == null || $scope.openingPeriods.length == 0){
+				$scope.openingPeriods.push(period);
+				$scope.resetTime(d);
+				inserted = true;
+			} else {
+				var timeStor = null;
+				for(var i = 0; (i < $scope.openingPeriods.length && !inserted); i++){
+					var timeA_stor = $scope.correctTime($scope.openingPeriods[i].to);
+					timeStor = $scope.castToTime(timeA_stor);
+					var timeDa_stor = $scope.correctTime($scope.openingPeriods[i].from);
+					var fromTime_stor = $scope.castToTime(timeDa_stor);
+					if(end.getTime()< timeStor.getTime()){
+						if(end.getTime()< fromTime_stor.getTime()){
+							if(i == 0){
+								// Case of new Date smaller than a Date in the first position of the array
+								$scope.openingPeriods.splice(i, 0, period);
+								$scope.resetTime(d);
+								inserted = true;
+							} else {
+								var timeA_stor_beforePos = $scope.correctTime($scope.openingPeriods[i-1].to);
+				       			var toTime_stor_beforePos = $scope.castToTime(timeA_stor_beforePos);
+								if(start.getTime() >= toTime_stor_beforePos.getTime()){
+									// Case of new Date smaller than a Date in the "i" position of the array
+									// and bigger than a date in the "i-1" position in the array
+									$scope.storicoResidenza.splice(i, 0, period);
+									$scope.resetTime(d);
+									inserted = true;
+								} else {
+									// Here I have overlap
+								}
+							}
+						} else {
+							// Here I have overlap
+						}
+					}
+				}
+				if(inserted == false){
+	   				if(start.getTime() >= timeStor.getTime()){
+	   					// Case of new Date bigger than the last array Date
+	   					$scope.openingPeriods.push(period);
+	   					$scope.resetTime(d);
+	   					inserted = true;
+	   				} else {
+	   					// Overlap.....
+	   					$scope.setErrorsPeriodTimeOverlap(true);
+	   				}
+	   			}
+			}
+		}
+		
 	};
 	
 	$scope.deleteOpeningPeriod = function(period){
@@ -2685,6 +2788,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			if($scope.openingPeriods[i].from == period.from && $scope.openingPeriods[i].to == period.to){
 				$scope.openingPeriods.splice(i, 1);
 			}
+		}
+	};
+	
+	$scope.changedTime = function(type){
+		if(type == 1){
+			// start time
+			$scope.timePeriod.from = $scope.startTime.getHours() + ":" + $scope.startTime.getMinutes();
+		} else {
+			// end time
+			$scope.timePeriod.to = $scope.endTime.getHours() + ":" + $scope.endTime.getMinutes();
 		}
 	};
 	
@@ -4258,6 +4371,24 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        		return date;
        	}
     };
+    
+    $scope.correctTime = function(date){
+       	if(date!= null){
+       		if(date instanceof Date){
+       			var correct = "";
+       			var hours = date.getHour();
+       			var minutes = date.getMinutes();
+       			correct = $scope.addZero(hours) + ":" + $scope.addZero(minutes);
+       			return correct;
+       		} else {
+       			var res = date.split(":");
+       			correct = res[0] + ":" + res[1];
+       			return correct;
+       		}
+       	} else {
+       		return date;
+       	}
+    };
             
     $scope.correctDateIt = function(date){
     	if(date != null){
@@ -4297,6 +4428,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		var res = stringDate.split("-");
     		var month = parseInt(res[1]) - 1; // the month start from 0 to 11;
     		return new Date(res[0], month, res[2]);
+    	} else {
+    		return null;
+    	}
+    };
+    
+    $scope.castToTime = function(stringDate){
+    	if(stringDate != null && stringDate!= "" ){
+    		var res = stringDate.split(":");
+    		var d = new Date(0);
+    		d.setHours(res[0]);
+    		d.setMinutes(res[1]);
+    		return d;
     	} else {
     		return null;
     	}

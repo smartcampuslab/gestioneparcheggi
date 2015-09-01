@@ -6,7 +6,7 @@
 				<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
 				<table width="100%">
 					<tr>
-						<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics_list" value="parkSupply" ng-change="changeDashboardView(2)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_parkSupply' | i18n }}</span></label></td>
+						<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics_list" value="parkSupply" ng-change="changeDashboardView(2)" ng-disabled="disableThemes">&nbsp;{{ 'park_parkSupply' | i18n }}</label></td><!-- <span style="color:gray"> </span> -->
 					</tr>
 					<tr>
 						<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics_list" value="occupation" ng-change="changeDashboardView(2)" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td>

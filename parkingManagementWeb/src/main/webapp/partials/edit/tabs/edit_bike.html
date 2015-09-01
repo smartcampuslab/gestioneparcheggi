@@ -151,72 +151,74 @@
 				</div>
 			</div>
 			<div ng-show="editModeBP">
-				<form role="form" name="form">
-					<div class="panel panel-default" width="90%">
-				   		<div class="panel-heading">
-				    		<h3 class="panel-title"><strong>{{ 'edit_bikepoint' | i18n }}</strong></h3>
-				  		</div>
-				  		<div class="panel-body">	
-						   	<div class="form-group" ng-show="bp_name.visible">
-						    	<label for="name">{{ 'bp_name' | i18n }}</label>
-						    	<input id="name" type="text" class="form-control" name="pName" ng-model="bikePoint.name" ng-required="bp_name.required" placeholder="{{ 'bp_name_placeholder' | i18n }}" >
-						   		<div class="alert alert-danger" ng-show="!isInit && form.pName.$error.required">{{ 'bikepoint_name_err_required' | i18n }}</div>
-						   	</div>
-						   	<div class="form-group" ng-show="bp_slotNumber.visible">
-						    	<label for="slots">{{ 'bp_slots' | i18n }}</label>
-						    	<input id="slots" type="text" class="form-control" name="pSlots" ng-model="bikePoint.slotNumber" ng-required="bp_slotNumber.required" ng-pattern="onlyNumbers" placeholder="{{ 'bp_slotnumber_placeholder' | i18n }}" >
-						   		<div class="alert alert-danger" ng-show="!isInit && form.pSlots.$error.pattern">{{ 'bikepoint_slots_err_pattern' | i18n }}</div>
-						   		<div class="alert alert-danger" ng-show="!isInit && form.pSlots.$error.required">{{ 'bikepoint_slots_err_required' | i18n }}</div>
-						   	</div>
-						   	<div class="form-group" ng-show="bp_bikeNumber.visible">
-						    	<label for="bikes">{{ 'bp_bikes' | i18n }}</label>
-						    	<input id="bikes" type="text" class="form-control" name="pBikes" ng-model="bikePoint.bikeNumber" ng-required="bp_bikeNumber.required" ng-pattern="onlyNumbers" placeholder="{{ 'bp_bikenumber_placeholder' | i18n }}" >
-						    	<div class="alert alert-danger" ng-show="!isInit && form.pBikes.$error.pattern">{{ 'bikepoint_bikes_err_pattern' | i18n }}</div>
-						    	<div class="alert alert-danger" ng-show="!isInit && form.pBikes.$error.required">{{ 'bikepoint_bikes_err_required' | i18n }}</div>
-						   	</div>
-						 
-							<div class="form-group">
-						    	<label for="geometry" ng-show="bp_geometry.visible">{{ 'bp_geometry' | i18n }}</label>
-						    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="bp_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'bp_geo_placeholder' | i18n }}" ng-blur="moveMarker(myGeometry)" ng-show="bp_geometry.visible" >
-						   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.pattern">{{ 'bikepoint_geometry_select_err_pattern' | i18n }}</div>
-						   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.required">{{ 'bikepoint_geometry_select_err_required' | i18n }}</div>
+				<div class="col-md-12">
+					<form role="form" name="form">
+						<div class="panel panel-default" width="90%">
+					   		<div class="panel-heading">
+					    		<h3 class="panel-title"><strong>{{ 'edit_bikepoint' | i18n }}</strong></h3>
+					  		</div>
+					  		<div class="panel-body">	
+							   	<div class="form-group" ng-show="bp_name.visible">
+							    	<label for="name">{{ 'bp_name' | i18n }}</label>
+							    	<input id="name" type="text" class="form-control" name="pName" ng-model="bikePoint.name" ng-required="bp_name.required" placeholder="{{ 'bp_name_placeholder' | i18n }}" >
+							   		<div class="alert alert-danger" ng-show="!isInit && form.pName.$error.required">{{ 'bikepoint_name_err_required' | i18n }}</div>
+							   	</div>
+							   	<div class="form-group" ng-show="bp_slotNumber.visible">
+							    	<label for="slots">{{ 'bp_slots' | i18n }}</label>
+							    	<input id="slots" type="text" class="form-control" name="pSlots" ng-model="bikePoint.slotNumber" ng-required="bp_slotNumber.required" ng-pattern="onlyNumbers" placeholder="{{ 'bp_slotnumber_placeholder' | i18n }}" >
+							   		<div class="alert alert-danger" ng-show="!isInit && form.pSlots.$error.pattern">{{ 'bikepoint_slots_err_pattern' | i18n }}</div>
+							   		<div class="alert alert-danger" ng-show="!isInit && form.pSlots.$error.required">{{ 'bikepoint_slots_err_required' | i18n }}</div>
+							   	</div>
+							   	<div class="form-group" ng-show="bp_bikeNumber.visible">
+							    	<label for="bikes">{{ 'bp_bikes' | i18n }}</label>
+							    	<input id="bikes" type="text" class="form-control" name="pBikes" ng-model="bikePoint.bikeNumber" ng-required="bp_bikeNumber.required" ng-pattern="onlyNumbers" placeholder="{{ 'bp_bikenumber_placeholder' | i18n }}" >
+							    	<div class="alert alert-danger" ng-show="!isInit && form.pBikes.$error.pattern">{{ 'bikepoint_bikes_err_pattern' | i18n }}</div>
+							    	<div class="alert alert-danger" ng-show="!isInit && form.pBikes.$error.required">{{ 'bikepoint_bikes_err_required' | i18n }}</div>
+							   	</div>
+							 
+								<div class="form-group">
+							    	<label for="geometry" ng-show="bp_geometry.visible">{{ 'bp_geometry' | i18n }}</label>
+							    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="bp_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'bp_geo_placeholder' | i18n }}" ng-blur="moveMarker(myGeometry)" ng-show="bp_geometry.visible" >
+							   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.pattern">{{ 'bikepoint_geometry_select_err_pattern' | i18n }}</div>
+							   		<div class="alert alert-danger" ng-show="!isInit && form.pGeometry.$error.required">{{ 'bikepoint_geometry_select_err_required' | i18n }}</div>
+								</div>
+								<div class="col-md-12"  ><!-- id="map_canvas" ng-show="!isEditing"  -->
+	<!-- 								<ui-gmap-google-map id="6" center="bpCreateMap.center" draggable="true" zoom="bpCreateMap.zoom" options="bpCreateMap.options" control="bpCreateMap.control" bounds="bpCreateMap.bounds" events="bpCreateMap.events"> -->
+	<!-- 										<ui-gmap-marker idkey="myNewBp.id" coords="myNewBp.coords" options="myNewBp.options" icon="myNewBp.icon" events="myNewBp.events">click="'onClick'" -->
+	<!-- 											<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
+	<!-- 			                					<p> -->
+	<!-- 						                        	Lat: {{myNewBp.coords.latitude}}<br/> -->
+	<!-- 						                        	Lng: {{myNewBp.coords.longitude}}<br/> -->
+	<!-- 						                    	</p> -->
+	<!-- 			            					</ui-gmap-window> -->
+	<!-- 			        					</ui-gmap-marker> -->
+	<!-- 								</ui-gmap-google-map> -->
+									<map id="editBike" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewMarker()" ><!-- ng-show="resizeMap()" -->
+										<marker ng-repeat="bp in newBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
+										</marker>
+										<marker ng-repeat="bp in editBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
+										</marker>
+									</map>
+								</div>
 							</div>
-							<div class="col-md-12"  ><!-- id="map_canvas" ng-show="!isEditing"  -->
-<!-- 								<ui-gmap-google-map id="6" center="bpCreateMap.center" draggable="true" zoom="bpCreateMap.zoom" options="bpCreateMap.options" control="bpCreateMap.control" bounds="bpCreateMap.bounds" events="bpCreateMap.events"> -->
-<!-- 										<ui-gmap-marker idkey="myNewBp.id" coords="myNewBp.coords" options="myNewBp.options" icon="myNewBp.icon" events="myNewBp.events">click="'onClick'" -->
-<!-- 											<ui-gmap-window show="'show'" closeClick="'closeClick'" ng-cloak> -->
-<!-- 			                					<p> -->
-<!-- 						                        	Lat: {{myNewBp.coords.latitude}}<br/> -->
-<!-- 						                        	Lng: {{myNewBp.coords.longitude}}<br/> -->
-<!-- 						                    	</p> -->
-<!-- 			            					</ui-gmap-window> -->
-<!-- 			        					</ui-gmap-marker> -->
-<!-- 								</ui-gmap-google-map> -->
-								<map id="editBike" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewMarker()" ><!-- ng-show="resizeMap()" -->
-									<marker ng-repeat="bp in newBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
-									</marker>
-									<marker ng-repeat="bp in editBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
-									</marker>
-								</map>
-							</div>
-						</div>
-						<div class="alert alert-danger" ng-show="showUpdatingBPErrorMessage">{{ 'err_in_update_bikepoint' | i18n }}</div>
-				   		<table width="97%">			
-						   	<tr>
-						   		<td width="85%"></td>
-						   		<td width="8%" align="right">
-						   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
-						   		</td>
-						   		<td width="7%" align="right">
-						   			<button type="button" class="btn btn-info btn-lg" ng-click="updateBpoint(form, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-						   			<button type="button" class="btn btn-info btn-lg" ng-click="createBpoint(form, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
-						   		</td>
-							</tr>
-							<tr>
-								<td colspan="3">&nbsp;</td>
-							</tr>
-						</table>
-				   	</div>
-			   	</form>
+							<div class="alert alert-danger" ng-show="showUpdatingBPErrorMessage">{{ 'err_in_update_bikepoint' | i18n }}</div>
+					   		<table width="97%">			
+							   	<tr>
+							   		<td width="85%"></td>
+							   		<td width="8%" align="right">
+							   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
+							   		</td>
+							   		<td width="7%" align="right">
+							   			<button type="button" class="btn btn-info btn-lg" ng-click="updateBpoint(form, myGeometry)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-info btn-lg" ng-click="createBpoint(form, myGeometry)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   		</td>
+								</tr>
+								<tr>
+									<td colspan="3">&nbsp;</td>
+								</tr>
+							</table>
+					   	</div>
+				   	</form>
+			   	</div>
 			</div>
 		</div>

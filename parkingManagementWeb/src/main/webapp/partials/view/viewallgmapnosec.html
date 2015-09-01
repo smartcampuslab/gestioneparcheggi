@@ -76,13 +76,19 @@
 							        			<td>&nbsp;{{ ps.data.streetReference }}</td>
 							        		</tr>
 											<tr ng-show="ps_fee.visible">
-							        			<td><strong>{{ 'ps_fee' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.fee }}</td>
+								       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
+								       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+								       			<td ng-if="ps.data.fee_val == null">&nbsp;n.p.</td>
+								       		</tr>
+							        		<tr ng-show="ps_fee.visible">
+							        			<td><strong>{{ 'ps_fee_note' | i18n }}:</strong></td>
+							        			<td>&nbsp;{{ ps.data.fee_note }}</td>
 							        		</tr>
 							        		<tr ng-show="ps_timeSlot.visible">
-							        			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.timeSlot }}</td>
-							        		</tr>
+								       			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
+								       			<td ng-if="ps.data.openingTime != null"><span ng-repeat="ops in ps.data.openingTime.period">&nbsp;{{ ops.from }} - {{ ops.to }};</span></td>
+								       			<td ng-if="ps.data.openingTime == null">&nbsp;n.p.</td>
+								       		</tr>
 							        		<tr ng-show="ps_phoneNumber.visible">
 							        			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
@@ -91,6 +97,10 @@
 							        			<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.managementMode }}</td>
 							        		</tr>
+							        		<tr>
+												<td><strong>{{ 'ps_park_and_ride' | i18n }}:</strong></td>
+												<td>&nbsp;{{ ps.data.parkAndRide | boolToString }}</td>
+											</tr>
 							        		<tr ng-show="ps_payment.visible">
 							        			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td>

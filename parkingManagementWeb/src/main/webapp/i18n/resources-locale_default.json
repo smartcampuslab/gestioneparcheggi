@@ -379,6 +379,14 @@
     "value": "Parcheggio Park&Ride",
     "description": "Label checkbox park and ride in parcheggio struttura"
 }, {
+    "key": "ps_park_and_ride_det",
+    "value": "Park&Ride",
+    "description": "Label park and ride in dettagli parcheggio struttura"
+}, {
+    "key": "ps_park_and_ride_title",
+    "value": "P&R",
+    "description": "Titolo campo park and ride in lista parcheggio struttura"
+}, {
     "key": "parkingstructure_name_err_required",
     "value": "Campo Nome Struttura obbligatorio",
     "description": "Messaggio errore campo nome struttura obbligatorio"
@@ -875,6 +883,10 @@
     "value": "Inserire la tariffa oraria della struttura (euro/ora) nel formato decimale (es: 0,50)",
     "description": "Testo placeholder campo tariffa oraria struttura"
 }, {
+    "key": "ps_fee_note_placeholder",
+    "value": "Inserire eventuali note sulla tariffa oraria della struttura",
+    "description": "Testo placeholder campo tariffa oraria struttura"
+}, {
     "key": "ps_time_placeholder",
     "value": "Inserire l'orario di apertura della struttura (da - a) nel formato hh:mm",
     "description": "Testo placeholder campo orario struttura"
@@ -922,10 +934,18 @@
     "key": "ps_unusuableslot_placeholder",
     "value": "Inserire il numero di posti non utilizzabili",
     "description": "Testo placeholder campo posti non utilizzabili struttura"
-}, {
+}, { 
     "key": "ps_geo_placeholder",
     "value": "Scegliere la posizione della struttura (click sulla mappa)",
     "description": "Testo placeholder campo posti disco orario via"
+}, { 
+    "key": "ps_period_overlap_error",
+    "value": "Attenzione: il nuovo periodo apertura si sovrappone a periodi gia' inseriti",
+    "description": "Testo messaggio di errore per periodo sovrapposto in ora apertura struttura"
+}, { 
+    "key": "ps_period_from_to_error",
+    "value": "Periodo inserito non corretto: ora di apertura maggiore di ora di chiusura",
+    "description": "Testo messaggio di errore per periodo non corretto in ora apertura struttura"
 }, {
     "key": "zone_name_placeholder",
     "value": "Inserire il nome della zona",

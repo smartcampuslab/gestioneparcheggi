@@ -861,6 +861,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.showPSList = false;
 	$scope.showPMList = false;
 	
+	$scope.showParkSupplyLists = false;
 	$scope.showOccupationLists = true;
 	$scope.showProfitLists = false;
 	$scope.showTimeCostLists = false;
@@ -946,22 +947,26 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 		} else {
 			switch($scope.dashboard_topics_list){
-				case "parkSupply": 
+				case "parkSupply":
+					// Show occupation objects (with specifics colors)
+					$scope.dashboard_space_list = "microzone";
+					$scope.showStreetList($scope.dashboard_topics_list);
+					break;
 					break;
 				case "occupation": 
 					// Show occupation objects (with specifics colors)
 					$scope.dashboard_space_list = "microzone";
-					$scope.showStreetList("occupation");
+					$scope.showStreetList($scope.dashboard_topics_list);
 					break;
 				case "receipts": 
 					// Show profit objects (with specifics colors)
 					$scope.dashboard_space_list = "parkingmeter";
-					$scope.showPMeterList("receipts");
+					$scope.showPMeterList($scope.dashboard_topics_list);
 					break;
 				case "timeCost": 
 					// Show occupation objects (with specifics colors)
 					$scope.dashboard_space_list = "microzone";
-					$scope.showStreetList("timeCost");
+					$scope.showStreetList($scope.dashboard_topics_list);
 					break;
 				case "pr": 
 					break;
@@ -973,15 +978,23 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.switchListShowType = function(type){
-		if(type == "occupation"){
+		if(type == "parkSupply"){
+			$scope.showParkSupplyLists = true;
+			$scope.showOccupationLists = false;
+			$scope.showProfitLists = false;
+			$scope.showTimeCostLists = false;
+		} else if(type == "occupation"){
+			$scope.showParkSupplyLists = false;
 			$scope.showOccupationLists = true;
 			$scope.showProfitLists = false;
 			$scope.showTimeCostLists = false;
 		} else if(type == "receipts"){
+			$scope.showParkSupplyLists = false;
 			$scope.showOccupationLists = false;
 			$scope.showProfitLists = true;
 			$scope.showTimeCostLists = false;
 		} else if(type == "timeCost"){
+			$scope.showParkSupplyLists = false;
 			$scope.showOccupationLists = false;
 			$scope.showProfitLists = false;
 			$scope.showTimeCostLists = true;
@@ -2753,7 +2766,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						phoneNumber: occupancyStructs[i].phoneNumber,
 						lastChange: profitStructs[j].lastChange,
 						occupancyRate: occupancyStructs[i].occupancyRate,
-						parkAndRide: occupancyStructs[i].parkAndRide,
+						parkAndRide: profitStructs[i].parkAndRide,
 						profit : profitStructs[j].profit,
 						tickets : profitStructs[j].tickets,
 						extratime: timeCost

@@ -26,7 +26,8 @@
 						       		</tr>
 									<tr ng-show="ps_fee.visible">
 						       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
-						       			<td>&nbsp;{{ ps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+						       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+						       			<td ng-if="ps.data.fee_val == null">&nbsp;n.p.</td>
 						       		</tr>
 						       		<tr ng-show="ps_fee.visible">
 						       			<td><strong>{{ 'ps_fee_note' | i18n }}:</strong></td>
@@ -35,7 +36,7 @@
 						       		<tr ng-show="ps_timeSlot.visible">
 						       			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
 						       			<td ng-if="ps.data.openingTime != null"><span ng-repeat="ops in ps.data.openingTime.period">{{ ops.from }} - {{ ops.to }};</span></td>
-						       			<td ng-if="ps.data.openingTime == null">n.p.</td>
+						       			<td ng-if="ps.data.openingTime == null">&nbsp;n.p.</td>
 						       		</tr>
 						       		<tr ng-show="ps_phone.visible">
 						       			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
@@ -47,7 +48,7 @@
 						       		</tr>
 						       		<tr>
 										<td><strong>{{ 'ps_park_and_ride' | i18n }}:</strong></td>
-										<td>{{ ps.data.parkAndRide | boolToString }}</td>
+										<td>&nbsp;{{ ps.data.parkAndRide | boolToString }}</td>
 									</tr>
 						       		<tr ng-show="ps_payment.visible">
 						       			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
@@ -94,7 +95,8 @@
 						       		</tr>
 									<tr ng-show="ps_fee.visible">
 						       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
-						       			<td>&nbsp;{{ sps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+						       			<td ng-if="sps.data.fee_val != null">&nbsp;{{ sps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+						       			<td ng-if="sps.data.fee_val == null">&nbsp;n.p.</td>
 						       		</tr>
 						       		<tr ng-show="ps_fee.visible">
 						       			<td><strong>{{ 'ps_fee_note' | i18n }}:</strong></td>
@@ -102,8 +104,8 @@
 						       		</tr>
 						       		<tr ng-show="ps_timeSlot.visible">
 						       			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
-						       			<td ng-if="sps.data.openingTime != null"><span ng-repeat="ops in sps.data.openingTime.period">{{ ops.from }} - {{ ops.to }};</span></td>
-						       			<td ng-if="sps.data.openingTime == null">n.p.</td>
+						       			<td ng-if="sps.data.openingTime != null"><span ng-repeat="ops in sps.data.openingTime.period">&nbsp;{{ ops.from }} - {{ ops.to }};</span></td>
+						       			<td ng-if="sps.data.openingTime == null">&nbsp;n.p.</td>
 						       		</tr>
 						       		<tr ng-show="ps_phone.visible">
 						       			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
@@ -113,6 +115,10 @@
 						       			<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ sps.data.managementMode }}</td>
 						       		</tr>
+						       		<tr>
+										<td><strong>{{ 'ps_park_and_ride' | i18n }}:</strong></td>
+										<td>&nbsp;{{ sps.data.parkAndRide | boolToString }}</td>
+									</tr>
 						       		<tr ng-show="ps_payment.visible">
 						       			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ castMyPaymentModeToString(sps.data.paymentMode) }}</td>
@@ -169,18 +175,18 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="pstructWS.length != 0">
-								<th width="35%"><span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span></th>
-								<th width="40%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
-	<!-- 							<th width="35%">{{ 'ps_time' | i18n }}</th> -->
+								<th width="32%"><span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span></th>
+								<th width="35%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+								<th width="8%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 								<th width="5%"><span ng-show="ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
 								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
 								ng-repeat="pstruct in pstructWS | filter:q | orderBy:'name' | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
 								<tr>
-									<td width="35%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
-									<td width="40%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
-	<!-- 								<td width="35%" align="center">{{pstruct.timeSlot}}</td> -->
+									<td width="32%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
+									<td width="35%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
+									<td width="8%" align="center">{{ pstruct.parkAndRide | boolToString }}</td>
 									<td width="5%" align="center"><span ng-show="ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
 									<td width="20%" align="center">
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
@@ -334,13 +340,13 @@
 					    	<table width="100%">
 					    		<tr>
 					    			<td width="6%"><strong>{{ 'ps_fee_det_val' | i18n }}: </strong></td>
-					    			<td width="44%">
+					    			<td width="39%">
 					    				<input id="feeVal" type="text" class="form-control" name="pFeeVal" ng-model="parkingStructure.fee_val" ng-required="ps_fee.required && parkingStructure.fee_note == null" placeholder="{{ 'ps_fee_placeholder' | i18n }}" ng-pattern="decimalNumbers" >
 					   					<div class="alert alert-danger" ng-show="!isInit && form.pFeeVal.$error.pattern">{{ 'parkingstructure_fee_err_pattern' | i18n }}</div>
 					    			</td>
 					    			<td width="5%" align="center"><strong>{{ 'ps_fee_det_note' | i18n }}: </strong></td>
-					    			<td width="45%">
-					    				<input id="feeNote" type="text" class="form-control" name="pFeeNote" ng-model="parkingStructure.fee_note" ng-required="ps_fee.required && parkingStructure.fee_val == null" placeholder="{{ 'ps_fee_placeholder' | i18n }}" >
+					    			<td width="50%">
+					    				<input id="feeNote" type="text" class="form-control" name="pFeeNote" ng-model="parkingStructure.fee_note" ng-required="ps_fee.required && parkingStructure.fee_val == null" placeholder="{{ 'ps_fee_note_placeholder' | i18n }}" >
 					    			</td>
 					    		</tr>
 					    		<tr ng-show="(!isInit && form.pFeeVal.$error.required) || (!isInit && form.pFeeNote.$error.required)">
@@ -349,7 +355,6 @@
 					    			</td>
 					    		</tr>
 					    	</table>
-					    	
 					   	</div>
 <!-- 					   	<div class="form-group" ng-show="ps_timeSlot.visible"> -->
 <!-- 					    	<label for="time">{{ 'ps_time' | i18n }}</label> -->
@@ -359,37 +364,52 @@
 <!-- 					   	</div> -->
 					   	<div class="form-group" ng-show="ps_timeSlot.visible">
 					    	<label for="time">{{ 'ps_time' | i18n }}</label>
-					    	<table width="100%">
+					    	<table width="100%" ng-show="openingPeriods != null && openingPeriods.length > 0">
 					    		<tbody class="animate-repeat" ng-repeat="p in openingPeriods">
 					    			<tr>
-					    				<td width="5%"><strong>{{ 'ps_opening_from' | i18n }}</strong></td>
-					    				<td width="40%">{{ p.from }}</td>
-					    				<td width="5%"><strong>{{ 'ps_opening_to' | i18n }}</strong></td>
+					    				<td width="6%"><strong>{{ 'ps_opening_from' | i18n }}: </strong></td>
+					    				<td width="39%">{{ p.from }}</td>
+					    				<td width="5%" align="center"><strong>{{ 'ps_opening_to' | i18n }}: </strong></td>
 					    				<td width="40%">{{ p.to }}</td>
 					    				<td width="10%" align="right">
 					    					<button type="button" class="btn btn-default" ng-click="deleteOpeningPeriod(p)">{{ 'ps_time_period_delete' | i18n }}</button>
 					    				</td>
 					    			</tr>
 					    		</tbody>
+					    		<tr>
+					    			<td colspan="5"><hr /></td>
+					    		</tr>
+					    		<tr ng-show="isErrorsPeriodTimeOverlap()">
+					    			<td colspan="5">
+					    				<div class="alert alert-danger">{{ 'ps_period_overlap_error' | i18n }}</div>
+					    			</td>
+					    		</tr>
+					    		<tr ng-show="isErrorsPeriodTimeFromTo()">
+					    			<td colspan="5">
+					    				<div class="alert alert-danger">{{ 'ps_period_from_to_error' | i18n }}</div>
+					    			</td>
+					    		</tr>
 					    	</table>
 					    	<table width="100%">
 					    		<tr>
-					    			<td width="5%">
+					    			<td width="6%">
 					    				<strong>{{ 'ps_opening_from' | i18n }}: </strong>
 					    			</td>
-					    			<td width="40%">
-					    				<input id="time_from" type="text" class="form-control" name="pTimeFrom" ng-model="timePeriod.from" ng-pattern="timePattern" placeholder="{{ 'ps_time_placeholder_from' | i18n }}" >
-					   					<div class="alert alert-danger" ng-show="!isInit && form.pTimeFrom.$error.pattern">{{ 'parkingstructure_openingtime_err_pattern' | i18n }}</div>
+					    			<td width="39%">
+					    				<timepicker ng-model="startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+<!-- 					    				<input id="time_from" type="text" class="form-control" name="pTimeFrom" ng-model="timePeriod.from" ng-pattern="timePattern" placeholder="{{ 'ps_time_placeholder_from' | i18n }}" > -->
+<!-- 					   					<div class="alert alert-danger" ng-show="!isInit && form.pTimeFrom.$error.pattern">{{ 'parkingstructure_openingtime_err_pattern' | i18n }}</div> -->
 					    			</td>
 					    			<td width="5%" align="center">
 					    				<strong>{{ 'ps_opening_to' | i18n }}: </strong>
 					    			</td>
 					    			<td width="40%">
-					    				<input id="time_to" type="text" class="form-control" name="pTimeTo" ng-model="timePeriod.to" ng-pattern="timePattern" placeholder="{{ 'ps_time_placeholder_to' | i18n }}" >
-					   					<div class="alert alert-danger" ng-show="!isInit && form.pTimeTo.$error.pattern">{{ 'parkingstructure_openingtime_err_pattern' | i18n }}</div>
+					    				<timepicker ng-model="endTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+<!-- 					    				<input id="time_to" type="text" class="form-control" name="pTimeTo" ng-model="timePeriod.to" ng-pattern="timePattern" placeholder="{{ 'ps_time_placeholder_to' | i18n }}" > -->
+<!-- 					   					<div class="alert alert-danger" ng-show="!isInit && form.pTimeTo.$error.pattern">{{ 'parkingstructure_openingtime_err_pattern' | i18n }}</div> -->
 					    			</td>
 					    			<td width="10%" align="right">
-					    				<button type="button" class="btn btn-success" ng-click="addOpeningPeriod(timePeriod)" alt="{{ 'add_time_period' | i18n }}" title="{{ 'add_time_period' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button>
+					    				<button type="button" class="btn btn-success" ng-click="addOpeningPeriod(startTime, endTime)" alt="{{ 'add_time_period' | i18n }}" title="{{ 'add_time_period' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button>
 					    			</td>
 					    		</tr>
 					    	</table>
