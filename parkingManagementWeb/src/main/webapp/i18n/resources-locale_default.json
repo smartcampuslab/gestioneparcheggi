@@ -175,6 +175,10 @@
     "value": "Posti",
     "description": "Intestazione colonna parcheggi in tabella lista strade"
 }, {
+    "key": "street_slots_composition",
+    "value": "Composizione",
+    "description": "Intestazione colonna composizione posti in tabella lista strade"
+}, {
     "key": "street_free_slots",
     "value": "Posti liberi",
     "description": "Label parcheggi liberi in strade pagina dashboard"
@@ -295,6 +299,10 @@
     "value": "Valore posizione lat-lng obbligatorio",
     "description": "Messaggio errore campo geometry parcometro obblilgatorio"
 }, {
+    "key": "text_btn_save",
+    "value": "Salva",
+    "description": "Testo pulsante 'salva'"
+}, {
     "key": "err_in_update_parkingmeter",
     "value": "Errore nell'aggiornamento del parcometro. DB non pronto.",
     "description": "Messaggio errore aggiornamento parcometro"
@@ -306,10 +314,6 @@
     "key": "view_parkingmeter",
     "value": "Dettagli parcometro",
     "description": "Titolo pagina view parcometro"
-}, {
-    "key": "text_btn_save",
-    "value": "Salva",
-    "description": "Testo pulsante 'salva'"
 }, {
     "key": "text_btn_close",
     "value": "Chiudi",
@@ -1157,6 +1161,10 @@
 }, {
     "key": "info_1",
     "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario",
+    "description": "Testo pannello informativo per occupazione parcheggi"
+}, {
+    "key": "info_2",
+    "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario, R: riservati, H: per disabili",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_close",

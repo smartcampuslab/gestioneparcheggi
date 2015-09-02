@@ -25,10 +25,13 @@ import it.smartcommunitylab.parking.management.web.model.ProfitParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ProfitRateArea;
 import it.smartcommunitylab.parking.management.web.model.ProfitStreet;
 import it.smartcommunitylab.parking.management.web.model.ProfitZone;
+import it.smartcommunitylab.parking.management.web.model.RateArea;
+import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.TimeCostParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.TimeCostRateArea;
 import it.smartcommunitylab.parking.management.web.model.TimeCostStreet;
 import it.smartcommunitylab.parking.management.web.model.TimeCostZone;
+import it.smartcommunitylab.parking.management.web.model.Zone;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -55,8 +58,153 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the street occupation
-	public String create_file_streets(ArrayList<OccupancyStreet> streets, String path) throws FileNotFoundException, UnsupportedEncodingException{
+	public String create_supply_file_streets(ArrayList<Street> streets, String path) throws FileNotFoundException, UnsupportedEncodingException{
 		String name = FILE_NAME + "Street.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Area");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti LC");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti LS");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti P");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti DO");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti R");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti H");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(Street s : streets){
+				writer.append(s.getStreetReference());
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getArea_name());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getFreeParkSlotSignNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getFreeParkSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getPaidSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getTimedParkSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getReservedSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getHandicappedSlotNumber() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in street csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the zone occupation
+	public String create_supply_file_zones(ArrayList<Zone> zones, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "Zone.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Macro");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tipo");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Note");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(Zone z : zones){
+				writer.append(z.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSubmacro());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getType());
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getNote());
+				writer.append(CSV_SEPARATOR);
+				writer.append(z.getSlotNumber() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in zone csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the area occupation
+	public String create_supply_file_areas(ArrayList<RateArea> areas, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "Area.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tariffa");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Orario");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Servizio telepark");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(RateArea a : areas){
+				writer.append(a.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getFee() + "");	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getTimeSlot());
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getSmsCode());
+				writer.append(CSV_SEPARATOR);
+				writer.append(a.getSlotNumber() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in area csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}	
+	
+	// Method used to create the csv file for the street occupation
+	public String create_occupancy_file_streets(ArrayList<OccupancyStreet> streets, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "OccupancyStreet.csv";
 		String long_name = path + "/" + name;
 		try {
 			FileWriter writer = new FileWriter(long_name);
@@ -113,8 +261,8 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the zone occupation
-	public String create_file_zones(ArrayList<OccupancyZone> zones, String path) throws FileNotFoundException, UnsupportedEncodingException{
-		String name = FILE_NAME + "Zone.csv";
+	public String create_occupancy_file_zones(ArrayList<OccupancyZone> zones, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "OccupancyZone.csv";
 		String long_name = path + "/" + name;
 		try {
 			FileWriter writer = new FileWriter(long_name);
@@ -159,8 +307,8 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the area occupation
-	public String create_file_areas(ArrayList<OccupancyRateArea> areas, String path) throws FileNotFoundException, UnsupportedEncodingException{
-		String name = FILE_NAME + "Area.csv";
+	public String create_occupancy_file_areas(ArrayList<OccupancyRateArea> areas, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "OccupancyArea.csv";
 		String long_name = path + "/" + name;
 		try {
 			FileWriter writer = new FileWriter(long_name);
@@ -205,8 +353,8 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the parking structures occupation
-	public String create_file_structs(ArrayList<OccupancyParkingStructure> structures, String path) throws FileNotFoundException, UnsupportedEncodingException{
-		String name = FILE_NAME + "Structure.csv";
+	public String create_occupancy_file_structs(ArrayList<OccupancyParkingStructure> structures, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "OccupancyStructure.csv";
 		String long_name = path + "/" + name;
 		try {
 			FileWriter writer = new FileWriter(long_name);

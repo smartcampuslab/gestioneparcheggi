@@ -44,6 +44,9 @@ public class Street {
 	private List<String> zones;
 	private List<String> parkingMeters;
 	private Long lastChange;
+	private String color;
+	private String area_name;
+	private String area_color;
 
 	public String getId() {
 		return id;
@@ -247,6 +250,30 @@ public class Street {
 		this.lastChange = lastChange;
 	}
 	
+	public String getArea_name() {
+		return area_name;
+	}
+
+	public String getArea_color() {
+		return area_color;
+	}
+
+	public void setArea_name(String area_name) {
+		this.area_name = area_name;
+	}
+
+	public void setArea_color(String area_color) {
+		this.area_color = area_color;
+	}
+
+	public String getColor() {
+		return color;
+	}
+
+	public void setColor(String color) {
+		this.color = color;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";

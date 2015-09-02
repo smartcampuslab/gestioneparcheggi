@@ -29,6 +29,7 @@ public class RateArea {
 	private String color;
 	private String note;
 	private List<Polygon> geometry;
+	private Integer slotNumber;	// used in supply csv creation
 
 	private List<Street> streets;
 	private List<ParkingMeter> parkingMeters;
@@ -119,6 +120,14 @@ public class RateArea {
 
 	public void setGeometry(List<Polygon> geometry) {
 		this.geometry = geometry;
+	}
+
+	public Integer getSlotNumber() {
+		return slotNumber;
+	}
+
+	public void setSlotNumber(Integer slotNumber) {
+		this.slotNumber = slotNumber;
 	}
 
 }

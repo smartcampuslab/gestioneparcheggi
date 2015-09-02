@@ -45,7 +45,7 @@
 				</table>
 				<p style="font-size:3px">&nbsp;</p>
 			</div>
-			<div >
+			<div ng-show="dashboard_topics_list=='occupation' || dashboard_topics_list=='receipts' || dashboard_topics_list=='timeCost'">
 				<h5><strong>{{ 'occupation_filter_title' | i18n }}</strong></h5>
 				<table width="100%" ng-controller="TimeFilterCtrl">
 	                <tr>

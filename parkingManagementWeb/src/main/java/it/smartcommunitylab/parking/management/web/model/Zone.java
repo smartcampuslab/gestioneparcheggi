@@ -26,6 +26,7 @@ public class Zone {
 	private String note;
 	private String color;
 	private Polygon geometry;
+	private Integer slotNumber;	// used in supply csv creation
 
 	public String getId() {
 		return id;
@@ -89,6 +90,14 @@ public class Zone {
 
 	public void setGeometry(Polygon geometry) {
 		this.geometry = geometry;
+	}
+
+	public Integer getSlotNumber() {
+		return slotNumber;
+	}
+
+	public void setSlotNumber(Integer slotNumber) {
+		this.slotNumber = slotNumber;
 	}
 
 }

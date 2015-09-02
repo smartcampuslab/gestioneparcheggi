@@ -175,6 +175,10 @@
     "value": "Posti",
     "description": "Intestazione colonna parcheggi in tabella lista strade"
 }, {
+    "key": "street_slots_composition",
+    "value": "Composizione",
+    "description": "Intestazione colonna composizione posti in tabella lista strade"
+}, {
     "key": "street_free_slots",
     "value": "Posti liberi",
     "description": "Label parcheggi liberi in strade pagina dashboard"
@@ -310,7 +314,7 @@
     "key": "view_parkingmeter",
     "value": "Dettagli parcometro",
     "description": "Titolo pagina view parcometro"
-},{
+}, {
     "key": "text_btn_close",
     "value": "Chiudi",
     "description": "Testo pulsante 'chiudi'"
@@ -753,7 +757,7 @@
 }, {
     "key": "area_openingtime_err_pattern",
     "value": "Campo 'orario area' non corretto. Inserire un valore nel formato hh:mm - hh:mm",
-    "description": "Errore Campo rariffa area non corretto"
+    "description": "Errore Campo orario area non corretto"
 }, {
     "key": "area_openingtime_err_required",
     "value": "Campo 'orario area' obbligatorio",
@@ -1136,7 +1140,7 @@
     "description": "Testo label filtro di sinistra in dashboard"
 }, {
 	"key": "other_settings",
-	"value": "Altre impostazioni",
+	"value": "Altre Impostazioni",
 	"description": "Label per altre impostazioni in settaggio filtro occupazione"
 }, {
 	"key": "use_average_zone_occ",
@@ -1157,6 +1161,10 @@
 }, {
     "key": "info_1",
     "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario",
+    "description": "Testo pannello informativo per occupazione parcheggi"
+}, {
+    "key": "info_2",
+    "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario, R: riservati, H: per disabili",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_close",
@@ -1508,7 +1516,7 @@
 	"description": "Label per valore di incasso parcometro"
 }, { 
 	"key": "pm_tickets",
-	"value": "N. Ticket",
+	"value": "N.Ticket",
 	"description": "Label per numero ticket emessi da parcometro"
 }, { 
 	"key": "ps_profit",

@@ -850,7 +850,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		if(type == 1){
 			$scope.dashboard_topics = "parkSupply";
 		} else {
-			$scope.dashboard_topics_list = "occupation";
+			$scope.dashboard_topics_list = "parkSupply"; 	//"occupation";
 		}
 		
 	};
@@ -861,8 +861,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.showPSList = false;
 	$scope.showPMList = false;
 	
-	$scope.showParkSupplyLists = false;
-	$scope.showOccupationLists = true;
+	$scope.showParkSupplyLists = true;
+	$scope.showOccupationLists = false;
 	$scope.showProfitLists = false;
 	$scope.showTimeCostLists = false;
 	
@@ -3786,6 +3786,37 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 		return icon + "_outline.png";
 	};
+
+	$scope.showDetailsInList = function(object, type){
+		switch(type){
+			case 1:
+				$scope.showPMDet();
+				$scope.pmDetails = object;
+				break;
+			case 2:
+				$scope.showPSDet();
+				$scope.psDetails = object;
+				//$scope.initPsOccupancyDiagram(object, 0);
+				break;
+			case 3:
+			    $scope.showStreetDet();
+				$scope.sDetails = object;
+				$scope.initStreetParkSupplyDiagram(object, 2);
+				break;
+			case 4:
+			    $scope.showZoneDet();
+				$scope.zDetails = object;
+				$scope.initZoneOccupancyDiagram(object, 2);
+				break;
+			case 5:
+			    $scope.showAreaDet();
+				$scope.aDetails = object;
+				//$scope.initAreaOccupancyDiagram(object, 2);
+				break;	
+		};
+		$scope.detailsOpened = true;
+		return object;
+	};	
 	
 	$scope.showOccupancyInList = function(object, type){
 		switch(type){
@@ -5211,6 +5242,61 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   		$scope.chartPsOccupancy.options.title = "Posti occupati in struttura";
     };
     
+    $scope.chartStreetParkAvailability = $scope.chart = {
+        "type": "PieChart",
+        "data": [],
+        "options": {
+            "displayExactValues": true,
+            "width": "100%",
+            "height": "100%",
+            "is3D": true,
+            "legend": {
+            	"position": 'top',
+            	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+       	    "chartArea": {
+       	      "left": 5,
+       	      "top": 50,
+       	      "bottom": 0,
+       	      "width": "100%",
+       	      "height": "100%"
+       	    }
+       	},
+       	"formatters": {
+       	    "number": [
+       	        {
+       	        	"columnNum": 1,
+       	        	"pattern": "#0 posti"
+       	        }
+       	    ]
+       	},
+       	"displayed": true
+    };
+    
+    $scope.initStreetParkSupplyDiagram = function(street, type){
+      	$scope.chartStreetParkAvailability.data = [["Posti", "number"]];
+      	var object = null;
+      	if(type == 1){
+      		object = street.data;
+      	} else {
+      		object = street;
+      	}
+    	// for slot composition
+    	var freeFree = [ "Gratuiti", object.freeParkSlotNumber ];
+    	var freeFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignNumber ];
+    	var freePaid = [ "A pagamento", object.paidSlotNumber ];
+    	var freeTimed = [ "Disco Orario", object.timedParkSlotNumber ];
+    	var freeHandicapped = [ "Per disabili", object.handicappedSlotNumber ];
+    	var freeReserved = [ "Riservati", object.reservedSlotNumber ];
+    	$scope.chartStreetParkAvailability.data.push(freeFree);
+    	$scope.chartStreetParkAvailability.data.push(freeFreeSigned);
+    	$scope.chartStreetParkAvailability.data.push(freePaid);
+    	$scope.chartStreetParkAvailability.data.push(freeTimed);
+    	$scope.chartStreetParkAvailability.data.push(freeHandicapped);
+    	$scope.chartStreetParkAvailability.data.push(freeReserved);
+    	$scope.chartStreetParkAvailability.options.title = "Composizione posti";	
+    };
+    
     $scope.chartStreetOccupancy = $scope.chart = {
     	"type": "PieChart",
     	"data": [],
@@ -5457,6 +5543,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		case 1:
     			$scope.showInfo_1 = true;
     			break;
+    		case 2:
+    			$scope.showInfo_2 = true;
+    			break;	
     		default:
 				break;
     	}	
@@ -5470,12 +5559,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		case 1:
     			$scope.showInfo_1 = false;
     			break;
+    		case 2:
+    			$scope.showInfo_2 = false;
+    			break;	
     		default:
 				break;
     	}	
     };
    
     // ------------------------------------------ End of block for info panels -------------------------------------------
+    $scope.streetSupplyCvsFile = "";
+    $scope.pmSupplyCvsFile = "";
+    $scope.zoneSupplyCvsFile = "";
+    $scope.areaSupplyCvsFile = "";
+    $scope.structSupplyCvsFile = "";
+    
     $scope.streetCvsFile = "";
     $scope.streetCvsFileName = "";
     $scope.zoneCvsFile = "";
@@ -5495,6 +5593,68 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.zoneTimeCostCvsFile = "";
     $scope.areaTimeCostCvsFile = "";
     $scope.structTimeCostCvsFile = "";
+    
+    // -------------------------------------------------- Block for supply CSV creation ---------------------------------------------
+	$scope.getStreetSupplyCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.streetWS);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/street/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.streetSupplyCvsFile = result;
+	    	window.location.href = $scope.streetSupplyCvsFile;
+	    });	
+	};
+	
+	$scope.getPMSupplyCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.parkingMeterWS);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/parkingmeter/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.pmSupplyCvsFile = result;
+	    	window.location.href = $scope.pmSupplyCvsFile;
+	    });	
+	};
+	
+	$scope.getZoneSupplyCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.zoneWS);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/zone/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.zoneSupplyCvsFile = result;
+	    	window.location.href = $scope.zoneSupplyCvsFile;
+	    });	
+	};
+	
+	$scope.getAreaSupplyCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.areaWS);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/area/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.areaSupplyCvsFile = result;
+	    	window.location.href = $scope.areaSupplyCvsFile;
+	    });	
+	};
+	
+	$scope.getStructureSupplyCsv = function(){
+		var method = 'POST';
+		var value = JSON.stringify($scope.pstructWS);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/parkingstructures/csv", null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.structSupplyCvsFile = result;
+	    	window.location.href = $scope.structSupplyCvsFile;
+	    });	
+	};
+	// ---------------------------------------------- End of block for supply CSV creation ------------------------------------------
     
     // ------------------------------------------- Block for occupancy CSV creation --------------------------------------
     $scope.getStreetOccupancyCsv = function(){
