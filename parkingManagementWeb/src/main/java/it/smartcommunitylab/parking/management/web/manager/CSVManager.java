@@ -20,6 +20,8 @@ import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructu
 import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ProfitParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.ProfitParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ProfitRateArea;
@@ -200,6 +202,103 @@ public class CSVManager {
 			logger.error("Error in area csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
+	}
+
+	// Method used to create the csv file for the parking structures occupation
+	public String create_supply_file_structs(ArrayList<ParkingStructure> structures, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "Structure.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+			
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Indirizzo");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Park&Ride");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Tariffa euro/ora");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Note tariffa");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Orario");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti per disabili");
+			writer.append(CSV_NEWLINE);
+			
+			// Add the list of data in a table
+			for(ParkingStructure ps : structures){
+				writer.append(ps.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getStreetReference());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.isParkAndRide()) ? "Sì" : "No");
+				writer.append(CSV_SEPARATOR);
+				double fee = 0.0;
+				if(ps.getFee_val() >= 0){
+					fee = ps.getFee_val() / 100;
+				}
+				writer.append(cleanCommaValue(fee + ""));
+				writer.append(CSV_SEPARATOR);
+				writer.append(cleanCommaValue(ps.getFee_note()));
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getTimeSlot());
+				writer.append(CSV_SEPARATOR);
+				writer.append(ps.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getHandicappedSlotNumber() >= 0) ? (ps.getHandicappedSlotNumber() + "") : "0");
+				writer.append(CSV_NEWLINE);
+			}
+			writer.flush();
+			writer.close();
+			
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in structures csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}	
+	
+	// Method used to create the csv file for the parkingmeter profit
+	public String create_supply_file_parkingmeters(ArrayList<ParkingMeter> parkingmeters, String path)
+			throws FileNotFoundException, UnsupportedEncodingException {
+		String name = FILE_NAME + "ParkingMeter.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+
+			// Added the table cols headers
+			writer.append("Codice");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Note");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Stato");
+			writer.append(CSV_NEWLINE);
+
+			// Add the list of data in a table
+			for (ParkingMeter p : parkingmeters) {
+				writer.append(p.getCode() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(cleanNewLineValue(p.getNote()));
+				writer.append(CSV_SEPARATOR);
+				writer.append(p.getStatus() + "");
+				writer.append(CSV_NEWLINE);
+			}
+			// String arr = writer.toString();
+			// ba = arr.getBytes();
+			writer.flush();
+			writer.close();
+
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in supply parking meter csv creation: " + e1);
+		}
+		return "csv/" + name; // ba
 	}	
 	
 	// Method used to create the csv file for the street occupation
@@ -255,7 +354,7 @@ public class CSVManager {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			logger.error("Error in street csv creation: " + e1);
+			logger.error("Error in occupancy street csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
 	}
@@ -301,7 +400,7 @@ public class CSVManager {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			logger.error("Error in zone csv creation: " + e1);
+			logger.error("Error in occupancy zone csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
 	}
@@ -347,7 +446,7 @@ public class CSVManager {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			logger.error("Error in area csv creation: " + e1);
+			logger.error("Error in occupancy area csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
 	}
@@ -393,7 +492,7 @@ public class CSVManager {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			logger.error("Error in structures csv creation: " + e1);
+			logger.error("Error in occupancy structures csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
 	}
@@ -570,7 +669,7 @@ public class CSVManager {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			logger.error("Error in profit street csv creation: " + e1);
+			logger.error("Error in profit parking meter csv creation: " + e1);
 		}
 		return "csv/" + name; // ba
 	}
@@ -1007,6 +1106,15 @@ public class CSVManager {
 		String cleanedVal = data;
 		if (data.contains("\n")) {
 			cleanedVal = data.replaceAll("\n", " ");
+		}
+		return cleanedVal;
+	}
+	
+	// Method cleanCommaValue: used to remove the comma chars from a string
+	private String cleanCommaValue(String data) {
+		String cleanedVal = data;
+		if (data.contains(",")) {
+			cleanedVal = data.replaceAll(",", ".");
 		}
 		return cleanedVal;
 	}

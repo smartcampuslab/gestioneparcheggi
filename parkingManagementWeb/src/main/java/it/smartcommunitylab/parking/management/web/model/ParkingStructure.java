@@ -32,7 +32,7 @@ public class ParkingStructure {
 	private String managementMode;
 	private String fee_note;
 	private Integer fee_val;	// in eurocent / hour
-	private String timeSlot;
+	private String timeSlot;	// used in csv creation for openingTime string value
 	private OpeningTime openingTime;
 	private Point geometry;
 	

@@ -37,6 +37,7 @@ import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructu
 import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
 import it.smartcommunitylab.parking.management.web.model.OccupancyZone;
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ProfitParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.ProfitParkingStructure;
@@ -338,7 +339,7 @@ public class DashboardController {
 	
 	// --------------------------------- Part for csv files creation ------------------------------------
 	// --------------------------------------- Supply CSV --------------------------------------------
-	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/sypply/street/csv")
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/supply/street/csv")
 	public @ResponseBody
 	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
 		logger.info("I am in street csv creation.");
@@ -504,7 +505,7 @@ public class DashboardController {
 	    	
 		for(int i = 0; i < structList.length(); i++){
 		   	JSONObject struct = structList.getJSONObject(i);
-		    //logger.error(String.format("Street Data: %s", street.toString()));
+		    logger.error(String.format("Struct Data: %s", struct.toString()));
 		    String id = struct.getString("id");
 		    String id_app = struct.getString("id_app");
 		    String name = struct.getString("name");
@@ -513,34 +514,87 @@ public class DashboardController {
 		    String phoneNumber = struct.getString("phoneNumber");
 		    Integer fee_val = (!struct.isNull("fee_val")) ? struct.getInt("fee_val") : 0;
 		    String fee_note = (!struct.isNull("fee_note")) ? struct.getString("fee_note") : "n.p.";
-//		    String timeSlot = struct.getString("timeSlot");
+		    String opening = "n.p.";
+		    JSONObject openingTime = (!struct.isNull("openingTime")) ? struct.getJSONObject("openingTime") : null;
+		    if(openingTime != null){
+		    	opening = "";
+		    	JSONArray periods = openingTime.getJSONArray("period");
+		    	for(int j = 0; j < periods.length(); j++){
+		    		JSONObject fromTo = periods.getJSONObject(j);
+		    		opening += fromTo.getString("from") + " - " + fromTo.getString("to") + " / ";
+		    	}
+		    	if(opening.length() > 0){
+		    		opening = opening.substring(0, opening.length() - 3);
+		    	}
+		    }
 		    Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
 		    Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
 		    Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
-		    ParkingStructure ops = new ParkingStructure();
-		    ops.setId(id);
-		    ops.setId_app(id_app);
-		    ops.setName(name);
-		    ops.setStreetReference(streetReference);
-		    ops.setManagementMode(managementMode);
-		    ops.setPhoneNumber(phoneNumber);
-		    ops.setFee_val(fee_val);
-		    ops.setFee_note(fee_note);
-		    //ops.setTimeSlot(timeSlot);
-		    ops.setSlotNumber(slotNumber);
-		    ops.setHandicappedSlotNumber(handicappedSlotNumber);
-		    ops.setUnusuableSlotNumber(unusuableSlotNumber);
-		    structData.add(ops);
+		    ParkingStructure ps = new ParkingStructure();
+		    ps.setId(id);
+		    ps.setId_app(id_app);
+		    ps.setName(name);
+		    ps.setStreetReference(streetReference);
+		    ps.setManagementMode(managementMode);
+		    ps.setPhoneNumber(phoneNumber);
+		    ps.setFee_val(fee_val);
+		    ps.setFee_note(fee_note);
+		    ps.setTimeSlot(opening);	// String value
+		    ps.setSlotNumber(slotNumber);
+		    ps.setHandicappedSlotNumber(handicappedSlotNumber);
+		    ps.setUnusuableSlotNumber(unusuableSlotNumber);
+		    structData.add(ps);
 		}	
 			
 		try {
-			//return_data = csvManager.create_file_streets(streetData, path);
-			//createdFile = csvManager.create_file_structs(structData, path);
+			createdFile = csvManager.create_supply_file_structs(structData, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
 		return createdFile;
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/supply/parkingmeter/csv")
+	public @ResponseBody
+	String createPMCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+		logger.info("I am in parkingmeter csv creation.");
+		ArrayList<ParkingMeter> pMData = new ArrayList<ParkingMeter>();
+		String createdFile = "";
+		//byte[] return_data = null;
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		
+		JSONArray pmList = new JSONArray(data);
+		logger.info("ParkingMeters list size: " + pmList.length());
+    	
+	    for(int i = 0; i < pmList.length(); i++){
+	    	JSONObject pm = pmList.getJSONObject(i);
+	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	String id = pm.getString("id");
+	    	String id_app = pm.getString("id_app");
+	    	Integer code = pm.getInt("code");
+	    	String note = pm.getString("note");
+	    	String status = pm.getString("status");
+	    	ParkingMeter spm = new ParkingMeter();
+	    	spm.setId(id);
+	    	spm.setId_app(id_app);
+	    	spm.setCode(code);
+	    	spm.setNote(note);
+	    	if(status.compareTo("ACTIVE") == 0){
+	    		spm.setStatus(ParkingMeter.Status.ACTIVE);
+	    	} else {
+	    		spm.setStatus(ParkingMeter.Status.INACTIVE);
+	    	}
+	    	pMData.add(spm);
+	    }	
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_supply_file_parkingmeters(pMData, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV per parcometri: " + e.getMessage());
+		}
+		return createdFile;
+	}	
 	// --------------------------------------- Occupancy CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/street/csv")
 	public @ResponseBody

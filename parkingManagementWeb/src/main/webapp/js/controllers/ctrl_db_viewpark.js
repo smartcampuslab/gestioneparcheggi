@@ -1048,6 +1048,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	
 	// ------------------------------- Utility methods ----------------------------------------
+	$scope.correctFeeData = function(fee_val){
+		if(fee_val != null){
+			fee_val = fee_val / 100 + "";
+			if(fee_val.indexOf(".") > -1){
+				fee_val = fee_val.replace(".", ",");
+			}
+		}
+		return fee_val;
+	};
+	
 	$scope.correctColor = function(value){
 		return "#" + value;
 	};
@@ -2766,7 +2776,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						phoneNumber: occupancyStructs[i].phoneNumber,
 						lastChange: profitStructs[j].lastChange,
 						occupancyRate: occupancyStructs[i].occupancyRate,
-						parkAndRide: profitStructs[i].parkAndRide,
+						parkAndRide: profitStructs[j].parkAndRide,
 						profit : profitStructs[j].profit,
 						tickets : profitStructs[j].tickets,
 						extratime: timeCost
@@ -2776,16 +2786,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 		}
 		return mergedStructs;
-	};
-	
-	$scope.correctFeeData = function(fee_val){
-		if(fee_val != null){
-			fee_val =fee_val / 100 + "";
-			if(fee_val.indexOf(".") > -1){
-				fee_val = fee_val.replace(".", ",");
-			}
-		}
-		return fee_val;
 	};
 	
 	// Method getStreetsInZoneOccupancy: used to get the occupancy of the streets in a specific zone
