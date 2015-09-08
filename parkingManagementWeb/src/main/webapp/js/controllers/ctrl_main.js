@@ -31,8 +31,8 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     $scope.app ;
                   			
     //$scope.citizenId = userId;
-    //$scope.user_token = token;
-    $scope.user_token = "";
+    $scope.user_token = token;
+    //$scope.user_token = "";
                   			
     // new elements for view
     $scope.currentView;

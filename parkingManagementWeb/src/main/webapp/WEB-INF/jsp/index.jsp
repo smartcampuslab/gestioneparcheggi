@@ -57,7 +57,7 @@
 <base href="<%=request.getContextPath()%>/" />
 
 <script>
-<%-- var token="<%=request.getAttribute("token")%>"; --%>
+var token="<%=request.getAttribute("token")%>";
 <%-- var userId="<%=request.getAttribute("user_id")%>"; --%>
 var user_name="<%=request.getAttribute("user_name")%>";
 var user_surname="<%=request.getAttribute("user_surname")%>";

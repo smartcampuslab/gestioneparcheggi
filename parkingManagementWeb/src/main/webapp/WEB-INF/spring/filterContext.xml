@@ -48,17 +48,18 @@
 		pattern="/rest/nosec/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/dashboard/rest/nosec/**" security="none" />
-	<http xmlns="http://www.springframework.org/schema/security"
-		pattern="/rest/appid/**" security="none" />
-	<http xmlns="http://www.springframework.org/schema/security"
-		pattern="/dashboard/rest/appid/**" security="none" />
+<!-- 	<http xmlns="http://www.springframework.org/schema/security" -->
+<!-- 		pattern="/rest/appid/**" security="none" /> -->
+<!-- 	<http xmlns="http://www.springframework.org/schema/security" -->
+<!-- 		pattern="/dashboard/rest/appid/**" security="none" /> -->
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/csv/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/auxiliary/rest/**" security="none" />
 	
+	<!-- Rest WS security with OAUTH2 -->
 <!-- 	<sec:http pattern="/rest/**" entry-point-ref="forbEntryPoint" -->
-<!-- 		use-expressions="true" create-session="stateless">ifRequired  -->
+<!-- 		use-expressions="true" create-session="stateless"> -->
 <!-- 		<sec:custom-filter position="PRE_AUTH_FILTER" ref="authTokenFilter" /> -->
 <!-- 		<sec:intercept-url pattern="/**" access="isFullyAuthenticated()" /> -->
 <!-- 	</sec:http> -->
@@ -95,7 +96,7 @@
 	
 	<context:property-placeholder location="classpath:tm.properties" />
 	
-	<!-- MyWeb console authentication manager with base authentication -->
+	<!-- ParkingManagement authentication manager with base authentication -->
     <sec:authentication-manager id="mongoAuthenticationManager">
 		<sec:authentication-provider user-service-ref="mongoUserDetailsService"> 
 			<sec:password-encoder hash="plaintext" />
@@ -117,5 +118,22 @@
 <!-- 			delete-cookies="true" -->
 <!-- 			logout-success-url="/prelogin" /> -->
 <!-- 	</sec:http> -->
+
+	<!-- ParkingManagement Portal authentication manager with OAUTH2 -->
+<!-- 	<bean id="forbEntryPoint" -->
+<!-- 		class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"> -->
+<!-- 	</bean> -->
+
+<!-- 	<bean id="authTokenFilter" class="eu.trentorise.smartcampus.aac.conf.OAuthTokenFilter"> -->
+<!-- 		<property name="authenticationManager" ref="authenticationManager" /> -->
+<!-- 	</bean> -->
+
+<!-- 	<sec:authentication-manager alias="authenticationManager"> -->
+<!-- 		<sec:authentication-provider ref="preauthAuthProvider" /> -->
+<!-- 	</sec:authentication-manager> -->
+	
+<!-- 	<bean id="preauthAuthProvider" -->
+<!-- 		class="eu.trentorise.smartcampus.aac.conf.OAuthAuthenticationProvider"> -->
+<!-- 	</bean> -->
 
 </beans>

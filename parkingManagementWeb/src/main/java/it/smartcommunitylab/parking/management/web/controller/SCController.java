@@ -15,45 +15,49 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.controller;
 
+import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.stereotype.Controller;
 
-//import eu.trentorise.smartcampus.aac.AACService;
-//import eu.trentorise.smartcampus.profileservice.BasicProfileService;
-//import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
-//import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
-//import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.context.SecurityContextHolder;
+
+import eu.trentorise.smartcampus.aac.AACService;
+import eu.trentorise.smartcampus.profileservice.BasicProfileService;
+import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
+import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
+import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 
 @Controller
 public class SCController {
 	
-//	@Autowired
-//	@Value("${aacExtURL}")
-//	private String aacExtURL;
-//	
-//
-//	@Autowired
-//	@Value("${aacURL}")
-//	private String aacURL;
-//
-//	@Autowired
-//	@Value("${smartcampus.clientId}")
-//	private String client_id;
-//
-//	@Autowired
-//	@Value("${smartcampus.clientSecret}")
-//	private String client_secret;
+	@Autowired
+	@Value("${aacExtURL}")
+	private String aacExtURL;
+	
 
-//	private SCWebApiClient client = null;
+	@Autowired
+	@Value("${aacURL}")
+	private String aacURL;
 
-//	protected String userToken = "";
-	//protected AACService aacService;
-	//protected BasicProfileService profileService;
+	@Autowired
+	@Value("${smartcampus.clientId}")
+	private String client_id;
 
-	//@PostConstruct
-	//public void init() {
-	//	aacService = new AACService(aacExtURL, client_id, client_secret);
-	//	profileService = new BasicProfileService(aacURL);
-	//}
+	@Autowired
+	@Value("${smartcampus.clientSecret}")
+	private String client_secret;
+
+	protected AACService aacService;
+	protected BasicProfileService profileService;
+
+	@PostConstruct
+	public void init() {
+		aacService = new AACService(aacExtURL, client_id, client_secret);
+		profileService = new BasicProfileService(aacURL);
+	}
 	
 	/**
 	 * Here we assume that the access token is placed in the current security
@@ -61,47 +65,26 @@ public class SCController {
 	 * 
 	 * @return
 	 */
-	//protected String getToken(HttpServletRequest request) {
-	//	String fromCtx = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-	//	System.err.println("TOKEN: "+fromCtx);
-	//	return fromCtx;
-	//}
-	
-//	protected String getToken(HttpServletRequest request) {
-//
-//		// String fromCtx = (String)
-//		// SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-//		String fromCtx = (String) request.getSession().getAttribute("token");
-//
-//		System.err.println("TOKEN: " + fromCtx);
-//		return fromCtx;
-//	}
-
-//	protected SCWebApiClient getSCClient() {
-//		if (client == null) {
-//			client = SCWebApiClient.getInstance(Locale.ENGLISH, socialEngineHost, socialEnginePort);
-//		}
-//		return client;
-//	}
-//
-//	protected boolean canRead(Long socialActorId, Long entityId) throws WebApiException {
-//		return getSCClient().readPermission(socialActorId, entityId, Operation.READ);
-//	}
+	protected String getToken(HttpServletRequest request) {
+		String fromCtx = (String) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+		System.err.println("TOKEN: "+fromCtx);
+		return fromCtx;
+	}
 
 	/*
 	 * Getters and Setters
 	 */
-	//protected BasicProfile getBasicProfile(HttpServletRequest request) throws SecurityException, ProfileServiceException {
-	//	BasicProfile bp = profileService.getBasicProfile(getToken(request));
-	//	return bp;
-	//}
-	//protected BasicProfile getBasicProfile(HttpServletRequest request, String userId) throws SecurityException, ProfileServiceException {
-	//	BasicProfile bp = profileService.getBasicProfile(userId, getToken(request));
-	//	return bp;
-	//}
+	protected BasicProfile getBasicProfile(HttpServletRequest request) throws SecurityException, ProfileServiceException {
+		BasicProfile bp = profileService.getBasicProfile(getToken(request));
+		return bp;
+	}
+	protected BasicProfile getBasicProfile(HttpServletRequest request, String userId) throws SecurityException, ProfileServiceException {
+		BasicProfile bp = profileService.getBasicProfile(userId, getToken(request));
+		return bp;
+	}
 
-	//protected AccountProfile getAccountProfile(HttpServletRequest request) throws SecurityException, ProfileServiceException {
-	//	return profileService.getAccountProfile(getToken(request));
-	//}
+	protected AccountProfile getAccountProfile(HttpServletRequest request) throws SecurityException, ProfileServiceException {
+		return profileService.getAccountProfile(getToken(request));
+	}
 
 }

@@ -115,6 +115,9 @@
 												</tr>
 											</table>
 										</form>
+<!-- 										<div align="center"> -->
+<!-- 											<a id="btn_login_test" href="login" class="btn btn-default" role="button" ng-click="getOldLogin()" disabled="false">Login TEST</a> -->
+<!-- 										</div> -->
 								</div>
 								
 							</div>
