@@ -108,6 +108,15 @@ public interface StatCustomRepository {
 			double value,
 			long timestamp);
 	
+	public void updateStatsPeriod(
+			String objectId,
+			String appId,
+			String type,
+			Map<String, Object> params,
+			double value,
+			long timestamp,
+			long[] period);
+	
 	public boolean isAHoliday(
 			Calendar cal, 
 			String appId);

@@ -208,6 +208,320 @@ public class StatRepositoryImpl implements StatCustomRepository {
 
 		mongoTemplate.upsert(Query.query(criteria), update, YearStat.class);
 	}
+	
+	public void updateStatsPeriod(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp, long[] period) {
+		Calendar c = Calendar.getInstance();
+		c.setTimeInMillis(timestamp);
+		boolean isHoliday = false;
+		String w = "wd";
+		
+		Calendar cStart = Calendar.getInstance();
+		Calendar cEnd = Calendar.getInstance();
+		Long difference = 0L;
+		int[] years = new int[0];
+		//years[0] = cEnd.get(Calendar.YEAR);
+		int[] months = new int[0];
+		//months[0] = cEnd.get(Calendar.MONTH);
+		int[] dows = new int[0];
+		//dows[0] = cEnd.get(Calendar.DAY_OF_WEEK);
+		int[] hours = new int[0];
+		//hours[0] = cEnd.get(Calendar.HOUR_OF_DAY);
+		if(period != null && period.length == 2){
+			cStart.setTimeInMillis(period[0]);
+			cEnd.setTimeInMillis(period[1]);
+			difference = cStart.getTimeInMillis() - cEnd.getTimeInMillis();
+			if(difference < 86400000L){
+				// in a single day
+				// I split the value in the differents hours contained in the period
+				int hourStart = cStart.get(Calendar.HOUR_OF_DAY);
+				int hourEnd = cEnd.get(Calendar.HOUR_OF_DAY);
+				hours = new int[hourEnd - hourStart + 1];
+				int j = 0;
+				for(int i = hourStart; i <= hourEnd; i++){
+					hours[j] = i;
+					j++;
+				}
+				years = new int[1];
+				years[0] = cEnd.get(Calendar.YEAR);
+				months = new int[1];
+				months[0] = cEnd.get(Calendar.MONTH);
+				dows = new int[1];
+				dows[0] = cEnd.get(Calendar.DAY_OF_WEEK);
+				isHoliday = isAHoliday(cEnd, appId);
+				w = isHoliday ? "we":"wd";
+			} else if(difference < 2629743830L){
+				// in a month
+				int dayStart = cStart.get(Calendar.DAY_OF_WEEK);
+				int dayEnd = cEnd.get(Calendar.DAY_OF_WEEK);
+				dows = new int[dayEnd - dayStart + 1];
+				int j = 0;
+				for(int i = dayStart; i <= dayEnd; i++){
+					dows[j] = i;
+					j++;
+				}
+				years = new int[1];
+				years[0] = cEnd.get(Calendar.YEAR);
+				months = new int[1];
+				months[0] = cEnd.get(Calendar.MONTH);
+			} else if(difference < 31556926000L){
+				// in a year
+				int monthStart = cStart.get(Calendar.MONTH);
+				int monthEnd = cEnd.get(Calendar.MONTH);
+				months = new int[monthEnd - monthStart + 1];
+				int j = 0;
+				for(int i = monthStart; i <= monthEnd; i++){
+					months[j] = i;
+					j++;
+				}
+				years = new int[1];
+				years[0] = cEnd.get(Calendar.YEAR);
+			} else {
+				// more years
+				int yearStart = cStart.get(Calendar.YEAR);
+				int yearEnd = cEnd.get(Calendar.YEAR);
+				years = new int[yearEnd - yearStart + 1];
+				int j = 0;
+				for(int i = yearStart; i <= yearEnd; i++){
+					years[j] = i;
+					j++;
+				}
+			}
+		}
+		
+		for(int y = 0; y < years.length; y++){
+			findAndUpdateStats(objectId, appId, type, params, value, timestamp, 4, years[y], 0, 0, 0, "we", true);
+			findAndUpdateStats(objectId, appId, type, params, value, timestamp, 4, years[y], 0, 0, 0, "wd", false);
+			
+			for(int m = 0; m < months.length; m++){
+				findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "we", true);
+				findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "wd", false);
+				
+				for(int d = 0; d < dows.length; d++){
+					if(hours == null || hours.length == 0){
+						Calendar cDay = Calendar.getInstance();
+						cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
+						isHoliday = isAHoliday(cDay, appId);
+						w = isHoliday ? "we":"wd";
+						findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], 0, w, isHoliday);
+					} else {
+						for(int h = 0; h < hours.length; h++){
+							findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], hours[h], w, isHoliday);
+				
+						}
+					}
+				}
+			}
+		}	
+	}	
+	
+	private void findAndUpdateStats(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp, int period, int year, int month, int dow, int hour, String wdt, boolean isHoliday){
+		StatValue stat = new StatValue(1, value, value, timestamp); //value,
+		
+		Criteria criteria = Criteria
+				.where("key.objectId").is(objectId)
+				.and("key.appId").is(appId)
+				.and("key.type").is(type)
+				.and("key.year").is(year);
+					
+		Query query = Query.query(criteria);
+			
+		String q1;
+		String q2;
+		String q3;
+		String q4;
+		String q5;
+		String q6;
+		String q7;
+		String q8;
+			
+		Update update = new Update();
+		if (params != null && !params.isEmpty()) {
+			update.addToSet("parameters", params);
+		}
+			
+		// hours
+		if(period == 1){
+			// - update: year, month, day, hour
+			q1 = "months."+month+".days."+dow+".hours."+hour;	//1
+			// - update: year, month, day, all
+			q2 = "months."+month+".days."+dow+".all";	//2
+			// - update: year, month, wd/we, hour
+			q3 = "months."+month+"."+wdt+".hours."+hour;	//1
+			// - update: year, month, wd/we, all
+			q4 = "months."+month+"."+wdt+".all";	//3
+			// - update: year, all, day, hour
+			q5 = "all.days."+dow+".hours."+hour;	//1
+			// - update: year, all, day, all
+			q6 = "all.days."+dow+".all";	//2
+			// - update: year, all, wd/we, hour
+			q7 = "all."+wdt+".hours."+hour; //1
+			// - update: year, all, wd/we, all
+			q8 = "all."+wdt+".all";	//4
+			
+			query.fields().include(q1);
+			query.fields().include(q2);
+			query.fields().include(q3);
+			query.fields().include(q4);
+			query.fields().include(q5);
+			query.fields().include(q6);
+			query.fields().include(q7);
+			query.fields().include(q8);
+				
+			YearStat yearStat = mongoTemplate.findOne(query, YearStat.class);
+			
+			StatValue stat1 = stat.copy();
+			if (yearStat != null && yearStat.month(month).day(dow).hour(hour) != null){
+				stat1.merge(yearStat.month(month).day(dow).hour(hour));
+			}
+			update.set(q1, stat1);
+		
+			StatValue stat2 = stat.copy();
+			if (yearStat != null && yearStat.month(month).day(dow).getAll() != null){
+				stat2.merge(yearStat.month(month).day(dow).getAll());
+			}
+			update.set(q2, stat2);
+				
+			StatValue stat3 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.month(month).getWe().hour(hour) != null){
+				stat3.merge(yearStat.month(month).getWe().hour(hour));
+			} else if (!isHoliday && yearStat != null && yearStat.month(month).getWd().hour(hour) != null){
+				stat3.merge(yearStat.month(month).getWd().hour(hour));
+			}
+			update.set(q3, stat3);
+		
+			StatValue stat4 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.month(month).getWe().getAll() != null){
+				stat4.merge(yearStat.month(month).getWe().getAll());
+			} else if (!isHoliday && yearStat != null && yearStat.month(month).getWd().getAll() != null){
+				stat4.merge(yearStat.month(month).getWd().getAll());
+			}
+			update.set(q4, stat4);
+		
+			StatValue stat5 = stat.copy();
+			if (yearStat != null && yearStat.getAll().day(dow).hour(hour) != null){
+				stat5.merge(yearStat.getAll().day(dow).hour(hour));
+			}
+			update.set(q5, stat5);
+		
+			StatValue stat6 = stat.copy();
+			if (yearStat != null && yearStat.getAll().day(dow).getAll() != null){
+				stat6.merge(yearStat.getAll().day(dow).getAll());
+			}
+			update.set(q6, stat6);
+				
+			StatValue stat7 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.getAll().getWe().hour(hour) != null){
+				stat7.merge(yearStat.getAll().getWe().hour(hour));
+			} else if (!isHoliday && yearStat != null && yearStat.getAll().getWd().hour(hour) != null){
+				stat7.merge(yearStat.getAll().getWd().hour(hour));
+			}
+			update.set(q7, stat7);
+		
+			StatValue stat8 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.getAll().getWe().getAll() != null){
+				stat8.merge(yearStat.getAll().getWe().getAll());
+			} else if (!isHoliday && yearStat != null && yearStat.getAll().getWd().getAll() != null){
+				stat8.merge(yearStat.getAll().getWd().getAll());
+			}
+			update.set(q8, stat8);
+		}
+			
+		//days
+		if(period == 2){
+			// - update: year, month, day, all
+			q2 = "months."+month+".days."+dow+".all";	//2
+			// - update: year, month, wd/we, all
+			q4 = "months."+month+"."+wdt+".all";	//3
+			// - update: year, all, day, all
+			q6 = "all.days."+dow+".all";	//2
+			// - update: year, all, wd/we, all
+			q8 = "all."+wdt+".all";	//4
+				
+			query.fields().include(q2);
+			query.fields().include(q4);
+			query.fields().include(q6);
+			query.fields().include(q8);
+				
+			YearStat yearStat = mongoTemplate.findOne(query, YearStat.class);
+		
+			StatValue stat2 = stat.copy();
+			if (yearStat != null && yearStat.month(month).day(dow).getAll() != null){
+				stat2.merge(yearStat.month(month).day(dow).getAll());
+			}
+			update.set(q2, stat2);
+		
+			StatValue stat4 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.month(month).getWe().getAll() != null){
+				stat4.merge(yearStat.month(month).getWe().getAll());
+			} else if (!isHoliday && yearStat != null && yearStat.month(month).getWd().getAll() != null){
+				stat4.merge(yearStat.month(month).getWd().getAll());
+			}
+			update.set(q4, stat4);
+		
+			StatValue stat6 = stat.copy();
+			if (yearStat != null && yearStat.getAll().day(dow).getAll() != null){
+				stat6.merge(yearStat.getAll().day(dow).getAll());
+			}
+			update.set(q6, stat6);
+		
+			StatValue stat8 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.getAll().getWe().getAll() != null){
+				stat8.merge(yearStat.getAll().getWe().getAll());
+			} else if (!isHoliday && yearStat != null && yearStat.getAll().getWd().getAll() != null){
+				stat8.merge(yearStat.getAll().getWd().getAll());
+			}
+			update.set(q8, stat8);
+		}
+			
+		//month
+		if(period == 3){
+			// - update: year, month, wd/we, all
+			q4 = "months."+month+"."+wdt+".all";	//3
+			// - update: year, all, wd/we, all
+			q8 = "all."+wdt+".all";	//4
+				
+			query.fields().include(q4);
+			query.fields().include(q8);
+				
+			YearStat yearStat = mongoTemplate.findOne(query, YearStat.class);
+		
+			StatValue stat4 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.month(month).getWe().getAll() != null){
+				stat4.merge(yearStat.month(month).getWe().getAll());
+			} else if (!isHoliday && yearStat != null && yearStat.month(month).getWd().getAll() != null){
+				stat4.merge(yearStat.month(month).getWd().getAll());
+			}
+			update.set(q4, stat4);
+		
+			StatValue stat8 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.getAll().getWe().getAll() != null){
+				stat8.merge(yearStat.getAll().getWe().getAll());
+			} else if (!isHoliday && yearStat != null && yearStat.getAll().getWd().getAll() != null){
+				stat8.merge(yearStat.getAll().getWd().getAll());
+			}
+			update.set(q8, stat8);
+		}
+			
+		//month
+		if(period == 4){
+			// - update: year, all, wd/we, all
+			q8 = "all."+wdt+".all";	//4
+
+			query.fields().include(q8);
+				
+			YearStat yearStat = mongoTemplate.findOne(query, YearStat.class);
+				
+			StatValue stat8 = stat.copy();
+			if (isHoliday && yearStat != null && yearStat.getAll().getWe().getAll() != null){
+				stat8.merge(yearStat.getAll().getWe().getAll());
+			} else if (!isHoliday && yearStat != null && yearStat.getAll().getWd().getAll() != null){
+				stat8.merge(yearStat.getAll().getWd().getAll());
+			}
+			update.set(q8, stat8);
+		}
+			
+		mongoTemplate.upsert(Query.query(criteria), update, YearStat.class);
+	}
 
 	//private boolean isHoliday(Calendar c, String appId) {
 		// TODO

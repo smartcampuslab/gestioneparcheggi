@@ -165,7 +165,7 @@ public class ObjectController  {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkingmeters") 
 	public @ResponseBody List<ParkMeter> getParkingMeters(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.info("I'm in get all parkingmeterss - auxiliary app!!!");
+		logger.info("I'm in get all parkingmeters - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
 			return dataService.getParkingMeters(agency, lat, lon, radius);
 		} 
@@ -173,9 +173,9 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
-	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=false) boolean isSysLog, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog);
+			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -185,10 +185,13 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/{id}/{userId:.*}") 
-	public @ResponseBody String updateStreet(@RequestBody Street street, @RequestParam(required=false) boolean isSysLog, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreet(@RequestBody Street street, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicStreetData(street, agency, userId, isSysLog);
+			if(period != null){
+				logger.error("Inserted period = " + period[0] + "-" + period[1] );
+			}
+			dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -198,10 +201,10 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/{id}/{userId:.*}") 
-	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog, from, to);
+			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog, from, to, period);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -211,10 +214,10 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/{id}/{userId:.*}") 
-	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to);
+			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block

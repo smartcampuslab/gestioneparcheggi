@@ -374,12 +374,12 @@ public class StorageManager {
 		return result;
 	}
 
-	public StreetBean findStreet(String parkingMeterId) {
+	public StreetBean findStreet(String streetId) {
 		List<RateArea> aree = mongodb.findAll(RateArea.class);
 		Street s = new Street();
 		for (RateArea area : aree) {
 			if (area.getStreets() != null) {
-				s.setId(parkingMeterId);
+				s.setId(streetId);
 				int index = area.getStreets().indexOf(s);
 				if (index != -1) {
 					Street st = area.getStreets().get(index);

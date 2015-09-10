@@ -324,7 +324,7 @@
     "description": "Testo pulsante 'modifica'"
 }, {
     "key": "edit_parkingstructure",
-    "value": "Modifica parcometro",
+    "value": "Modifica parcheggio in struttura",
     "description": "Titolo pagina editing parcometro"
 }, {
     "key": "ps_geometry",

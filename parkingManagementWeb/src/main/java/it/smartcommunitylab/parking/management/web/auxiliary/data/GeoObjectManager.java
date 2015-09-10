@@ -88,7 +88,7 @@ public class GeoObjectManager {
 		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
 	}
 	
-	public void updateDynamicStreetData(Street s, String agencyId, String authorId, boolean sysLog) throws Exception, NotFoundException {
+	public void updateDynamicStreetData(Street s, String agencyId, String authorId, boolean sysLog, long[] period) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(s.getUpdateTime() != null){
 			currTime = s.getUpdateTime();
@@ -97,18 +97,18 @@ public class GeoObjectManager {
 		//currTime = 1428271200000L; // Easter Monday 2015
 		//currTime = 1431813600000L; // A Sunday
 		//currTime = 1432543500000L;	// Today at 10.45 am
-		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, sysLog);
+		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, sysLog, period);
 	}
 	
-	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, boolean sysLog) throws Exception, NotFoundException {
+	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, boolean sysLog, long[] period) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog);
+		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog, period);
 	}
 	
-	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog, Long from, Long to) throws Exception, NotFoundException {
+	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -117,10 +117,10 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, sysLog);
+		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, sysLog, period);
 	}
 	
-	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, boolean sysLog, Long from, Long to) throws Exception, NotFoundException {
+	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -129,7 +129,7 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, sysLog);
+		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, sysLog, period);
 	}
 
 	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {

@@ -390,7 +390,7 @@ public class DynamicManager {
 		return vb;
 	}
 
-	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, boolean sysLog) throws DatabaseException {
+	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period) throws DatabaseException {
 		String[] ids = s.getId().split("@");
 		String pmId = ids[2];
 		s.setUpdateTime(timestamp);
@@ -459,24 +459,44 @@ public class DynamicManager {
 					int[] total = {s.getSlotsFree(),s.getSlotsPaying(), s.getSlotsTimed()};
 					int[] occupied = {s.getSlotsOccupiedOnFree(),s.getSlotsOccupiedOnPaying(), s.getSlotsOccupiedOnTimed(), s.getSlotsUnavailable()};
 					double statValue = findOccupationRate(total, occupied, 0, 0, 1);
-					repo.updateStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp);
+					if(period == null || period.length == 0){
+						repo.updateStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp);
+					} else {
+						repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp, period);
+					}
 					// Here I have to difference the type of the park: total, free, paying and timed - MULTIPARKOCC
 					if(countElements(total) > 1){	// Here I check if there are more than one element of park type
 						if(s.getSlotsFree()!= 0){
 							double freeOccValue = findOccupationRate(null, null, s.getSlotsFree(), s.getSlotsOccupiedOnFree(), 2);
-							repo.updateStats(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp);
+							if(period == null || period.length == 0){
+								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp);
+							} else {
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp, period);
+							}
 						}
 						if(s.getSlotsPaying() != 0){
 							double payingOccValue = findOccupationRate(null, null, s.getSlotsPaying(), s.getSlotsOccupiedOnPaying(), 2);
-							repo.updateStats(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp);
+							if(period == null || period.length == 0){
+								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp);
+							} else {
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp, period);
+							}
 						}
 						if(s.getSlotsTimed() != 0){
 							double timedOccValue = findOccupationRate(null, null, s.getSlotsTimed(), s.getSlotsOccupiedOnTimed(), 2);
-							repo.updateStats(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp);
+							if(period == null || period.length == 0){
+								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp);
+							} else {
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp, period);
+							}
 						}
 						if(s.getSlotsHandicapped() != 0){
 							double handicappedOccValue = findOccupationRate(null, null, s.getSlotsHandicapped(), s.getSlotsOccupiedOnHandicapped(), 2);
-							repo.updateStats(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp);
+							if(period == null || period.length == 0){
+								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp);
+							} else {
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp, period);
+							}
 						}
 					}
 					break;
@@ -657,7 +677,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingStructureAux: used to save a DataLogBean object for the new occupancy data in a parkingStructure
-	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
+	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -711,11 +731,15 @@ public class DynamicManager {
 		int[] total = {p.getSlotsTotal()};
 		int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
 		double statValue = findOccupationRate(total, occupied, 0, 0, 1);
-		repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
+		if(period == null || period.length == 0){
+			repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
+		} else {
+			repo.updateStatsPeriod(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp, period);
+		}
 	}
 	
 	// Method editParkStructProfitAux: used to save a ProfitLogBean object for the new profit data in a parkingStructure
-	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
+	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog, long[] period) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -759,12 +783,18 @@ public class DynamicManager {
 		// Update Stat report
 		int profitVal = p.getProfit();
 		int ticketsVal = p.getTickets();
-		repo.updateStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
-		repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+		if(period == null || period.length == 0){
+			repo.updateStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
+			repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+		} else {
+			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period);
+			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period);
+		}
+		
 	}
 	
 	// Method editParkingMeterAux: used to save a ProfitLogBean object for the new profit data in a parkingMeter
-	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog) throws NotFoundException {
+	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog, long[] period) throws NotFoundException {
 		String[] ids = pm.getId().split("@");
 		String pmId = ids[2];
 		pm.setUpdateTime(timestamp);
@@ -814,8 +844,13 @@ public class DynamicManager {
 		//double statValue = findOccupationRate(total, occupied, 0, 0, 1);
 		int profitVal = pm.getProfit();
 		int ticketsVal = pm.getTickets();
-		repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
-		repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+		if(period == null || period.length == 0){
+			repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
+			repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+		} else {
+			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period);
+			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period);
+		}
 	}
 
 	
