@@ -1316,7 +1316,11 @@
     "description": "Label codice utente in creazione log via"
 }, {
     "key": "street_time_log",
-    "value": "Ora Log",
+    "value": "Timestamp Log",
+    "description": "Label orario in creazione log via"
+}, {
+    "key": "street_day_log",
+    "value": "Giorno",
     "description": "Label orario in creazione log via"
 }, {
     "key": "street_timelog_err_required",
@@ -1582,6 +1586,22 @@
 	"key": "element_waiting_min", 
 	"value": "min",
 	"description": "Label per minuti di attesa per parcheggio"
+}, { 
+	"key": "log_period", 
+	"value": "Periodo",
+	"description": "Label per periodo temporale specifico in inserimento log"
+}, { 
+	"key": "log_period_from_date", 
+	"value": "Dal",
+	"description": "Label per inizio periodo in inserimento log"
+}, { 
+	"key": "log_period_to_date", 
+	"value": "Al",
+	"description": "Label per fine periodo in inserimento log"
+}, { 
+	"key": "log_period_time", 
+	"value": "Ora",
+	"description": "Label per ora periodo in inserimento log"
 }, {
     "key": "time_vis",
     "value": "Visualizzazione"

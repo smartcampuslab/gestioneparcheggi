@@ -63,6 +63,26 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
               
     //---------------- End datetimepicker section------------
     
+    // ----------------------- Start timepicker section ---------------------------
+    $scope.startTime = new Date(0);
+    $scope.endTime = new Date(0);
+    
+    $scope.ismeridian = false;
+    $scope.hstep = 1;	// hour step
+    $scope.mstep = 1;	// minute step
+    
+    $scope.clearTime = function() {
+        $scope.startTime = null;
+        $scope.endTime = null;        
+    };
+    
+    $scope.resetTime = function(date){
+    	$scope.startTime = date;
+    	$scope.endTime = date;
+    };
+    
+    // ------------------------ End timepicker section ------------------------------
+    
     $scope.setIndex = function($index){
     	switch($index){
 	    	case 0:
@@ -470,8 +490,11 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.initTimeValues = function(){
 		var now = new Date();
-		$scope.myStreetDetails.loghour = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear();
-		$scope.myStreetDetails.logtime = $scope.addZero(now.getHours()) + ":" + $scope.addZero(now.getMinutes()) + ":" + $scope.addZero(now.getSeconds());
+		$scope.myStreetDetails.loghour = $scope.addZero(now.getDate()) + "/" + $scope.addZero(now.getMonth() + 1) + "/" + now.getFullYear();
+		//$scope.myStreetDetails.logtime = $scope.addZero(now.getHours()) + ":" + $scope.addZero(now.getMinutes()) + ":" + $scope.addZero(now.getSeconds());
+		$scope.myStreetDetails.logtime = now;
+		$scope.myStreetDetails.startTimePeriod = new Date(0);
+		$scope.myStreetDetails.endTimePeriod = new Date(0);
 	};
 	
 	$scope.initParkTimeValues = function(){
@@ -484,57 +507,66 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	$scope.insertStreetLog = function(form, myStreetDetails){
 		$scope.showUpdatingSErrorMessage = false;
 		$scope.showUpdatingSSuccessMessage = false;
+		
+		//if($scope.correctPeriod(myStreetDetails))
+		
 		if($scope.checkCorrectSlots(myStreetDetails)){
 			
-		if(form.$invalid){
-			$scope.isInit = false;
-		} else {
-			var method = 'POST';
-			var appId = sharedDataService.getConfAppId();
-			var logId = myStreetDetails.id;
-			var user = myStreetDetails.user;
-			var streetLogDet = {
-				id: myStreetDetails.id, 
-				agency: myStreetDetails.agency, 
-				position: myStreetDetails.position, 
-				name: myStreetDetails.name, 
-				description: myStreetDetails.description,
-				updateTime: $scope.getLogMillis(myStreetDetails.loghour, myStreetDetails.logtime), 
-				user: parseInt(myStreetDetails.user), 
-				slotsFree: parseInt(myStreetDetails.slotsFree), 
-				slotsOccupiedOnFree: parseInt(myStreetDetails.slotsOccupiedOnFree), 
-				slotsPaying: parseInt(myStreetDetails.slotsPaying), 
-				slotsOccupiedOnPaying: parseInt(myStreetDetails.slotsOccupiedOnPaying), 
-				slotsTimed: parseInt(myStreetDetails.slotsTimed), 
-				slotsOccupiedOnTimed: parseInt(myStreetDetails.slotsOccupiedOnTimed), 
-				slotsHandicapped: parseInt(myStreetDetails.slotsHandicapped), 
-				slotsOccupiedOnHandicapped: parseInt(myStreetDetails.slotsOccupiedOnHandicapped),
-				slotsUnavailable: parseInt(myStreetDetails.slotsUnavailable), 
-				polyline: myStreetDetails.polyline, 
-				areaId: myStreetDetails.areaId,
-				version: myStreetDetails.version,
-				lastChange:myStreetDetails.lastChange
-			};
+			var periodFrom = new Date(myStreetDetails.logPeriodFrom);
+			var periodTo = new Date(myStreetDetails.logPeriodTo);
+			periodFrom.setHours(myStreetDetails.startTimePeriod.getHours(), myStreetDetails.startTimePeriod.getMinutes(), 0, 0);
+			periodTo.setHours(myStreetDetails.endTimePeriod.getHours(), myStreetDetails.endTimePeriod.getMinutes(), 0, 0);
 			
-			var params = {
-				isSysLog: true	
-			};
-			var value = JSON.stringify(streetLogDet);
-			console.log("streetLogDet: " + value);
-			
-		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
-		   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets/" + logId + "/" + user, params, $scope.authHeaders, value);
-		    myDataPromise.then(function(result){
-		    	console.log("Insert street log: " + JSON.stringify(result));
-		    	if(result == "OK"){
-		    		$scope.showUpdatingSErrorMessage = false;
-		    		$scope.showUpdatingSSuccessMessage = true;
-		    	} else {
-		    		$scope.showUpdatingSErrorMessage = true;
-		    		$scope.showUpdatingSSuccessMessage = false;
-		    	}
-		    });	
-		}
+			if(form.$invalid){
+				$scope.isInit = false;
+			} else {
+				var method = 'POST';
+				var appId = sharedDataService.getConfAppId();
+				var logId = myStreetDetails.id;
+				var user = myStreetDetails.user;
+				var streetLogDet = {
+					id: myStreetDetails.id, 
+					agency: myStreetDetails.agency, 
+					position: myStreetDetails.position, 
+					name: myStreetDetails.name, 
+					description: myStreetDetails.description,
+					updateTime: $scope.getLogMillis(myStreetDetails.loghour, myStreetDetails.logtime), 
+					user: parseInt(myStreetDetails.user), 
+					slotsFree: parseInt(myStreetDetails.slotsFree), 
+					slotsOccupiedOnFree: parseInt(myStreetDetails.slotsOccupiedOnFree), 
+					slotsPaying: parseInt(myStreetDetails.slotsPaying), 
+					slotsOccupiedOnPaying: parseInt(myStreetDetails.slotsOccupiedOnPaying), 
+					slotsTimed: parseInt(myStreetDetails.slotsTimed), 
+					slotsOccupiedOnTimed: parseInt(myStreetDetails.slotsOccupiedOnTimed), 
+					slotsHandicapped: parseInt(myStreetDetails.slotsHandicapped), 
+					slotsOccupiedOnHandicapped: parseInt(myStreetDetails.slotsOccupiedOnHandicapped),
+					slotsUnavailable: parseInt(myStreetDetails.slotsUnavailable), 
+					polyline: myStreetDetails.polyline, 
+					areaId: myStreetDetails.areaId,
+					version: myStreetDetails.version,
+					lastChange:myStreetDetails.lastChange
+				};
+				
+				var params = {
+					isSysLog: true,
+					period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : []
+				};
+				var value = JSON.stringify(streetLogDet);
+				console.log("streetLogDet: " + value);
+				
+			    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+			   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets/" + logId + "/" + user, params, $scope.authHeaders, value);
+			    myDataPromise.then(function(result){
+			    	console.log("Insert street log: " + JSON.stringify(result));
+			    	if(result == "OK"){
+			    		$scope.showUpdatingSErrorMessage = false;
+			    		$scope.showUpdatingSSuccessMessage = true;
+			    	} else {
+			    		$scope.showUpdatingSErrorMessage = true;
+			    		$scope.showUpdatingSSuccessMessage = false;
+			    	}
+			    });	
+			}
 		}
 	};
 	
@@ -699,11 +731,19 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     // Method getLogMillis: used to cast a date value in a long milliseconds
     $scope.getLogMillis = function(date, time){
     	var millis = 0;
-    	var res = time.split(":");
-   		var hours = res[0];
-   		var minutes = res[1];
-   		var seconds = res[2];
-    	
+    	var hours = 0;
+   		var minutes = 0;
+   		var seconds = 0;
+    	if(time instanceof Date){
+    		hours = time.getHours();
+       		minutes = time.getMinutes();
+       		seconds = time.getSeconds();
+    	} else {
+    		var res = time.split(":");
+       		hours = res[0];
+       		minutes = res[1];
+       		seconds = res[2];
+    	}
     	if(date instanceof Date){
     		// if date is a Date
        		date.setHours(hours);

@@ -17,6 +17,10 @@ package it.smartcommunitylab.parking.management.web.repository.impl;
 
 import it.smartcommunitylab.parking.management.web.model.ObjectsHolidays;
 import it.smartcommunitylab.parking.management.web.model.ObjectsSpecialHolidays;
+import it.smartcommunitylab.parking.management.web.model.period.Dow;
+import it.smartcommunitylab.parking.management.web.model.period.Hour;
+import it.smartcommunitylab.parking.management.web.model.period.Month;
+import it.smartcommunitylab.parking.management.web.model.period.Year;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 import it.smartcommunitylab.parking.management.web.model.stats.YearStat;
@@ -54,6 +58,11 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	private ObjectsSpecialHolidaysSetup objectHistoricalEaster;
 	
 	private static final Logger logger = Logger.getLogger(StatRepositoryImpl.class);
+	
+	private static final long MILLISINHOUR = 3600000L;
+	private static final long MILLISINDAY = 86400000L;
+	private static final long MILLISINMONTH = 2629743830L;
+	private static final long MILLISINYEAR = 31556926000L;
     
 	public Map<StatKey, StatValue> findStats(String objectId, String appId, String type, Map<String, Object> params,
 			int[] years, byte[] months, byte[] days, byte[] hours) {
@@ -219,62 +228,176 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		Calendar cEnd = Calendar.getInstance();
 		Long difference = 0L;
 		int[] years = new int[0];
-		//years[0] = cEnd.get(Calendar.YEAR);
 		int[] months = new int[0];
-		//months[0] = cEnd.get(Calendar.MONTH);
 		int[] dows = new int[0];
-		//dows[0] = cEnd.get(Calendar.DAY_OF_WEEK);
 		int[] hours = new int[0];
-		//hours[0] = cEnd.get(Calendar.HOUR_OF_DAY);
+		int[][] dhours = new int[0][0];	// used when I have hours from 2 days
+		int[][] mdows = new int[0][0];	// used when I have days from 2 months
+		int[][] ymonths = new int[0][0];	// used when I have days from 2 months
 		if(period != null && period.length == 2){
 			cStart.setTimeInMillis(period[0]);
 			cEnd.setTimeInMillis(period[1]);
-			difference = cStart.getTimeInMillis() - cEnd.getTimeInMillis();
-			if(difference < 86400000L){
+			difference = cEnd.getTimeInMillis() - cStart.getTimeInMillis();
+			if(difference < MILLISINDAY){
 				// in a single day
 				// I split the value in the differents hours contained in the period
-				int hourStart = cStart.get(Calendar.HOUR_OF_DAY);
-				int hourEnd = cEnd.get(Calendar.HOUR_OF_DAY);
-				hours = new int[hourEnd - hourStart + 1];
-				int j = 0;
-				for(int i = hourStart; i <= hourEnd; i++){
-					hours[j] = i;
-					j++;
-				}
-				years = new int[1];
-				years[0] = cEnd.get(Calendar.YEAR);
-				months = new int[1];
-				months[0] = cEnd.get(Calendar.MONTH);
-				dows = new int[1];
-				dows[0] = cEnd.get(Calendar.DAY_OF_WEEK);
-				isHoliday = isAHoliday(cEnd, appId);
-				w = isHoliday ? "we":"wd";
-			} else if(difference < 2629743830L){
+				Long startMillis = cStart.getTimeInMillis();
+				Calendar tmp = Calendar.getInstance();
+				int i = 0;
+				int a = 0;
+				int hourNum = (int)Math.floor(difference / MILLISINHOUR);
+				if(cStart.get(Calendar.DAY_OF_WEEK) != cEnd.get(Calendar.DAY_OF_WEEK)){
+					// Case of period < 24h but splitted in two days
+					dows = new int[2];
+					dows[0] = cStart.get(Calendar.DAY_OF_WEEK);
+					dows[1] = cEnd.get(Calendar.DAY_OF_WEEK);
+					dhours = new int[2][hourNum + 1];
+					while(startMillis <= cEnd.getTimeInMillis()){
+						tmp.setTimeInMillis(startMillis);
+						int tHour = tmp.get(Calendar.HOUR_OF_DAY);
+						if(i != 0 && tHour == 0){
+							a++;	// case of day switch
+						}
+						dhours[a][i] = tHour;
+						i++;
+						startMillis = startMillis + MILLISINHOUR;
+					}
+					months = new int[1];
+					months[0] = cEnd.get(Calendar.MONTH);
+					years = new int[1];
+					years[0] = cEnd.get(Calendar.YEAR);
+					if(cStart.get(Calendar.MONTH) != cEnd.get(Calendar.MONTH)){
+						mdows = new int[2][2];	// Here I specify the week day and the month
+						mdows[0][0] = cStart.get(Calendar.DAY_OF_WEEK);
+						mdows[1][1] = cEnd.get(Calendar.DAY_OF_WEEK);
+						months = new int[2];
+						months[0] = cStart.get(Calendar.MONTH);
+						months[1] = cEnd.get(Calendar.MONTH);
+					}
+					if(cStart.get(Calendar.YEAR) != cEnd.get(Calendar.YEAR)){
+						ymonths = new int[2][2];
+						ymonths[0][0] = cStart.get(Calendar.MONTH);
+						ymonths[1][1] = cEnd.get(Calendar.MONTH);
+						years = new int[2];
+						years[0] = cStart.get(Calendar.YEAR);
+						years[1] = cEnd.get(Calendar.YEAR);
+					}
+				} else {
+					// Case of period contained in a day
+					dows = new int[1];
+					dows[0] = cEnd.get(Calendar.DAY_OF_WEEK);
+					hours = new int[hourNum + 1];
+					while(startMillis <= cEnd.getTimeInMillis()){
+						tmp.setTimeInMillis(startMillis);
+						int tHour = tmp.get(Calendar.HOUR_OF_DAY);
+						hours[i] = tHour;
+						i++;
+						startMillis = startMillis + MILLISINHOUR;
+					}
+					isHoliday = isAHoliday(cEnd, appId);
+					w = isHoliday ? "we":"wd";
+					years = new int[1];
+					years[0] = cEnd.get(Calendar.YEAR);
+					months = new int[1];
+					months[0] = cEnd.get(Calendar.MONTH);
+				}	
+				
+			} else if(difference < MILLISINMONTH){
 				// in a month
-				int dayStart = cStart.get(Calendar.DAY_OF_WEEK);
-				int dayEnd = cEnd.get(Calendar.DAY_OF_WEEK);
-				dows = new int[dayEnd - dayStart + 1];
-				int j = 0;
-				for(int i = dayStart; i <= dayEnd; i++){
-					dows[j] = i;
-					j++;
+				Long startMillis = cStart.getTimeInMillis();
+				Calendar tmp = Calendar.getInstance();
+				int i = 0;
+				int a = 0;
+				int dayNum = (int)Math.floor(difference / MILLISINDAY);
+				if(cStart.get(Calendar.MONTH) != cEnd.get(Calendar.MONTH)){
+					// Case of period < month but splitted in two months
+					months = new int[2];
+					months[0] = cStart.get(Calendar.MONTH);
+					months[1] = cEnd.get(Calendar.MONTH);
+					if(dayNum >= 7){
+						mdows = new int[2][7];
+					} else {
+						mdows = new int[2][dayNum];
+					}
+					while(startMillis <= cEnd.getTimeInMillis()){
+						tmp.setTimeInMillis(startMillis);
+						int tDow = tmp.get(Calendar.DAY_OF_WEEK);
+						if(i != 0 && tmp.get(Calendar.DAY_OF_MONTH) == 1){
+							a++;	// case of month switch
+						}
+						mdows[a][(i % 7)] = tDow;
+						i++;
+						startMillis = startMillis + MILLISINDAY;
+					}
+					years = new int[1];
+					years[0] = cEnd.get(Calendar.YEAR);
+					if(cStart.get(Calendar.YEAR) != cEnd.get(Calendar.YEAR)){
+						ymonths = new int[2][2];
+						ymonths[0][0] = cStart.get(Calendar.MONTH);
+						ymonths[1][1] = cEnd.get(Calendar.MONTH);
+						years = new int[2];
+						years[0] = cStart.get(Calendar.YEAR);
+						years[1] = cEnd.get(Calendar.YEAR);
+					}
+				} else {
+					// Case of period in a single month
+					months = new int[1];
+					months[0] = cEnd.get(Calendar.MONTH);
+					if(dayNum >= 7){
+						dows = new int[7];
+					} else {
+						dows = new int[dayNum];
+					}
+					while(startMillis < cEnd.getTimeInMillis() && i < 7){
+						tmp.setTimeInMillis(startMillis);
+						int dayW = tmp.get(Calendar.DAY_OF_WEEK);
+						dows[i] = dayW;
+						i++;
+						startMillis = startMillis + MILLISINDAY;
+					}
+					years = new int[1];
+					years[0] = cEnd.get(Calendar.YEAR);
 				}
-				years = new int[1];
-				years[0] = cEnd.get(Calendar.YEAR);
-				months = new int[1];
-				months[0] = cEnd.get(Calendar.MONTH);
-			} else if(difference < 31556926000L){
+			} else if(difference < MILLISINYEAR){
 				// in a year
-				int monthStart = cStart.get(Calendar.MONTH);
-				int monthEnd = cEnd.get(Calendar.MONTH);
-				months = new int[monthEnd - monthStart + 1];
-				int j = 0;
-				for(int i = monthStart; i <= monthEnd; i++){
-					months[j] = i;
-					j++;
+				Long startMillis = cStart.getTimeInMillis();
+				Calendar tmp = Calendar.getInstance();
+				int i = 0;
+				int a = 0;
+				
+				int monthNum = (int)Math.floor(difference / MILLISINMONTH);
+				if(cStart.get(Calendar.YEAR) != cEnd.get(Calendar.YEAR)){
+					// period splitted in two years
+					ymonths = new int[2][monthNum + 1];
+					years = new int[2];
+					years[0] = cStart.get(Calendar.YEAR);
+					years[1] = cEnd.get(Calendar.YEAR);
+					while(startMillis <= cEnd.getTimeInMillis()){
+						
+						tmp.setTimeInMillis(startMillis);
+						int tMonth = tmp.get(Calendar.MONTH);
+						if(i != 0 && tmp.get(Calendar.MONTH) == 0){
+							a++;	// case of year switch
+						}
+						ymonths[a][i] = tMonth;
+						i++;
+						tmp.set(Calendar.MONTH, tMonth + 1);
+						startMillis = tmp.getTimeInMillis();	//startMillis + MILLISINMONTH;
+					}			
+				} else {
+					// period in a single year
+					months = new int[monthNum + 1];
+					years = new int[1];
+					years[0] = cEnd.get(Calendar.YEAR);
+					while(startMillis < cEnd.getTimeInMillis() && i < 7){
+						tmp.setTimeInMillis(startMillis);
+						int tMonth = tmp.get(Calendar.MONTH);
+						months[i] = tMonth;
+						i++;
+						tmp.set(Calendar.MONTH, tMonth + 1);
+						startMillis = tmp.getTimeInMillis();	//startMillis + MILLISINMONTH;
+					}
 				}
-				years = new int[1];
-				years[0] = cEnd.get(Calendar.YEAR);
 			} else {
 				// more years
 				int yearStart = cStart.get(Calendar.YEAR);
@@ -287,32 +410,192 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				}
 			}
 		}
-		
+		int lastMonth = 0;
+		int m = 0;
 		for(int y = 0; y < years.length; y++){
 			findAndUpdateStats(objectId, appId, type, params, value, timestamp, 4, years[y], 0, 0, 0, "we", true);
 			findAndUpdateStats(objectId, appId, type, params, value, timestamp, 4, years[y], 0, 0, 0, "wd", false);
 			
-			for(int m = 0; m < months.length; m++){
-				findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "we", true);
-				findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "wd", false);
-				
-				for(int d = 0; d < dows.length; d++){
-					if(hours == null || hours.length == 0){
-						Calendar cDay = Calendar.getInstance();
-						cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
-						isHoliday = isAHoliday(cDay, appId);
-						w = isHoliday ? "we":"wd";
-						findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], 0, w, isHoliday);
-					} else {
-						for(int h = 0; h < hours.length; h++){
-							findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], hours[h], w, isHoliday);
-				
+			int lastDay = 0;
+			int d = 0;
+			if(ymonths == null || ymonths.length == 0){
+				for(m = 0; m < months.length; m++){
+					// Case of one year
+					findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "we", true);
+					findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "wd", false);
+					
+					int lastHour = 0;
+					int h = 0;
+					if(mdows == null || mdows.length == 0){
+						// Case of one month
+						for(d = 0; d < dows.length; d++){
+							if((hours == null || hours.length == 0) && (dhours == null || dhours.length == 0)){
+								Calendar cDay = Calendar.getInstance();
+								cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
+								isHoliday = isAHoliday(cDay, appId);
+								w = isHoliday ? "we":"wd";
+								findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], dows[d], 0, w, isHoliday);
+							} else {
+								if(dhours != null && dhours.length > 0){
+									Calendar cDay = Calendar.getInstance();
+									cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
+									isHoliday = isAHoliday(cDay, appId);
+									w = isHoliday ? "we":"wd";
+									// Case of 2 days
+									boolean skip = false;
+									for(h = lastHour; (h < dhours[d].length) && !skip; h++){
+										if(d == 0){
+											if(dhours[d][h] != 0){
+												findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], dhours[d][h], w, isHoliday);
+											} else {
+												skip = true;
+											}
+										} else {
+											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], dhours[d][h], w, isHoliday);
+										}
+									}
+									lastHour = posOfZeroVal(dhours);	// I save the last hour iterator value;
+								} else {
+									for(h = 0; h < hours.length; h++){
+										// Case of 1 day
+										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], hours[h], w, isHoliday);
+									}
+								}
+							}
 						}
+					} else {
+						// Case of dows from 2 months
+						boolean mskip = false;
+						for(d = lastDay; (d < mdows[m].length) && !mskip; d++){
+							if(dhours == null || dhours.length == 0){
+								Calendar cDay = Calendar.getInstance();
+								cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
+								isHoliday = isAHoliday(cDay, appId);
+								w = isHoliday ? "we":"wd";
+								if(m == 0){
+									if(mdows[m][d] != 0){
+										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+									} else {
+										mskip = true;
+									}
+								} else {
+									findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+								}
+							} else {
+								// Case of hours from 2 days
+								m = d;	// I align the day with the months;
+								Calendar cDay = Calendar.getInstance();
+								cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
+								isHoliday = isAHoliday(cDay, appId);
+								w = isHoliday ? "we":"wd";
+								// Case of 2 days
+								boolean skip = false;
+								for(h = lastHour; (h < dhours[d].length) && !skip; h++){
+									if(d == 0){
+										if(dhours[d][h] != 0){
+											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+										} else {
+											skip = true;
+										}
+									} else {
+										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+									}
+								}
+								lastHour = posOfZeroVal(dhours);	// I save the last hour iterator value;
+							}
+						}
+						lastDay = posOfFirstVal(mdows);	// I save the last day iterator value;
 					}
 				}
+			} else {
+				// Case of months from 2 years
+				int lastHour = 0;
+				int h = 0;
+				boolean yskip = false;
+				for(m = lastMonth; (m < ymonths[y].length) && !yskip; m++){
+					if((dhours == null || dhours.length == 0) && ((mdows == null || mdows.length == 0))){
+						if(y == 0){
+							if(ymonths[y][m] != 0){
+								findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "wd", false);
+								findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "we", true);
+							} else {
+								yskip = true;
+							}
+						} else {
+							findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "wd", false);
+							findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "we", true);
+						}
+					} else {
+						// Case of hours and days from 2 years
+						boolean mskip = false;
+						for(d = lastDay; (d < mdows[m].length) && !mskip; d++){
+							if(dhours == null || dhours.length == 0){
+								y = m;	// I align the month with the year;
+								Calendar cDay = Calendar.getInstance();
+								cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
+								isHoliday = isAHoliday(cDay, appId);
+								w = isHoliday ? "we":"wd";
+								if(m == 0){
+									if(mdows[m][d] != 0){
+										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+									} else {
+										mskip = true;
+									}
+								} else {
+									findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+								}
+							} else {
+								// Case of hours from 2 days
+								y = m = d;	// I align the day with the month and the year;
+								Calendar cDay = Calendar.getInstance();
+								cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
+								isHoliday = isAHoliday(cDay, appId);
+								w = isHoliday ? "we":"wd";
+								// Case of 2 days
+								boolean skip = false;
+								for(h = lastHour; (h < dhours[d].length) && !skip; h++){
+									if(d == 0){
+										if(dhours[d][h] != 0){
+											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+										} else {
+											skip = true;
+										}
+									} else {
+										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+									}
+								}
+								lastHour = posOfZeroVal(dhours);	// I save the last hour iterator value;
+							}
+						}
+						lastDay = posOfFirstVal(mdows);	// I save the last day iterator value;
+						
+					}
+				}
+				lastMonth = posOfZeroVal(ymonths);	// I save the last month iterator value;
+				
 			}
 		}	
 	}	
+	
+	private int posOfZeroVal(int[][] secondArr){
+		int zero = 0;
+		for(int i = 0; (i < secondArr[1].length && zero == 0) ; i++){
+			if(secondArr[1][i] != 0){
+				zero = i - 1;
+			}
+		}
+		return zero;
+	}
+	
+	private int posOfFirstVal(int[][] secondArr){
+		int zero = 0;
+		for(int i = 0; (i < secondArr[1].length && zero == 0) ; i++){
+			if(secondArr[1][i] != 0){
+				zero = i;
+			}
+		}
+		return zero;
+	}
 	
 	private void findAndUpdateStats(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp, int period, int year, int month, int dow, int hour, String wdt, boolean isHoliday){
 		StatValue stat = new StatValue(1, value, value, timestamp); //value,

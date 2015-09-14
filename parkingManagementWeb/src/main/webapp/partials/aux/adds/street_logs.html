@@ -36,15 +36,73 @@
 				   	<div class="alert alert-danger" ng-show="!isInit && form.sUserLog.$error.pattern">{{ 'street_userlog_pattern' | i18n }}</div>
 				</div>
 				<div class="form-group" ng-show="streetLoadedAndSelected">
-			    	<label for="logtime">{{ 'street_time_log' | i18n }}:</label>&nbsp;
-			    	<input id="logtime" name="pLogTime" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myStreetDetails.loghour" is-open="sLogtime.open" ng-click="sLogtime.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required />
-			    	<div class="alert alert-danger" ng-show="!isInit && form.pLogTime.$error.required">{{ 'street_timelog_err_required' | i18n }}</div>
+					<label>{{ 'street_time_log' | i18n }}</label>
+			   		<div class="panel panel-default" width="90%">
+				   		<div class="panel-body">
+							<table width="100%">
+								<tr>
+									<td width="6%"><strong>{{ 'street_day_log' | i18n }}: </strong></td>
+									<td width="39%">
+										<input id="logtime" name="pLogTime" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myStreetDetails.loghour" is-open="sLogtime.open" ng-click="sLogtime.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required />
+									</td>
+									<td width="5%" align="center"><strong>{{ 'log_period_time' | i18n }}: </strong></td>
+									<td width="50%">
+										<timepicker id="time" name="pLogOra" ng-model="myStreetDetails.logtime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian" required></timepicker>
+									</td>
+								</tr>
+								<tr>
+									<td colspan="4">
+										<div class="alert alert-danger" ng-show="!isInit && form.pLogTime.$error.required">{{ 'street_timelog_err_required' | i18n }}</div>
+										<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div>
+									</td>
+								</tr>
+							</table>
+						</div>
+					</div>    		
+<!-- 			    	<label for="logtime">{{ 'street_time_log' | i18n }}:</label>&nbsp; -->
+<!-- 			    	<input id="logtime" name="pLogTime" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myStreetDetails.loghour" is-open="sLogtime.open" ng-click="sLogtime.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required /> -->
+<!-- 			    	<div class="alert alert-danger" ng-show="!isInit && form.pLogTime.$error.required">{{ 'street_timelog_err_required' | i18n }}</div> -->
 			    </div>
-			    <div class="form-group" ng-show="streetLoadedAndSelected">	
-			   		<input type="text" class="form-control" name="pLogOra" id="time" ng-model="myStreetDetails.logtime" placeholder="HH:mm:ss" ng-pattern="timePattern" required>
-			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div>
-			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.pattern">{{ 'log_time_error_pattern' | i18n }}</div>
+<!-- 			    <div class="form-group" ng-show="streetLoadedAndSelected">	 -->
+<!-- 			   		<input type="text" class="form-control" name="pLogOra" id="time" ng-model="myStreetDetails.logtime" placeholder="HH:mm:ss" ng-pattern="timePattern" required> -->
+<!-- 			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div> -->
+<!-- 			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.pattern">{{ 'log_time_error_pattern' | i18n }}</div> -->
+<!-- 			   	</div> -->
+			   	<div ng-show="streetLoadedAndSelected">
+			   		<label>{{ 'log_period' | i18n }}</label>
+			   		<div class="panel panel-default" width="90%">
+				   		<div class="panel-body">
+				   			<table width="100%">
+					    		<tr>
+					    			<td width="6%"><strong>{{ 'log_period_from_date' | i18n }}: </strong></td>
+					    			<td width="39%">
+					    				<input id="logperiodf" name="sLogPeriodF" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myStreetDetails.logPeriodFrom" is-open="slogperiodf.open" ng-click="slogperiodf.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+					    			</td>
+					    			<td width="5%" align="center"><strong>{{ 'log_period_time' | i18n }}: </strong></td>
+					    			<td width="50%">
+					    				<timepicker ng-model="myStreetDetails.startTimePeriod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+					    			</td>
+					    		</tr>
+					    		<tr>
+					    			<td width="6%"><strong>{{ 'log_period_to_date' | i18n }}: </strong></td>
+					    			<td width="39%">
+					    				<input id="logperiodt" name="pLogPeriodT" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myStreetDetails.logPeriodTo" is-open="slogperiodt.open" ng-click="slogperiodt.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+					    			</td>
+					    			<td width="5%" align="center"><strong>{{ 'log_period_time' | i18n }}: </strong></td>
+					    			<td width="50%">
+					    				<timepicker ng-model="myStreetDetails.endTimePeriod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+					    			</td>
+					    		</tr>
+					    		<tr ng-show="(!isInit && form.pFeeVal.$error.required) || (!isInit && form.pFeeNote.$error.required)">
+					    			<td colspan="4">
+					    				<div class="alert alert-danger">{{ 'parkingstructure_fee_err_required' | i18n }}</div>
+					    			</td>
+					    		</tr>
+					    	</table>
+				   		</div>
+				   	</div>	
 			   	</div>
+			   	
 				<div ng-show="streetLoadedAndSelected">
 				   	<label for="totalSlot">{{ 'street_slots' | i18n }}</label>
 				   	<div class="panel panel-default" width="90%">

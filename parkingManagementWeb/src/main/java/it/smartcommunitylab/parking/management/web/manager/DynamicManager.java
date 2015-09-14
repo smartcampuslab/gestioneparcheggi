@@ -1155,10 +1155,10 @@ public class DynamicManager {
 			int freeParks = 0;
 			int paidSlotParks = 0;
 			int timedParks = 0;
-			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotSignNumber() != null){
-				freeParks = s.getFreeParkSlotNumber()+s.getFreeParkSlotSignNumber();
+			if(ModelConverter.isValorisedSlots(s.getFreeParkSlotNumber()) && ModelConverter.isValorisedSlots(s.getFreeParkSlotSignNumber())){
+				freeParks = s.getFreeParkSlotNumber() + s.getFreeParkSlotSignNumber();
 			} else {
-				if(s.getFreeParkSlotNumber() != null){
+				if(ModelConverter.isValorisedSlots(s.getFreeParkSlotNumber())){
 					freeParks = s.getFreeParkSlotNumber();
 				} else {
 					freeParks = s.getFreeParkSlotSignNumber();

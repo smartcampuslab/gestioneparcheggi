@@ -25,6 +25,7 @@ import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
@@ -392,7 +393,16 @@ public class GeoObjectManager {
 		Street s = new Street();
 		s.setId("street@" + street.getId_app() + "@" + street.getId());
 		s.setAgency(street.getId_app());
-		s.setSlotsFree(street.getFreeParkSlotNumber());
+		if(ModelConverter.isValorisedSlots(street.getFreeParkSlotNumber()) && ModelConverter.isValorisedSlots(street.getFreeParkSlotSignNumber())){
+			int freeSlots = street.getFreeParkSlotNumber() + street.getFreeParkSlotSignNumber();
+			s.setSlotsFree(freeSlots);
+		} else {
+			if(ModelConverter.isValorisedSlots(street.getFreeParkSlotNumber())){
+				s.setSlotsFree(street.getFreeParkSlotNumber());
+			} else {
+				s.setSlotsFree(street.getFreeParkSlotSignNumber());
+			}
+		}
 		s.setSlotsPaying(street.getPaidSlotNumber());
 		s.setSlotsTimed(street.getTimedParkSlotNumber());
 		s.setSlotsHandicapped(street.getHandicappedSlotNumber());
@@ -406,6 +416,8 @@ public class GeoObjectManager {
 		s.setAreaId(street.getRateAreaId());
 		return s;
 	}
+	
+	
 	
 	private Parking castPMStructureBeanToParking(ParkingStructureBean park){
 		//logger.error(String.format("Park to be casted : %s", park.toJSON()));

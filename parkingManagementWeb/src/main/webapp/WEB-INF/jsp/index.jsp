@@ -31,7 +31,7 @@
 <script src="lib/angular-spinkit.min.js"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
-<script src="i18n/angular-locale_en-EN.js"></script>
+<!-- <script src="i18n/angular-locale_en-EN.js"></script> -->
 
 <script src="js/app.js?1001"></script>
 <script src="js/controllers/ctrl.js?1001"></script>

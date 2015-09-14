@@ -145,5 +145,13 @@ public class ModelConverter {
 //		return lastGeoBean;
 //	}
 	
+	public static boolean isValorisedSlots(Integer slots){
+		boolean hasValue = false;
+		if(slots != null && slots > 0){
+			hasValue = true;
+		}
+		return hasValue;
+	}
+	
 
 }
