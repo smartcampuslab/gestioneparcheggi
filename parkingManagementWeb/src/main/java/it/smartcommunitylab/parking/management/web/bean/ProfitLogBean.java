@@ -7,8 +7,10 @@ public class ProfitLogBean {
 	private String id;
 	private String objId;
 	private String type;
-	private Long fromTime;
-	private Long toTime;
+	//private Long fromTime;
+	//private Long toTime;
+	private Long time;
+	private Long[] logPeriod;
 	private String author;
 	private String agency;
 	private boolean deleted;
@@ -34,18 +36,34 @@ public class ProfitLogBean {
 		return type;
 	}
 	
-	public Long getFromTime() {
-		return fromTime;
-	}
-	
-	public Long getToTime() {
-		return toTime;
-	}
+//	public Long getFromTime() {
+//		return fromTime;
+//	}
+//	
+//	public Long getToTime() {
+//		return toTime;
+//	}
 	
 	public String getAuthor() {
 		return author;
 	}
 	
+	public Long getTime() {
+		return time;
+	}
+
+	public Long[] getLogPeriod() {
+		return logPeriod;
+	}
+
+	public void setTime(Long time) {
+		this.time = time;
+	}
+
+	public void setLogPeriod(Long[] logPeriod) {
+		this.logPeriod = logPeriod;
+	}
+
 	public String getAgency() {
 		return agency;
 	}
@@ -98,13 +116,13 @@ public class ProfitLogBean {
 		this.type = type;
 	}
 	
-	public void setFromTime(Long fromTime) {
-		this.fromTime = fromTime;
-	}
-	
-	public void setToTime(Long toTime) {
-		this.toTime = toTime;
-	}
+//	public void setFromTime(Long fromTime) {
+//		this.fromTime = fromTime;
+//	}
+//	
+//	public void setToTime(Long toTime) {
+//		this.toTime = toTime;
+//	}
 	
 	public void setAuthor(String author) {
 		this.author = author;

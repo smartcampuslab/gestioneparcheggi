@@ -31,6 +31,8 @@ import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
+import it.smartcommunitylab.parking.management.web.repository.ProfitLogBeanTP;
+import it.smartcommunitylab.parking.management.web.repository.ProfitLogRepositoryDao;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -60,6 +62,8 @@ public class GeoObjectManager {
 	private DynamicManager dynamicManager;
 	@Autowired
 	private DataLogRepositoryDao dataLogRepo;
+	@Autowired
+	private ProfitLogRepositoryDao profitLogRepo;
 	@Autowired
 	private MongoTemplate mongodb;
 	
@@ -164,6 +168,17 @@ public class GeoObjectManager {
 		return correctedLogs;
 	};
 	
+	public List<ProfitLogBeanTP> findAllProfitLogsByAgency(String agency){
+		List<ProfitLogBeanTP> correctedLogs = new ArrayList<ProfitLogBeanTP>();
+		List<ProfitLogBeanTP> profitlogs = profitLogRepo.findByAgency(agency);
+		for(int i = 0; i < profitlogs.size(); i++){
+			if(!profitlogs.get(i).isDeleted()){
+				correctedLogs.add(profitlogs.get(i));
+			}
+		}
+		return correctedLogs;
+	};
+	
 	public int countAllStreetLogs(String agency) {
 		return dynamicManager.countLogsById(null, agency, -1, 0, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
 	}
@@ -205,6 +220,17 @@ public class GeoObjectManager {
 		for(int i = 0; i < parkingLogs.size(); i++){
 			if(parkingLogs.get(i) != null && !parkingLogs.get(i).isDeleted() && parkingLogs.get(i).getAgency() != null && parkingLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedParkingLogs.add(parkingLogs.get(i));
+			}
+		}
+		return correctedParkingLogs;
+	};
+	
+	public List<ProfitLogBeanTP> getParkingProfitLogsByAgency(String agency){
+		List<ProfitLogBeanTP> correctedParkingLogs = new ArrayList<ProfitLogBeanTP>();
+		List<ProfitLogBeanTP> parkingProfitLogs = profitLogRepo.findByType(ParkStruct.class.getCanonicalName());
+		for(int i = 0; i < parkingProfitLogs.size(); i++){
+			if(parkingProfitLogs.get(i) != null && !parkingProfitLogs.get(i).isDeleted() && parkingProfitLogs.get(i).getAgency() != null && parkingProfitLogs.get(i).getAgency().compareTo(agency) == 0){
+				correctedParkingLogs.add(parkingProfitLogs.get(i));
 			}
 		}
 		return correctedParkingLogs;

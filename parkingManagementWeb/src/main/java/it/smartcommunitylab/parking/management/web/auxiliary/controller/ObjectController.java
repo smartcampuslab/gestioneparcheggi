@@ -45,6 +45,7 @@ import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.CSVManager;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
+import it.smartcommunitylab.parking.management.web.repository.ProfitLogBeanTP;
 
 @Controller
 public class ObjectController  {
@@ -82,6 +83,12 @@ public class ObjectController  {
 		return dataService.findAllLogsByAgency(agency);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplogprofit/all") 
+	public @ResponseBody Iterable<ProfitLogBeanTP> getAllProfitTPLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+		if (count == null) count = DEFAULT_COUNT;
+		return dataService.findAllProfitLogsByAgency(agency);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/tplog/all/{id:.*}") 
 	public @ResponseBody DataLogBean getStreetLogByLogId(@PathVariable String id) {
 		//return logMongoStorage.getStreetLogsById(id, agency, count);
@@ -115,6 +122,11 @@ public class ObjectController  {
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/parking") 
 	public @ResponseBody int countParkingLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
 		return dataService.countAllParkingLogs(agency);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkstructs") 
+	public @ResponseBody List<ProfitLogBeanTP> getAllParkStructsLogs(@PathVariable String agency) {
+		return dataService.getParkingProfitLogsByAgency(agency);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets") 

@@ -41,6 +41,8 @@ pm.service('sharedDataService', function(){
 	this.inGlobalLogPage = false;
 	this.inParkLogPage = false;
 	this.inStreetLogPage = false;
+	this.inProfitParkLogPage = false;
+	this.inProfitParkmeterLogPage = false;
 	
 	// Shared time variables
 	//-------------------------------------------------------------
@@ -181,6 +183,14 @@ pm.service('sharedDataService', function(){
 	
 	this.isInStreetLogPage = function(){
 		return this.inStreetLogPage;
+	};
+	
+	this.setInProfitParkLogPage = function(value){
+		this.inProfitParkLogPage = value;
+	};
+	
+	this.isInProfitParkLogPage = function(){
+		return this.inProfitParkLogPage;
 	};
 	
 //	this.getUserIdentity = function(){

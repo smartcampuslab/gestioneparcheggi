@@ -93,9 +93,9 @@
 					    				<timepicker ng-model="myStreetDetails.endTimePeriod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
 					    			</td>
 					    		</tr>
-					    		<tr ng-show="(!isInit && form.pFeeVal.$error.required) || (!isInit && form.pFeeNote.$error.required)">
+					    		<tr ng-show="(!isInit && isPeriodError())">
 					    			<td colspan="4">
-					    				<div class="alert alert-danger">{{ 'parkingstructure_fee_err_required' | i18n }}</div>
+					    				<div class="alert alert-danger">{{ 'street_period_err' | i18n }}</div>
 					    			</td>
 					    		</tr>
 					    	</table>

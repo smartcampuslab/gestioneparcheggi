@@ -918,7 +918,7 @@
     "key": "ps_time_period_delete",
     "value": "Cancella",
     "description": "Testo pulsante per cancellazione periodo apertura da lista"
-}, {
+}, { 
     "key": "ps_phone_placeholder",
     "value": "Inserire il numero di telefono della struttura",
     "description": "Testo placeholder campo telefono struttura"
@@ -938,7 +938,7 @@
     "key": "ps_unusuableslot_placeholder",
     "value": "Inserire il numero di posti non utilizzabili",
     "description": "Testo placeholder campo posti non utilizzabili struttura"
-}, {
+}, { 
     "key": "ps_geo_placeholder",
     "value": "Scegliere la posizione della struttura (click sulla mappa)",
     "description": "Testo placeholder campo posti disco orario via"
@@ -1220,12 +1220,20 @@
     "description": "messaggio nessun valore in lista log globali"
 }, {
     "key": "parking_type_in_lists",
-    "value": "Parcheggio",
+    "value": "Parcheggio (Occupazione)",
+    "description": "Valore per tipo oggetto parcheggio"
+}, {
+    "key": "park_profit_type_in_lists",
+    "value": "Parcheggio (Ricavo)",
     "description": "Valore per tipo oggetto parcheggio"
 }, {
     "key": "street_type_in_lists",
     "value": "Via",
     "description": "Valore per tipo oggetto via"
+}, {
+    "key": "pm_type_in_lists",
+    "value": "Parcometro",
+    "description": "Valore per tipo oggetto parcometro"
 }, {
     "key": "log_total_slot",
     "value": "Posti totali",
@@ -1327,6 +1335,10 @@
     "value": "Campo ora log obbligatorio",
     "description": "Messaggio orario log mancante in creazione log via"
 }, {
+    "key": "street_period_err",
+    "value": "Periodo inserito non corretto, data di inizio maggiore di data di fine",
+    "description": "Messaggio errore periodo in creazione log via"
+}, {
 	"key": "datepicker_button_today",
 	"value": "Oggi",
 	"description": "Testo pulsante datapicker per oggi"
@@ -1392,8 +1404,52 @@
     "description": "Label codice utente in creazione log parcheggio"
 }, {
     "key": "parking_time_log",
-    "value": "Ora Log",
+    "value": "Timestamp Log",
     "description": "Label orario in creazione log parcheggio"
+}, {
+    "key": "parking_day_log",
+    "value": "Giorno",
+    "description": "Label orario in creazione log parcheggio"
+}, {
+    "key": "parking_profit",
+    "value": "Incasso",
+    "description": "Titolo incasso in creazione log parcheggio"
+}, {
+    "key": "parking_profit_val",
+    "value": "Valore Incasso (in eurocent)",
+    "description": "Label incasso in creazione log parcheggio"
+}, {
+    "key": "parking_profit_placeholder",
+    "value": "Inserire il valore di incasso in eurocent. Es: 1,35 euro = 135 eurocent.",
+    "description": "Valore placeholder incasso in creazione log parcheggio"
+}, {
+    "key": "parking_tickets_val",
+    "value": "Num ticket",
+    "description": "Label numero ticket in creazione log parcheggio"
+}, {
+    "key": "parking_tickets_placeholder",
+    "value": "Inserire il numero di ticket emessi.",
+    "description": "Valore placeholder tickets in creazione log parcheggio"
+}, {
+    "key": "log_parking_profit_error_pattern",
+    "value": "Valore non corretto nel campo 'Incasso'. Inserire un valore decimale con virgola es: 1,35",
+    "description": "Messaggio errore valore non corretto in campo incasso in creazione log parcheggio"
+}, {
+    "key": "log_parking_profit_error_required",
+    "value": "Campo 'Incasso' obbligatorio. Inserire un valore decimale corretto.",
+    "description": "Messaggio errore valore obbligatorio in campo incasso in creazione log parcheggio"
+}, {
+    "key": "log_parking_tickets_error_pattern",
+    "value": "Valore non corretto nel campo 'Num Ticket'. Inserire un valore numerico intero.",
+    "description": "Messaggio errore valore non corretto in campo tickets in creazione log parcheggio"
+}, {
+    "key": "log_parking_tickets_error_required",
+    "value": "Campo 'Num Ticket' obbligatorio. Inserire un valore intero corretto.",
+    "description": "Messaggio errore valore obbligatorio in campo tickets in creazione log parcheggio"
+}, {
+    "key": "parking_period_err",
+    "value": "Periodo inserito non corretto, data di inizio maggiore di data di fine",
+    "description": "Messaggio errore periodo in creazione log parcheggio"
 }, {
     "key": "parking_timelog_err_required",
     "value": "Campo ora log obbligatorio",
@@ -1570,7 +1626,7 @@
 	"key": "element_profit", 
 	"value": "Incasso",
 	"description": "Label per valore di incasso in elemento in lista"
-}, {
+}, { 
 	"key": "element_tickets", 
 	"value": "N.Ticket",
 	"description": "Label per numero ticket emessi in elemento in lista"
@@ -1602,7 +1658,7 @@
 	"key": "log_period_time", 
 	"value": "Ora",
 	"description": "Label per ora periodo in inserimento log"
-}, {
+}, { 
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {

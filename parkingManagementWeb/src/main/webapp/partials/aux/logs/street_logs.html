@@ -18,6 +18,10 @@
 				<td width="30%"><strong>{{ 'log_time' | i18n }}</strong></td>
 				<td>{{ (logDetails.time | date:'short') }}</td>
 			</tr>
+			<tr ng-if="logDetails.logPeriod != null">
+				<td width="30%"><strong>{{ 'log_period' | i18n }}</strong></td>
+				<td>{{ (logDetails.logPeriod[0] | date:'short') }} - {{ (logDetails.logPeriod[1] | date:'short') }}</td>
+			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_author' | i18n }}</strong></td>
 				<td>{{ logDetails.author }}</td>

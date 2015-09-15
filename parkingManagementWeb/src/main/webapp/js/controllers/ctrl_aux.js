@@ -13,12 +13,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     $scope.maxLogs = 15;
     
     $scope.onlyNumbers = /^\d+$/;
+    $scope.decimalNumbers = /^([0-9]+)[\,]{0,1}[0-9]{0,2}$/;
     $scope.timePattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
     
     $scope.logtabs = [ 
         { title:'Log generale', index: 1, content:"partials/aux/logs/global_logs.html" },
-        { title:'Log vie', index: 2, content:"partials/aux/logs/street_logs.html" },
-        { title:'Log parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html" }
+        { title:'Log occupazione vie', index: 2, content:"partials/aux/logs/street_logs.html" },
+        { title:'Log occupazione parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html" },
+        { title:'Log ricavi parcheggi', index: 4, content:"partials/aux/logs/parking_profit_logs.html" }
     ];
     
  // ------------------ Start datetimepicker section -----------------------
@@ -89,27 +91,39 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    		sharedDataService.setInGlobalLogPage(true);
 	    		sharedDataService.setInStreetLogPage(false);
 	    		sharedDataService.setInParkLogPage(false);
+	    		sharedDataService.setInProfitParkLogPage(false);
 	    		$scope.initGlobalLogs();
 	    		break;
 	    	case 1:
 	    		sharedDataService.setInGlobalLogPage(false);
 	    		sharedDataService.setInStreetLogPage(true);
 	    		sharedDataService.setInParkLogPage(false);
+	    		sharedDataService.setInProfitParkLogPage(false);
 	    		$scope.initStreetLogs();
 	    		break;
 	    	case 2:
 	    		sharedDataService.setInGlobalLogPage(false);
 	    		sharedDataService.setInStreetLogPage(false);
 	    		sharedDataService.setInParkLogPage(true);
+	    		sharedDataService.setInProfitParkLogPage(false);
 	    		$scope.initParkLogs();
 	    		break;
+	    	case 3:
+	    		sharedDataService.setInGlobalLogPage(false);
+	    		sharedDataService.setInStreetLogPage(false);
+	    		sharedDataService.setInParkLogPage(false);
+	    		sharedDataService.setInProfitParkLogPage(true);
+	    		$scope.initProfitParkLogs();
+	    		break;	
     	}
        	$scope.tabIndex = $index;
     };
     
     $scope.addtabs = [ 
-        { title:'Nuovo log via', index: 1, content:"partials/aux/adds/street_logs.html" },
-        { title:'Nuovo log parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html" }
+        { title:'Nuovo log Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html" },
+        { title:'Nuovo log Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html" },
+        { title:'Nuovo log Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html" },
+        { title:'Nuovo log Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html" }
     ];
                   
     $scope.setAddIndex = function($index){
@@ -186,6 +200,42 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					objId: partialLogs[i].objId,
 					type: partialLogs[i].type,
 					time: partialLogs[i].time,
+					logPeriod: partialLogs[i].logPeriod,
+					author: partialLogs[i].author,
+					agency: partialLogs[i].agency,
+			        deleted: partialLogs[i].deleted,
+			        year: partialLogs[i].year,
+			        month: partialLogs[i].month,
+			        week_day: partialLogs[i].week_day,
+			        timeSlot: partialLogs[i].tileSlot,
+			        holyday: partialLogs[i].holyday,
+			        isSystemLog: partialLogs[i].systemLog,
+			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
+				};
+				//console.log("corrLog: " + JSON.stringify(corrLog));
+				$scope.globalLogs.push(corrLog);
+			}
+			$scope.getAllProfitLogsFromDbTP();
+			$scope.logCounts =  partialLogs.length;
+		    $scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
+		});
+	};
+	
+	$scope.getAllProfitLogsFromDbTP = function(){
+		//$scope.globalLogs = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplogprofit/all", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+			var partialLogs = result;//$scope.globalLogs.concat(result);
+			var corrLog = null;
+			for(var i = 0; i < partialLogs.length; i++){
+				corrLog = {
+					id:	partialLogs[i].id,
+					objId: partialLogs[i].objId,
+					type: partialLogs[i].type,
+					time: partialLogs[i].time,
+					logPeriod: partialLogs[i].logPeriod,
 					author: partialLogs[i].author,
 					agency: partialLogs[i].agency,
 			        deleted: partialLogs[i].deleted,
@@ -215,11 +265,18 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		return corrected;
 	};
 	
-	// For parking
+	// For parking occupancy
 	$scope.initParkLogs = function(){
 		$scope.showDetails = false;
     	//$scope.countAllParkLogsInDb();
 		$scope.getAllParkLogsFromDbTP();
+    };
+    
+    // For parking profit
+    $scope.initProfitParkLogs = function(){
+		$scope.showDetails = false;
+    	//$scope.countAllParkLogsInDb();
+		$scope.getAllParkProfitLogsFromDbTP();
     };
 	
 //	$scope.countAllParkLogsInDb = function(){
@@ -279,13 +336,47 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			        year: partialLogs[i].year,
 			        month: partialLogs[i].month,
 			        week_day: partialLogs[i].week_day,
-			        timeSlot: partialLogs[i].tileSlot,
+			        timeSlot: partialLogs[i].timeSlot,
 			        holyday: partialLogs[i].holyday,
 			        isSystemLog: partialLogs[i].systemLog,
 			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
 				};
 				//console.log("corrLog: " + JSON.stringify(corrLog));
 				$scope.parkLogs.push(corrLog);
+			}
+			$scope.logParkCounts = partialLogs.length;
+		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
+		});
+	};
+	
+	// Method getAllParkProfitLogsFromDbTP: used to retrieve all the logs of type parkstruct in the profitLogBean Table
+	$scope.getAllParkProfitLogsFromDbTP = function(){
+		$scope.parkProfitLogs = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/parkstructs", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+			var partialLogs = result;
+			var corrLog = null;
+			for(var i = 0; i < partialLogs.length; i++){
+				corrLog = {
+					id:	partialLogs[i].id,
+					objId: partialLogs[i].objId,
+					type: partialLogs[i].type,
+					time: partialLogs[i].time,
+					author: partialLogs[i].author,
+					agency: partialLogs[i].agency,
+			        deleted: partialLogs[i].deleted,
+			        year: partialLogs[i].year,
+			        month: partialLogs[i].month,
+			        week_day: partialLogs[i].week_day,
+			        timeSlot: partialLogs[i].timeSlot,
+			        holyday: partialLogs[i].holyday,
+			        isSystemLog: partialLogs[i].systemLog,
+			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
+				};
+				//console.log("corrLog: " + JSON.stringify(corrLog));
+				$scope.parkProfitLogs.push(corrLog);
 			}
 			$scope.logParkCounts = partialLogs.length;
 		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
@@ -350,6 +441,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					objId: partialLogs[i].objId,
 					type: partialLogs[i].type,
 					time: partialLogs[i].time,
+					logPeriod: partialLogs[i].logPeriod,
 					author: partialLogs[i].author,
 					agency: partialLogs[i].agency,
 			        deleted: partialLogs[i].deleted,
@@ -406,6 +498,12 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
      	}
 	};  
 	
+	$scope.correctEuroCent = function(eurocent){
+		var intval = parseInt(eurocent);
+		var totalEur = (intval / 100);
+		return totalEur.toFixed(2) + " ";
+	};
+	
 	// --------------------------------------------- Block for csv ---------------------------------------------
 	$scope.globalLogCvsFile = "";
 	
@@ -444,6 +542,13 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.getParkingsFromDb();
 	};
 	
+	$scope.initParkProfitLogCreation = function(){
+		$scope.showUpdatingPErrorMessage = false;
+		$scope.showUpdatingPSuccessMessage = false;
+		$scope.isInit = true;
+		$scope.getParkingsProfitFromDb();
+	};
+	
 	// Method getStreetsFromDb: used to init the input select in street log creation
 	$scope.getStreetsFromDb = function(){
 		$scope.allStreet = [];
@@ -467,6 +572,24 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, $scope.allParking);
 	    	$scope.parkLoadedAndSelected = false;
+	    	$scope.parkProfitLoadedAndSelected = false;
+	    });
+	};
+	
+	// Method getParksFromDb: used to init the input select in park log creation
+	$scope.getParkingsProfitFromDb = function(){
+		$scope.allParkingProfit = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings", null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	angular.copy(result, $scope.allParkingProfit);
+	    	for(var i = 0; i < $scope.allParkingProfit.length; i ++){
+	    		$scope.allParkingProfit[i].id = $scope.correctProfitLogId($scope.allParkingProfit[i].id);
+	    	}
+	    	$scope.parkLoadedAndSelected = false;
+	    	$scope.parkProfitLoadedAndSelected = false;
 	    });
 	};
 	
@@ -481,8 +604,17 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getParkDetailData = function(park){
 		$scope.myParkingDetails = park;
-		$scope.initParkTimeValues();
+		$scope.initParkTimeValues(1);
 		$scope.parkLoadedAndSelected = true;
+		// to hide the messages (error or success)
+		$scope.showUpdatingPErrorMessage = false;
+		$scope.showUpdatingPSuccessMessage = false;
+	};
+	
+	$scope.getParkProfitDetailData = function(park){
+		$scope.myParkingProfitDetails = park;
+		$scope.initParkTimeValues(2);
+		$scope.parkProfitLoadedAndSelected = true;
 		// to hide the messages (error or success)
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
@@ -497,10 +629,21 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.myStreetDetails.endTimePeriod = new Date(0);
 	};
 	
-	$scope.initParkTimeValues = function(){
+	$scope.initParkTimeValues = function(type){
 		var now = new Date();
-		$scope.myParkingDetails.loghour = now.getDate() + "/" + (now.getMonth() + 1) + "/" + now.getFullYear();
-		$scope.myParkingDetails.logtime = $scope.addZero(now.getHours()) + ":" + $scope.addZero(now.getMinutes()) + ":" + $scope.addZero(now.getSeconds());
+		if(type == 1){
+			$scope.myParkingDetails.loghour = $scope.addZero(now.getDate()) + "/" + $scope.addZero(now.getMonth() + 1) + "/" + now.getFullYear();
+			//$scope.myParkingDetails.logtime = $scope.addZero(now.getHours()) + ":" + $scope.addZero(now.getMinutes()) + ":" + $scope.addZero(now.getSeconds());
+			$scope.myParkingDetails.logtime = now;
+			$scope.myParkingDetails.startTimePeriod = new Date(0);
+			$scope.myParkingDetails.endTimePeriod = new Date(0);
+		} else {
+			$scope.myParkingProfitDetails.loghour = $scope.addZero(now.getDate()) + "/" + $scope.addZero(now.getMonth() + 1) + "/" + now.getFullYear();
+			//$scope.myParkingDetails.logtime = $scope.addZero(now.getHours()) + ":" + $scope.addZero(now.getMinutes()) + ":" + $scope.addZero(now.getSeconds());
+			$scope.myParkingProfitDetails.logtime = now;
+			$scope.myParkingProfitDetails.startTimePeriod = new Date(0);
+			$scope.myParkingProfitDetails.endTimePeriod = new Date(0);
+		}
 	};
 	
 	// Method insertStreetLog: used to insert in the db (table dataLogBean) a new street log
@@ -512,10 +655,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		
 		if($scope.checkCorrectSlots(myStreetDetails)){
 			
-			var periodFrom = new Date(myStreetDetails.logPeriodFrom);
-			var periodTo = new Date(myStreetDetails.logPeriodTo);
-			periodFrom.setHours(myStreetDetails.startTimePeriod.getHours(), myStreetDetails.startTimePeriod.getMinutes(), 0, 0);
-			periodTo.setHours(myStreetDetails.endTimePeriod.getHours(), myStreetDetails.endTimePeriod.getMinutes(), 0, 0);
+			var periodFrom = (myStreetDetails.logPeriodFrom != null) ? new Date(myStreetDetails.logPeriodFrom) : null;
+			var periodTo = (myStreetDetails.logPeriodTo != null) ? new Date(myStreetDetails.logPeriodTo) : null;
+			if(periodFrom != null)periodFrom.setHours(myStreetDetails.startTimePeriod.getHours(), myStreetDetails.startTimePeriod.getMinutes(), 0, 0);
+			if(periodTo != null)periodTo.setHours(myStreetDetails.endTimePeriod.getHours(), myStreetDetails.endTimePeriod.getMinutes(), 0, 0);
 			
 			if(form.$invalid){
 				$scope.isInit = false;
@@ -549,7 +692,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				
 				var params = {
 					isSysLog: true,
-					period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : []
+					period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 				};
 				var value = JSON.stringify(streetLogDet);
 				console.log("streetLogDet: " + value);
@@ -575,6 +718,12 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
 		if($scope.checkCorrectParkSlots(myParkingDetails)){
+			
+			var periodFrom = (myParkingDetails.logPeriodFrom != null) ? new Date(myParkingDetails.logPeriodFrom) : null;
+			var periodTo = (myParkingDetails.logPeriodTo != null) ? new Date(myParkingDetails.logPeriodTo) : null;
+			if(periodFrom != null)periodFrom.setHours(myParkingDetails.startTimePeriod.getHours(), myParkingDetails.startTimePeriod.getMinutes(), 0, 0);
+			if(periodTo != null)periodTo.setHours(myParkingDetails.endTimePeriod.getHours(), myParkingDetails.endTimePeriod.getMinutes(), 0, 0);
+			
 			if(form.$invalid){
 				$scope.isInit = false;
 			} else {
@@ -597,7 +746,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				};
 				
 				var params = {
-					isSysLog: true	
+					isSysLog: true,
+					period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 				};
 				var value = JSON.stringify(parkingLogDet);
 				console.log("parkingLogDet: " + value);
@@ -617,13 +767,78 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		}
 	};
 	
+	// Method insertParkingLog: used to insert in the db (table dataLogBean) a new parking log
+	$scope.insertParkingProfitLog = function(form, myParkingProfitDetails){
+		$scope.showUpdatingPErrorMessage = false;
+		$scope.showUpdatingPSuccessMessage = false;
+		if($scope.checkCorrectParkSlots(myParkingProfitDetails)){
+			
+			var periodFrom = (myParkingProfitDetails.logPeriodFrom != null) ? new Date(myParkingProfitDetails.logPeriodFrom) : null;
+			var periodTo = (myParkingProfitDetails.logPeriodTo != null) ? new Date(myParkingProfitDetails.logPeriodTo) : null;
+			if(periodFrom != null)periodFrom.setHours(myParkingProfitDetails.startTimePeriod.getHours(), myParkingProfitDetails.startTimePeriod.getMinutes(), 0, 0);
+			if(periodTo != null)periodTo.setHours(myParkingProfitDetails.endTimePeriod.getHours(), myParkingProfitDetails.endTimePeriod.getMinutes(), 0, 0);
+			
+			if(form.$invalid){
+				$scope.isInit = false;
+			} else {
+				var method = 'POST';
+				var appId = sharedDataService.getConfAppId();
+				var logId = myParkingProfitDetails.id;
+				var user = myParkingProfitDetails.user;
+				var parkingLogDet = {
+					id: myParkingProfitDetails.id, 
+					agency: myParkingProfitDetails.agency, 
+					position: myParkingProfitDetails.position, 
+					name: myParkingProfitDetails.name, 
+					description: myParkingProfitDetails.description,
+					updateTime: $scope.getLogMillis(myParkingProfitDetails.loghour, myParkingProfitDetails.logtime), 
+					user: parseInt(myParkingProfitDetails.user), 
+					//slotsTotal: parseInt(myParkingProfitDetails.slotsTotal), 
+					//slotsOccupiedOnTotal: parseInt(myParkingDetails.slotsOccupiedOnTotal),
+					//slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), 
+					lastChange:myParkingProfitDetails.lastChange,
+					profit: parseInt(myParkingProfitDetails.profit),
+					tickets: parseInt(myParkingProfitDetails.tickets)
+				};
+				
+				var params = {
+					isSysLog: true,
+					period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
+				};
+				var value = JSON.stringify(parkingLogDet);
+				console.log("parkingLogDet: " + value);
+				
+			   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkstructprofit/" + logId + "/" + user, params, $scope.authHeaders, value);
+			    myDataPromise.then(function(result){
+			    	console.log("Insert parking log: " + JSON.stringify(result));
+			    	if(result == "OK"){
+			    		$scope.showUpdatingPErrorMessage = false;
+			    		$scope.showUpdatingPSuccessMessage = true;
+			    	} else {
+			    		$scope.showUpdatingPErrorMessage = true;
+			    		$scope.showUpdatingPSuccessMessage = false;
+			    	}
+			    });	
+			}
+		}
+	};
+	
 	// Method composeLogId: method used to compose the correct log id with the object type, app id and the log id
 	$scope.composeLogId = function(type, appId, logId){
 		if(type == 1){
 			return "street@" + appId + "@" + logId;
-		} else {
+		} else if(type == 2){
 			return "parking@" + appId + "@" + logId;
+		} else if(type == 3){
+			return "parkstruct@" + appId + "@" + logId;
+		} else {
+			return "parkingmeter@" + appId + "@" + logId;
 		}
+	};
+	
+	$scope.correctProfitLogId = function(logId){
+		var res = logId.split("@");
+		return "parkstruct@" + res[1] + "@" + res[2];
 	};
 	
 	$scope.correctDateIt = function(date){

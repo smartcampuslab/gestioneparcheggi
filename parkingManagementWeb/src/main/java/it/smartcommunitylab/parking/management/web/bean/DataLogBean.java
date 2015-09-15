@@ -25,6 +25,7 @@ public class DataLogBean {
 	//private PointBean location;
 	private String type;
 	private Long time;
+	private Long[] logPeriod;	// used in log with a time period
 	private String author;
 	private String agency;
 	private boolean deleted;
@@ -168,6 +169,14 @@ public class DataLogBean {
 
 	public void setSystemLog(boolean isSystemLog) {
 		this.isSystemLog = isSystemLog;
+	}
+
+	public Long[] getLogPeriod() {
+		return logPeriod;
+	}
+
+	public void setLogPeriod(Long[] logPeriod) {
+		this.logPeriod = logPeriod;
 	}
 	
 }

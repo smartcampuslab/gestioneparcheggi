@@ -428,6 +428,10 @@ public class DynamicManager {
 					dl.setObjId(s.getId());
 					dl.setType(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
 					dl.setTime(timestamp);
+					if(period != null && period.length == 2){		// If there is a log period
+						Long[] periodLong = {period[0], period[1]};
+						dl.setLogPeriod(periodLong);
+					}
 					dl.setAuthor(authorId);
 					dl.setAgency(agencyId);
 					// set new fields ---------
@@ -696,6 +700,10 @@ public class DynamicManager {
 		dl.setObjId(p.getId());
 		dl.setType(Parking.class.getCanonicalName());
 		dl.setTime(timestamp);
+		if(period != null && period.length == 2){		// If there is a log period
+			Long[] periodLong = {period[0], period[1]};
+			dl.setLogPeriod(periodLong);
+		}
 		dl.setAuthor(authorId);
 		dl.setAgency(agencyId);
 		// set new fields ---------
@@ -755,8 +763,13 @@ public class DynamicManager {
 		ProfitLogBean pl = new ProfitLogBean();
 		pl.setObjId(p.getId());
 		pl.setType(ParkStruct.class.getCanonicalName());
-		pl.setFromTime(startTime);
-		pl.setToTime(timestamp);
+		//pl.setFromTime(startTime);
+		//pl.setToTime(timestamp);
+		pl.setTime(timestamp);
+		if(period != null && period.length == 2){		// If there is a log period
+			Long[] periodLong = {period[0], period[1]};
+			pl.setLogPeriod(periodLong);
+		}
 		pl.setAuthor(authorId);
 		pl.setAgency(agencyId);
 		// set new fields ---------
@@ -806,8 +819,13 @@ public class DynamicManager {
 		ProfitLogBean pl = new ProfitLogBean();
 		pl.setObjId(pm.getId());
 		pl.setType(ParkMeter.class.getCanonicalName());
-		pl.setFromTime(startTime);
-		pl.setToTime(timestamp);
+		//pl.setFromTime(startTime);
+		//pl.setToTime(timestamp);
+		pl.setTime(timestamp);
+		if(period != null && period.length == 2){		// If there is a log period
+			Long[] periodLong = {period[0], period[1]};
+			pl.setLogPeriod(periodLong);
+		}
 		pl.setAuthor(authorId);
 		pl.setAgency(agencyId);
 		// set new fields ---------

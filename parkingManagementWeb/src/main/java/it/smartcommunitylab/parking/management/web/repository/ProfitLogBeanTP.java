@@ -18,8 +18,8 @@ package it.smartcommunitylab.parking.management.web.repository;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
-@Document(collection="dataLogBean") 	 	
-public class DataLogBeanTP {
+@Document(collection="profitLogBean") 	 	
+public class ProfitLogBeanTP {
 	
 	@Id
 	private String id;
@@ -41,11 +41,11 @@ public class DataLogBeanTP {
 
 	private String valueString;
 
-	public DataLogBeanTP() {
+	public ProfitLogBeanTP() {
 		super();		
 	}
 
-	public DataLogBeanTP(String id, String objId, String type, Long time, Long[] logPeriod,
+	public ProfitLogBeanTP(String id, String objId, String type, Long time, Long[] logPeriod,
 			String author, String agency, boolean deleted, String year, String month,
 			String week_day, String timeSlot, boolean isHolyday, boolean isSystemLog,
 			String valueString){
@@ -189,7 +189,7 @@ public class DataLogBeanTP {
 
 	@Override
 	public String toString() {
-		return "DataLogBeanTP [id=" + id + ", objId=" + objId + ", type="
+		return "ProfitLogBeanTP [id=" + id + ", objId=" + objId + ", type="
 				+ type + ", time=" + time + ", logPeriod=" + logPeriod + ", author=" + author + ", deleted="
 				+ deleted + ", year=" + year + ", month=" + month
 				+ ", week_day=" + week_day + ", timeSlot=" + timeSlot + ", isHolyday=" + isHolyday

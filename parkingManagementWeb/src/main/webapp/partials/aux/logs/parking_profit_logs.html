@@ -12,7 +12,7 @@
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_type' | i18n }}</strong></td>
-				<td>{{ 'parking_type_in_lists' | i18n }}</td>
+				<td>{{ 'park_profit_type_in_lists' | i18n }}</td>
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_time' | i18n }}</strong></td>
@@ -38,22 +38,16 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-<!-- 					<div class="well"> -->
-						<table width="100%">
-							<tr>
-								<td width="30%"><strong>{{ 'log_total_slot' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsTotal}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_occupied_on_total' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsOccupiedOnTotal}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsUnavailable}}</td>
-							</tr>
-						</table>
-<!-- 					</div> -->
+					<table width="100%">
+						<tr>
+							<td width="30%"><strong>{{ 'ps_profit' | i18n }}</strong></td>
+							<td>{{correctEuroCent(logDetails.value.profit)}}{{ 'euro' | i18n }}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'ps_tickets' | i18n }}</strong></td>
+							<td>{{logDetails.value.tickets}}</td>
+						</tr>
+					</table>
 				</td>
 			</tr>
 <!-- 			<tr> -->
@@ -74,7 +68,7 @@
 	<div ng-show="!showDetails">
 		<div class="logwrapper">
 			<table class="table table-striped" style="width: 100%">
-				<tr ng-show="parkLogs.length != 0">
+				<tr ng-show="parkProfitLogs.length != 0">
 					<th width="3%"></th>
 					<th width="24%">{{ 'log_objId' | i18n }}</th>
 					<th width="15%">{{ 'log_type' | i18n }}</th>
@@ -84,14 +78,16 @@
 					<th width="5%"></th>
 				</tr>
 				<tbody class="animate-repeat"
-					ng-repeat="log in parkLogs | orderBy:'-time' | startFrom:currentPage*maxLogs | limitTo:maxLogs">
+					ng-repeat="log in parkProfitLogs | orderBy:'-time' | startFrom:currentPage*maxLogs | limitTo:maxLogs">
 				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 				<tr>
 					<td width="3%"><i class="glyphicon glyphicon-import" ng-show="log.isSystemLog" title="{{ 'system_log_alt_title' | i18n }}" alt="{{ 'system_log_alt_title' | i18n }}"></i></td>
 					<td width="24%" align="left">{{log.objId}}</td>
 					<td width="15%" align="left">
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'parking_type_in_lists' | i18n }}</span>
-						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'street_type_in_lists' | i18n }}</span>
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct'">{{ 'park_profit_type_in_lists' | i18n }}</span>
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Street'">{{ 'street_type_in_lists' | i18n }}</span>
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{ 'pm_type_in_lists' | i18n }}</span>
 					</td>
 					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
 					<td width="15%" align="left">{{log.author}}</td>
@@ -105,7 +101,7 @@
 					</td>
 				</tr>
 				</tbody>
-				<tr ng-show="parkLogs.length == 0">
+				<tr ng-show="parkProfitLogs.length == 0">
 					<td colspan="7"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td>
 				</tr>
 			</table>
@@ -119,7 +115,7 @@
 						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 						{{currentPage+1}}/{{logParkCountsPage}}
 					<button class="btn btn-success"
-						ng-disabled="currentPage >= parkLogs.length/maxLogs - 1"
+						ng-disabled="currentPage >= parkProfitLogs.length/maxLogs - 1"
 						ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 				</td>
 				<td width="33%" align="left">

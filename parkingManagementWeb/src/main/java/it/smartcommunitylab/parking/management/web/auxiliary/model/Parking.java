@@ -68,7 +68,6 @@ public class Parking implements Serializable  {
 		this.lastChange = lastChange;
 	}
 	
-	
 	public String getId() {
 		return id;
 	}
