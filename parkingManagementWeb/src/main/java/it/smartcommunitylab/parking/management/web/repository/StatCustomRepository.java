@@ -115,7 +115,8 @@ public interface StatCustomRepository {
 			Map<String, Object> params,
 			double value,
 			long timestamp,
-			long[] period);
+			long[] period,
+			int valtype);
 	
 	public boolean isAHoliday(
 			Calendar cal, 

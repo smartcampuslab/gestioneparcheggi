@@ -6,9 +6,13 @@
 				<td width="30%"><strong>{{ 'log_objId' | i18n }}</strong></td>
 				<td>{{ logDetails.objId }}</td>
 			</tr>
-			<tr>
+			<tr ng-if="logDetails.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">
 				<td width="30%"><strong>{{ 'log_object_name' | i18n }}</strong></td>
 				<td>{{ logDetails.value.name }}</td>
+			</tr>
+			<tr ng-if="logDetails.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">
+				<td width="30%"><strong>{{ 'log_object_code' | i18n }}</strong></td>
+				<td>{{ logDetails.value.code }} - {{ logDetails.value.note }}</td>
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_type' | i18n }}</strong></td>
@@ -138,8 +142,8 @@
 					<th width="25%">{{ 'log_objId' | i18n }}</th>
 					<th width="15%">{{ 'log_type' | i18n }}</th>
 					<th width="15%">{{ 'log_time' | i18n }}</th>
-					<th width="15%">{{ 'log_author' | i18n }}</th>
-					<th width="20%">{{ 'log_object_name' | i18n }}</th>
+					<th width="8%">{{ 'log_author' | i18n }}</th>
+					<th width="27%">{{ 'log_object_name' | i18n }}</th>
 					<th width="7%"></th>
 				</tr>
 				<tbody class="animate-repeat"
@@ -159,8 +163,11 @@
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{ 'pm_type_in_lists' | i18n }}</span>
 					</td>
 					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
-					<td width="15%" align="left">{{log.author}}</td>
-					<td width="20%">{{log.value.name}}</td>
+					<td width="8%" align="left">{{log.author}}</td>
+					<td width="27%">
+						<span ng-if="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.name}}</span>
+						<span ng-if="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.code}} - {{log.value.note}}</span>
+					</td>
 					<td width="7%" align="center">
 						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewDetails(1, log)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 					</td>
@@ -220,7 +227,10 @@
 					</td>
 					<td width="9%" align="left">{{ (log.time | date:'short') }}</td>
 					<td width="5%" align="left">{{log.author}}</td>
-					<td width="13%">{{log.value.name}}</td>
+					<td width="13%">
+						<span ng-if="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.name}}</span>
+						<span ng-if="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.code}} - {{log.value.note}}</span>
+					</td>
 					<td width="45%" align="left">
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">Tot: {{log.value.slotsTotal}}, Occ: {{log.value.slotsOccupiedOnTotal}}, Non Disp.: {{log.value.slotsUnavailable}}</span>
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct'">Profit: {{correctEuroCent(log.value.profit)}}, Ticket: {{log.value.tickets}}</span>

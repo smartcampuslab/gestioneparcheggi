@@ -466,7 +466,7 @@ public class DynamicManager {
 					if(period == null || period.length == 0){
 						repo.updateStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp);
 					} else {
-						repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp, period);
+						repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp, period, 1);
 					}
 					// Here I have to difference the type of the park: total, free, paying and timed - MULTIPARKOCC
 					if(countElements(total) > 1){	// Here I check if there are more than one element of park type
@@ -475,7 +475,7 @@ public class DynamicManager {
 							if(period == null || period.length == 0){
 								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp);
 							} else {
-								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp, period);
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp, period, 1);
 							}
 						}
 						if(s.getSlotsPaying() != 0){
@@ -483,7 +483,7 @@ public class DynamicManager {
 							if(period == null || period.length == 0){
 								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp);
 							} else {
-								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp, period);
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp, period, 1);
 							}
 						}
 						if(s.getSlotsTimed() != 0){
@@ -491,7 +491,7 @@ public class DynamicManager {
 							if(period == null || period.length == 0){
 								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp);
 							} else {
-								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp, period);
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp, period, 1);
 							}
 						}
 						if(s.getSlotsHandicapped() != 0){
@@ -499,7 +499,7 @@ public class DynamicManager {
 							if(period == null || period.length == 0){
 								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp);
 							} else {
-								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp, period);
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp, period, 1);
 							}
 						}
 					}
@@ -742,7 +742,7 @@ public class DynamicManager {
 		if(period == null || period.length == 0){
 			repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
 		} else {
-			repo.updateStatsPeriod(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp, period);
+			repo.updateStatsPeriod(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp, period, 1);
 		}
 	}
 	
@@ -800,8 +800,8 @@ public class DynamicManager {
 			repo.updateStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
 			repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
 		} else {
-			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period);
-			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period);
+			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period, 2);
+			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
 		}
 		
 	}
@@ -866,8 +866,8 @@ public class DynamicManager {
 			repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
 			repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
 		} else {
-			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period);
-			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period);
+			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period, 2);
+			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
 		}
 	}
 

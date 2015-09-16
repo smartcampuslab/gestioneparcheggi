@@ -2317,18 +2317,65 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};
 	
+	// Method chekIfAllRange: used to control if a range is complete. In this case the range value is set to null
+	$scope.chekIfAllRange = function(arr, type){
+		var corrVal = arr;
+		var res;
+		switch(type){
+			case 1:	// months
+				if(arr != null && arr != ""){
+					arr = arr + ""; // to force to string
+					if(arr.indexOf(";") > -1){
+						res = arr.split(";");
+						if(res[0] == "1" && res[1] == "12"){
+							corrVal = null;
+						}
+					}
+				}
+				break;
+			case 2: // week day
+				if(arr != null && arr != ""){
+					arr = arr + ""; // to force to string
+					if(arr.indexOf(";") > -1){
+						res = arr.split(";");
+						if(res[0] == "1" && res[1] == "7"){
+							corrVal = null;
+						}
+					}
+				}
+				break;
+			case 3: // hour
+				if(arr != null && arr != ""){
+					arr = arr + ""; // to force to string
+					if(arr.indexOf(";") > -1){
+						res = arr.split(";");
+						if(res[0] == "0" && res[1] == "23"){
+							corrVal = null;
+						}
+					}
+				}
+				break;
+			default: break;
+		}
+		return corrVal;
+	};
+	
 	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
 	$scope.getOccupancyStreetsFromDb = function(year, month, weekday, dayType, hour, valueType, isFirst){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
 		$scope.streetMapReady = false;
 		var allStreet = [];
 		var idApp = sharedDataService.getConfAppId();
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(month),
-			weekday: $scope.correctParamsFromSemicolon(weekday),
+			month: $scope.correctParamsFromSemicolon(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hour),
+			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
@@ -2391,6 +2438,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getProfitPMFromDb: used to retrieve te streets occupancy data from the db
 	$scope.getProfitPMFromDb = function(year, month, weekday, dayType, hour, valueType, isFirst){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
 		$scope.streetMapReady = false;
 		var markers = [];
 		var allPMs = [];
@@ -2398,10 +2449,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(month),
-			weekday: $scope.correctParamsFromSemicolon(weekday),
+			month: $scope.correctParamsFromSemicolon(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hour),
+			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
@@ -2443,6 +2494,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getProfitStructFromDb: used to retrieve te streets occupancy data from the db
 	$scope.getProfitParksFromDb = function(year, month, weekday, dayType, hour, valueType, isFirst){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
 		$scope.streetMapReady = false;
 		var markers = [];
 		var allPSs = [];
@@ -2450,10 +2505,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(month),
-			weekday: $scope.correctParamsFromSemicolon(weekday),
+			month: $scope.correctParamsFromSemicolon(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hour),
+			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
@@ -2500,15 +2555,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.zoneCvsFile = "";
 		$scope.areaCvsFile = "";
 		$scope.structCvsFile = "";
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
+		
 		var allStreet = [];
 		var idApp = sharedDataService.getConfAppId();
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(month),
-			weekday: $scope.correctParamsFromSemicolon(weekday),
+			month: $scope.correctParamsFromSemicolon(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hour),
+			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
@@ -2584,16 +2644,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getOccupancyParksFromDb: used to retrieve te parks occupancy data from the db
 	$scope.getOccupancyParksFromDb = function(year, month, weekday, dayType, hour, valueType, isFirst){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
 		var allParks = [];
 		var markers = [];
 		var idApp = sharedDataService.getConfAppId();
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(month),
-			weekday: $scope.correctParamsFromSemicolon(weekday),
+			month: $scope.correctParamsFromSemicolon(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hour),
+			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
@@ -2623,16 +2687,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getOccupancyParksUpdatedFromDb: used to retrieve te parks occupancy data from the db
 	$scope.getOccupancyParksUpdatedFromDb = function(year, month, weekday, dayType, hour, valueType, callType, oldParks, cost_type){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
 		var allParks = [];
 		var markers = [];
 		var idApp = sharedDataService.getConfAppId();
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(month),
-			weekday: $scope.correctParamsFromSemicolon(weekday),
+			month: $scope.correctParamsFromSemicolon(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hour),
+			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};

@@ -1215,6 +1215,10 @@
     "value": "Nome oggetto",
     "description": "intestazione colonna nome oggetto in lista log globali"
 }, {
+    "key": "log_object_code",
+    "value": "Codice oggetto",
+    "description": "intestazione colonna codice oggetto in lista log globali"
+}, {
     "key": "no_logs_in_lists",
     "value": "Nessun log trovato",
     "description": "messaggio nessun valore in lista log globali"
@@ -1379,6 +1383,10 @@
     "value": "Crea Log Parcheggio",
     "description": "Titolo pannello in creazione log parcheggio"
 }, {
+    "key": "new_log_parkingmeter",
+    "value": "Crea Log Parcometro",
+    "description": "Titolo pannello in creazione log parcometro"
+}, {
     "key": "parking_name_log",
     "value": "Nome parcheggio",
     "description": "Label per select in creazione log parcheggio"
@@ -1386,6 +1394,14 @@
     "key": "parking_log_placeholder",
     "value": "Seleziona il nome del parcheggio",
     "description": "Placeholder per select in creazione log parcheggio"
+}, {
+    "key": "pm_code_log",
+    "value": "Codice parcometro",
+    "description": "Label per select in creazione log parcometro"
+}, {
+    "key": "pm_log_placeholder",
+    "value": "Seleziona il codice del parcometro",
+    "description": "Placeholder per select in creazione log parcometro"
 }, {
     "key": "parking_name_select_err_required",
     "value": "Campo 'Nome parcheggio' obbligatorio",

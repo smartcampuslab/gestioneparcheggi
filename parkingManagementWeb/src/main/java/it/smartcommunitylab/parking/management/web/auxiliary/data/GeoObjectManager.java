@@ -236,6 +236,17 @@ public class GeoObjectManager {
 		return correctedParkingLogs;
 	};
 	
+	public List<ProfitLogBeanTP> getPmProfitLogsByAgency(String agency){
+		List<ProfitLogBeanTP> correctedPmLogs = new ArrayList<ProfitLogBeanTP>();
+		List<ProfitLogBeanTP> pmProfitLogs = profitLogRepo.findByType(ParkMeter.class.getCanonicalName());
+		for(int i = 0; i < pmProfitLogs.size(); i++){
+			if(pmProfitLogs.get(i) != null && !pmProfitLogs.get(i).isDeleted() && pmProfitLogs.get(i).getAgency() != null && pmProfitLogs.get(i).getAgency().compareTo(agency) == 0){
+				correctedPmLogs.add(pmProfitLogs.get(i));
+			}
+		}
+		return correctedPmLogs;
+	};
+	
 	// -------------------- Methods from geoStorage ---------------------------
 	
 	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle

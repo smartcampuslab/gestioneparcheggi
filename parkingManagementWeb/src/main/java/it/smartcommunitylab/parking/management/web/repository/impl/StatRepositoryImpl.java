@@ -218,11 +218,17 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		mongoTemplate.upsert(Query.query(criteria), update, YearStat.class);
 	}
 	
-	public void updateStatsPeriod(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp, long[] period) {
+	public void updateStatsPeriod(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp, long[] period, int valtype) {
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(timestamp);
 		boolean isHoliday = false;
 		String w = "wd";
+		
+		// params for profit value in period
+		boolean isHoursPeriodVal = false;
+		boolean isDowsPeriodVal = false;
+		boolean isMonthsPeriodVal = false;
+		boolean isYearsPeriodVal = false;
 		
 		Calendar cStart = Calendar.getInstance();
 		Calendar cEnd = Calendar.getInstance();
@@ -246,6 +252,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				int i = 0;
 				int a = 0;
 				int hourNum = (int)Math.floor(difference / MILLISINHOUR);
+				if(valtype == 2 && hourNum > 1)isHoursPeriodVal = true;
 				if(cStart.get(Calendar.DAY_OF_WEEK) != cEnd.get(Calendar.DAY_OF_WEEK)){
 					// Case of period < 24h but splitted in two days
 					dows = new int[2];
@@ -309,6 +316,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				int i = 0;
 				int a = 0;
 				int dayNum = (int)Math.floor(difference / MILLISINDAY);
+				if(valtype == 2 && dayNum > 1)isDowsPeriodVal = true;
 				if(cStart.get(Calendar.MONTH) != cEnd.get(Calendar.MONTH)){
 					// Case of period < month but splitted in two months
 					months = new int[2];
@@ -366,6 +374,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				int a = 0;
 				
 				int monthNum = (int)Math.floor(difference / MILLISINMONTH);
+				if(valtype == 2 && monthNum > 1)isMonthsPeriodVal = true;
 				if(cStart.get(Calendar.YEAR) != cEnd.get(Calendar.YEAR)){
 					// period splitted in two years
 					ymonths = new int[2][monthNum + 1];
@@ -402,7 +411,9 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				// more years
 				int yearStart = cStart.get(Calendar.YEAR);
 				int yearEnd = cEnd.get(Calendar.YEAR);
-				years = new int[yearEnd - yearStart + 1];
+				int yearNum = yearEnd - yearStart + 1;
+				years = new int[yearNum];
+				if(valtype == 2 && yearNum > 1)isYearsPeriodVal = true;
 				int j = 0;
 				for(int i = yearStart; i <= yearEnd; i++){
 					years[j] = i;
@@ -412,31 +423,69 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		}
 		int lastMonth = 0;
 		int m = 0;
+		double[] splittedVal = new double[2];
+		if(isYearsPeriodVal){
+			splittedVal = getSplittedValue(value, years.length);
+		}
 		for(int y = 0; y < years.length; y++){
-			findAndUpdateStats(objectId, appId, type, params, value, timestamp, 4, years[y], 0, 0, 0, "we", true);
-			findAndUpdateStats(objectId, appId, type, params, value, timestamp, 4, years[y], 0, 0, 0, "wd", false);
-			
+			if(isYearsPeriodVal){
+				double corrVal = splittedVal[0];
+				if(y == years.length - 1){
+					corrVal = splittedVal[0] + splittedVal[1];
+				}
+				findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 4, years[y], 0, 0, 0, "we", true);
+				findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 4, years[y], 0, 0, 0, "wd", false);
+			} else {
+				findAndUpdateStats(objectId, appId, type, params, value, timestamp, 4, years[y], 0, 0, 0, "we", true);
+				findAndUpdateStats(objectId, appId, type, params, value, timestamp, 4, years[y], 0, 0, 0, "wd", false);
+			}
 			int lastDay = 0;
 			int d = 0;
 			if(ymonths == null || ymonths.length == 0){
+				if(isMonthsPeriodVal){
+					splittedVal = getSplittedValue(value, months.length);
+				}
 				for(m = 0; m < months.length; m++){
 					// Case of one year
-					findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "we", true);
-					findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "wd", false);
+					if(isMonthsPeriodVal){
+						double corrVal = splittedVal[0];
+						if(m == months.length - 1){
+							corrVal = splittedVal[0] + splittedVal[1];
+						}
+						findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 3, years[y], months[m], 0, 0, "we", true);
+						findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 3, years[y], months[m], 0, 0, "wd", false);
+					} else {
+						findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "we", true);
+						findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], months[m], 0, 0, "wd", false);
+					}
 					
 					int lastHour = 0;
 					int h = 0;
 					if(mdows == null || mdows.length == 0){
 						// Case of one month
+						if(isDowsPeriodVal){
+							splittedVal = getSplittedValue(value, dows.length);
+						}
 						for(d = 0; d < dows.length; d++){
 							if((hours == null || hours.length == 0) && (dhours == null || dhours.length == 0)){
 								Calendar cDay = Calendar.getInstance();
 								cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
 								isHoliday = isAHoliday(cDay, appId);
 								w = isHoliday ? "we":"wd";
-								findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], dows[d], 0, w, isHoliday);
+								if(isDowsPeriodVal){
+									double corrVal = splittedVal[0];
+									if(d == dows.length - 1){
+										corrVal = splittedVal[0] + splittedVal[1];
+									}
+									findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 2, years[y], months[m], dows[d], 0, w, isHoliday);
+								} else {
+									findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], dows[d], 0, w, isHoliday);
+								}
 							} else {
 								if(dhours != null && dhours.length > 0){
+									if(isHoursPeriodVal){
+										splittedVal = getSplittedValue(value, dhours[0].length);
+									}
 									Calendar cDay = Calendar.getInstance();
 									cDay.setTimeInMillis(cStart.getTimeInMillis() + (d * 86400000L));
 									isHoliday = isAHoliday(cDay, appId);
@@ -446,24 +495,51 @@ public class StatRepositoryImpl implements StatCustomRepository {
 									for(h = lastHour; (h < dhours[d].length) && !skip; h++){
 										if(d == 0){
 											if(dhours[d][h] != 0){
-												findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], dhours[d][h], w, isHoliday);
+												if(isHoursPeriodVal){
+													double corrVal = splittedVal[0];
+													findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 1, years[y], months[m], dows[d], dhours[d][h], w, isHoliday);
+												} else {
+													findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], dhours[d][h], w, isHoliday);
+												}
 											} else {
 												skip = true;
 											}
 										} else {
-											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], dhours[d][h], w, isHoliday);
+											if(isHoursPeriodVal){
+												double corrVal = splittedVal[0];
+												if(h == dhours[1].length){
+													corrVal = splittedVal[0] + splittedVal[1];
+												}
+												findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 1, years[y], months[m], dows[d], dhours[d][h], w, isHoliday);
+											} else {
+												findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], dhours[d][h], w, isHoliday);
+											}
 										}
 									}
 									lastHour = posOfZeroVal(dhours);	// I save the last hour iterator value;
 								} else {
+									if(isHoursPeriodVal){
+										splittedVal = getSplittedValue(value, hours.length);
+									}
 									for(h = 0; h < hours.length; h++){
 										// Case of 1 day
-										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], hours[h], w, isHoliday);
+										if(isHoursPeriodVal){
+											double corrVal = splittedVal[0];
+											if(h == hours.length - 1){
+												corrVal = splittedVal[0] + splittedVal[1];
+											}
+											findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 1, years[y], months[m], dows[d], hours[h], w, isHoliday);
+										} else {
+											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], dows[d], hours[h], w, isHoliday);
+										}
 									}
 								}
 							}
 						}
 					} else {
+						if(isDowsPeriodVal){
+							splittedVal = getSplittedValue(value, mdows[0].length);
+						}
 						// Case of dows from 2 months
 						boolean mskip = false;
 						for(d = lastDay; (d < mdows[m].length) && !mskip; d++){
@@ -474,14 +550,30 @@ public class StatRepositoryImpl implements StatCustomRepository {
 								w = isHoliday ? "we":"wd";
 								if(m == 0){
 									if(mdows[m][d] != 0){
-										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+										if(isDowsPeriodVal){
+											double corrVal = splittedVal[0];
+											findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+										} else {
+											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+										}
 									} else {
 										mskip = true;
 									}
 								} else {
-									findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+									if(isDowsPeriodVal){
+										double corrVal = splittedVal[0];
+										if(d == mdows[1].length - 1){
+											corrVal = splittedVal[0] + splittedVal[1];
+										}
+										findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+									} else {
+										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+									}
 								}
 							} else {
+								if(isHoursPeriodVal){
+									splittedVal = getSplittedValue(value, dhours[0].length);
+								}
 								// Case of hours from 2 days
 								m = d;	// I align the day with the months;
 								Calendar cDay = Calendar.getInstance();
@@ -493,12 +585,25 @@ public class StatRepositoryImpl implements StatCustomRepository {
 								for(h = lastHour; (h < dhours[d].length) && !skip; h++){
 									if(d == 0){
 										if(dhours[d][h] != 0){
-											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+											if(isHoursPeriodVal){
+												double corrVal = splittedVal[0];
+												findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+											} else {
+												findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+											}
 										} else {
 											skip = true;
 										}
 									} else {
-										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+										if(isHoursPeriodVal){
+											double corrVal = splittedVal[0];
+											if(h == dhours[1].length){
+												corrVal = splittedVal[0] + splittedVal[1];
+											}
+											findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+										} else {
+											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+										}
 									}
 								}
 								lastHour = posOfZeroVal(dhours);	// I save the last hour iterator value;
@@ -509,6 +614,9 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				}
 			} else {
 				// Case of months from 2 years
+				if(isMonthsPeriodVal){
+					splittedVal = getSplittedValue(value, ymonths[0].length);
+				}
 				int lastHour = 0;
 				int h = 0;
 				boolean yskip = false;
@@ -516,17 +624,35 @@ public class StatRepositoryImpl implements StatCustomRepository {
 					if((dhours == null || dhours.length == 0) && ((mdows == null || mdows.length == 0))){
 						if(y == 0){
 							if(ymonths[y][m] != 0){
-								findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "wd", false);
-								findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "we", true);
+								if(isMonthsPeriodVal){
+									double corrVal = splittedVal[0];
+									findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 3, years[y], ymonths[y][m], 0, 0, "we", true);
+									findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 3, years[y], ymonths[y][m], 0, 0, "wd", false);
+								} else {
+									findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "wd", false);
+									findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "we", true);
+								}
 							} else {
 								yskip = true;
 							}
 						} else {
-							findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "wd", false);
-							findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "we", true);
+							if(isMonthsPeriodVal){
+								double corrVal = splittedVal[0];
+								if(m == ymonths[1].length - 1){
+									corrVal = splittedVal[0] + splittedVal[1];
+								}
+								findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 3, years[y], ymonths[y][m], 0, 0, "we", true);
+								findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 3, years[y], ymonths[y][m], 0, 0, "wd", false);
+							} else {
+								findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "wd", false);
+								findAndUpdateStats(objectId, appId, type, params, value, timestamp, 3, years[y], ymonths[y][m], 0, 0, "we", true);
+							}
 						}
 					} else {
 						// Case of hours and days from 2 years
+						if(isDowsPeriodVal){
+							splittedVal = getSplittedValue(value, mdows[0].length);
+						}
 						boolean mskip = false;
 						for(d = lastDay; (d < mdows[m].length) && !mskip; d++){
 							if(dhours == null || dhours.length == 0){
@@ -537,14 +663,30 @@ public class StatRepositoryImpl implements StatCustomRepository {
 								w = isHoliday ? "we":"wd";
 								if(m == 0){
 									if(mdows[m][d] != 0){
-										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+										if(isDowsPeriodVal){
+											double corrVal = splittedVal[0];
+											findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+										} else {
+											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+										}
 									} else {
 										mskip = true;
 									}
 								} else {
-									findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+									if(isDowsPeriodVal){
+										double corrVal = splittedVal[0];
+										if(d == mdows[1].length - 1){
+											corrVal = splittedVal[0] + splittedVal[1];
+										}
+										findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+									} else {
+										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 2, years[y], months[m], mdows[m][d], 0, w, isHoliday);
+									}
 								}
 							} else {
+								if(isHoursPeriodVal){
+									splittedVal = getSplittedValue(value, dhours[0].length);
+								}
 								// Case of hours from 2 days
 								y = m = d;	// I align the day with the month and the year;
 								Calendar cDay = Calendar.getInstance();
@@ -556,12 +698,25 @@ public class StatRepositoryImpl implements StatCustomRepository {
 								for(h = lastHour; (h < dhours[d].length) && !skip; h++){
 									if(d == 0){
 										if(dhours[d][h] != 0){
-											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+											if(isHoursPeriodVal){
+												double corrVal = splittedVal[0];
+												findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+											} else {
+												findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+											}
 										} else {
 											skip = true;
 										}
 									} else {
-										findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+										if(isHoursPeriodVal){
+											double corrVal = splittedVal[0];
+											if(h == dhours[1].length){
+												corrVal = splittedVal[0] + splittedVal[1];
+											}
+											findAndUpdateStats(objectId, appId, type, params, corrVal, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+										} else {
+											findAndUpdateStats(objectId, appId, type, params, value, timestamp, 1, years[y], months[m], mdows[m][d], dhours[d][h], w, isHoliday);
+										}
 									}
 								}
 								lastHour = posOfZeroVal(dhours);	// I save the last hour iterator value;
@@ -595,6 +750,16 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			}
 		}
 		return zero;
+	}
+	
+	// method getSplittedValue: used to retrieve the correct value for the profit in period
+	private double[] getSplittedValue(double val, int elements){
+		double[] result = new double[2];
+		int quotient = (int)val / elements;
+		double remainder = val - (quotient * elements);
+		result[0] = quotient;
+		result[1] = remainder;
+		return result;
 	}
 	
 	private void findAndUpdateStats(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp, int period, int year, int month, int dow, int hour, String wdt, boolean isHoliday){

@@ -20,7 +20,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
         { title:'Log generale', index: 1, content:"partials/aux/logs/global_logs.html" },
         { title:'Log occupazione vie', index: 2, content:"partials/aux/logs/street_logs.html" },
         { title:'Log occupazione parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html" },
-        { title:'Log ricavi parcheggi', index: 4, content:"partials/aux/logs/parking_profit_logs.html" }
+        { title:'Log ricavi parcometri', index: 4, content:"partials/aux/logs/pm_profit_logs.html" },
+        { title:'Log ricavi parcheggi', index: 5, content:"partials/aux/logs/parking_profit_logs.html" }
     ];
     
  // ------------------ Start datetimepicker section -----------------------
@@ -92,6 +93,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    		sharedDataService.setInStreetLogPage(false);
 	    		sharedDataService.setInParkLogPage(false);
 	    		sharedDataService.setInProfitParkLogPage(false);
+	    		sharedDataService.setInProfitParkmeterLogPage(false);
 	    		$scope.initGlobalLogs();
 	    		break;
 	    	case 1:
@@ -99,6 +101,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    		sharedDataService.setInStreetLogPage(true);
 	    		sharedDataService.setInParkLogPage(false);
 	    		sharedDataService.setInProfitParkLogPage(false);
+	    		sharedDataService.setInProfitParkmeterLogPage(false);
 	    		$scope.initStreetLogs();
 	    		break;
 	    	case 2:
@@ -106,13 +109,23 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    		sharedDataService.setInStreetLogPage(false);
 	    		sharedDataService.setInParkLogPage(true);
 	    		sharedDataService.setInProfitParkLogPage(false);
+	    		sharedDataService.setInProfitParkmeterLogPage(false);
 	    		$scope.initParkLogs();
 	    		break;
 	    	case 3:
 	    		sharedDataService.setInGlobalLogPage(false);
 	    		sharedDataService.setInStreetLogPage(false);
 	    		sharedDataService.setInParkLogPage(false);
+	    		sharedDataService.setInProfitParkLogPage(false);
+	    		sharedDataService.setInProfitParkmeterLogPage(true);
+	    		$scope.initProfitParkMeterLogs();
+	    		break;	
+	    	case 4:
+	    		sharedDataService.setInGlobalLogPage(false);
+	    		sharedDataService.setInStreetLogPage(false);
+	    		sharedDataService.setInParkLogPage(false);
 	    		sharedDataService.setInProfitParkLogPage(true);
+	    		sharedDataService.setInProfitParkmeterLogPage(false);
 	    		$scope.initProfitParkLogs();
 	    		break;	
     	}
@@ -278,6 +291,13 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	//$scope.countAllParkLogsInDb();
 		$scope.getAllParkProfitLogsFromDbTP();
     };
+    
+    // For parkingmeter profit
+    $scope.initProfitParkMeterLogs = function(){
+		$scope.showDetails = false;
+    	//$scope.countAllParkLogsInDb();
+		$scope.getAllParkMeterProfitLogsFromDbTP();
+    };
 	
 //	$scope.countAllParkLogsInDb = function(){
 //		var elements = 0;
@@ -377,6 +397,40 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				};
 				//console.log("corrLog: " + JSON.stringify(corrLog));
 				$scope.parkProfitLogs.push(corrLog);
+			}
+			$scope.logParkCounts = partialLogs.length;
+		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
+		});
+	};
+	
+	// Method getAllParkMeterProfitLogsFromDbTP: used to retrieve all the logs of type parkmeter in the profitLogBean Table
+	$scope.getAllParkMeterProfitLogsFromDbTP = function(){
+		$scope.pmProfitLogs = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/parkmeters", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+			var partialLogs = result;
+			var corrLog = null;
+			for(var i = 0; i < partialLogs.length; i++){
+				corrLog = {
+					id:	partialLogs[i].id,
+					objId: partialLogs[i].objId,
+					type: partialLogs[i].type,
+					time: partialLogs[i].time,
+					author: partialLogs[i].author,
+					agency: partialLogs[i].agency,
+			        deleted: partialLogs[i].deleted,
+			        year: partialLogs[i].year,
+			        month: partialLogs[i].month,
+			        week_day: partialLogs[i].week_day,
+			        timeSlot: partialLogs[i].timeSlot,
+			        holyday: partialLogs[i].holyday,
+			        isSystemLog: partialLogs[i].systemLog,
+			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
+				};
+				//console.log("corrLog: " + JSON.stringify(corrLog));
+				$scope.pmProfitLogs.push(corrLog);
 			}
 			$scope.logParkCounts = partialLogs.length;
 		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
@@ -549,6 +603,13 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.getParkingsProfitFromDb();
 	};
 	
+	$scope.initPmProfitLogCreation = function(){
+		$scope.showUpdatingPMErrorMessage = false;
+		$scope.showUpdatingPMSuccessMessage = false;
+		$scope.isInit = true;
+		$scope.getPmProfitFromDb();
+	};
+	
 	// Method getStreetsFromDb: used to init the input select in street log creation
 	$scope.getStreetsFromDb = function(){
 		$scope.allStreet = [];
@@ -572,11 +633,11 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, $scope.allParking);
 	    	$scope.parkLoadedAndSelected = false;
-	    	$scope.parkProfitLoadedAndSelected = false;
+	    	//$scope.parkProfitLoadedAndSelected = false;
 	    });
 	};
 	
-	// Method getParksFromDb: used to init the input select in park log creation
+	// Method getParkingsProfitFromDb: used to init the input select in park profit log creation
 	$scope.getParkingsProfitFromDb = function(){
 		$scope.allParkingProfit = [];
 		var method = 'GET';
@@ -588,8 +649,24 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	for(var i = 0; i < $scope.allParkingProfit.length; i ++){
 	    		$scope.allParkingProfit[i].id = $scope.correctProfitLogId($scope.allParkingProfit[i].id);
 	    	}
-	    	$scope.parkLoadedAndSelected = false;
+	    	//$scope.parkLoadedAndSelected = false;
 	    	$scope.parkProfitLoadedAndSelected = false;
+	    });
+	};
+	
+	// Method getPmProfitFromDb: used to init the input select in pm profit log creation
+	$scope.getPmProfitFromDb = function(){
+		$scope.allPmProfit = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters", null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	angular.copy(result, $scope.allPmProfit);
+	    	//for(var i = 0; i < $scope.allPmProfit.length; i ++){
+	    	//	$scope.allParkingProfit[i].id = $scope.correctProfitLogId($scope.allParkingProfit[i].id);
+	    	//}
+	    	$scope.pmProfitLoadedAndSelected = false;
 	    });
 	};
 	
@@ -620,6 +697,15 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.showUpdatingPSuccessMessage = false;
 	};
 	
+	$scope.getPmProfitDetailData = function(parkmeter){
+		$scope.myPmProfitDetails = parkmeter;
+		$scope.initParkTimeValues(3);
+		$scope.pmProfitLoadedAndSelected = true;
+		// to hide the messages (error or success)
+		$scope.showUpdatingPMErrorMessage = false;
+		$scope.showUpdatingPMSuccessMessage = false;
+	};
+	
 	$scope.initTimeValues = function(){
 		var now = new Date();
 		$scope.myStreetDetails.loghour = $scope.addZero(now.getDate()) + "/" + $scope.addZero(now.getMonth() + 1) + "/" + now.getFullYear();
@@ -637,12 +723,17 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			$scope.myParkingDetails.logtime = now;
 			$scope.myParkingDetails.startTimePeriod = new Date(0);
 			$scope.myParkingDetails.endTimePeriod = new Date(0);
-		} else {
+		} else if(type == 2){
 			$scope.myParkingProfitDetails.loghour = $scope.addZero(now.getDate()) + "/" + $scope.addZero(now.getMonth() + 1) + "/" + now.getFullYear();
 			//$scope.myParkingDetails.logtime = $scope.addZero(now.getHours()) + ":" + $scope.addZero(now.getMinutes()) + ":" + $scope.addZero(now.getSeconds());
 			$scope.myParkingProfitDetails.logtime = now;
 			$scope.myParkingProfitDetails.startTimePeriod = new Date(0);
 			$scope.myParkingProfitDetails.endTimePeriod = new Date(0);
+		} else if(type == 3){
+			$scope.myPmProfitDetails.loghour = $scope.addZero(now.getDate()) + "/" + $scope.addZero(now.getMonth() + 1) + "/" + now.getFullYear();
+			$scope.myPmProfitDetails.logtime = now;
+			$scope.myPmProfitDetails.startTimePeriod = new Date(0);
+			$scope.myPmProfitDetails.endTimePeriod = new Date(0);
 		}
 	};
 	
@@ -822,6 +913,60 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			}
 		}
 	};
+	
+	// Method insertPmProfitLog: used to insert in the db (table dataLogBean) a new parkingmeter log
+	$scope.insertPmProfitLog = function(form, myPmProfitDetails){
+		$scope.showUpdatingPMErrorMessage = false;
+		$scope.showUpdatingPMSuccessMessage = false;
+		//if($scope.checkCorrectParkSlots(myParkingProfitDetails)){
+			
+			var periodFrom = (myPmProfitDetails.logPeriodFrom != null) ? new Date(myPmProfitDetails.logPeriodFrom) : null;
+			var periodTo = (myPmProfitDetails.logPeriodTo != null) ? new Date(myPmProfitDetails.logPeriodTo) : null;
+			if(periodFrom != null)periodFrom.setHours(myPmProfitDetails.startTimePeriod.getHours(), myPmProfitDetails.startTimePeriod.getMinutes(), 0, 0);
+			if(periodTo != null)periodTo.setHours(myPmProfitDetails.endTimePeriod.getHours(), myPmProfitDetails.endTimePeriod.getMinutes(), 0, 0);
+			
+			if(form.$invalid){
+				$scope.isInit = false;
+			} else {
+				var method = 'POST';
+				var appId = sharedDataService.getConfAppId();
+				var logId = myPmProfitDetails.id;
+				var user = myPmProfitDetails.user;
+				var parkingMeterLogDet = {
+					id: myPmProfitDetails.id, 
+					agency: myPmProfitDetails.agency, 
+					position: myPmProfitDetails.position, 
+					code: myPmProfitDetails.code,
+					note: myPmProfitDetails.note,
+					status: myPmProfitDetails.status,
+					updateTime: $scope.getLogMillis(myPmProfitDetails.loghour, myPmProfitDetails.logtime), 
+					user: parseInt(myPmProfitDetails.user), 
+					areaId: myPmProfitDetails.areaId,
+					lastChange:myPmProfitDetails.lastChange,
+					profit: parseInt(myPmProfitDetails.profit),
+					tickets: parseInt(myPmProfitDetails.tickets)
+				};
+				var params = {
+					isSysLog: true,
+					period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
+				};
+				var value = JSON.stringify(parkingMeterLogDet);
+				console.log("parkingMeterLogDet: " + value);
+				
+			   	var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters/" + logId + "/" + user, params, $scope.authHeaders, value);
+			    myDataPromise.then(function(result){
+			    	console.log("Insert parking log: " + JSON.stringify(result));
+			    	if(result == "OK"){
+			    		$scope.showUpdatingPMErrorMessage = false;
+			    		$scope.showUpdatingPMSuccessMessage = true;
+			    	} else {
+			    		$scope.showUpdatingPMErrorMessage = true;
+			    		$scope.showUpdatingPMSuccessMessage = false;
+			    	}
+			    });	
+			}
+		//}
+	};	
 	
 	// Method composeLogId: method used to compose the correct log id with the object type, app id and the log id
 	$scope.composeLogId = function(type, appId, logId){

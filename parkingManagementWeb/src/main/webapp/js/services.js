@@ -193,6 +193,14 @@ pm.service('sharedDataService', function(){
 		return this.inProfitParkLogPage;
 	};
 	
+	this.setInProfitParkmeterLogPage = function(value){
+		this.inProfitParkmeterLogPage = value;
+	};
+	
+	this.isInProfitParkmeterLogPage = function(){
+		return this.inProfitParkmeterLogPage;
+	};
+	
 //	this.getUserIdentity = function(){
 //		return this.utente.codiceFiscale;
 //	};

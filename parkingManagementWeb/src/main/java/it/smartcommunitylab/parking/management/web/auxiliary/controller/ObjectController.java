@@ -129,6 +129,11 @@ public class ObjectController  {
 		return dataService.getParkingProfitLogsByAgency(agency);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkmeters") 
+	public @ResponseBody List<ProfitLogBeanTP> getAllParkMetersLogs(@PathVariable String agency) {
+		return dataService.getPmProfitLogsByAgency(agency);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets") 
 	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency) {
 		return dataService.getStreetLogsByAgency(agency);
