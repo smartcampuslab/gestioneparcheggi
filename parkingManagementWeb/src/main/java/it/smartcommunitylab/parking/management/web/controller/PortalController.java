@@ -47,10 +47,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 //import eu.trentorise.smartcampus.citizenportal.models.SubjectDn;
 
-import eu.trentorise.smartcampus.aac.AACException;
-import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
-import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
-import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
+//import eu.trentorise.smartcampus.aac.AACException;
+//import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
+//import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
+//import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 
 @Controller
 public class PortalController extends SCController{

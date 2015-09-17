@@ -24,11 +24,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.context.SecurityContextHolder;
 
-import eu.trentorise.smartcampus.aac.AACService;
-import eu.trentorise.smartcampus.profileservice.BasicProfileService;
-import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
-import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
-import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
+//import eu.trentorise.smartcampus.aac.AACService;
+//import eu.trentorise.smartcampus.profileservice.BasicProfileService;
+//import eu.trentorise.smartcampus.profileservice.ProfileServiceException;
+//import eu.trentorise.smartcampus.profileservice.model.AccountProfile;
+//import eu.trentorise.smartcampus.profileservice.model.BasicProfile;
 
 @Controller
 public class SCController {
@@ -50,14 +50,14 @@ public class SCController {
 	@Value("${smartcampus.clientSecret}")
 	private String client_secret;
 
-	protected AACService aacService;
-	protected BasicProfileService profileService;
+//	protected AACService aacService;
+//	protected BasicProfileService profileService;
 
-	@PostConstruct
-	public void init() {
-		aacService = new AACService(aacExtURL, client_id, client_secret);
-		profileService = new BasicProfileService(aacURL);
-	}
+//	@PostConstruct
+//	public void init() {
+//		aacService = new AACService(aacExtURL, client_id, client_secret);
+//		profileService = new BasicProfileService(aacURL);
+//	}
 	
 	/**
 	 * Here we assume that the access token is placed in the current security
@@ -74,17 +74,17 @@ public class SCController {
 	/*
 	 * Getters and Setters
 	 */
-	protected BasicProfile getBasicProfile(HttpServletRequest request) throws SecurityException, ProfileServiceException {
-		BasicProfile bp = profileService.getBasicProfile(getToken(request));
-		return bp;
-	}
-	protected BasicProfile getBasicProfile(HttpServletRequest request, String userId) throws SecurityException, ProfileServiceException {
-		BasicProfile bp = profileService.getBasicProfile(userId, getToken(request));
-		return bp;
-	}
-
-	protected AccountProfile getAccountProfile(HttpServletRequest request) throws SecurityException, ProfileServiceException {
-		return profileService.getAccountProfile(getToken(request));
-	}
+//	protected BasicProfile getBasicProfile(HttpServletRequest request) throws SecurityException, ProfileServiceException {
+//		BasicProfile bp = profileService.getBasicProfile(getToken(request));
+//		return bp;
+//	}
+//	protected BasicProfile getBasicProfile(HttpServletRequest request, String userId) throws SecurityException, ProfileServiceException {
+//		BasicProfile bp = profileService.getBasicProfile(userId, getToken(request));
+//		return bp;
+//	}
+//
+//	protected AccountProfile getAccountProfile(HttpServletRequest request) throws SecurityException, ProfileServiceException {
+//		return profileService.getAccountProfile(getToken(request));
+//	}
 
 }
