@@ -52,7 +52,7 @@
     "description": "Valore link menu per editing parcheggi"
 }, {
     "key": "menu_bar-homeaux",
-    "value": "Parcheggi Ausiliari",
+    "value": "Gestione Log",
     "description": "Valore link menu per editing punti bici"
 }, {
     "key": "park_menu_list",
@@ -1674,6 +1674,14 @@
 	"key": "log_period_time", 
 	"value": "Ora",
 	"description": "Label per ora periodo in inserimento log"
+}, { 
+	"key": "from_to_period_err", 
+	"value": "Periodo inserito non corretto: data inizio maggiore di data fine.",
+	"description": "Messaggio errore periodo data da maggiore di data a in inserimento log"
+}, { 
+	"key": "start_or_end_emplty_period_err", 
+	"value": "Data di inizio o di fine periodo mancante. Inserire entrambi i valori per continuare.",
+	"description": "Messaggio errore periodo data da o data a mancanti in inserimento log"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"

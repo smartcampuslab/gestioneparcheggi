@@ -88,11 +88,16 @@
 					    				<timepicker ng-model="myParkingDetails.endTimePeriod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
 					    			</td>
 					    		</tr>
-					    		<tr ng-show="(!isInit && isPeriodError())">
+					    		<tr ng-show="(showErrorFromMajorTo)">
 					    			<td colspan="4">
-					    				<div class="alert alert-danger">{{ 'parking_period_err' | i18n }}</div>
+					    				<div class="alert alert-danger">{{ 'from_to_period_err' | i18n }}</div>
 					    			</td>
 					    		</tr>
+					    		<tr ng-show="(showErrorEmptyVal)">
+				   					<td colspan="4">
+				   						<div class="alert alert-danger">{{ 'start_or_end_emplty_period_err' | i18n }}</div>
+				   					</td>
+				   				</tr>
 					    	</table>
 				   		</div>
 				   	</div>

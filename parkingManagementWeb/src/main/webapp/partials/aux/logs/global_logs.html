@@ -229,7 +229,7 @@
 					<td width="5%" align="left">{{log.author}}</td>
 					<td width="13%">
 						<span ng-if="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.name}}</span>
-						<span ng-if="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.code}} - {{log.value.note}}</span>
+						<span ng-if="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.code}}</span><!--  - {{log.value.note}} -->
 					</td>
 					<td width="45%" align="left">
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">Tot: {{log.value.slotsTotal}}, Occ: {{log.value.slotsOccupiedOnTotal}}, Non Disp.: {{log.value.slotsUnavailable}}</span>

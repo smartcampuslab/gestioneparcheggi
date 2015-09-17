@@ -41,6 +41,7 @@ import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
+import it.smartcommunitylab.parking.management.web.bean.ProfitLogBean;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.CSVManager;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
@@ -247,8 +248,8 @@ public class ObjectController  {
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/globallogs/csv")
 	public @ResponseBody
 	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		logger.info("I am in log csv creation.");
-		ArrayList<DataLogBean> logData = new ArrayList<DataLogBean>();
+		ArrayList<ProfitLogBean> logAllData = new ArrayList<ProfitLogBean>();
+		
 		String createdFile = "";
 		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
@@ -259,11 +260,20 @@ public class ObjectController  {
 	   	
 	    for(int i = 0; i < logList.length(); i++){
 	    	JSONObject log = logList.getJSONObject(i);
-	    	//logger.error(String.format("Log Data: %s", log.toString()));
+	    	logger.error(String.format("Log Data: %s", log.toString()));
 	    	String id = log.getString("id");
 	    	String objId = log.getString("objId");
 	    	String author = log.getString("author");
-	    	Long time = log.getLong("time");
+	    	Long[] periodLog = null;
+	    	Object period = (!log.isNull("logPeriod") ? log.get("logPeriod") : null);
+	    	if(period != null){
+	    		String periodVal = period.toString();
+	    		String res[] = periodVal.split(",");
+	    		periodLog = new Long[2];
+	    		periodLog[0] = Long.parseLong(res[0].substring(1, res[0].length() - 1));
+	    		periodLog[1] = Long.parseLong(res[1].substring(0, res[1].length() - 2));
+	    	}
+	    	Long time = (!log.isNull("time")) ? log.getLong("time") : null;
 	    	String time_slot = (!log.isNull("timeSlot")) ? log.getString("timeSlot") : "";
 	    	String week_day = (!log.isNull("week_day")) ? log.getString("week_day") : "";
 	    	String month = (!log.isNull("month")) ? log.getString("month") : "";
@@ -308,27 +318,54 @@ public class ObjectController  {
 			    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
 			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
 			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
+		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct") == 0){
+		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
+			    	log_value.put("name", (!value.isNull("name")) ? value.getString("name") : "n.p.");
+			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
+			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
+			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
+			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
+			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
+			    	//log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
+			    	log_value.put("profit", (!value.isNull("profit")) ? value.getInt("profit") : 0);
+			    	log_value.put("tickets", (!value.isNull("tickets")) ? value.getInt("tickets") : 0);
+			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
+			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
+		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter") == 0){
+		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
+			    	log_value.put("code", (!value.isNull("code")) ? value.getString("code") : "n.p.");
+			    	log_value.put("note", (!value.isNull("note")) ? value.getString("note") : "n.p.");
+			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
+			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
+			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
+			    	log_value.put("status", (!value.isNull("status")) ? value.getString("status") : "n.p.");
+			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
+			    	//log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
+			    	log_value.put("profit", (!value.isNull("profit")) ? value.getInt("profit") : 0);
+			    	log_value.put("tickets", (!value.isNull("tickets")) ? value.getInt("tickets") : 0);
+			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
 		    	}
 	    	}
-	    	DataLogBean dl = new DataLogBean();
-	    	dl.setId(id);
-	    	dl.setObjId(objId);
-	    	dl.setAuthor(author);
-	    	dl.setTime(time);
-	    	dl.setTimeSlot(time_slot);
-	    	dl.setWeek_day(week_day);
-	    	dl.setMonth(month);
-	    	dl.setYear(year);
-	    	dl.setType(type);
-	    	dl.setDeleted(deleted);
-	    	dl.setHolyday(holyday);
-	    	dl.setValue(log_value);
-	    	logData.add(dl);
+	    	ProfitLogBean pl = new ProfitLogBean();
+	    	pl.setId(id);
+	    	pl.setObjId(objId);
+	    	pl.setAuthor(author);
+	    	pl.setLogPeriod(periodLog);
+	    	pl.setTime(time);
+	    	pl.setTimeSlot(time_slot);
+	    	pl.setWeek_day(week_day);
+	    	pl.setMonth(month);
+	    	pl.setYear(year);
+	    	pl.setType(type);
+	    	pl.setDeleted(deleted);
+	    	pl.setHolyday(holyday);
+	    	pl.setValue(log_value);
+	    	logAllData.add(pl);
 	    }	
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_file_log(logData, path);
+			createdFile = csvManager.create_file_log(logAllData, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per log: " + e.getMessage());
 		}

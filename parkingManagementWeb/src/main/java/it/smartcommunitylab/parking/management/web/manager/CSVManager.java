@@ -15,7 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
-import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
+import it.smartcommunitylab.parking.management.web.bean.ProfitLogBean;
 import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
 import it.smartcommunitylab.parking.management.web.model.OccupancyStreet;
@@ -498,7 +498,7 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the logs history
-	public String create_file_log(ArrayList<DataLogBean> logs, String path)
+	public String create_file_log(ArrayList<ProfitLogBean> logs, String path)
 			throws FileNotFoundException, UnsupportedEncodingException {
 		String name = FILE_NAME + "Log.csv";
 		String long_name = path + "/" + name;
@@ -517,6 +517,8 @@ public class CSVManager {
 			writer.append("Ora");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Ora(millisecondi)");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Periodo");
 			writer.append(CSV_SEPARATOR);
 			// writer.append("Valore");
 			writer.append("Posti Gratuiti");
@@ -540,25 +542,42 @@ public class CSVManager {
 			writer.append("Posti Occupati Totali");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Non Disponibili");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Ricavi");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Ticket emessi");
 			writer.append(CSV_NEWLINE);
 
 			// Add the list of data in a table
-			for (DataLogBean l : logs) {
+			for (ProfitLogBean l : logs) {	
 				writer.append(l.getObjId());
 				writer.append(CSV_SEPARATOR);
 				writer.append(getNameFromValue(l.getValue() + ""));
 				writer.append(CSV_SEPARATOR);
-				writer.append((l
-						.getType()
-						.compareTo(
-								"it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0) ? "Via"
-						: "Parcheggio Struttura");
+				String type = "";
+				if(l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0){
+					type = "Via";
+				} else if(l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Parking") == 0){
+					type = "Parcheggio (Occupazione)";
+				} else if(l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct") == 0){
+					type = "Parcheggio (Incassi)";
+				} else {
+					type = "Parcometro";
+				}
+				writer.append((type));
 				writer.append(CSV_SEPARATOR);
 				writer.append(l.getAuthor());
 				writer.append(CSV_SEPARATOR);
 				writer.append(correctDateTime(l.getTime()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(l.getTime() + "");
+				writer.append(CSV_SEPARATOR);
+				Long[] period = l.getLogPeriod();
+				String periodVal = "Nessuno";
+				if(period != null && period.length == 2){
+					periodVal = correctDateTime(period[0]) + "-" + correctDateTime(period[1]);
+				}
+				writer.append(periodVal);
 				writer.append(CSV_SEPARATOR);
 				writer.append(correctValue(l.getValue() + ""));
 				// writer.append(l.getValueToString());
@@ -1023,6 +1042,8 @@ public class CSVManager {
 		String totalSlots = "0";
 		String occupiedTotalSlots = "0";
 		String unavailableSlots = "0";
+		String profit = "0";
+		String tickets = "0";
 		String to_clean = value.toString();
 		// logger.error("Value in CSV: " + to_clean);
 		String completeVals[] = to_clean.split(",");
@@ -1064,6 +1085,12 @@ public class CSVManager {
 			if (s.contains("slotsUnavailable")) {
 				unavailableSlots = s.substring(s.indexOf("=") + 1, s.length());
 			}
+			if (s.contains("profit")) {
+				profit = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("tickets")) {
+				tickets = s.substring(s.indexOf("=") + 1, s.length());
+			}
 		}
 
 		// String cleaned = to_clean.replaceAll(",", " / ");
@@ -1072,7 +1099,8 @@ public class CSVManager {
 				+ payingSlots + "," + occupiedPayingSlots + "," + timedSlots
 				+ "," + occupiedTimedSlots + "," + handicappedSlots + ","
 				+ occupiedHandicappedSlots + "," + totalSlots + ","
-				+ occupiedTotalSlots + "," + unavailableSlots;
+				+ occupiedTotalSlots + "," + unavailableSlots + ","
+				+ profit + "," + tickets;
 		return cleaned;
 	}
 		
@@ -1084,6 +1112,8 @@ public class CSVManager {
 		String completeVals[] = to_clean.split(",");
 		for (String s : completeVals) {
 			if (s.contains("name")) {
+				name = s.substring(s.indexOf("=") + 1, s.length());
+			} else if(s.contains("code")) {	// Case for parcometro
 				name = s.substring(s.indexOf("=") + 1, s.length());
 			}
 		}
