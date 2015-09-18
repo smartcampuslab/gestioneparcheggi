@@ -2317,6 +2317,30 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};
 	
+	// Method correctParamsFromSemicolonForMonth: used to replace the semicolon with a comma. In this case the vales are 
+	// corrected becouse in the slider the month range is 1-12 but in java is 0, 11
+	$scope.correctParamsFromSemicolonForMonth = function(value){
+		if(value != null){
+			var res = value+"";
+			if(res.indexOf(";") > -1){
+				var arr = res.split(";");
+				var val1 = parseInt(arr[0]) - 1;
+				var val2 = parseInt(arr[1]) - 1;
+				return val1 + "," + val2;
+			} else if(res.indexOf(",") > -1){
+				var arr = res.split(",");
+				var val1 = parseInt(arr[0]) - 1;
+				var val2 = parseInt(arr[1]) - 1;
+				return val1 + "," + val2;
+			} else {
+				var val = parseInt(res) - 1;
+				return val + "";
+			}
+		} else {
+			return value;
+		}
+	};
+	
 	// Method chekIfAllRange: used to control if a range is complete. In this case the range value is set to null
 	$scope.chekIfAllRange = function(arr, type){
 		var corrVal = arr;
@@ -2372,7 +2396,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(monthRange),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
 			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
@@ -2449,7 +2473,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(monthRange),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
 			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
@@ -2505,7 +2529,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(monthRange),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
 			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
@@ -2565,7 +2589,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(monthRange),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
 			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
@@ -2654,7 +2678,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(monthRange),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
 			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
@@ -2697,7 +2721,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'GET';
 		var params = {
 			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolon(monthRange),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
 			weekday: $scope.correctParamsFromSemicolon(weekRange),
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
