@@ -959,7 +959,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allAreas);
-			console.log("rateAreas retrieved from db: " + JSON.stringify(result));
+			//console.log("rateAreas retrieved from db: " + JSON.stringify(result));
 			    
 			$scope.areaWS = allAreas;
 			if(showArea){
@@ -980,7 +980,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/street", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allStreet);
-		    console.log("streets retrieved from db: " + JSON.stringify(result));
+		    //console.log("streets retrieved from db: " + JSON.stringify(result));
 		    	
 		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
 		    if(showStreets){
@@ -999,7 +999,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingmeter", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allParkingMeters);
-		  	console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
+		  	//console.log("Parking Meters retrieved from db: " + JSON.stringify(result));
 		    //$scope.addParkingMetersMarkers(allParkingMeters);
 		    	
 		    if(showPm){
@@ -1024,7 +1024,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allParkingStructures);
-		    console.log("Parking Structures retrieved from db: " + JSON.stringify(result));
+		    //console.log("Parking Structures retrieved from db: " + JSON.stringify(result));
 		 
 		    if(showPs){
 		    	for (var i = 0; i <  allParkingStructures.length; i++) {
@@ -1046,7 +1046,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allBikePoints);
-	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
+	    	//console.log("BikePoints retrieved from db: " + JSON.stringify(result));
 	    	
 	    	if(showBp){
 	    		for (var i = 0; i <  allBikePoints.length; i++) {
@@ -1070,7 +1070,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/zone", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allZones);
-			console.log("Zone retrieved from db: " + JSON.stringify(result));
+			//console.log("Zone retrieved from db: " + JSON.stringify(result));
 		    	
 			$scope.zoneWS = $scope.correctMyZones(allZones);
 		 	sharedDataService.setSharedLocalZones($scope.zoneWS);

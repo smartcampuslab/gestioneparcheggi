@@ -23,7 +23,6 @@ import it.smartcommunitylab.parking.management.web.bean.CompactStreetBean;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingLog;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
-import it.smartcommunitylab.parking.management.web.bean.ProfitLogBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
@@ -454,7 +453,7 @@ public class DynamicManager {
 					Map<String,Object> map = ModelConverter.convert(s, Map.class);
 					dl.setValue(map);
 					JSONObject tmpVal = new JSONObject(map);
-					dl.setValueString(tmpVal.toString());
+					dl.setValueString(tmpVal.toString(4));
 					logger.info(String.format("Value String: %s", tmpVal.toString()));
 					//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 					mongodb.save(dl);
@@ -732,7 +731,7 @@ public class DynamicManager {
 		Map<String,Object> map = ModelConverter.convert(p, Map.class);
 		dl.setValue(map);
 		JSONObject tmpVal = new JSONObject(map);
-		dl.setValueString(tmpVal.toString());
+		dl.setValueString(tmpVal.toString(4));
 		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 		mongodb.save(dl);
 		// Update Stat report
@@ -760,7 +759,8 @@ public class DynamicManager {
 		//entity.setLastChange(timestamp);
 		//mongodb.save(entity);
 		
-		ProfitLogBean pl = new ProfitLogBean();
+		//ProfitLogBean pl = new ProfitLogBean();
+		DataLogBean pl = new DataLogBean();
 		pl.setObjId(p.getId());
 		pl.setType(ParkStruct.class.getCanonicalName());
 		//pl.setFromTime(startTime);
@@ -790,7 +790,7 @@ public class DynamicManager {
 		Map<String,Object> map = ModelConverter.convert(p, Map.class);
 		pl.setValue(map);
 		JSONObject tmpVal = new JSONObject(map);
-		pl.setValueString(tmpVal.toString());
+		pl.setValueString(tmpVal.toString(4));
 		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 		mongodb.save(pl);
 		// Update Stat report
@@ -816,7 +816,8 @@ public class DynamicManager {
 		ParkingMeterBean entity = findParkingMeter(pmId);
 		//mongodb.save(entity);
 		
-		ProfitLogBean pl = new ProfitLogBean();
+		//ProfitLogBean pl = new ProfitLogBean();
+		DataLogBean pl = new DataLogBean();
 		pl.setObjId(pm.getId());
 		pl.setType(ParkMeter.class.getCanonicalName());
 		//pl.setFromTime(startTime);
@@ -854,7 +855,7 @@ public class DynamicManager {
 		Map<String,Object> map = ModelConverter.convert(pm, Map.class);
 		pl.setValue(map);
 		JSONObject tmpVal = new JSONObject(map);
-		pl.setValueString(tmpVal.toString());
+		pl.setValueString(tmpVal.toString(4));
 		mongodb.save(pl);
 		// Update Profit Stat report
 		//int[] total = {p.getSlotsTotal()};

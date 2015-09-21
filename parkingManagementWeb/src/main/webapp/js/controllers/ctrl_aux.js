@@ -167,6 +167,34 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	$scope.getAllLogsFromDbTP();
     };
     
+    // For parking occupancy
+	$scope.initParkLogs = function(){
+		$scope.showDetails = false;
+		//$scope.getAllParkLogsFromDbTP();
+		$scope.getAllParkLogsFromGlobalList();
+    };
+    
+    // For parking profit
+    $scope.initProfitParkLogs = function(){
+		$scope.showDetails = false;
+		//$scope.getAllParkProfitLogsFromDbTP();
+		$scope.getAllParkProfitLogsFromGlobalList();
+    };
+    
+    // For parkingmeter profit
+    $scope.initProfitParkMeterLogs = function(){
+		$scope.showDetails = false;
+		//$scope.getAllParkMeterProfitLogsFromDbTP();
+		$scope.getAllParkMeterProfitLogsFromGlobalList();
+    };
+    
+    // For street
+	$scope.initStreetLogs = function(){
+		$scope.showDetails = false;
+		//$scope.getAllStreetLogsFromDbTP();
+		$scope.getAllStreetLogsFromGlobalList();
+    };
+    
 //    $scope.countAllLogsInDb = function(){
 //		var elements = 0;
 //		var method = 'GET';
@@ -206,6 +234,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getAllLogsFromDbTP = function(){
 		$scope.globalLogs = [];
+		$scope.isLoadingLogs = true;
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", null, $scope.authHeaders, null);
@@ -233,43 +262,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				//console.log("corrLog: " + JSON.stringify(corrLog));
 				$scope.globalLogs.push(corrLog);
 			}
-			$scope.getAllProfitLogsFromDbTP();
-			//$scope.logCounts =  partialLogs.length;
-		    //$scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
-		});
-	};
-	
-	$scope.getAllProfitLogsFromDbTP = function(){
-		//$scope.globalLogs = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplogprofit/all", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			var partialLogs = result;//$scope.globalLogs.concat(result);
-			var corrLog = null;
-			for(var i = 0; i < partialLogs.length; i++){
-				corrLog = {
-					id:	partialLogs[i].id,
-					objId: partialLogs[i].objId,
-					type: partialLogs[i].type,
-					time: partialLogs[i].time,
-					logPeriod: partialLogs[i].logPeriod,
-					author: partialLogs[i].author,
-					agency: partialLogs[i].agency,
-			        deleted: partialLogs[i].deleted,
-			        year: partialLogs[i].year,
-			        month: partialLogs[i].month,
-			        week_day: partialLogs[i].week_day,
-			        timeSlot: partialLogs[i].tileSlot,
-			        holyday: partialLogs[i].holyday,
-			        isSystemLog: partialLogs[i].systemLog,
-			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
-				};
-				//console.log("corrLog: " + JSON.stringify(corrLog));
-				$scope.globalLogs.push(corrLog);
-			}	
-			$scope.logCounts =  $scope.globalLogs.length;
+			//$scope.getAllProfitLogsFromDbTP();
+			$scope.logCounts =  partialLogs.length;
 		    $scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
+		    $scope.isLoadingLogs = false;
 		});
 	};
 	
@@ -282,27 +278,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		};
 		return corrected;
 	};
-	
-	// For parking occupancy
-	$scope.initParkLogs = function(){
-		$scope.showDetails = false;
-    	//$scope.countAllParkLogsInDb();
-		$scope.getAllParkLogsFromDbTP();
-    };
-    
-    // For parking profit
-    $scope.initProfitParkLogs = function(){
-		$scope.showDetails = false;
-    	//$scope.countAllParkLogsInDb();
-		$scope.getAllParkProfitLogsFromDbTP();
-    };
-    
-    // For parkingmeter profit
-    $scope.initProfitParkMeterLogs = function(){
-		$scope.showDetails = false;
-    	//$scope.countAllParkLogsInDb();
-		$scope.getAllParkMeterProfitLogsFromDbTP();
-    };
 	
 //	$scope.countAllParkLogsInDb = function(){
 //		var elements = 0;
@@ -355,6 +330,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					objId: partialLogs[i].objId,
 					type: partialLogs[i].type,
 					time: partialLogs[i].time,
+					logPeriod : partialLogs[i].logPeriod,
 					author: partialLogs[i].author,
 					agency: partialLogs[i].agency,
 			        deleted: partialLogs[i].deleted,
@@ -389,6 +365,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					objId: partialLogs[i].objId,
 					type: partialLogs[i].type,
 					time: partialLogs[i].time,
+					logPeriod : partialLogs[i].logPeriod,
 					author: partialLogs[i].author,
 					agency: partialLogs[i].agency,
 			        deleted: partialLogs[i].deleted,
@@ -408,7 +385,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		});
 	};
 	
-	// Method getAllParkMeterProfitLogsFromDbTP: used to retrieve all the logs of type parkmeter in the profitLogBean Table
+	// Method getAllParkMeterProfitLogsFromDbTP: used to retrieve all the logs of type parkmeter in the dataLogBean Table
 	$scope.getAllParkMeterProfitLogsFromDbTP = function(){
 		$scope.pmProfitLogs = [];
 		var method = 'GET';
@@ -423,6 +400,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					objId: partialLogs[i].objId,
 					type: partialLogs[i].type,
 					time: partialLogs[i].time,
+					logPeriod : partialLogs[i].logPeriod,
 					author: partialLogs[i].author,
 					agency: partialLogs[i].agency,
 			        deleted: partialLogs[i].deleted,
@@ -441,13 +419,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
 		});
 	};
-	
-	// For street
-	$scope.initStreetLogs = function(){
-		$scope.showDetails = false;
-    	//$scope.countAllStreetLogsInDb();
-		$scope.getAllStreetLogsFromDbTP();
-    };
 	
 //	$scope.countAllStreetLogsInDb = function(){
 //		var elements = 0;
@@ -518,6 +489,54 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			$scope.logStreetCounts = partialLogs.length;
 		    $scope.logStreetCountsPage = Math.ceil($scope.logStreetCounts / $scope.maxLogs);
 		});
+	};
+	
+	// Method getAllParkLogsFromGlobalList: used to retrieve all the logs of type parking from the globalLogs list
+	$scope.getAllParkLogsFromGlobalList = function(){
+		$scope.parkLogs = [];
+		for(var i = 0; i < $scope.globalLogs.length; i++){
+			if($scope.globalLogs[i].type == "it.smartcommunitylab.parking.management.web.auxiliary.model.Parking"){
+				$scope.parkLogs.push($scope.globalLogs[i]);
+			}
+		}
+		$scope.logParkCounts = $scope.parkLogs.length;
+	    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
+	};
+	
+	// Method getAllParkMeterProfitLogsFromGlobalList: used to retrieve all the logs of type parkmeter from the globalLogs list
+	$scope.getAllParkMeterProfitLogsFromGlobalList = function(){
+		$scope.pmProfitLogs = [];
+		for(var i = 0; i < $scope.globalLogs.length; i++){
+			if($scope.globalLogs[i].type == "it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter"){
+				$scope.pmProfitLogs.push($scope.globalLogs[i]);
+			}
+		}
+		$scope.logParkCounts = $scope.pmProfitLogs.length;
+	    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
+	};
+	
+	// Method getAllParkProfitLogsFromGlobalList: used to retrieve all the logs of type parkstruct from the globalLogs list
+	$scope.getAllParkProfitLogsFromGlobalList = function(){
+		$scope.parkProfitLogs = [];
+		for(var i = 0; i < $scope.globalLogs.length; i++){
+			if($scope.globalLogs[i].type == "it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct"){
+				$scope.parkProfitLogs.push($scope.globalLogs[i]);
+			}
+		}
+		$scope.logParkCounts = $scope.parkProfitLogs.length;
+	    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
+	};
+	
+	// Method getAllStreetLogsFromGlobalList: used to retrieve all the logs of type street from the globalLogs list
+	$scope.getAllStreetLogsFromGlobalList = function(){
+		$scope.streetLogs = [];
+		for(var i = 0; i < $scope.globalLogs.length; i++){
+			if($scope.globalLogs[i].type == "it.smartcommunitylab.parking.management.web.auxiliary.model.Street"){
+				$scope.streetLogs.push($scope.globalLogs[i]);
+			}
+		}
+		$scope.logStreetCounts = $scope.streetLogs.length;
+	    $scope.logStreetCountsPage = Math.ceil($scope.logStreetCounts / $scope.maxLogs);
 	};
 	
 	$scope.viewDetails = function(type, log){

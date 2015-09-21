@@ -197,6 +197,7 @@
 		</table>
 	</div>
 	<div ng-show="!showFiltered && !showDetails">
+		<div ng-show="isLoadingLogs==false">
 		<div class="logwrapper">
 			<table class="table table-striped" style="width: 100%">
 				<tr ng-show="globalLogs.length != 0">
@@ -268,6 +269,16 @@
 				</td>
 			</tr>
 		</table>
+		</div>
+		
+		<div ng-show="isLoadingLogs==true">
+			<div class="row" style="height: 90px; margin-top: 20px">
+				<div style="text-align: center">
+					<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
+					<h3>{{ 'loading_text' | i18n }}...</h3>
+				</div>
+			</div>
+		</div>
 			
 	</div>
 </div>

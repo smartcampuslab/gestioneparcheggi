@@ -127,6 +127,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	dashboard = "active";
     	parkhome = "";
     	auxhome = "";
+    	viewingAll = "";
     	sharedDataService.setInGlobalLogPage(false);
     };
     
@@ -192,6 +193,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	dashboard = "";	// Used for dashboard
     	parkhome = "";
     	auxhome = "active";
+    	viewingAll = "";
     };
     
     $scope.isHomeAuxActive = function(){
@@ -237,6 +239,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
         editingPark = "";
         editingBike = "";
         viewingAll = "active";
+        auxhome = "";
         sharedDataService.setInGlobalLogPage(false);
     };
     
