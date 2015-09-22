@@ -240,6 +240,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
         editingBike = "";
         viewingAll = "active";
         auxhome = "";
+        dashboard = "";
         sharedDataService.setInGlobalLogPage(false);
     };
     
