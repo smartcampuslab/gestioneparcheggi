@@ -8,6 +8,8 @@ var pm = angular.module('pm', [
 	'ngSanitize',
 	'colorpicker.module',
 	'ngMap',
+	'angularFileUpload',
+	'angularAwesomeSlider',
 	
 	'pmServices',
 	'pmControllers',
@@ -87,13 +89,18 @@ pm.config(['$routeProvider', '$locationProvider',
 //    		controller: 'ViewCtrlGmap',
 //    		controllerAs: 'view_ctrl_gmap'
 //    	})
-    	.when('/aux/logs', {
+    	.when('/aux/logs/:id', {
     		templateUrl: 'partials/aux/logs.html',
     		controller: 'AuxCtrl',
     		controllerAs: 'aux_ctrl'
     	})
     	.when('/aux/add', {
     		templateUrl: 'partials/aux/add.html',
+    		controller: 'AuxCtrl',
+    		controllerAs: 'aux_ctrl'
+    	})
+    	.when('/aux/add/uploadfile/:objtype/:objperiod', {
+    		templateUrl: 'partials/aux/upload/upload_file.html',
     		controller: 'AuxCtrl',
     		controllerAs: 'aux_ctrl'
     	})

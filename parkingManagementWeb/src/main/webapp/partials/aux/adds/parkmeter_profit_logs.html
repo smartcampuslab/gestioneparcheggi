@@ -2,7 +2,16 @@
 	<form role="form" name="form" ng-init="initPmProfitLogCreation()">
 		<div class="panel panel-default" width="90%">
 		   	<div class="panel-heading">
-		    	<h3 class="panel-title"><strong>{{ 'new_log_parkingmeter' | i18n }}</strong></h3>
+		   		<table width="100%">
+		   			<tr>
+		   				<td width="50%" align="left">
+		   					<h3 class="panel-title"><strong>{{ 'new_log_parkingmeter' | i18n }}</strong></h3>
+		   				</td>
+		   				<td width="50%" align="right">
+							<a href="#/aux/add/uploadfile/4/1" class="btn btn-primary" type="button">Carica File Log</a>
+						</td>
+		   			</tr>
+		   		</table>
 		  	</div>
 		  	<div class="panel-body">
 		  		<div class="form-group">

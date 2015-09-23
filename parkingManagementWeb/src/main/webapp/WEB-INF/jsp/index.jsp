@@ -24,11 +24,12 @@
 <script src="lib/angular-awesome-slider.min.js" type="text/javascript"></script>
 <script src="lib/ng-google-chart.js"></script>
 
-<script src="js/jquery.min.js"></script>
 <script src="js/bootstrap.min.js"></script>
 <script src="lib/bootstrap-colorpicker-module.js"></script>
 <script src="lib/ui-bootstrap-tpls.min.js"></script>
 <script src="lib/angular-spinkit.min.js"></script>
+<script src="js/localize.js" type="text/javascript"></script>
+<script src="js/dialogs.min.js" type="text/javascript"></script>
 
 <script src="i18n/angular-locale_it-IT.js"></script>
 <!-- <script src="i18n/angular-locale_en-EN.js"></script> -->
@@ -47,12 +48,15 @@
 <script src="js/filters.js?1001"></script>
 <script src="js/services.js?1001"></script>
 <script src="js/directives.js"></script>
-<script src="js/localize.js" type="text/javascript"></script>
-<script src="js/dialogs.min.js" type="text/javascript"></script>
 
 <script src="lib/lodash.js"></script>
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
 <script src="lib/ng-map.min.js"></script>
+
+<script src="lib/angular-file-upload.min.js" type="text/javascript"></script>
+<script src="lib/shim.js" type="text/javascript"></script>
+<script src="lib/xls.js" type="text/javascript"></script>
+<script src="lib/angular-base64.min.js"></script>
 
 <base href="<%=request.getContextPath()%>/" />
 
@@ -402,6 +406,42 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
       padding: 5px;
       border: 1px solid #999;
     }
+    
+	.custom-file-input {
+	  color: transparent;
+	  width: 170px;
+	  height: 40px;
+	}
+	.custom-file-input::-webkit-file-upload-button {
+	  visibility: hidden;
+	}
+	.custom-file-input::before {
+	  content: 'Seleziona un file';
+	  color: black;
+	  display: inline-block;
+	  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+	  border: 1px solid #999;
+	  border-radius: 3px;
+	  padding: 8px 20px;
+	  outline: none;
+	  white-space: nowrap;
+	  -webkit-user-select: none;
+	  cursor: pointer;
+	  text-shadow: 1px 1px #fff;
+	  font-weight: 700;
+	  font-size: 12pt;
+	  width: 170px;
+	  height: 40px;
+	}
+	.custom-file-input:hover::before {
+	  border-color: black;
+	}
+	.custom-file-input:active {
+	  outline: 0;
+	}
+	.custom-file-input:active::before {
+	  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+	}    
 	
   </style>
 

@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-var pmControllers = angular.module('pmControllers', ['googlechart','angularAwesomeSlider','angular-spinkit']);
+var pmControllers = angular.module('pmControllers', ['googlechart','angular-spinkit']);//,'angular-spinkit'
 pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize',
                                 function($scope, $route, $rootScope, $filter, localize) {
 	$scope.vis = 'vis_last_value';
@@ -39,23 +39,23 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	};
 	
 	// Method resetDashboardFilter: used to clear all the filter options to the initial values. Never used
-	$scope.resetDashboardFilter = function(){
-		$scope.year = "";
-		$scope.dayOptions = {value:'wd'};
-		$scope.hourOptions = {value:'morning'};
-		var date = new Date();
-		var initialMonth = (date.getMonth() == 0 ? date.getMonth()+1 : date.getMonth());
-		var endMonth = (date.getMonth()+1);
-		$scope.monthSliderValue = "" + initialMonth +";"+endMonth + "";
-		$scope.daySliderValue = (date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
-		$scope.hourSliderValue = "10;12";
-		// set all filter elements visible
-		$scope.dashboard_filter = {
-			months : true,
-			dows : true,
-			hours : true
-		};
-	};
+//	$scope.resetDashboardFilter = function(){
+//		$scope.year = "";
+//		$scope.dayOptions = {value:'wd'};
+//		$scope.hourOptions = {value:'morning'};
+//		var date = new Date();
+//		var initialMonth = (date.getMonth() == 0 ? date.getMonth()+1 : date.getMonth());
+//		var endMonth = (date.getMonth()+1);
+//		$scope.monthSliderValue = "" + initialMonth +";"+endMonth + "";
+//		$scope.daySliderValue = (date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
+//		$scope.hourSliderValue = "10;12";
+//		// set all filter elements visible
+//		$scope.dashboard_filter = {
+//			months : true,
+//			dows : true,
+//			hours : true
+//		};
+//	};
 	
 	// Method updateFilterObject: used to set to "all" the value of months (case type == 1), day of week (case type == 2) or hours (case type == 3)
 	$scope.updateFilterObject = function(filter, type){

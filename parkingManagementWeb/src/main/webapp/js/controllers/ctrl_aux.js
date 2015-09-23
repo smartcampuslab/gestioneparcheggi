@@ -1,12 +1,77 @@
 'use strict';
 
 /* Controllers */
-var pmControllers = angular.module('pmControllers');
+var pmControllers = angular.module('pmControllers'); //, ['angularFileUpload']
 
-pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokePdfServiceProxy', 'invokeAuxWSService', 'getMyMessages', '$timeout',
-                               function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, invokeAuxWSService, getMyMessages, $timeout) { 
+pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokePdfServiceProxy', 'invokeAuxWSService', 'getMyMessages', '$timeout','FileUploader',
+                               function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, invokeAuxWSService, getMyMessages, $timeout, FileUploader) { 
 	this.$scope = $scope;
     $scope.params = $routeParams;
+    
+    // ---------------------------------- START Code for file upload ------------------------------------
+	var uploader = $scope.uploader = new FileUploader({
+		url: 'js/controllers/upload.php'
+		//url: 'upload/upload.php'   
+    });
+	//var uploader = $scope.uploader = new FileUploader();
+	
+	// FILTERS
+
+    uploader.filters.push({
+        name: 'customFilter',
+        fn: function(item /*{File|FileLikeObject}*/, options) {
+            return this.queue.length < 10;
+        }
+    });
+
+    // CALLBACKS
+
+    uploader.onWhenAddingFileFailed = function(item /*{File|FileLikeObject}*/, filter, options) {
+        console.info('onWhenAddingFileFailed', item, filter, options);
+    };
+    uploader.onAfterAddingFile = function(fileItem) {
+        console.info('onAfterAddingFile', fileItem);
+    };
+    uploader.onAfterAddingAll = function(addedFileItems) {
+        console.info('onAfterAddingAll', addedFileItems);
+    };
+    uploader.onBeforeUploadItem = function(item) {
+        console.info('onBeforeUploadItem', item);
+    };
+    uploader.onProgressItem = function(fileItem, progress) {
+        console.info('onProgressItem', fileItem, progress);
+    };
+    uploader.onProgressAll = function(progress) {
+        console.info('onProgressAll', progress);
+    };
+    uploader.onSuccessItem = function(fileItem, response, status, headers) {
+        console.info('onSuccessItem', fileItem, response, status, headers);
+    };
+    uploader.onErrorItem = function(fileItem, response, status, headers) {
+        console.info('onErrorItem', fileItem, response, status, headers);
+    };
+    uploader.onCancelItem = function(fileItem, response, status, headers) {
+        console.info('onCancelItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteItem = function(fileItem, response, status, headers) {
+        console.info('onCompleteItem', fileItem, response, status, headers);
+    };
+    uploader.onCompleteAll = function() {
+        console.info('onCompleteAll');
+    };
+
+    console.info('uploader', uploader);
+    
+    $scope.selectedFile = [];
+    $scope.uploadProgress = 0;
+    
+    $scope.onFileSelect = function ($files) {
+        $scope.uploadProgress = 0;
+        $scope.selectedFile = $files;
+    };
+    
+    // ---------------------------------- END Code for file upload ------------------------------------    
+    
     
     $scope.showDetails = false;
     $scope.showFiltered = false;
@@ -15,14 +80,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     $scope.onlyNumbers = /^\d+$/;
     $scope.decimalNumbers = /^([0-9]+)[\,]{0,1}[0-9]{0,2}$/;
     $scope.timePattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
-    
-    $scope.logtabs = [ 
-        { title:'Log generale', index: 1, content:"partials/aux/logs/global_logs.html" },
-        { title:'Log occupazione vie', index: 2, content:"partials/aux/logs/street_logs.html" },
-        { title:'Log occupazione parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html" },
-        { title:'Log ricavi parcometri', index: 4, content:"partials/aux/logs/pm_profit_logs.html" },
-        { title:'Log ricavi parcheggi', index: 5, content:"partials/aux/logs/parking_profit_logs.html" }
-    ];
     
  // ------------------ Start datetimepicker section -----------------------
     $scope.today = function() {
@@ -90,6 +147,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     };
     
     // ------------------------ End timepicker section ------------------------------
+    
+    $scope.logtabs = [ 
+        { title:'Log generale', index: 1, content:"partials/aux/logs/global_logs.html", active: true },
+        { title:'Log occupazione vie', index: 2, content:"partials/aux/logs/street_logs.html", active: false },
+        { title:'Log occupazione parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html", active: false },
+        { title:'Log ricavi parcometri', index: 4, content:"partials/aux/logs/pm_profit_logs.html", active: false },
+        { title:'Log ricavi parcheggi', index: 5, content:"partials/aux/logs/parking_profit_logs.html", active: false }
+    ];
     
     $scope.setIndex = function($index){
     	switch($index){
@@ -1173,6 +1238,143 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	}
     	return millis;
     };
+    
+    $scope.setUploadParams = function(type, period){
+    	if(type == "1"){
+    		// Case of street occupation log
+    		$scope.uploadFileType = "Log occupazione vie";
+    		switch (period){
+    			case "1":
+    				// No period
+    				$scope.uploadFilePeriod = "Valori attuali";
+    				//uploadPanelClass = "panel panel-success";
+    				break;
+    			case "2":
+    				// Months
+    				$scope.uploadFilePeriod = "Valori mensili";
+    				//uploadPanelClass = "panel panel-info";
+    				break;
+    			case "3":
+    				// Years
+    				$scope.uploadFilePeriod = "Valori annuali";
+    				//uploadPanelClass = "panel panel-warning";
+    				break;	
+    			case "4":
+    				// Dows
+    				$scope.uploadFilePeriod = "Valori giorno settimana";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;
+    			case "5":
+    				// Hours
+    				$scope.uploadFilePeriod = "Valori orari";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;	
+    		}
+    	} else if(type == "2"){
+    		// Case of ps occupation log
+    		$scope.uploadFileType = "Log occupazione strutture";
+    		switch (period){
+    			case "0":
+    				// No period
+    				$scope.uploadFilePeriod = "Valori attuali";
+    				//uploadPanelClass = "panel panel-success";
+    				break;
+    			case "1":
+    				// Months
+    				$scope.uploadFilePeriod = "Valori mensili";
+    				//uploadPanelClass = "panel panel-info";
+    				break;
+    			case "2":
+    				// Years
+    				$scope.uploadFilePeriod = "Valori annuali";
+    				//uploadPanelClass = "panel panel-warning";
+    				break;	
+    			case "3":
+    				// Dows
+    				$scope.uploadFilePeriod = "Valori giorno settimana";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;
+    			case "4":
+    				// Hours
+    				$scope.uploadFilePeriod = "Valori orari";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;	
+    		}
+    	} else if(type == "3"){
+    		// Case of ps occupation log
+    		$scope.uploadFileType = "Log incassi strutture";
+    		switch (period){
+    			case "0":
+    				// No period
+    				$scope.uploadFilePeriod = "Valori attuali";
+    				//uploadPanelClass = "panel panel-success";
+    				break;
+    			case "1":
+    				// Months
+    				$scope.uploadFilePeriod = "Valori mensili";
+    				//uploadPanelClass = "panel panel-info";
+    				break;
+    			case "2":
+    				// Years
+    				$scope.uploadFilePeriod = "Valori annuali";
+    				//uploadPanelClass = "panel panel-warning";
+    				break;	
+    			case "3":
+    				// Dows
+    				$scope.uploadFilePeriod = "Valori giorno settimana";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;
+    			case "4":
+    				// Hours
+    				$scope.uploadFilePeriod = "Valori orari";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;	
+    		}
+    	} else if(type == "4"){
+    		// Case of ps occupation log
+    		$scope.uploadFileType = "Log incassi parcometri";
+    		switch (period){
+    			case "0":
+    				// No period
+    				$scope.uploadFilePeriod = "Valori attuali";
+    				//uploadPanelClass = "panel panel-success";
+    				break;
+    			case "1":
+    				// Months
+    				$scope.uploadFilePeriod = "Valori mensili";
+    				//uploadPanelClass = "panel panel-info";
+    				break;
+    			case "2":
+    				// Years
+    				$scope.uploadFilePeriod = "Valori annuali";
+    				//uploadPanelClass = "panel panel-warning";
+    				break;	
+    			case "3":
+    				// Dows
+    				$scope.uploadFilePeriod = "Valori giorno settimana";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;
+    			case "4":
+    				// Hours
+    				$scope.uploadFilePeriod = "Valori orari";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;	
+    		}
+    	}
+    };
+    
+    $scope.initActiveLogTab = function(id){
+    	if(id > 4) id = id - 4;
+    	$scope.setIndex(id-1);
+    	for(var i = 0; i < $scope.logtabs.length; i++){
+    		if(i == (id - 1)){
+    			$scope.logtabs[i].active = true;
+    		} else {
+    			$scope.logtabs[i].active = false;
+    		}
+    	}
+    };
+    
     
     
 }]);    

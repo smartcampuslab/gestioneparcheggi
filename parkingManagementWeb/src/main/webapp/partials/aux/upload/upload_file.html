@@ -1,0 +1,440 @@
+<div ng-init="setUploadParams(params.objtype, params.objperiod)" >
+<div class="panel panel-default" >
+	<div class="panel-heading">
+   		<h3 class="panel-title"><strong>{{ uploadFileType }} - {{ uploadFilePeriod }}</strong></h3>
+	</div>
+	<div class="panel-body">
+		<table style="width: 100%">
+			<tr colspan="5" ng-show="false">
+				<td>Use Web Workers: (when available) <input type="checkbox"
+					name="useworker"><br /> Use Transferrables: (when
+					available) <input type="checkbox" name="xferable"><br />
+					Use readAsBinaryString: (when available) <input type="checkbox"
+					name="userabs" checked><br>
+					<div id="drop">Drop an XLS or XML (2003) file here to see
+						sheet data.</div>
+				</td>
+			</tr>
+			<tr>
+				<td align="left" valign="middle" colspan="5">
+					<h4>{{ uploadFileClassId }}</h4>
+				</td>
+			</tr>
+			<tr>
+				<td align="left" valign="middle" colspan="5">
+					<!-- 								<input type="file" name="attachment" class="custom-file-input" nv-file-select uploader="uploader" title="Seleziona un file" onchange="angular.element(this).scope().unlockMailButtonIF()"><br/> options="{url: 'upload/'}" ng-file-select="onFileSelect($files)" on-read-file="showContent($fileContent)" -->
+					<input type="file" name="xlfile" id="xlf" class="custom-file-input"
+					title="Seleziona un file" nv-file-select uploader="uploader" />
+				</td>
+			</tr>
+				<td align="center" valign="middle" colspan="5">
+					<hr/>
+				</td>
+			<tr>
+			</tr>
+			<tr>
+				<td align="left" valign="middle" colspan="5">
+					<table class="table" ng-show="uploader.queue!=null && uploader.queue.length > 0" style="width: 98%">
+						<thead>
+							<tr>
+								<th width="50%">Nome File</th>
+								<th ng-show="uploader.isHTML5">Dimensione</th>
+								<!-- <th ng-show="uploader.isHTML5">Progresso</th> -->
+								<th>Stato</th>
+								<th align="center">Azioni</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr ng-repeat="item in uploader.queue">
+								<td><strong>{{ item.file.name }}</strong></td>
+								<td ng-show="uploader.isHTML5" nowrap>{{
+									item.file.size/1024/1024|number:2 }} MB</td>
+								<td class="text-center"><span
+									ng-show="!item.isCancel && !item.isError"><i
+										class="glyphicon glyphicon-ok"></i></span> <span
+									ng-show="item.isCancel"><i
+										class="glyphicon glyphicon-ban-circle"></i></span> <span
+									ng-show="item.isError"><i
+										class="glyphicon glyphicon-remove"></i></span></td>
+								<td nowrap ng-show="params.objtype == 1">
+									<!-- here I have to manage all the case of upload -->
+									<a href="#/aux/log/2" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(1,0);item.remove()"
+										ng-show="params.objtype == 1 && params.objperiod == 0">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/2" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(1,1);item.remove()"
+										ng-show="params.objtype == 1 && params.objperiod == 1">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/2" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(1,2);item.remove()"
+										ng-show="params.objtype == 1 && params.objperiod == 2">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/2" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(1,3);item.remove()"
+										ng-show="params.objtype == 1 && params.objperiod == 3">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/2" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(1,4);item.remove()"
+										ng-show="params.objtype == 1 && params.objperiod == 4">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a type="button" class="btn btn-danger btn-lg" ng-click="item.remove()">
+	 								    <span class="glyphicon glyphicon-trash"></span> Rimuovi
+									</a>
+								</td>
+								<td nowrap ng-show="params.objtype == 2">
+									<!-- here I have to manage all the case of upload -->
+									<a href="#/aux/log/3" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(2,0);item.remove()"
+										ng-show="params.objtype == 2 && params.objperiod == 0">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/3" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(2,1);item.remove()"
+										ng-show="params.objtype == 2 && params.objperiod == 1">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/3" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(2,2);item.remove()"
+										ng-show="params.objtype == 2 && params.objperiod == 2">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/3" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(2,3);item.remove()"
+										ng-show="params.objtype == 2 && params.objperiod == 3">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/3" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(2,4);item.remove()"
+										ng-show="params.objtype == 2 && params.objperiod == 4">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a type="button" class="btn btn-danger btn-lg" ng-click="item.remove()">
+	 								    <span class="glyphicon glyphicon-trash"></span> Rimuovi
+									</a>
+								</td>
+								<td nowrap ng-show="params.objtype == 3">
+									<!-- here I have to manage all the case of upload -->
+									<a href="#/aux/log/4" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(3,0);item.remove()"
+										ng-show="params.objtype == 3 && params.objperiod == 0">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/4" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(3,1);item.remove()"
+										ng-show="params.objtype == 3 && params.objperiod == 1">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/4" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(3,2);item.remove()"
+										ng-show="params.objtype == 3 && params.objperiod == 2">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/4" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(3,3);item.remove()"
+										ng-show="params.objtype == 3 && params.objperiod == 3">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/4" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(3,4);item.remove()"
+										ng-show="params.objtype == 3 && params.objperiod == 4">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a type="button" class="btn btn-danger btn-lg" ng-click="item.remove()">
+	 								    <span class="glyphicon glyphicon-trash"></span> Rimuovi
+									</a>
+								</td>
+								<td nowrap ng-show="params.objtype == 4">
+									<!-- here I have to manage all the case of upload -->
+									<a href="#/aux/log/5" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(4,0);item.remove()"
+										ng-show="params.objtype == 4 && params.objperiod == 0">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/5" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(4,1);item.remove()"
+										ng-show="params.objtype == 4 && params.objperiod == 1">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/5" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(4,2);item.remove()"
+										ng-show="params.objtype == 4 && params.objperiod == 2">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/5" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(4,3);item.remove()"
+										ng-show="params.objtype == 4 && params.objperiod == 3">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a href="#/aux/log/5" type="button" class="btn btn-success btn-lg"
+										ng-click="loadLogData(4,4);item.remove()"
+										ng-show="params.objtype == 4 && params.objperiod == 4">
+										<span class="glyphicon glyphicon-upload"></span> Carica
+									</a>
+									<a type="button" class="btn btn-danger btn-lg" ng-click="item.remove()">
+	 								    <span class="glyphicon glyphicon-trash"></span> Rimuovi
+									</a>
+								</td>
+							</tr>
+						</tbody>
+					</table>
+				</td>
+			</tr>
+		</table>
+	<pre id="out" ng-model="provv_class_val" hidden>Testo...</pre>
+</div>
+
+<script>
+var X = XLS;
+var XW = {
+	/* worker message */
+	msg: 'xls',
+	/* worker scripts */
+	rABS: './xlsworker2.js',
+	norABS: './xlsworker1.js',
+	noxfer: './xlsworker.js'
+};
+
+var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
+if(!rABS) {
+	document.getElementsByName("userabs")[0].disabled = true;
+	document.getElementsByName("userabs")[0].checked = false;
+}
+
+var use_worker = typeof Worker !== 'undefined';
+if(!use_worker) {
+	document.getElementsByName("useworker")[0].disabled = true;
+	document.getElementsByName("useworker")[0].checked = false;
+}
+
+var transferable = use_worker;
+if(!transferable) {
+	document.getElementsByName("xferable")[0].disabled = true;
+	document.getElementsByName("xferable")[0].checked = false;
+}
+
+var wtf_mode = false;
+
+function fixdata(data) {
+	var o = "", l = 0, w = 10240;
+	for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint8Array(data.slice(l*w,l*w+w)));
+	o+=String.fromCharCode.apply(null, new Uint8Array(data.slice(l*w)));
+	return o;
+}
+
+function ab2str(data) {
+	var o = "", l = 0, w = 10240;
+	for(; l<data.byteLength/w; ++l) o+=String.fromCharCode.apply(null,new Uint16Array(data.slice(l*w,l*w+w)));
+	o+=String.fromCharCode.apply(null, new Uint16Array(data.slice(l*w)));
+	return o;
+}
+
+function s2ab(s) {
+	var b = new ArrayBuffer(s.length*2), v = new Uint16Array(b);
+	for (var i=0; i != s.length; ++i) v[i] = s.charCodeAt(i);
+	return [v, b];
+}
+
+function xw_noxfer(data, cb) {
+	var worker = new Worker(XW.noxfer);
+	worker.onmessage = function(e) {
+		switch(e.data.t) {
+			case 'ready': break;
+			case 'e': console.error(e.data.d); break;
+			case XW.msg: cb(JSON.parse(e.data.d)); break;
+		}
+	};
+	var arr = rABS ? data : btoa(fixdata(data));
+	worker.postMessage({d:arr,b:rABS});
+}
+
+function xw_xfer(data, cb) {
+	var worker = new Worker(rABS ? XW.rABS : XW.norABS);
+	worker.onmessage = function(e) {
+		switch(e.data.t) {
+			case 'ready': break;
+			case 'e': console.error(e.data.d); break;
+			default: xx=ab2str(e.data).replace(/\n/g,"\\n").replace(/\r/g,"\\r"); console.log("done"); cb(JSON.parse(xx)); break;
+		}
+	};
+	if(rABS) {
+		var val = s2ab(data);
+		worker.postMessage(val[1], [val[1]]);
+	} else {
+		worker.postMessage(data, [data]);
+	}
+}
+
+function xw(data, cb) {
+	transferable = document.getElementsByName("xferable")[0].checked;
+	if(transferable) xw_xfer(data, cb);
+	else xw_noxfer(data, cb);
+}
+
+function get_radio_value( radioName ) {
+	var radios = document.getElementsByName( radioName );
+	for( var i = 0; i < radios.length; i++ ) {
+		if( radios[i].checked || radios.length === 1 ) {
+			return radios[i].value;
+		}
+	}
+}
+
+function to_json(workbook) {
+	var result = {};
+	workbook.SheetNames.forEach(function(sheetName) {
+		var roa = X.utils.sheet_to_row_object_array(workbook.Sheets[sheetName]);
+		if(roa.length > 0){
+			result[sheetName] = roa;
+		}
+	});
+	return result;
+}
+
+function to_csv(workbook) {
+	var result = [];
+	workbook.SheetNames.forEach(function(sheetName) {
+		var csv = X.utils.sheet_to_csv(workbook.Sheets[sheetName]);
+		if(csv.length > 0){
+			result.push("SHEET: " + sheetName);
+			result.push("");
+			result.push(csv);
+		}
+	});
+	return result.join("\n");
+}
+
+function to_formulae(workbook) {
+	var result = [];
+	workbook.SheetNames.forEach(function(sheetName) {
+		var formulae = X.utils.get_formulae(workbook.Sheets[sheetName]);
+		if(formulae.length > 0){
+			result.push("SHEET: " + sheetName);
+			result.push("");
+			result.push(formulae.join("\n"));
+		}
+	});
+	return result.join("\n");
+}
+
+var tarea = document.getElementById('b64data');
+function b64it() {
+	if(typeof console !== 'undefined') console.log("onload", new Date());
+	var wb = X.read(tarea.value, {type: 'base64',WTF:wtf_mode});
+	process_wb(wb);
+}
+
+function process_wb(wb) {
+	if(use_worker) XLS.SSF.load_table(wb.SSF);
+	var output = "";
+	switch(get_radio_value("format")) {
+		case "json":
+		output = JSON.stringify(to_json(wb), 2, 2);
+			break;
+		case "form":
+			output = to_formulae(wb);
+			break; 
+		default:
+		output = to_csv(wb);
+	}
+	
+	if(out.innerText === undefined) out.textContent = output;
+	else out.innerText = output;
+	if(typeof console !== 'undefined') console.log("output", new Date());
+}
+
+var drop = document.getElementById('drop');
+function handleDrop(e) {
+	e.stopPropagation();
+	e.preventDefault();
+	rABS = document.getElementsByName("userabs")[0].checked;
+	use_worker = document.getElementsByName("useworker")[0].checked;
+	var files = e.dataTransfer.files;
+	var f = files[0];
+	{
+		var reader = new FileReader();
+		var name = f.name;
+		reader.onload = function(e) {
+			if(typeof console !== 'undefined') console.log("onload", new Date(), rABS, use_worker);
+			var data = e.target.result;
+			if(use_worker) {
+				xw(data, process_wb);
+			} else {
+				var wb;
+				if(rABS) {
+					wb = X.read(data, {type: 'binary'});
+				} else {
+					var arr = fixdata(data);
+					wb = X.read(btoa(arr), {type: 'base64'});
+				}
+			process_wb(wb);
+			}
+		};
+		if(rABS) reader.readAsBinaryString(f);
+		else reader.readAsArrayBuffer(f);
+	}
+}
+
+function handleDragover(e) {
+	e.stopPropagation();
+	e.preventDefault();
+	e.dataTransfer.dropEffect = 'copy';
+}
+
+if(drop.addEventListener) {
+	drop.addEventListener('dragenter', handleDragover, false);
+	drop.addEventListener('dragover', handleDragover, false);
+	drop.addEventListener('drop', handleDrop, false);
+}
+
+
+var xlf = document.getElementById('xlf');
+function handleFile(e) {
+	rABS = document.getElementsByName("userabs")[0].checked;
+	use_worker = document.getElementsByName("useworker")[0].checked;
+	var files = e.target.files;
+	var f = files[0];
+	{
+		var reader = new FileReader();
+		var name = f.name;
+		reader.onload = function(e) {
+			if(typeof console !== 'undefined') console.log("onload", new Date(), rABS, use_worker);
+			var data = e.target.result;
+			if(use_worker) {
+				xw(data, process_wb);
+			} else {
+				var wb;
+				if(rABS) {
+					wb = X.read(data, {type: 'binary'});
+				} else {
+					var arr = fixdata(data);
+					wb = X.read(btoa(arr), {type: 'base64'});
+				}
+				process_wb(wb);
+			}
+		};
+		if(rABS) reader.readAsBinaryString(f);
+		else reader.readAsArrayBuffer(f);
+	}
+}
+
+if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
+</script>
+<script type="text/javascript">
+	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-36810333-1']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();
+</script>
+</div>
+</div>
