@@ -58,7 +58,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 //	};
 	
 	// Method updateFilterObject: used to set to "all" the value of months (case type == 1), day of week (case type == 2) or hours (case type == 3)
-	$scope.updateFilterObject = function(filter, type){
+	$scope.updateFilterObject = function(filter, type, filtertype){
 		switch (type){
 			case 1: // months
 				if(filter.months){	// reverse case 
@@ -78,30 +78,30 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 				}
 				break;
 		}
-		$scope.updateSearch();
+		$scope.updateSearch(filtertype);
 	};
 	
-	$scope.updateYear = function(value){
+	$scope.updateYear = function(value, type){
 		$scope.year = value;
-		$scope.updateSearch();
+		$scope.updateSearch(type);
 	};
 	
-	$scope.updateMonth = function(value){
+	$scope.updateMonth = function(value, type){
 		$scope.monthSliderValue = value;
-		$scope.updateSearch();
+		$scope.updateSearch(type);
 	};
 	
-	$scope.updateDay = function(value){
+	$scope.updateDay = function(value, type){
 		$scope.daySliderValue = value;
-		$scope.updateSearch();
+		$scope.updateSearch(type);
 	};
 	
-	$scope.updateHour = function(value){
+	$scope.updateHour = function(value, type){
 		$scope.hourSliderValue = value;
-		$scope.updateSearch();
+		$scope.updateSearch(type);
 	};
 	
-	$scope.updateSearch = function(){
+	$scope.updateSearch = function(type){
 		$scope.loadMapsObject();
 		//$scope.alignSelectedObjects();
 		//$scope.setAllMapObjectLoaded(false);
@@ -125,7 +125,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
  	    	}	
 	    }
 	    console.log("Fascia oraria: " + $scope.hourSliderValue);
-	    if($scope.dashboard_topics == "occupation" || $scope.dashboard_topics_list == "occupation"){
+	    if((type == 1 && $scope.dashboard_topics == "occupation") || (type == 2 && $scope.dashboard_topics_list == "occupation")){
 		    switch($scope.vis){
 		    	case "vis_last_value": 
 		    		//$scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1);
@@ -151,7 +151,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    		break;
 		    	default: break;	
 		    }
-	    } else if($scope.dashboard_topics == "receipts" || $scope.dashboard_topics_list == "receipts"){
+	    } else if((type == 1 && $scope.dashboard_topics == "receipts") || (type == 2 && $scope.dashboard_topics_list == "receipts")){
 	    	switch($scope.vis){
 		    	case "vis_last_value": 
 		    		$scope.getProfitPMFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, false);
@@ -176,7 +176,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    		break;
 		    	default: break;
 	    	}
-	    } else if($scope.dashboard_topics == "timeCost" || $scope.dashboard_topics_list == "timeCost"){
+	    } else if((type == 1 && $scope.dashboard_topics == "timeCost") || (type == 2 && $scope.dashboard_topics_list == "timeCost")){
 	    	switch($scope.vis){
 	    	case "vis_last_value": 
 	    		$scope.getOccupancyStreetsUpdatesFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, $scope.streetWS, 2);
@@ -1326,6 +1326,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.hideParkingMetersMarkers = function() {
     	$scope.mapParkingMetersMarkers = []; //$scope.setAllMarkersMap($scope.parkingMetersMarkers, null, false);
     	$scope.profitParkingMetersMarkers = [];
+    	$scope.detailsOpened = false;
+    	$scope.occupancyOpened = false;
+    	$scope.profitOpened = false;
+    	$scope.timeCostOpened = false;
+    	if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
+    		$scope.parkingMetersMarkers.push($scope.mapParkingMetersSelectedMarkers[0]);
+    	}
+    	$scope.mapParkingMetersSelectedMarkers = [];
     	//$scope.refreshMap();
         //$scope.$apply();
     };
@@ -1400,7 +1408,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.occupancyOpened = false;
     	$scope.profitOpened = false;
     	$scope.timeCostOpened = false;
-    	$scope.mapStreetSelectedMarkers = [];
+    	if($scope.mapParkingStructureSelectedMarkers != null && $scope.mapParkingStructureSelectedMarkers.length > 0){
+    		$scope.parkingStructureMarkers.push($scope.mapParkingStructureSelectedMarkers[0]);
+    	}
+    	$scope.mapParkingStructureSelectedMarkers = [];
+    	//$scope.mapStreetSelectedMarkers = [];
     	//$scope.$apply();
     };
     
@@ -1688,6 +1700,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    		$scope.profitStreets = [];
 	    		$scope.timeCostStreets = [];
 	    	}
+	    	$scope.alignSelectedObjects();
     	}
     };
     
@@ -1727,6 +1740,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	for(var i = 0; i < $scope.timeCostZones.length; i++){
     		toDelZones[$scope.timeCostZones[i].id].setMap(null);		// I can access dinamically the value of the object shapes for zones
     	}
+    	$scope.alignSelectedObjects();
     };
     
     $scope.hideAllAreas = function(areas){
@@ -1747,6 +1761,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    		}
     		}
     	}
+    	$scope.alignSelectedObjects();
     };
     
     $scope.setAllMarkersMap = function(markers, map, visible, type){
@@ -2617,6 +2632,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					$scope.updateZoneProfit(isFirst);
 				}
 			}
+			//$scope.closeLoadingMap();
 		});
 	};
 	
@@ -5338,7 +5354,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   		  "data": [],
   		  "options": {
   		    "displayExactValues": true,
-  		    "width": "100%",
+  		    "width": "180px",
   		    "height": "100%",
   		    "is3D": true,
   		    "legend": {
@@ -5442,7 +5458,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	"data": [],
     	"options": {
     	    "displayExactValues": true,
-    	    "width": "100%",
+    	    "width": "180px",
     	    "height": "100%",
     	    "is3D": true,
     	    "legend": {
@@ -5473,7 +5489,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         "data": [],
         "options": {
             "displayExactValues": true,
-            "width": "100%",
+            "width": "180px",
             "height": "100%",
             "is3D": true,
             "legend": {
@@ -5582,7 +5598,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         	"data": [],
         	"options": {
         	    "displayExactValues": true,
-        	    "width": "100%",
+        	    "width": "180px",
         	    "height": "100%",
         	    "is3D": true,
         	    "legend": {
@@ -5630,7 +5646,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         "data": [],
         "options": {
             "displayExactValues": true,
-            "width": "100%",
+            "width": "180px",
             "height": "100%",
             "is3D": true,
             "legend": {

@@ -612,7 +612,8 @@
 						<td align="right">
 							<button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)">
 								<i class="glyphicon glyphicon-remove"></i>
-							</button></td>
+							</button>
+						</td>
 					</tr>
 				</table>
 			</div>
@@ -707,14 +708,15 @@
 				<div google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.slotOccupied)" />
 			</div>
 			<div ng-show="isStreetDetShow()">
-				<table width="100%">
+				<table width="98%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'street_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
 					</tr>
-				</table>	
-				<table width="100%">	
+				</table>
+				<br>	
+				<table width="98%">	
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
@@ -738,7 +740,7 @@
 					</tr>
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
-							<div google-chart chart="chartStreetOccupancy" style="" />
+<!-- 							<div google-chart chart="chartStreetOccupancy" style="" /> -->
 						</td>
 					</tr>
 					<tr>
@@ -753,8 +755,8 @@
 						<td class="detailsTableSX">{{ 'street_freepark_slot_signed_db' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-						<span ng-show="sDetails.data.freeParkSlotSignFree > 0">{{ sDetails.data.freeParkSlotSignFree }}</span>
-						<span ng-show="sDetails.data.freeParkSlotSignFree == 0">{{ sDetails.data.freeParkSlotFree }}</span>
+							<span ng-show="sDetails.data.freeParkSlotSignFree > 0">{{ sDetails.data.freeParkSlotSignFree }}</span>
+							<span ng-show="sDetails.data.freeParkSlotSignFree == 0">{{ sDetails.data.freeParkSlotFree }}</span>
 						</td>
 					</tr>
 					<tr>
@@ -948,7 +950,7 @@
 						<td class="detailsTableSX">{{ 'pm_tickets' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-if="pmDetails.data.tickets != -1">{{	pmDetails.data.tickets }}</span>
+							<span ng-if="pmDetails.data.tickets != -1">{{ pmDetails.data.tickets }}</span>
 							<span ng-if="pmDetails.data.tickets == -1">n.p.</span>
 						</td>
 					</tr>
@@ -1008,7 +1010,8 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ sDetails.data.streetReference }}</td>
 					</tr>
-				</table>	
+				</table>
+				<br>	
 				<table width="100%">	
 					<tr ng-show="s_pms.visible">
 						<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
@@ -1160,12 +1163,13 @@
 						<td align="right">
 							<button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetails(theme)">
 								<i class="glyphicon glyphicon-remove"></i>
-							</button></td>
+							</button>
+						</td>
 					</tr>
 				</table>
 			</div>
 			<div ng-show="isPSDetShow()">
-				<table width="100%">
+				<table width="99%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'ps_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
@@ -1182,7 +1186,7 @@
 						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
 					</tr>
 				</table>
-				<table>			
+				<table width="99%">			
 					<tr ng-show="pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
@@ -1235,8 +1239,8 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">&nbsp;{{ sDetails.data.streetReference }}</td>
 					</tr>
-				</table>	
-				<table>	
+				</table>
+				<table width="100%">	
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
@@ -1260,7 +1264,7 @@
 					</tr>
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
-							<div google-chart chart="chartStreetOccupancy" style="" />
+<!-- 							<div google-chart chart="chartStreetOccupancy" style="" /> -->
 						</td>
 					</tr>
 					<tr>
@@ -1283,14 +1287,14 @@
 				</table>
 			</div>
 			<div ng-show="isZoneDetShow()">
-				<table width="100%">
+				<table width="99%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
 					</tr>
 				</table>	
-				<table>	
+				<table width="99%">	
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
@@ -1329,14 +1333,14 @@
 				</table>
 			</div>
 			<div ng-show="isAreaDetShow()">
-				<table width="100%">
+				<table width="99%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'area_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ aDetails.data.name }}</td>
 					</tr>
 				</table>	
-				<table>	
+				<table width="99%">	
 					<tr ng-show="a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
