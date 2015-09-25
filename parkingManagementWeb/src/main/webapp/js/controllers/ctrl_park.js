@@ -421,6 +421,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	if(tab.index == 3){
        		//$scope.resizeMap();
        		$scope.getParkingMetersFromDb();
+       		// I load the streets if there are no streets loaded
+       		if($scope.streetWS == null || $scope.streetWS.length == 0){
+	    		$scope.getStreetsFromDb();
+	    	}
        	}
        	if(tab.index == 4){
        		//$scope.resizeMap();
@@ -2644,15 +2648,64 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	$scope.updateStreetPM = function(street){
+		var id = street.id;
+		var appId = sharedDataService.getConfAppId();
+		var method = 'PUT';
+		
+		var data = {
+			id: street.id,
+			id_app: street.id_app,
+			streetReference: street.streetReference,
+			slotNumber: street.slotNumber,
+			handicappedSlotNumber: street.handicappedSlotNumber,
+			reservedSlotNumber: street.reservedSlotNumber,
+			timedParkSlotNumber:street.timedParkSlotNumber,
+			paidSlotNumber: street.paidSlotNumber,
+			freeParkSlotNumber: street.freeParkSlotNumber,
+			freeParkSlotSignNumber: street.freeParkSlotSignNumber,
+			unusuableSlotNumber: street.unusuableSlotNumber,
+			subscritionAllowedPark: street.subscritionAllowedPark,
+			color: street.color,
+			rateAreaId: street.rateAreaId,
+			zones: street.zones,
+			parkingMeters: street.parkingMeters,
+			geometry: street.geometry
+			//geometry: $scope.correctMyGeometryPolyline(polyline.path)
+		};
+		
+	    var value = JSON.stringify(data);
+	    if($scope.showLog) console.log("Street data : " + value);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Updated street: " + result);
+	    	if(result != null){ // == "OK"){
+	    		$scope.getStreetsFromDb();
+	    	}	
+	    });	
+	};
+	
 	var showPMErrorCode = false;
 	
 	$scope.isPMErrorCodeShowed = function(){
 		return showPMErrorCode;
 	};
 	
+	var isPMCodeUpdated = false;
+	var oldCode = "";
+	
+	$scope.saveActualCodeValue = function(old_code){
+		if(oldCode == ""){
+			oldCode = old_code;
+		}
+	};
+	
 	// Method checkIfAlreadyExist: used to check i a pm code is already used
 	$scope.checkIfAlreadyExist = function(pm_code){
 		var found = false;
+		isPMCodeUpdated = false;
 		if(!$scope.isEditing){
 			for(var i = 0; ((i < $scope.pmeterWS.length) && !found); i++){
 				if($scope.pmeterWS[i].code == pm_code){
@@ -2672,6 +2725,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			showPMErrorCode = true;
 		} else {
 			showPMErrorCode = false;
+			isPMCodeUpdated = true;
 		}
 	};
 	
@@ -2712,6 +2766,22 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    		$scope.editModePM = true;
 		    		$scope.showUpdatingErrorMessage = true;
 		    	}
+		    	
+		    	if(isPMCodeUpdated){
+			    	// Case of update of code: I have to align the street
+				    for(var i = 0; i < $scope.streetWS.length; i++){
+				    	if($scope.streetWS[i].parkingMeters != null && $scope.streetWS[i].parkingMeters.length > 0){
+				    		for(var p = 0; p < $scope.streetWS[i].parkingMeters.length; p++){
+				    			if($scope.streetWS[i].parkingMeters[p] == oldCode){
+				    				$scope.streetWS[i].parkingMeters[p] = pm.code;	// Update the pm code in street pm list
+				    				$scope.updateStreetPM($scope.streetWS[i]);
+				    			}
+				    		}
+				    	}
+				    }
+				    oldCode = "";	// clear the code of the pm
+			    }
+		    	
 		    });
 		}
 	};
@@ -3134,8 +3204,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted parkingmeter: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
+	    		// Here I have to remove the pmCode from the street
+	    		for(var i = 0; i < $scope.streetWS.length; i++){
+			    	if($scope.streetWS[i].parkingMeters != null && $scope.streetWS[i].parkingMeters.length > 0){
+			    		for(var p = 0; p < $scope.streetWS[i].parkingMeters.length; p++){
+			    			if($scope.streetWS[i].parkingMeters[p] == pMeter.code){
+			    				$scope.streetWS[i].parkingMeters.splice(p,1);
+			    				$scope.updateStreetPM($scope.streetWS[i]);
+			    			}
+			    		}
+			    	}
+			    }
 	    		$scope.getParkingMetersFromDb();
-	    		//$scope.editModeA = false;
 	    	} else {
 	    		//$scope.editModeA = true;
 	    		$scope.showDeletingPMErrorMessage = true;
@@ -3180,8 +3260,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted zone: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
+	    		// Here I have to remove the zone id from the street
+	    		for(var i = 0; i < $scope.streetWS.length; i++){
+			    	if($scope.streetWS[i].zones != null && $scope.streetWS[i].zones.length > 0){
+			    		for(var z = 0; z < $scope.streetWS[i].zones.length; z++){
+			    			if($scope.streetWS[i].zones[z] == zone.id){
+			    				$scope.streetWS[i].zones.splice(z,1);
+			    				$scope.updateStreetPM($scope.streetWS[i]);
+			    			}
+			    		}
+			    	}
+			    }
 	    		$scope.getZonesFromDb();
-	    		//$scope.editModeA = false;
 	    	} else {
 	    		//$scope.editModeA = true;
 	    		$scope.showDeletingZErrorMessage = true;

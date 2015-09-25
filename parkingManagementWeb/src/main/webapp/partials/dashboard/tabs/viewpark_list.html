@@ -1295,7 +1295,7 @@
 						        	<td class="detailsListTableDXS">{{ sDetails.streetReference }}</td>
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
-						        <tr>
+						        <tr ng-show="sDetails.myPms != null && sDetails.myPms.length > 0">
 									<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'street_pm' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
@@ -1311,12 +1311,12 @@
 <!-- 							        </td> -->
 <!-- 							        <td class="detailsListTableCXS"></td> -->
 <!-- 							    </tr> -->
-						        <tr ng-show="s_zones.visible">
+						        <tr ng-show="s_zones.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
 						        	<td class="detailsListTableCXS"></td>
 									<td colspan="3" align="left"><strong>{{ 'street_zone' | i18n }}</strong></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="s_zones.visible">
+								<tr ng-show="s_zones.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
 									<td class="detailsListTableCXS"></td>
 									<td colspan="3">
 										<table width="100%" ng-repeat="z in sDetails.myZones track by z.id">

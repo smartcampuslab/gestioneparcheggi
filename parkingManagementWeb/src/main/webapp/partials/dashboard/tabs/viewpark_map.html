@@ -428,22 +428,22 @@
 					</tr>
 				</table>	
 				<table width="100%">	
-					<tr ng-show="s_pms.visible">
+					<tr ng-show="s_pms.visible && (sDetails.pms != null && sDetails.pms.length > 0)">
 						<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
 							<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code }};</span>
 						</td>
 					</tr>
-					<tr ng-show="s_zones.visible">
+					<tr ng-show="s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="s_zones.visible">
+					<tr ng-show="s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
 						<td colspan="3" class="detailsTableColSpan">{{ 'street_zone' | i18n }}</td>
 					</tr>
-					<tr ng-show="s_zones.visible">
+					<tr ng-show="s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
 						<td colspan="3">
 							<table width="100%" ng-repeat="z in sDetails.zones track by z.id">
 								<tr>
