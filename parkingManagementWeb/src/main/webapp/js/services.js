@@ -104,6 +104,48 @@ pm.service('sharedDataService', function(){
          {occupancy:  90, difficulty_level: 'Very High', extratime_estimation_min: 3, extratime_estimation_max: 10},
          {occupancy:  100, difficulty_level: 'Impossible', extratime_estimation_min: 5, extratime_estimation_max: 15},
     ];
+  
+    // Shared filter fields and mothods
+    this.filter_year;
+    this.filter_month;
+    this.filter_dowType;
+    this.filter_dowVal;
+    this.filter_hour;
+    
+    this.setFilterYear = function(value){
+    	this.filter_year = value;
+    };
+    this.getFilterYear = function(){
+    	return this.filter_year;
+    };
+    
+    this.setFilterMonth = function(value){
+        this.filter_month = value;
+    };
+    this.getFilterMonth = function(){
+    	return this.filter_month;
+    };
+    
+    this.setFilterDowType = function(value){
+        this.filter_dowType = value;
+    };
+    this.getFilterDowType = function(){
+    	return this.filter_dowType;
+    };
+    
+    this.setFilterDowVal = function(value){
+        this.filter_dowVal = value;
+    };
+    this.getFilterDowVal = function(){
+    	return this.filter_dowVal;
+    };
+    
+    this.setFilterHour = function(value){
+        this.filter_hour = value;
+    };
+    this.getFilterHour = function(){
+    	return this.filter_hour;
+    };
     
     this.setExtratimeWait = function(value){
     	this.extratime_wait = value;

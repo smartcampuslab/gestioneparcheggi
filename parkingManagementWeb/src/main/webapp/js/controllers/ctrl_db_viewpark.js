@@ -2,8 +2,8 @@
 
 /* Controllers */
 var pmControllers = angular.module('pmControllers', ['googlechart','angular-spinkit']);//,'angular-spinkit'
-pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize',
-                                function($scope, $route, $rootScope, $filter, localize) {
+pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize', 'sharedDataService',
+                                function($scope, $route, $rootScope, $filter, localize, sharedDataService) {
 	$scope.vis = 'vis_last_value';
 	$scope.visOptions = ['vis_last_value','vis_medium', 'vis_medium_year', 'vis_medium_month', 'vis_medium_day'];
 	var date = new Date();
@@ -125,6 +125,13 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
  	    	}	
 	    }
 	    console.log("Fascia oraria: " + $scope.hourSliderValue);
+	    //--------------- Shared filter params ----------------
+	    sharedDataService.setFilterYear($scope.year);
+	    sharedDataService.setFilterMonth($scope.monthSliderValue);
+	    sharedDataService.setFilterDowType($scope.dayOptions.value);
+	    sharedDataService.setFilterDowVal($scope.daySliderValue);
+	    sharedDataService.setFilterHour($scope.hourSliderValue);
+	    //-----------------------------------------------------
 	    if((type == 1 && $scope.dashboard_topics == "occupation") || (type == 2 && $scope.dashboard_topics_list == "occupation")){
 		    switch($scope.vis){
 		    	case "vis_last_value": 
@@ -3975,6 +3982,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};	
 	
 	$scope.showOccupancyInList = function(object, type){
+		$scope.showReportComparation = false;
+		$scope.showCreatedCmpReport = false;
 		switch(type){
 			case 1:
 				$scope.showPMDet();
@@ -5354,7 +5363,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   		  "data": [],
   		  "options": {
   		    "displayExactValues": true,
-  		    "width": "180px",
+  		    "width": "100%",
   		    "height": "100%",
   		    "is3D": true,
   		    "legend": {
@@ -5458,7 +5467,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	"data": [],
     	"options": {
     	    "displayExactValues": true,
-    	    "width": "180px",
+    	    "width": "100%",
     	    "height": "100%",
     	    "is3D": true,
     	    "legend": {
@@ -5489,7 +5498,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         "data": [],
         "options": {
             "displayExactValues": true,
-            "width": "180px",
+            "width": "100%",
             "height": "100%",
             "is3D": true,
             "legend": {
@@ -5598,7 +5607,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         	"data": [],
         	"options": {
         	    "displayExactValues": true,
-        	    "width": "180px",
+        	    "width": "100%",
         	    "height": "100%",
         	    "is3D": true,
         	    "legend": {
@@ -5646,7 +5655,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         "data": [],
         "options": {
             "displayExactValues": true,
-            "width": "180px",
+            "width": "100%",
             "height": "100%",
             "is3D": true,
             "legend": {
@@ -5992,4 +6001,91 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	// -------------------------------------------- End of block for time cost CSV creation -----------------------------------------
     
+	// --------------------------------------------- New block for report compare creation ------------------------------------------
+	
+	$scope.showReportComparation = false;
+	$scope.showCreatedCmpReport = false;
+	//$scope.verticalCompData = "";
+	//$scope.orizontalCompData = "";
+	$scope.lockOrizontalValSelect = true;
+	$scope.isCompInit = true;
+	$scope.matrixOcc = [];
+	
+	// list for vertical and orizontal value;
+	$scope.allCmpVal = [
+	    {cod:"1", val:"Anni"},
+	    {cod:"2", val:"Mesi"},
+	    {cod:"3", val:"Giorni settimana"},
+	    {cod:"4", val:"Ore"}
+	];
+	
+	$scope.filteredCmpVal = [];
+	
+	$scope.updateOrizzSelect = function(){
+		angular.copy($scope.allCmpVal, $scope.filteredCmpVal);
+		for(var i = 0; i < $scope.allCmpVal.length; i++){
+			if($scope.verticalCompData == $scope.allCmpVal[i].cod){
+				$scope.filteredCmpVal.splice(i, 1);
+			}
+		}
+		$scope.lockOrizontalValSelect = false;
+	};
+	
+	$scope.createReportCompare = function(){
+		$scope.showReportComparation = true;
+		$scope.lockOrizontalValSelect = true;
+		$scope.showCreatedCmpReport = false;
+		$scope.isCompInit = true;
+	};
+	
+	$scope.showReportCompare = function(form, verticalData, orizontalData){
+		$scope.showReportComparation = false;
+		$scope.showCreatedCmpReport = true;
+		if(form.$invalid){
+			$scope.isCompInit = false;
+		} else {
+			//--------------- Shared filter params ----------------
+			var year = sharedDataService.getFilterYear();
+			var month = sharedDataService.getFilterMonth();
+			var dowType = sharedDataService.getFilterDowType();
+			var dowVal = sharedDataService.getFilterDowVal();
+			var hour = sharedDataService.getFilterHour();
+			//-----------------------------------------------------
+			
+			// Here I have to create the historycal data
+			$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalData, orizontalData, year, month, dowVal, dowType, hour, 1);
+		}
+	};
+	
+	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
+	$scope.getHistorycalOccupancyStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
+		$scope.streetMapReady = false;
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: $scope.correctParamsFromSemicolon(year),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: $scope.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			noCache: new Date().getTime()
+		};
+		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
+		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streetcompare/" + id, params, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+		    angular.copy(result, $scope.matrixOcc);
+		    console.log("street occupancy retrieved from db: " + JSON.stringify(result));
+		});
+	};
+	
+	// -------------------------------------------- End of block for report compare creation -----------------------------------------
 }]);

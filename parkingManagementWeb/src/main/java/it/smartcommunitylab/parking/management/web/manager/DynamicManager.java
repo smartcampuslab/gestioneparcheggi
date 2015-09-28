@@ -44,6 +44,7 @@ import it.smartcommunitylab.parking.management.web.repository.StatRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -68,6 +69,12 @@ public class DynamicManager {
 	
 	private static final String profit = "@profit";
 	private static final String tickets = "@tickets";
+	
+	// Constants for comparation
+	private static final int YEAR_VALS = 5;
+	private static final int MONTH_VALS = 12;
+	private static final int DOW_VALS = 7;
+	private static final int HOUR_VALS = 24;
 
 	@Autowired
 	private MongoTemplate mongodb;
@@ -1140,6 +1147,166 @@ public class DynamicManager {
 		s.setOccupancyRate(occRate);
 		
 		return s;
+	}
+	
+	public String[][] getHistorycalOccupationRateFromStreet(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+		//StreetBean s = findStreet(objectId);
+		String sId = getCorrectId(objectId, "street", appId);
+		String[][] occMatrix = null;
+		String matrixType = "";
+		
+		switch(verticalVal){
+			case 1: 
+				// Year
+				switch(orizontalVal){
+				case 1: 
+					// Year
+					break;
+				case 2: 
+					// Month
+					occMatrix = new String[YEAR_VALS][MONTH_VALS];
+					break;
+				case 3: 
+					// DayOfWeek
+					occMatrix = new String[YEAR_VALS][DOW_VALS];
+					break;
+				case 4: 
+					// Hours
+					occMatrix = new String[YEAR_VALS][HOUR_VALS];
+					break;
+				}
+				break;
+			case 2: 
+				// Month
+				switch(orizontalVal){
+				case 1: 
+					// Year
+					occMatrix = new String[MONTH_VALS][YEAR_VALS];
+					break;
+				case 2: 
+					// Month
+					break;
+				case 3: 
+					// DayOfWeek
+					occMatrix = new String[MONTH_VALS][DOW_VALS];
+					break;
+				case 4: 
+					// Hours
+					occMatrix = new String[MONTH_VALS][HOUR_VALS];
+					break;
+				}
+				break;
+			case 3: 
+				// DayOfWeek
+				switch(orizontalVal){
+				case 1: 
+					// Year
+					occMatrix = new String[DOW_VALS][YEAR_VALS];
+					break;
+				case 2: 
+					// Month
+					occMatrix = new String[DOW_VALS][MONTH_VALS];
+					break;
+				case 3: 
+					// DayOfWeek
+					break;
+				case 4: 
+					// Hours
+					occMatrix = new String[DOW_VALS][HOUR_VALS];
+					break;
+				}
+				break;
+			case 4: 
+				// Hours
+				switch(orizontalVal){
+				case 1: 
+					// Year
+					occMatrix = new String[HOUR_VALS][YEAR_VALS];
+					break;
+				case 2: 
+					// Month
+					occMatrix = new String[HOUR_VALS][MONTH_VALS];
+					break;
+				case 3: 
+					// DayOfWeek
+					occMatrix = new String[HOUR_VALS][DOW_VALS];
+					break;
+				case 4: 
+					// Hours
+					break;
+				}
+				break;
+		}
+		matrixType = "" + verticalVal + "" + orizontalVal;
+		Calendar tmp = Calendar.getInstance();
+		int year = tmp.get(Calendar.YEAR);
+		
+		if(matrixType.compareTo("12") == 0){
+			// case years-months
+			for(int i = 0; i < occMatrix.length; i++){
+				for(int j = 0; j < occMatrix[i].length; j++){
+					byte[] b_month = {(byte)j};
+					int[] i_year = {(year-i)};
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+				}
+			}
+		} else if(matrixType.compareTo("13") == 0){
+			// case years-dows
+			for(int i = 0; i < occMatrix.length; i++){
+				for(int j = 0; j < occMatrix[i].length; j++){
+					byte[] b_dows = {(byte)(j + 1)};
+					int[] i_year = {(year-i)};
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+				}
+			}
+		} else if(matrixType.compareTo("14") == 0){
+			// case years-hours
+			for(int i = 0; i < occMatrix.length; i++){
+				for(int j = 0; j < occMatrix[i].length; j++){
+					byte[] b_hour = {(byte)(j)};
+					int[] i_year = {(year-i)};
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+				}
+			}
+		} else if(matrixType.compareTo("21") == 0){
+			// case months-years
+			for(int i = 0; i < occMatrix.length; i++){
+				for(int j = 0; j < occMatrix[i].length; j++){
+					byte[] b_month = {(byte)i};
+					int[] i_year = {(year - j)};
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+				}
+			}
+		} else if(matrixType.compareTo("23") == 0){
+			// case months-dows
+			for(int i = 0; i < occMatrix.length; i++){
+				for(int j = 0; j < occMatrix[i].length; j++){
+					byte[] b_month = {(byte)i};
+					byte[] b_dows = {(byte)(j + 1)};
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+				}
+			}
+		} else if(matrixType.compareTo("24") == 0){
+			// case months-hours
+			for(int i = 0; i < occMatrix.length; i++){
+				for(int j = 0; j < occMatrix[i].length; j++){
+					byte[] b_month = {(byte)i};
+					byte[] b_hour = {(byte)(j)};
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+				}
+			}
+		}
+		
+		
+//		double occRate = 0;
+//		if(valueType == 1){
+//			occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+//		} else {
+//			occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+//		}
+//		s.setOccupancyRate(occRate);
+		
+		return occMatrix;
 	}
 	
 	public ParkingStructureBean getOccupationRateFromParking(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){

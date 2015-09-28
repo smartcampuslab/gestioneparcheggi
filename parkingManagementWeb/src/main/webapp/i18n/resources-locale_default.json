@@ -1683,6 +1683,34 @@
 	"value": "Data di inizio o di fine periodo mancante. Inserire entrambi i valori per continuare.",
 	"description": "Messaggio errore periodo data da o data a mancanti in inserimento log"
 }, { 
+	"key": "cmp_report_creation_button", 
+	"value": "Confronta Valori",
+	"description": "Testo pulsante per creazione report di comparazione in lista dati"
+}, { 
+	"key": "cmp_report_creation_panel", 
+	"value": "Costruzione report di confronto",
+	"description": "Titolo pannello per creazione report di comparazione in lista dati"
+}, { 
+	"key": "vertical_compare_values", 
+	"value": "Valori verticali",
+	"description": "Label select valori verticali per creazione report di comparazione in lista dati"
+}, { 
+	"key": "orizontal_compare_values", 
+	"value": "Valori orizzontali",
+	"description": "Label select valori orizzontali per creazione report di comparazione in lista dati"
+}, { 
+	"key": "vertical_data_select_err_required", 
+	"value": "Errore in creazione report di confronto: selezione obbligatoria per campo 'valori verticali'",
+	"description": "Testo errore in creazione report di comparazione: campo valori verticali obbligatorio"
+}, { 
+	"key": "orizontal_data_select_err_required", 
+	"value": "Errore in creazione report di confronto: selezione obbligatoria per campo 'valori orizzontali'",
+	"description": "Testo errore in creazione report di comparazione: campo valori orizzontali obbligatorio"
+}, { 
+	"key": "create_comparation_report_btn", 
+	"value": "Crea Report",
+	"description": "Testo pulsate creazione nuovo report di confronto"
+}, { 
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {

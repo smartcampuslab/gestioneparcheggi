@@ -1720,7 +1720,7 @@
 <!-- 				</table> -->		
 			</div>
 			<div ng-show="isStreetDetShow()">
-				<table width="100%">
+				<table width="100%"  ng-show="!showReportComparation && !showCreatedCmpReport">
 					<tr valign="top">
 						<td width="33%">
 							<table width="100%">
@@ -1855,7 +1855,75 @@
 						    <div google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/>
 						</td>
 					</tr>
-				</table>										
+				</table>
+				<table width="100%" ng-show="!showReportComparation && !showCreatedCmpReport">
+					<tr>
+						<td colspan="3">
+							<hr/>
+						</td>
+					</tr>
+					<tr>
+						<td width="33%"></td>
+						<td width="34%"></td>
+						<td width="33%" align="right">
+							<button type="button" class="btn btn-primary" ng-click="createReportCompare()">{{ 'cmp_report_creation_button' | i18n }}</button>
+						</td>
+					</tr>
+				</table>
+				<div class="panel panel-default" ng-show="showReportComparation">
+				 <div class="panel-heading">{{ 'cmp_report_creation_panel' | i18n }}</div>
+				 	<form role="form" name="form">
+						  <div class="panel-body">
+						    <table width="100%">
+						    	<tr>
+						    		<td width="47%">
+						    			<div class="form-group">
+									    	<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
+									    	<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in allCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect()">
+									    	</select>
+									   		<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
+										</div>
+						    		</td>
+						    		<td width="5%"></td>
+						    		<td width="48%">
+						    			<div class="form-group">
+									    	<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
+									    	<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-disabled="lockOrizontalValSelect" ng-options="f.cod as f.val for f in filteredCmpVal" ng-model="orizontalCompData" required>
+									    	</select>
+									   		<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
+										</div>
+						    		</td>
+						    	</tr>
+						    	<tr>
+						    		<td colspan="3" align="right">
+						    			<button type="button" class="btn btn-primary" ng-click="showReportCompare(form, verticalCompData, orizontalCompData)">{{ 'create_comparation_report_btn' | i18n }}</button>
+						    		</td>
+						    	</tr>
+						    </table>
+						  </div>
+					</form>
+				</div>
+				<div ng-show="showCreatedCmpReport">
+					<table width="100%">
+						<tbody class="animate-repeat" ng-repeat="rows in matrixOcc">
+						<tr>
+							<td ng-repeat="col in rows track by $index">
+								{{ col }}
+							</td>
+						</tr>
+					</table>
+					<table width="100%">
+						<tr>
+							<td width="33%"></td>
+							<td width="34%"></td>
+							<td width="33%" align="right">
+								<button type="button" class="btn btn-primary" ng-click="createReportCompare()">{{ 'text_btn_close' | i18n }}</button>
+								&nbsp;&nbsp;
+								<a href class="btn btn-success" target="_blank" ng-click="getStructureTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+							</td>
+						</tr>
+					</table>
+				</div>									
 <!-- 						        		<tr> -->
 <!-- 						        			<td colspan="3" class="detailsTableColSpan"> -->
 <!-- 						        				<hr/> -->
