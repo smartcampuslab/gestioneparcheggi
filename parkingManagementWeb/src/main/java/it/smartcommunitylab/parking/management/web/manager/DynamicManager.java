@@ -71,10 +71,13 @@ public class DynamicManager {
 	private static final String tickets = "@tickets";
 	
 	// Constants for comparation
-	private static final int YEAR_VALS = 5;
-	private static final int MONTH_VALS = 12;
-	private static final int DOW_VALS = 7;
-	private static final int HOUR_VALS = 24;
+	private static final int YEAR_VALS = 6;
+	private static final int MONTH_VALS = 13;
+	private static final int DOW_VALS = 8;
+	private static final int HOUR_VALS = 25;
+	private static final String[] MONTHS_LABEL = {"Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"};
+	private static final String[] DOWS_LABEL = {"Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"};
+	private static final String[] HOURS_LABEL = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
 
 	@Autowired
 	private MongoTemplate mongodb;
@@ -1149,9 +1152,21 @@ public class DynamicManager {
 		return s;
 	}
 	
-	public String[][] getHistorycalOccupationRateFromStreet(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+	public String[][] getHistorycalDataFromObject(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
 		//StreetBean s = findStreet(objectId);
-		String sId = getCorrectId(objectId, "street", appId);
+		String sId = "";
+		String psOccId = "";
+		String psProfId = "";
+		String pmId = "";
+		if(objType == 1){
+			pmId = getCorrectId(objectId, "parkingmeter", appId);
+		} else if(objType == 2){
+			psOccId = getCorrectId(objectId, "parking", appId);
+		} else if(objType == 3){
+			psProfId = getCorrectId(objectId, "parkstruct", appId);
+		} else if(objType == 4){
+			sId = getCorrectId(objectId, "street", appId);
+		}
 		String[][] occMatrix = null;
 		String matrixType = "";
 		
@@ -1243,56 +1258,241 @@ public class DynamicManager {
 		
 		if(matrixType.compareTo("12") == 0){
 			// case years-months
-			for(int i = 0; i < occMatrix.length; i++){
-				for(int j = 0; j < occMatrix[i].length; j++){
-					byte[] b_month = {(byte)j};
-					int[] i_year = {(year-i)};
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+			occMatrix[0][0] = "Anno/Mese";
+			for(int x = 0; x < MONTHS_LABEL.length; x++){
+				occMatrix[0][x + 1] = MONTHS_LABEL[x];
+			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = (year - (i - 1)) + "";
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_month = {(byte)(j - 1)};
+					int[] i_year = {(year-(i - 1))}; 
+					if(objType == 1){
+						occMatrix[i][j] = "" + getLastProfitFromObject(pmId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getLastProfitFromObject(pmId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
+					} else if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+					}
 				}
 			}
 		} else if(matrixType.compareTo("13") == 0){
 			// case years-dows
-			for(int i = 0; i < occMatrix.length; i++){
-				for(int j = 0; j < occMatrix[i].length; j++){
+			occMatrix[0][0] = "Anno/Settimana";
+			for(int x = 0; x < DOWS_LABEL.length; x++){
+				occMatrix[0][x + 1] = DOWS_LABEL[x];
+			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = (year - (i - 1)) + "";
+				int[] i_year = {(year-(i - 1))};
+				for(int j = 1; j < occMatrix[i].length-1; j++){
 					byte[] b_dows = {(byte)(j + 1)};
-					int[] i_year = {(year-i)};
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					if(objType == 1){
+						occMatrix[i][j] = "" + getLastProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getLastProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+					} else if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					}
+				}
+				byte[] b_dows = {(byte)(1)};
+				if(objType == 1){
+					occMatrix[i][7] = "" + getLastProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getLastProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+				} else if(objType == 4){
+					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
 				}
 			}
 		} else if(matrixType.compareTo("14") == 0){
 			// case years-hours
-			for(int i = 0; i < occMatrix.length; i++){
-				for(int j = 0; j < occMatrix[i].length; j++){
-					byte[] b_hour = {(byte)(j)};
-					int[] i_year = {(year-i)};
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
-				}
+			occMatrix[0][0] = "Anno/Ora";
+			for(int x = 0; x < HOURS_LABEL.length; x++){
+				occMatrix[0][x + 1] = HOURS_LABEL[x];
+			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = (year - (i - 1)) + "";
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_hour = {(byte)(j - 1)};
+					int[] i_year = {(year-(i - 1))};
+					if(objType == 1){
+						occMatrix[i][j] = "" + getLastProfitFromObject(pmId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getLastProfitFromObject(pmId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
+					} else if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+					}
+				}	
 			}
 		} else if(matrixType.compareTo("21") == 0){
 			// case months-years
-			for(int i = 0; i < occMatrix.length; i++){
-				for(int j = 0; j < occMatrix[i].length; j++){
-					byte[] b_month = {(byte)i};
-					int[] i_year = {(year - j)};
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
-				}
+			occMatrix[0][0] = "Mese/Anno";
+			for(int x = 0; x < 5; x++){
+				occMatrix[0][x + 1] = (year - x) + "";
+			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_month = {(byte)(i - 1)};
+					int[] i_year = {(year - (j - 1))};
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+					}
+				}	
 			}
 		} else if(matrixType.compareTo("23") == 0){
 			// case months-dows
-			for(int i = 0; i < occMatrix.length; i++){
-				for(int j = 0; j < occMatrix[i].length; j++){
-					byte[] b_month = {(byte)i};
-					byte[] b_dows = {(byte)(j + 1)};
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
-				}
+			occMatrix[0][0] = "Mese/Settimana";
+			for(int x = 0; x < DOWS_LABEL.length; x++){
+				occMatrix[0][x + 1] = DOWS_LABEL[x];
 			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				byte[] b_month = {(byte)(i - 1)};
+				for(int j = 1; j < occMatrix[i].length-1; j++){
+					byte[] b_dows = {(byte)(j + 1)};
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					}		
+				}	
+				byte[] b_dows = {(byte)(1)};
+				if(objType == 4){
+					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+				}
+			}	
 		} else if(matrixType.compareTo("24") == 0){
 			// case months-hours
-			for(int i = 0; i < occMatrix.length; i++){
-				for(int j = 0; j < occMatrix[i].length; j++){
-					byte[] b_month = {(byte)i};
-					byte[] b_hour = {(byte)(j)};
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+			occMatrix[0][0] = "Mese/Ora";
+			for(int x = 0; x < HOURS_LABEL.length; x++){
+				occMatrix[0][x + 1] = HOURS_LABEL[x];
+			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_month = {(byte)(i - 1)};
+					byte[] b_hour = {(byte)(j - 1)};
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+					}
+				}	
+			}
+		} else if(matrixType.compareTo("31") == 0){
+			// case years-months
+			occMatrix[0][0] = "Settimana/Anno";
+			for(int x = 0; x < 5; x++){
+				occMatrix[0][x + 1] = (year - x) + "";
+			}
+			int i = 0;
+			for(i = 1; i < occMatrix.length-1; i++){
+				occMatrix[i][0] = DOWS_LABEL[i - 1];
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_dows = {(byte)(i + 1)};
+					int[] i_year = {(year-(j - 1))}; 
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					}
+				}	
+			}
+			occMatrix[i][0] = DOWS_LABEL[i - 1];
+			for(int j = 1; j < occMatrix[i].length; j++){
+				byte[] b_dows = {(byte)1};
+				int[] i_year = {(year-(j - 1))};
+				if(objType == 4){
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+				}
+			}	
+		} else if(matrixType.compareTo("32") == 0){
+			// case years-dows
+			occMatrix[0][0] = "Settimana/Mese";
+			for(int x = 0; x < MONTHS_LABEL.length; x++){
+				occMatrix[0][x + 1] = MONTHS_LABEL[x];
+			}
+			int i = 0;
+			for(i = 1; i < occMatrix.length-1; i++){
+				occMatrix[i][0] = DOWS_LABEL[i - 1];
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_dows = {(byte)(i + 1)};
+					byte[] b_month = {(byte)(j - 1)};
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					}	
+				}	
+			}
+			occMatrix[i][0] = DOWS_LABEL[i - 1];
+			for(int j = 1; j < occMatrix[i].length; j++){
+				byte[] b_dows = {(byte)1};
+				byte[] b_month = {(byte)(j - 1)};
+				if(objType == 4){
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+				}
+			}	
+		} else if(matrixType.compareTo("34") == 0){
+			// case years-hours
+			occMatrix[0][0] = "Settimana/Ora";
+			for(int x = 0; x < HOURS_LABEL.length; x++){
+				occMatrix[0][x + 1] = HOURS_LABEL[x];
+			}
+			int i = 0;
+			for(i = 1; i < occMatrix.length-1; i++){
+				occMatrix[i][0] = DOWS_LABEL[i - 1];
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_dows = {(byte)(i + 1)};
+					byte[] b_hour = {(byte)(j - 1)};
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					}
+				}	
+			}
+			occMatrix[i][0] = DOWS_LABEL[i - 1];
+			for(int j = 1; j < occMatrix[i].length; j++){
+				byte[] b_dows = {(byte)1};
+				byte[] b_hour = {(byte)(j - 1)};
+				if(objType == 4){
+					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+				}
+			}	
+		} else if(matrixType.compareTo("41") == 0){
+			// case years-months
+			occMatrix[0][0] = "Ora/Anno";
+			for(int x = 0; x < 5; x++){
+				occMatrix[0][x + 1] = (year - x) + "";
+			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = HOURS_LABEL[i - 1];
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_hour = {(byte)(i - 1)};
+					int[] i_year = {(year-(j - 1))}; 
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+					}
+				}	
+			}
+		} else if(matrixType.compareTo("42") == 0){
+			// case years-dows
+			occMatrix[0][0] = "Ora/Mese";
+			for(int x = 0; x < MONTHS_LABEL.length; x++){
+				occMatrix[0][x + 1] = MONTHS_LABEL[x];
+			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = HOURS_LABEL[i - 1];
+				for(int j = 1; j < occMatrix[i].length; j++){
+					byte[] b_hour = {(byte)(i - 1)};
+					byte[] b_month = {(byte)(j - 1)};
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+					}
+				}	
+			}
+		} else if(matrixType.compareTo("43") == 0){
+			// case months-dows
+			occMatrix[0][0] = "Ora/Settimana";
+			for(int x = 0; x < DOWS_LABEL.length; x++){
+				occMatrix[0][x + 1] = DOWS_LABEL[x];
+			}
+			for(int i = 1; i < occMatrix.length; i++){
+				occMatrix[i][0] = HOURS_LABEL[i - 1];
+				byte[] b_hour = {(byte)(i - 1)};
+				for(int j = 1; j < occMatrix[i].length-1; j++){
+					byte[] b_dows = {(byte)(j + 1)};
+					if(objType == 4){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					}
+				}	
+				byte[] b_dows = {(byte)(1)};
+				if(objType == 4){
+					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
 				}
 			}
 		}
@@ -1460,6 +1660,23 @@ public class DynamicManager {
 		}
 
 		return parkingmeters;
+	}
+	
+	public ParkingMeterBean getProfitFromParkingMeter(String parkMeterId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+		ParkingMeterBean pm = new ParkingMeterBean();
+		double profitVal = 0;
+		int ticketsNum = 0;
+		String pId = getCorrectId(parkMeterId, "parkingmeter", appId);
+		if(valueType == 1){
+			profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+			ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+		} else {
+			profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+			ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+		}
+		pm.setProfit(profitVal);
+		pm.setTickets(ticketsNum);
+		return pm;
 	}
 	
 	public List<ParkingStructureBean> getProfitFromAllParkStructs(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){

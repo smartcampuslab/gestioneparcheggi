@@ -54,6 +54,7 @@ public class CSVManager {
 	private static final String FILE_NAME = "report";
 	private static final String CSV_SEPARATOR = ",";
 	private static final String CSV_NEWLINE = "\n";
+	private static final String CSV_NOVAL = "n.p.";
 
 	public CSVManager() {
 		// TODO Auto-generated constructor stub
@@ -1026,6 +1027,51 @@ public class CSVManager {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in timeCost structures csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the street occupation
+	public String create_occupancy_file_history_streets(Street street, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "HistorycalOccupancyStreet.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+				
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Area");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_NEWLINE);
+				
+			writer.append(street.getStreetReference());
+			writer.append(CSV_SEPARATOR);
+			writer.append(street.getArea_name());	// to convert to area name
+			writer.append(CSV_SEPARATOR);
+			writer.append(street.getSlotNumber() + "");
+			writer.append(CSV_NEWLINE);
+			
+			for(int i = 0; i < matrix.length; i++){
+				for(int j = 0; j < matrix[i].length; j++){
+					if(matrix[i][j].compareTo("-1.0") == 0){
+						writer.append(CSV_NOVAL);
+					} else {
+						writer.append(matrix[i][j]);
+					}
+					writer.append(CSV_SEPARATOR);
+				}
+				writer.append(CSV_NEWLINE);
+			}
+			
+			writer.flush();
+			writer.close();
+				
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in street csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
 	}	

@@ -90,6 +90,13 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		margin-bottom: 10px;
 	}
 	
+	div.detailstablewrapper {
+		width: 100%; 
+		overflow-y: auto;
+		margin-left: 5px;
+		margin-right: 5px;
+	}
+	
 	div.tabledetailswrapper {
 		width: 99%;
 		min-width: 100px;

@@ -4004,6 +4004,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				object.reservedSlotFree = (object.reservedSlotNumber > 0)? (object.reservedSlotNumber - object.reservedSlotOccupied) : 0;
 				$scope.sDetails = object;
 			    $scope.initStreetOccupancyDiagram(object, 2);
+			    // To show the historycal data
+			    $scope.showReportCompare("1", "2");
 				break;
 			case 4:
 			    $scope.showZoneDet();
@@ -6003,10 +6005,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
 	// --------------------------------------------- New block for report compare creation ------------------------------------------
 	
-	$scope.showReportComparation = false;
-	$scope.showCreatedCmpReport = false;
-	//$scope.verticalCompData = "";
-	//$scope.orizontalCompData = "";
+	//$scope.showReportComparation = false;
+	//$scope.showCreatedCmpReport = false;
+	$scope.verticalCompData = "1";
+	$scope.orizontalCompData = "2";
 	$scope.lockOrizontalValSelect = true;
 	$scope.isCompInit = true;
 	$scope.matrixOcc = [];
@@ -6019,28 +6021,46 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    {cod:"4", val:"Ore"}
 	];
 	
-	$scope.filteredCmpVal = [];
+	$scope.filteredOCmpVal = [
+	    {cod:"2", val:"Mesi"},
+		{cod:"3", val:"Giorni settimana"},
+		{cod:"4", val:"Ore"}                     
+	];
 	
-	$scope.updateOrizzSelect = function(){
-		angular.copy($scope.allCmpVal, $scope.filteredCmpVal);
+	$scope.filteredVCmpVal = [
+	    {cod:"1", val:"Anni"},
+		{cod:"3", val:"Giorni settimana"},
+		{cod:"4", val:"Ore"}                     
+	];
+	
+	$scope.updateOrizzSelect = function(verticalVal){
+		angular.copy($scope.allCmpVal, $scope.filteredOCmpVal);
 		for(var i = 0; i < $scope.allCmpVal.length; i++){
-			if($scope.verticalCompData == $scope.allCmpVal[i].cod){
-				$scope.filteredCmpVal.splice(i, 1);
+			if(verticalVal == $scope.allCmpVal[i].cod){
+				$scope.filteredOCmpVal.splice(i, 1);
 			}
 		}
-		$scope.lockOrizontalValSelect = false;
+	};
+	
+	$scope.updateVerticalSelect = function(orizontalVal){
+		angular.copy($scope.allCmpVal, $scope.filteredVCmpVal);
+		for(var i = 0; i < $scope.allCmpVal.length; i++){
+			if(orizontalVal == $scope.allCmpVal[i].cod){
+				$scope.filteredVCmpVal.splice(i, 1);
+			}
+		}
 	};
 	
 	$scope.createReportCompare = function(){
-		$scope.showReportComparation = true;
+		//$scope.showReportComparation = true;
+		//$scope.showCreatedCmpReport = false;
 		$scope.lockOrizontalValSelect = true;
-		$scope.showCreatedCmpReport = false;
 		$scope.isCompInit = true;
 	};
 	
-	$scope.showReportCompare = function(form, verticalData, orizontalData){
-		$scope.showReportComparation = false;
-		$scope.showCreatedCmpReport = true;
+	$scope.updateReportCompare = function(form, verticalVal, orizontalVal){
+		//$scope.showReportComparation = false;
+		//$scope.showCreatedCmpReport = true;
 		if(form.$invalid){
 			$scope.isCompInit = false;
 		} else {
@@ -6053,8 +6073,48 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			//-----------------------------------------------------
 			
 			// Here I have to create the historycal data
-			$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalData, orizontalData, year, month, dowVal, dowType, hour, 1);
+			$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
 		}
+	};
+	
+	$scope.showReportCompare = function(verticalVal, orizontalVal, object, type){
+		//--------------- Shared filter params ----------------
+		var year = sharedDataService.getFilterYear();
+		var month = sharedDataService.getFilterMonth();
+		var dowType = sharedDataService.getFilterDowType();
+		var dowVal = sharedDataService.getFilterDowVal();
+		var hour = sharedDataService.getFilterHour();
+		//-----------------------------------------------------
+		
+		switch(object){
+		case 1: 
+			// pm
+			break;
+		case 2: 
+			// ps
+			break;
+		case 3: 
+			// street
+			if(type == 1){
+				// occupation data
+				// Here I have to create the historycal data
+				$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+			} else if(type == 2){
+				// profit data
+				$scope.getHistorycalProfitStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+			} else if(type == 3){
+				// time cost data
+				$scope.getHistorycalTimeCostStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+			}
+			break;
+		case 4: 
+			// area
+			break;
+		case 5: 
+			// zone
+			break;
+		}
+		
 	};
 	
 	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
@@ -6086,6 +6146,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    console.log("street occupancy retrieved from db: " + JSON.stringify(result));
 		});
 	};
+	
+	// Street historycal csv data
+	$scope.getOccupancyStreetHistoryCsv = function(dStreet){
+		var method = 'POST';
+		//var appId = sharedDataService.getConfAppId();
+		var params = {
+				dstreet_name: dStreet.streetReference,
+				dstreet_area: dStreet.area_name,
+				dstreet_totalslot: dStreet.slotNumber
+		};
+		var value = JSON.stringify($scope.matrixOcc);
+		
+	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupation/streethistory/csv", params, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.streetOccCvsHistorycalFile = result;
+	    	window.location.href = $scope.streetOccCvsHistorycalFile;
+	    });	
+	};
+	
 	
 	// -------------------------------------------- End of block for report compare creation -----------------------------------------
 }]);

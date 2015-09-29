@@ -226,7 +226,7 @@ public class DashboardController {
 	public @ResponseBody String[][] getHistorycalStreetOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
 		//byte[] hour = new byte[]{(byte)10,(byte)12};
 		String type = Street.class.getCanonicalName();
-		return dynamic.getHistorycalOccupationRateFromStreet(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType);
+		return dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/streets")
@@ -257,16 +257,20 @@ public class DashboardController {
 	public @ResponseBody
 	List<ParkingMeterBean> getAllParkingMetersProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
 		String type = ParkMeter.class.getCanonicalName();
-//		int year_f = (year!= null && year.length > 0) ? year[0] : 0;
-//		int year_t = (year!= null && year.length > 1) ? year[1] : 0;
-//		int month_f = (month!= null && month.length > 0) ? month[0] : 0;
-//		int month_t = (month!= null && month.length > 1) ? month[1] : 0;
-//		int weekday_f = (weekday!= null && weekday.length > 0) ? weekday[0] : 0;
-//		int weekday_t = (weekday!= null && weekday.length > 1) ? weekday[1] : 0;
-//		int hour_f = (hour!= null && hour.length > 0) ? hour[0] : 0;
-//		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
-//		logger.info(String.format("Parameters retrieved in back-end request for parkingmeters: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_f, weekday_t, hour_f, hour_t, valueType));
 		return dynamic.getProfitFromAllParkingMeters(appId, type, null, year, month, dayType, weekday, hour, valueType);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkingmeter/{id}")
+	public @ResponseBody
+	ParkingMeterBean getParkingMeterProfit(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+		String type = ParkMeter.class.getCanonicalName();
+		return dynamic.getProfitFromParkingMeter(id, appId, type, null, year, month, dayType, weekday, hour, valueType);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkingmetercompare/{id}")
+	public @ResponseBody String[][] getHistoricalParkingMeterProfit(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+		String type = ParkMeter.class.getCanonicalName();
+		return dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 1);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkstructs")
@@ -1350,5 +1354,28 @@ public class DashboardController {
 	
 	// ------------------------------ End of part for csv files creation --------------------------------
 	
+	// --------------------------------- Part for historycal csv files creation ------------------------------------
+	// --------------------------------------- Street CSV --------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupation/streethistory/csv")
+	public @ResponseBody
+	String createOccupationStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
+		logger.info("I am in historycal street csv creation.");
+		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+	    	
+	    it.smartcommunitylab.parking.management.web.model.Street s = new it.smartcommunitylab.parking.management.web.model.Street();
+	    s.setStreetReference(dstreet_name);
+	    s.setSlotNumber(Integer.parseInt(dstreet_totalslot));
+	    s.setArea_name(dstreet_area);
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_occupancy_file_history_streets(s, matrix, path); //occ_matrix
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV occupazione storico per vie: " + e.getMessage());
+		}
+		return createdFile;
+	}
 
 }
