@@ -1268,7 +1268,11 @@ public class DynamicManager {
 					byte[] b_month = {(byte)(j - 1)};
 					int[] i_year = {(year-(i - 1))}; 
 					if(objType == 1){
-						occMatrix[i][j] = "" + getLastProfitFromObject(pmId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getLastProfitFromObject(pmId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, b_month, dayType, days, hours);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
 					}
@@ -1286,14 +1290,22 @@ public class DynamicManager {
 				for(int j = 1; j < occMatrix[i].length-1; j++){
 					byte[] b_dows = {(byte)(j + 1)};
 					if(objType == 1){
-						occMatrix[i][j] = "" + getLastProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getLastProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
 					}
 				}
 				byte[] b_dows = {(byte)(1)};
 				if(objType == 1){
-					occMatrix[i][7] = "" + getLastProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getLastProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+					occMatrix[i][7] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+				} else if(objType == 2){
+					occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+				} else if(objType == 3){
+					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 				} else if(objType == 4){
 					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
 				}
@@ -1310,7 +1322,11 @@ public class DynamicManager {
 					byte[] b_hour = {(byte)(j - 1)};
 					int[] i_year = {(year-(i - 1))};
 					if(objType == 1){
-						occMatrix[i][j] = "" + getLastProfitFromObject(pmId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getLastProfitFromObject(pmId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, dayType, days, b_hour);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
 					}
@@ -1327,7 +1343,13 @@ public class DynamicManager {
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_month = {(byte)(i - 1)};
 					int[] i_year = {(year - (j - 1))};
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, b_month, dayType, days, hours);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
 					}
 				}	
@@ -1343,12 +1365,24 @@ public class DynamicManager {
 				byte[] b_month = {(byte)(i - 1)};
 				for(int j = 1; j < occMatrix[i].length-1; j++){
 					byte[] b_dows = {(byte)(j + 1)};
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
 					}		
 				}	
 				byte[] b_dows = {(byte)(1)};
-				if(objType == 4){
+				if(objType == 1){
+					occMatrix[i][7] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
+				} else if(objType == 2){
+					occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+				} else if(objType == 3){
+					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
+				} else if(objType == 4){
 					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
 				}
 			}	
@@ -1363,7 +1397,13 @@ public class DynamicManager {
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_month = {(byte)(i - 1)};
 					byte[] b_hour = {(byte)(j - 1)};
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, dayType, days, b_hour);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
 					}
 				}	
@@ -1380,7 +1420,13 @@ public class DynamicManager {
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_dows = {(byte)(i + 1)};
 					int[] i_year = {(year-(j - 1))}; 
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
 					}
 				}	
@@ -1389,7 +1435,13 @@ public class DynamicManager {
 			for(int j = 1; j < occMatrix[i].length; j++){
 				byte[] b_dows = {(byte)1};
 				int[] i_year = {(year-(j - 1))};
-				if(objType == 4){
+				if(objType == 1){
+					occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+				} else if(objType == 2){
+					occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+				} else if(objType == 3){
+					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
+				} else if(objType == 4){
 					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
 				}
 			}	
@@ -1405,7 +1457,13 @@ public class DynamicManager {
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_dows = {(byte)(i + 1)};
 					byte[] b_month = {(byte)(j - 1)};
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
 					}	
 				}	
@@ -1414,7 +1472,13 @@ public class DynamicManager {
 			for(int j = 1; j < occMatrix[i].length; j++){
 				byte[] b_dows = {(byte)1};
 				byte[] b_month = {(byte)(j - 1)};
-				if(objType == 4){
+				if(objType == 1){
+					occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
+				} else if(objType == 2){
+					occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+				} else if(objType == 3){
+					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
+				} else if(objType == 4){
 					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
 				}
 			}	
@@ -1430,7 +1494,13 @@ public class DynamicManager {
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_dows = {(byte)(i + 1)};
 					byte[] b_hour = {(byte)(j - 1)};
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, months, null, b_dows, b_hour);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
 					}
 				}	
@@ -1439,7 +1509,13 @@ public class DynamicManager {
 			for(int j = 1; j < occMatrix[i].length; j++){
 				byte[] b_dows = {(byte)1};
 				byte[] b_hour = {(byte)(j - 1)};
-				if(objType == 4){
+				if(objType == 1){
+					occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
+				} else if(objType == 2){
+					occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, months, null, b_dows, b_hour);
+				} else if(objType == 3){
+					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
+				} else if(objType == 4){
 					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
 				}
 			}	
@@ -1454,7 +1530,13 @@ public class DynamicManager {
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_hour = {(byte)(i - 1)};
 					int[] i_year = {(year-(j - 1))}; 
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, dayType, days, b_hour);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
 					}
 				}	
@@ -1470,7 +1552,13 @@ public class DynamicManager {
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_hour = {(byte)(i - 1)};
 					byte[] b_month = {(byte)(j - 1)};
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, dayType, days, b_hour);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
 					}
 				}	
@@ -1486,12 +1574,24 @@ public class DynamicManager {
 				byte[] b_hour = {(byte)(i - 1)};
 				for(int j = 1; j < occMatrix[i].length-1; j++){
 					byte[] b_dows = {(byte)(j + 1)};
-					if(objType == 4){
+					if(objType == 1){
+						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
+					} else if(objType == 2){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years,  months, null, b_dows, b_hour);
+					} else if(objType == 3){
+						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
+					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
 					}
 				}	
 				byte[] b_dows = {(byte)(1)};
-				if(objType == 4){
+				if(objType == 1){
+					occMatrix[i][7] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
+				} else if(objType == 2){
+					occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years,  months, null, b_dows, b_hour);
+				} else if(objType == 3){
+					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
+				} else if(objType == 4){
 					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
 				}
 			}
@@ -1696,8 +1796,25 @@ public class DynamicManager {
 			p.setProfit(profitVal);
 			p.setTickets(ticketsNum);
 		}
-
 		return parkstructs;
+	}
+	
+	public ParkingStructureBean getProfitFromParkStruct(String id, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+		ParkingStructureBean p = new ParkingStructureBean();
+		String pId = "";
+		double profitVal = 0;
+		int ticketsNum = 0;
+		pId = getCorrectId(id, "parkstruct", appId);
+		if(valueType == 1){
+			profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+			ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+		} else {
+			profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+			ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+		}
+		p.setProfit(profitVal);
+		p.setTickets(ticketsNum);
+		return p;
 	}
 	
 	/**

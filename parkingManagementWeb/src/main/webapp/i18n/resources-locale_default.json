@@ -1176,8 +1176,12 @@
     "description": "Testo per attributo alt o title del link per il pannello informativo"
 }, {
     "key": "csv_btn_create",
-    "value": "Crea CSV",
+    "value": "Esporta Dati",
     "description": "Testo bottone per creazione del file csv"
+}, {
+    "key": "report_btn_automate",
+    "value": "Crea Report",
+    "description": "Testo bottone per creazione report periodico"
 }, {
     "key": "csv_link_alt_title",
     "value": "Scarica file csv",
@@ -1710,6 +1714,14 @@
 	"key": "create_comparation_report_btn", 
 	"value": "Crea Report",
 	"description": "Testo pulsate creazione nuovo report di confronto"
+}, { 
+	"key": "profit_history_table_label", 
+	"value": "Profitto (€)",
+	"description": "Titolo tabella profitto in dettagli storici parcometro"
+}, { 
+	"key": "tickets_history_table_label", 
+	"value": "Ticket emessi",
+	"description": "Titolo tabella ticket in dettagli storici parcometro"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"

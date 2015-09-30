@@ -1071,7 +1071,355 @@ public class CSVManager {
 		} catch (IOException e1) {
 			// TODO Auto-generated catch block
 			e1.printStackTrace();
-			logger.error("Error in street csv creation: " + e1);
+			logger.error("Error in historycal street csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}	
+	
+	// Method used to create the csv file for the street occupation
+	public String create_occupancy_file_history_structs(OccupancyParkingStructure struct, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "HistorycalOccupancyParking.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+				
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Indirizzo");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_NEWLINE);
+					
+			writer.append(struct.getName());
+			writer.append(CSV_SEPARATOR);
+			writer.append(struct.getStreetReference());	// to convert to area name
+			writer.append(CSV_SEPARATOR);
+			writer.append(struct.getSlotNumber() + "");
+			writer.append(CSV_NEWLINE);
+			
+			for(int i = 0; i < matrix.length; i++){
+				for(int j = 0; j < matrix[i].length; j++){
+					if(matrix[i][j].compareTo("-1.0") == 0){
+						writer.append(CSV_NOVAL);
+					} else {
+						writer.append(matrix[i][j]);
+					}
+					writer.append(CSV_SEPARATOR);
+				}
+				writer.append(CSV_NEWLINE);
+			}
+			
+			writer.flush();
+			writer.close();
+				
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in historycal struct csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}		
+	
+	// Method used to create the csv file for the street occupation
+	public String create_profit_file_history_parkingmeters(ProfitParkingMeter parkingMeter, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "HistorycalProfitParkingMeter.csv";
+		String long_name = path + "/" + name;
+		String[][] matrixProfit = null;
+		String[][] matrixTickets = null;
+		if(matrix != null && matrix[0] != null && matrix[0].length > 0){
+			matrixProfit = new String[matrix.length][matrix[0].length];
+			matrixTickets = new String[matrix.length][matrix[0].length];
+		
+			try {
+				FileWriter writer = new FileWriter(long_name);
+	
+				// Added the table cols headers
+				writer.append("Codice");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Note");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Area");
+				writer.append(CSV_NEWLINE);
+					
+				writer.append(parkingMeter.getCode() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(cleanNewLineValue(parkingMeter.getNote()));	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(parkingMeter.getAreaId());
+				writer.append(CSV_NEWLINE);
+				
+				for(int i = 0; i < matrix.length; i++){
+					for(int j = 0; j < matrix[i].length; j++){
+						if(i == 0 && j == 0){
+							matrixProfit[i][j] = matrix[i][j];
+							matrixTickets[i][j] = matrix[i][j];
+						} else {
+							String[] res = matrix[i][j].split("/");
+							if(res.length < 2){
+								matrixProfit[i][j] = matrix[i][j];
+								matrixTickets[i][j] = matrix[i][j];
+							} else {
+								String profit = res[0];
+								String tickets = res[1];
+								matrixProfit[i][j] = profit;
+								matrixTickets[i][j] = tickets;
+							}	
+						}
+					}
+				}
+				
+				writer.append(CSV_NEWLINE);
+				writer.append("Incasso in euro");
+				writer.append(CSV_NEWLINE);
+				for(int i = 0; i < matrixProfit.length; i++){
+					for(int j = 0; j < matrixProfit[i].length; j++){
+						
+						if(matrixProfit[i][j].compareTo("-1.0") == 0){
+							writer.append(CSV_NOVAL);
+						} else {
+							if(i == 0 || j == 0){
+								writer.append(matrixProfit[i][j]);
+							} else {
+								double profit = Double.parseDouble(matrixProfit[i][j]);
+								double profVal = profit / 100;
+								writer.append(String.format("%.2f", profVal));
+							}
+						}
+						writer.append(CSV_SEPARATOR);
+					}
+					writer.append(CSV_NEWLINE);
+				}
+				
+				writer.append(CSV_NEWLINE);
+				writer.append("Ticket");
+				writer.append(CSV_NEWLINE);
+				for(int i = 0; i < matrixTickets.length; i++){
+					for(int j = 0; j < matrixTickets[i].length; j++){
+						
+						if(matrixTickets[i][j].compareTo("-1.0") == 0){
+							writer.append(CSV_NOVAL);
+						} else {
+							if(i == 0 || j == 0){
+								writer.append(matrixTickets[i][j]);
+							} else {
+								double tickets = Double.parseDouble(matrixTickets[i][j]);
+								writer.append(String.format("%.0f", tickets));
+							}
+						}
+						writer.append(CSV_SEPARATOR);
+					}
+					writer.append(CSV_NEWLINE);
+				}
+				
+				writer.flush();
+				writer.close();
+	
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				logger.error("Error in historycal profit parking meter csv creation: " + e1);
+			}		
+		}
+		
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the street occupation
+	public String create_profit_file_history_structs(ProfitParkingStructure struct, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "HistorycalProfitParkstruct.csv";
+		String long_name = path + "/" + name;
+		String[][] matrixProfit = null;
+		String[][] matrixTickets = null;
+		if(matrix != null && matrix[0] != null && matrix[0].length > 0){
+			matrixProfit = new String[matrix.length][matrix[0].length];
+			matrixTickets = new String[matrix.length][matrix[0].length];
+			try {
+				FileWriter writer = new FileWriter(long_name);
+						
+				// Added the table cols headers
+				writer.append("Nome");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Indirizzo");
+				writer.append(CSV_SEPARATOR);
+				writer.append("Posti Totali");
+				writer.append(CSV_NEWLINE);
+							
+				writer.append(struct.getName());
+				writer.append(CSV_SEPARATOR);
+				writer.append(struct.getStreetReference());	// to convert to area name
+				writer.append(CSV_SEPARATOR);
+				writer.append(struct.getSlotNumber() + "");
+				writer.append(CSV_NEWLINE);
+					
+				for(int i = 0; i < matrix.length; i++){
+					for(int j = 0; j < matrix[i].length; j++){
+						if(i == 0 && j == 0){
+							matrixProfit[i][j] = matrix[i][j];
+							matrixTickets[i][j] = matrix[i][j];
+						} else {
+							String[] res = matrix[i][j].split("/");
+							if(res.length < 2){
+								matrixProfit[i][j] = matrix[i][j];
+								matrixTickets[i][j] = matrix[i][j];
+							} else {
+								String profit = res[0];
+								String tickets = res[1];
+								matrixProfit[i][j] = profit;
+								matrixTickets[i][j] = tickets;
+							}	
+						}
+					}
+				}
+				
+				writer.append(CSV_NEWLINE);
+				writer.append("Incasso in euro");
+				writer.append(CSV_NEWLINE);
+				for(int i = 0; i < matrixProfit.length; i++){
+					for(int j = 0; j < matrixProfit[i].length; j++){
+						
+						if(matrixProfit[i][j].compareTo("-1.0") == 0){
+							writer.append(CSV_NOVAL);
+						} else {
+							if(i == 0 || j == 0){
+								writer.append(matrixProfit[i][j]);
+							} else {
+								double profit = Double.parseDouble(matrixProfit[i][j]);
+								double profVal = profit / 100;
+								writer.append(String.format("%.2f", profVal));
+							}
+						}
+						writer.append(CSV_SEPARATOR);
+					}
+					writer.append(CSV_NEWLINE);
+				}
+				
+				writer.append(CSV_NEWLINE);
+				writer.append("Ticket");
+				writer.append(CSV_NEWLINE);
+				for(int i = 0; i < matrixTickets.length; i++){
+					for(int j = 0; j < matrixTickets[i].length; j++){
+						if(matrixTickets[i][j].compareTo("-1.0") == 0){
+							writer.append(CSV_NOVAL);
+						} else {
+							if(i == 0 || j == 0){
+								writer.append(matrixTickets[i][j]);
+							} else {
+								double tickets = Double.parseDouble(matrixTickets[i][j]);
+								writer.append(String.format("%.0f", tickets));
+							}
+						}
+						writer.append(CSV_SEPARATOR);
+					}
+					writer.append(CSV_NEWLINE);
+				}
+				
+				writer.flush();
+				writer.close();
+					
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+				logger.error("Error in historycal profit struct csv creation: " + e1);
+			}
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the street occupation
+	public String create_timecost_file_history_streets(Street street, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "HistorycalTimeCostStreet.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+				
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Area");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_NEWLINE);
+				
+			writer.append(street.getStreetReference());
+			writer.append(CSV_SEPARATOR);
+			writer.append(street.getArea_name());	// to convert to area name
+			writer.append(CSV_SEPARATOR);
+			writer.append(street.getSlotNumber() + "");
+			writer.append(CSV_NEWLINE);
+				
+			for(int i = 0; i < matrix.length; i++){
+				for(int j = 0; j < matrix[i].length; j++){
+					if(i == 0 || j == 0){
+						writer.append(matrix[i][j]);
+					} else {
+						if(matrix[i][j].compareTo("-1.0") == 0){
+							writer.append(CSV_NOVAL);
+						} else {
+							writer.append(matrix[i][j] + " min");
+						}
+					}
+					writer.append(CSV_SEPARATOR);
+				}
+				writer.append(CSV_NEWLINE);
+			}
+			
+			writer.flush();
+			writer.close();
+				
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in historycal street csv creation: " + e1);
+		}
+		return "csv/" + name;	//ba
+	}
+	
+	// Method used to create the csv file for the street occupation
+	public String create_timecost_file_history_structs(OccupancyParkingStructure struct, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+		String name = FILE_NAME + "HistorycalTimecostParking.csv";
+		String long_name = path + "/" + name;
+		try {
+			FileWriter writer = new FileWriter(long_name);
+				
+			// Added the table cols headers
+			writer.append("Nome");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Indirizzo");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Totali");
+			writer.append(CSV_NEWLINE);
+					
+			writer.append(struct.getName());
+			writer.append(CSV_SEPARATOR);
+			writer.append(struct.getStreetReference());	// to convert to area name
+			writer.append(CSV_SEPARATOR);
+			writer.append(struct.getSlotNumber() + "");
+			writer.append(CSV_NEWLINE);
+			
+			for(int i = 0; i < matrix.length; i++){
+				for(int j = 0; j < matrix[i].length; j++){
+					if(i == 0 || j == 0){
+						writer.append(matrix[i][j]);
+					} else {
+						if(matrix[i][j].compareTo("-1.0") == 0){
+							writer.append(CSV_NOVAL);
+						} else {
+							writer.append(matrix[i][j] + " min");
+						}
+					}
+					writer.append(CSV_SEPARATOR);
+				}
+				writer.append(CSV_NEWLINE);
+			}
+			
+			writer.flush();
+			writer.close();
+				
+		} catch (IOException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			logger.error("Error in historycal timecost struct csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
 	}	

@@ -93,6 +93,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 	div.detailstablewrapper {
 		width: 100%; 
 		overflow-y: auto;
+		margin-top: 10px;
 		margin-left: 5px;
 		margin-right: 5px;
 	}
