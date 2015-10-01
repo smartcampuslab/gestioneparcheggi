@@ -38,6 +38,16 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    step: 1
 	};
 	
+	// init shared filter values
+	sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
+	sharedDataService.setFilterSpace($scope.dashboard_space);
+	sharedDataService.setFilterVis($scope.vis);	
+	sharedDataService.setFilterYear($scope.year);
+    sharedDataService.setFilterMonth($scope.monthSliderValue);
+    sharedDataService.setFilterDowType($scope.dayOptions.value);
+    sharedDataService.setFilterDowVal($scope.daySliderValue);
+    sharedDataService.setFilterHour($scope.hourSliderValue);
+	
 	// Method resetDashboardFilter: used to clear all the filter options to the initial values. Never used
 //	$scope.resetDashboardFilter = function(){
 //		$scope.year = "";
@@ -126,6 +136,9 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    }
 	    console.log("Fascia oraria: " + $scope.hourSliderValue);
 	    //--------------- Shared filter params ----------------
+	    sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
+	    sharedDataService.setFilterSpace($scope.dashboard_space);
+	    sharedDataService.setFilterVis($scope.vis);	
 	    sharedDataService.setFilterYear($scope.year);
 	    sharedDataService.setFilterMonth($scope.monthSliderValue);
 	    sharedDataService.setFilterDowType($scope.dayOptions.value);
@@ -304,6 +317,166 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.closeLoadingMap = function(){
 		$scope.progress = 100;
     	$rootScope.$broadcast('dialogs.wait.complete');
+	};
+	
+	$scope.launchReport = function(){
+		var rep_name = $scope.generateReportName();
+		sharedDataService.setReportName(rep_name);
+		var dlg = $dialogs.create('/dialogs/report.html','reportCtrl',{},{key: false,back: 'static'});
+        dlg.result.then(function(name){
+            $scope.name = name;
+          },function(){
+            $scope.name = 'You decided not to enter in your name, that makes me sad.';
+          });
+	};
+	
+	$scope.generateReportName = function(){
+		
+		//--------------- Shared filter params ----------------
+		var year = sharedDataService.getFilterYear();
+		var month = sharedDataService.getFilterMonth();
+		var dowType = sharedDataService.getFilterDowType();
+		var dowVal = sharedDataService.getFilterDowVal();
+		var hour = sharedDataService.getFilterHour();
+		//-----------------------------------------------------
+		
+		var title_map = "";
+		if($scope.dashboard_space.rate_area){
+			title_map = "areatariffazione_";
+		} else if($scope.dashboard_space.macrozone){
+			title_map = "macrozona_";
+		} else if($scope.dashboard_space.microzone){
+			title_map = "via_";
+		} else if($scope.dashboard_space.parkingstructs){
+			title_map = "parcheggiostruttura_";
+		} else if($scope.dashboard_space.parkingmeter){
+			title_map = "parcometro_";
+		}
+		
+		switch ($scope.dashboard_topics_list){
+			case "occupation": 
+				title_map += "occupazione_";
+				break;
+			case "receipts": 
+				title_map += "incasso_";
+				break;
+			case "timeCost": 
+				title_map += "costoaccesso_";
+				break;	
+			default: break;
+		}
+		
+		if(year != null && year != ""){
+			title_map += year + "_";
+		}
+		
+		if(month != null && month != ""){
+			var months_val = month.split(";");
+			if(months_val.length > 1){
+				title_map += $scope.getCorrectTitleValFromFilter(months_val[0], 1) + $scope.getCorrectTitleValFromFilter(months_val[1], 1);
+			} else {
+				title_map += $scope.getCorrectTitleValFromFilter(months_val[0], 1);
+			}
+		}
+		
+		if(dowType != null && dowType != ""){
+			if(dowType != "custom"){
+				if(dowType == "we"){
+					title_map += "festivo_";
+				} else {
+					title_map += "feriale_";
+				}
+			} else {
+				var dow_val = dowVal.split(";");
+				if(dow_val.length > 1){
+					title_map += $scope.getCorrectTitleValFromFilter(dow_val[0], 2) + $scope.getCorrectTitleValFromFilter(dow_val[1], 2);
+				} else {
+					title_map += $scope.getCorrectTitleValFromFilter(dow_val[0], 2);
+				}
+			}
+		}
+		
+		if(hour != null && hour != ""){
+			var hour_val = hour.split(";");
+			if(hour_val.length > 1){
+				title_map += hour_val[0] + "_" + hour_val[1];
+			} else {
+				title_map += hour_val[0];
+			}
+			
+		}
+		return title_map + ".csv";
+	};
+	
+	$scope.getCorrectTitleValFromFilter = function(value, type){
+		var val_title = "";
+		if(type == 1){
+			// months
+			switch(value){
+				case "1":
+					val_title = "gennaio_";
+					break;
+				case "2":
+					val_title = "febbraio_";
+					break;
+				case "3":
+					val_title = "marzo_";
+					break;
+				case "4":
+					val_title = "aprile_";
+					break;
+				case "5":
+					val_title = "maggio_";
+					break;
+				case "6":
+					val_title = "giugno_";
+					break;
+				case "7":
+					val_title = "luglio_";
+					break;
+				case "8":
+					val_title = "agosto_";
+					break;
+				case "9":
+					val_title = "settembre_";
+					break;
+				case "10":
+					val_title = "ottobre_";
+					break;
+				case "11":
+					val_title = "novembre_";
+					break;
+				case "12":
+					val_title = "dicembre_";
+					break;
+			}
+		} else if(type == 2){
+			// day of week
+			switch(value){
+				case "1":
+					val_title = "lunedi_";
+					break;
+				case "2":
+					val_title = "martedi_";
+					break;
+				case "3":
+					val_title = "mercoledi_";
+					break;
+				case "4":
+					val_title = "giovedi_";
+					break;
+				case "5":
+					val_title = "venerdi_";
+					break;
+				case "6":
+					val_title = "sabato_";
+					break;
+				case "7":
+					val_title = "domenica_";
+					break;
+			}
+		}
+		return val_title;
 	};
 	
 	// --------------- Block for title of the map (describe the element showed in the map ------------------
@@ -6568,4 +6741,246 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// ---------------------------------------------------------- End of WS call ----------------------------------------------------
 	
 	// -------------------------------------------- End of block for report compare creation -----------------------------------------
+}]);
+
+pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataService',
+    function($scope, $modalInstance, data, sharedDataService) {
+		
+	$scope.mailPattern=/^(([^<>()[\]\\.,;:\s@\"]+(\.[^<>()[\]\\.,;:\s@\"]+)*)|(\".+\"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+	$scope.isInit = true;
+	
+	//var shared_name = sharedDataService.getReportName();
+	$scope.report = {
+		name : '', 
+		periodic : '', 
+		startperiod : '', 
+		mail : ''
+	};
+	
+	$scope.isperiod = false;
+	$scope.periods = [
+	    { id:'1', title:"Annuale" },
+	    { id:'2', title:"Mensile" },
+	    { id:'3', title:"Settimanale" },
+	    { id:'4', title:"Giornaliero" }
+	];
+	
+	// ------------------ Start datetimepicker section -----------------------
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        //$scope.dt = null;
+    };
+
+    // Disable weekend selection
+    $scope.disabled = function(date, mode) {
+         return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
+
+    $scope.toggleMin = function() {
+         $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.dateOptions = {
+        formatYear: 'yyyy',
+        startingDay: 1,
+        showWeeks: 'false'
+    };
+
+    $scope.initDate = new Date();
+    $scope.formats = ['shortDate', 'dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy'];
+    $scope.format = $scope.formats[0];
+              
+    //---------------- End datetimepicker section------------
+    
+    // ----------------------- Start timepicker section ---------------------------
+    $scope.startTime = new Date(0);
+    $scope.endTime = new Date(0);
+    
+    $scope.ismeridian = false;
+    $scope.hstep = 1;	// hour step
+    $scope.mstep = 1;	// minute step
+    
+    $scope.clearTime = function() {
+        $scope.startTime = null;
+        $scope.endTime = null;        
+    };
+    
+    $scope.resetTime = function(date){
+    	$scope.startTime = date;
+    	$scope.endTime = date;
+    };
+    // ------------------------ End timepicker section ------------------------------
+	
+	
+	$scope.readReportName = function(){
+		$scope.report.name = sharedDataService.getReportName();
+		$scope.isInit = true;
+		//--------------- Shared filter params ----------------
+		var topics = sharedDataService.getFilterTopicList();
+		var space = sharedDataService.getFilterSpace();
+		var vis = sharedDataService.getFilterVis();	
+		var year = sharedDataService.getFilterYear();
+		var month = sharedDataService.getFilterMonth();
+		var dowType = sharedDataService.getFilterDowType();
+		var dowVal = sharedDataService.getFilterDowVal();
+		var hour = sharedDataService.getFilterHour();
+		//-----------------------------------------------------
+		$scope.rep_topic = topics;
+		$scope.rep_space = space;
+		$scope.rep_vis = $scope.correctVisFromFilter(vis);
+		$scope.rep_year = (year == null || year == "")?"tutti":year;
+		if(month == null || month == ""){
+			$scope.rep_month = "tutti";
+		} else {
+			var month_val = month.split(";");
+			if(month_val.length > 1){
+				$scope.rep_month = $scope.getCorrectTitleDescFromFilter(month_val[0], 1) + "-" + $scope.getCorrectTitleDescFromFilter(month_val[1], 1);
+			} else {
+				$scope.rep_month = $scope.getCorrectTitleDescFromFilter(month_val[0], 1);
+			}
+		}
+		if(dowType != null && dowType != ""){
+			if(dowType != "custom"){
+				if(dowType == "we"){
+					$scope.rep_dow = "festivo";
+				} else {
+					$scope.rep_dow = "feriale";
+				}
+			} else {
+				var dow_val = dowVal.split(";");
+				if(dow_val.length > 1){
+					$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_val[0], 2) + $scope.getCorrectTitleDescFromFilter(dow_val[1], 2);
+				} else {
+					$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_val[0], 2);
+				}
+			}
+		}
+		if(hour != null && hour != ""){
+			var hour_val = hour.split(";");
+			if(hour_val.length > 1){
+				$scope.rep_hour = hour_val[0] + "-" + hour_val[1];
+			} else {
+				$scope.rep_hour = hour_val[0];
+			}
+		}		
+	};
+	
+	$scope.correctVisFromFilter = function(vis){
+		var value = "";
+		switch(vis){
+			case 'vis_medium': 
+				value = "ultimo valore";
+				break;
+			case 'vis_last_value': 
+				value = "valore medio";
+				break;
+			case 'vis_medium_year': 
+				value = "medio ultimo anno";
+				break;
+			case 'vis_medium_month': 
+				value = "medio ultimo mese";
+				break;
+			case 'vis_medium_day': 
+				value = "medio ultimo giorno";
+				break;
+		}
+		return value;
+	};
+	
+	$scope.getCorrectTitleDescFromFilter = function(value, type){
+		var val_title = "";
+		if(type == 1){
+			// months
+			switch(value){
+				case "1":
+					val_title = "gennaio";
+					break;
+				case "2":
+					val_title = "febbraio";
+					break;
+				case "3":
+					val_title = "marzo";
+					break;
+				case "4":
+					val_title = "aprile";
+					break;
+				case "5":
+					val_title = "maggio";
+					break;
+				case "6":
+					val_title = "giugno";
+					break;
+				case "7":
+					val_title = "luglio";
+					break;
+				case "8":
+					val_title = "agosto";
+					break;
+				case "9":
+					val_title = "settembre";
+					break;
+				case "10":
+					val_title = "ottobre";
+					break;
+				case "11":
+					val_title = "novembre";
+					break;
+				case "12":
+					val_title = "dicembre";
+					break;
+			}
+		} else if(type == 2){
+			// day of week
+			switch(value){
+				case "1":
+					val_title = "lunedi";
+					break;
+				case "2":
+					val_title = "martedi";
+					break;
+				case "3":
+					val_title = "mercoledi";
+					break;
+				case "4":
+					val_title = "giovedi";
+					break;
+				case "5":
+					val_title = "venerdi";
+					break;
+				case "6":
+					val_title = "sabato";
+					break;
+				case "7":
+					val_title = "domenica";
+					break;
+			}
+		}
+		return val_title;
+	};	
+	
+	var now = Date.now();
+	$scope.initperioddate = now;
+	
+	$scope.cancel = function(){
+	    $modalInstance.dismiss('canceled');  
+	}; // end cancel
+	  
+	$scope.save = function(form){
+		if(!form.$valid){
+			$scope.isInit=false;
+		} else {
+			$scope.isInit=true;
+			$modalInstance.close($scope.report);
+		}
+	}; // end save
+	  
+	$scope.hitEnter = function(evt){
+	    if(angular.equals(evt.keyCode,13) && !(angular.equals($scope.name,null) || angular.equals($scope.name,'')))
+		$scope.save();
+	}; // end hitEnter
 }]);

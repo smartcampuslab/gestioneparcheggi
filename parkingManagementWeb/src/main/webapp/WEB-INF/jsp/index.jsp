@@ -460,7 +460,6 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
   </style>
 
 </head>
-
 <body>
 	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()">
     <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
@@ -553,7 +552,80 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 		</div>
 	</div>	
 </body>
-
-
+<script type="text/ng-template" id="/dialogs/report.html">
+<div class="modal" ng-init="readReportName()">
+		<form role="form" name="form">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title"><span class="glyphicon glyphicon-list-alt"></span>&nbsp;&nbsp;Crea Report</h4>
+				</div>
+				<div class="modal-body">
+						<div class="form-group" ng-class="{true: 'has-error'}[form.reportname.$dirty && form.reportname.$invalid]">
+							<label class="control-label" for="username">Nome report:</label>
+							<input type="text" class="form-control" name="reportname" id="reportname" placeholder="Inserisci il nome del report" ng-model="report.name" ng-keyup="hitEnter($event)" required>
+						</div>
+						<div class="form-group">
+							<label for="report_description">Dettagli report</label>
+							<table id="report_description" class="table table-striped" width="100%">
+								<tr>
+									<th>Tipo dati</th>
+									<th>Elemento</th>
+									<th>Filtra per</th>
+									<th>Anno</th>
+									<th>Mese</th>
+									<th>Giorno</th>
+									<th>Ora</th>
+								</tr>
+								<tr>
+									<td>{{ rep_topic }}</td>
+									<td>{{ rep_space }}</td>
+									<td>{{ rep_vis }}</td>
+									<td>{{ rep_year }}</td>
+									<td>{{ rep_month }}</td>
+									<td>{{ rep_dow }}</td>
+									<td>{{ rep_hour }}</td>
+								</tr>
+							</table>
+						</div>
+						<div class="form-group">
+							<input id="periodCheck" type="checkbox" ng-model="isperiod" >&nbsp; invio periodico</label>
+						</div>
+						<div ng-show="isperiod">
+							<div class="form-group">
+						    	<label for="reportperiod">Periodo invio report</label>
+						    	<select id="reportperiod" name="reportSentPeriod" class="form-control" ng-model="report.periodic" ng-required="isperiod"><!-- ng-options="p.id as p.title for p in periods" -->
+						    		<option value="">Seleziona periodo</option>
+                                    <option ng-repeat="p in periods" value="{{p.id}}">{{p.title}}</option>
+						    	</select>
+					   			<div class="alert alert-danger" ng-show="!isInit && form.reportSentPeriod.$error.required">Campo 'periodo invio report' obbligatorio</div>
+							</div>
+							<div ng-show="report.periodic=='1' || report.periodic=='2' || report.periodic=='3'">
+								<label for="periodstartday">Giorno inizio periodo</label>
+					    		<input id="periodstartday" name="PeriodStart" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="gg/mm/aaaa" ng-model="report.startperiod" is-open="periodstart.open" ng-click="periodstart.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+							</div>
+							<div ng-show="report.periodic=='4'">
+								<label for="periodstarttime">Ora invio</label>
+								<timepicker id="periodstarttime" ng-model="report.startperiod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+							</div>
+							<div>&nbsp;</div>
+						</div>
+						<div class="form-group">
+						    <label for="email_rep">Email inoltro report</label>
+    						<input type="text" class="form-control" id="email_rep" name="repEmail" placeholder="Inserisci indirizzo email di inoltro report" ng-model="report.mail" required ng-pattern="mailPattern">
+   							<div class="alert alert-danger" ng-show="!isInit && form.repEmail.$error.required">Campo 'email' obbligatorio</div>
+   							<div class="alert alert-danger" ng-show="!isInit && form.repEmail.$error.pattern">Campo 'email' non corretto</div>
+						</div>
+						<div></div>
+				</div>
+				<div class="modal-footer">
+					<button type="button" class="btn btn-default" ng-click="cancel()">Annulla</button>
+					<button type="button" class="btn btn-primary" ng-click="save(form)" >OK</button><!-- ng-disabled="(form.$dirty && form.$invalid) || form.$pristine" -->
+				</div>
+			</div>
+		</div>
+		</form>
+	</div>
+</script>
 
 </html>

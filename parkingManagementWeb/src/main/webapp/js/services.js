@@ -105,12 +105,39 @@ pm.service('sharedDataService', function(){
          {occupancy:  100, difficulty_level: 'Impossible', extratime_estimation_min: 5, extratime_estimation_max: 15},
     ];
   
+    
     // Shared filter fields and mothods
+    this.filter_topiclist;
+    this.filter_space;
+    this.filter_vis;
     this.filter_year;
     this.filter_month;
     this.filter_dowType;
     this.filter_dowVal;
     this.filter_hour;
+    
+    this.report_name;
+    
+    this.setFilterTopicList = function(value){
+    	this.filter_topiclist = value;
+    };
+    this.getFilterTopicList = function(){
+    	return this.filter_topiclist;
+    };
+    
+    this.setFilterSpace = function(value){
+    	this.filter_space = value;
+    };
+    this.getFilterSpace = function(){
+    	return this.filter_space;
+    };
+    
+    this.setFilterVis = function(value){
+    	this.filter_vis = value;
+    };
+    this.getFilterVis = function(){
+    	return this.filter_vis;
+    };
     
     this.setFilterYear = function(value){
     	this.filter_year = value;
@@ -153,6 +180,13 @@ pm.service('sharedDataService', function(){
 	
     this.getExtratimeWait = function(){
     	return this.extratime_wait;
+    };
+    
+    this.setReportName = function(value){
+    	this.report_name = value;
+    };
+    this.getReportName = function(){
+    	return this.report_name;
     };
     
 	// Get and Set methods
