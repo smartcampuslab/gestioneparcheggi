@@ -151,6 +151,403 @@ ul.payment{
 }
 
 */
+
+ 
+.borderless td{
+    border: 0;
+}
+
+div.listwrapper {
+    height: 580px; 
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+div.tablewrapper {
+    height: 490px; 
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+div.detailstablewrapper {
+    width: 100%; 
+    overflow-y: auto;
+    margin-top: 10px;
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+div.tabledetailswrapper {
+    width: 99%;
+    min-width: 100px;
+    max-width: 150px;
+}
+
+div.logwrapper {
+    height: 680px; 
+    overflow-y: auto;
+    margin-bottom: 10px;
+}
+
+.angular-google-map-container {
+    height: 700px; 
+}
+
+pre {
+    outline: 1px solid #ccc; 
+    padding: 5px; 
+    margin: 5px; 
+}
+
+.colorBox {   
+    float: left;
+    width: 15px;
+    height: 15px;
+    margin: 2px;
+    border-width: 1px;
+    border-style: solid;
+    border-color: rgba(0,0,0,.2);
+}
+
+td.detailsTableSX {
+    width: 55%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsTableCX {
+    width: 5%;
+    height: 20px;
+    text-align: right;
+    vertical-align: middle;
+}
+td.detailsTableDX {
+    width: 40%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsTitleTableSX {
+    width: 35%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsTitleTableCX {
+    width: 5%;
+    height: 20px;
+    text-align: right;
+    vertical-align: middle;
+}
+td.detailsTitleTableDX {
+    width: 60%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsTableColSpan {
+    width: 100%;
+    height: 20px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+td.detailsTableColSpanLeft {
+    width: 100%;
+    height: 20px;
+    text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+td.detailsListTableSX {
+    width: 30%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsListTableCX {
+    width: 5%;
+    height: 20px;
+    text-align: right;
+    vertical-align: middle;
+}
+td.detailsListTableDX {
+    width: 65%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsNumberListTableSX {
+    width: 55%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsNumberListTableCX {
+    width: 5%;
+    height: 20px;
+    text-align: right;
+    vertical-align: middle;
+}
+td.detailsNumberListTableDX {
+    width: 40%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsTableColSpanS {
+    width: 90%;
+    height: 20px;
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+td.detailsTableColSpanLeftS {
+    width: 90%;
+    height: 20px;
+    text-align: left;
+    font-weight: bold;
+    text-transform: uppercase;
+    vertical-align: middle;
+}
+td.detailsListTableSXS {
+    width: 30%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsListTableCXS {
+    width: 5%;
+    height: 20px;
+    text-align: right;
+    vertical-align: middle;
+}
+td.detailsListTableDXS {
+    width: 55%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsNumberListTableSXS {
+    width: 45%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsNumberListTableCXS {
+    width: 5%;
+    height: 20px;
+    text-align: right;
+    vertical-align: middle;
+}
+td.detailsNumberListTableDXS {
+    width: 40%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsCompressTableSX {
+    width: 25%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsCompressTableCX {
+    width: 3%;
+    height: 20px;
+    text-align: right;
+    vertical-align: middle;
+}
+td.detailsCompressTableDX {
+    width: 32%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsCompressTableDiagram {
+    width: 40%;
+    font-weight: bold;
+    text-align: center;
+    vertical-align: middle;
+}
+th.myCenter {
+    text-align: center;
+}
+
+td.detailsViewAreaSX{
+    width: 45%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsViewAreaDX{
+    width: 55%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+
+td.detailsViewBikeSX{
+    width: 45%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsViewBikeDX{
+    width: 55%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+
+td.detailsViewZoneSX{
+    width: 45%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsViewZoneDX{
+    width: 55%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+
+td.detailsViewStructSX{
+    width: 45%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsViewStructDX{
+    width: 55%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+
+td.detailsViewParkmeterSX{
+    width: 45%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsViewParkmeterDX{
+    width: 55%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+
+td.detailsViewStreetSX{
+    width: 45%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsViewStreetDX{
+    width: 55%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+
+div.left-filter {
+    font-size: medium;
+}
+
+label.left-filter {
+    font-size: small;
+}
+
+div #panelMap {
+  position: absolute;
+  top: 5px;
+  left: 50%;
+  margin-left: -90px;
+  z-index: 5;
+  background-color: #fff;
+  padding: 5px;
+  border: 1px solid #999;
+}
+
+.custom-file-input {
+  color: transparent;
+  width: 170px;
+  height: 40px;
+}
+.custom-file-input::-webkit-file-upload-button {
+  visibility: hidden;
+}
+.custom-file-input::before {
+  content: 'Seleziona un file';
+  color: black;
+  display: inline-block;
+  background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+  border: 1px solid #999;
+  border-radius: 3px;
+  padding: 8px 20px;
+  outline: none;
+  white-space: nowrap;
+  -webkit-user-select: none;
+  cursor: pointer;
+  text-shadow: 1px 1px #fff;
+  font-weight: 700;
+  font-size: 12pt;
+  width: 170px;
+  height: 40px;
+}
+.custom-file-input:hover::before {
+  border-color: black;
+}
+.custom-file-input:active {
+  outline: 0;
+}
+.custom-file-input:active::before {
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}    
+
+.navbar-brand > img {
+	height: 70px;
+}    
+
+.navbar .nav>li {
+	bottom: -50px;
+}
+
+.navbar-brand {
+    height:inherit; 	
+}
+
 .dashboard-panel {
 	font-size: 12px  !important;
 	padding: 10px !important;
@@ -160,3 +557,106 @@ ul.payment{
 	margin-right: 5px !important;
 }
 
+.navbar-inverse {
+    background-image: none;
+    background-color: #ffffff;
+    border-bottom-color: #3b81c3;
+    border-bottom-width: 5px;
+}
+
+.navbar-inverse .navbar-nav>li>a {
+    text-shadow: none;  
+    color: #000000;
+}
+.navbar-inverse .navbar-nav>li>a:hover {
+    color: #3b81c3 !important;
+	background: none !important;
+}
+
+.navbar-inverse .navbar-nav>li.active>a {
+    color: #3b81c3 !important;
+    font-weight: bold !important;
+    background: none !important;
+    box-shadow: none !important;
+    -webkit-box-shadow: none !important;
+}
+
+.panel {
+    border: 0;	
+    box-shadow: none;
+    -webkit-box-shadow: none;
+}
+
+.nav-tabs>li.active>a {
+	color: #3b81c3;
+	font-weight: bold;
+}
+
+.nav-tabs>li:not(.active)>a {
+    color: #000000;
+    font-weight: bold;
+}
+.nav-tabs>li:not(.active)>a:hover {
+    color: #3b81c3;
+	background: none;
+	border: 0;
+}
+
+.close {
+	color: #ffffff;
+	text-shadow: none;
+	opacity: 1;
+}
+
+.dialog-header-confirm {
+	background-color: #3b81c3;
+}
+
+.alert.alert-danger {
+	background: none;
+	border: 0px;
+	border-bottom: 2px solid #3b81c3;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    border-radius: 0px;
+    color: #3b81c3;
+    padding-left: 0px;
+    padding-right: 0px;
+    padding-bottom: 5px;
+}
+
+.alert.alert-danger .btn-danger {
+    box-shadow: none;
+    -webkit-box-shadow: none;
+	background: none;
+    border: none;
+    color: #b92c28;
+    text-shadow: none;
+}
+
+.alert.alert-danger .btn-danger i::before {
+	font-size: 16px;
+}
+
+.detailsTableColSpan hr {
+	border-top-color: #3b81c3;
+}
+
+.btn-primary {
+	background-image: linear-gradient(to bottom, #3b81c3 0, #1460a4 100%);
+}
+.btn-primary:hover {
+    background-image: linear-gradient(to bottom, #1460a4 0, #1460a4 100%);
+}
+
+.panel-success > .panel-heading {
+	background: none;
+    border: 0px;
+    border-bottom: 2px solid #3b81c3;
+    box-shadow: none;
+    -webkit-box-shadow: none;
+    border-radius: 0px;
+    color: #3b81c3;
+    padding-left: 0px;
+    padding-bottom: 5px;
+}

@@ -251,12 +251,17 @@
 								</tr>
 								<tr ng-if="dashboard_topics=='occupation'">
 									<td>
-				                        <a href ng-click="showOtherSettings(!isOtherSettingsShow())" title="{{ 'link_view_title' | i18n }}" alt="{{ 'link_view_title' | i18n }}">
+                                        <h5><strong>{{'other_settings'|i18n}}</strong></h5>
+<!-- 				                        <a href ng-click="showOtherSettings(!isOtherSettingsShow())" title="{{ 'link_view_title' | i18n }}" alt="{{ 'link_view_title' | i18n }}">
 				                        	<h5><i class="glyphicon glyphicon-wrench"></i>&nbsp;<strong>{{'other_settings'|i18n}}</strong></h5>
 				                        </a>
-				                        <table width="100%" ng-show="isOtherSettingsShow()" >
+ -->				                        <table width="100%" >
 											<tr>
-												<td align="left"><label class="left-filter"><input id="averageZoneOcc" type="checkbox" ng-model="useAverageZoneOccupation" ng-change="setAverageZoneValue(useAverageZoneOccupation);updateSearch(1)">&nbsp;{{ 'use_average_zone_occ' | i18n }}</label></td>
+												<td align="left">
+												<label class="left-filter">
+												<input id="averageZoneOcc" type="checkbox" ng-model="useAverageZoneOccupation" ng-change="setAverageZoneValue(useAverageZoneOccupation);updateSearch(1)">&nbsp;{{ 'use_average_zone_occ' | i18n }}
+												</label>
+												</td>
 											</tr>
 										</table>
 									</td>
