@@ -119,6 +119,10 @@
     "value": "Vie",
     "description": "Label checkbox vie"
 }, {
+    "key": "view_streets_part",
+    "value": "Sottovie",
+    "description": "Label checkbox sottovie"
+}, {
     "key": "view_parkingmeters",
     "value": "Parcometri",
     "description": "Label checkbox parcometri"
@@ -994,6 +998,30 @@
     "key": "btn_remove_last_polygons",
     "value": "Cancella ultimo",
     "description": "Label pulsante cancella ultimo poligono in area edit"
+}, {
+    "key": "filter_code_title",
+    "value": "Filtra per Codice",
+    "description": "Title icona filtro per codice"
+}, {
+    "key": "filter_name_title",
+    "value": "Filtra per Nome",
+    "description": "Title icona filtro per nome"
+}, {
+    "key": "filter_note_title",
+    "value": "Filtra per Note",
+    "description": "Title icona filtro per note"
+}, {
+    "key": "filter_name_text",
+    "value": "Inserisci nome oggetto...",
+    "description": "Testo filtro nome oggetto"
+}, {
+    "key": "filter_code_text",
+    "value": "Inserisci codice oggetto...",
+    "description": "Testo filtro codice oggetto"
+}, {
+    "key": "filter_note_text",
+    "value": "Inserisci nota...",
+    "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_area_title",
     "value": "Filtra per Area",

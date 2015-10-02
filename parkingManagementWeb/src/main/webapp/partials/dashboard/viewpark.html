@@ -37,6 +37,9 @@
 						<td align="left"><label class="left-filter"><input id="streets" type="radio" ng-model="dashboard_space_list" value="microzone" ng-click="showStreetList(dashboard_topics_list)">&nbsp;{{ 'view_streets' | i18n }}</label></td>
 					</tr>
 					<tr>
+						<td align="left"><label class="left-filter"><input id="streets_part" type="radio" ng-model="dashboard_space_list" value="microzone_part" ng-click="showStreetPartList(dashboard_topics_list)" disabled>&nbsp;<span style="color:gray">{{ 'view_streets_part' | i18n }}</span></label></td>
+					</tr>
+					<tr>
 						<td align="left"><label class="left-filter"><input id="pStruct" type="radio" ng-model="dashboard_space_list" value="parkingstructs" ng-click="showStructList(dashboard_topics_list)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
 					</tr>
 					<tr>
@@ -169,6 +172,9 @@
 							</tr>
 							<tr>
 								<td align="left"><label class="left-filter"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
+							</tr>
+							<tr>
+								<td align="left"><label class="left-filter"><input id="streets_part" type="checkbox" ng-model="dashboard_space.microzone_part" ng-click="changeStreetPolylines(dashboard_topics)" disabled >&nbsp;<span style="color:gray">{{ 'view_streets_part' | i18n }}</span></label></td><!-- ng-click="changeStreetAndPS()" -->
 							</tr>
 							<tr>
 								<td align="left"><label class="left-filter"><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>

@@ -54,7 +54,7 @@ public class CSVManager {
 	private static final String FILE_NAME = "report";
 	private static final String CSV_SEPARATOR = ",";
 	private static final String CSV_NEWLINE = "\n";
-	private static final String CSV_NOVAL = "n.p.";
+	private static final String CSV_NOVAL = "/";
 
 	public CSVManager() {
 		// TODO Auto-generated constructor stub

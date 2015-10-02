@@ -319,7 +319,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.launchReport = function(report){
 		if(report!=null){
-			sharedDataService.setSavedReport(report);
+			if(report != 'history'){
+				sharedDataService.setSavedReport(report);
+			} else {
+				var rep_name = "dati_storici_" + $scope.generateReportName();
+				sharedDataService.setReportName(rep_name);
+			}
 		} else {
 			var rep_name = $scope.generateReportName();
 			sharedDataService.setReportName(rep_name);
@@ -690,6 +695,96 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	return $scope.allMapObjectLoaded;
     };
     
+    // Methods to show/hide street area filter
+    $scope.showSAreaFilter = function(){
+    	$scope.showAreaStreetFilter = true;
+    };
+    
+    $scope.hideSAreaFilter = function(){
+    	//$scope.streetAreaFilter = null;
+    	$scope.showAreaStreetFilter = false;
+    };
+    
+    // Methods to show/hide street name filter
+    $scope.showStreetNameFilter = function(){
+    	$scope.showStreetFilter = true;
+    };
+    
+    $scope.hideStreetNameFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showStreetFilter = false;
+    };
+    
+    // Methods to show/hide area name filter
+    $scope.showAreaNameFilter = function(){
+    	$scope.showAreaFilter = true;
+    };
+    
+    $scope.hideAreaNameFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showAreaFilter = false;
+    };
+    
+    // Methods to show/hide zone name filter
+    $scope.showZoneNameFilter = function(){
+    	$scope.showZoneFilter = true;
+    };
+    
+    $scope.hideZoneNameFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showZoneFilter = false;
+    };
+    
+    // Methods to show/hide code filter
+    $scope.showCodeFilter = function(){
+    	$scope.showCodFilter = true;
+    };
+    
+    $scope.hideCodeFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showCodFilter = false;
+    };
+    
+    // Methods to show/hide note filter
+    $scope.showNoteFilter = function(){
+    	$scope.showNotFilter = true;
+    };
+    
+    $scope.hideNoteFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showNotFilter = false;
+    };
+    
+    // Methods to show/hide pm status filter
+    $scope.showPmStatusFilter = function(){
+    	$scope.showStatusPmFilter = true;
+    };
+    
+    $scope.hidePmStatusFilter = function(){
+    	//$scope.pmStatusFilter = '';
+    	$scope.showStatusPmFilter = false;
+    };
+    
+    // Methods to show/hide pm area filter
+    $scope.showPmAreaFilter = function(){
+    	$scope.showAreaPmFilter = true;
+    };
+    
+    $scope.hidePmAreaFilter = function(){
+    	$scope.pmAreaFilter = '';
+    	$scope.showAreaPmFilter = false;
+    };
+    
+    // Methods to show/hide ps area filter
+    $scope.showPsNameFilter = function(){
+    	$scope.showPsFilter = true;
+    };
+    
+    $scope.hidePsNameFilter = function(){
+    	$scope.pmAreaFilter = '';
+    	$scope.showPsFilter = false;
+    };    
+    
     $scope.initComponents = function(){
 	    if($scope.editparktabs == null || $scope.editparktabs.length == 0){
 		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
@@ -922,6 +1017,47 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     $scope.setIndex = function($index){
     	if($index > 0){
+    	// ----------------------------- Block for report init ------------------------------------
+    	$scope.preloaded_report_1 = {
+    		id: 1,
+    			name: 'parcometro_incasso_2015_settembre_feriale',
+    			description : {
+    				dow: "feriale",
+    				hour: null,
+    				month: "settembre",
+    				space: "parcometro",
+    				topic: "incasso",
+    				vis: "valore medio",
+    				year: "2015",
+    			},
+    			periodic : '2',
+    			startperiod : new Date(1441058400000),
+    			mail : 'prova@prova.it;test@test.it'
+    		};
+    				
+    		$scope.preloaded_report_2 = {
+    			id: 2,
+    			name: 'dati_storici_parcometro_incasso_gennaio_dicembre',
+    			description : {
+    				dow: null,
+    				hour: null,
+    				month: "gennaio-dicembre",
+    				space: "parcometro",
+    				topic: "incasso",
+    				vis: "valore medio",
+    				year: "tutti",
+    			},
+    			periodic : '1',
+    			startperiod : new Date(1441058400000),
+    			mail : 'prova@prova.it'
+    		};
+    			
+    		if(sharedDataService.addReportInList == null || sharedDataService.addReportInList.length < 2){
+    			sharedDataService.addReportInList($scope.preloaded_report_1);
+    			sharedDataService.addReportInList($scope.preloaded_report_2);
+    		}
+    		// ----------------------------------------------------------------------------------------
+    		
     		sharedDataService.setIsInList(true);
     		$scope.initWsView(2);
     	} else {
@@ -945,7 +1081,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.numberOfPages = function(type, list){
        	if(type == 1){
        		if($scope.areaWS != null){
-       			return Math.ceil($scope.areaWS.length/$scope.maxAreas);
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.areaWS.length/$scope.maxAreas);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxAreas);
+       			}
        		} else {
        			return 0;
       		}
@@ -963,13 +1103,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
      		}
        	} else if(type == 4){
        		if($scope.pstructWS != null){
-       			return Math.ceil($scope.pstructWS.length/$scope.maxPStructs);
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.pstructWS.length/$scope.maxPStructs);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxPStructs);
+       			}
        		} else {
        			return 0;
      		}
        	} else if(type == 5){
        		if($scope.zoneWS != null){
-       			return Math.ceil($scope.zoneWS.length/$scope.maxZones);
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.zoneWS.length/$scope.maxZones);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxZones);
+       			}
        		} else {
        			return 0;
      		}
@@ -1258,6 +1406,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.showStreetList = function(type){
+		// ---- Init street area filter
+		$scope.allAreaFilter = [];
+		angular.copy(sharedDataService.getSharedLocalAreas(),$scope.allAreaFilter);
+		if($scope.allAreaFilter != null && $scope.allAreaFilter.length > 0 && $scope.allAreaFilter[0].id != ''){
+			$scope.allAreaFilter.splice(0,0,{id:'', name: "Tutte"});
+		}
+		$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
+		// ----------------------------
 		$scope.switchListShowType(type);
 		$scope.showSList = true;
 		$scope.showZList = false;
@@ -1276,6 +1432,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.showPMeterList = function(type){
+		$scope.allPmStatusFilter = [];
+		angular.copy($scope.listaStati, $scope.allPmStatusFilter);
+		if($scope.allPmStatusFilter != null && $scope.allPmStatusFilter.length > 0 && $scope.allPmStatusFilter[0].idObj != ''){
+			$scope.allPmStatusFilter.splice(0, 0, {idObj:"", descrizione: "Tutti"});
+		}
+		$scope.allPmAreaFilter = [];
+		angular.copy(sharedDataService.getSharedLocalAreas(),$scope.allPmAreaFilter);
+		if($scope.allPmAreaFilter != null && $scope.allPmAreaFilter.length > 0 && $scope.allPmAreaFilter[0].id != ''){
+			$scope.allPmAreaFilter.splice(0,0,{id:'', name: "Tutte"});
+		}
+		if($scope.allPmAreaFilter.length > 0){
+			$scope.pmAreaFilter = $scope.allPmAreaFilter[0].id;
+		}
+		$scope.pmStatusFilter = $scope.allPmStatusFilter[0].filter;
 		$scope.switchListShowType(type);
 		$scope.showPSList = false;
 		$scope.showZList = false;
@@ -1295,6 +1465,18 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 		return fee_val;
 	};
+	
+	$scope.listaStati = [{
+			idObj: "ACTIVE",
+			descrizione: "Attivo",
+			filter: "ON-ACTIVE"
+		},
+		{
+			idObj: "INACTIVE",
+			descrizione: "Disattivo",
+			filter: "OFF-INACTIVE"
+		}
+	];
 	
 	$scope.correctColor = function(value){
 		return "#" + value;
@@ -2850,6 +3032,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					$scope.updateZoneProfit(isFirst);
 				}
 			}
+			
+			// ---- Init street area filter
+			$scope.allAreaFilter = [];
+			angular.copy(sharedDataService.getSharedLocalAreas(),$scope.allAreaFilter);
+			if($scope.allAreaFilter != null && $scope.allAreaFilter.length > 0 && $scope.allAreaFilter[0].id != ''){
+				$scope.allAreaFilter.splice(0,0,{id:'', name: "Tutte"});
+			}
+			$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
+			// ----------------------------
+			
 			//$scope.closeLoadingMap();
 		});
 	};
