@@ -182,11 +182,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(8, parkingMeterWS)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= parkingMeterWS.length/maxPMeters - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -240,11 +240,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(8, parkingMeterWS)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= parkingMeterWS.length/maxPMeters - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -262,7 +262,7 @@
 						<th width="20%">{{ 'street_name' | i18n }}</th>
 						<th width="25%" colspan="2">{{ 'street_area_name' | i18n }}</th>
 						<th width="9%">{{ 'street_slots' | i18n }} Tot</th>
-						<th width="41" colspan="6">{{ 'street_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(2)"></th>
+						<th width="41" colspan="6">{{ 'street_slots_composition' | i18n }}&nbsp;<i class="glyphicon glyphicon-sign"  ng-click="showInfo(2)"></i></th>
 <!-- 						<th width="9%">LS</th> -->
 <!-- 						<th width="9%">LC</th> -->
 <!-- 						<th width="9%">P</th> -->
@@ -302,11 +302,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(2, streetWS)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage >= streetWS.length/maxStreets - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -361,11 +361,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(2, streetWS)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage >= streetWS.length/maxStreets - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -420,11 +420,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(7, profitStreetsList)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage >= profitStreetsList.length/maxStreets - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -483,11 +483,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(2, streetWS)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage >= streetWS.length/maxStreets - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -532,11 +532,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(5)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= zoneWS.length/maxZones - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -586,11 +586,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(5)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= zoneWS.length/maxZones - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -644,11 +644,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(9, profitZonesList)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= profitZonesList.length/maxZones - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -705,11 +705,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(5)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= zoneWS.length/maxZones - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -753,11 +753,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(1)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -807,11 +807,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(1)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -865,11 +865,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(1)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage >= profitAreaList.length/maxAreas - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -928,11 +928,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage == 0"
 							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(1)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 							ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
 							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -984,11 +984,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(4)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= allDataStructWS.length/maxPStructs - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -1041,11 +1041,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(4)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= pstructWS.length/maxPStructs - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -1098,11 +1098,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(10, profitStructWS)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= profitStructWS.length/maxPStructs - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>
@@ -1162,11 +1162,11 @@
 				<tr>
 					<td width="33%"></td>
 					<td width="34%" align="center">
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage == 0"
 								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 							{{currentPage+1}}/{{numberOfPages(4)}}
-						<button class="btn btn-success"
+						<button class="btn btn-primary"
 								ng-disabled="currentPage >= allDataStructWS.length/maxPStructs - 1"
 								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 					</td>

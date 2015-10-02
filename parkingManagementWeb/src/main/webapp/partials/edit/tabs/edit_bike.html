@@ -62,12 +62,12 @@
 <!-- 						</div> -->
 <!-- 				</div> -->
 				<div class="col-md-6" ng-show="!viewModeBP">
-							<div class="panel panel-info" align="center">
+							<div class="panel panel-success" align="center">
 								<div class="panel-heading">
 									<table width="100%">
 										<tr>
 											<td align="left"><h5 class="panel-title">{{ 'bp_list' | i18n }}</h5></td>
-											<td align="right"><button type="button" class="btn btn-info" ng-click="setBpEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+											<td align="right"><button type="button" class="btn btn-success" ng-click="setBpEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
 										</tr>
 									</table>
 <!-- 									<h5 class="panel-title">{{ 'bp_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-info btn-xs" ng-click="setBpEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
@@ -100,11 +100,11 @@
 											</tr>
 										</table>
 									</div>
-									<button class="btn btn-info"
+									<button class="btn btn-default"
 											ng-disabled="currentPage == 0"
 											ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 										{{currentPage+1}}/{{numberOfPages(6)}}
-									<button class="btn btn-info"
+									<button class="btn btn-default"
 											ng-disabled="currentPage >= bpointWS.length/maxBPoints - 1"
 											ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 								</div>

@@ -66,7 +66,8 @@
 <!-- 									<img src="img/myweb4.png" alt="Logo myWeb" title="Logo myWeb" height="130" width="250" /> -->
 								</div>
 								<div class="well" align="center">
-									<h2 id="banner">App Parcheggi - Login</h2>
+								    <img src="imgs/logo.png" style="margin: 20px" />
+<!-- 									<h2 id="banner">MetroParco</h2> -->
 										<form name="f" action="login.do" method="POST" accept-charset="utf-8"><!-- j_spring_security_check -->
 											<table style="width: 45%;">
 												<tr>

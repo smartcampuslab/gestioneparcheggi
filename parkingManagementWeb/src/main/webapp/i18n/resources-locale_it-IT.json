@@ -124,7 +124,7 @@
     "description": "Label checkbox parcometri"
 }, {
     "key": "view_parkingstructs",
-    "value": "Strutture parcheggio",
+    "value": "Parcheggi in struttura",
     "description": "Label checkbox parcheggi in strutture"
 }, {
     "key": "view_bikepoints",
