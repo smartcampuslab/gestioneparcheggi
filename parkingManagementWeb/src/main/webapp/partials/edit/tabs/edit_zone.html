@@ -86,7 +86,7 @@
 <!-- 					<h5 class="panel-title">{{ 'zone_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setZEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
 				</div>
 				<div class="panel-body">
-					<div class="alert alert-danger" ng-show="showDeletingZErrorMessage">{{ 'err_in_delete_zone' | i18n }}</div>
+					<div class="field-error" ng-show="showDeletingZErrorMessage">{{ 'err_in_delete_zone' | i18n }}</div>
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="zoneWS.length != 0">
@@ -157,10 +157,10 @@
 						<tr>
 							<td width="70%" align="right">
 							<td width="15%" align="left">
-								<button type="button" class="btn btn-danger btn-lg" ng-click="closeZView()">{{ 'text_btn_close' | i18n  }}</button>	
+								<button type="button" class="btn btn-default btn-lg" ng-click="closeZView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
 							<td width="15%" align="left">
-								<button type="button" class="btn btn-success btn-lg" ng-click="setZEdit(viewZone)">{{ 'text_btn_edit' | i18n  }}</button>
+								<button type="button" class="btn btn-primary btn-lg" ng-click="setZEdit(viewZone)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>
@@ -172,9 +172,7 @@
 		<div class="col-md-12">
 			<form role="form" name="form">
 				<div class="panel panel-default" width="90%">
-			   		<div class="panel-heading">
-			    		<h3 class="panel-title"><strong>{{ 'edit_zone' | i18n }}</strong></h3>
-			  		</div>
+			    	<h3 class="panel-title"><strong>{{ 'edit_zone' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 			  			<div class="col-md-12" ><!-- id="map_canvas" ng-show="!isEditing" -->
 	<!-- 						<ui-gmap-google-map id="51" center="zCreateMap.center" draggable="true" zoom="zCreateMap.zoom" options="zCreateMap.options" control="zCreateMap.control" bounds="zCreateMap.bounds" events="zCreateMap.events"> -->
@@ -190,39 +188,39 @@
 						<div class="form-group">
 					    	<label for="geometryN" ng-show="zone_geometry.visible">{{ 'zone_geometry' | i18n }}</label>
 					    	<input id="geometryN" type="text" class="form-control" name="zGeometry" ng-model="myPolGeometry" ng-show="zone_geometry.visible" ng-required="zone_geometry.required" >
-					   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div>
-					   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.required">{{ 'zone_geometry_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.zGeometry.$error.required">{{ 'zone_geometry_err_required' | i18n }}</div>
 						</div>
 					   	<div class="form-group" ng-show="zone_name.visible">
 					    	<label for="name">{{ 'zone_name' | i18n }}</label>
 					    	<input id="name" type="text" class="form-control" name="zName" ng-model="zone.name" ng-required="zone_name.required" placeholder="{{ 'zone_name_placeholder' | i18n }}" >
-					   		<div class="alert alert-danger" ng-show="!isInit && form.zName.$error.required">{{ 'zone_name_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.zName.$error.required">{{ 'zone_name_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="zone_submacro.visible">
 					    	<label for="submacro">{{ 'zone_submacro' | i18n }}</label>
 					    	<input id="submacro" type="text" class="form-control" name="zSub" ng-model="zone.submacro" ng-required="zone_submacro.required" placeholder="{{ 'zone_submacro_placeholder' | i18n }}" >
-					   		<div class="alert alert-danger" ng-show="!isInit && form.zSub.$error.required">{{ 'zone_submacro_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.zSub.$error.required">{{ 'zone_submacro_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="zone_type.visible">
 					    	<label for="type">{{ 'zone_type' | i18n }}</label>
 					    	<input id="type" type="text" class="form-control" name="zType" ng-model="zone.type" ng-required="zone_type.required" placeholder="{{ 'zone_type_placeholder' | i18n }}" >
-					   		<div class="alert alert-danger" ng-show="!isInit && form.zType.$error.required">{{ 'zone_type_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.zType.$error.required">{{ 'zone_type_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="zone_note.visible">
 					    	<label for="note">{{ 'zone_note' | i18n }}</label>
 					    	<input id="note" type="text" class="form-control" name="zNote" ng-model="zone.note" ng-required="zone_note.required" placeholder="{{ 'zone_note_placeholder' | i18n }}" >
-					   		<div class="alert alert-danger" ng-show="!isInit && form.zNote.$error.required">{{ 'zone_note_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.zNote.$error.required">{{ 'zone_note_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="zone_color.visible">
 					    	<label for="color">{{ 'zone_color' | i18n }}</label>
 					    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="zColor" ng-model="myColor" ng-required="zone_color.required" placeholder="{{ 'zone_color_placeholder' | i18n }}" >
-					    	<div class="alert alert-danger" ng-show="!isInit && form.zColor.$error.required">{{ 'zone_color_err_required' | i18n }}</div>
+					    	<div class="field-error" ng-show="!isInit && form.zColor.$error.required">{{ 'zone_color_err_required' | i18n }}</div>
 					   	</div>
 					   	
 	<!-- 					<div class="form-group" ng-show="isEditing"> -->
 	<!-- 				    	<label for="geometry">{{ 'zone_geometry' | i18n }}</label> -->
 	<!-- 				    	<input id="geometry" type="text" class="form-control" name="zGeometry" ng-model="myPolGeometry" ng-required="false" >ng-pattern="gpsPos" -->
-	<!-- 				   		<div class="alert alert-danger" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div> -->
+	<!-- 				   		<div class="field-error" ng-show="!isInit && form.zGeometry.$error.pattern">{{ 'zone_geometry_err_pattern' | i18n }}</div> -->
 	<!-- 					</div> -->
 	<!-- 					<div class="col-md-12" ng-show="isEditing"> -->
 	<!-- 						<ui-gmap-google-map id="52" center="zEditMap.center" draggable="true" zoom="zEditMap.zoom" options="zEditMap.options" control="zEditMap.control" bounds="zEditMap.bounds"> -->
@@ -231,16 +229,16 @@
 	<!-- 						</ui-gmap-google-map> -->
 	<!-- 					</div> -->
 					</div>
-					<div class="alert alert-danger" ng-show="showUpdatingZErrorMessage">{{ 'err_in_update_zone' | i18n }}</div>
+					<div class="field-error" ng-show="showUpdatingZErrorMessage">{{ 'err_in_update_zone' | i18n }}</div>
 			   		<table width="95%">			
 					   	<tr>
 					   		<td width="85%"></td>
 					   		<td width="8%" align="center">
-					   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeZView()">{{ 'text_btn_close' | i18n  }}</button>
+					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeZView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
-					   			<button type="button" class="btn btn-success btn-lg" ng-click="updateZone(form, zone, myColor)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- editZone -->
-					   			<button type="button" class="btn btn-success btn-lg" ng-click="createZone(form, zone, myColor)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- newZone -->
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateZone(form, zone, myColor)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- editZone -->
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createZone(form, zone, myColor)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- newZone -->
 					   		</td>
 						</tr>
 						<tr>

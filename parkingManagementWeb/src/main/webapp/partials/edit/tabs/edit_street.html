@@ -246,7 +246,7 @@
 <!-- 					<h5 class="panel-title">{{ 'street_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setSEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
 				</div>
 				<div class="panel-body">
-					<div class="alert alert-danger" ng-show="showDeletingSErrorMessage">{{ 'err_in_delete_street' | i18n }}</div>
+					<div class="field-error" ng-show="showDeletingSErrorMessage">{{ 'err_in_delete_street' | i18n }}</div>
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="streetWS.length != 0">
@@ -405,10 +405,10 @@
 						<tr>
 							<td width="70%" align="right"></td>
 							<td width="15%" align="center">
-								<button type="button" class="btn btn-danger btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>	
+								<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
 							<td width="15%" align="right">
-								<button type="button" class="btn btn-success btn-lg" ng-click="setSEdit(viewStreet)">{{ 'text_btn_edit' | i18n  }}</button>
+								<button type="button" class="btn btn-primary btn-lg" ng-click="setSEdit(viewStreet)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>
@@ -420,16 +420,14 @@
 		<div class="col-md-12">
 			<form role="form" name="form">
 				<div class="panel panel-default" width="90%">
-			   		<div class="panel-heading">
-			    		<h3 class="panel-title"><strong>{{ 'edit_street' | i18n }}</strong></h3>
-			  		</div>
+			    	<h3 class="panel-title"><strong>{{ 'edit_street' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 			  			<div class="form-group" ng-show="!isEditing && s_areaId.visible">
 					    	<label for="area1">{{ 'street_area_name' | i18n }}</label>
 					    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myNewArea" ng-required="!isEditing && s_areaId.required" ng-change="getAreaPM(myNewArea)">
 					    		<option value="">{{ 'street_area_placeholder' | i18n }}</option>
 					    	</select>
-					   		<div class="alert alert-danger" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 						</div>
 			  			<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing"  -->
 	<!-- 						<ui-gmap-google-map id="41" center="sCreateMap.center" draggable="true" zoom="sCreateMap.zoom" options="sCreateMap.options" control="sCreateMap.control" bounds="sCreateMap.bounds" events="sCreateMap.events"> -->
@@ -446,58 +444,58 @@
 						<div class="form-group">
 					    	<label for="geometry" ng-show="s_geometry.visible">{{ 'street_geometry' | i18n }}</label>
 					    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myLineGeometry" ng-required="s_geometry.required" ng-show="s_geometry.visible" ><!-- ng-pattern="gpsPos" -->
-					   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
-					   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.required">{{ 'street_geometry_select_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.sGeometry.$error.required">{{ 'street_geometry_select_err_required' | i18n }}</div>
 						</div>
 					   	<div class="form-group" ng-show="s_streetRef.visible">
 					    	<label for="address">{{ 'street_address' | i18n }}</label>
 					    	<input id="address" type="text" class="form-control" name="sAddress" ng-model="eStreet.streetReference" ng-required="s_streetRef.required" placeholder="{{ 'street_address_placeholder' | i18n }}" >
-					   		<div class="alert alert-danger" ng-show="!isInit && form.sAddress.$error.required">{{ 'street_reference_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.sAddress.$error.required">{{ 'street_reference_err_required' | i18n }}</div>
 					   	</div>
 					   	<label for="totalSlot">{{ 'street_slots' | i18n }}</label>
-					   	<div class="panel panel-default" width="95%">
+					   	<div class="panel panel-default subpanel" width="95%">
 					   		<div class="panel-body">
 							   	<div class="form-group" ng-show="s_slotNum.visible">
 							    	<label for="totalSlot">{{ 'street_totalslot' | i18n }}</label>
 							    	<input id="totalSlot" type="text" class="form-control" name="sTotalslot" ng-model="eStreet.slotNumber" ng-pattern="onlyNumbers" ng-required="s_slotNum.required" placeholder="{{ 'street_totalslot_placeholder' | i18n }}" >
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sTotalslot.$error.required">{{ 'street_slots_err_required' | i18n }}</div>
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sTotalslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sTotalslot.$error.required">{{ 'street_slots_err_required' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sTotalslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 							   	</div>
 								<div class="form-group" ng-show="s_handicappedSlot.visible">
 							    	<label for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
 							    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="eStreet.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
 							   	</div>
 							   	<div class="form-group" ng-show="s_reservedSlot.visible">
 							    	<label for="reservedSlot">{{ 'street_reserved_slot' | i18n }}</label>
 							    	<input id="reservedSlot" type="text" class="form-control" name="sReservedslot" ng-model="eStreet.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
 							   	</div>
 							   	<div class="form-group" ng-show="s_timedSlot.visible">
 							    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
 							    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="eStreet.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="s_timedSlot.required" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
 							   	</div>
 							   	<div class="form-group" ng-show="s_freeSlot.visible">
 							    	<label for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
 							    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="eStreet.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
 							   	</div>
 							   	<div class="form-group" ng-show="s_freeSlotSign.visible">
 							    	<label for="freeparkSlotSigned">{{ 'street_freepark_slot_signed' | i18n }}</label>
 							    	<input id="freeparkSlotSigned" type="text" class="form-control" name="sFreeparkslotSigned" ng-model="eStreet.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
 							   	</div>
 							   	<div class="form-group" ng-show="s_unusuableSlot.visible">
 							    	<label for="unusuableSlot">{{ 'street_unusuable_slot' | i18n }}</label>
 							    	<input id="unusuableSlot" type="text" class="form-control" name="sUnusuableslot" ng-model="eStreet.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="s_unusuableSlot.required" placeholder="{{ 'street_unusuableslot_placeholder' | i18n }}" >
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sUnusuableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="alert alert-danger" ng-show="!isInit && form.sUnusuableslot.$error.required">{{ 'street_unusuable_slots_err_required' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sUnusuableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.sUnusuableslot.$error.required">{{ 'street_unusuable_slots_err_required' | i18n }}</div>
 							   	</div>
 					   		</div>
 					   	</div>
@@ -510,7 +508,7 @@
 					    	<label for="area">{{ 'street_area_name' | i18n }}</label>
 					    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="isEditing && s_areaId.required" ng-change="getAreaPM(myArea)">
 					    	</select>
-					   		<div class="alert alert-danger" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="s_zones.visible" >
 					    	<label for="dropdownZ1">{{ 'street_zone' | i18n }}</label>
@@ -530,7 +528,7 @@
 						    		<li ng-repeat="z in myZones | orderBy:['name', 'submacro']"><input type="checkbox" id="{{ z.id }}" name="zones" ng-model=z.selected value="{{ z.id }}" /><span> - </span><label for="{{ z.id }}">{{ z.name }} {{ z.submacro }}</label></li>
 						    	</ul>
 					    	</div>
-					    	<div class="alert alert-danger" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>
+					    	<div class="field-error" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="s_pms.visible" >
 					    	<label for="dropdownPm1">{{ 'street_pm' | i18n }}</label>
@@ -550,26 +548,26 @@
 						    		<li ng-repeat="p in myPms | orderBy:['code']"><input type="checkbox" id="{{ p.id }}" name="pms" ng-model=p.selected value="{{ p.code }}" /><span> - </span><label for="{{ p.id }}">{{ p.code }} {{ p.note }}</label></li>
 						    	</ul>
 					    	</div>
-					    	<div class="alert alert-danger" ng-show="!isInit && form.sPm.$error.required">{{ 'street_pm_select_err_required' | i18n }}</div>
+					    	<div class="field-error" ng-show="!isInit && form.sPm.$error.required">{{ 'street_pm_select_err_required' | i18n }}</div>
 						</div>
 	<!-- 					<div class="form-group" ng-show="isEditing"> -->
 	<!-- 				    	<label for="geometry">{{ 'street_geometry' | i18n }}</label> -->
 	<!-- 				    	<input id="geometry" type="text" class="form-control" name="sGeometry" ng-model="myLineGeometry" ng-required="false" >ng-pattern="gpsPos" -->
-	<!-- 				   		<div class="alert alert-danger" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div> -->
+	<!-- 				   		<div class="field-error" ng-show="!isInit && form.sGeometry.$error.pattern">{{ 'street_geometry_select_err_pattern' | i18n }}</div> -->
 	<!-- 					</div> -->
 					</div>
-					<div class="alert alert-danger" ng-show="showUpdatingSErrorMessage">{{ 'err_in_update_street' | i18n }}</div>
+					<div class="field-error" ng-show="showUpdatingSErrorMessage">{{ 'err_in_update_street' | i18n }}</div>
 			   		<table width="97%">			
 					   	<tr>
 					   		<td width="85%"></td>
 					   		<td width="8%" align="center">
-					   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>
+					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
 	<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
 	<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
-					   			<button type="button" class="btn btn-success btn-lg" ng-click="updateStreet(form, eStreet, myArea, myZones, myPms)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-					   			<button type="button" class="btn btn-success btn-lg" ng-click="createStreet(form, eStreet, myNewArea, myZones, myPms)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateStreet(form, eStreet, myArea, myZones, myPms)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createStreet(form, eStreet, myNewArea, myZones, myPms)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>
 						</tr>
 						<tr>

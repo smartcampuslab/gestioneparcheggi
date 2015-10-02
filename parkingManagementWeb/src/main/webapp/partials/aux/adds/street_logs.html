@@ -1,16 +1,14 @@
 <div class="col-md-12"><!-- style="height: 250px" -->
 	<form role="form" name="form" ng-init="initStreetLogCreation()">
 		<div class="panel panel-default" width="90%">
-		   	<div class="panel-heading">
 		    	<h3 class="panel-title"><strong>{{ 'new_log_street' | i18n }}</strong></h3>
-		  	</div>
 		  	<div class="panel-body">
 		  		<div class="form-group">
 			    	<label for="streetN">{{ 'street_name_log' | i18n }}</label>
 			    	<select id="streetN" name="streetN" class="form-control" ng-options="s as s.name for s in allStreet" ng-model="myStreet" required ng-change="getDetailData(myStreet)">
 			    		<option value="">{{ 'street_log_placeholder' | i18n }}</option>
 			    	</select>
-			   		<div class="alert alert-danger" ng-show="!isInit && form.streetN.$error.required">{{ 'street_name_select_err_required' | i18n }}</div>
+			   		<div class="field-error" ng-show="!isInit && form.streetN.$error.required">{{ 'street_name_select_err_required' | i18n }}</div>
 				</div>
 				<table width="100%" ng-show="streetLoadedAndSelected">
 					<tr>
@@ -32,11 +30,11 @@
 				<div class="form-group" ng-show="streetLoadedAndSelected">
 					<label for="totalSlot">{{ 'street_user_log' | i18n }}</label>
 			    	<input id="totalSlot" type="text" class="form-control" name="sUserLog" ng-model="myStreetDetails.user" ng-pattern="onlyNumbers" placeholder="{{ 'street_usercode_placeholder' | i18n }}" required >
-				   	<div class="alert alert-danger" ng-show="!isInit && form.sUserLog.$error.required">{{ 'street_userlog_err_required' | i18n }}</div>
-				   	<div class="alert alert-danger" ng-show="!isInit && form.sUserLog.$error.pattern">{{ 'street_userlog_pattern' | i18n }}</div>
+				   	<div class="field-error" ng-show="!isInit && form.sUserLog.$error.required">{{ 'street_userlog_err_required' | i18n }}</div>
+				   	<div class="field-error" ng-show="!isInit && form.sUserLog.$error.pattern">{{ 'street_userlog_pattern' | i18n }}</div>
 				</div>
 				<div class="form-group" ng-show="streetLoadedAndSelected">
-					<label>{{ 'street_time_log' | i18n }}</label>
+					<label class="group-label" >{{ 'street_time_log' | i18n }}</label>
 			   		<div class="panel panel-default" width="90%">
 				   		<div class="panel-body">
 							<table width="100%">
@@ -52,8 +50,8 @@
 								</tr>
 								<tr>
 									<td colspan="4">
-										<div class="alert alert-danger" ng-show="!isInit && form.pLogTime.$error.required">{{ 'street_timelog_err_required' | i18n }}</div>
-										<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div>
+										<div class="field-error" ng-show="!isInit && form.pLogTime.$error.required">{{ 'street_timelog_err_required' | i18n }}</div>
+										<div class="field-error" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div>
 									</td>
 								</tr>
 							</table>
@@ -61,15 +59,15 @@
 					</div>    		
 <!-- 			    	<label for="logtime">{{ 'street_time_log' | i18n }}:</label>&nbsp; -->
 <!-- 			    	<input id="logtime" name="pLogTime" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myStreetDetails.loghour" is-open="sLogtime.open" ng-click="sLogtime.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required /> -->
-<!-- 			    	<div class="alert alert-danger" ng-show="!isInit && form.pLogTime.$error.required">{{ 'street_timelog_err_required' | i18n }}</div> -->
+<!-- 			    	<div class="field-error" ng-show="!isInit && form.pLogTime.$error.required">{{ 'street_timelog_err_required' | i18n }}</div> -->
 			    </div>
 <!-- 			    <div class="form-group" ng-show="streetLoadedAndSelected">	 -->
 <!-- 			   		<input type="text" class="form-control" name="pLogOra" id="time" ng-model="myStreetDetails.logtime" placeholder="HH:mm:ss" ng-pattern="timePattern" required> -->
-<!-- 			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div> -->
-<!-- 			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.pattern">{{ 'log_time_error_pattern' | i18n }}</div> -->
+<!-- 			   		<div class="field-error" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div> -->
+<!-- 			   		<div class="field-error" ng-show="!isInit && form.pLogOra.$error.pattern">{{ 'log_time_error_pattern' | i18n }}</div> -->
 <!-- 			   	</div> -->
 			   	<div ng-show="streetLoadedAndSelected">
-			   		<label>{{ 'log_period' | i18n }}</label>
+			   		<label class="group-label" >{{ 'log_period' | i18n }}</label>
 			   		<div class="panel panel-default" width="90%">
 				   		<div class="panel-body">
 				   			<table width="100%">
@@ -95,12 +93,12 @@
 					    		</tr>
 					    		<tr ng-show="(showErrorFromMajorTo)">
 					    			<td colspan="4">
-					    				<div class="alert alert-danger">{{ 'from_to_period_err' | i18n }}</div>
+					    				<div class="field-error">{{ 'from_to_period_err' | i18n }}</div>
 					    			</td>
 					    		</tr>
 					    		<tr ng-show="(showErrorEmptyVal)">
 				   					<td colspan="4">
-				   						<div class="alert alert-danger">{{ 'start_or_end_emplty_period_err' | i18n }}</div>
+				   						<div class="field-error">{{ 'start_or_end_emplty_period_err' | i18n }}</div>
 				   					</td>
 				   				</tr>
 					    	</table>
@@ -109,7 +107,7 @@
 			   	</div>
 			   	
 				<div ng-show="streetLoadedAndSelected">
-				   	<label for="totalSlot">{{ 'street_slots' | i18n }}</label>
+				   	<label class="group-label" for="totalSlot">{{ 'street_slots' | i18n }}</label>
 				   	<div class="panel panel-default" width="90%">
 				   		<div class="panel-body">
 				   			<table width="100%">
@@ -128,25 +126,25 @@
 				   				<tr ng-show="!isInit && form.sOccupiedslotOnTimed.$error.pattern">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_timed_error_pattern' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_timed_error_pattern' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr ng-show="!isInit && form.sOccupiedslotOnTimed.$error.required">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_timed_error_required' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_timed_error_required' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr ng-show="!isInit && form.sOccupiedslotOnTimed.$error.min">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_timed_error_min' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_timed_error_min' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr ng-show="showMaxErrorTimed">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_timed_error_max' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_timed_error_max' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr>
@@ -158,25 +156,25 @@
 <!-- 				   				<tr ng-show="!isInit && form.sOccupiedslotOnPaying.$error.pattern"> -->
 <!-- 				   					<td colspan="3" width="50%"></td> -->
 <!-- 				   					<td align="center"> -->
-<!-- 				   						<div class="alert alert-danger">{{ 'log_street_occupied_paid_error_pattern' | i18n }}</div> -->
+<!-- 				   						<div class="field-error">{{ 'log_street_occupied_paid_error_pattern' | i18n }}</div> -->
 <!-- 				   					</td> -->
 <!-- 				   				</tr> -->
 				   				<tr ng-show="!isInit && form.sOccupiedslotOnPaying.$error.required">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_paid_error_required' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_paid_error_required' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr ng-show="!isInit && form.sOccupiedslotOnPaying.$error.min">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_paid_error_min' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_paid_error_min' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr ng-show="showMaxErrorPaing">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_paid_error_max' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_paid_error_max' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr>
@@ -188,25 +186,25 @@
 				   				<tr ng-show="!isInit && form.sOccupiedslotOnFree.$error.pattern">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_free_error_pattern' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_free_error_pattern' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr ng-show="!isInit && form.sOccupiedslotOnFree.$error.required">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_free_error_required' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_free_error_required' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr ng-show="!isInit && form.sOccupiedslotOnFree.$error.min">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_free_error_min' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_free_error_min' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr ng-show="showMaxErrorFree">
 				   					<td colspan="3" width="50%"></td>
 				   					<td align="center">
-				   						<div class="alert alert-danger">{{ 'log_street_occupied_free_error_max' | i18n }}</div>
+				   						<div class="field-error">{{ 'log_street_occupied_free_error_max' | i18n }}</div>
 				   					</td>
 				   				</tr>
 				   				<tr>
@@ -224,19 +222,19 @@
 				   			</table>
 				   	</div>
 				</div>
-				<div class="alert alert-danger" ng-show="showUpdatingSErrorMessage">{{ 'err_in_log_street_inserting' | i18n }}</div>
+				<div class="field-error" ng-show="showUpdatingSErrorMessage">{{ 'err_in_log_street_inserting' | i18n }}</div>
 				<div class="alert alert-success" ng-show="showUpdatingSSuccessMessage">{{ 'succ_in_log_street_inserting' | i18n }}</div>
 		   		<table width="97%">			
 				   	<tr>
 				   		<td width="85%"></td>
 				   		<td width="8%" align="center">
 <!-- 				   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button> -->
-				   			<a href="#/aux/home" type="button" class="btn btn-danger btn-lg" >{{ 'text_btn_close' | i18n }}</a>
+				   			<a href="#/aux/home" type="button" class="btn btn-default btn-lg" >{{ 'text_btn_close' | i18n }}</a>
 				   		</td>
 				   		<td width="7%" align="right">
 <!-- 				   		<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
 <!-- 				   		<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
-				   			<button type="button" class="btn btn-success btn-lg" ng-click="insertStreetLog(form, myStreetDetails)">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-primary btn-lg" ng-click="insertStreetLog(form, myStreetDetails)">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 					<tr>

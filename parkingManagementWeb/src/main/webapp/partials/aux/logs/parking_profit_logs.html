@@ -110,11 +110,11 @@
 			<tr>
 				<td width="33%"></td>
 				<td width="34%" align="center">
-					<button class="btn btn-success"
+					<button class="btn btn-default"
 						ng-disabled="currentPage == 0"
 						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
 						{{currentPage+1}}/{{logParkCountsPage}}
-					<button class="btn btn-success"
+					<button class="btn btn-default"
 						ng-disabled="currentPage >= parkProfitLogs.length/maxLogs - 1"
 						ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
 				</td>
