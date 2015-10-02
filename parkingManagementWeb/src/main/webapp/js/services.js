@@ -117,6 +117,15 @@ pm.service('sharedDataService', function(){
     this.filter_hour;
     
     this.report_name;
+    this.saved_report = {
+    	id : '',	
+    	name : '', 
+    	description: {},
+    	periodic : '', 
+    	startperiod : '', 
+    	mail : ''
+    };
+    this.report_list=[];
     
     this.setFilterTopicList = function(value){
     	this.filter_topiclist = value;
@@ -187,6 +196,20 @@ pm.service('sharedDataService', function(){
     };
     this.getReportName = function(){
     	return this.report_name;
+    };
+    
+    this.setSavedReport = function(value){
+    	this.saved_report = value;
+    };
+    this.getSavedReport = function(){
+    	return this.saved_report;
+    };
+    
+    this.addReportInList = function(report){
+    	this.report_list.push(report);
+    };
+    this.getReportInList = function(report){
+    	return this.report_list;
     };
     
 	// Get and Set methods

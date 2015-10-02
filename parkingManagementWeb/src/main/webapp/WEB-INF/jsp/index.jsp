@@ -594,8 +594,12 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 						<div ng-show="isperiod">
 							<div class="form-group">
 						    	<label for="reportperiod">Periodo invio report</label>
-						    	<select id="reportperiod" name="reportSentPeriod" class="form-control" ng-model="report.periodic" ng-required="isperiod"><!-- ng-options="p.id as p.title for p in periods" -->
-						    		<option value="">Seleziona periodo</option>
+						    	<select ng-if="myPeriod == null" id="reportperiod" name="reportSentPeriod" class="form-control" ng-model="report.periodic" ng-required="isperiod"><!-- ng-options="p.id as p.title for p in periods" -->
+						    		<option value="" >Seleziona periodo</option>
+                                    <option ng-repeat="p in periods" value="{{p.id}}">{{p.title}}</option>
+						    	</select>
+						    	<select ng-if="myPeriod != null" id="reportperiod" name="reportSentPeriod" class="form-control" ng-model="report.periodic" ng-required="isperiod"><!-- ng-options="p.id as p.title for p in periods" -->
+									<option value="myPeriod.id">{{ myPeriod.title }}</option>
                                     <option ng-repeat="p in periods" value="{{p.id}}">{{p.title}}</option>
 						    	</select>
 					   			<div class="alert alert-danger" ng-show="!isInit && form.reportSentPeriod.$error.required">Campo 'periodo invio report' obbligatorio</div>
@@ -609,18 +613,18 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 								<timepicker id="periodstarttime" ng-model="report.startperiod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
 							</div>
 							<div>&nbsp;</div>
-						</div>
-						<div class="form-group">
-						    <label for="email_rep">Email inoltro report</label>
-    						<input type="text" class="form-control" id="email_rep" name="repEmail" placeholder="Inserisci indirizzo email di inoltro report" ng-model="report.mail" required ng-pattern="mailPattern">
-   							<div class="alert alert-danger" ng-show="!isInit && form.repEmail.$error.required">Campo 'email' obbligatorio</div>
-   							<div class="alert alert-danger" ng-show="!isInit && form.repEmail.$error.pattern">Campo 'email' non corretto</div>
+							<div class="form-group">
+							    <label for="email_rep">Email inoltro report</label>
+	    						<input type="text" class="form-control" id="email_rep" name="repEmail" placeholder="Inserisci indirizzo email di inoltro report" ng-model="report.mail" ng-required="isperiod" ><!-- ng-pattern="mailPattern" -->
+	   							<div class="alert alert-danger" ng-show="!isInit && form.repEmail.$error.required">Campo 'email' obbligatorio</div>
+<!-- 	   							<div class="alert alert-danger" ng-show="!isInit && form.repEmail.$error.pattern">Campo 'email' non corretto</div> -->
+							</div>
 						</div>
 						<div></div>
 				</div>
 				<div class="modal-footer">
 					<button type="button" class="btn btn-default" ng-click="cancel()">Annulla</button>
-					<button type="button" class="btn btn-primary" ng-click="save(form)" >OK</button><!-- ng-disabled="(form.$dirty && form.$invalid) || form.$pristine" -->
+					<button type="button" class="btn btn-primary" ng-click="save(form)">OK</button><!-- ng-disabled="(form.$dirty && form.$invalid) || form.$pristine" -->
 				</div>
 			</div>
 		</div>

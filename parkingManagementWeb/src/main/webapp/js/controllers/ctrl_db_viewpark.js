@@ -39,8 +39,6 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	};
 	
 	// init shared filter values
-	sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
-	sharedDataService.setFilterSpace($scope.dashboard_space);
 	sharedDataService.setFilterVis($scope.vis);	
 	sharedDataService.setFilterYear($scope.year);
     sharedDataService.setFilterMonth($scope.monthSliderValue);
@@ -136,8 +134,6 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    }
 	    console.log("Fascia oraria: " + $scope.hourSliderValue);
 	    //--------------- Shared filter params ----------------
-	    sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
-	    sharedDataService.setFilterSpace($scope.dashboard_space);
 	    sharedDataService.setFilterVis($scope.vis);	
 	    sharedDataService.setFilterYear($scope.year);
 	    sharedDataService.setFilterMonth($scope.monthSliderValue);
@@ -284,6 +280,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return showOtherFilterSettings;
 	};
 	
+	$scope.reportShareList = [];
+	
 	$scope.lightgray = "#B0B0B0";//"#81EBBA";
 	$scope.lightgreen = "#37EC0E";
 	$scope.green = "#31B404";
@@ -319,9 +317,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$rootScope.$broadcast('dialogs.wait.complete');
 	};
 	
-	$scope.launchReport = function(){
-		var rep_name = $scope.generateReportName();
-		sharedDataService.setReportName(rep_name);
+	$scope.launchReport = function(report){
+		if(report!=null){
+			sharedDataService.setSavedReport(report);
+		} else {
+			var rep_name = $scope.generateReportName();
+			sharedDataService.setReportName(rep_name);
+		}
 		var dlg = $dialogs.create('/dialogs/report.html','reportCtrl',{},{key: false,back: 'static'});
         dlg.result.then(function(name){
             $scope.name = name;
@@ -341,15 +343,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		//-----------------------------------------------------
 		
 		var title_map = "";
-		if($scope.dashboard_space.rate_area){
+		if($scope.dashboard_space_list == "rate_area"){
 			title_map = "areatariffazione_";
-		} else if($scope.dashboard_space.macrozone){
+		} else if($scope.dashboard_space_list == "macrozone"){
 			title_map = "macrozona_";
-		} else if($scope.dashboard_space.microzone){
+		} else if($scope.dashboard_space_list == "microzone"){
 			title_map = "via_";
-		} else if($scope.dashboard_space.parkingstructs){
+		} else if($scope.dashboard_space_list == "parkingstructs"){
 			title_map = "parcheggiostruttura_";
-		} else if($scope.dashboard_space.parkingmeter){
+		} else if($scope.dashboard_space_list == "parkingmeter"){
 			title_map = "parcometro_";
 		}
 		
@@ -405,7 +407,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 			
 		}
-		return title_map + ".csv";
+		return title_map; // + ".csv"
 	};
 	
 	$scope.getCorrectTitleValFromFilter = function(value, type){
@@ -1081,6 +1083,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			$scope.dashboard_topics_list = "parkSupply"; 	//"occupation";
 		}
 		
+		sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
+		sharedDataService.setFilterSpace($scope.dashboard_space_list);
+		
 	};
 	
 	$scope.showZList = false;
@@ -1201,8 +1206,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				case "budget": 
 					break;
 			}
+			sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
+			sharedDataService.setFilterSpace($scope.dashboard_space_list);
+			// here I init the reportsharedList
+			$scope.reportShareList = sharedDataService.getReportInList();
 		}
 		$scope.update_title_map(false, "", "");
+		
 	};
 	
 	$scope.switchListShowType = function(type){
@@ -6751,7 +6761,9 @@ pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataServi
 	
 	//var shared_name = sharedDataService.getReportName();
 	$scope.report = {
+		id : '',
 		name : '', 
+		description: {},
 		periodic : '', 
 		startperiod : '', 
 		mail : ''
@@ -6764,6 +6776,7 @@ pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataServi
 	    { id:'3', title:"Settimanale" },
 	    { id:'4', title:"Giornaliero" }
 	];
+	$scope.myPeriod = null;
 	
 	// ------------------ Start datetimepicker section -----------------------
     $scope.today = function() {
@@ -6818,56 +6831,109 @@ pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataServi
 	
 	
 	$scope.readReportName = function(){
-		$scope.report.name = sharedDataService.getReportName();
-		$scope.isInit = true;
-		//--------------- Shared filter params ----------------
-		var topics = sharedDataService.getFilterTopicList();
-		var space = sharedDataService.getFilterSpace();
-		var vis = sharedDataService.getFilterVis();	
-		var year = sharedDataService.getFilterYear();
-		var month = sharedDataService.getFilterMonth();
-		var dowType = sharedDataService.getFilterDowType();
-		var dowVal = sharedDataService.getFilterDowVal();
-		var hour = sharedDataService.getFilterHour();
-		//-----------------------------------------------------
-		$scope.rep_topic = topics;
-		$scope.rep_space = space;
-		$scope.rep_vis = $scope.correctVisFromFilter(vis);
-		$scope.rep_year = (year == null || year == "")?"tutti":year;
-		if(month == null || month == ""){
-			$scope.rep_month = "tutti";
+		$scope.myPeriod = null;
+		$scope.report = sharedDataService.getSavedReport();
+		if($scope.report.id != ''){
+			// load saved report data
+			if( $scope.report.periodic != ''){
+				$scope.isperiod = true;
+				var id = Number($scope.report.periodic);
+				$scope.myPeriod = $scope.periods[id -1];
+			}
+			$scope.rep_topic = $scope.report.description.topic;
+			$scope.rep_space = $scope.report.description.space;
+			$scope.rep_vis = $scope.report.description.vis;
+			$scope.rep_year = $scope.report.description.year;
+			$scope.rep_month = $scope.report.description.month;
+			$scope.rep_dow = $scope.report.description.dow;
+			$scope.rep_hour = $scope.report.description.hour;
 		} else {
-			var month_val = month.split(";");
-			if(month_val.length > 1){
-				$scope.rep_month = $scope.getCorrectTitleDescFromFilter(month_val[0], 1) + "-" + $scope.getCorrectTitleDescFromFilter(month_val[1], 1);
-			} else {
-				$scope.rep_month = $scope.getCorrectTitleDescFromFilter(month_val[0], 1);
+			// generate new report data
+			$scope.report.name = sharedDataService.getReportName();
+			$scope.isInit = true;
+			//--------------- Shared filter params ----------------
+			var topics = sharedDataService.getFilterTopicList();
+			var space = sharedDataService.getFilterSpace();
+			var vis = sharedDataService.getFilterVis();	
+			var year = sharedDataService.getFilterYear();
+			var month = sharedDataService.getFilterMonth();
+			var dowType = sharedDataService.getFilterDowType();
+			var dowVal = sharedDataService.getFilterDowVal();
+			var hour = sharedDataService.getFilterHour();
+			//-----------------------------------------------------
+			
+			if(space == "rate_area"){
+				$scope.rep_space = "area tariffazione";
+			} else if(space == "macrozone"){
+				$scope.rep_space = "macrozona";
+			} else if(space == "microzone"){
+				$scope.rep_space = "via";
+			} else if(space == "parkingstructs"){
+				$scope.rep_space = "parcheggio struttura";
+			} else if(space == "parkingmeter"){
+				$scope.rep_space = "parcometro";
 			}
-		}
-		if(dowType != null && dowType != ""){
-			if(dowType != "custom"){
-				if(dowType == "we"){
-					$scope.rep_dow = "festivo";
+			
+			switch (topics){
+				case "occupation": 
+					$scope.rep_topic = "occupazione";
+					break;
+				case "receipts": 
+					$scope.rep_topic = "incasso";
+					break;
+				case "timeCost": 
+					$scope.rep_topic = "costoaccesso";
+					break;	
+				default: break;
+			}
+			
+			$scope.rep_vis = $scope.correctVisFromFilter(vis);
+			$scope.rep_year = (year == null || year == "")?"tutti":year;
+			if(month == null || month == ""){
+				$scope.rep_month = "tutti";
+			} else {
+				var month_val = month.split(";");
+				if(month_val.length > 1){
+					$scope.rep_month = $scope.getCorrectTitleDescFromFilter(month_val[0], 1) + "-" + $scope.getCorrectTitleDescFromFilter(month_val[1], 1);
 				} else {
-					$scope.rep_dow = "feriale";
+					$scope.rep_month = $scope.getCorrectTitleDescFromFilter(month_val[0], 1);
 				}
-			} else {
-				var dow_val = dowVal.split(";");
-				if(dow_val.length > 1){
-					$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_val[0], 2) + $scope.getCorrectTitleDescFromFilter(dow_val[1], 2);
+			}
+			if(dowType != null && dowType != ""){
+				if(dowType != "custom"){
+					if(dowType == "we"){
+						$scope.rep_dow = "festivo";
+					} else {
+						$scope.rep_dow = "feriale";
+					}
 				} else {
-					$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_val[0], 2);
+					var dow_val = dowVal.split(";");
+					if(dow_val.length > 1){
+						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_val[0], 2) + $scope.getCorrectTitleDescFromFilter(dow_val[1], 2);
+					} else {
+						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_val[0], 2);
+					}
 				}
 			}
+			if(hour != null && hour != ""){
+				var hour_val = hour.split(";");
+				if(hour_val.length > 1){
+					$scope.rep_hour = hour_val[0] + "-" + hour_val[1];
+				} else {
+					$scope.rep_hour = hour_val[0];
+				}
+			}	
+			
+			$scope.report.description = {
+				topic: 	$scope.rep_topic,
+				space: $scope.rep_space,
+				vis: $scope.rep_vis,
+				year: $scope.rep_year,
+				month: $scope.rep_month,
+				dow: $scope.rep_dow,
+				hour: $scope.rep_hour
+			};
 		}
-		if(hour != null && hour != ""){
-			var hour_val = hour.split(";");
-			if(hour_val.length > 1){
-				$scope.rep_hour = hour_val[0] + "-" + hour_val[1];
-			} else {
-				$scope.rep_hour = hour_val[0];
-			}
-		}		
 	};
 	
 	$scope.correctVisFromFilter = function(vis){
@@ -6968,6 +7034,8 @@ pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataServi
 	
 	$scope.cancel = function(){
 	    $modalInstance.dismiss('canceled');  
+	    $scope.clearReport();
+		sharedDataService.setSavedReport($scope.report);
 	}; // end cancel
 	  
 	$scope.save = function(form){
@@ -6975,10 +7043,25 @@ pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataServi
 			$scope.isInit=false;
 		} else {
 			$scope.isInit=true;
+			$scope.report.id = sharedDataService.getReportInList().length + 1;
 			$modalInstance.close($scope.report);
+			sharedDataService.addReportInList($scope.report);
+			$scope.clearReport();
+			sharedDataService.setSavedReport($scope.report);
 		}
 	}; // end save
 	  
+	$scope.clearReport = function(){
+		$scope.report = {
+			id : '',
+			name : '', 
+			description: {},
+			periodic : '', 
+			startperiod : '', 
+			mail : ''
+		};
+	};
+	
 	$scope.hitEnter = function(evt){
 	    if(angular.equals(evt.keyCode,13) && !(angular.equals($scope.name,null) || angular.equals($scope.name,'')))
 		$scope.save();
