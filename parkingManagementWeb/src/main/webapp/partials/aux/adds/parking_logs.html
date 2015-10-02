@@ -1,9 +1,7 @@
 <div class="col-md-12">
 	<form role="form" name="form" ng-init="initParkLogCreation()">
 		<div class="panel panel-default" width="90%">
-		   	<div class="panel-heading">
 		    	<h3 class="panel-title"><strong>{{ 'new_log_parking' | i18n }}</strong></h3>
-		  	</div>
 		  	<div class="panel-body">
 		  		<div class="form-group">
 			    	<label for="parkN">{{ 'parking_name_log' | i18n }}</label>
@@ -32,7 +30,7 @@
 				   	<div class="alert alert-danger" ng-show="!isInit && form.sUserLog.$error.pattern">{{ 'parking_userlog_pattern' | i18n }}</div>
 				</div>
 				<div class="form-group" ng-show="parkLoadedAndSelected">
-					<label for="logtime">{{ 'parking_time_log' | i18n }}:</label>
+					<label class="group-label" for="logtime">{{ 'parking_time_log' | i18n }}:</label>
 			   		<div class="panel panel-default" width="90%">
 				   		<div class="panel-body">
 							<table width="100%">
@@ -64,7 +62,7 @@
 <!-- 			   		<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.pattern">{{ 'log_time_error_pattern' | i18n }}</div> -->
 <!-- 			   	</div> -->
 				<div ng-show="parkLoadedAndSelected">
-					<label>{{ 'log_period' | i18n }}</label>
+					<label class="group-label" >{{ 'log_period' | i18n }}</label>
 			   		<div class="panel panel-default" width="90%">
 				   		<div class="panel-body">
 				   			<table width="100%">
@@ -103,7 +101,7 @@
 				   	</div>
 				</div>
 				<div ng-show="parkLoadedAndSelected">
-				   	<label for="totalSlot">{{ 'parking_slots' | i18n }}</label>
+				   	<label class="group-label"  for="totalSlot">{{ 'parking_slots' | i18n }}</label>
 				   	<div class="panel panel-default" width="90%">
 				   		<div class="panel-body">
 				   			<table width="100%">
@@ -153,12 +151,12 @@
 				   		<td width="85%"></td>
 				   		<td width="8%" align="center">
 <!-- 				   			<button type="button" class="btn btn-danger btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button> -->
-				   			<a href="#/aux/home" type="button" class="btn btn-danger btn-lg" >{{ 'text_btn_close' | i18n }}</a>
+				   			<a href="#/aux/home" type="button" class="btn btn-default btn-lg" >{{ 'text_btn_close' | i18n }}</a>
 				   		</td>
 				   		<td width="7%" align="right">
 <!-- 				   		<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
 <!-- 				   		<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
-				   			<button type="button" class="btn btn-success btn-lg" ng-click="insertParkingLog(form, myParkingDetails)">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-primary btn-lg" ng-click="insertParkingLog(form, myParkingDetails)">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 					<tr>

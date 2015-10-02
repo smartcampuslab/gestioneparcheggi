@@ -6,6 +6,7 @@
 <link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">
 <link href="css/modaldialog.css" rel="stylesheet" type="text/css" />
 <link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
+<link href="css/style.css" rel="stylesheet" type="text/css" />
 
 <!-- required libraries -->
 <script src="js/jquery.min.js" type="text/javascript"></script>

@@ -203,10 +203,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     };
     
     $scope.addtabs = [ 
-        { title:'Nuovo log Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html" },
-        { title:'Nuovo log Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html" },
-        { title:'Nuovo log Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html" },
-        { title:'Nuovo log Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html" }
+        { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html" },
+        { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html" },
+        { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html" },
+        { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html" }
     ];
                   
     $scope.setAddIndex = function($index){

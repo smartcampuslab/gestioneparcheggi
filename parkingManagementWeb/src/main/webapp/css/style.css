@@ -649,7 +649,7 @@ div #panelMap {
     background-image: linear-gradient(to bottom, #1460a4 0, #1460a4 100%);
 }
 
-.panel-success > .panel-heading {
+.panel-success > .panel-heading, .panel-default > .panel-heading {
 	background: none;
     border: 0px;
     border-bottom: 2px solid #3b81c3;
@@ -659,4 +659,44 @@ div #panelMap {
     color: #3b81c3;
     padding-left: 0px;
     padding-bottom: 5px;
+}
+
+.pmeter-on {
+	color: #5cb85c;
+	font-weight: bold;
+}
+
+.pmeter-off {
+    color: #b92c28;
+    font-weight: bold;
+}
+
+label {
+	text-transform: uppercase;
+}
+
+label.group-label {
+    border-bottom: 2px solid #3b81c3;
+    width: 100%;
+}
+
+.subpanel {
+	border-radius: 0;
+    border-top: 2px solid #3b81c3;
+	border-bottom: 2px solid #3b81c3;
+}
+
+.subpanel label {
+    text-transform: none !important;
+}
+
+.field-error {
+	color: #b92c28;
+}
+
+.well {
+    background: none;
+    border: 0px;
+    box-shadow: none;
+    -webkit-box-shadow: none;
 }
