@@ -175,41 +175,64 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
 	    	$scope.editparktabs = [];
 	    	var parktabs = [];
+	    	var area_tab_obj = {};
+	    	var zone_tab_obj = {};
+	    	var street_tab_obj = {};
+	    	var ps_tab_obj = {};
+	    	var pm_tab_obj = {};
+	    	var bp_tab_obj = {};
 	    	$scope.showedObjects = sharedDataService.getVisibleObjList();
 	    	for(var i = 0; i < $scope.showedObjects.length; i++){
 	    		if($scope.showedObjects[i].id == 'Area'){
 	    			showArea = true;
 	    			$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
-	    			parktabs.push({ title:'Area', index: 1, content:"partials/edit/tabs/edit_area.html" });
-	    		}
-	    		if($scope.showedObjects[i].id == 'Street'){
-	    			showStreets = true;
-	    			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
-	    			parktabs.push({ title:'Via', index: 2, content:"partials/edit/tabs/edit_street.html" });
-	    		}
-	    		if($scope.showedObjects[i].id == 'Pm'){
-	    			showPm = true;
-	    			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
-	    			parktabs.push({ title:'Parcometro', index: 3, content:"partials/edit/tabs/edit_parkingmeter.html" });
-	    		}
-	    		if($scope.showedObjects[i].id == 'Ps'){
-	    			showPs = true;
-	    			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
-	    			parktabs.push({ title:'Parcheggio in struttura', index: 4, content:"partials/edit/tabs/edit_parkingstructure.html" });
+	    			area_tab_obj = { title:'Area', index: 1, content:"partials/edit/tabs/edit_area.html" };
 	    		}
 	    		if($scope.showedObjects[i].id == 'Zone'){
 	    			showZones = true;
 	    			$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
-	    			parktabs.push({ title:'Zona', index: 5, content:"partials/edit/tabs/edit_zone.html" });
+	    			zone_tab_obj = { title:'Macrozona', index: 2, content:"partials/edit/tabs/edit_zone.html" };
+	    		}
+	    		if($scope.showedObjects[i].id == 'Street'){
+	    			showStreets = true;
+	    			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
+	    			street_tab_obj = { title:'Via', index: 3, content:"partials/edit/tabs/edit_street.html" };
+	    		}
+	    		if($scope.showedObjects[i].id == 'Ps'){
+	    			showPs = true;
+	    			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
+	    			ps_tab_obj = { title:'Parcheggio in struttura', index: 4, content:"partials/edit/tabs/edit_parkingstructure.html" };
+	    		}
+	    		if($scope.showedObjects[i].id == 'Pm'){
+	    			showPm = true;
+	    			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
+	    			pm_tab_obj = { title:'Parcometro', index: 5, content:"partials/edit/tabs/edit_parkingmeter.html" };
 	    		}
 	    		if($scope.showedObjects[i].id == 'Bp'){
 	    			showBp = true;
 	    			$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
-	    			parktabs.push({ title:'Punti Bici', index: 6, content:"partials/edit/tabs/edit_bike.html" });
+	    			bp_tab_obj = { title:'Punti Bici', index: 6, content:"partials/edit/tabs/edit_bike.html" };
 	    		}
 	    	}
+	    	if(showArea){
+	    		parktabs.push(area_tab_obj);
+	    	}
+	    	if(showZones){
+	    		parktabs.push(zone_tab_obj);
+	    	}
+	    	if(showStreets){
+	    		parktabs.push(street_tab_obj);
+	    	}
+	    	if(showPs){
+	    		parktabs.push(ps_tab_obj);
+	    	}
+	    	if(showPm){
+	    		parktabs.push(pm_tab_obj);
+	    	}
+	    	if(showBp){
+	    		parktabs.push(bp_tab_obj);
+	    	}
 	    	angular.copy(parktabs, $scope.editparktabs);
-	    	
     	}
     };
     
@@ -407,7 +430,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	if(tab.index == 1){
        		$scope.getAreasFromDb();
        	}
-       	if(tab.index == 2){
+       	if(tab.index == 2){ // era 5
+       		//$scope.resizeMap();
+       		$scope.getZonesFromDb();
+       	}
+       	if(tab.index == 3){	// era 2
        		var zones = sharedDataService.getSharedLocalZones;
        		if(zones == null || zones.length == 0){
        			$scope.getZonesFromDb();
@@ -418,21 +445,17 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        		}
        		$scope.getStreetsFromDb();
        	}
-       	if(tab.index == 3){
+       	if(tab.index == 4){
+       		//$scope.resizeMap();
+       		$scope.getParkingStructuresFromDb();
+       	}
+       	if(tab.index == 5){	// era 3
        		//$scope.resizeMap();
        		$scope.getParkingMetersFromDb();
        		// I load the streets if there are no streets loaded
        		if($scope.streetWS == null || $scope.streetWS.length == 0){
 	    		$scope.getStreetsFromDb();
 	    	}
-       	}
-       	if(tab.index == 4){
-       		//$scope.resizeMap();
-       		$scope.getParkingStructuresFromDb();
-       	}
-       	if(tab.index == 5){
-       		//$scope.resizeMap();
-       		$scope.getZonesFromDb();
        	}
        	if(tab.index == 6){
        		$scope.getBikePointsFromDb();

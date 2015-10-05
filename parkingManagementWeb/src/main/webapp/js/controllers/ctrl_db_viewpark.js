@@ -66,7 +66,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 //	};
 	
 	// Method updateFilterObject: used to set to "all" the value of months (case type == 1), day of week (case type == 2) or hours (case type == 3)
-	$scope.updateFilterObject = function(filter, type, filtertype){
+	$scope.updateFilterObject = function(filter, type){	//, filtertype
 		switch (type){
 			case 1: // months
 				if(filter.months){	// reverse case 
@@ -86,30 +86,35 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 				}
 				break;
 		}
-		$scope.updateSearch(filtertype);
+		$scope.updateSearch();	//filtertype
 	};
 	
-	$scope.updateYear = function(value, type){
+	$scope.updateYear = function(value){	//, type
 		$scope.year = value;
-		$scope.updateSearch(type);
+		$scope.updateSearch();
 	};
 	
-	$scope.updateMonth = function(value, type){
+	$scope.updateMonth = function(value){	//, type
 		$scope.monthSliderValue = value;
-		$scope.updateSearch(type);
+		$scope.updateSearch();
 	};
 	
-	$scope.updateDay = function(value, type){
+	$scope.updateDay = function(value){		//, type
 		$scope.daySliderValue = value;
-		$scope.updateSearch(type);
+		$scope.updateSearch();
 	};
 	
-	$scope.updateHour = function(value, type){
+	$scope.updateHour = function(value){	//, type
 		$scope.hourSliderValue = value;
-		$scope.updateSearch(type);
+		$scope.updateSearch();
 	};
 	
-	$scope.updateSearch = function(type){
+	$scope.updateSearch = function(){	//type
+		var type = 1;
+		if(sharedDataService.getIsInList()){
+			type = 2;
+		}
+		$scope.closeAllDetailsList();
 		$scope.loadMapsObject();
 		//$scope.alignSelectedObjects();
 		//$scope.setAllMapObjectLoaded(false);
@@ -215,8 +220,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    		$scope.getOccupancyParksUpdatedFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
 	    		break;
 	    	default: break;	
-    	}
-    }
+	    	}
+	    }
 	};
 
 }]);
@@ -1015,8 +1020,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         { title:'Lista', index: 2, content:"partials/dashboard/tabs/viewpark_list.html", disabled:false }
     ];
     
+    $scope.firstIndexSet = true;
+    
     $scope.setIndex = function($index){
     	if($index > 0){
+    		// case index 1: map view
     	// ----------------------------- Block for report init ------------------------------------
     	$scope.preloaded_report_1 = {
     		id: 1,
@@ -1057,12 +1065,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     			sharedDataService.addReportInList($scope.preloaded_report_2);
     		}
     		// ----------------------------------------------------------------------------------------
-    		
     		sharedDataService.setIsInList(true);
-    		$scope.initWsView(2);
+    		$scope.initWsView(2, $scope.firstIndexSet);
     	} else {
+    		// case index 0: map view
     		sharedDataService.setIsInList(false);
-    		$scope.initWsView(1);
+    		$scope.initWsView(1, $scope.firstIndexSet);
+    		if($scope.firstIndexSet){
+    			$scope.firstIndexSet = false;
+    		};
     	}
        	$scope.tabIndex = $index;
     };
@@ -1208,8 +1219,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	
-	$scope.initPage = function(type){
-		
+	$scope.initPage = function(){	//type
 		$scope.dashboard_space = {
 			rate_area : false,
 			macrozone : false,
@@ -1225,11 +1235,55 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		};
 		
 		$scope.dashboard_space_list = "microzone";
-		if(type == 1){
+		//if(type == 1){
 			$scope.dashboard_topics = "parkSupply";
-		} else {
+		//} else {
 			$scope.dashboard_topics_list = "parkSupply"; 	//"occupation";
+		//}
+		
+		sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
+		sharedDataService.setFilterSpace($scope.dashboard_space_list);
+	};
+	 
+	// Method changeFilterSetup: used to keep in memory the filter option after tab swith (from map to list and vice versa)
+	$scope.changeFilterSetup = function(type){
+		if(type == 1){
+			// case of map
+			if($scope.dashboard_space_list == "rate_area"){
+				$scope.dashboard_space.rate_area = true;
+			} else if($scope.dashboard_space_list == "macrozone"){
+				$scope.dashboard_space.macrozone = true;
+			} else if($scope.dashboard_space_list == "microzone"){
+				$scope.dashboard_space.microzone = true;
+			} else if($scope.dashboard_space_list == "parkingmeter"){
+				$scope.dashboard_space.parkingmeter = true;
+			} else if($scope.dashboard_space_list == "parkingstructs"){
+				$scope.dashboard_space.parkingstructs = true;
+			}
+			$scope.dashboard_topics = $scope.dashboard_topics_list;
+			$scope.changeDashboardView(1, true);
+		} else {
+			// case of list
+			if($scope.dashboard_space.rate_area){
+				$scope.dashboard_space_list = "rate_area";
+			} else if($scope.dashboard_space.macrozone){
+				$scope.dashboard_space_list = "macrozone";
+			} else if($scope.dashboard_space.microzone){
+				$scope.dashboard_space_list = "microzone";
+			} else if($scope.dashboard_space.parkingmeter){
+				$scope.dashboard_space_list = "parkingmeter";
+			} else if($scope.dashboard_space.parkingstructs){
+				$scope.dashboard_space_list = "parkingstructs";
+			}
+			$scope.dashboard_topics_list = $scope.dashboard_topics;
+			$scope.changeDashboardView(2, true);
 		}
+			
+//		$scope.dashboard_filter = {
+//			months : true,
+//			dows : true,
+//			hours : true
+//		};
 		
 		sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
 		sharedDataService.setFilterSpace($scope.dashboard_space_list);
@@ -1248,37 +1302,67 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.showTimeCostLists = false;
 	
 	
-	$scope.changeDashboardView = function(type){
+	$scope.changeDashboardView = function(type, autoInit){
 		if(type == 1){
 			switch($scope.dashboard_topics){
 				case "parkSupply": 
 					// Show profit objects (with specifics colors)
-					$scope.dashboard_space.microzone = true;
-					$scope.dashboard_space.parkingmeter = false;
-					// Show parkingManagement objects
-					$scope.switchStreetMapObject(2, null, false);
-					$scope.switchZoneMapObject(2, null);
-					$scope.switchAreaMapObject(2, null);
-					$scope.switchParkingMapObject(2, null);
-					$scope.switchPMMapObject(2, null);
-					
-					// Hide the parkingMeters and uncheck the checkBox
-					if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
-						var object = $scope.mapParkingMetersSelectedMarkers[0];
-						object.options.animation = "";
-						$scope.mapParkingMetersMarkers.push(object);
-						$scope.mapParkingMetersSelectedMarkers = [];
+					if(autoInit){
+						$scope.hideAllAreas($scope.areaWS);
+						$scope.hideAllZones();
+						$scope.hideAllStreets(false);
+						if($scope.dashboard_space.rate_area){
+							$scope.showAreaPolygons(1);
+						} else if($scope.dashboard_space.macrozone){
+							$scope.showZonePolygons(1);
+						} else if($scope.dashboard_space.microzone){
+							$scope.showStreetPolylines(1);
+						} else if($scope.dashboard_space.parkingmeter){
+							$scope.showParkingMetersMarkers();
+						} else if($scope.dashboard_space.parkingstructs){
+							$scope.showParkingStructuresMarkers(1);
+						}
+					} else {
+						$scope.dashboard_space.microzone = true;
+						$scope.dashboard_space.parkingmeter = false;
+						// Show parkingManagement objects
+						$scope.switchStreetMapObject(2, null, false);
+						$scope.switchZoneMapObject(2, null);
+						$scope.switchAreaMapObject(2, null);
+						$scope.switchParkingMapObject(2, null);
+						$scope.switchPMMapObject(2, null);
 					}
-					$scope.hideParkingMetersMarkers();
+					if(!$scope.dashboard_space.parkingmeter){
+						// Hide the parkingMeters and uncheck the checkBox
+						if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
+							var object = $scope.mapParkingMetersSelectedMarkers[0];
+							object.options.animation = "";
+							$scope.mapParkingMetersMarkers.push(object);
+							$scope.mapParkingMetersSelectedMarkers = [];
+						}
+						$scope.hideParkingMetersMarkers();
+					}
 					break;
 				case "occupation": 
 					// Show occupation objects (with specifics colors)
-					$scope.dashboard_space.microzone = true;
-					$scope.dashboard_space.parkingmeter = false;
-					$scope.switchStreetMapObject(1, null, false);
-					$scope.switchZoneMapObject(1, null);
-					$scope.switchAreaMapObject(1, null);
-					$scope.switchParkingMapObject(1, null);
+					if(autoInit){
+						if($scope.dashboard_space.rate_area){
+							$scope.showAreaPolygons(2);
+						} else if($scope.dashboard_space.macrozone){
+							$scope.showZonePolygons(2);
+						} else if($scope.dashboard_space.microzone){
+							$scope.showStreetPolylines(2);
+						} else if($scope.dashboard_space.parkingstructs){
+							$scope.showParkingStructuresMarkers(2);
+						}
+					} else {
+						$scope.dashboard_space.microzone = true;
+						$scope.dashboard_space.parkingmeter = false;
+						$scope.switchStreetMapObject(1, null, false);
+						$scope.switchZoneMapObject(1, null);
+						$scope.switchAreaMapObject(1, null);
+						$scope.switchParkingMapObject(1, null);	
+					}
 					// Hide the parkingMeters and uncheck the checkBox
 					if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
 						var object = $scope.mapParkingMetersSelectedMarkers[0];
@@ -1291,28 +1375,54 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					break;
 				case "receipts": 
 					// Show profit objects (with specifics colors)
-					if(!$scope.dashboard_space.parkingmeter){
-						$scope.showProfitPMMarkers();	// here I show the parkingMeter on he map
+					if(autoInit){
+						if($scope.dashboard_space.rate_area){
+							$scope.showAreaPolygons(3);
+						} else if($scope.dashboard_space.macrozone){
+							$scope.showZonePolygons(3);
+						} else if($scope.dashboard_space.microzone){
+							$scope.showStreetPolylines(3);
+						} else if($scope.dashboard_space.parkingmeter){
+							$scope.showProfitPMMarkers();
+						} else if($scope.dashboard_space.parkingstructs){
+							$scope.showParkingStructuresMarkers(3);
+						}
 					} else {
-						$scope.switchPMMapObject(5, null);
-					}	
-					$scope.dashboard_space.microzone = false;
-					$scope.dashboard_space.parkingmeter = true;
-					$scope.switchStreetMapObject(5, null, true);
-					$scope.switchZoneMapObject(5, null);
-					$scope.switchAreaMapObject(5, null);
-					$scope.switchParkingMapObject(5, null);		
+						if(!$scope.dashboard_space.parkingmeter){
+							$scope.showProfitPMMarkers();	// here I show the parkingMeter on he map
+						} else {
+							$scope.switchPMMapObject(5, null);
+						}	
+						$scope.dashboard_space.microzone = false;
+						$scope.dashboard_space.parkingmeter = true;
+						$scope.switchStreetMapObject(5, null, true);
+						$scope.switchZoneMapObject(5, null);
+						$scope.switchAreaMapObject(5, null);
+						$scope.switchParkingMapObject(5, null);	
+					}
 					break;
 				case "timeCost": 
 					// Show occupation objects (with specifics colors)
-					$scope.dashboard_space.microzone = true;
-					$scope.dashboard_space.parkingmeter = false;
-					$scope.switchStreetMapObject(7, null, false);
-					$scope.switchZoneMapObject(7, null);
-					$scope.switchAreaMapObject(7, null);
-					$scope.switchParkingMapObject(7, null);
-					// Hide the parkingMeters and uncheck the checkBox
+					if(autoInit){
+						if($scope.dashboard_space.rate_area){
+							$scope.showAreaPolygons(4);
+						} else if($scope.dashboard_space.macrozone){
+							$scope.showZonePolygons(4);
+						} else if($scope.dashboard_space.microzone){
+							$scope.showStreetPolylines(4);
+						} else if($scope.dashboard_space.parkingstructs){
+							$scope.showParkingStructuresMarkers(4);
+						}
+					} else {
+						$scope.dashboard_space.microzone = true;
+						$scope.dashboard_space.parkingmeter = false;
+						$scope.switchStreetMapObject(7, null, false);
+						$scope.switchZoneMapObject(7, null);
+						$scope.switchAreaMapObject(7, null);
+						$scope.switchParkingMapObject(7, null);
+					}	
 					if($scope.mapParkingMetersSelectedMarkers != null && $scope.mapParkingMetersSelectedMarkers.length > 0){
+						// Hide the parkingMeters and uncheck the checkBox
 						var object = $scope.mapParkingMetersSelectedMarkers[0];
 						object.options.animation = "";
 						$scope.mapParkingMetersMarkers.push(object);
@@ -1327,27 +1437,83 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					break;
 			}
 		} else {
+			$scope.closeAllDetailsList();
 			switch($scope.dashboard_topics_list){
 				case "parkSupply":
 					// Show occupation objects (with specifics colors)
-					$scope.dashboard_space_list = "microzone";
-					$scope.showStreetList($scope.dashboard_topics_list);
-					break;
+					if(autoInit){
+						if($scope.dashboard_space_list == "rate_area"){
+							$scope.showAreaList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "macrozone"){
+							$scope.showZoneList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "microzone"){
+							$scope.showStreetList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "parkingmeter"){
+							$scope.showPMeterList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "parkingstructs"){
+							$scope.showStructList($scope.dashboard_topics_list);
+						}
+					} else {
+						$scope.dashboard_space_list = "microzone";
+						$scope.showStreetList($scope.dashboard_topics_list);
+					}
 					break;
 				case "occupation": 
 					// Show occupation objects (with specifics colors)
-					$scope.dashboard_space_list = "microzone";
-					$scope.showStreetList($scope.dashboard_topics_list);
+					if(autoInit){
+						if($scope.dashboard_space_list == "rate_area"){
+							$scope.showAreaList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "macrozone"){
+							$scope.showZoneList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "microzone"){
+							$scope.showStreetList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "parkingmeter"){
+							$scope.showPMeterList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "parkingstructs"){
+							$scope.showStructList($scope.dashboard_topics_list);
+						}
+					} else {
+						$scope.dashboard_space_list = "microzone";
+						$scope.showStreetList($scope.dashboard_topics_list);
+					}
 					break;
 				case "receipts": 
 					// Show profit objects (with specifics colors)
-					$scope.dashboard_space_list = "parkingmeter";
-					$scope.showPMeterList($scope.dashboard_topics_list);
+					if(autoInit){
+						if($scope.dashboard_space_list == "rate_area"){
+							$scope.showAreaList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "macrozone"){
+							$scope.showZoneList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "microzone"){
+							$scope.showStreetList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "parkingmeter"){
+							$scope.showPMeterList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "parkingstructs"){
+							$scope.showStructList($scope.dashboard_topics_list);
+						}
+					} else {
+						$scope.dashboard_space_list = "parkingmeter";
+						$scope.showPMeterList($scope.dashboard_topics_list);
+					}
 					break;
 				case "timeCost": 
 					// Show occupation objects (with specifics colors)
-					$scope.dashboard_space_list = "microzone";
-					$scope.showStreetList($scope.dashboard_topics_list);
+					if(autoInit){
+						if($scope.dashboard_space_list == "rate_area"){
+							$scope.showAreaList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "macrozone"){
+							$scope.showZoneList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "microzone"){
+							$scope.showStreetList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "parkingmeter"){
+							$scope.showPMeterList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "parkingstructs"){
+							$scope.showStructList($scope.dashboard_topics_list);
+						}
+					} else {
+						$scope.dashboard_space_list = "microzone";
+						$scope.showStreetList($scope.dashboard_topics_list);
+					}
 					break;
 				case "pr": 
 					break;
@@ -1364,6 +1530,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.switchListShowType = function(type){
+		$scope.closeAllDetailsList();
 		if(type == "parkSupply"){
 			$scope.showParkSupplyLists = true;
 			$scope.showOccupationLists = false;
@@ -2713,15 +2880,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myPMs;
 	};
 	
-	$scope.initWsView = function(type){
+	$scope.initWsView = function(type, isInit){
 		$scope.hideAllStreets(true);	// Method used to hide all streets from map after tab switch
-		$scope.loadMapsObject();		// To show modal waiting spinner
-		$scope.parkingMetersMarkers = [];
-		$scope.parkingStructureMarkers = [];
-	   	$scope.initPage(type);
-	   	$scope.initComponents();
+		//$scope.parkingMetersMarkers = [];
+		//$scope.parkingStructureMarkers = [];
+	   	if(!isInit){
+	   		$scope.changeFilterSetup(type);
+	   	} else {
+	   		$scope.initPage();
+	   		$scope.loadMapsObject();	// To show modal waiting spinner
+	   		$scope.initComponents();
+	   		$scope.getAreasFromDb();
+	   	}
 		$scope.mapReady = false;
-		$scope.getAreasFromDb();
 	};
 	
 	 $scope.getAreasFromDb = function(){
