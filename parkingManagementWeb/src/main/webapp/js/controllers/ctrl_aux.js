@@ -149,11 +149,11 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     // ------------------------ End timepicker section ------------------------------
     
     $scope.logtabs = [ 
-        { title:'Log generale', index: 1, content:"partials/aux/logs/global_logs.html", active: true },
-        { title:'Log occupazione vie', index: 2, content:"partials/aux/logs/street_logs.html", active: false },
-        { title:'Log occupazione parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html", active: false },
-        { title:'Log ricavi parcometri', index: 4, content:"partials/aux/logs/pm_profit_logs.html", active: false },
-        { title:'Log ricavi parcheggi', index: 5, content:"partials/aux/logs/parking_profit_logs.html", active: false }
+        { title:'Storico Rilevazioni', index: 1, content:"partials/aux/logs/global_logs.html", active: true },
+        { title:'Rilevazioni occupazione vie', index: 2, content:"partials/aux/logs/street_logs.html", active: false },
+        { title:'Rilevazioni occupazione parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html", active: false },
+        { title:'Rilevazioni ricavi parcometri', index: 4, content:"partials/aux/logs/pm_profit_logs.html", active: false },
+        { title:'Rilevazioni ricavi parcheggi', index: 5, content:"partials/aux/logs/parking_profit_logs.html", active: false }
     ];
     
     $scope.setIndex = function($index){

@@ -127,6 +127,43 @@ pm.service('sharedDataService', function(){
     };
     this.report_list=[];
     
+    this.preloaded_report_1 = {
+    	id: 1,
+    	name: 'parcometro_incasso_2015_settembre_feriale',
+    	description : {
+    		dow: "feriale",
+    		hour: null,
+    		month: "settembre",
+    		space: "parcometro",
+    		topic: "incasso",
+    		vis: "valore medio",
+    		year: "2015",
+    	},
+    	periodic : '2',
+    	startperiod : new Date(1441058400000),
+    	mail : 'prova@prova.it;test@test.it'
+    };
+    				
+    this.preloaded_report_2 = {
+    	id: 2,
+    	name: 'dati_storici_parcometro_incasso_gennaio_dicembre',
+    	description : {
+    		dow: null,
+    		hour: null,
+    		month: "gennaio-dicembre",
+    		space: "parcometro",
+    		topic: "incasso",
+    		vis: "valore medio",
+    		year: "tutti",
+    	},
+    	periodic : '1',
+    	startperiod : new Date(1441058400000),
+    	mail : 'prova@prova.it'
+    };
+    
+    this.report_list.push(this.preloaded_report_1);
+    this.report_list.push(this.preloaded_report_2);
+    
     this.setFilterTopicList = function(value){
     	this.filter_topiclist = value;
     };

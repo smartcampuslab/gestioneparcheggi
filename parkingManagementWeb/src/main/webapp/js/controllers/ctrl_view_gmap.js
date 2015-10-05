@@ -318,8 +318,8 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		$scope.mapelements = {
 			rateareas : false,
 			streets : true,
-			parkingmeters : true,
-			parkingstructs : false,
+			parkingmeters : false,
+			parkingstructs : true,
 			bikepoints : false,
 			zones : false
 		};
@@ -1054,7 +1054,8 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			    }
 	    		angular.copy(markers, $scope.bikePointMarkers);
 	    		//$scope.initMap($scope.parkingMetersMarkers, $scope.parkingStructureMarkers, $scope.bikePointMarkers);
-	    		$scope.initMap($scope.parkingMetersMarkers, null, null);
+	    		//$scope.initMap($scope.parkingMetersMarkers, null, null);
+	    		$scope.initMap(null, $scope.parkingStructureMarkers, null);
 	    	}
 			$scope.getZonesFromDb();
 		});

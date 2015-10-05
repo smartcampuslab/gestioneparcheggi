@@ -1025,46 +1025,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.setIndex = function($index){
     	if($index > 0){
     		// case index 1: map view
-    	// ----------------------------- Block for report init ------------------------------------
-    	$scope.preloaded_report_1 = {
-    		id: 1,
-    			name: 'parcometro_incasso_2015_settembre_feriale',
-    			description : {
-    				dow: "feriale",
-    				hour: null,
-    				month: "settembre",
-    				space: "parcometro",
-    				topic: "incasso",
-    				vis: "valore medio",
-    				year: "2015",
-    			},
-    			periodic : '2',
-    			startperiod : new Date(1441058400000),
-    			mail : 'prova@prova.it;test@test.it'
-    		};
-    				
-    		$scope.preloaded_report_2 = {
-    			id: 2,
-    			name: 'dati_storici_parcometro_incasso_gennaio_dicembre',
-    			description : {
-    				dow: null,
-    				hour: null,
-    				month: "gennaio-dicembre",
-    				space: "parcometro",
-    				topic: "incasso",
-    				vis: "valore medio",
-    				year: "tutti",
-    			},
-    			periodic : '1',
-    			startperiod : new Date(1441058400000),
-    			mail : 'prova@prova.it'
-    		};
-    			
-    		if(sharedDataService.addReportInList == null || sharedDataService.addReportInList.length < 2){
-    			sharedDataService.addReportInList($scope.preloaded_report_1);
-    			sharedDataService.addReportInList($scope.preloaded_report_2);
-    		}
-    		// ----------------------------------------------------------------------------------------
     		sharedDataService.setIsInList(true);
     		$scope.initWsView(2, $scope.firstIndexSet);
     	} else {
@@ -1236,9 +1196,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		
 		$scope.dashboard_space_list = "microzone";
 		//if(type == 1){
-			$scope.dashboard_topics = "parkSupply";
+		$scope.dashboard_topics = "parkSupply";
 		//} else {
-			$scope.dashboard_topics_list = "parkSupply"; 	//"occupation";
+		$scope.dashboard_topics_list = "parkSupply"; 	//"occupation";
 		//}
 		
 		sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
@@ -1261,6 +1221,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.dashboard_space.parkingstructs = true;
 			}
 			$scope.dashboard_topics = $scope.dashboard_topics_list;
+			$scope.clearAllSpaceFilter(1);
 			$scope.changeDashboardView(1, true);
 		} else {
 			// case of list
@@ -1276,6 +1237,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.dashboard_space_list = "parkingstructs";
 			}
 			$scope.dashboard_topics_list = $scope.dashboard_topics;
+			$scope.clearAllSpaceFilter(2);
 			$scope.changeDashboardView(2, true);
 		}
 			
@@ -1287,7 +1249,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		
 		sharedDataService.setFilterTopicList($scope.dashboard_topics_list);
 		sharedDataService.setFilterSpace($scope.dashboard_space_list);
-		
+	};
+	
+	// method clearAllSpaceFilter: used to clear all the space setting after change the dashboard view (map or list)
+	$scope.clearAllSpaceFilter = function(type){
+		if(type == 1){
+			$scope.dashboard_space_list = "";
+		} else {
+			$scope.dashboard_space.rate_area = false;
+			$scope.dashboard_space.macrozone = false;
+			$scope.dashboard_space.microzone = false;
+			$scope.dashboard_space.parkingmeter = false;
+			$scope.dashboard_space.parkingstructs = false;
+		}
 	};
 	
 	$scope.showZList = false;
@@ -1304,13 +1278,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.changeDashboardView = function(type, autoInit){
 		if(type == 1){
+			if(autoInit){
+				$scope.hideAllAreas($scope.areaWS);
+				$scope.hideAllZones();
+				$scope.hideAllStreets(false);
+			}
 			switch($scope.dashboard_topics){
 				case "parkSupply": 
 					// Show profit objects (with specifics colors)
 					if(autoInit){
-						$scope.hideAllAreas($scope.areaWS);
-						$scope.hideAllZones();
-						$scope.hideAllStreets(false);
 						if($scope.dashboard_space.rate_area){
 							$scope.showAreaPolygons(1);
 						} else if($scope.dashboard_space.macrozone){
@@ -2532,12 +2508,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.updateAreasOccupancyTimeCost = function(){
 		for(var i = 0; i < $scope.areaWS.length; i++){
-			var areaOccupancy = $scope.getStreetsInAreaOccupancy($scope.areaWS[i].id);
-			var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
-			$scope.areaWS[i].occupancy = (areaOccupancy != -1) ? Math.round(areaOccupancy) : areaOccupancy;
 			var slotsInArea = $scope.getTotalSlotsInArea($scope.areaWS[i].id);
 			$scope.areaWS[i].slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(areas[i].id);
 			$scope.areaWS[i].slotOccupied = slotsInArea[1]; //Math.round(area.data.slotNumber * areaOccupancy / 100);
+			var areaOccupancy = $scope.getStreetsInAreaOccupancy($scope.areaWS[i].id);
+			if(areaOccupancy != -1){
+				areaOccupancy = slotsInArea[2];
+			}
+			var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
+			$scope.areaWS[i].occupancy = (areaOccupancy != -1) ? Math.round(areaOccupancy) : areaOccupancy;
 			$scope.areaWS[i].extratime = timeCost;
 		}
 	};
@@ -2640,13 +2619,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.updateZonesOccupancyTimeCost = function(){
 		for(var i = 0; i < $scope.zoneWS.length; i++){
-			var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.zoneWS[i].id);
-			var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
-			$scope.zoneWS[i].occupancy = (zoneOccupancy != -1) ? Math.round(zoneOccupancy) : zoneOccupancy;
-			$scope.zoneWS[i].zColor = $scope.getOccupancyColor(zoneOccupancy);
 			var slotsInZone = $scope.getTotalSlotsInZone($scope.zoneWS[i].id);
 			$scope.zoneWS[i].slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone(zones[i].id);
 			$scope.zoneWS[i].slotOccupied = slotsInZone[1];
+			var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.zoneWS[i].id);
+			if(zoneOccupancy != -1){
+				zoneOccupancy = slotsInZone[2];
+			}
+			var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+			$scope.zoneWS[i].occupancy = (zoneOccupancy != -1) ? Math.round(zoneOccupancy) : zoneOccupancy;
+			$scope.zoneWS[i].zColor = $scope.getOccupancyColor(zoneOccupancy);
 			$scope.zoneWS[i].extratime = timeCost;
 		}
 	};
@@ -3286,10 +3268,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    if(showArea){
 				    	$scope.updateAreaOccupancy(false);
 				    }
-			    } else {
-			    	$scope.updateZonesOccupancyTimeCost();
-			    	$scope.updateAreasOccupancyTimeCost();
-			    	$scope.closeLoadingMap();
 			    }
 		    } else {			// case of time cost
 		    	if(!isInList){
@@ -3302,12 +3280,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    if(showArea){
 				    	$scope.updateAreaTimeCost(false);
 				    }
-			    } else {
-			    	$scope.updateZonesOccupancyTimeCost();
-			    	$scope.updateAreasOccupancyTimeCost();
-			    	$scope.closeLoadingMap();
 			    }
 		    }
+		    $scope.updateZonesOccupancyTimeCost();
+	    	$scope.updateAreasOccupancyTimeCost();
+	    	$scope.closeLoadingMap();
 		});
 	};
 	
@@ -3703,7 +3680,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				}
 			}
 		}
-		return [totalSlots, occupiedSlots];
+		var occupation = (occupiedSlots == 0) ? -1 : Math.round((100 * occupiedSlots) / totalSlots);
+		return [totalSlots, occupiedSlots, occupation];
 	};
 	
 	// Method getTotalSlotsInZone: used to count the total slots of a zone from the slots in streets
@@ -3741,7 +3719,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				}
 			}
 		}
-		return [totalSlots, occupiedSlots];
+		var occupation = (occupiedSlots == 0) ? -1 : Math.round((100 * occupiedSlots) / totalSlots);
+		return [totalSlots, occupiedSlots, occupation];
 	};
 	
 	// Method updateStreetOccupancy: update all street maps Object elements with new occupation data retrieved from db
@@ -5064,12 +5043,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.mapZones.length; i++){
 	    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
 	    	    		var object = $scope.mapZones[i];
-	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapZones[i].id);
-	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
-	    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
 	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.mapZones[i].id);
 	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
 	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapZones[i].id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
 	    	    		$scope.occupancyZones.push(object);
 	    	    	}
 	    			$scope.mapZones = [];
@@ -5078,12 +5060,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.profitZones.length; i++){
 	    	    		toHideZones[$scope.profitZones[i].id].setMap(null);
 	    	    		var object = $scope.profitZones[i];
-	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.profitZones[i].id);
-	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
-	    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
 	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.profitZones[i].id);
 	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
 	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.profitZones[i].id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
 	    	    		$scope.occupancyZones.push(object);
 	    	    	}
 	    			$scope.profitZones = [];
@@ -5092,12 +5077,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.timeCostZones.length; i++){
 	    	    		toHideZones[$scope.timeCostZones[i].id].setMap(null);
 	    	    		var object = $scope.timeCostZones[i];
-	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.timeCostZones[i].id);
-	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
-	    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
 	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.timeCostZones[i].id);
 	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
 	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.timeCostZones[i].id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
 	    	    		$scope.occupancyZones.push(object);
 	    	    	}
 	    			$scope.timeCostZones = [];
@@ -5147,12 +5135,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    	for(var i = 0; i < $scope.occupancyZones.length; i++){
     	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
     	    		var object = newList[i];
-    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.occupancyZones[i].id);
-    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
-    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
     	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.occupancyZones[i].id);
     	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.occupancyZones[i].id);
     	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.occupancyZones[i].id);
+    	    		if(zoneOccupancy != -1){
+    	    			zoneOccupancy = slotsInZone[2];
+    	    		}
+    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+    	    		object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
     	    		tmpZones.push(object);
     	    	}
     	    	angular.copy(tmpZones, $scope.occupancyZones);
@@ -5209,13 +5200,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.mapZones.length; i++){
 	    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
 	    	    		var object = $scope.mapZones[i];
-	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapZones[i].id);
-	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
-	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
-	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.mapZones[i].id);
 	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
 	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapZones[i].id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		object.data.extratime = timeCost;
 	    	    		$scope.timeCostZones.push(object);
 	    	    	}
@@ -5225,13 +5219,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.occupancyZones.length; i++){
 	    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
 	    	    		var object = $scope.occupancyZones[i];
-	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.occupancyZones[i].id);
-	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
-	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
-	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.occupancyZones[i].id);
 	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
 	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.occupancyZones[i].id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		object.data.extratime = timeCost;
 	    	    		$scope.timeCostZones.push(object);
 	    	    	}
@@ -5241,13 +5238,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.profitZones.length; i++){
 	    	    		toHideZones[$scope.profitZones[i].id].setMap(null);
 	    	    		var object = $scope.profitZones[i];
-	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.profitZones[i].id);
-	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
-	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
-	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.profitZones[i].id);
 	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
 	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.profitZones[i].id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
+	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		object.data.extratime = timeCost;
 	    	    		$scope.timeCostZones.push(object);
 	    	    	}
@@ -5259,13 +5259,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    	for(var i = 0; i < $scope.timeCostZones.length; i++){
     	    		toHideZones[$scope.timeCostZones[i].id].setMap(null);
     	    		var object = newList[i];
-    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.timeCostZones[i].id);
-    				var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
-    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
-    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
     	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.timeCostZones[i].id);
     	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.occupancyZones[i].id);
     	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.timeCostZones[i].id);
+    	    		if(zoneOccupancy != -1){
+    	    			zoneOccupancy = slotsInZone[2];
+    	    		}
+    				var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
+    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
     	    		object.data.extratime = timeCost;
     	    		tmpZones.push(object);
     	    	}
@@ -5307,12 +5310,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	    		toHideAreas[$scope.mapAreas[i].id].setMap(null);
 	    	    		var object = $scope.mapAreas[i];
 	    	    		var myAreaId = $scope.cleanAreaId($scope.mapAreas[i].id);
-	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-	    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
-	    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
 	    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+	    	    		if(areaOccupancy != -1){
+	    	    			areaOccupancy = slotsInArea[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
+	    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
 	    	    		$scope.occupancyAreas.push(object);
 	    	    	}
 	    	    	$scope.mapAreas = [];
@@ -5322,12 +5328,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	    		toHideAreas[$scope.profitAreas[i].id].setMap(null);
 	    	    		var object = $scope.profitAreas[i];
 	    	    		var myAreaId = $scope.cleanAreaId($scope.profitAreas[i].id);
-	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-	    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
-	    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
 	    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+	    	    		if(areaOccupancy != -1){
+	    	    			areaOccupancy = slotsInArea[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
+	    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
 	    	    		$scope.occupancyAreas.push(object);
 	    	    	}
 	    	    	$scope.profitAreas = [];
@@ -5337,12 +5346,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	    		toHideAreas[$scope.timeCostAreas[i].id].setMap(null);
 	    	    		var object = $scope.timeCostAreas[i];
 	    	    		var myAreaId = $scope.cleanAreaId($scope.timeCostAreas[i].id);
-	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-	    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
-	    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
 	    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+	    	    		if(areaOccupancy != -1){
+	    	    			areaOccupancy = slotsInArea[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
+	    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
 	    	    		$scope.occupancyAreas.push(object);
 	    	    	}
 	    	    	$scope.timeCostAreas = [];
@@ -5397,12 +5409,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		toHideAreas[$scope.occupancyAreas[i].id].setMap(null);
     	    		var object = newList[i];
     	    		var myAreaId = $scope.cleanAreaId($scope.occupancyAreas[i].id);
-    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
-    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
     	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
     	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
     	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+    	    		if(areaOccupancy == -1){
+    	    			areaOccupancy = slotsInArea[2];
+    	    		}
+    	    		object.stroke.color = $scope.getOccupancyColor(areaOccupancy);	//Here I have to add the streets that compose the area
+    	    		object.fill.color = $scope.getOccupancyColor(areaOccupancy);
     	    		tmpAreas.push(object);
     	    	}
     	    	angular.copy(tmpAreas, $scope.occupancyAreas);
@@ -5464,13 +5479,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	    		toHideAreas[$scope.mapAreas[i].id].setMap(null);
 	    	    		var object = $scope.mapAreas[i];
 	    	    		var myAreaId = $scope.cleanAreaId($scope.mapAreas[i].id);
-	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-	    	    		var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
-	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);
-	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+	    	    		if(areaOccupancy != -1){
+	    	    			areaOccupancy = slotsInArea[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);
+	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		object.data.extratime = timeCost;
 	    	    		$scope.occupancyAreas.push(object);
 	    	    	}
@@ -5481,13 +5499,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	    		toHideAreas[$scope.profitAreas[i].id].setMap(null);
 	    	    		var object = $scope.profitAreas[i];
 	    	    		var myAreaId = $scope.cleanAreaId($scope.profitAreas[i].id);
-	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-	    	    		var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
-	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);
-	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+	    	    		if(areaOccupancy != -1){
+	    	    			areaOccupancy = slotsInArea[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);
+	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		object.data.extratime = timeCost;
 	    	    		$scope.occupancyAreas.push(object);
 	    	    	}
@@ -5498,13 +5519,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	    		toHideAreas[$scope.timeCostAreas[i].id].setMap(null);
 	    	    		var object = $scope.timeCostAreas[i];
 	    	    		var myAreaId = $scope.cleanAreaId($scope.timeCostAreas[i].id);
-	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-	    	    		var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
-	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);
-	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
 	    	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+	    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+	    	    		if(areaOccupancy != -1){
+	    	    			areaOccupancy = slotsInArea[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);
+	    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
 	    	    		object.data.extratime = timeCost;
 	    	    		$scope.occupancyAreas.push(object);
 	    	    	}
@@ -5517,13 +5541,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	    		toHideAreas[$scope.timeCostAreas[i].id].setMap(null);
     	    		var object = newList[i];
     	    		var myAreaId = $scope.cleanAreaId($scope.timeCostAreas[i].id);
-    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
-    	    		var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
-    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);
-    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
     	    		var slotsInArea = $scope.getTotalSlotsInArea(myAreaId);
     	    		object.data.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(myAreaId);
     	    		object.data.slotOccupied = slotsInArea[1]; //Math.round(object.data.slotNumber * areaOccupancy / 100);
+    	    		var areaOccupancy = $scope.getStreetsInAreaOccupancy(myAreaId);
+    	    		if(areaOccupancy != -1){
+    	    			areaOccupancy = slotsInArea[2];
+    	    		}
+    	    		var timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
+    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);
+    	    		object.fill.color = $scope.getTimeCostColor(timeCost);
     	    		object.data.extratime = timeCost;
     	    		tmpAreas.push(object);
     	    	}

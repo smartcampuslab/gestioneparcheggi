@@ -16,7 +16,7 @@
     "description": "Titolo sezione info pagina home park app"
 }, {
     "key": "app_home_aux_info",
-    "value": "Descrizione App Parcheggi Ausiliari",
+    "value": "Descrizione App Gestione Flussi",
     "description": "Titolo sezione info pagina home aux app"
 }, {
     "key": "app_home_info_text",
@@ -28,7 +28,7 @@
     "description": "Titolo sezione info pagina home app"
 }, {
     "key": "app_home_aux_info_text",
-    "value": "L'applicazione 'parcheggi ausiliari' e' stata pensata per reperire informazioni utili sull'utilizzo dei parcheggi di un centro urbano. Nello specifico e' possibile visualizzare l'occupazione dei parcheggi di strade o strutture in una specifica fascia oraria, visualizzare l'utilizzo delle biciclette in un punto bici ecc. L'app e' completa di mappe iterattive in modo da avere traccia chiara della localizzazione degli elementi all'interno della citta'.",
+    "value": "L'applicazione per la gestione dei flussi e' usata per raccogliere informazioni dinamiche sull'utilizzo dei parcheggi nella citta'. Nello specifico si gestiscono dati di occupazione delle soste e dati sugli incassi relativi ai parcometri. Utilizzando i pulsanti in basso e' possibile visualizzare lo storico delle rilevazioni inserite oppure inserire nuove rilevazioni utilizzando le apposite macro.",
     "description": "Titolo sezione info pagina home app"
 }, {
     "key": "menu_bar-home",
@@ -48,11 +48,11 @@
     "description": "Valore link menu per dashboard - soste"
 }, {
     "key": "menu_bar-homepark",
-    "value": "Gestione Parcheggi",
+    "value": "Gestione Offerta",
     "description": "Valore link menu per editing parcheggi"
 }, {
     "key": "menu_bar-homeaux",
-    "value": "Gestione Log",
+    "value": "Gestione Flussi",
     "description": "Valore link menu per editing punti bici"
 }, {
     "key": "park_menu_list",
@@ -68,7 +68,7 @@
     "description": "Valore link menu per editing punti bici"
 }, {
     "key": "menu_bar-parkview",
-    "value": "Visualizza elementi",
+    "value": "Widget",
     "description": "Valore link menu per visualizzazione elementi"
 }, {
     "key": "parkEditingPanelTitle",
@@ -1216,11 +1216,11 @@
     "description": "Testo per attributo alt o title del link per il download del file csv"
 }, {
     "key": "view_logs_link_text",
-    "value": "Visualizza Logs",
+    "value": "Visualizza Flussi",
     "description": "Testo per per pulsante view logs - ausiliari"
 }, {
     "key": "new_logs_link_text",
-    "value": "Aggiungi Logs",
+    "value": "Aggiungi Rilevazione",
     "description": "Testo per per pulsante new logs - ausiliari"
 }, {
     "key": "log_objId",
