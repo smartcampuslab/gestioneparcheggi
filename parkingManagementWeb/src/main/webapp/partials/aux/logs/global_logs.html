@@ -133,74 +133,74 @@
 			</tr>	
 		</table>
 	</div>
-	<div ng-show="showFiltered">
-		<div class="logwrapper">
-			<h4 align="left"><strong>{{ 'log_filtered_list' | i18n }}</strong></h4>
-			<table class="table table-striped" style="width: 100%">
-				<tr ng-show="globalLogs.length != 0">
-					<th width="3%"></th>
-					<th width="25%">{{ 'log_objId' | i18n }}</th>
-					<th width="15%">{{ 'log_type' | i18n }}</th>
-					<th width="15%">{{ 'log_time' | i18n }}</th>
-					<th width="8%">{{ 'log_author' | i18n }}</th>
-					<th width="27%">{{ 'log_object_name' | i18n }}</th>
-					<th width="7%"></th>
-				</tr>
-				<tbody class="animate-repeat"
-					ng-repeat="log in filtered =  (globalLogs | filter:filterForLog) | orderBy:'-time' | startFrom:currentFilterPage*maxLogs | limitTo:maxLogs">
-				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
-				<tr>
-					<td width="3%"><i class="glyphicon glyphicon-import" ng-show="log.isSystemLog" title="{{ 'system_log_alt_title' | i18n }}" alt="{{ 'system_log_alt_title' | i18n }}"></i></td>
-					<td width="25%" align="left">{{log.objId}}</td>
+<!-- 	<div ng-show="showFiltered"> -->
+<!-- 		<div class="logwrapper"> -->
+<!-- 			<h4 align="left"><strong>{{ 'log_filtered_list' | i18n }}</strong></h4> -->
+<!-- 			<table class="table table-striped" style="width: 100%"> -->
+<!-- 				<tr ng-show="globalLogs.length != 0"> -->
+<!-- 					<th width="3%"></th> -->
+<!-- 					<th width="25%">{{ 'log_objId' | i18n }}</th> -->
+<!-- 					<th width="15%">{{ 'log_type' | i18n }}</th> -->
+<!-- 					<th width="15%">{{ 'log_time' | i18n }}</th> -->
+<!-- 					<th width="8%">{{ 'log_author' | i18n }}</th> -->
+<!-- 					<th width="27%">{{ 'log_object_name' | i18n }}</th> -->
+<!-- 					<th width="7%"></th> -->
+<!-- 				</tr> -->
+<!-- 				<tbody class="animate-repeat" -->
+<!-- 					ng-repeat="log in filtered =  (globalLogs | filter:filterForLog) | orderBy:'-time' | startFrom:currentFilterPage*maxLogs | limitTo:maxLogs"> -->
+<!-- 				ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+<!-- 				<tr> -->
+<!-- 					<td width="3%"><i class="glyphicon glyphicon-import" ng-show="log.isSystemLog" title="{{ 'system_log_alt_title' | i18n }}" alt="{{ 'system_log_alt_title' | i18n }}"></i></td> -->
+<!-- 					<td width="25%" align="left">{{log.objId}}</td> -->
 <!-- 					<td width="15%" align="left"> -->
 <!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'parking_type_in_lists' | i18n }}</span> -->
 <!-- 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'street_type_in_lists' | i18n }}</span> -->
 <!-- 					</td> -->
-					<td width="15%" align="left">
-						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'parking_type_in_lists' | i18n }}</span>
-						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct'">{{ 'park_profit_type_in_lists' | i18n }}</span>
-						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Street'">{{ 'street_type_in_lists' | i18n }}</span>
-						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{ 'pm_type_in_lists' | i18n }}</span>
-					</td>
-					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
-					<td width="8%" align="left">{{log.author}}</td>
-					<td width="27%">
-						<span ng-if="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.name}}</span>
-						<span ng-if="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.code}} - {{log.value.note}}</span>
-					</td>
-					<td width="7%" align="center">
-						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewDetails(1, log)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
-					</td>
-				</tr>
-				</tbody>
-				<tr ng-show="globalLogs.length == 0">
-					<td colspan="7"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td>
-				</tr>
-			</table>
-		</div>
-		<table width="100%">
-			<tr>
-				<td width="33%"></td>
-				<td width="34%" align="center">
-					<button class="btn btn-success"
-						ng-disabled="currentFilterPage == 0"
-						ng-click="currentFilterPage=currentFilterPage-1">{{ 'previous_label' | i18n }}</button>
-						{{currentFilterPage+1}}/{{numberOfPages(filtered)}}
-					<button class="btn btn-success"
-						ng-disabled="currentFilterPage >= filtered.length/maxLogs - 1"
-						ng-click="currentFilterPage=currentFilterPage+1">{{ 'next_label' | i18n }}</button>
-				</td>
-				<td width="33%" align="right">
-					<button type="button" class="btn btn-danger btn-lg" ng-click="closeFiltered()">{{ 'text_btn_close' | i18n  }}</button>
-				</td>
-			</tr>
-		</table>
-	</div>
+<!-- 					<td width="15%" align="left"> -->
+<!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'parking_type_in_lists' | i18n }}</span> -->
+<!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct'">{{ 'park_profit_type_in_lists' | i18n }}</span> -->
+<!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Street'">{{ 'street_type_in_lists' | i18n }}</span> -->
+<!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{ 'pm_type_in_lists' | i18n }}</span> -->
+<!-- 					</td> -->
+<!-- 					<td width="15%" align="left">{{ (log.time | date:'short') }}</td> -->
+<!-- 					<td width="8%" align="left">{{log.author}}</td> -->
+<!-- 					<td width="27%"> -->
+<!-- 						<span ng-if="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.name}}</span> -->
+<!-- 						<span ng-if="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.code}} - {{log.value.note}}</span> -->
+<!-- 					</td> -->
+<!-- 					<td width="7%" align="center"> -->
+<!-- 						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewDetails(1, log)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a> -->
+<!-- 					</td> -->
+<!-- 				</tr> -->
+<!-- 				</tbody> -->
+<!-- 				<tr ng-show="globalLogs.length == 0"> -->
+<!-- 					<td colspan="7"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td> -->
+<!-- 				</tr> -->
+<!-- 			</table> -->
+<!-- 		</div> -->
+<!-- 		<table width="100%"> -->
+<!-- 			<tr> -->
+<!-- 				<td width="33%"></td> -->
+<!-- 				<td width="34%" align="center"> -->
+<!-- 					<button class="btn btn-success" -->
+<!-- 						ng-disabled="currentFilterPage == 0" -->
+<!-- 						ng-click="currentFilterPage=currentFilterPage-1">{{ 'previous_label' | i18n }}</button> -->
+<!-- 						{{currentFilterPage+1}}/{{numberOfPages(filtered)}} -->
+<!-- 					<button class="btn btn-success" -->
+<!-- 						ng-disabled="currentFilterPage >= filtered.length/maxLogs - 1" -->
+<!-- 						ng-click="currentFilterPage=currentFilterPage+1">{{ 'next_label' | i18n }}</button> -->
+<!-- 				</td> -->
+<!-- 				<td width="33%" align="right"> -->
+<!-- 					<button type="button" class="btn btn-danger btn-lg" ng-click="closeFiltered()">{{ 'text_btn_close' | i18n  }}</button> -->
+<!-- 				</td> -->
+<!-- 			</tr> -->
+<!-- 		</table> -->
+<!-- 	</div> -->
 	<div ng-show="!showFiltered && !showDetails">
 		<div ng-show="isLoadingLogs==false">
 		<div class="logwrapper">
 			<table class="table table-striped" style="width: 100%">
-				<tr ng-show="globalLogs.length != 0">
+				<tr ng-show="getLogData().length != 0">
 					<th width="3%"></th>
 					<th width="20%">{{ 'log_objId' | i18n }}</th>
 					<th width="5%">{{ 'log_type' | i18n }}</th>
@@ -211,7 +211,7 @@
 					<th width="3%"></th>
 				</tr>
 				<tbody class="animate-repeat"
-					ng-repeat="log in globalLogs | orderBy:'-time' | startFrom:currentPage*maxLogs | limitTo:maxLogs">
+					ng-repeat="log in getLogData()">
 				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 				<tr>
 					<td width="3%"><i class="glyphicon glyphicon-import" ng-show="log.isSystemLog" title="{{ 'system_log_alt_title' | i18n }}" alt="{{ 'system_log_alt_title' | i18n }}"></i></td>
@@ -239,11 +239,12 @@
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">Profit: {{correctEuroCent(log.value.profit)}}, Ticket: {{log.value.tickets}}</span>
 					</td>
 					<td width="3%" align="center">
-						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewFiltered(log)" alt="{{ 'link_filter_log_title' | i18n }}" title="{{ 'link_filter_log_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i></a>
+                        <a href type="button" class="btn btn-primary btn-xs" ng-click="viewDetails(1, log)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+<!-- 						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewFiltered(log)" alt="{{ 'link_filter_log_title' | i18n }}" title="{{ 'link_filter_log_title' | i18n }}"><i class="glyphicon glyphicon-list-alt"></i></a> -->
 					</td>
 				</tr>
 				</tbody>
-				<tr ng-show="globalLogs.length == 0">
+				<tr ng-show="getLogData().length == 0">
 					<td colspan="8"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td>
 				</tr>
 			</table>
@@ -254,12 +255,12 @@
 				</td>
 				<td width="34%" align="center">
 					<button class="btn btn-default"
-						ng-disabled="currentPage == 0"
-						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-						{{currentPage+1}}/{{logCountsPage}}
+						ng-disabled="geCturrentPage() == 0"
+						ng-click="stepPage(-1)">{{ 'previous_label' | i18n }}</button>
+						{{getCurrentPage()+1}}/{{totalPages()}}
 					<button class="btn btn-default"
-						ng-disabled="currentPage >= globalLogs.length/maxLogs - 1"
-						ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+						ng-disabled="getCurrentPage() >= totalPages()"
+						ng-click="stepPage(1)">{{ 'next_label' | i18n }}</button>
 				</td>
 				<td width="33%" align="right">
                         <a href class="btn btn-success" target="_blank" ng-click="getAllLogCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
@@ -271,14 +272,14 @@
 		</table>
 		</div>
 		
-		<div ng-show="isLoadingLogs==true">
-			<div class="row" style="height: 90px; margin-top: 20px">
-				<div style="text-align: center">
-					<img src="imgs/ajax-loader.gif" width="40" height="40" /><br>
-					<h3>{{ 'loading_text' | i18n }}...</h3>
-				</div>
-			</div>
-		</div>
+<!-- 		<div ng-show="isLoadingLogs==true"> -->
+<!-- 			<div class="row" style="height: 90px; margin-top: 20px"> -->
+<!-- 				<div style="text-align: center"> -->
+<!-- 					<img src="imgs/ajax-loader.gif" width="40" height="40" /><br> -->
+<!-- 					<h3>{{ 'loading_text' | i18n }}...</h3> -->
+<!-- 				</div> -->
+<!-- 			</div> -->
+<!-- 		</div> -->
 			
 	</div>
 </div>

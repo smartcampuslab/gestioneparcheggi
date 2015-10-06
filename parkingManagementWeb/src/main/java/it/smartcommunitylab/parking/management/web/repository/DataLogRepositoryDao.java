@@ -26,9 +26,4 @@ public interface DataLogRepositoryDao extends CrudRepository<DataLogBeanTP, Stri
 	public List<DataLogBeanTP> findByObjId(String id);
 	
 	public List<DataLogBeanTP> findByType(String type);
-	
-	public List<DataLogBeanTP> findByAgency(String agency);
-	
-	public List<DataLogBeanTP> findByTypeAndAgencyAllIgnoreCase(String type, String agency);
-	
 }

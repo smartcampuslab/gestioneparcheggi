@@ -68,7 +68,7 @@
 	<div ng-show="!showDetails">
 		<div class="logwrapper">
 			<table class="table table-striped" style="width: 100%">
-				<tr ng-show="parkProfitLogs.length != 0">
+				<tr ng-show="getLogData().length != 0">
 					<th width="3%"></th>
 					<th width="24%">{{ 'log_objId' | i18n }}</th>
 					<th width="15%">{{ 'log_type' | i18n }}</th>
@@ -78,7 +78,7 @@
 					<th width="5%"></th>
 				</tr>
 				<tbody class="animate-repeat"
-					ng-repeat="log in parkProfitLogs | orderBy:'-time' | startFrom:currentPage*maxLogs | limitTo:maxLogs">
+					ng-repeat="log in getLogData()">
 				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 				<tr>
 					<td width="3%"><i class="glyphicon glyphicon-import" ng-show="log.isSystemLog" title="{{ 'system_log_alt_title' | i18n }}" alt="{{ 'system_log_alt_title' | i18n }}"></i></td>
@@ -101,7 +101,7 @@
 					</td>
 				</tr>
 				</tbody>
-				<tr ng-show="parkProfitLogs.length == 0">
+				<tr ng-show="getLogData().length == 0">
 					<td colspan="7"><strong>{{ 'no_logs_in_lists' | i18n }}</strong></td>
 				</tr>
 			</table>
@@ -109,15 +109,15 @@
 		<table width="100%">
 			<tr>
 				<td width="33%"></td>
-				<td width="34%" align="center">
-					<button class="btn btn-default"
-						ng-disabled="currentPage == 0"
-						ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-						{{currentPage+1}}/{{logParkCountsPage}}
-					<button class="btn btn-default"
-						ng-disabled="currentPage >= parkProfitLogs.length/maxLogs - 1"
-						ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
-				</td>
+                <td width="34%" align="center">
+                    <button class="btn btn-default"
+                        ng-disabled="geCturrentPage() == 0"
+                        ng-click="stepPage(-1)">{{ 'previous_label' | i18n }}</button>
+                        {{getCurrentPage()+1}}/{{totalPages()}}
+                    <button class="btn btn-default"
+                        ng-disabled="getCurrentPage() >= totalPages()"
+                        ng-click="stepPage(1)">{{ 'next_label' | i18n }}</button>
+                </td>
 				<td width="33%" align="left">
 	<!-- 				<button class="btn btn-success" ng-click="getStreetOccupancyCsv()">Crea CSV</button> -->
 	<!-- 				&nbsp;&nbsp; -->

@@ -15,9 +15,9 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.data;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.auxiliary.services.PolylineEncoder;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
@@ -38,14 +38,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.geo.Circle;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 //import eu.trentorise.smartcampus.presentation.common.exception.DataException;
 //import eu.trentorise.smartcampus.presentation.data.BasicObject;
@@ -133,18 +132,18 @@ public class GeoObjectManager {
 		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, sysLog, period);
 	}
 
-	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
-		return dynamicManager.getLogsById(null, agency, count, skip, "all");
-	}
+//	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
+//		return dynamicManager.getLogsById(null, agency, count, skip, "all");
+//	}
 	
 	public DataLogBean getLogById(String id) {
 		return dynamicManager.getLogByLogId(id);
 	}
 	
-	public int countAllLogs(String agency) {
-		return dynamicManager.countLogsById(null, agency, -1, 0, "all");
-	}
-	
+//	public int countAllLogs(String agency) {
+//		return dynamicManager.countLogsById(null, agency, -1, 0, "all");
+//	}
+//	
 	private List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
 		return dynamicManager.getLogsById(id, agency, count, 0, type);
 	}
@@ -153,17 +152,22 @@ public class GeoObjectManager {
 		return dynamicManager.getLogsByAuthor(authorId, agency, count);
 	}
 	
-	public List<DataLogBeanTP> findAllLogsByAgency(String agency){
-		List<DataLogBeanTP> correctedLogs = new ArrayList<DataLogBeanTP>();
-		List<DataLogBeanTP> logs = dataLogRepo.findByAgency(agency);
-		for(int i = 0; i < logs.size(); i++){
-			if(!logs.get(i).isDeleted()){
-				correctedLogs.add(logs.get(i));
-			}
-		}
-		return correctedLogs;
+	public List<DataLogBeanTP> findAllLogsByAgency(String agency, Integer skip, Integer count){
+		return dynamicManager.findTPAll(agency, false, skip, count);
 	};
-	
+
+	public Long countAllLogsByAgency(String agency) {
+		return dynamicManager.countTPAll(agency, false);
+	}
+
+	public List<DataLogBeanTP> findAllLogsByAgencyAndType(String agency, String type, Integer skip, Integer count){
+		return dynamicManager.findTPTyped(agency, false, type, skip, count);
+	};
+
+	public Long countAllLogsByAgencyAndType(String agency, String type) {
+		return dynamicManager.countTPTyped(agency, false, type);
+	}
+
 	public int countAllStreetLogs(String agency) {
 		return dynamicManager.countLogsById(null, agency, -1, 0, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
 	}
