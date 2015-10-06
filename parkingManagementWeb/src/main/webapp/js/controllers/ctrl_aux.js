@@ -257,15 +257,16 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	$scope.gotoPage = function(page) {
 		$scope.logtabs[$scope.tabIndex].page = page;
 		loadLogs();
-	}	
+	};	
 	
 	$scope.totalPages = function() {
 		return Math.ceil($scope.logtabs[$scope.tabIndex].count / $scope.maxLogs);
-	}
+	};
 	
 	$scope.getLogData = function() {
+		$scope.globalLogs = $scope.logtabs[$scope.tabIndex].data;
 		return $scope.logtabs[$scope.tabIndex].data;
-	}
+	};
 	
 	$scope.viewDetails = function(type, log){
 		$scope.showDetails = true;
