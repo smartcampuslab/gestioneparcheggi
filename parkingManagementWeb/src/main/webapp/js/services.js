@@ -304,38 +304,38 @@ pm.service('sharedDataService', function(){
 	this.isInGlobalLogPage = function(){
 		return this.inGlobalLogPage;
 	};
-	
-	this.setInParkLogPage = function(value){
-		this.inParkLogPage = value;
-	};
-	
-	this.isInParkLogPage = function(){
-		return this.inParkLogPage;
-	};
-	
-	this.setInStreetLogPage = function(value){
-		this.inStreetLogPage = value;
-	};
-	
-	this.isInStreetLogPage = function(){
-		return this.inStreetLogPage;
-	};
-	
-	this.setInProfitParkLogPage = function(value){
-		this.inProfitParkLogPage = value;
-	};
-	
-	this.isInProfitParkLogPage = function(){
-		return this.inProfitParkLogPage;
-	};
-	
-	this.setInProfitParkmeterLogPage = function(value){
-		this.inProfitParkmeterLogPage = value;
-	};
-	
-	this.isInProfitParkmeterLogPage = function(){
-		return this.inProfitParkmeterLogPage;
-	};
+//	
+//	this.setInParkLogPage = function(value){
+//		this.inParkLogPage = value;
+//	};
+//	
+//	this.isInParkLogPage = function(){
+//		return this.inParkLogPage;
+//	};
+//	
+//	this.setInStreetLogPage = function(value){
+//		this.inStreetLogPage = value;
+//	};
+//	
+//	this.isInStreetLogPage = function(){
+//		return this.inStreetLogPage;
+//	};
+//	
+//	this.setInProfitParkLogPage = function(value){
+//		this.inProfitParkLogPage = value;
+//	};
+//	
+//	this.isInProfitParkLogPage = function(){
+//		return this.inProfitParkLogPage;
+//	};
+//	
+//	this.setInProfitParkmeterLogPage = function(value){
+//		this.inProfitParkmeterLogPage = value;
+//	};
+//	
+//	this.isInProfitParkmeterLogPage = function(){
+//		return this.inProfitParkmeterLogPage;
+//	};
 	
 //	this.getUserIdentity = function(){
 //		return this.utente.codiceFiscale;

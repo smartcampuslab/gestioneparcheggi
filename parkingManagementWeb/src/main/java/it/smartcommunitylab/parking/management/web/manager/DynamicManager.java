@@ -15,17 +15,17 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
+import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.CompactParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.CompactStreetBean;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingLog;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
-import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
-import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
+import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetLog;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
@@ -33,18 +33,18 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
-import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
-import it.smartcommunitylab.parking.management.web.model.RateArea;
-import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
+import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.StatRepository;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -1981,6 +1981,27 @@ public class DynamicManager {
 			result.add(p);
 		}
 		return result;
+	}
+	public Long countTPAll(String agency, boolean deleted) {
+		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("deleted").is(false)), "dataLogBean");
+	}
+	public Long countTPTyped(String agency, boolean deleted, String type) {
+		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("deleted").is(false).and("type").is(type)), "dataLogBean");
+	}
+	public List<DataLogBeanTP> findTPAll(String agency, boolean deleted, int skip, int limit) {
+		Query query = Query.query(new Criteria("agency").is(agency).and("deleted").is(false));
+		query.limit(limit);
+		query.skip(skip);
+		query.sort().on("time", Order.DESCENDING);
+		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");
+		
+	}
+	public List<DataLogBeanTP> findTPTyped(String agency, boolean deleted, String type, int skip, int limit) {
+		Query query = Query.query(new Criteria("agency").is(agency).and("deleted").is(false).and("type").is(type));
+		query.limit(limit);
+		query.skip(skip);
+		query.sort().on("time", Order.DESCENDING);
+		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");
 	}
 
 }

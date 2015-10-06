@@ -73,10 +73,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     // ---------------------------------- END Code for file upload ------------------------------------    
     
     
-    $scope.showDetails = false;
-    $scope.showFiltered = false;
-    $scope.maxLogs = 15;
-    
     $scope.onlyNumbers = /^\d+$/;
     $scope.decimalNumbers = /^([0-9]+)[\,]{0,1}[0-9]{0,2}$/;
     $scope.timePattern=/^(?:(?:([01]?\d|2[0-3]):)?([0-5]?\d):)?([0-5]?\d)$/;
@@ -149,163 +145,47 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     // ------------------------ End timepicker section ------------------------------
     
     $scope.logtabs = [ 
-        { title:'Storico Rilevazioni', index: 1, content:"partials/aux/logs/global_logs.html", active: true },
-        { title:'Rilevazioni occupazione vie', index: 2, content:"partials/aux/logs/street_logs.html", active: false },
-        { title:'Rilevazioni occupazione parcheggi', index: 3, content:"partials/aux/logs/parking_logs.html", active: false },
-        { title:'Rilevazioni ricavi parcometri', index: 4, content:"partials/aux/logs/pm_profit_logs.html", active: false },
-        { title:'Rilevazioni ricavi parcheggi', index: 5, content:"partials/aux/logs/parking_profit_logs.html", active: false }
+        { title:'Rilevazioni occupazione vie', index: 1, content:"partials/aux/logs/street_logs.html", active: false, path: "/tplog/streets" },
+        { title:'Rilevazioni occupazione parcheggi', index: 2, content:"partials/aux/logs/parking_logs.html", active: false, path: "/tplog/parkings"},
+        { title:'Rilevazioni ricavi parcometri', index: 3, content:"partials/aux/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" },
+        { title:'Rilevazioni ricavi parcheggi', index: 4, content:"partials/aux/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" },
+        { title:'Storico Rilevazioni', index: 5, content:"partials/aux/logs/global_logs.html", active: true, path: "/tplog/all"}
     ];
     
-    $scope.setIndex = function($index){
-    	switch($index){
-	    	case 0:
-	    		sharedDataService.setInGlobalLogPage(true);
-	    		sharedDataService.setInStreetLogPage(false);
-	    		sharedDataService.setInParkLogPage(false);
-	    		sharedDataService.setInProfitParkLogPage(false);
-	    		sharedDataService.setInProfitParkmeterLogPage(false);
-	    		$scope.initGlobalLogs();
-	    		break;
-	    	case 1:
-	    		sharedDataService.setInGlobalLogPage(false);
-	    		sharedDataService.setInStreetLogPage(true);
-	    		sharedDataService.setInParkLogPage(false);
-	    		sharedDataService.setInProfitParkLogPage(false);
-	    		sharedDataService.setInProfitParkmeterLogPage(false);
-	    		$scope.initStreetLogs();
-	    		break;
-	    	case 2:
-	    		sharedDataService.setInGlobalLogPage(false);
-	    		sharedDataService.setInStreetLogPage(false);
-	    		sharedDataService.setInParkLogPage(true);
-	    		sharedDataService.setInProfitParkLogPage(false);
-	    		sharedDataService.setInProfitParkmeterLogPage(false);
-	    		$scope.initParkLogs();
-	    		break;
-	    	case 3:
-	    		sharedDataService.setInGlobalLogPage(false);
-	    		sharedDataService.setInStreetLogPage(false);
-	    		sharedDataService.setInParkLogPage(false);
-	    		sharedDataService.setInProfitParkLogPage(false);
-	    		sharedDataService.setInProfitParkmeterLogPage(true);
-	    		$scope.initProfitParkMeterLogs();
-	    		break;	
-	    	case 4:
-	    		sharedDataService.setInGlobalLogPage(false);
-	    		sharedDataService.setInStreetLogPage(false);
-	    		sharedDataService.setInParkLogPage(false);
-	    		sharedDataService.setInProfitParkLogPage(true);
-	    		sharedDataService.setInProfitParkmeterLogPage(false);
-	    		$scope.initProfitParkLogs();
-	    		break;	
-    	}
-       	$scope.tabIndex = $index;
+    $scope.showDetails = false;
+    $scope.showFiltered = false;
+    $scope.maxLogs = 15;
+    
+    // reset tab view in log lists
+    var resetView = function() {
+    	$scope.showDetails = false;
+    	$scope.showFiltered = false;
     };
     
-    $scope.addtabs = [ 
-        { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html" },
-        { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html" },
-        { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html" },
-        { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html" }
-    ];
-                  
-    $scope.setAddIndex = function($index){
-        $scope.tabIndex = $index;
+    // switch tab, reset view to list, load data with the corresponding data page
+    $scope.setIndex = function(idx){
+    	resetView();
+       	$scope.tabIndex = idx;
+    	loadLogs();
     };
     
     $scope.authHeaders = {
         'Accept': 'application/json;charset=UTF-8'
     };
     
-    $scope.logCounts = 0;
-    $scope.logParkCounts = 0;
-    $scope.logStreetCounts = 0;
-    $scope.globalLogs = [];
-    $scope.parkLogs = [];
-    $scope.streetLogs = [];
-    
-    // For default
-    $scope.initGlobalLogs = function(){
-    	$scope.showDetails = false;
-    	$scope.showFiltered = false;
-    	//$scope.countAllLogsInDb();
-    	$scope.getAllLogsFromDbTP();
-    };
-    
-    // For parking occupancy
-	$scope.initParkLogs = function(){
-		$scope.showDetails = false;
-		//$scope.getAllParkLogsFromDbTP();
-		$scope.getAllParkLogsFromGlobalList();
-    };
-    
-    // For parking profit
-    $scope.initProfitParkLogs = function(){
-		$scope.showDetails = false;
-		//$scope.getAllParkProfitLogsFromDbTP();
-		$scope.getAllParkProfitLogsFromGlobalList();
-    };
-    
-    // For parkingmeter profit
-    $scope.initProfitParkMeterLogs = function(){
-		$scope.showDetails = false;
-		//$scope.getAllParkMeterProfitLogsFromDbTP();
-		$scope.getAllParkMeterProfitLogsFromGlobalList();
-    };
-    
-    // For street
-	$scope.initStreetLogs = function(){
-		$scope.showDetails = false;
-		//$scope.getAllStreetLogsFromDbTP();
-		$scope.getAllStreetLogsFromGlobalList();
-    };
-    
-//    $scope.countAllLogsInDb = function(){
-//		var elements = 0;
-//		var method = 'GET';
-//		var appId = sharedDataService.getConfAppId();
-//		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/log/count/all", null, $scope.authHeaders, null);
-//		myDataPromise.then(function(result){
-//		    console.log("log counted in db: " + JSON.stringify(result));
-//		    elements = parseInt(result);
-//		    $scope.logCounts = elements;
-//		    $scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
-//		    if($scope.globalLogs.length != $scope.logCounts){
-//		    	$scope.globalLogs = [];
-//		    }
-//		    $scope.getAllLogsFromDb(0);
-//		});
-//	};
-//	
-//	$scope.getAllLogsFromDb = function(skip){
-//		if($scope.globalLogs.length < $scope.logCounts){
-//			var method = 'GET';
-//			var appId = sharedDataService.getConfAppId();
-//			var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/log/all/" + skip, null, $scope.authHeaders, null);
-//			myDataPromise.then(function(result){
-//				//console.log("log finded in db: " + JSON.stringify(result));
-//				$scope.globalLogs = $scope.globalLogs.concat(result);
-//			    if(skip < $scope.logCounts && sharedDataService.isInGlobalLogPage()){
-//			    	skip += 100;
-//			   	$scope.getAllLogsFromDb(skip);
-//			    } else {
-//			    	console.log("All log finded: last skip = " + skip);
-//			    }
-//			});
-//		} else {
-//			console.log("global log already loaded.");
-//		}
-//	};
-	
-	$scope.getAllLogsFromDbTP = function(){
-		$scope.globalLogs = [];
+    // load remote data
+	var loadData = function(path, skip, count){
+	    $scope.progress = 25;
+		$dialogs.wait("Aggiornamento dati in corso...", $scope.progress);
+
 		$scope.isLoadingLogs = true;
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", null, $scope.authHeaders, null);
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + path, {skip: skip, count: count}, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			var partialLogs = result;//$scope.globalLogs.concat(result);
 			var corrLog = null;
+			var nulogs = [];
 			for(var i = 0; i < partialLogs.length; i++){
 				corrLog = {
 					id:	partialLogs[i].id,
@@ -325,15 +205,31 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
 				};
 				//console.log("corrLog: " + JSON.stringify(corrLog));
-				$scope.globalLogs.push(corrLog);
+				nulogs.push(corrLog);
 			}
-			//$scope.getAllProfitLogsFromDbTP();
-			$scope.logCounts =  partialLogs.length;
-		    $scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
-		    $scope.isLoadingLogs = false;
+			$scope.logtabs[$scope.tabIndex].data = nulogs;
+			$scope.progress += 25;
+	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: "Aggiornamento dati in corso...",'progress': $scope.progress});
+	    	
+			invokeAuxWSService.getProxy(method, appId + path+"/count", null, $scope.authHeaders, null)
+			.then(function(result) {
+				$scope.logtabs[$scope.tabIndex].count = result;
+			    $scope.isLoadingLogs = false;
+				$scope.progress = 100;
+		    	$rootScope.$broadcast('dialogs.wait.complete');
+			});
 		});
 	};
-	
+    // load data for the current tab for the current page
+    var loadLogs = function() {
+    	if (!$scope.tabIndex) $scope.tabIndex = 0;
+    	var logtab = $scope.logtabs[$scope.tabIndex];
+    	var page = logtab.page;
+    	if (!page) page = 0;
+    	var skip = page * $scope.maxLogs;
+    	loadData(logtab.path, skip, $scope.maxLogs);
+    }
+
 	// Method cleanStringFroJSON: used to clean the saved valueString to be accepted in JSON.parse function
 	$scope.cleanStringForJSON = function(value){
 		var corrected = "";
@@ -344,271 +240,38 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		return corrected;
 	};
 	
-//	$scope.countAllParkLogsInDb = function(){
-//		var elements = 0;
-//		var method = 'GET';
-//		var appId = sharedDataService.getConfAppId();
-//		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/log/count/parking", null, $scope.authHeaders, null);
-//		myDataPromise.then(function(result){
-//		    console.log("park log counted in db: " + JSON.stringify(result));
-//		    elements = parseInt(result);
-//		    $scope.logParkCounts = elements;
-//		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
-//		    if($scope.parkLogs.length != $scope.logParkCounts){
-//		    	$scope.parkLogs = [];
-//		    }
-//		    $scope.getAllParkLogsFromDb(0);
-//		});
-//	};
-//	
-//	$scope.getAllParkLogsFromDb = function(skip){
-//		if($scope.parkLogs.length < $scope.logParkCounts){
-//			var method = 'GET';
-//			var appId = sharedDataService.getConfAppId();
-//			var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/log/parkings/" + skip, null, $scope.authHeaders, null);
-//			myDataPromise.then(function(result){
-//				console.log("park log finded in db: " + JSON.stringify(result));
-//				$scope.parkLogs = $scope.parkLogs.concat(result);
-//			    if(skip < $scope.logParkCounts && sharedDataService.isInParkLogPage()){
-//			    	skip += 100;
-//			    	$scope.getAllParkLogsFromDb(skip);
-//			    } else {
-//			    	console.log("Park log finded: last skip = " + skip + " counts = " + $scope.logParkCounts + " isInParkLogPage = " + sharedDataService.isInParkLogPage());
-//			    }
-//			});
-//		} else {
-//			console.log("park log already loaded.");
-//		}
-//	};
-	
-	$scope.getAllParkLogsFromDbTP = function(){
-		$scope.parkLogs = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/parkings", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			var partialLogs = result;
-			var corrLog = null;
-			for(var i = 0; i < partialLogs.length; i++){
-				corrLog = {
-					id:	partialLogs[i].id,
-					objId: partialLogs[i].objId,
-					type: partialLogs[i].type,
-					time: partialLogs[i].time,
-					logPeriod : partialLogs[i].logPeriod,
-					author: partialLogs[i].author,
-					agency: partialLogs[i].agency,
-			        deleted: partialLogs[i].deleted,
-			        year: partialLogs[i].year,
-			        month: partialLogs[i].month,
-			        week_day: partialLogs[i].week_day,
-			        timeSlot: partialLogs[i].timeSlot,
-			        holyday: partialLogs[i].holyday,
-			        isSystemLog: partialLogs[i].systemLog,
-			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
-				};
-				//console.log("corrLog: " + JSON.stringify(corrLog));
-				$scope.parkLogs.push(corrLog);
-			}
-			$scope.logParkCounts = partialLogs.length;
-		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
-		});
+	$scope.getCurrentPage = function() {
+		var p = $scope.logtabs[$scope.tabIndex].page;
+		if (!p) p = 0;
+		return p;
 	};
-	
-	// Method getAllParkProfitLogsFromDbTP: used to retrieve all the logs of type parkstruct in the profitLogBean Table
-	$scope.getAllParkProfitLogsFromDbTP = function(){
-		$scope.parkProfitLogs = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/parkstructs", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			var partialLogs = result;
-			var corrLog = null;
-			for(var i = 0; i < partialLogs.length; i++){
-				corrLog = {
-					id:	partialLogs[i].id,
-					objId: partialLogs[i].objId,
-					type: partialLogs[i].type,
-					time: partialLogs[i].time,
-					logPeriod : partialLogs[i].logPeriod,
-					author: partialLogs[i].author,
-					agency: partialLogs[i].agency,
-			        deleted: partialLogs[i].deleted,
-			        year: partialLogs[i].year,
-			        month: partialLogs[i].month,
-			        week_day: partialLogs[i].week_day,
-			        timeSlot: partialLogs[i].timeSlot,
-			        holyday: partialLogs[i].holyday,
-			        isSystemLog: partialLogs[i].systemLog,
-			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
-				};
-				//console.log("corrLog: " + JSON.stringify(corrLog));
-				$scope.parkProfitLogs.push(corrLog);
-			}
-			$scope.logParkCounts = partialLogs.length;
-		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
-		});
+
+	$scope.stepPage = function(shift) {
+		var p = $scope.getCurrentPage();
+		var np = p + shift;
+		if (np < 0) return;
+		$scope.logtabs[$scope.tabIndex].page = np;
+		loadLogs();
 	};
+
+	$scope.gotoPage = function(page) {
+		$scope.logtabs[$scope.tabIndex].page = page;
+		loadLogs();
+	}	
 	
-	// Method getAllParkMeterProfitLogsFromDbTP: used to retrieve all the logs of type parkmeter in the dataLogBean Table
-	$scope.getAllParkMeterProfitLogsFromDbTP = function(){
-		$scope.pmProfitLogs = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/parkmeters", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			var partialLogs = result;
-			var corrLog = null;
-			for(var i = 0; i < partialLogs.length; i++){
-				corrLog = {
-					id:	partialLogs[i].id,
-					objId: partialLogs[i].objId,
-					type: partialLogs[i].type,
-					time: partialLogs[i].time,
-					logPeriod : partialLogs[i].logPeriod,
-					author: partialLogs[i].author,
-					agency: partialLogs[i].agency,
-			        deleted: partialLogs[i].deleted,
-			        year: partialLogs[i].year,
-			        month: partialLogs[i].month,
-			        week_day: partialLogs[i].week_day,
-			        timeSlot: partialLogs[i].timeSlot,
-			        holyday: partialLogs[i].holyday,
-			        isSystemLog: partialLogs[i].systemLog,
-			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
-				};
-				//console.log("corrLog: " + JSON.stringify(corrLog));
-				$scope.pmProfitLogs.push(corrLog);
-			}
-			$scope.logParkCounts = partialLogs.length;
-		    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
-		});
-	};
+	$scope.totalPages = function() {
+		return Math.ceil($scope.logtabs[$scope.tabIndex].count / $scope.maxLogs);
+	}
 	
-//	$scope.countAllStreetLogsInDb = function(){
-//		var elements = 0;
-//		var method = 'GET';
-//		var appId = sharedDataService.getConfAppId();
-//		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/log/count/street", null, $scope.authHeaders, null);
-//		myDataPromise.then(function(result){
-//		    console.log("street log counted in db: " + JSON.stringify(result));
-//		    elements = parseInt(result);
-//		    $scope.logStreetCounts = elements;
-//		    $scope.logStreetCountsPage = Math.ceil($scope.logStreetCounts / $scope.maxLogs);
-//		    if($scope.streetLogs.length != $scope.logStreetCounts){
-//		    	$scope.streetLogs = [];
-//		    }
-//		    $scope.getAllStreetLogsFromDb(0);
-//		});
-//	};
-//	
-//	$scope.getAllStreetLogsFromDb = function(skip){
-//		if($scope.streetLogs.length < $scope.logStreetCounts){
-//			var method = 'GET';
-//			var appId = sharedDataService.getConfAppId();
-//			var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/log/streets/" + skip, null, $scope.authHeaders, null);
-//			myDataPromise.then(function(result){
-//				//console.log("street log finded in db: " + JSON.stringify(result));
-//				$scope.streetLogs = $scope.streetLogs.concat(result);
-//			    if(skip < $scope.logStreetCounts && sharedDataService.isInStreetLogPage()){
-//			    	skip += 100;
-//			    	$scope.getAllStreetLogsFromDb(skip);
-//			    } else {
-//			    	console.log("Street log finded: last skip = " + skip + " counts = " + $scope.logStreetCounts + " isInStreetLogPage = " + sharedDataService.isInStreetLogPage());
-//			    }
-//			});
-//		} else {
-//			console.log("street log already loaded.");
-//		}
-//	};
-	
-	$scope.getAllStreetLogsFromDbTP = function(){
-		$scope.streetLogs = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/streets", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			var partialLogs = result;
-			var corrLog = null;
-			for(var i = 0; i < partialLogs.length; i++){
-				corrLog = {
-					id:	partialLogs[i].id,
-					objId: partialLogs[i].objId,
-					type: partialLogs[i].type,
-					time: partialLogs[i].time,
-					logPeriod: partialLogs[i].logPeriod,
-					author: partialLogs[i].author,
-					agency: partialLogs[i].agency,
-			        deleted: partialLogs[i].deleted,
-			        year: partialLogs[i].year,
-			        month: partialLogs[i].month,
-			        week_day: partialLogs[i].week_day,
-			        timeSlot: partialLogs[i].tileSlot,
-			        holyday: partialLogs[i].holyday,
-			        isSystemLog: partialLogs[i].systemLog,
-			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
-				};
-				//console.log("corrLog: " + JSON.stringify(corrLog));
-				$scope.streetLogs.push(corrLog);
-			}
-			$scope.logStreetCounts = partialLogs.length;
-		    $scope.logStreetCountsPage = Math.ceil($scope.logStreetCounts / $scope.maxLogs);
-		});
-	};
-	
-	// Method getAllParkLogsFromGlobalList: used to retrieve all the logs of type parking from the globalLogs list
-	$scope.getAllParkLogsFromGlobalList = function(){
-		$scope.parkLogs = [];
-		for(var i = 0; i < $scope.globalLogs.length; i++){
-			if($scope.globalLogs[i].type == "it.smartcommunitylab.parking.management.web.auxiliary.model.Parking"){
-				$scope.parkLogs.push($scope.globalLogs[i]);
-			}
-		}
-		$scope.logParkCounts = $scope.parkLogs.length;
-	    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
-	};
-	
-	// Method getAllParkMeterProfitLogsFromGlobalList: used to retrieve all the logs of type parkmeter from the globalLogs list
-	$scope.getAllParkMeterProfitLogsFromGlobalList = function(){
-		$scope.pmProfitLogs = [];
-		for(var i = 0; i < $scope.globalLogs.length; i++){
-			if($scope.globalLogs[i].type == "it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter"){
-				$scope.pmProfitLogs.push($scope.globalLogs[i]);
-			}
-		}
-		$scope.logParkCounts = $scope.pmProfitLogs.length;
-	    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
-	};
-	
-	// Method getAllParkProfitLogsFromGlobalList: used to retrieve all the logs of type parkstruct from the globalLogs list
-	$scope.getAllParkProfitLogsFromGlobalList = function(){
-		$scope.parkProfitLogs = [];
-		for(var i = 0; i < $scope.globalLogs.length; i++){
-			if($scope.globalLogs[i].type == "it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct"){
-				$scope.parkProfitLogs.push($scope.globalLogs[i]);
-			}
-		}
-		$scope.logParkCounts = $scope.parkProfitLogs.length;
-	    $scope.logParkCountsPage = Math.ceil($scope.logParkCounts / $scope.maxLogs);
-	};
-	
-	// Method getAllStreetLogsFromGlobalList: used to retrieve all the logs of type street from the globalLogs list
-	$scope.getAllStreetLogsFromGlobalList = function(){
-		$scope.streetLogs = [];
-		for(var i = 0; i < $scope.globalLogs.length; i++){
-			if($scope.globalLogs[i].type == "it.smartcommunitylab.parking.management.web.auxiliary.model.Street"){
-				$scope.streetLogs.push($scope.globalLogs[i]);
-			}
-		}
-		$scope.logStreetCounts = $scope.streetLogs.length;
-	    $scope.logStreetCountsPage = Math.ceil($scope.logStreetCounts / $scope.maxLogs);
-	};
+	$scope.getLogData = function() {
+		return $scope.logtabs[$scope.tabIndex].data;
+	}
 	
 	$scope.viewDetails = function(type, log){
 		$scope.showDetails = true;
-		if(type == 1){
-			$scope.showFiltered = false;
-		}
+//		if(type == 1){
+//			$scope.showFiltered = false;
+//		}
 		$scope.logDetails = log;
 		$scope.json_log_value = JSON.stringify(log, undefined, 4);
 	};
@@ -621,25 +284,23 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.logDetails = {};
 	};
 	
-	$scope.viewFiltered = function(log){
-		$scope.filterForLog = log.objId;
-		$scope.showFiltered = true;
-	};
-	
-	$scope.closeFiltered = function(){
-		$scope.filterForLog = null;
-		$scope.showFiltered = false;
-	};
-	
-	$scope.currentPage = 0;
-	$scope.currentFilterPage = 0;
-	$scope.numberOfPages = function(list){
-       	if(list != null){
-       		return Math.ceil(list.length/$scope.maxLogs);
-       	} else {
-       		return 0;
-     	}
-	};  
+//	$scope.viewFiltered = function(log){
+//		$scope.filterForLog = log.objId;
+//		$scope.showFiltered = true;
+//	};
+//	
+//	$scope.closeFiltered = function(){
+//		$scope.filterForLog = null;
+//		$scope.showFiltered = false;
+//	};
+//	
+//	$scope.numberOfPages = function(list){
+//       	if(list != null){
+//       		return Math.ceil(list.length/$scope.maxLogs);
+//       	} else {
+//       		return 0;
+//     	}
+//	};  
 	
 	$scope.correctEuroCent = function(eurocent){
 		var intval = parseInt(eurocent);
@@ -647,6 +308,18 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		return totalEur.toFixed(2) + " ";
 	};
 	
+    $scope.addtabs = [ 
+                      { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html" },
+                      { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html" },
+                      { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html" },
+                      { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html" }
+                  ];
+                                
+                  $scope.setAddIndex = function($index){
+                      $scope.tabIndex = $index;
+                  };
+                  
+
 	// --------------------------------------------- Block for csv ---------------------------------------------
 	$scope.globalLogCvsFile = "";
 	

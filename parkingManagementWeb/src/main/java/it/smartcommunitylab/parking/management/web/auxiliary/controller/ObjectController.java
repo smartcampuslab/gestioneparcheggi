@@ -67,90 +67,113 @@ public class ObjectController  {
 		return "pong";
 	} 
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/all/{skip}") 
-	public @ResponseBody List<DataLogBean> getAllLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/all") 
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
-		//return logMongoStorage.getParkingLogsById(id, agency, count);
-		return dataService.getAllLogs(agency, count, skip);
+		if (skip == null) skip = 0;
+		return dataService.findAllLogsByAgency(agency, skip, count);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/all/count") 
+	public @ResponseBody Long getAllTPLogsCount(@PathVariable String agency) {
+		return dataService.countAllLogsByAgency(agency);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings") 
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPParkingLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+		if (count == null) count = DEFAULT_COUNT;
+		if (skip == null) skip = 0;
+		return dataService.findAllLogsByAgencyAndType(agency, Parking.class.getCanonicalName(), skip, count);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings/count") 
+	public @ResponseBody Long getAllTPParkingLogsCount(@PathVariable String agency) {
+		return dataService.countAllLogsByAgencyAndType(agency, Parking.class.getCanonicalName());
+	}
+
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkstructs") 
+	public @ResponseBody List<DataLogBeanTP> getAllParkStructsLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+		if (count == null) count = DEFAULT_COUNT;
+		if (skip == null) skip = 0;
+		return dataService.findAllLogsByAgencyAndType(agency, ParkStruct.class.getCanonicalName(), skip, count);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkstructs/count") 
+	public @ResponseBody Long getAllTPParkStructsLogsCount(@PathVariable String agency) {
+		return dataService.countAllLogsByAgencyAndType(agency, ParkStruct.class.getCanonicalName());
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/all") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkmeters") 
+	public @ResponseBody List<DataLogBeanTP> getAllParkMetersLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
-		//return logMongoStorage.getParkingLogsById(id, agency, count);
-		//return dataLogRepo.findByAgency(agency);
-		return dataService.findAllLogsByAgency(agency);
+		if (skip == null) skip = 0;
+		return dataService.findAllLogsByAgencyAndType(agency, ParkMeter.class.getCanonicalName(), skip, count);
 	}
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkmeters/count") 
+	public @ResponseBody Long getAllParkMetersLogsCount(@PathVariable String agency) {
+		return dataService.countAllLogsByAgencyAndType(agency, ParkMeter.class.getCanonicalName());
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets") 
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+		if (count == null) count = DEFAULT_COUNT;
+		if (skip == null) skip = 0;
+		return dataService.findAllLogsByAgencyAndType(agency, Street.class.getCanonicalName(), skip, count);
+	}
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets/count") 
+	public @ResponseBody Long getAllTPStreetLogsCount(@PathVariable String agency) {
+		return dataService.countAllLogsByAgencyAndType(agency, Street.class.getCanonicalName());
+	}
+
+//	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/all/{skip}") 
+//	public @ResponseBody List<DataLogBean> getAllLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
+//		if (count == null) count = DEFAULT_COUNT;
+//		//return logMongoStorage.getParkingLogsById(id, agency, count);
+//		return dataService.getAllLogs(agency, count, skip);
+//	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/tplog/all/{id:.*}") 
 	public @ResponseBody DataLogBean getStreetLogByLogId(@PathVariable String id) {
 		//return logMongoStorage.getStreetLogsById(id, agency, count);
 		return dataService.getLogById(id);
 	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/all") 
-	public @ResponseBody int countAllLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
-		//if (count == null) count = DEFAULT_COUNT;
-		//return logMongoStorage.getParkingLogsById(id, agency, count);
-		return dataService.countAllLogs(agency);
-	}
+//	
+//	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/all") 
+//	public @ResponseBody int countAllLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+//		//if (count == null) count = DEFAULT_COUNT;
+//		//return logMongoStorage.getParkingLogsById(id, agency, count);
+//		return dataService.countAllLogs(agency);
+//	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPParkingLogs(@PathVariable String agency) {
-		return dataService.getParkingLogsByAgency(agency);
-		//return dataLogRepo.findByTypeAndAgencyAllIgnoreCase(Parking.class.getCanonicalName(), agency);
-	}
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/parkings/{skip}") 
-	public @ResponseBody List<DataLogBean> getAllParkingLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
-		if (count == null) count = DEFAULT_COUNT;
-		//return logMongoStorage.getParkingLogsById(id, agency, count);
-		return dataService.getAllParkingLogs(agency, count, skip);
-	}
+//	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/parkings/{skip}") 
+//	public @ResponseBody List<DataLogBean> getAllParkingLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
+//		if (count == null) count = DEFAULT_COUNT;
+//		//return logMongoStorage.getParkingLogsById(id, agency, count);
+//		return dataService.getAllParkingLogs(agency, count, skip);
+//	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/parking/{id:.*}") 
 	public @ResponseBody List<DataLogBean> getParkingLogs(@PathVariable String agency, @PathVariable String id, @RequestParam(required=false) Integer count) {
 		if (count == null) count = DEFAULT_COUNT;
 		//return logMongoStorage.getParkingLogsById(id, agency, count);
 		return dataService.getParkingLogsByIdDyn(id, agency, count);
 	}
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/parking") 
-	public @ResponseBody int countParkingLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
-		return dataService.countAllParkingLogs(agency);
-	}
+//	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/parking") 
+//	public @ResponseBody int countParkingLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+//		return dataService.countAllParkingLogs(agency);
+//	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkstructs") 
-	public @ResponseBody List<DataLogBeanTP> getAllParkStructsLogs(@PathVariable String agency) {
-		//public @ResponseBody List<ProfitLogBeanTP> getAllParkStructsLogs(@PathVariable String agency) {
-		return dataService.getParkProfitLogsByAgency(agency);
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkmeters") 
-	public @ResponseBody List<DataLogBeanTP> getAllParkMetersLogs(@PathVariable String agency) {
-		//public @ResponseBody List<ProfitLogBeanTP> getAllParkMetersLogs(@PathVariable String agency) {
-		//return dataService.getPmProfitLogsByAgency(agency);
-		return dataService.getPmLogsByAgency(agency);
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency) {
-		return dataService.getStreetLogsByAgency(agency);
-		//return dataLogRepo.findByTypeAndAgencyAllIgnoreCase(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName(), agency);
-	}
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/streets/{skip}") 
-	public @ResponseBody List<DataLogBean> getAllStreetLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
-		if (count == null) count = DEFAULT_COUNT;
-		//return logMongoStorage.getStreetLogsById(id, agency, count);
-		return dataService.getAllStreetLogs(agency, count, skip);
-	}
+//	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/streets/{skip}") 
+//	public @ResponseBody List<DataLogBean> getAllStreetLogs(@PathVariable String agency, @PathVariable int skip, @RequestParam(required=false) Integer count) {
+//		if (count == null) count = DEFAULT_COUNT;
+//		//return logMongoStorage.getStreetLogsById(id, agency, count);
+//		return dataService.getAllStreetLogs(agency, count, skip);
+//	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/street/{id:.*}") 
 	public @ResponseBody List<DataLogBean> getStreetLogs(@PathVariable String agency, @PathVariable String id, @RequestParam(required=false) Integer count) {
 		if (count == null) count = DEFAULT_COUNT;
 		//return logMongoStorage.getStreetLogsById(id, agency, count);
 		return dataService.getStreetLogsByIdDyn(id, agency, count);
 	}
-	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/street") 
-	public @ResponseBody int countStreetLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
-		return dataService.countAllStreetLogs(agency);
-	}
+//	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/count/street") 
+//	public @ResponseBody int countStreetLogs(@PathVariable String agency, @RequestParam(required=false) Integer count) {
+//		return dataService.countAllStreetLogs(agency);
+//	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/user/{id:.*}") 
 	public @ResponseBody List<DataLogBean> getUserLogs(@PathVariable String agency, @PathVariable String id, @RequestParam(required=false) Integer count) {
