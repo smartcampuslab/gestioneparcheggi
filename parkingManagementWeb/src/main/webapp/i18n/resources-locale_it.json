@@ -44,7 +44,7 @@
     "description": "Valore link menu per Contatti"
 }, {
     "key": "menu_bar-homedashboard",
-    "value": "Dashboard - Soste",
+    "value": "Dashboard",
     "description": "Valore link menu per dashboard - soste"
 }, {
     "key": "menu_bar-homepark",

@@ -176,7 +176,24 @@
 <!-- 					    </div> -->
 <!-- 					</div> -->
 		<div id="title_map_page" align="left">
-			<h5><strong>{{ title_map }}</strong></h5>
+			<table width="100%">
+				<tr valign="top">
+					<td align="left" width="50%"><h5><strong>{{ title_map }}</strong></h5></td>
+<!-- 					<td align="right" width="50%"><button class="btn btn-default" ng-click="showLegend(1)">Visualizza Legenda</button></td> -->
+				</tr>
+			</table>
+		</div>
+		<div id="legend" align="left" ng-show="isOccupancyLegendShow()">
+			<table width="100%">
+				<tr valign="top">
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(violet)}"></span>&nbsp;90%-100%</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(red)}">&nbsp;75%-90%</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(orange)}">&nbsp;50%-75%</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(yellow)}">&nbsp;25%-50%</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(green)}">&nbsp;0%-25%</td>
+					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td>
+				</tr>
+			</table>
 		</div>
 		<map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}">
 			<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showDetails(event, pm, 1, 0)" ><!-- on-click="showInfoWindow(event, 'pm')" -->

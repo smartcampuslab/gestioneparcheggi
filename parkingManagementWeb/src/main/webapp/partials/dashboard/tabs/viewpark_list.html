@@ -124,10 +124,12 @@
 	<div class="col-md-12" align="center" ng-show="!detailsOpened && !occupancyOpened && !profitOpened  && !timeCostOpened"><!--  ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" -->
 		<div ng-show="reportShareList.length > 0">
 			<table width="100%">
-				<tr>
-					<td width="33%"></td>
-					<td width="34%"></td>
-					<td width="33%" align="right">
+				<tr valign="top">
+					<td width="50%"></td>
+<!-- 					<td width="43%" align="right"> -->
+<!-- 						<button class="btn btn-default" ng-click="showLegend(1)">Visualizza Legenda</button>&nbsp; -->
+<!-- 					</td> -->
+					<td width="7%" align="right">
 						<div class="form-group" >
 							<div class="dropdown">
 								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownPm1" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="true">
@@ -158,7 +160,7 @@
 						</th>
 						<th width="30%">
 							<span ng-show="pm_note.visible">{{ 'pm_note' | i18n }}</span>
-							<a href ng-click="showNoteFilter()" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showNotFilter">
 						    	 <input type="search" ng-model="noteFilter" placeholder="{{ 'filter_note_text' | i18n }}" />
@@ -166,13 +168,13 @@
 						</th>
 						<th width="10%">
 							<span ng-show="pm_status.visible">{{ 'pm_status' | i18n }}</span>
-							<a href ng-click="showPmStatusFilter()" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPmStatusFilter();currentPagePm=0" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="pmStatusFilter=null;hidePmStatusFilter()" ng-show="showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<select id="f_pm_status" ng-show="showStatusPmFilter" class="form-control" ng-options="s.idObj as s.descrizione for s in allPmStatusFilter" ng-model="pmStatusFilter">
 					    	</select>
 						</th>
 						<th width="20%" colspan="2">{{ 'pm_area_name' | i18n }}&nbsp;
-							<a href ng-click="showPmAreaFilter()" ng-show="!showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPmAreaFilter();currentPagePm=0" ng-show="!showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="pmAreaFilter=null;hidePmAreaFilter()" ng-show="showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 						    <select id="f_pm_area" ng-show="showAreaPmFilter" class="form-control" ng-model="pmAreaFilter">
 						    	<option ng-repeat="a in allPmAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
@@ -181,7 +183,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="pmeter in filtered = (parkingMeterWS | filter:noteFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:['code'] | startFrom:currentPage*maxPMeters | limitTo:maxPMeters">
+						ng-repeat="pmeter in filtered = (parkingMeterWS | filter:noteFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:['code'] | startFrom:currentPagePm*maxPMeters | limitTo:maxPMeters">
 						<tr>
 							<td width="10%" align="left">{{pmeter.code}}</td>
 							<td width="30%" align="left">
@@ -210,12 +212,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(8, filtered)}}
+								ng-disabled="currentPagePm == 0"
+								ng-click="currentPagePm=currentPagePm-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPagePm+1}}/{{numberOfPages(8, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxPMeters - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPagePm >= filtered.length/maxPMeters - 1"
+								ng-click="currentPagePm=currentPagePm+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<a href class="btn btn-success" target="_blank" ng-click="getPMSupplyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
@@ -236,7 +238,7 @@
 						</th>
 						<th width="20%">
 							<span ng-show="pm_note.visible">{{ 'pm_note' | i18n }}</span>
-							<a href ng-click="showNoteFilter()" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showNoteFilter();currentPagePmp=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showNotFilter">
 						    	 <input type="search" ng-model="noteFilter" placeholder="{{ 'filter_note_text' | i18n }}" />
@@ -244,7 +246,7 @@
 						</th>
 						<th width="10%" class="myCenter">
 							<span ng-show="pm_status.visible">{{ 'pm_status' | i18n }}</span>
-							<a href ng-click="showPmStatusFilter()" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPmStatusFilter();currentPagePmp=0" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="pmStatusFilter=null;hidePmStatusFilter()" ng-show="showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<select id="f_pm_status" ng-show="showStatusPmFilter" class="form-control" ng-options="s.idObj as s.descrizione for s in allPmStatusFilter" ng-model="pmStatusFilter">
 					    	</select>
@@ -254,7 +256,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="pmeter in filtered = (parkingMeterWS | filter:noteFilter | filter:codeFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:['-profit', 'code'] | startFrom:currentPage*maxPMeters | limitTo:maxPMeters">
+						ng-repeat="pmeter in filtered = (parkingMeterWS | filter:noteFilter | filter:codeFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:['-profit', 'code'] | startFrom:currentPagePmp*maxPMeters | limitTo:maxPMeters">
 						<tr>
 							<td width="10%" align="left">{{pmeter.code}}</td>
 							<td width="25%" align="left"><span ng-show="pm_note.visible">{{pmeter.note}}</span></td>
@@ -287,12 +289,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(8, filtered)}}
+								ng-disabled="currentPagePmp == 0"
+								ng-click="currentPagePmp=currentPagePmp-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPagePmp+1}}/{{numberOfPages(8, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxPMeters - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPagePmp >= filtered.length/maxPMeters - 1"
+								ng-click="currentPagePmp=currentPagePmp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -306,14 +308,14 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="streetWS.length != 0">
 						<th width="20%">{{ 'street_name' | i18n }}&nbsp;
-							<a href ng-click="showStreetNameFilter()" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showStreetNameFilter();currentPageSa=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showStreetFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
 						<th width="25%" colspan="2">{{ 'street_area_name' | i18n }}&nbsp;
-							<a href ng-click="showSAreaFilter()" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showSAreaFilter();currentPageSa=0" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="streetAreaFilter=null;hideSAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaStreetFilter">
 						    	<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
@@ -335,7 +337,7 @@
 						<td colspan="10"><div class="alert alert-info">{{ 'info_2' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(2)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
 					</tr>
 					<tbody class="animate-repeat"
-							ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['area_name', 'name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
+							ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['area_name', 'name'] | startFrom:currentPageSa*maxStreets | limitTo:maxStreets">
 						<tr>
 							<td width="20%" align="left">{{street.streetReference}}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
@@ -363,12 +365,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(2, filtered)}}
+							ng-disabled="currentPageSa == 0"
+							ng-click="currentPageSa=currentPageSa-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageSa+1}}/{{numberOfPages(2, filtered)}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPage >= filtered.length/maxStreets - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageSa >= filtered.length/maxStreets - 1"
+							ng-click="currentPageSa=currentPageSa+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<a href class="btn btn-success" target="_blank" ng-click="getStreetSupplyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
@@ -381,14 +383,14 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="streetWS.length != 0">
 						<th width="16%">{{ 'street_name' | i18n }}&nbsp;
-							<a href ng-click="showStreetNameFilter()" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showStreetNameFilter();currentPageSo=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showStreetFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
 						<th width="12%">{{ 'street_area_name' | i18n }}&nbsp;
-							<a href ng-click="showSAreaFilter()" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showSAreaFilter();currentPageSo=0" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="streetAreaFilter=null;hideSAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaStreetFilter">
 						    	<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
@@ -405,8 +407,8 @@
 						<td colspan="10"><div class="alert alert-info">{{ 'info_1' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(1)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
 					</tr>
 					<tbody class="animate-repeat"
-							ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
-						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+							ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPageSo*maxStreets | limitTo:maxStreets">
+						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageSo*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="16%" align="left">{{street.streetReference}}</td>
 							<td width="12%" align="left">{{street.area_name}}</td>
@@ -436,12 +438,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(2, filtered)}}
+							ng-disabled="currentPageSo == 0"
+							ng-click="currentPageSo=currentPageSo-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageSo+1}}/{{numberOfPages(2, filtered)}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPage >= filtered.length/maxStreets - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageSo >= filtered.length/maxStreets - 1"
+							ng-click="currentPageSo=currentPageSo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -456,14 +458,14 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="profitStreetsList.length != 0">
 						<th width="20%">{{ 'street_name' | i18n }}&nbsp;
-							<a href ng-click="showStreetNameFilter()" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showStreetNameFilter();currentPageSp=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showStreetFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
 						<th width="15%">{{ 'street_area_name' | i18n }}&nbsp;
-							<a href ng-click="showSAreaFilter()" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showSAreaFilter();currentPageSp=0" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="streetAreaFilter=null;hideSAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaStreetFilter">
 						    	<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
@@ -478,8 +480,8 @@
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-							ng-repeat="street in filtered = (profitStreetsList | filter:nameFilter | filter:streetAreaFilter) | orderBy:['-profit', 'name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
-						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+							ng-repeat="street in filtered = (profitStreetsList | filter:nameFilter | filter:streetAreaFilter) | orderBy:['-profit', 'name'] | startFrom:currentPageSp*maxStreets | limitTo:maxStreets">
+						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageSp*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="20%" align="left">{{street.streetReference}}</td>
 							<td width="15%" align="left">{{street.area_name}}</td>
@@ -509,12 +511,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(7, filtered)}}
+							ng-disabled="currentPageSp == 0"
+							ng-click="currentPageSp=currentPageSp-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageSp+1}}/{{numberOfPages(7, filtered)}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPage >= filtered.length/maxStreets - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageSp >= filtered.length/maxStreets - 1"
+							ng-click="currentPageSp=currentPageSp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -528,14 +530,14 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="streetWS.length != 0">
 						<th width="16%">{{ 'street_name' | i18n }}&nbsp;
-							<a href ng-click="showStreetNameFilter()" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showStreetNameFilter();currentPageSt=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showStreetFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
 						<th width="12%">{{ 'street_area_name' | i18n }}&nbsp;
-							<a href ng-click="showSAreaFilter()" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showSAreaFilter();currentPageSt=0" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="streetAreaFilter=null;hideSAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaStreetFilter">
 						    	<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
@@ -553,8 +555,8 @@
 						<td colspan="10"><div class="alert alert-info">{{ 'info_1' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(1)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
 					</tr>
 					<tbody class="animate-repeat"
-							ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPage*maxStreets | limitTo:maxStreets">
-						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+							ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPageSt*maxStreets | limitTo:maxStreets">
+						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageSt*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="16%" align="left">{{street.streetReference}}</td>
 							<td width="12%" align="left">{{street.area_name}}</td>
@@ -586,12 +588,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(2, filtered)}}
+							ng-disabled="currentPageSt == 0"
+							ng-click="currentPageSt=currentPageSt-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageSt+1}}/{{numberOfPages(2, filtered)}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPage >= filtered.length/maxStreets - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageSt >= filtered.length/maxStreets - 1"
+							ng-click="currentPageSt=currentPageSt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -607,7 +609,7 @@
 					<tr ng-show="zoneWS.length != 0">
 						<th width="25%">
 							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter()" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -620,7 +622,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPage*maxZones | limitTo:maxZones">
+						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZa*maxZones | limitTo:maxZones">
 						<tr>
 							<td width="25%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
 							<td width="15%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -642,12 +644,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(5, filtered)}}
+								ng-disabled="currentPageZa == 0"
+								ng-click="currentPageZa=currentPageZa-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZa+1}}/{{numberOfPages(5, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxZones - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPageZa >= filtered.length/maxZones - 1"
+								ng-click="currentPageZa=currentPageZa+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<a href class="btn btn-success" target="_blank" ng-click="getZoneSupplyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
@@ -661,7 +663,7 @@
 					<tr ng-show="zoneWS.length != 0">
 						<th width="20%">
 							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter()" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -675,8 +677,8 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPage*maxZones | limitTo:maxZones">
-				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxZones | limitTo:maxZones">
+				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageZo*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="20%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -703,12 +705,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(5, filtered)}}
+								ng-disabled="currentPageZo == 0"
+								ng-click="currentPageZo=currentPageZo-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZo+1}}/{{numberOfPages(5, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxZones - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPageZo >= filtered.length/maxZones - 1"
+								ng-click="currentPageZo=currentPageZo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -723,7 +725,7 @@
 					<tr ng-show="profitZonesList.length != 0">
 						<th width="20%">
 							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter()" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -737,8 +739,8 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (profitZonesList | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPage*maxZones | limitTo:maxZones">
-				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						ng-repeat="zone in filtered = (profitZonesList | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxZones | limitTo:maxZones">
+				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageZp*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="20%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -768,12 +770,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(9, filtered)}}
+								ng-disabled="currentPageZp == 0"
+								ng-click="currentPageZp=currentPageZp-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZp+1}}/{{numberOfPages(9, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxZones - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPageZp >= filtered.length/maxZones - 1"
+								ng-click="currentPageZp=currentPageZp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -788,7 +790,7 @@
 					<tr ng-show="zoneWS.length != 0">
 						<th width="20%">
 							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter()" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -803,8 +805,8 @@
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPage*maxZones | limitTo:maxZones">
-				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxZones | limitTo:maxZones">
+				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageZt*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="20%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -836,12 +838,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(5, filtered)}}
+								ng-disabled="currentPageZt == 0"
+								ng-click="currentPageZt=currentPageZt-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZt+1}}/{{numberOfPages(5, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxZones - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPageZt >= filtered.length/maxZones - 1"
+								ng-click="currentPageZt=currentPageZt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -856,7 +858,7 @@
 					<tr ng-show="areaWS.length != 0">
 						<th width="20%">
 							<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>
-							<a href ng-click="showAreaNameFilter()" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showAreaNameFilter();currentPageAa=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -869,7 +871,7 @@
 						<th class="myCenter" width="10%">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['name'] | startFrom:currentPage*maxAreas | limitTo:maxAreas">
+						ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['name'] | startFrom:currentPageAa*maxAreas | limitTo:maxAreas">
 						<tr>
 							<td width="20%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
 							<td width="10%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
@@ -891,12 +893,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(1, filtered)}}
+							ng-disabled="currentPageAa == 0"
+							ng-click="currentPageAa=currentPageAa-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageAa+1}}/{{numberOfPages(1, filtered)}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPage >= filtered.length/maxAreas - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageAa >= filtered.length/maxAreas - 1"
+							ng-click="currentPageAa=currentPageAa+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<a href class="btn btn-success" target="_blank" ng-click="getAreaSupplyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
@@ -910,7 +912,7 @@
 					<tr ng-show="areaWS.length != 0">
 						<th width="15%">
 							<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>
-							<a href ng-click="showAreaNameFilter()" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showAreaNameFilter();currentPageAo=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -924,8 +926,8 @@
 						<th class="myCenter" width="10%">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['-occupancy', 'name'] | startFrom:currentPage*maxAreas | limitTo:maxAreas">
-			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['-occupancy', 'name'] | startFrom:currentPageAo*maxAreas | limitTo:maxAreas">
+			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAo*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
 							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
@@ -952,12 +954,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(1, filtered)}}
+							ng-disabled="currentPageAo == 0"
+							ng-click="currentPageAo=currentPageAo-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageAo+1}}/{{numberOfPages(1, filtered)}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPage >= filtered.length/maxAreas - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageAo >= filtered.length/maxAreas - 1"
+							ng-click="currentPageAo=currentPageAo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -972,7 +974,7 @@
 					<tr ng-show="profitAreaList.length != 0">
 						<th width="15%">
 							<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>
-							<a href ng-click="showAreaNameFilter()" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showAreaNameFilter();currentPageAp=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -986,8 +988,8 @@
 						<th class="myCenter" width="10%">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="area in filtered = (profitAreaList | filter:nameFilter) | orderBy:['-profit', 'name'] | startFrom:currentPage*maxAreas | limitTo:maxAreas">
-			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						ng-repeat="area in filtered = (profitAreaList | filter:nameFilter) | orderBy:['-profit', 'name'] | startFrom:currentPageAp*maxAreas | limitTo:maxAreas">
+			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAp*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
 							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
@@ -1017,12 +1019,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(1, filtered)}}
+							ng-disabled="currentPageAp == 0"
+							ng-click="currentPageAp=currentPageAp-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageAp+1}}/{{numberOfPages(1, filtered)}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPage >= filtered.length/maxAreas - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageAp >= filtered.length/maxAreas - 1"
+							ng-click="currentPageAp=currentPageAp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -1037,7 +1039,7 @@
 					<tr ng-show="areaWS.length != 0">
 						<th width="15%">
 							<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>
-							<a href ng-click="showAreaNameFilter()" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showAreaNameFilter();currentPageAt=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1052,8 +1054,8 @@
 						<th class="myCenter" width="10%">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['-occupancy', 'name'] | startFrom:currentPage*maxAreas | limitTo:maxAreas">
-			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+						ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['-occupancy', 'name'] | startFrom:currentPageAt*maxAreas | limitTo:maxAreas">
+			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAt*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
 							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
@@ -1087,12 +1089,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(1, filtered)}}
+							ng-disabled="currentPageAt == 0"
+							ng-click="currentPageAt=currentPageAt-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageAt+1}}/{{numberOfPages(1, filtered)}}
 						<button class="btn btn-primary"
-							ng-disabled="currentPage >= filtered.length/maxAreas - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageAt >= filtered.length/maxAreas - 1"
+							ng-click="currentPageAt=currentPageAt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -1107,7 +1109,7 @@
 					<tr ng-show="pstructWS.length != 0">
 						<th width="25%">
 							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
-							<a href ng-click="showPsNameFilter()" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPsNameFilter();currentPagePsa=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1121,7 +1123,7 @@
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>					
 					<tbody class="animate-repeat"
-						ng-repeat="pstruct in filtered = (allDataStructWS | filter:nameFilter) | orderBy:['name'] | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
+						ng-repeat="pstruct in filtered = (allDataStructWS | filter:nameFilter) | orderBy:['name'] | startFrom:currentPagePsa*maxPStructs | limitTo:maxPStructs">
 						<tr>
 							<td width="25%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="15%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
@@ -1150,12 +1152,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(4, filtered)}}
+								ng-disabled="currentPagePsa == 0"
+								ng-click="currentPagePsa=currentPagePsa-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPagePsa+1}}/{{numberOfPages(4, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxPStructs - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPagePsa >= filtered.length/maxPStructs - 1"
+								ng-click="currentPagePsa=currentPagePsa+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<a href class="btn btn-success" target="_blank" ng-click="getStructureSupplyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
@@ -1169,7 +1171,7 @@
 					<tr ng-show="pstructWS.length != 0">
 						<th width="15%">
 							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
-							<a href ng-click="showPsNameFilter()" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPsNameFilter();currentPagePso=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1183,7 +1185,7 @@
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
+						ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPagePso*maxPStructs | limitTo:maxPStructs">
 						<tr>
 							<td width="15%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="15%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
@@ -1214,12 +1216,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(4, filtered)}}
+								ng-disabled="currentPagePso == 0"
+								ng-click="currentPagePso=currentPagePso-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPagePso+1}}/{{numberOfPages(4, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxPStructs - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPagePso >= filtered.length/maxPStructs - 1"
+								ng-click="currentPagePso=currentPagePso+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -1234,7 +1236,7 @@
 					<tr ng-show="profitStructWS.length != 0">
 						<th width="16%">
 							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
-							<a href ng-click="showPsNameFilter()" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPsNameFilter();currentPagePsp=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1248,7 +1250,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="pstruct in filtered = (profitStructWS | filter:nameFilter) | orderBy:['-profit', 'name'] | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
+						ng-repeat="pstruct in filtered = (profitStructWS | filter:nameFilter) | orderBy:['-profit', 'name'] | startFrom:currentPagePsp*maxPStructs | limitTo:maxPStructs">
 						<tr>
 							<td width="16%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="16%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
@@ -1278,12 +1280,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(10, filtered)}}
+								ng-disabled="currentPagePsp == 0"
+								ng-click="currentPagePsp=currentPagePsp-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPagePsp+1}}/{{numberOfPages(10, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxPStructs - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPagePsp >= filtered.length/maxPStructs - 1"
+								ng-click="currentPagePsp=currentPagePsp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -1298,7 +1300,7 @@
 					<tr ng-show="pstructWS.length != 0">
 						<th width="16%">
 							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
-							<a href ng-click="showPsNameFilter()" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPsNameFilter();currentPagePst=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1313,7 +1315,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="pstruct in filtered = (allDataStructWS | filter:nameFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPage*maxPStructs | limitTo:maxPStructs">
+						ng-repeat="pstruct in filtered = (allDataStructWS | filter:nameFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPagePst*maxPStructs | limitTo:maxPStructs">
 						<tr>
 							<td width="16%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="16%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
@@ -1349,12 +1351,12 @@
 					<td width="33%"></td>
 					<td width="34%" align="center">
 						<button class="btn btn-primary"
-								ng-disabled="currentPage == 0"
-								ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPage+1}}/{{numberOfPages(4, filtered)}}
+								ng-disabled="currentPagePst == 0"
+								ng-click="currentPagePst=currentPagePst-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPagePst+1}}/{{numberOfPages(4, filtered)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPage >= filtered.length/maxPStructs - 1"
-								ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+								ng-disabled="currentPagePst >= filtered.length/maxPStructs - 1"
+								ng-click="currentPagePst=currentPagePst+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
@@ -1785,7 +1787,7 @@
 				<table width="100%">
 					<tr>
 						<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
-						<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetailsList()"><i class="glyphicon glyphicon-remove"></i></button></td>
+						<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetailsList();verticalCompData='1';orizontalCompData='2'"><i class="glyphicon glyphicon-remove"></i></button></td>
 					</tr>
 				</table>
 			</div>	
@@ -2270,7 +2272,7 @@
 				<table width="100%">
 					<tr>
 						<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
-						<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetailsList()"><i class="glyphicon glyphicon-remove"></i></button></td>
+						<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetailsList();verticalCompData='1';orizontalCompData='2'"><i class="glyphicon glyphicon-remove"></i></button></td>
 					</tr>
 				</table>
 			</div>	
@@ -2854,7 +2856,7 @@
 				<table width="100%">
 					<tr>
 						<td align="left"><h5 class="panel-title">{{ 'element_details' | i18n }}</h5></td>
-						<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetailsList()"><i class="glyphicon glyphicon-remove"></i></button></td>
+						<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllDetailsList();verticalCompData='1';orizontalCompData='2'"><i class="glyphicon glyphicon-remove"></i></button></td>
 					</tr>
 				</table>
 			</div>

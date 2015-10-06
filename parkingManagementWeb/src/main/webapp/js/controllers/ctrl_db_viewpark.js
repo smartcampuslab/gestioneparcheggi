@@ -4,34 +4,34 @@
 var pmControllers = angular.module('pmControllers', ['googlechart','angular-spinkit']);//,'angular-spinkit'
 pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize', 'sharedDataService',
                                 function($scope, $route, $rootScope, $filter, localize, sharedDataService) {
-	$scope.vis = 'vis_last_value';
-	$scope.visOptions = ['vis_last_value','vis_medium', 'vis_medium_year', 'vis_medium_month', 'vis_medium_day'];
+	$scope.vis = 'vis_medium'; //vis_last_value
+	$scope.visOptions = ['vis_medium','vis_last_value', 'vis_medium_year', 'vis_medium_month', 'vis_medium_day'];
 	var date = new Date();
 	$scope.years = [];
 	$scope.year = "";
-	$scope.dayOptions = {value:'wd'};
-	$scope.hourOptions = {value:'morning'};
+	$scope.dayOptions = {value:'custom'};//{value:'wd'};
+	$scope.hourOptions = {value:'custom'};//{value:'morning'};
 	
 	for (var i = 0; i < 5; i++) {
 		$scope.years.push('' + date.getFullYear()-i);
 	}
 	var initialMonth = (date.getMonth() == 0 ? date.getMonth()+1 : date.getMonth());
 	var endMonth = (date.getMonth()+1);
-	$scope.monthSliderValue = "" + initialMonth +";"+endMonth + "";
+	$scope.monthSliderValue = "1;12";//"" + initialMonth +";"+endMonth + "";
 	$scope.monthSliderOptions = {       
 		    from: 1,
 		    to: 12,
 		    step: 1,
 		    modelLabels: {'1': 'GE', '2': 'FE', '3': 'MA', '4': 'AP', '5': 'MA', '6': 'GI', '7':'LU', '8': 'AG', '9': 'SE', '10': 'OT', '11': 'NO', '12': 'DI'}
 	};
-	$scope.daySliderValue = (date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
+	$scope.daySliderValue = "1;7";//(date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
 	$scope.daySliderOptions = {       
 		    from: 1,
 		    to: 7,
 		    step: 1,
 		    modelLabels: {'1': 'LU', '2': 'MA', '3': 'ME', '4': 'GI', '5': 'VE', '6': 'SA', '7':'DO'}
 	};
-	$scope.hourSliderValue = "10;12";
+	$scope.hourSliderValue = "0;23";//"10;12";
 	$scope.hourSliderOptions = {
 		    from: 0,
 		    to: 23,
@@ -1189,9 +1189,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		};
 		
 		$scope.dashboard_filter = {
-			months : true,
-			dows : true,
-			hours : true
+			months : false,
+			dows : false,
+			hours : false
 		};
 		
 		$scope.dashboard_space_list = "microzone";
@@ -2451,13 +2451,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			if(type == 1){
 				aColor = $scope.correctColor(areas[i].color);
 			} else if(type == 2){
+				var slotsInArea = $scope.getTotalSlotsInArea(areas[i].id);
 				areaOccupancy = $scope.getStreetsInAreaOccupancy(areas[i].id);
+				if(areaOccupancy != -1){
+					areaOccupancy = slotsInArea[2];
+				}
 				aColor = $scope.getOccupancyColor(areaOccupancy);
 			} else if(type == 3){
 				areaProfit = $scope.getPMsInAreaProfit(areas[i].id);
 				aColor = $scope.getProfitColor(areaProfit[0]);
 			} else if(type == 4){
+				var slotsInArea = $scope.getTotalSlotsInArea(areas[i].id);
 				areaOccupancy = $scope.getStreetsInAreaOccupancy(areas[i].id);
+				if(areaOccupancy != -1){
+					areaOccupancy = slotsInArea[2];
+				}
 				timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
 				areas[i].extratime = timeCost;
 				aColor = $scope.getTimeCostColor(timeCost);
@@ -2704,13 +2712,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			if(type == 1){
 				zColor = $scope.correctColor(zones[i].color);
 			} else if(type == 2){
+				var slotsInZone = $scope.getTotalSlotsInZone(zones[i].id);
 				zoneOccupancy = $scope.getStreetsInZoneOccupancy(zones[i].id);
+				if(zoneOccupancy != -1){
+					zoneOccupancy = slotsInZone[2];
+				}
 				zColor = $scope.getOccupancyColor(zoneOccupancy);
 			} else if(type == 3){
 				zoneProfit = $scope.getStreetsInZoneProfit(zones[i].id);
 				zColor = $scope.getProfitColor(zoneProfit[0]);
 			} else if(type == 4){
+				var slotsInZone = $scope.getTotalSlotsInZone(zones[i].id);
 				zoneOccupancy = $scope.getStreetsInZoneOccupancy(zones[i].id);
+				if(zoneOccupancy != -1){
+					zoneOccupancy = slotsInZone[2];
+				}
 				timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
 				zones[i].extratime = timeCost;
 				zColor = $scope.getTimeCostColor(timeCost);
@@ -2894,9 +2910,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}    
 			sharedDataService.setSharedLocalAreas($scope.areaWS);
 			//$scope.getParkingMetersFromDb();
-			var d = new Date();
-		    var hour = "10;12";
-		    $scope.getProfitPMFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 2, true);
+			//var d = new Date();
+		    //var hour = "10;12";
+		    //$scope.getProfitPMFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 2, true);
+		    $scope.getProfitPMFromDb("", "1;12", "1;7", null, "0;23", 2, true);
 		});
 	};
 	
@@ -3052,9 +3069,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    }
 		    
 		    if(isFirst){
-		    	var d = new Date();
-		    	var hour = "10;12";
-		    	$scope.getProfitParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
+		    	//var d = new Date();
+		    	//var hour = "10;12";
+		    	//$scope.getProfitParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
+		    	$scope.getProfitParksFromDb("", "1;12", "1;7", null, "0;23", 2, isFirst);
 		    	$scope.dashboard_space.microzone = true;
 		    	$scope.dashboard_topics == "parkSupply";
 		    	if(showStreets){
@@ -3114,9 +3132,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    sharedDataService.setSharedLocalPms(allPMs);
 		    
 		    if(isFirst){
-		    	var d = new Date();
-		    	var hour = "10;12";
-		    	$scope.getOccupancyParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
+		    	//var d = new Date();
+		    	//var hour = "10;12";
+		    	//$scope.getOccupancyParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
+		    	$scope.getOccupancyParksFromDb("", "1;12", "1;7", null, "0;23", 2, isFirst);
 		    } else {
 		    	if(showStreets){
 			    	$scope.updateStreetProfit(isFirst, $scope.dashboard_space.microzone);
@@ -4086,9 +4105,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	$scope.initZonesOnMap($scope.zoneWS, false, 1, false, true);
 		    }
 		    //$scope.getStreetsFromDb();
-		    var d = new Date();
-		    var hour = "10;12";
-		    $scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
+		    //var d = new Date();
+		    //var hour = "10;12";
+		    //$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
+		    $scope.getOccupancyStreetsFromDb("", "1;12", "1;7", "wd", "0;23", 2, isFirst);
 		});
 	};
 	
@@ -7136,11 +7156,54 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	$scope.parkingTimeCostCvsHistorycalFile = result;
 	    	window.location.href = $scope.parkingTimeCostCvsHistorycalFile;
 	    });	
-	};		
+	};
 	
 	// ---------------------------------------------------------- End of WS call ----------------------------------------------------
 	
 	// -------------------------------------------- End of block for report compare creation -----------------------------------------
+
+	//----------------------------------- legend part --------------------------------------
+	
+	var showLegendOcc = false;
+	var showLegendProf = false;
+	var showLegendTime = false;
+	
+	$scope.showLegend = function(type){
+		if(type == 1){
+			showLegendOcc = true;
+			showLegendProf = false;
+			showLegendTime = false;
+		} else if(type == 2){
+			showLegendOcc = false;
+			showLegendProf = true;
+			showLegendTime = false;
+		} else if(type == 3){
+			showLegendOcc = false;
+			showLegendProf = false;
+			showLegendTime = true;
+		}
+	};
+	
+	$scope.isOccupancyLegendShow = function(){
+		return showLegendOcc;
+	};
+	
+	$scope.isProfitLegendShow = function(){
+		return showLegendProf;
+	};
+	
+	$scope.isTimeLegendShow = function(){
+		return showLegendTime;
+	};
+	
+	$scope.closeAllLegend = function(){
+		showLegendOcc = false;
+		showLegendProf = false;
+		showLegendTime = false;
+	};
+
+	//------------------------------ end of legend part -------------------------------------
+
 }]);
 
 pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataService',
