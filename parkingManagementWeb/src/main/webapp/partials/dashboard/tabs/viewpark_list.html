@@ -124,12 +124,16 @@
 	<div class="col-md-12" align="center" ng-show="!detailsOpened && !occupancyOpened && !profitOpened  && !timeCostOpened"><!--  ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" -->
 		<div ng-show="reportShareList.length > 0">
 			<table width="100%">
-				<tr valign="top">
+				<tr valign="middle">
 					<td width="50%"></td>
-<!-- 					<td width="43%" align="right"> -->
+					<td width="39%" align="right">
 <!-- 						<button class="btn btn-default" ng-click="showLegend(1)">Visualizza Legenda</button>&nbsp; -->
-<!-- 					</td> -->
-					<td width="7%" align="right">
+						<a href ng-click="showLegend(1)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_occupancy_legend_button"><span class="glyphicon glyphicon-info-sign"></span></a>
+						<a href ng-click="showLegend(2)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_profit_legend_button"><span class="glyphicon glyphicon-info-sign"></span></a>
+						<a href ng-click="showLegend(3)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_time_legend_button"><span class="glyphicon glyphicon-info-sign"></span></a>
+					</td>
+					<td width="1%"></td>
+					<td width="10%" align="right">
 						<div class="form-group" >
 							<div class="dropdown">
 								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownPm1" data-toggle="dropdown" aria-haspopup="true"  aria-expanded="true">
@@ -147,6 +151,49 @@
 				</tr>
 			</table>
 		</div>	
+		<div id="legend" align="left" ng-show="isOccupancyLegendShow()">
+			<table width="100%">
+				<tr valign="top">
+					<td align="left" width="40%">{{ 'legend_occupancy_label' | i18n }}</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': violet}"></span>&nbsp;90%-100% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': red}"></span>&nbsp;75%-90% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': orange}"></span>&nbsp;50%-75% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': yellow}"></span>&nbsp;25%-50% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;0%-25% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
+					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td>
+				</tr>
+			</table>
+		</div>
+		<div id="legend" align="left" ng-show="isProfitLegendShow()">
+			<table width="100%">
+				<tr valign="top">
+					<td align="left" width="40%">{{ 'legend_profit_label' | i18n }}</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': blue}"></span>&nbsp;> 10000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': violet}"></span>&nbsp;5000-10000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': orange}"></span>&nbsp;2000-5000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;1000-2000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgreen}"></span>&nbsp;< 1000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
+					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td>
+				</tr>
+			</table>
+		</div>
+		<div id="legend" align="left" ng-show="isTimeLegendShow()">
+			<table width="100%">
+				<tr valign="top">
+					<td align="left" width="40%">{{ 'legend_time_label' | i18n }}</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': violet}"></span>&nbsp;5 - 15 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': red}"></span>&nbsp;3 - 10 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': orange}"></span>&nbsp;2 - 5 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': yellow}"></span>&nbsp;1 - 3 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;1 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgreen}"></span>&nbsp;0 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
+					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td>
+				</tr>
+			</table>
+		</div>
 		<div ng-show="showPMList && showParkSupplyLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
@@ -2205,8 +2252,52 @@
 							<div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
 						</td>
 					</tr>
+					<tr>
+						<td colspan="3">
+							<hr/>
+						</td>
+					</tr>
 				</table>
-					
+				<form role="form" name="form">
+					<table width="100%">
+						<tr>
+						    <td width="47%">
+						    	<div class="form-group">
+									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
+									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
+									</select>
+								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
+								</div>
+						    </td>
+						    <td width="5%"></td>
+						    <td width="48%">
+						    	<div class="form-group">
+									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
+									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
+								</div>
+						    </td>
+						</tr>
+					</table>
+				</form>
+				<div class="detailstablewrapper">
+					<table width="100%" class="table table-bordered">
+						<tbody class="animate-repeat" ng-repeat="rows in matrixZoneOcc track by $index">
+						<tr ng-if="$index == 0">
+							<th ng-repeat="col in rows track by $index">
+								<span>{{ col }}</span>
+							</th>
+						</tr>
+						<tr ng-if="$index != 0">
+							<td ng-repeat="col in rows track by $index">
+								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
+								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+								<span ng-if="$index != 0 && col==-1">/</span>
+							</td>
+						</tr>
+					</table>
+				</div>	
 			</div>
 			<div ng-show="isAreaDetShow()">
 				<table width="100%">

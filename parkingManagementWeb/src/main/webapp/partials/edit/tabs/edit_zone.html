@@ -90,14 +90,21 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="zoneWS.length != 0">
-								<th width="45%"><span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span></th>
+								<th width="45%">
+									<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>&nbsp;
+									<a href ng-click="showZoneNameFilter();currentPageZ=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+									<div ng-show="showZoneFilter">
+						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    		</div>
+								</th>
 								<th width="20%" class="myCenter"><span ng-show="zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
 								<th width="15%"><span ng-show="zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
-								ng-repeat="zone in zoneWS | filter:q | orderBy: ['name', 'submacro'] |  startFrom:currentPage*maxZones | limitTo:maxZones">
-				<!--			ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+								ng-repeat="zone in zoneWS | filter:nameFilter | orderBy: ['name', 'submacro'] |  startFrom:currentPageZ*maxZones | limitTo:maxZones">
+				<!--			ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageZ*maxPractices | limitTo:maxPractices"> -->
 								<tr>
 									<td width="45%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
 									<td width="20%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -115,12 +122,12 @@
 						</table>
 					</div>
 					<button class="btn btn-default"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-						{{currentPage+1}}/{{numberOfPages(5)}}
+							ng-disabled="currentPageZ == 0"
+							ng-click="currentPageZ=currentPageZ-1">{{ 'previous_label' | i18n }}</button>
+						{{currentPageZ+1}}/{{numberOfPages(5)}}
 					<button class="btn btn-default"
-							ng-disabled="currentPage >= zoneWS.length/maxZones - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageZ >= zoneWS.length/maxZones - 1"
+							ng-click="currentPageZ=currentPageZ+1">{{ 'next_label' | i18n }}</button>
 				</div>
 			</div>
 		</div>

@@ -177,20 +177,56 @@
 <!-- 					</div> -->
 		<div id="title_map_page" align="left">
 			<table width="100%">
-				<tr valign="top">
+				<tr valign="middle">
 					<td align="left" width="50%"><h5><strong>{{ title_map }}</strong></h5></td>
-<!-- 					<td align="right" width="50%"><button class="btn btn-default" ng-click="showLegend(1)">Visualizza Legenda</button></td> -->
+					<td align="right" width="50%">
+<!-- 					<button class="btn btn-default" ng-click="showLegend(1)">Visualizza Legenda</button> -->
+						<a href ng-click="showLegend(1)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_occupancy_legend_button"><span class="glyphicon glyphicon-info-sign"></span></a>
+						<a href ng-click="showLegend(2)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_profit_legend_button"><span class="glyphicon glyphicon-info-sign"></span></a>
+						<a href ng-click="showLegend(3)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_time_legend_button"><span class="glyphicon glyphicon-info-sign"></span></a>
+					</td>
 				</tr>
 			</table>
 		</div>
 		<div id="legend" align="left" ng-show="isOccupancyLegendShow()">
 			<table width="100%">
 				<tr valign="top">
-					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(violet)}"></span>&nbsp;90%-100%</td>
-					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(red)}">&nbsp;75%-90%</td>
-					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(orange)}">&nbsp;50%-75%</td>
-					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(yellow)}">&nbsp;25%-50%</td>
-					<td align="left"> <span class="colorBox" ng-style="{'background-color': correctColor(green)}">&nbsp;0%-25%</td>
+					<td align="left" width="40%">{{ 'legend_occupancy_label' | i18n }}</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': violet}"></span>&nbsp;90%-100% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': red}"></span>&nbsp;75%-90% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': orange}"></span>&nbsp;50%-75% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': yellow}"></span>&nbsp;25%-50% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;0%-25% |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
+					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td>
+				</tr>
+			</table>
+		</div>
+		<div id="legend" align="left" ng-show="isProfitLegendShow()">
+			<table width="100%">
+				<tr valign="top">
+					<td align="left" width="40%">{{ 'legend_profit_label' | i18n }}</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': blue}"></span>&nbsp;> 10000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': violet}"></span>&nbsp;5000-10000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': orange}"></span>&nbsp;2000-5000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;1000-2000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgreen}"></span>&nbsp;< 1000{{ 'euro' | i18n }} |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
+					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td>
+				</tr>
+			</table>
+		</div>
+		<div id="legend" align="left" ng-show="isTimeLegendShow()">
+			<table width="100%">
+				<tr valign="top">
+					<td align="left" width="40%">{{ 'legend_time_label' | i18n }}</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': violet}"></span>&nbsp;5 - 15 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': red}"></span>&nbsp;3 - 10 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': orange}"></span>&nbsp;2 - 5 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': yellow}"></span>&nbsp;1 - 3 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;1 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgreen}"></span>&nbsp;0 min |</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
 					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td>
 				</tr>
 			</table>

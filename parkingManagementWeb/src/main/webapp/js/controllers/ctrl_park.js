@@ -145,6 +145,60 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	$scope.showStatusPmFilter = false;
     };
     
+    // Methods to show/hide street name filter
+    $scope.showStreetNameFilter = function(){
+    	$scope.showStreetFilter = true;
+    };
+    
+    $scope.hideStreetNameFilter = function(){
+    	$scope.showStreetFilter = false;
+    };
+    
+    // Methods to show/hide zone name filter
+    $scope.showZoneNameFilter = function(){
+    	$scope.showZoneFilter = true;
+    };
+    
+    $scope.hideZoneNameFilter = function(){
+    	$scope.showZoneFilter = false;
+    };
+    
+    // Methods to show/hide area name filter
+    $scope.showAreaNameFilter = function(){
+    	$scope.showAreaNFilter = true;
+    };
+    
+    $scope.hideAreaNameFilter = function(){
+    	$scope.showAreaNFilter = false;
+    };
+    
+    // Methods to show/hide ps name filter
+    $scope.showPsNameFilter = function(){
+    	$scope.showPsFilter = true;
+    };
+    
+    $scope.hidePsNameFilter = function(){
+    	$scope.showPsFilter = false;
+    };
+    
+    // Methods to show/hide bp name filter
+    $scope.showBpNameFilter = function(){
+    	$scope.showBpFilter = true;
+    };
+    
+    $scope.hideBpNameFilter = function(){
+    	$scope.showBpFilter = false;
+    };
+    
+    // Methods to show/hide note filter
+    $scope.showNoteFilter = function(){
+    	$scope.showNotFilter = true;
+    };
+    
+    $scope.hideNoteFilter = function(){
+    	$scope.showNotFilter = false;
+    };
+    
     $scope.checkStatusClass = function(status){
     	if(status == 'ACTIVE'){
     		return "success";
@@ -553,7 +607,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.numberOfPages = function(type, list){
        	if(type == 1){
        		if($scope.areaWS != null){
-       			return Math.ceil($scope.areaWS.length/$scope.maxAreas);
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.areaWS.length/$scope.maxAreas);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxAreas);
+       			}
        		} else {
        			return 0;
       		}
@@ -571,19 +629,31 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
      		}
        	} else if(type == 4){
        		if($scope.pstructWS != null){
-       			return Math.ceil($scope.pstructWS.length/$scope.maxPStructs);
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.pstructWS.length/$scope.maxPStructs);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxPStructs);
+       			}
        		} else {
        			return 0;
      		}
        	} else if(type == 5){
        		if($scope.zoneWS != null){
-       			return Math.ceil($scope.zoneWS.length/$scope.maxZones);
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.zoneWS.length/$scope.maxZones);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxZones);
+       			}
        		} else {
        			return 0;
      		}
        	} else if(type == 6){
        		if($scope.bpointWS != null){
-       			return Math.ceil($scope.bpointWS.length/$scope.maxBPoints);
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.bpointWS.length/$scope.maxBPoints);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxBPoints);
+       			}
        		} else {
        			return 0;
      		}

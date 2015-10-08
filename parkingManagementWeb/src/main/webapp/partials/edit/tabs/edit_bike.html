@@ -77,13 +77,20 @@
 									<div class="tablewrapper">
 										<table class="table table-striped" style="width: 100%">
 											<tr ng-show="bpointWS.length != 0">
-												<th width="43%"><span ng-show="bp_name.visible">{{ 'bp_name' | i18n }}</span></th>
+												<th width="43%">
+													<span ng-show="bp_name.visible">{{ 'bp_name' | i18n }}</span>&nbsp;
+													<a href ng-click="showBpNameFilter();currentPageBp=0" ng-show="!showBpFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+													<a href ng-click="nameFilter=null;hideBpNameFilter()" ng-show="showBpFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+													<div ng-show="showBpFilter">
+										    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+										    		</div>
+												</th>
 												<th width="22%" class="myCenter"><span ng-show="bp_slotNumber.visible">{{ 'bp_slots' | i18n }}</span></th>
 												<th width="15%" class="myCenter"><span ng-show="bp_bikeNumber.visible">{{ 'bp_bikes' | i18n }}</span></th>
 												<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 											</tr>
 											<tbody class="animate-repeat"
-												ng-repeat="bpoint in bpointWS | filter:q | orderBy:'name' | startFrom:currentPage*maxBPoints | limitTo:maxBPoints">
+												ng-repeat="bpoint in filtered = (bpointWS | filter:nameFilter) | orderBy:'name' | startFrom:currentPageBp*maxBPoints | limitTo:maxBPoints">
 												<tr>
 													<td width="43%" align="left"><span ng-show="bp_name.visible">{{bpoint.name}}</span></td>
 													<td width="22%" align="center"><span ng-show="bp_slotNumber.visible">{{bpoint.slotNumber}}</span></td>
@@ -101,12 +108,12 @@
 										</table>
 									</div>
 									<button class="btn btn-default"
-											ng-disabled="currentPage == 0"
-											ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-										{{currentPage+1}}/{{numberOfPages(6)}}
+											ng-disabled="currentPageBp == 0"
+											ng-click="currentPageBp=currentPageBp-1">{{ 'previous_label' | i18n }}</button>
+										{{currentPageBp+1}}/{{numberOfPages(6)}}
 									<button class="btn btn-default"
-											ng-disabled="currentPage >= bpointWS.length/maxBPoints - 1"
-											ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+											ng-disabled="currentPageBp >= bpointWS.length/maxBPoints - 1"
+											ng-click="currentPageBp=currentPageBp+1">{{ 'next_label' | i18n }}</button>
 								</div>
 							</div>
 				</div>

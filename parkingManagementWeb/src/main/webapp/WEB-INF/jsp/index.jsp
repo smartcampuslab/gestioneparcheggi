@@ -70,6 +70,8 @@ var conf_app_id="<%=request.getAttribute("app_id")%>";
 var conf_map_center="<%=request.getAttribute("map_center")%>";
 var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
+var conf_widget_url="<%=request.getAttribute("widget_url")%>";
+var ctx="<%=request.getContextPath()%>";
 </script>
   
 </head>

@@ -89,6 +89,7 @@ public class PortalController extends SCController{
 		model.addAttribute("app_id", objectToShow.getAppId());
 		model.addAttribute("map_center", objectToShow.getMapCenter());
 		model.addAttribute("map_zoom", objectToShow.getMapZoom());
+		model.addAttribute("widget_url", mainURL);
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
 		logger.debug("I am in get root console. object_showed: " + objectToShow.getShowObjectsMap());
 		return new ModelAndView("index", model);
@@ -113,6 +114,7 @@ public class PortalController extends SCController{
 		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetailsByAppId(appId);
 		model.addAttribute("map_center", objectToShow.getMapCenter());
 		model.addAttribute("map_zoom", objectToShow.getMapZoom());
+		model.addAttribute("widget_url", mainURL);
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
 //		model.addAttribute("show_area", view_rv_area);
 //		model.addAttribute("show_street", view_rv_street);

@@ -751,6 +751,7 @@ public class StorageManager {
 		}
 		return result;
 	}
+	
 	/**
 	 * Method getZoneByName: get a list of zone having a specific name
 	 * @param name: name of the zone to search
@@ -767,6 +768,23 @@ public class StorageManager {
 		}	
 		return result;
 	}
+	
+	/**
+	 * Method findZoneById: get a list of zone having a specific name
+	 * @param name: name of the zone to search
+	 * @return List of ZoneBean found
+	 */
+	public ZoneBean findZoneById(String zId, String appId) {
+		List<ZoneBean> result = new ArrayList<ZoneBean>();
+		for (Zone z : mongodb.findAll(Zone.class)) {
+			if(z != null && z.getId_app().compareTo(appId) == 0){
+				if(z.getId().compareTo(zId) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
+			}
+		}	
+		return result.get(0);
+	}	
 
 	public ZoneBean editZone(ZoneBean z, String appId) throws NotFoundException {
 		Zone zona = findById(z.getId(), Zone.class);

@@ -264,9 +264,48 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	};
 	
 	$scope.getLogData = function() {
-		$scope.globalLogs = $scope.logtabs[$scope.tabIndex].data;
+		//$scope.globalLogs = $scope.logtabs[$scope.tabIndex].data;
 		return $scope.logtabs[$scope.tabIndex].data;
 	};
+	
+	// Used to load all logs from db (only for CSV creation)
+	$scope.getAllLogsFromDbTP = function(){
+		$scope.globalLogs = [];
+		$scope.isAllLogLoaded = false;
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", null, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+			var partialLogs = result;//$scope.globalLogs.concat(result);
+			var corrLog = null;
+			for(var i = 0; i < partialLogs.length; i++){
+				corrLog = {
+					id:	partialLogs[i].id,
+					objId: partialLogs[i].objId,
+					type: partialLogs[i].type,
+					time: partialLogs[i].time,
+					logPeriod: partialLogs[i].logPeriod,
+					author: partialLogs[i].author,
+					agency: partialLogs[i].agency,
+			        deleted: partialLogs[i].deleted,
+			        year: partialLogs[i].year,
+			        month: partialLogs[i].month,
+			        week_day: partialLogs[i].week_day,
+			        timeSlot: partialLogs[i].tileSlot,
+			        holyday: partialLogs[i].holyday,
+			        isSystemLog: partialLogs[i].systemLog,
+			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
+				};
+				//console.log("corrLog: " + JSON.stringify(corrLog));
+				$scope.globalLogs.push(corrLog);
+			}
+			//$scope.getAllProfitLogsFromDbTP();
+			$scope.logCounts =  partialLogs.length;
+		    $scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
+		    $scope.isAllLogLoaded = true;
+		});
+	};
+	
 	
 	$scope.viewDetails = function(type, log){
 		$scope.showDetails = true;

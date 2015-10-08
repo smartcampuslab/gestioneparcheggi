@@ -98,15 +98,22 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="areaWS.length != 0">
-								<th width="25%"><span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span></th>
+								<th width="25%">
+									<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>&nbsp;
+									<a href ng-click="showAreaNameFilter();currentPageA=0" ng-show="!showAreaNFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaNFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+									<div ng-show="showAreaNFilter">
+						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    		</div>
+								</th>
 								<th width="14%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
 								<th width="31%"><span ng-show="a_timeSlot.visible">{{ 'area_time' | i18n }}</span></th>
 								<th class="myCenter" width="10%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
 								<th class="myCenter" width="20%">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
-								ng-repeat="area in areaWS | filter:q | orderBy:'name' | startFrom:currentPage*maxAreas | limitTo:maxAreas">
-			<!-- 					ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+								ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:'name' | startFrom:currentPageA*maxAreas | limitTo:maxAreas">
+			<!-- 					ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageA*maxPractices | limitTo:maxPractices"> -->
 								<tr>
 									<td width="25%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
 									<td width="14%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
@@ -125,12 +132,12 @@
 						</table>
 					</div>
 					<button class="btn btn-default"
-							ng-disabled="currentPage == 0"
-							ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-						{{currentPage+1}}/{{numberOfPages(1)}}
+							ng-disabled="currentPageA == 0"
+							ng-click="currentPageA=currentPageA-1">{{ 'previous_label' | i18n }}</button>
+						{{currentPageA+1}}/{{numberOfPages(1, filtered)}}
 					<button class="btn btn-default"
-							ng-disabled="currentPage >= areaWS.length/maxAreas - 1"
-							ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+							ng-disabled="currentPageA >= filtered.length/maxAreas - 1"
+							ng-click="currentPageA=currentPageA+1">{{ 'next_label' | i18n }}</button>
 				</div>
 			</div>
 		</div>

@@ -38,6 +38,7 @@ import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.Street;
+import it.smartcommunitylab.parking.management.web.model.Zone;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
@@ -398,6 +399,23 @@ public class DynamicManager {
 		}
 		return vb;
 	}
+	
+	/**
+	 * Method findZoneById: get a list of zone having a specific name
+	 * @param name: name of the zone to search
+	 * @return List of ZoneBean found
+	 */
+	public ZoneBean findZoneById(String zId, String appId) {
+		List<ZoneBean> result = new ArrayList<ZoneBean>();
+		for (Zone z : mongodb.findAll(Zone.class)) {
+			if(z != null && z.getId_app().compareTo(appId) == 0){
+				if(z.getId().compareTo(zId) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
+			}
+		}	
+		return result.get(0);
+	}	
 
 	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period) throws DatabaseException {
 		String[] ids = s.getId().split("@");
@@ -1150,6 +1168,29 @@ public class DynamicManager {
 		s.setOccupancyRate(occRate);
 		
 		return s;
+	}
+	
+	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+		String[][] occMatrix = null;
+		
+		ZoneBean z = findZoneById(objectId, appId);
+		List<StreetBean> streets = getAllStreets(z, null);
+		occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+		for(int i = 1; i < streets.size(); i++){
+			occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+		}
+		
+		return occMatrix;
+	}
+	
+	public String[][] mergeMatrix(String[][] m1, String[][] m2){
+		String[][] tmp = m1;
+		for(int i = 1; i < m1.length; i++){
+			for(int j = 1; j < m1[i].length; j++){
+				//tmp[i][j] = 
+			}
+		}
+		return tmp;
 	}
 	
 	public String[][] getHistorycalDataFromObject(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){

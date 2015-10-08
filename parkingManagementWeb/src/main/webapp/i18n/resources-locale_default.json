@@ -1751,6 +1751,26 @@
 	"value": "Ticket emessi",
 	"description": "Titolo tabella ticket in dettagli storici parcometro"
 }, { 
+	"key": "legend_alt_title_val", 
+	"value": "Visualizza legenda",
+	"description": "Alt e title link per visualizzazione legenda"
+}, { 
+	"key": "legend_occupancy_label", 
+	"value": "Legenda occupazione",
+	"description": "Label per legenda occupazione"
+}, { 
+	"key": "legend_profit_label", 
+	"value": "Legenda incassi",
+	"description": "Label per legenda incassi"
+}, { 
+	"key": "legend_time_label", 
+	"value": "Legenda tempo ricerca",
+	"description": "Label per legenda tempo ricerca"
+}, { 
+	"key": "legend_np_data", 
+	"value": "non disp",
+	"description": "Valore dato non disponibile in legenda"
+}, { 
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {

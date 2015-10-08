@@ -51,7 +51,7 @@ public class ObjectController  {
 
 	private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
-	private static final int DEFAULT_COUNT = 100;
+	private static final int DEFAULT_COUNT = 10000;
 	
 	@Autowired
 	private GeoObjectManager dataService; 
@@ -278,7 +278,7 @@ public class ObjectController  {
 	   	
 	    for(int i = 0; i < logList.length(); i++){
 	    	JSONObject log = logList.getJSONObject(i);
-	    	logger.error(String.format("Log Data: %s", log.toString()));
+	    	//logger.error(String.format("Log Data: %s", log.toString()));
 	    	String id = log.getString("id");
 	    	String objId = log.getString("objId");
 	    	String author = log.getString("author");

@@ -1321,6 +1321,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					break;
 				case "occupation": 
 					// Show occupation objects (with specifics colors)
+					$scope.show_occupancy_legend_button = true;
+					$scope.show_profit_legend_button = false;
+					$scope.show_time_legend_button = false;
 					if(autoInit){
 						if($scope.dashboard_space.rate_area){
 							$scope.showAreaPolygons(2);
@@ -1350,6 +1353,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					$scope.dashboard_space.parkingmeter = false;
 					break;
 				case "receipts": 
+					$scope.show_occupancy_legend_button = false;
+					$scope.show_profit_legend_button = true;
+					$scope.show_time_legend_button = false;
 					// Show profit objects (with specifics colors)
 					if(autoInit){
 						if($scope.dashboard_space.rate_area){
@@ -1378,6 +1384,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					}
 					break;
 				case "timeCost": 
+					$scope.show_occupancy_legend_button = false;
+					$scope.show_profit_legend_button = false;
+					$scope.show_time_legend_button = true;
 					// Show occupation objects (with specifics colors)
 					if(autoInit){
 						if($scope.dashboard_space.rate_area){
@@ -1435,6 +1444,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					}
 					break;
 				case "occupation": 
+					$scope.show_occupancy_legend_button = true;
+					$scope.show_profit_legend_button = false;
+					$scope.show_time_legend_button = false;
 					// Show occupation objects (with specifics colors)
 					if(autoInit){
 						if($scope.dashboard_space_list == "rate_area"){
@@ -1454,6 +1466,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					}
 					break;
 				case "receipts": 
+					$scope.show_occupancy_legend_button = false;
+					$scope.show_profit_legend_button = true;
+					$scope.show_time_legend_button = false;
 					// Show profit objects (with specifics colors)
 					if(autoInit){
 						if($scope.dashboard_space_list == "rate_area"){
@@ -1473,6 +1488,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					}
 					break;
 				case "timeCost": 
+					$scope.show_occupancy_legend_button = false;
+					$scope.show_profit_legend_button = false;
+					$scope.show_time_legend_button = true;
 					// Show occupation objects (with specifics colors)
 					if(autoInit){
 						if($scope.dashboard_space_list == "rate_area"){
@@ -2889,6 +2907,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	   		$scope.loadMapsObject();	// To show modal waiting spinner
 	   		$scope.initComponents();
 	   		$scope.getAreasFromDb();
+	   		$scope.initAllDiagrams();
 	   	}
 		$scope.mapReady = false;
 	};
@@ -5830,11 +5849,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	if(value == -1){
     		return $scope.lightgray;
     	} else {
-	    	if(value < 100){
+	    	if(value < 100000){
 	    		return $scope.lightgreen;
-	    	} else if(value < 500){
+	    	} else if(value < 200000){
 	    		return $scope.green;
-	    	} else if(value < 1000){
+	    	} else if(value < 500000){
+	    		return $scope.orange;
+	    	} else if(value < 1000000){
 	    		return $scope.violet;
 	    	} else {
 	    		return $scope.blue;
@@ -5987,6 +6008,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     };
     
     // ---------------------------------------------- Start block Utilization diagrams --------------------------------------
+    $scope.initAllDiagrams = function(){
+    	$scope.chartPsOccupancy.data = [["Posti", "num"]];
+    	$scope.chartStreetParkAvailability.data = [["Posti", "number"]];
+    	$scope.chartStreetOccupancy.data = [["Posti", "number"]];
+      	$scope.chartStreetFreeParkAvailability.data = [["Posti liberi", "number"]];
+      	$scope.chartStreetOccupiedParkComposition.data = [["Posti occupati", "number"]];
+      	$scope.chartZoneOccupancy.data = [["Posti", "num"]];
+      	$scope.chartAreaOccupancy.data = [["Posti", "num"]];
+    };
+    
     $scope.chartPsOccupancy = $scope.chart = {
   		  "type": "PieChart",
   		  "data": [],
@@ -6747,6 +6778,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					break;
 				case 5: 
 					// zone
+					if(type == 1){
+						// occupation data
+						// Here I have to create the historycal data
+						$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+					} else if(type == 2){
+						// profit data
+						$scope.getHistorycalProfitStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+					} else if(type == 3){
+						// time cost data
+						$scope.getHistorycalTimeCostStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+					}
 					break;
 			}
 		
@@ -6811,6 +6853,36 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	// ---------------------------------------------------------- WS call --------------------------------------------------------
+	
+	// Method getHistorycalOccupancyStreetsFromDb: used to retrieve the historycal streets occupancy data from the db
+	$scope.getHistorycalOccupancyZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
+		$scope.streetMapReady = false;
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: $scope.correctParamsFromSemicolon(year),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: $scope.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			noCache: new Date().getTime()
+		};
+		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
+		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+		    angular.copy(result, $scope.matrixZoneOcc);
+		    console.log("zone occupancy history retrieved from db: " + JSON.stringify(result));
+		});
+	};
 	
 	// Method getHistorycalOccupancyStreetFromDb: used to retrieve the historycal streets occupancy data from the db
 	$scope.getHistorycalOccupancyStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
@@ -7167,6 +7239,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	var showLegendOcc = false;
 	var showLegendProf = false;
 	var showLegendTime = false;
+	
+	$scope.show_occupancy_legend_button = false;
+	$scope.show_profit_legend_button = false;
+	$scope.show_time_legend_button = false;
 	
 	$scope.showLegend = function(type){
 		if(type == 1){

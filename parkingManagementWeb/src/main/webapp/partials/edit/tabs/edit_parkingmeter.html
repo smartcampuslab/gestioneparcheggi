@@ -140,20 +140,25 @@
 								<table class="table table-striped" style="width: 100%">
 									<tr ng-show="pmeterWS.length != 0">
 										<th width="15%"><span ng-show="pm_code.visible">{{ 'pm_code' | i18n }}</span></th>
-										<th width="20%"><span ng-show="pm_note.visible">{{ 'pm_note' | i18n }}</span></th>
+										<th width="20%">
+											<span ng-show="pm_note.visible">{{ 'pm_note' | i18n }}</span>&nbsp;
+											<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+											<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+											<div ng-show="showNotFilter">
+										    	 <input type="search" ng-model="noteFilter" placeholder="{{ 'filter_note_text' | i18n }}" />
+										    </div>
+										</th>
 										<th width="18%" class="myCenter">
 											<span ng-show="pm_status.visible">{{ 'pm_status' | i18n }}</span> 
-											<a href ng-click="showPmStatusFilter()" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
-											<a href ng-click="hidePmStatusFilter()" ng-show="showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+											<a href ng-click="showPmStatusFilter();currentPagePm=0" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+											<a href ng-click="pmStatusFilter=null;hidePmStatusFilter()" ng-show="showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 											<select id="f_pm_status" ng-show="showStatusPmFilter" class="form-control" ng-options="s.filter as s.descrizione for s in allPmStatusFilter" ng-model="pmStatusFilter">
 					    					</select>
 										</th>
 										<th width="22%" colspan="2" class="myCenter">
 											<span ng-show="pm_rateArea.visible">{{ 'pm_area_name' | i18n }}</span>&nbsp;
-											<a href ng-click="showPmAreaFilter()" ng-show="!showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
-											<a href ng-click="hidePmAreaFilter()" ng-show="showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
-	<!-- 										<select id="f_pm_area" ng-show="showAreaPmFilter" class="form-control" ng-model="pmAreaFilter" ng-options="a.id as a.name for a in allPmAreaFilter"> -->
-	<!-- 					    				</select> -->
+											<a href ng-click="showPmAreaFilter();currentPagePm=0" ng-show="!showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+											<a href ng-click="pmAreaFilter=null;hidePmAreaFilter()" ng-show="showAreaPmFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 						    				<select id="f_pm_area" ng-show="showAreaPmFilter" class="form-control" ng-model="pmAreaFilter">
 						    					<option ng-repeat="a in allPmAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
 						    				</select>
@@ -161,8 +166,8 @@
 										<th width="25%" class="myCenter"><span>{{ 'operations' | i18n }}</span></th>
 									</tr>
 									<tbody class="animate-repeat"
-										ng-repeat="pmeter in filtered = (pmeterWS | filter:q | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:'code' | startFrom:currentPage*maxPmeters | limitTo:maxPmeters">
-					<!--						ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+										ng-repeat="pmeter in filtered = (pmeterWS | filter:noteFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:'code' | startFrom:currentPagePm*maxPmeters | limitTo:maxPmeters">
+					<!--						ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPagePm*maxPractices | limitTo:maxPractices"> -->
 										<tr ><!--  ng-show="pmeter.status!='ACTIVE' && pmStatusFilter!='ACTIVE'" -->
 											<td align="left"><span ng-show="pm_code.visible">{{pmeter.code}}</span></td>
 											<td align="left"><span ng-show="pm_note.visible">{{pmeter.note}}</span></td>
@@ -197,12 +202,12 @@
 								</table>
 							</div>
 							<button class="btn btn-default"
-									ng-disabled="currentPage == 0"
-									ng-click="currentPage=currentPage-1">{{ 'previous_label' | i18n }}</button>
-								{{currentPage+1}}/{{numberOfPages(3, filtered)}}
+									ng-disabled="currentPagePm == 0"
+									ng-click="currentPagePm=currentPagePm-1">{{ 'previous_label' | i18n }}</button>
+								{{currentPagePm+1}}/{{numberOfPages(3, filtered)}}
 							<button class="btn btn-default"
-									ng-disabled="currentPage >= filtered.length/maxPmeters - 1"
-									ng-click="currentPage=currentPage+1">{{ 'next_label' | i18n }}</button>
+									ng-disabled="currentPagePm >= filtered.length/maxPmeters - 1"
+									ng-click="currentPagePm=currentPagePm+1">{{ 'next_label' | i18n }}</button>
 						</div>
 					</div>
 				</div>
