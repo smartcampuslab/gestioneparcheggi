@@ -415,6 +415,39 @@ public class DynamicManager {
 			}
 		}	
 		return result.get(0);
+	}
+	
+	/**
+	 * Method getAreaById: used to retrieve an RateAreaBean object from a specific id 
+	 * @param areaId: id of the area to find
+	 * @param appId: agency id
+	 * @return Object RateAreaBean found
+	 */
+	public RateAreaBean getAreaById(String areaId, String appId) {
+		RateArea a = mongodb.findById(areaId, RateArea.class);
+		RateAreaBean ra = ModelConverter.convert(a, RateAreaBean.class);
+		return ra;
+	}
+	
+	/**
+	 * Method findParkingMeterByCode: used to find a ParkingMeterBean object using the code
+	 * @param code: code of the parkingMeter to find
+	 * @return ParkingMeterBean object found;
+	 */
+	public ParkingMeterBean findParkingMeterByCode(int code, String appId) {
+		List<RateArea> aree = mongodb.findAll(RateArea.class);
+		for (RateArea area : aree) {
+			if (area.getParkingMeters() != null && area.getId_app().compareTo(appId) == 0) {
+				for(ParkingMeter pm : area.getParkingMeters()){
+					if(pm.getCode() == code){
+						ParkingMeterBean result = ModelConverter.convert(pm, ParkingMeterBean.class);
+						result.setAreaId(area.getId());
+						return result;
+					}
+				}
+			}
+		}
+		return null;
 	}	
 
 	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period) throws DatabaseException {
@@ -1170,6 +1203,23 @@ public class DynamicManager {
 		return s;
 	}
 	
+	/**
+	 * Method getHistorycalDataFromZone: used to retrieve the historical data info from a zone (sum / average the street values)
+	 * @param objectId: id of zone;
+	 * @param appId: agency id of call;
+	 * @param type: object class type to find;
+	 * @param verticalVal: vertical val for the compare table;
+	 * @param orizontalVal: orizontal val for the compare table;
+	 * @param params: passed params;
+	 * @param years: years to calculate in filter;
+	 * @param months: months to calculate in filter;
+	 * @param dayType: dayTyoe to calculate in filter;
+	 * @param days: days to calculate in filter;
+	 * @param hours: hours to calculate in filter;
+	 * @param valueType: value to find: occupancy, profit or time cost;
+	 * @param objType: type of object to find: street, parkingmeter, parking structure
+	 * @return String matrix with the zone occupancy compare
+	 */
 	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
 		String[][] occMatrix = null;
 		
@@ -1179,18 +1229,164 @@ public class DynamicManager {
 		for(int i = 1; i < streets.size(); i++){
 			occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
 		}
-		
-		return occMatrix;
+		return cleanAverageMatrix(occMatrix, streets.size());
 	}
 	
+	/**
+	 * Method getHistoricalDataFromArea: used to retrieve hostorical data info from a rate area (sum / average the street values)
+	 * @param objectId: id of a specific area
+	 * @param appId: agency id of call;
+	 * @param type: object class type to find;
+	 * @param verticalVal: vertical val for the compare table;
+	 * @param orizontalVal: orizontal val for the compare table;
+	 * @param params: passed params;
+	 * @param years: years to calculate in filter;
+	 * @param months: months to calculate in filter;
+	 * @param dayType: dayTyoe to calculate in filter;
+	 * @param days: days to calculate in filter;
+	 * @param hours: hours to calculate in filter;
+	 * @param valueType: value to find: occupancy, profit or time cost;
+	 * @param objType: type of object to find: street, parkingmeter, parking structure
+	 * @return String matrix with the area occupancy compare
+	 */
+	public String[][] getHistorycalDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+		String[][] occMatrix = null;
+		
+		RateAreaBean a = getAreaById(objectId, appId);
+		List<StreetBean> streets = getAllStreets(a, null);
+		occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+		for(int i = 1; i < streets.size(); i++){
+			occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+		}
+		return cleanAverageMatrix(occMatrix, streets.size());
+	}	
+	
+	// Method mergeMatrix: used to merge the value of two matrix (with same size) in a single matrix
 	public String[][] mergeMatrix(String[][] m1, String[][] m2){
 		String[][] tmp = m1;
 		for(int i = 1; i < m1.length; i++){
 			for(int j = 1; j < m1[i].length; j++){
-				//tmp[i][j] = 
+				String[] profits_1 = m1[i][j].split("/");
+				String[] profits_2 = m2[i][j].split("/");
+				if(profits_1.length == 1){
+					double occ1 = Double.parseDouble(m1[i][j]);
+					double occ2 = Double.parseDouble(m2[i][j]);
+					double merge = 0.0;
+					if((occ1 != -1.0) && (occ2 != -1.0)){
+						merge = occ1 + occ2;
+					} else if((occ1 != -1.0) && (occ2 == -1.0)){
+						merge = occ1;
+					} else if((occ1 == -1.0) && (occ2 != -1.0)){
+						merge = occ2;
+					} else {
+						merge = -1.0;
+					}
+					tmp[i][j] = "" + merge;
+				} else {
+					double prof1 = Double.parseDouble(profits_1[0]);
+					double prof2 = Double.parseDouble(profits_2[0]);
+					double merge1 = 0.0;
+					if((prof1 != -1.0) && (prof2 != -1.0)){
+						merge1 = prof1 + prof2;
+					} else if((prof1 != -1.0) && (prof2 == -1.0)){
+						merge1 = prof1;
+					} else if((prof1 == -1.0) && (prof2 != -1.0)){
+						merge1 = prof2;
+					} else {
+						merge1 = -1.0;
+					}
+					double tick1 = Double.parseDouble(profits_1[1]);
+					double tick2 = Double.parseDouble(profits_2[1]);
+					double merge2 = 0.0;
+					if((tick1 != -1.0) && (tick2 != -1.0)){
+						merge2 = tick1 + tick2;
+					} else if((tick1 != -1.0) && (tick2 == -1.0)){
+						merge2 = tick1;
+					} else if((tick1 == -1.0) && (tick2 != -1.0)){
+						merge2 = tick2;
+					} else {
+						merge2 = -1.0;
+					}
+					tmp[i][j] = "" + merge1 + "/" + merge2;
+				}
 			}
 		}
 		return tmp;
+	}
+	
+	// Method cleanAverageMatrix: used to calculate the average values from a matrix with the sum data
+	public String[][] cleanAverageMatrix(String[][] m1, int streets){
+		String[][] tmp = m1;
+		for(int i = 1; i < m1.length; i++){
+			for(int j = 1; j < m1[i].length; j++){
+				if(Double.parseDouble(m1[i][j]) != -1.0){
+					double average = Double.parseDouble(m1[i][j]) / streets;
+					tmp[i][j] = String.format("%.2f", average);
+				}
+			}
+		}
+		return tmp;
+	}
+	
+	public String[][] getHistorycalProfitDataFromStreet(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+		String[][] profMatrix = null;
+		
+		StreetBean s = findStreet(objectId);
+		List<String> pmCodes = s.getParkingMeters();
+		if(pmCodes != null && pmCodes.size() > 0){
+			ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
+			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			for(int i = 1; i < pmCodes.size(); i++){
+				pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
+				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+			}
+		}
+		return profMatrix;	//cleanAverageMatrix(profMatrix, pmCodes.size());
+	}
+	
+	public String[][] getHistorycalProfitDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+		String[][] profMatrix = null;
+	
+		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
+		List<String> pmCodes = new ArrayList<String>();
+		// find all parkingmeters in zone (in streets in zone)
+		for(StreetBean s : streets){
+			//StreetBean s = findStreet(objectId);
+			List<String> zones = s.getZones();
+			boolean found = false;
+			for(int i = 0; i < zones.size() && !found; i++){
+				if(zones.get(i).compareTo(objectId) == 0){
+					found = true;
+					pmCodes.addAll(s.getParkingMeters());
+				}
+			}
+		}
+		// iterate the parkingmeter list and merge the profit matrix
+		if(pmCodes != null && pmCodes.size() > 0){
+			ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
+			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			for(int i = 1; i < pmCodes.size(); i++){
+				pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
+				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+			}
+		}
+		return profMatrix;	//cleanAverageMatrix(profMatrix, pmCodes.size());
+	}
+	
+	public String[][] getHistorycalProfitDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+		String[][] profMatrix = null;
+		
+		RateArea a = mongodb.findById(objectId, RateArea.class);
+		List<ParkingMeter> pms = a.getParkingMeters();
+		if(pms != null && pms.size() > 0){
+			ParkingMeterBean pmb = findParkingMeter(pms.get(0).getId());
+			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			for(int i = 1; i < pms.size(); i++){
+				pmb = findParkingMeter(pms.get(i).getId());
+				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+			}
+		}
+		return profMatrix;	//cleanAverageMatrix(profMatrix, pmCodes.size());
 	}
 	
 	public String[][] getHistorycalDataFromObject(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){

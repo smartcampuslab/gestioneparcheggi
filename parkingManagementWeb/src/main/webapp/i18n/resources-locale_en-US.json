@@ -1771,6 +1771,18 @@
 	"value": "non disp",
 	"description": "Valore dato non disponibile in legenda"
 }, { 
+	"key": "legend_open_label", 
+	"value": "Mostra legenda",
+	"description": "Label pulsante mostra legenda"
+}, { 
+	"key": "legend_close_label", 
+	"value": "Nascondi legenda",
+	"description": "Label pulsante chiudi legenda"
+}, { 
+	"key": "report_management_button_label", 
+	"value": "Gestione Report",
+	"description": "Label pulsante gestione report"
+}, { 
     "key": "time_vis",
     "value": "Visualizzazione"
 }, {
