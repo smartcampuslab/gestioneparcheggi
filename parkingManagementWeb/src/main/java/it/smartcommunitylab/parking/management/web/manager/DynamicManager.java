@@ -1334,10 +1334,12 @@ public class DynamicManager {
 		StreetBean s = findStreet(objectId);
 		List<String> pmCodes = s.getParkingMeters();
 		if(pmCodes != null && pmCodes.size() > 0){
-			ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
+			ParkingMeterBean pmb = findParkingMeter(pmCodes.get(0));
+			//ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
 			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
 			for(int i = 1; i < pmCodes.size(); i++){
-				pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
+				pmb = findParkingMeter(pmCodes.get(i));
+				//pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
 				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
 			}
 		}
@@ -1363,10 +1365,12 @@ public class DynamicManager {
 		}
 		// iterate the parkingmeter list and merge the profit matrix
 		if(pmCodes != null && pmCodes.size() > 0){
-			ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
+			//ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
+			ParkingMeterBean pmb = findParkingMeter(pmCodes.get(0));
 			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
 			for(int i = 1; i < pmCodes.size(); i++){
-				pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
+				//pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
+				pmb = findParkingMeter(pmCodes.get(i));
 				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
 			}
 		}

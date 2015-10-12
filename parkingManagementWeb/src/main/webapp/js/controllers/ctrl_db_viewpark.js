@@ -31,6 +31,16 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    step: 1,
 		    modelLabels: {'1': 'LU', '2': 'MA', '3': 'ME', '4': 'GI', '5': 'VE', '6': 'SA', '7':'DO'}
 	};
+	$scope.dow_val = {
+		mo : true,
+		tu : true,
+		we : true,
+		th : true,
+		fr : true,
+		sa : true,
+		su : true
+	};
+	
 	$scope.hourSliderValue = "0;23";//"10;12";
 	$scope.hourSliderOptions = {
 		    from: 0,
@@ -77,6 +87,15 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 				if(filter.dows){	// reverse case 
 					$scope.dayOptions.value = "custom";
 					$scope.daySliderValue = "1;7";
+					$scope.dow_val = {
+						mo : true,
+						tu : true,
+						we : true,
+						th : true,
+						fr : true,
+						sa : true,
+						su : true
+					};
 				}
 				break;
 			case 3:	// hours
@@ -101,6 +120,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	
 	$scope.updateDay = function(value){		//, type
 		$scope.daySliderValue = value;
+		//$scope.dow_val = value;
 		$scope.updateSearch();
 	};
 	
@@ -124,7 +144,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    console.log("Anno: " + $scope.year);
 	    console.log("Mesi: " + $scope.monthSliderValue);
 	    console.log("Giorno - tipo: " + $scope.dayOptions.value);
-	    console.log("Giorni: " + $scope.daySliderValue);
+	    //console.log("Giorni: " + $scope.daySliderValue);
+	    console.log("Giorni: " + $scope.dow_val);
 	    var d = new Date();	// I retrieve the actual date
 	    var weekDay = d.getDay() + 1; // In java calendar the weekday are from 1 to 7, in javascript from 0 to 6;
 	    if($scope.hourOptions.value != "custom"){
@@ -399,11 +420,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					title_map += "feriale_";
 				}
 			} else {
-				var dow_val = dowVal.split(";");
-				if(dow_val.length > 1){
-					title_map += $scope.getCorrectTitleValFromFilter(dow_val[0], 2) + $scope.getCorrectTitleValFromFilter(dow_val[1], 2);
+				var dow_value = dowVal.split(";");
+				if(dow_value.length > 1){
+					title_map += $scope.getCorrectTitleValFromFilter(dow_value[0], 2) + $scope.getCorrectTitleValFromFilter(dow_value[1], 2);
 				} else {
-					title_map += $scope.getCorrectTitleValFromFilter(dow_val[0], 2);
+					title_map += $scope.getCorrectTitleValFromFilter(dow_value[0], 2);
 				}
 			}
 		}
@@ -2806,6 +2827,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};
 	
+	$scope.getLocalPmById = function(objId){
+		var find = false;
+		var myPms = sharedDataService.getSharedLocalPms();
+		for(var i = 0; i < myPms.length && !find; i++){
+			var pmIdString = String(myPms[i].id);
+			if(pmIdString.localeCompare(objId) == 0){
+				find = true;
+				return myPms[i];
+			}
+		}
+		return null;
+	};	
+	
 	$scope.initStreetsObjects = function(streets){
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
@@ -2817,7 +2851,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var pms = [];
 			if(streets[i].parkingMeters != null){
 				for(var x = 0; x < streets[i].parkingMeters.length; x++){
-					var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
+					//var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
+					var pm = $scope.getLocalPmById(streets[i].parkingMeters[x]);
 					pms.push(pm);
 				}
 			}
@@ -3888,7 +3923,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};	
 	
-	// Method updateStreetOccupancy: update all street maps Object elements with new occupation data retrieved from db
+	// Method updateStreetProfit: update all street maps Object elements with new profit data retrieved from db
 	$scope.updateStreetProfit = function(firstTime, show){
 		$scope.profitStreetsList = $scope.initStreetsOnMap($scope.streetWS, show, 3, firstTime)[1];
 		if($scope.dashboard_space.microzone && $scope.dashboard_topics_list != "receipts" && !firstTime){	// I check if the street check is selected
@@ -4646,11 +4681,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    $scope.showZoneDet();
 				$scope.zDetails = object;
 				$scope.initZoneOccupancyDiagram(object, 2);
+				$scope.showReportCompare("1","2", 5, 3);	// 5 = zone, 3 = time cost
 				break;
 			case 5:
 			    $scope.showAreaDet();
 				$scope.aDetails = object;
 				$scope.initAreaOccupancyDiagram(object, 2);
+				$scope.showReportCompare("1","2", 4, 3);	// 4 = area, 3 = time cost
 				break;	
 		};
 		$scope.timeCostOpened = true;
@@ -6691,6 +6728,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.matrixAreaTick = [];
 	$scope.matrixPAreaAll = [];
 	$scope.matrixTimeCost = [];
+	$scope.matrixZoneTimeCost = [];
+	$scope.matrixAreaTimeCost = [];
 	
 	// list for vertical and orizontal value;
 	$scope.allCmpVal = [
@@ -7031,7 +7070,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Street historycal occupancy csv data
 	$scope.getOccupancyStreetHistoryCsv = function(dStreet){
 		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
 		var params = {
 				dstreet_name: dStreet.streetReference,
 				dstreet_area: dStreet.area_name,
@@ -7144,6 +7182,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 		    console.log("area profit history retrieved from db: " + JSON.stringify(result));
 		});
+	};
+	
+	// Area historycal profit csv data
+	$scope.getProfitAreaHistoryCsv = function(dArea){
+		var method = 'POST';
+		var params = {
+				darea_name: dArea.name,
+				darea_fee: dArea.fee,
+				darea_totalslot: dArea.slotNumber
+		};
+		var value = JSON.stringify($scope.matrixPAreaAll);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/areahistory/csv", params, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.zoneProfCvsHistorycalFile = result;
+	    	window.location.href = $scope.zoneProfCvsHistorycalFile;
+	    });	
 	};	
 	
 	// Method getHistorycalProfitZoneFromDb: used to retrieve the historycal zone profit data from the db
@@ -7194,6 +7250,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		});
 	};	
 	
+	// Zone historycal profit csv data
+	$scope.getProfitZoneHistoryCsv = function(dZone){
+		var method = 'POST';
+		var params = {
+				dzone_name: dZone.name,
+				dzone_sub: dZone.submacro,
+				dzone_totalslot: dZone.slotNumber
+		};
+		var value = JSON.stringify($scope.matrixPZoneAll);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/zonehistory/csv", params, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.zoneProfCvsHistorycalFile = result;
+	    	window.location.href = $scope.zoneProfCvsHistorycalFile;
+	    });	
+	};			
+	
 	// Method getHistorycalProfitStreetFromDb: used to retrieve the historycal street profit data from the db
 	$scope.getHistorycalProfitStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
@@ -7240,15 +7314,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 		    console.log("street profit history retrieved from db: " + JSON.stringify(result));
 		});
-	};	
+	};
 	
-	// ParkingMeter historycal profit csv data
+	// Street historycal profit csv data
 	$scope.getProfitStreetHistoryCsv = function(dStreet){
 		var method = 'POST';
 		var params = {
-				dstreet_code: dStreet.code,
-				dstreet_note: dStreet.note,
-				dstreet_area: dStreet.area.name
+				dstreet_name: dStreet.streetReference,
+				dstreet_area: dStreet.area_name,
+				dstreet_totalslot: dStreet.slotNumber
 		};
 		var value = JSON.stringify($scope.matrixPStreetAll);
 		
@@ -7259,7 +7333,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	$scope.streetProfCvsHistorycalFile = result;
 	    	window.location.href = $scope.streetProfCvsHistorycalFile;
 	    });	
-	};	
+	};		
 	
 	// Method getHistorycalProfitPmFromDb: used to retrieve the historycal parking profit data from the db
 	$scope.getHistorycalProfitPmFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
@@ -7378,7 +7452,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		});
 	};
 	
-	// ParkiStruct historycal profit csv data
+	// ParkiStruct historycal time cost csv data
 	$scope.getProfitParkStructHistoryCsv = function(dParkstruct){
 		var method = 'POST';
 		var params = {
@@ -7396,6 +7470,107 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	window.location.href = $scope.parkstructProfCvsHistorycalFile;
 	    });	
 	};
+	
+	// Method getHistorycalTimeCostAreaFromDb: used to retrieve the historycal streets extratime cost data from the db
+	$scope.getHistorycalTimeCostAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: $scope.correctParamsFromSemicolon(year),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: $scope.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			noCache: new Date().getTime()
+		};
+		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/areacompare/" + id, params, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+		    angular.copy(result, $scope.matrixAreaTimeCost);
+		    for(var i = 1; i < result.length; i++){
+		    	for(var j = 1; j < result[i].length; j++){
+		    		$scope.matrixAreaTimeCost[i][j] = $scope.getExtratimeFromOccupancyForHistorycalTable(Number(result[i][j]));
+			    }
+		    }
+		    console.log("area timecost history retrieved from db: " + JSON.stringify(result));
+		});
+	};	
+	
+	// Area historycal time cost csv data
+	$scope.getTimeCostAreaHistoryCsv = function(dArea){
+		var method = 'POST';
+		var params = {
+				darea_name: dArea.name,
+				darea_fee: dArea.fee,
+				darea_totalslot: dArea.slotNumber
+		};
+		var value = JSON.stringify($scope.matrixAreaTimeCost);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/areahistory/csv", params, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.areaTimeCostCvsHistorycalFile = result;
+	    	window.location.href = $scope.areaTimeCostCvsHistorycalFile;
+	    });	
+	};	
+	
+	// Method getHistorycalTimeCostZoneFromDb: used to retrieve the historycal streets extratime cost data from the db
+	$scope.getHistorycalTimeCostZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var monthRange = $scope.chekIfAllRange(month, 1);
+		var weekRange = $scope.chekIfAllRange(weekday, 2);
+		var hourRange = $scope.chekIfAllRange(hour, 3);
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: $scope.correctParamsFromSemicolon(year),
+			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: $scope.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: $scope.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			noCache: new Date().getTime()
+		};
+		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+		    angular.copy(result, $scope.matrixZoneTimeCost);
+		    for(var i = 1; i < result.length; i++){
+		    	for(var j = 1; j < result[i].length; j++){
+		    		$scope.matrixZoneTimeCost[i][j] = $scope.getExtratimeFromOccupancyForHistorycalTable(Number(result[i][j]));
+			    }
+		    }
+		    console.log("zone timecost history retrieved from db: " + JSON.stringify(result));
+		});
+	};	
+	
+	// Zone historycal time cost csv data
+	$scope.getTimeCostZoneHistoryCsv = function(dZone){
+		var method = 'POST';
+		//var appId = sharedDataService.getConfAppId();
+		var params = {
+				dzone_name: dZone.name,
+				dzone_sub: dZone.submacro,
+				dzone_totalslot: dZone.slotNumber
+		};
+		var value = JSON.stringify($scope.matrixZoneTimeCost);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/zonehistory/csv", params, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created csv file: " + JSON.stringify(result));
+	    	$scope.zoneTimeCostCvsHistorycalFile = result;
+	    	window.location.href = $scope.zoneTimeCostCvsHistorycalFile;
+	    });	
+	};	
 	
 	// Method getHistorycalTimeCostStreetFromDb: used to retrieve the historycal streets extratime cost data from the db
 	$scope.getHistorycalTimeCostStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
@@ -7713,11 +7888,11 @@ pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataServi
 						$scope.rep_dow = "feriale";
 					}
 				} else {
-					var dow_val = dowVal.split(";");
-					if(dow_val.length > 1){
-						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_val[0], 2) + $scope.getCorrectTitleDescFromFilter(dow_val[1], 2);
+					var dow_value = dowVal.split(";");
+					if(dow_value.length > 1){
+						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_value[0], 2) + $scope.getCorrectTitleDescFromFilter(dow_value[1], 2);
 					} else {
-						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_val[0], 2);
+						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_value[0], 2);
 					}
 				}
 			}

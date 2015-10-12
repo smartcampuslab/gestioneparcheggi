@@ -1819,6 +1819,27 @@
     "key": "we_vis",
     "value": "Festivo"
 }, {
+    "key": "mon_vis",
+    "value": "Lu"
+}, {
+    "key": "tue_vis",
+    "value": "Ma"
+}, {
+    "key": "wed_vis",
+    "value": "Me"
+}, {
+    "key": "thu_vis",
+    "value": "Gi"
+}, {
+    "key": "fri_vis",
+    "value": "Ve"
+}, {
+    "key": "sat_vis",
+    "value": "Sa"
+}, {
+    "key": "sun_vis",
+    "value": "Do"
+}, {
     "key": "custom_vis",
     "value": "Definisci periodo"
 }, {

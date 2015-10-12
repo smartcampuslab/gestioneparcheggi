@@ -728,6 +728,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return null;
 	};
 	
+	$scope.getLocalPmById = function(objId){
+		var find = false;
+		var myPms = sharedDataService.getSharedLocalPms();
+		for(var i = 0; i < myPms.length && !find; i++){
+			var pmIdString = String(myPms[i].id);
+			if(pmIdString.localeCompare(objId) == 0){
+				find = true;
+				return myPms[i];
+			}
+		}
+		return null;
+	};
+	
 	$scope.getStreetsFromDb = function(){
 		$scope.streetMapReady = false;
 		$scope.mapStreetSelectedMarkers = [];
@@ -1082,18 +1095,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var correctedPms = [];
 		for(var i = 0; i < pms.length; i++){
 			if(pms[i].selected){
-//			var correctZone = {
-//					id: zones[i].id,
-//					id_app: zones[i].id_app,
-//					color: zones[i].color,
-//					name: zones[i].name,
-//					submacro: zones[i].submacro,
-//					type: zones[i].type,
-//					note: zones[i].note,
-//					geometry: $scope.correctMyGeometryPolygon(zones[i].geometry)
-//			};
-//			correctedZones.push(correctZone);
-				correctedPms.push(String(pms[i].code));
+				//correctedPms.push(String(pms[i].code));
+				correctedPms.push(String(pms[i].id));
 			}
 		}
 		return correctedPms;
@@ -1118,7 +1121,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var pms = [];
 			if(streets[i].parkingMeters != null){
 				for(var x = 0; x < streets[i].parkingMeters.length; x++){
-					var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
+					//var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
+					var pm = $scope.getLocalPmById(streets[i].parkingMeters[x]);
 					if(pm != null){
 						pms.push(pm);
 					}
@@ -1290,7 +1294,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.myPms[j].selected = false;
 			if(street.myPms != null && street.myPms.length > 0){
 				for(var i = 0; i < street.myPms.length; i++){
-					if($scope.myPms[j].code == street.myPms[i].code){
+					//if($scope.myPms[j].code == street.myPms[i].code){
+					if($scope.myPms[j].id == street.myPms[i].id){	
 						myStreetPms.push($scope.myPms[j]);
 					}
 				}
@@ -1916,7 +1921,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			for(var j = 0; j < $scope.myPms.length; j++){
 				$scope.myPms[j].selected = false;
 				for(var i = 0; i < street.myPms.length; i++){
-					if($scope.myPms[j].code ==  street.myPms[i].code){
+					//if($scope.myPms[j].code ==  street.myPms[i].code){
+					if($scope.myPms[j].id ==  street.myPms[i].id){	
 						$scope.myPms[j].selected = true;
 					}
 				}
@@ -2729,7 +2735,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
 		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
-		    	console.log("Updated street: " + result);
+		    	console.log("Updated street: " + JSON.stringify(result));
 		    	if(result != null){ // == "OK"){
 		    		$scope.getStreetsFromDb();
 					$scope.editModeS = false;

@@ -892,6 +892,19 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		}
 	};
 	
+	$scope.getLocalPmById = function(objId){
+		var find = false;
+		var myPms = sharedDataService.getSharedLocalPms();
+		for(var i = 0; i < myPms.length && !find; i++){
+			var pmIdString = String(myPms[i].id);
+			if(pmIdString.localeCompare(objId) == 0){
+				find = true;
+				return myPms[i];
+			}
+		}
+		return null;
+	};	
+	
 	$scope.initStreetsObjects = function(streets){
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
@@ -903,7 +916,8 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			var pms = [];
 			if(streets[i].parkingMeters != null){
 				for(var x = 0; x < streets[i].parkingMeters.length; x++){
-					var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
+					//var pm = $scope.getLocalPmByCode(streets[i].parkingMeters[x]);
+					var pm = $scope.getLocalPmById(streets[i].parkingMeters[x]);
 					pms.push(pm);
 				}
 			}

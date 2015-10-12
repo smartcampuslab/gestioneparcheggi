@@ -1496,6 +1496,70 @@ public class DashboardController {
 		return createdFile;		
 	}
 	
+	// ---------------------------------------- Street Profit CSV -------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/streethistory/csv")
+	public @ResponseBody
+	String createProfitStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) {
+		logger.info("I am in profit street csv creation.");
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+    	
+		it.smartcommunitylab.parking.management.web.model.Street s = new it.smartcommunitylab.parking.management.web.model.Street();
+	    s.setStreetReference(dstreet_name);
+	    s.setSlotNumber(Integer.parseInt(dstreet_totalslot));
+	    s.setArea_name(dstreet_area);
+		
+		try {
+			//return_data = csvManager.create_file_streets(streetData, path);
+			createdFile = csvManager.create_profit_file_history_street(s, matrix, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV incassi storico per vie: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	// --------------------------------------- Zone Profit CSV --------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/zonehistory/csv")
+	public @ResponseBody
+	String createProfitZoneHistoryCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_sub, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) {
+		logger.info("I am in historycal zone csv creation.");
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		    	
+	    it.smartcommunitylab.parking.management.web.model.ProfitZone z = new it.smartcommunitylab.parking.management.web.model.ProfitZone();
+	    z.setName(dzone_name);
+	    z.setSubmacro(dzone_sub);
+	    z.setSlotNumber(Integer.parseInt(dzone_totalslot));
+			
+		try {
+			createdFile = csvManager.create_profit_file_history_zone(z, matrix, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV incassi storico per zone: " + e.getMessage());
+		}
+		return createdFile;
+	}
+	
+	// --------------------------------------- Area Profit CSV --------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/areahistory/csv")
+	public @ResponseBody
+	String createProfitAreaHistoryCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot,  @RequestBody String[][] matrix) {
+		logger.info("I am in historycal area csv creation.");
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+			    	
+		it.smartcommunitylab.parking.management.web.model.ProfitRateArea a = new it.smartcommunitylab.parking.management.web.model.ProfitRateArea();
+	    a.setName(darea_name);
+	    a.setFee(Float.valueOf(darea_fee));
+	    a.setSlotNumber(Integer.parseInt(darea_totalslot));
+				
+		try {
+			createdFile = csvManager.create_profit_file_history_area(a, matrix, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV incassi storico per aree: " + e.getMessage());
+		}
+		return createdFile;
+	}	
+	
 	// ---------------------------------------- Parking Profit CSV -------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/parkingmeterhistory/csv")
 	public @ResponseBody
@@ -1543,13 +1607,54 @@ public class DashboardController {
 		}
 		return createdFile;			
 	}
+
+	// --------------------------------------- Area TimeCost CSV --------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timecost/areahistory/csv")
+	public @ResponseBody
+	String createTimeCostAreaHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot, @RequestBody String[][] matrix) {
+		logger.info("I am in historycal time cost area csv creation.");
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+	    	
+		it.smartcommunitylab.parking.management.web.model.OccupancyRateArea a = new it.smartcommunitylab.parking.management.web.model.OccupancyRateArea();
+	    a.setName(darea_name);
+	    a.setFee(Float.valueOf(darea_fee));
+	    a.setSlotNumber(Integer.parseInt(darea_totalslot));
+			
+		try {
+			createdFile = csvManager.create_timecost_file_history_area(a, matrix, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV costo accesso storico per zone: " + e.getMessage());
+		}
+		return createdFile;
+	}	
+	
+	// --------------------------------------- Zone TimeCost CSV --------------------------------------------
+	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timecost/zonehistory/csv")
+	public @ResponseBody
+	String createTimeCostZoneHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_sub, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) {
+		logger.info("I am in historycal time cost zone csv creation.");
+		String createdFile = "";
+		String path = request.getSession().getServletContext().getRealPath("/csv/");
+	    	
+	    it.smartcommunitylab.parking.management.web.model.OccupancyZone z = new it.smartcommunitylab.parking.management.web.model.OccupancyZone();
+	    z.setName(dzone_name);
+	    z.setSubmacro(dzone_sub);
+	    z.setSlotNumber(Integer.parseInt(dzone_totalslot));
+			
+		try {
+			createdFile = csvManager.create_timecost_file_history_zone(z, matrix, path);
+		} catch (Exception e) {
+			logger.error("Errore in creazione CSV costo accesso storico per zone: " + e.getMessage());
+		}
+		return createdFile;
+	}	
 	
 	// --------------------------------------- Street TimeCost CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timecost/streethistory/csv")
 	public @ResponseBody
 	String createTimeCostStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		logger.info("I am in historycal time cost street csv creation.");
-		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 	    	
