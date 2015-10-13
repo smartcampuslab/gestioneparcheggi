@@ -8,8 +8,8 @@ var pm = angular.module('pm', [
 	'ngSanitize',
 	'colorpicker.module',
 	'ngMap',
-	'angularFileUpload',
-	'angularAwesomeSlider',
+	//'angularFileUpload',
+	//'angularAwesomeSlider',
 	
 	'pmServices',
 	'pmControllers',

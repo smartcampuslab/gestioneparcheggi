@@ -15,14 +15,13 @@
 						sheet data.</div>
 				</td>
 			</tr>
+<!-- 			<tr> -->
+<!-- 				<td align="left" valign="middle" colspan="5"> -->
+<!-- 					<h4>{{ uploadFileClassId }}</h4> -->
+<!-- 				</td> -->
+<!-- 			</tr> -->
 			<tr>
 				<td align="left" valign="middle" colspan="5">
-					<h4>{{ uploadFileClassId }}</h4>
-				</td>
-			</tr>
-			<tr>
-				<td align="left" valign="middle" colspan="5">
-					<!-- 								<input type="file" name="attachment" class="custom-file-input" nv-file-select uploader="uploader" title="Seleziona un file" onchange="angular.element(this).scope().unlockMailButtonIF()"><br/> options="{url: 'upload/'}" ng-file-select="onFileSelect($files)" on-read-file="showContent($fileContent)" -->
 					<input type="file" name="xlfile" id="xlf" class="custom-file-input"
 					title="Seleziona un file" nv-file-select uploader="uploader" />
 				</td>
@@ -186,18 +185,20 @@
 				</td>
 			</tr>
 		</table>
-	<pre id="out" ng-model="provv_class_val" hidden>Testo...</pre>
+	<pre id="out" ng-model="provv_class_val" >Testo...</pre><!-- hidden -->
 </div>
 
+</div>
+</div>
 <script>
 var X = XLS;
 var XW = {
 	/* worker message */
 	msg: 'xls',
 	/* worker scripts */
-	rABS: './xlsworker2.js',
-	norABS: './xlsworker1.js',
-	noxfer: './xlsworker.js'
+	rABS: 'parking-management/xlsworker2.js',
+	norABS: 'parking-management/xlsworker1.js',
+	noxfer: 'parking-management/xlsworker.js'
 };
 
 var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
@@ -425,16 +426,3 @@ function handleFile(e) {
 
 if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
 </script>
-<script type="text/javascript">
-	var _gaq = _gaq || [];
-	_gaq.push(['_setAccount', 'UA-36810333-1']);
-	_gaq.push(['_trackPageview']);
-
-	(function() {
-		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
-		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
-	})();
-</script>
-</div>
-</div>

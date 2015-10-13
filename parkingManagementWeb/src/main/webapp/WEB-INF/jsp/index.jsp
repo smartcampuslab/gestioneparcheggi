@@ -36,6 +36,7 @@
 
 <script src="js/app.js?1001"></script>
 <script src="js/controllers/ctrl.js?1001"></script>
+<script src="js/controllers/ctrl_aux.js"></script>
 <script src="js/controllers/ctrl_login.js?1000"></script>
 <script src="js/controllers/ctrl_main.js"></script>
 <script src="js/controllers/ctrl_park.js"></script>
@@ -43,20 +44,19 @@
 <!-- <script src="js/controllers/ctrl_view.js"></script> -->
 <script src="js/controllers/ctrl_view_gmap.js"></script>
 <script src="js/controllers/ctrl_db_viewpark.js"></script>
-<script src="js/controllers/ctrl_aux.js"></script>
 
 <script src="js/filters.js?1001"></script>
 <script src="js/services.js?1001"></script>
 <script src="js/directives.js"></script>
 
-<script src="lib/lodash.js"></script>
-<script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
-<script src="lib/ng-map.min.js"></script>
-
-<script src="lib/angular-file-upload.min.js" type="text/javascript"></script>
+<script src="lib/angular-file-upload.js" type="text/javascript"></script>
 <script src="lib/shim.js" type="text/javascript"></script>
 <script src="lib/xls.js" type="text/javascript"></script>
 <script src="lib/angular-base64.min.js"></script>
+
+<script src="lib/lodash.js"></script>
+<script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
+<script src="lib/ng-map.min.js"></script>
 
 <base href="<%=request.getContextPath()%>/" />
 
@@ -168,6 +168,7 @@ var ctx="<%=request.getContextPath()%>";
 		</div>
 	</div>	
 </body>
+
 <script type="text/ng-template" id="/dialogs/report.html">
 <div class="modal" ng-init="readReportName()">
 		<form role="form" name="form">

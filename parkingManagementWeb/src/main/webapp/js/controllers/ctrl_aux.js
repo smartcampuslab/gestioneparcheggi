@@ -13,7 +13,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		url: 'js/controllers/upload.php'
 		//url: 'upload/upload.php'   
     });
-	//var uploader = $scope.uploader = new FileUploader();
 	
 	// FILTERS
 
@@ -228,7 +227,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	if (!page) page = 0;
     	var skip = page * $scope.maxLogs;
     	loadData(logtab.path, skip, $scope.maxLogs);
-    }
+    };
 
 	// Method cleanStringFroJSON: used to clean the saved valueString to be accepted in JSON.parse function
 	$scope.cleanStringForJSON = function(value){
@@ -1088,6 +1087,40 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	}
     };
     
+    // Method loadLogData: used to load the log data in the DB mongo
+    $scope.loadLogData = function(cat, type){
+    	if(cat == 4){
+    		// Case pm profit log
+	    	switch(type){
+	    		case 1:
+	    			// Case months value
+	    			var out_obj = angular.element(out);
+	    	    	console.log("Stampa log file excel: " + $scope.provv_class_val + out_obj.context.innerText);
+	    	    	
+	    			var method = 'POST';
+	    	    	
+	    	    	var fileVal = {	
+	    	    		classData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+	    	        };
+	    	                	
+	    	        var value = JSON.stringify(fileVal);
+	    	        if($scope.showLog) console.log("Json value " + value);
+	    	                	
+	    	        var myDataPromise = invokePdfServiceProxy.getProxy(method, "rest/correctUserClass", null, $scope.authHeaders, value);	
+	    	        myDataPromise.then(function(result){
+	    	           if(result != null && result != ""){	// I have to check if it is correct
+	    	        	   //state = result;
+	    	        	   console.log("CorrectUserClassification result: " + result);
+	    	        	   $scope.provvClass = result.userClassList;
+	    	        	   $scope.setLoadedPracticeVisible();
+	    	        	   $scope.ctUpdateProvv(1, "UPLOADED");
+	    	           }
+	    	        });
+	    			break;
+	    		default: break;	
+	    	}
+    	}	
+    };
     
     
 }]);    

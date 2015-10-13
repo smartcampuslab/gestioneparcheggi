@@ -1,7 +1,7 @@
 'use strict';
 
 /* Controllers */
-var pmControllers = angular.module('pmControllers', ['googlechart','angular-spinkit']);//,'angular-spinkit'
+var pmControllers = angular.module('pmControllers');//, ['googlechart','angular-spinkit']
 pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize', 'sharedDataService',
                                 function($scope, $route, $rootScope, $filter, localize, sharedDataService) {
 	$scope.vis = 'vis_medium'; //vis_last_value
@@ -24,7 +24,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    step: 1,
 		    modelLabels: {'1': 'GE', '2': 'FE', '3': 'MA', '4': 'AP', '5': 'MA', '6': 'GI', '7':'LU', '8': 'AG', '9': 'SE', '10': 'OT', '11': 'NO', '12': 'DI'}
 	};
-	$scope.daySliderValue = "1;7";//(date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
+	$scope.daySliderValue = "1;2;3;4;5;6;7";//(date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
 	$scope.daySliderOptions = {       
 		    from: 1,
 		    to: 7,
@@ -40,6 +40,33 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		sa : true,
 		su : true
 	};
+	
+	$scope.toWeekArray = function(value){
+		var arr = "";
+		if(value.mo){
+			arr +="1,";
+		}
+		if(value.tu){
+			arr +="2,";
+		}
+		if(value.we){
+			arr +="3,";
+		}
+		if(value.th){
+			arr +="4,";
+		}
+		if(value.fr){
+			arr +="5,";
+		}
+		if(value.sa){
+			arr +="6,";
+		}
+		if(value.su){
+			arr +="7,";
+		}
+		arr = arr.substring(0, arr.length-1);
+		return arr;
+	};	
 	
 	$scope.hourSliderValue = "0;23";//"10;12";
 	$scope.hourSliderOptions = {
@@ -86,7 +113,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 			case 2: // day of week
 				if(filter.dows){	// reverse case 
 					$scope.dayOptions.value = "custom";
-					$scope.daySliderValue = "1;7";
+					$scope.daySliderValue = "1,2,3,4,5,6,7";	//"1;7";
 					$scope.dow_val = {
 						mo : true,
 						tu : true,
@@ -119,7 +146,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	};
 	
 	$scope.updateDay = function(value){		//, type
-		$scope.daySliderValue = value;
+		//$scope.daySliderValue = value;
 		//$scope.dow_val = value;
 		$scope.updateSearch();
 	};
@@ -144,8 +171,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    console.log("Anno: " + $scope.year);
 	    console.log("Mesi: " + $scope.monthSliderValue);
 	    console.log("Giorno - tipo: " + $scope.dayOptions.value);
-	    //console.log("Giorni: " + $scope.daySliderValue);
-	    console.log("Giorni: " + $scope.dow_val);
+	    $scope.daySliderValue = $scope.toWeekArray($scope.dow_val);
+	    console.log("Giorni: " + $scope.daySliderValue);
 	    var d = new Date();	// I retrieve the actual date
 	    var weekDay = d.getDay() + 1; // In java calendar the weekday are from 1 to 7, in javascript from 0 to 6;
 	    if($scope.hourOptions.value != "custom"){
@@ -420,12 +447,42 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					title_map += "feriale_";
 				}
 			} else {
-				var dow_value = dowVal.split(";");
-				if(dow_value.length > 1){
-					title_map += $scope.getCorrectTitleValFromFilter(dow_value[0], 2) + $scope.getCorrectTitleValFromFilter(dow_value[1], 2);
+				var week_day_title = "";
+				var dow_value = dowVal.split(",");
+				if(dow_value.length == 7){
+					week_day_title = "tutti_";
 				} else {
-					title_map += $scope.getCorrectTitleValFromFilter(dow_value[0], 2);
+					for(var i = 0; i < dow_value.length; i++){
+						if(dow_value[i] == "1"){
+							week_day_title+="lu_";
+						}
+						if(dow_value[i] == "2"){
+							week_day_title+="ma_";
+						}
+						if(dow_value[i] == "3"){
+							week_day_title+="me_";
+						}
+						if(dow_value[i] == "4"){
+							week_day_title+="gi_";
+						}
+						if(dow_value[i] == "5"){
+							week_day_title+="ve_";
+						}
+						if(dow_value[i] == "6"){
+							week_day_title+="sa_";
+						}
+						if(dow_value[i] == "7"){
+							week_day_title+="do_";
+						}
+					}
+					//week_day_title = week_day_title.substring(0, week_day_title.length-1);
 				}
+				title_map += week_day_title;
+//				if(dow_value.length > 1){
+//					title_map += $scope.getCorrectTitleValFromFilter(dow_value[0], 2) + $scope.getCorrectTitleValFromFilter(dow_value[1], 2);
+//				} else {
+//					title_map += $scope.getCorrectTitleValFromFilter(dow_value[0], 2);
+//				}
 			}
 		}
 		
@@ -2968,7 +3025,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			//var d = new Date();
 		    //var hour = "10;12";
 		    //$scope.getProfitPMFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 2, true);
-		    $scope.getProfitPMFromDb("", "1;12", "1;7", null, "0;23", 2, true);
+		    $scope.getProfitPMFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, true);
 		});
 	};
 	
@@ -3050,7 +3107,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					arr = arr + ""; // to force to string
 					if(arr.indexOf(";") > -1){
 						res = arr.split(";");
-						if(res[0] == "1" && res[1] == "7"){
+						//if(res[0] == "1" && res[1] == "7"){
+						if(res.length == 7){	// all day selected	
 							corrVal = null;
 						}
 					}
@@ -3127,7 +3185,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	//var d = new Date();
 		    	//var hour = "10;12";
 		    	//$scope.getProfitParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
-		    	$scope.getProfitParksFromDb("", "1;12", "1;7", null, "0;23", 2, isFirst);
+		    	$scope.getProfitParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		    	$scope.dashboard_space.microzone = true;
 		    	$scope.dashboard_topics == "parkSupply";
 		    	if(showStreets){
@@ -3190,7 +3248,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	//var d = new Date();
 		    	//var hour = "10;12";
 		    	//$scope.getOccupancyParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
-		    	$scope.getOccupancyParksFromDb("", "1;12", "1;7", null, "0;23", 2, isFirst);
+		    	$scope.getOccupancyParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		    } else {
 		    	if(showStreets){
 			    	$scope.updateStreetProfit(isFirst, $scope.dashboard_space.microzone);
@@ -4163,7 +4221,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    //var d = new Date();
 		    //var hour = "10;12";
 		    //$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
-		    $scope.getOccupancyStreetsFromDb("", "1;12", "1;7", "wd", "0;23", 2, isFirst);
+		    $scope.getOccupancyStreetsFromDb("", "1;12", "1,2,3,4,5,6,7", "wd", "0;23", 2, isFirst);
 		});
 	};
 	
@@ -7888,12 +7946,42 @@ pm.controller('reportCtrl',['$scope', '$modalInstance', 'data', 'sharedDataServi
 						$scope.rep_dow = "feriale";
 					}
 				} else {
-					var dow_value = dowVal.split(";");
-					if(dow_value.length > 1){
-						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_value[0], 2) + $scope.getCorrectTitleDescFromFilter(dow_value[1], 2);
+//					var dow_value = dowVal.split(";");
+//					if(dow_value.length > 1){
+//						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_value[0], 2) + $scope.getCorrectTitleDescFromFilter(dow_value[1], 2);
+//					} else {
+//						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_value[0], 2);
+//					}
+					var week_day_title = "";
+					var dow_value = dowVal.split(",");
+					if(dow_value.length == 7){
+						$scope.rep_dow = "tutti";
 					} else {
-						$scope.rep_dow = $scope.getCorrectTitleDescFromFilter(dow_value[0], 2);
-					}
+						for(var i = 0; i < dow_value.length; i++){
+							if(dow_value[i] == "1"){
+								week_day_title+="lu_";
+							}
+							if(dow_value[i] == "2"){
+								week_day_title+="ma_";
+							}
+							if(dow_value[i] == "3"){
+								week_day_title+="me_";
+							}
+							if(dow_value[i] == "4"){
+								week_day_title+="gi_";
+							}
+							if(dow_value[i] == "5"){
+								week_day_title+="ve_";
+							}
+							if(dow_value[i] == "6"){
+								week_day_title+="sa_";
+							}
+							if(dow_value[i] == "7"){
+								week_day_title+="do_";
+							}
+						}
+						$scope.rep_dow = week_day_title.substring(0, week_day_title.length-1);
+					}					
 				}
 			}
 			if(hour != null && hour != ""){

@@ -946,6 +946,14 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		return complete;
 	}
 
+	private List<String> correctArray(byte[] values){
+		List<String> arr = new ArrayList<String>();
+		for(int i = 0; i < values.length; i++){
+			arr.add(values[i] + "");
+		}
+		return arr;
+	}
+	
 	private Query createQuery(
 			String objectId, 
 			String appId, 
@@ -986,22 +994,16 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			for (String month : myMonths) {
 				monthKeys.add("months."+month);
 			}
-//			for (byte month : months) {
-//				monthKeys.add("months."+month);
-//			}
 		} else {
 			monthKeys.add("all");
 		}	
 		
 		List<String> dayKeys = new ArrayList<String>();
 		if (days != null && days.length > 0) {
-			List<String> myDays = completeSequence(days);
+			List<String> myDays = correctArray(days);	//completeSequence(days);
 			for (String day : myDays) {
 				dayKeys.add("days."+day);
 			}
-//			for (byte day : days) {
-//				dayKeys.add("days."+day);
-//			}
 		} else {
 			if (wd) {
 				dayKeys.add("wd");

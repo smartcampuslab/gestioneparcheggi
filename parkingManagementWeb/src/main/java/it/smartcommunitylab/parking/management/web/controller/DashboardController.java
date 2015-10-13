@@ -201,16 +201,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/parkingstructures")
 	public @ResponseBody
 	List<ParkingStructureBean> getAllParkingStructureOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
-		//byte[] hour = new byte[]{(byte)10,(byte)12};
-		int year_f = (year!= null && year.length > 0) ? year[0] : 0;
-		int year_t = (year!= null && year.length > 1) ? year[1] : 0;
-		int month_f = (month!= null && month.length > 0) ? month[0] : 0;
-		int month_t = (month!= null && month.length > 1) ? month[1] : 0;
-		int weekday_f = (weekday!= null && weekday.length > 0) ? weekday[0] : 0;
-		int weekday_t = (weekday!= null && weekday.length > 1) ? weekday[1] : 0;
-		int hour_f = (hour!= null && hour.length > 0) ? hour[0] : 0;
-		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
-		//logger.info(String.format("Parameters retrieved in back-end request for parkings: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_f, weekday_t, hour_f, hour_t, valueType));
 		String type = Parking.class.getCanonicalName();
 		return dynamic.getOccupationRateFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType);
 	}
@@ -252,16 +242,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/streets")
 	public @ResponseBody
 	List<StreetBean> getAllStreetOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
-		//byte[] hour = new byte[]{(byte)10,(byte)12};
-		int year_f = (year!= null && year.length > 0) ? year[0] : 0;
-		int year_t = (year!= null && year.length > 1) ? year[1] : 0;
-		int month_f = (month!= null && month.length > 0) ? month[0] : 0;
-		int month_t = (month!= null && month.length > 1) ? month[1] : 0;
-		int weekday_f = (weekday!= null && weekday.length > 0) ? weekday[0] : 0;
-		int weekday_t = (weekday!= null && weekday.length > 1) ? weekday[1] : 0;
-		int hour_f = (hour!= null && hour.length > 0) ? hour[0] : 0;
-		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
-		//logger.info(String.format("Parameters retrieved in back-end request for streets: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_f, weekday_t, hour_f, hour_t, valueType));
 		String type = Street.class.getCanonicalName();
 		return dynamic.getOccupationRateFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType);
 	}
@@ -269,6 +249,20 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancychanged/{appId}/streets")
 	public @ResponseBody
 	List<CompactStreetBean> getAllStreetChangedOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+//		int year_f = (year!= null && year.length > 0) ? year[0] : 0;
+//		int year_t = (year!= null && year.length > 1) ? year[1] : 0;
+//		int month_f = (month!= null && month.length > 0) ? month[0] : 0;
+//		int month_t = (month!= null && month.length > 1) ? month[1] : 0;
+//		int weekday_1 = (weekday!= null && weekday.length > 0) ? weekday[0] : 0;
+//		int weekday_2 = (weekday!= null && weekday.length > 1) ? weekday[1] : 0;
+//		int weekday_3 = (weekday!= null && weekday.length > 2) ? weekday[2] : 0;
+//		int weekday_4 = (weekday!= null && weekday.length > 3) ? weekday[3] : 0;
+//		int weekday_5 = (weekday!= null && weekday.length > 4) ? weekday[4] : 0;
+//		int weekday_6 = (weekday!= null && weekday.length > 5) ? weekday[5] : 0;
+//		int weekday_7 = (weekday!= null && weekday.length > 6) ? weekday[6] : 0;
+//		int hour_f = (hour!= null && hour.length > 0) ? hour[0] : 0;
+//		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
+//		logger.info(String.format("Parameters retrieved in back-end request for streets: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d,%d,%d,%d,%d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_1, weekday_2, weekday_3, weekday_4, weekday_5, weekday_6, weekday_7, hour_f, hour_t, valueType));
 		String type = Street.class.getCanonicalName();
 		return dynamic.getOccupationChangesFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType);
 	}
