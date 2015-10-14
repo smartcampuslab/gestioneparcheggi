@@ -36,6 +36,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
@@ -254,6 +255,40 @@ public class ObjectController  {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
 			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period);
+			return "OK";
+		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "KO";
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/fileupload/{userId:.*}") 
+	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+		try {
+			
+			String datas = data.get("logData").toString();
+			List<PMProfitData> allData = dataService.classStringToPPMObjArray(datas);
+			for(PMProfitData p : allData){
+				ParkMeter parking = dataService.getParkingMeterFromCode(agency, p.getpCode());
+				if(parking != null){
+					List<String> tickets = p.getTickets();
+					List<String> profits = p.getProfitVals();
+					for(int i = 0; i < profits.size(); i++){
+						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
+							int profit = (int)(Double.parseDouble(profits.get(i)) * 100);
+							int ticket = Integer.parseInt(tickets.get(i));
+							parking.setProfit(profit);
+							parking.setTickets(ticket);
+							int year = Integer.parseInt(p.getPeriod().getYear());
+							period = dataService.getPeriodFromYearAndMonth(year, i);
+							dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period);
+						}
+					}
+				} else {
+					logger.error("parkingmeter with code: " + p.getpCode() + " not found in db");
+				}
+			}
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block

@@ -22,8 +22,7 @@
 <!-- 			</tr> -->
 			<tr>
 				<td align="left" valign="middle" colspan="5">
-					<input type="file" name="xlfile" id="xlf" class="custom-file-input"
-					title="Seleziona un file" nv-file-select uploader="uploader" />
+					<input id="xlsfile" type="file" name="xlfile" class="custom-file-input" title="Seleziona un file" nv-file-select uploader="uploader" />
 				</td>
 			</tr>
 				<td align="center" valign="middle" colspan="5">
@@ -188,17 +187,15 @@
 	<pre id="out" ng-model="provv_class_val" >Testo...</pre><!-- hidden -->
 </div>
 
-</div>
-</div>
-<script>
+<script type="text/javascript">
 var X = XLS;
 var XW = {
 	/* worker message */
 	msg: 'xls',
 	/* worker scripts */
-	rABS: 'parking-management/xlsworker2.js',
-	norABS: 'parking-management/xlsworker1.js',
-	noxfer: 'parking-management/xlsworker.js'
+	rABS: './xlsworker2.js',
+	norABS: './xlsworker1.js',
+	noxfer: './xlsworker.js'
 };
 
 var rABS = typeof FileReader !== "undefined" && typeof FileReader.prototype !== "undefined" && typeof FileReader.prototype.readAsBinaryString !== "undefined";
@@ -394,7 +391,7 @@ if(drop.addEventListener) {
 }
 
 
-var xlf = document.getElementById('xlf');
+var xlf = document.getElementById('xlsfile');
 function handleFile(e) {
 	rABS = document.getElementsByName("userabs")[0].checked;
 	use_worker = document.getElementsByName("useworker")[0].checked;
@@ -424,5 +421,18 @@ function handleFile(e) {
 	}
 }
 
-if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);
+if(xlf.addEventListener) xlf.addEventListener('change', handleFile, false);	
 </script>
+<script type="text/javascript">
+/*	var _gaq = _gaq || [];
+	_gaq.push(['_setAccount', 'UA-36810333-1']);
+	_gaq.push(['_trackPageview']);
+
+	(function() {
+		var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+		ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+		var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+	})();*/
+</script>
+</div>
+</div>

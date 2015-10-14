@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.data;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.FilterPeriod;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
@@ -33,7 +35,10 @@ import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -82,6 +87,21 @@ public class GeoObjectManager {
 	
 	public List<ParkMeter> getParkingMeters(String agency) throws Exception { 
 		return searchParkingMeters((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
+	}
+	
+	public ParkMeter getParkingMeterFromCode(String agency, String code) throws Exception { 
+		ParkMeter park = null;
+		boolean find = false;
+		//return 
+		List<ParkMeter> all = searchParkingMeters((Circle)null, Collections.<String,Object>singletonMap("agency", agency));
+		for(int i = 0; i < all.size() && !find; i++){
+			ParkMeter p = all.get(i);
+			if(p.getCode().compareTo(code) == 0){
+				park = p;
+				find = true;
+			}
+		}
+		return park;
 	}
 	
 	public List<ParkMeter> getParkingMeters(String agency, double lat, double lon, double radius) throws Exception {
@@ -474,6 +494,84 @@ public class GeoObjectManager {
 		return p;
 	}
 	
+
+    public ArrayList<PMProfitData> classStringToPPMObjArray(String data) throws Exception{
+    	
+    	logger.error(String.format("Map Object data: %s", data));
+    	
+    	ArrayList<PMProfitData> correctData = new ArrayList<PMProfitData>();
+    	
+    	String[] allRecords = data.split("\n");
+    	String year = "";
+    	FilterPeriod period = new FilterPeriod();
+    	
+    	for(int i = 0; i < allRecords.length; i++){
+    		String[] att_and_vals = allRecords[i].split(",");
+    		if(att_and_vals != null && att_and_vals.length > 0){
+	    		if(att_and_vals[0].compareTo("Parcom") != 0){	// to skip header records
+	    			if(att_and_vals[0].compareTo("Anno") == 0){
+	        			year = att_and_vals[1];
+	        	    	period.setYear(year);
+	        		} else {
+	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+	        				PMProfitData tmpPProfit = new PMProfitData();
+	        				tmpPProfit.setpCode(cleanField(att_and_vals[0]));
+	        				tmpPProfit.setpNote(cleanField(att_and_vals[1]));
+	        				tmpPProfit.setPeriod(period);
+	    			
+	        				// here I load the vals
+	        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
+	        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+	        				tmpPProfit.setProfitVals(cleanStringArray(vals));
+	        				tmpPProfit.setTickets(cleanStringArray(tickets));
+	        				
+	        				logger.error(String.format("Corrected Object: %s", tmpPProfit.toString()));
+	        				correctData.add(tmpPProfit);
+	        			}
+	        		}
+	    		}
+    		}
+    	}
+    	
+    	return correctData;
+    }	
+	
+    private String cleanField(String value){
+    	String cleaned = value.replace('"', ' ').trim();
+    	cleaned = cleaned.replace('\n', ' ').trim();
+    	if(cleaned.compareTo("0.00") == 0){
+    		cleaned = "0";
+    	}
+    	return cleaned;
+    }
+    
+    private List<String> cleanStringArray(String[] arr){
+    	List<String> correctedVal= new ArrayList<String>();
+    	for(String s : arr){
+    		String cleandedVal = cleanField(s);
+    		correctedVal.add(cleandedVal);
+    	}
+    	return correctedVal;
+    };
+    
+    public long[] getPeriodFromYearAndMonth(int year, int month){
+    	long[] period = {0L,0L};
+    	Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, month);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR, 0);
+		c.set(Calendar.AM_PM, Calendar.AM);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+    	long start = c.getTimeInMillis();
+    	c.set(Calendar.MONTH, month + 1);
+    	long end = c.getTimeInMillis() - (1000 * 60 * 60 * 10);	// first day (month + 1) - 10 ore
+    	period[0] = start;
+    	period[1] = end;
+    	return period;
+    };
+    
 	private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {
 		double theta = lon1 - lon2;
 		double dist = Math.sin(deg2rad(lat1)) * Math.sin(deg2rad(lat2)) + Math.cos(deg2rad(lat1)) * Math.cos(deg2rad(lat2)) * Math.cos(deg2rad(theta));

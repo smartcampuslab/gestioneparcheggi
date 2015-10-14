@@ -14,7 +14,7 @@
 <link href="imgs/carpark.ico" rel="shortcut icon" type="image/x-icon" />
 
 <!-- required libraries -->
-<script src="js/jquery.min.js"></script>
+<script src="js/jquery.js"></script>
 <script src="lib/angular.js"></script>
 <script src="lib/angular-route.js"></script>
 <script src="lib/angular-sanitize.js"></script>
@@ -126,7 +126,7 @@ var ctx="<%=request.getContextPath()%>";
 									
 <!-- 								</div> -->
 <!-- 							</div> -->
-							<div class="row" ng-show="isHomeParkActive() == 'active'" ><!--   style="height: 150px;" -->
+							<div class="row" ng-if="isHomeParkActive() == 'active'" ><!--   style="height: 150px;" -->
 								<div class="col-md-2" ng-show="false">
 									<div class="panel panel-primary" align="left">
 										<div class="panel-heading">
@@ -143,11 +143,11 @@ var ctx="<%=request.getContextPath()%>";
 									</div>
 								</div>
 								<div class="col-md-12">
-									<div ng-view class="row" ng-hide="isNewPractice()" >{{ 'loading_text'| i18n }}...</div>
+									<div ng-view class="row">{{ 'loading_text'| i18n }}...</div>
 								</div>
 							</div>
-							<div ng-show="isHomeParkActive() != 'active'">
-								<div ng-view class="row" ng-hide="isNewPractice()" >{{ 'loading_text'| i18n }}...</div>
+							<div ng-if="isHomeParkActive() != 'active'">
+								<div ng-view class="row" >{{ 'loading_text'| i18n }}...</div>
 							</div>
 						</div>
 						</div>

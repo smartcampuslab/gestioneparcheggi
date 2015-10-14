@@ -1089,6 +1089,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     
     // Method loadLogData: used to load the log data in the DB mongo
     $scope.loadLogData = function(cat, type){
+    	var appId = sharedDataService.getConfAppId();
+    	var user = "999";
     	if(cat == 4){
     		// Case pm profit log
 	    	switch(type){
@@ -1100,13 +1102,17 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    			var method = 'POST';
 	    	    	
 	    	    	var fileVal = {	
-	    	    		classData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
 	    	        };
+	    	    	var params = {
+	    				isSysLog: true,
+	    				period : null
+	    			};
 	    	                	
 	    	        var value = JSON.stringify(fileVal);
 	    	        if($scope.showLog) console.log("Json value " + value);
 	    	                	
-	    	        var myDataPromise = invokePdfServiceProxy.getProxy(method, "rest/correctUserClass", null, $scope.authHeaders, value);	
+	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters/fileupload/" + user, params, $scope.authHeaders, value);	
 	    	        myDataPromise.then(function(result){
 	    	           if(result != null && result != ""){	// I have to check if it is correct
 	    	        	   //state = result;
