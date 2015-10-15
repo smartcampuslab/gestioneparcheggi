@@ -128,7 +128,7 @@ public class GeoObjectManager {
 		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog, period);
 	}
 	
-	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period) throws Exception, NotFoundException {
+	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -137,7 +137,7 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, sysLog, period);
+		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, sysLog, period, p_type);
 	}
 	
 	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period) throws Exception, NotFoundException {
@@ -570,6 +570,19 @@ public class GeoObjectManager {
     	period[0] = start;
     	period[1] = end;
     	return period;
+    };
+    
+    public long getTimeStampFromYearAndMonth(int year, int month){
+    	Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, month);
+		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR, 0);
+		c.set(Calendar.AM_PM, Calendar.AM);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+    	long tstamp = c.getTimeInMillis();
+    	return tstamp;
     };
     
 	private double distance(double lat1, double lon1, double lat2, double lon2, char unit) {

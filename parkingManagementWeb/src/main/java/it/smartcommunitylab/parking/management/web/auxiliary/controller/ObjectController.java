@@ -53,6 +53,11 @@ public class ObjectController  {
 	private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
 	private static final int DEFAULT_COUNT = 10000;
+	private static final int NO_PERIOD = -1;
+	private static final int YEAR_PERIOD = 1;
+	private static final int MONTH_PERIOD = 2;
+	private static final int DOW_PERIOD = 3;
+	private static final int HOUR_PERIOD = 4;
 	
 	@Autowired
 	private GeoObjectManager dataService; 
@@ -241,7 +246,7 @@ public class ObjectController  {
 	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog, from, to, period);
+			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -266,7 +271,7 @@ public class ObjectController  {
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/fileupload/{userId:.*}") 
 	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			
+			logger.info("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PMProfitData> allData = dataService.classStringToPPMObjArray(datas);
 			for(PMProfitData p : allData){
@@ -281,14 +286,17 @@ public class ObjectController  {
 							parking.setProfit(profit);
 							parking.setTickets(ticket);
 							int year = Integer.parseInt(p.getPeriod().getYear());
-							period = dataService.getPeriodFromYearAndMonth(year, i);
-							dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period);
+							period = null;
+							//period = dataService.getPeriodFromYearAndMonth(year, i);
+							parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+							dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
 						}
 					}
 				} else {
 					logger.error("parkingmeter with code: " + p.getpCode() + " not found in db");
 				}
 			}
+			logger.info("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block

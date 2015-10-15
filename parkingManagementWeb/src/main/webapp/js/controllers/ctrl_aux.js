@@ -1116,10 +1116,11 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	        myDataPromise.then(function(result){
 	    	           if(result != null && result != ""){	// I have to check if it is correct
 	    	        	   //state = result;
-	    	        	   console.log("CorrectUserClassification result: " + result);
-	    	        	   $scope.provvClass = result.userClassList;
-	    	        	   $scope.setLoadedPracticeVisible();
-	    	        	   $scope.ctUpdateProvv(1, "UPLOADED");
+	    	        	   console.log("File upload result: " + result);
+	    	        	   //$scope.provvClass = result.userClassList;
+	    	        	   //$scope.setLoadedPracticeVisible();
+	    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
+	    	        	   // here I have to force a redirect
 	    	           }
 	    	        });
 	    			break;

@@ -3105,8 +3105,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			case 2: // week day
 				if(arr != null && arr != ""){
 					arr = arr + ""; // to force to string
-					if(arr.indexOf(";") > -1){
-						res = arr.split(";");
+					if(arr.indexOf(",") > -1){
+						res = arr.split(",");
 						//if(res[0] == "1" && res[1] == "7"){
 						if(res.length == 7){	// all day selected	
 							corrVal = null;

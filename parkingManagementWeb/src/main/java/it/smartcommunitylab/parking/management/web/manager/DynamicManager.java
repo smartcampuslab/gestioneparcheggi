@@ -868,7 +868,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingMeterAux: used to save a ProfitLogBean object for the new profit data in a parkingMeter
-	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog, long[] period) throws NotFoundException {
+	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws NotFoundException {
 		String[] ids = pm.getId().split("@");
 		String pmId = ids[2];
 		pm.setUpdateTime(timestamp);
@@ -925,8 +925,13 @@ public class DynamicManager {
 		int profitVal = pm.getProfit();
 		int ticketsVal = pm.getTickets();
 		if(period == null || period.length == 0){
-			repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
-			repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+			if(p_type != -1){
+				repo.updateDirectPeriodStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, p_type);
+				repo.updateDirectPeriodStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+			} else {
+				repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
+				repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+			}
 		} else {
 			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period, 2);
 			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);

@@ -108,6 +108,15 @@ public interface StatCustomRepository {
 			double value,
 			long timestamp);
 	
+	public void updateDirectPeriodStats(
+			String objectId,
+			String appId,
+			String type,
+			Map<String, Object> params,
+			double value,
+			long timestamp,
+			int p_type);
+	
 	public void updateStatsPeriod(
 			String objectId,
 			String appId,
