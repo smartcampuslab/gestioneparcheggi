@@ -37,9 +37,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PSOccupancyData;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PSProfitData;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.SOccupancyData;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
@@ -233,7 +236,7 @@ public class ObjectController  {
 			if(period != null){
 				logger.error("Inserted period = " + period[0] + "-" + period[1] );
 			}
-			dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period);
+			dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -259,7 +262,92 @@ public class ObjectController  {
 	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period);
+			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period, NO_PERIOD);
+			return "OK";
+		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "KO";
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/fileupload/{userId:.*}") 
+	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data,  @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+		try {
+			logger.info("started file uplodad flux");
+			String datas = data.get("logData").toString();
+			List<PSOccupancyData> allData = dataService.classStringToOPSObjArray(datas);
+			for(PSOccupancyData s : allData){
+				//Parking park = dataService.get
+			}
+			
+			//dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period);
+			return "OK";
+		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "KO";
+		}
+	}	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
+	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+		try {
+			logger.info("started file uplodad flux");
+			String datas = data.get("logData").toString();
+			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas);
+			for(SOccupancyData s : allData){
+				Street street = dataService.getStreetByName(s.getsName(),agency);
+				if (street != null){
+					List<String> slotsLC = s.getOccLC();
+					List<String> slotsLS = s.getOccLS();
+					List<String> slotsP = s.getOccP();
+					List<String> slotsDO = s.getOccDO();
+					for(int i = 0; i < slotsLC.size(); i++){
+						boolean skipUpdate = true;
+						int slotOccLc = -1;
+						int slotOccLs = -1;
+						int slotOccP = -1;
+						int slotOccDO = -1;
+						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("0") != 0){
+							slotOccLc = Integer.parseInt(slotsLC.get(i));
+						}
+						if(slotsLS.get(i).compareTo("") != 0 && slotsLS.get(i).compareTo("0") != 0){
+							slotOccLs = Integer.parseInt(slotsLS.get(i));
+						}
+						if(slotsP.get(i).compareTo("") != 0 && slotsP.get(i).compareTo("0") != 0){
+							slotOccP = Integer.parseInt(slotsP.get(i));
+						}
+						if(slotsDO.get(i).compareTo("") != 0 && slotsDO.get(i).compareTo("0") != 0){
+							slotOccDO = Integer.parseInt(slotsDO.get(i));
+						}
+						if(slotOccLc != -1){
+							street.setSlotsOccupiedOnFree(slotOccLc);
+							skipUpdate = false;
+						} else {
+							if(slotOccLs != -1){
+								street.setSlotsOccupiedOnFree(slotOccLs);
+								skipUpdate = false;
+							}
+						}
+						if(slotOccP != -1){
+							street.setSlotsOccupiedOnPaying(slotOccP);
+							skipUpdate = false;
+						}
+						if(slotOccDO != -1){
+							street.setSlotsOccupiedOnTimed(slotOccDO);
+							skipUpdate = false;
+						}
+						int year = Integer.parseInt(s.getPeriod().getYear());
+						period = null;
+						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+						if(!skipUpdate){
+							dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, MONTH_PERIOD);
+						}
+					}	
+				}
+			}
+			logger.info("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -304,6 +392,46 @@ public class ObjectController  {
 			return "KO";
 		}
 	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/fileupload/{userId:.*}") 
+	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+		try {
+			
+			logger.info("started file uplodad flux");
+			String datas = data.get("logData").toString();
+			List<PSProfitData> allData = dataService.classStringToPPSObjArray(datas);
+			for(PSProfitData p : allData){
+				ParkStruct parkStruct = dataService.getParkingStructureByName(p.getpName(), agency);
+				if(parkStruct != null){
+					List<String> tickets = p.getTickets();
+					List<String> profits = p.getProfitVals();
+					for(int i = 0; i < profits.size(); i++){
+						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
+							int profit = (int)(Double.parseDouble(profits.get(i)) * 100);
+							int ticket = Integer.parseInt(tickets.get(i));
+							parkStruct.setProfit(profit);
+							parkStruct.setTickets(ticket);
+							int year = Integer.parseInt(p.getPeriod().getYear());
+							period = null;
+							//period = dataService.getPeriodFromYearAndMonth(year, i);
+							parkStruct.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+							dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
+						}
+					}
+				} else {
+					logger.error("parkingstructure with name: " + p.getpName() + " not found in db");
+				}
+			}
+			logger.info("ended file uplodad flux");
+			
+			
+			return "OK";
+		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "KO";
+		}
+	}	
 	
 	// --------------------------------- Part for csv files creation ------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/globallogs/csv")

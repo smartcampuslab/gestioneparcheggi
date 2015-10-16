@@ -17,9 +17,12 @@ package it.smartcommunitylab.parking.management.web.auxiliary.data;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.model.FilterPeriod;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PSOccupancyData;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PSProfitData;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.SOccupancyData;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.auxiliary.services.PolylineEncoder;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
@@ -31,6 +34,7 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
 
@@ -68,6 +72,8 @@ public class GeoObjectManager {
 	private MongoTemplate mongodb;
 	
 	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
+	private static final int OCCUPANCY_CELLS_OFFSET = 5;
+	private static final int OCCUPANCY_CELLS_FIRSTVAL = 4;
 	
 	public List<Parking> getParkings(String agency) throws Exception { 
 		return searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
@@ -104,11 +110,41 @@ public class GeoObjectManager {
 		return park;
 	}
 	
+	public ParkStruct getParkingStructureByName(String name, String appId) throws Exception{
+		ParkStruct pstruct = null;
+		boolean find = false;
+		//return 
+		List<ParkStruct> all = searchParkingStructures((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		for(int i = 0; i < all.size() && !find; i++){
+			ParkStruct ps = all.get(i);
+			if(ps.getName().compareToIgnoreCase(name) == 0){
+				pstruct = ps;
+				find = true;
+			}
+		}
+		return pstruct;
+	}
+	
+	public Street getStreetByName(String name, String appId) throws Exception{
+		Street street = null;
+		boolean find = false;
+		//return 
+		List<Street> all = searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		for(int i = 0; i < all.size() && !find; i++){
+			Street s = all.get(i);
+			if(s.getName().compareToIgnoreCase(name) == 0){
+				street = s;
+				find = true;
+			}
+		}
+		return street;
+	}
+	
 	public List<ParkMeter> getParkingMeters(String agency, double lat, double lon, double radius) throws Exception {
 		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
 	}
 	
-	public void updateDynamicStreetData(Street s, String agencyId, String authorId, boolean sysLog, long[] period) throws Exception, NotFoundException {
+	public void updateDynamicStreetData(Street s, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(s.getUpdateTime() != null){
 			currTime = s.getUpdateTime();
@@ -117,7 +153,7 @@ public class GeoObjectManager {
 		//currTime = 1428271200000L; // Easter Monday 2015
 		//currTime = 1431813600000L; // A Sunday
 		//currTime = 1432543500000L;	// Today at 10.45 am
-		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, sysLog, period);
+		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, sysLog, period, p_type);
 	}
 	
 	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, boolean sysLog, long[] period) throws Exception, NotFoundException {
@@ -140,7 +176,7 @@ public class GeoObjectManager {
 		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, sysLog, period, p_type);
 	}
 	
-	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period) throws Exception, NotFoundException {
+	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -149,7 +185,7 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, sysLog, period);
+		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, sysLog, period, p_type);
 	}
 
 //	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
@@ -328,9 +364,7 @@ public class GeoObjectManager {
 	
 	public List<ParkMeter> searchParkingMeters(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle	
 		//logger.error(String.format("Search Parking limit %s, skip %s, query %s, class %s", limit, skip, query.getHint(), type));
-		
 		List<ParkMeter> listaObj = new ArrayList<ParkMeter>();
-		//storageManager.setAppId(inCriteria.get("agency").toString());
 		List<ParkingMeterBean> myParkingMeters = storageManager.getAllParkingMeters(inCriteria.get("agency").toString());
 		
 		for(int i = 0; i < myParkingMeters.size(); i++){
@@ -344,8 +378,29 @@ public class GeoObjectManager {
 				listaObj.add(pm);
 			}
 		}
-		
 		return listaObj; //find(query, cls);
+	}
+	
+	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
+		return searchParkingStructures(circle, inCriteria, 0, 0);//circle,
+	}	
+	
+	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle	
+		List<ParkStruct> listaObj = new ArrayList<ParkStruct>();
+		List<ParkingStructureBean> myParkingStructures = storageManager.getAllParkingStructure(inCriteria.get("agency").toString());
+		
+		for(int i = 0; i < myParkingStructures.size(); i++){
+			ParkStruct ps = castPStructBeanToParkStruct(myParkingStructures.get(i));
+			if(circle != null){
+				// here I have to create a specific filter for position distances from circle center and distances < radius
+				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), ps.getPosition()[0], ps.getPosition()[1],'K') <= circle.getRadius()){
+					listaObj.add(ps);
+				}
+			} else {
+				listaObj.add(ps);
+			}
+		}
+		return listaObj;
 	}
 	
 	@SuppressWarnings("unused")
@@ -494,10 +549,109 @@ public class GeoObjectManager {
 		return p;
 	}
 	
+	private ParkStruct castPStructBeanToParkStruct(ParkingStructureBean pstruct){
+		//logger.error(String.format("Park to be casted : %s", park.toJSON()));
+		ParkStruct ps = new ParkStruct();
+		ps.setId("parkstruct@" + pstruct.getId_app() + "@" + pstruct.getId());
+		ps.setAgency(pstruct.getId_app());
+		ps.setName(pstruct.getName());
+		ps.setDescription(pstruct.getStreetReference());
+		if(pstruct.getGeometry() != null){
+			ps.setPosition(new double[]{pstruct.getGeometry().getLat(), pstruct.getGeometry().getLng()});
+		}
+		return ps;
+	}	
+	
+	public ArrayList<PSOccupancyData> classStringToOPSObjArray(String data) throws Exception{
+    	logger.info(String.format("Map Object data: %s", data));
+    	
+    	ArrayList<PSOccupancyData> correctData = new ArrayList<PSOccupancyData>();
+    	
+    	String[] allRecords = data.split("\n");
+    	String year = "";
+    	FilterPeriod period = new FilterPeriod();
+    	
+    	for(int i = 0; i < allRecords.length; i++){
+    		String[] att_and_vals = allRecords[i].split(",");
+    		if(att_and_vals != null && att_and_vals.length > 0){
+	    		if(att_and_vals[0].compareTo("Nome") != 0){	// to skip header records
+	    			if(att_and_vals[0].compareTo("Anno") == 0){
+	        			year = att_and_vals[1];
+	        	    	period.setYear(year);
+	        		} else {
+	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+	        				PSOccupancyData tmpPSOcc = new PSOccupancyData();
+	        				tmpPSOcc.setpName(cleanField(att_and_vals[0]));
+	        				tmpPSOcc.setpAddress(cleanField(att_and_vals[1]));
+	        				tmpPSOcc.setPeriod(period);
+	        				
+	        				// here I load the vals
+	        				List<String> lcSlots = loadRicursive(att_and_vals, 0);
+	        				List<String> lsSlots = loadRicursive(att_and_vals, 1);
+	        				List<String> pSlots = loadRicursive(att_and_vals, 2);
+	        				List<String> doSlots = loadRicursive(att_and_vals, 3);
+	        				
+	        				tmpPSOcc.setOccLC(lcSlots);
+	        				tmpPSOcc.setOccLS(lsSlots);
+	        				tmpPSOcc.setOccP(pSlots);
+	        				tmpPSOcc.setOccDO(doSlots);
+	        				
+	        				logger.error(String.format("Corrected Object: %s", tmpPSOcc.toString()));
+	        				correctData.add(tmpPSOcc);
+	        			}
+	        		}
+	    		}
+    		}
+    	}
+    	return correctData;
+    }	
+	
+	public ArrayList<SOccupancyData> classStringToOSObjArray(String data) throws Exception{
+    	logger.info(String.format("Map Object data: %s", data));
+    	
+    	ArrayList<SOccupancyData> correctData = new ArrayList<SOccupancyData>();
+    	
+    	String[] allRecords = data.split("\n");
+    	String year = "";
+    	FilterPeriod period = new FilterPeriod();
+    	
+    	for(int i = 0; i < allRecords.length; i++){
+    		String[] att_and_vals = allRecords[i].split(",");
+    		if(att_and_vals != null && att_and_vals.length > 0){
+	    		if(att_and_vals[0].compareTo("Nome") != 0){	// to skip header records
+	    			if(att_and_vals[0].compareTo("Anno") == 0){
+	        			year = att_and_vals[1];
+	        	    	period.setYear(year);
+	        		} else {
+	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+	        				SOccupancyData tmpSOcc = new SOccupancyData();
+	        				tmpSOcc.setsName(cleanField(att_and_vals[0]));
+	        				tmpSOcc.setsArea(cleanField(att_and_vals[1]));
+	        				tmpSOcc.setPeriod(period);
+	        				
+	        				// here I load the vals
+	        				List<String> lcSlots = loadRicursive(att_and_vals, 0);
+	        				List<String> lsSlots = loadRicursive(att_and_vals, 1);
+	        				List<String> pSlots = loadRicursive(att_and_vals, 2);
+	        				List<String> doSlots = loadRicursive(att_and_vals, 3);
+	        				
+	        				tmpSOcc.setOccLC(lcSlots);
+	        				tmpSOcc.setOccLS(lsSlots);
+	        				tmpSOcc.setOccP(pSlots);
+	        				tmpSOcc.setOccDO(doSlots);
+	        				
+	        				logger.error(String.format("Corrected Object: %s", tmpSOcc.toString()));
+	        				correctData.add(tmpSOcc);
+	        			}
+	        		}
+	    		}
+    		}
+    	}
+    	return correctData;
+    }	
 
     public ArrayList<PMProfitData> classStringToPPMObjArray(String data) throws Exception{
-    	
-    	logger.error(String.format("Map Object data: %s", data));
+    	logger.info(String.format("Map Object data: %s", data));
     	
     	ArrayList<PMProfitData> correctData = new ArrayList<PMProfitData>();
     	
@@ -532,9 +686,47 @@ public class GeoObjectManager {
 	    		}
     		}
     	}
-    	
     	return correctData;
-    }	
+    }
+    
+    public ArrayList<PSProfitData> classStringToPPSObjArray(String data) throws Exception{
+    	logger.info(String.format("Map Object data: %s", data));
+    	
+    	ArrayList<PSProfitData> correctData = new ArrayList<PSProfitData>();
+    	
+    	String[] allRecords = data.split("\n");
+    	String year = "";
+    	FilterPeriod period = new FilterPeriod();
+    	
+    	for(int i = 0; i < allRecords.length; i++){
+    		String[] att_and_vals = allRecords[i].split(",");
+    		if(att_and_vals != null && att_and_vals.length > 0){
+	    		if(att_and_vals[0].compareTo("Nome") != 0){	// to skip header records
+	    			if(att_and_vals[0].compareTo("Anno") == 0){
+	        			year = att_and_vals[1];
+	        	    	period.setYear(year);
+	        		} else {
+	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+	        				PSProfitData tmpSProfit = new PSProfitData();
+	        				tmpSProfit.setpName(cleanField(att_and_vals[0]));
+	        				tmpSProfit.setpAddress(cleanField(att_and_vals[1]));
+	        				tmpSProfit.setPeriod(period);
+	    			
+	        				// here I load the vals
+	        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
+	        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+	        				tmpSProfit.setProfitVals(cleanStringArray(vals));
+	        				tmpSProfit.setTickets(cleanStringArray(tickets));
+	        				
+	        				logger.error(String.format("Corrected Object: %s", tmpSProfit.toString()));
+	        				correctData.add(tmpSProfit);
+	        			}
+	        		}
+	    		}
+    		}
+    	}
+    	return correctData;
+    }    
 	
     private String cleanField(String value){
     	String cleaned = value.replace('"', ' ').trim();
@@ -549,6 +741,15 @@ public class GeoObjectManager {
     	List<String> correctedVal= new ArrayList<String>();
     	for(String s : arr){
     		String cleandedVal = cleanField(s);
+    		correctedVal.add(cleandedVal);
+    	}
+    	return correctedVal;
+    };
+    
+    private List<String> loadRicursive(String[] arr, int first){
+    	List<String> correctedVal = new ArrayList<String>();
+    	for(int i = (first + OCCUPANCY_CELLS_FIRSTVAL); i < arr.length; i+=OCCUPANCY_CELLS_OFFSET){
+    		String cleandedVal = cleanField(arr[i]);
     		correctedVal.add(cleandedVal);
     	}
     	return correctedVal;

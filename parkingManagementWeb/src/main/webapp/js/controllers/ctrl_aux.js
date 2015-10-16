@@ -348,15 +348,15 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	};
 	
     $scope.addtabs = [ 
-                      { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html" },
-                      { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html" },
-                      { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html" },
-                      { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html" }
-                  ];
+        { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false },
+        { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false },
+        { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false },
+        { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false }
+    ];
                                 
-                  $scope.setAddIndex = function($index){
-                      $scope.tabIndex = $index;
-                  };
+    $scope.setAddIndex = function($index){
+    	$scope.tabIndex = $index;
+    };
                   
 
 	// --------------------------------------------- Block for csv ---------------------------------------------
@@ -1013,37 +1013,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     				break;	
     		}
     	} else if(type == "3"){
-    		// Case of ps occupation log
-    		$scope.uploadFileType = "Log incassi strutture";
-    		switch (period){
-    			case "0":
-    				// No period
-    				$scope.uploadFilePeriod = "Valori attuali";
-    				//uploadPanelClass = "panel panel-success";
-    				break;
-    			case "1":
-    				// Months
-    				$scope.uploadFilePeriod = "Valori mensili";
-    				//uploadPanelClass = "panel panel-info";
-    				break;
-    			case "2":
-    				// Years
-    				$scope.uploadFilePeriod = "Valori annuali";
-    				//uploadPanelClass = "panel panel-warning";
-    				break;	
-    			case "3":
-    				// Dows
-    				$scope.uploadFilePeriod = "Valori giorno settimana";
-    				//uploadPanelClass = "panel panel-danger";
-    				break;
-    			case "4":
-    				// Hours
-    				$scope.uploadFilePeriod = "Valori orari";
-    				//uploadPanelClass = "panel panel-danger";
-    				break;	
-    		}
-    	} else if(type == "4"){
-    		// Case of ps occupation log
+    		// Case of ps profit log
     		$scope.uploadFileType = "Log incassi parcometri";
     		switch (period){
     			case "0":
@@ -1072,7 +1042,37 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     				//uploadPanelClass = "panel panel-danger";
     				break;	
     		}
-    	}
+    	} else if(type == "4"){
+    		// Case of pm profit log
+    		$scope.uploadFileType = "Log incassi strutture";
+    		switch (period){
+    			case "0":
+    				// No period
+    				$scope.uploadFilePeriod = "Valori attuali";
+    				//uploadPanelClass = "panel panel-success";
+    				break;
+    			case "1":
+    				// Months
+    				$scope.uploadFilePeriod = "Valori mensili";
+    				//uploadPanelClass = "panel panel-info";
+    				break;
+    			case "2":
+    				// Years
+    				$scope.uploadFilePeriod = "Valori annuali";
+    				//uploadPanelClass = "panel panel-warning";
+    				break;	
+    			case "3":
+    				// Dows
+    				$scope.uploadFilePeriod = "Valori giorno settimana";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;
+    			case "4":
+    				// Hours
+    				$scope.uploadFilePeriod = "Valori orari";
+    				//uploadPanelClass = "panel panel-danger";
+    				break;	
+    		}
+    	} 
     };
     
     $scope.initActiveLogTab = function(id){
@@ -1087,20 +1087,104 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	}
     };
     
+    $scope.initActiveAddLogTab = function(id){
+    	if(id > 4) id = id - 4;
+    	$scope.setAddIndex(id-1);
+    	for(var i = 0; i < $scope.addtabs.length; i++){
+    		if(i == (id - 1)){
+    			$scope.addtabs[i].active = true;
+    		} else {
+    			$scope.addtabs[i].active = false;
+    		}
+    	}
+    };
+    
     // Method loadLogData: used to load the log data in the DB mongo
     $scope.loadLogData = function(cat, type){
     	var appId = sharedDataService.getConfAppId();
     	var user = "999";
-    	if(cat == 4){
+    	$scope.progress = 25;
+ 		$dialogs.wait("Aggiornamento dati in corso...", $scope.progress);
+ 		if(cat == 1){
+    		// Case street occupancy log
+	    	switch(type){
+	    		case 1:
+	    			// Case months value
+	    			var out_obj = angular.element(out);
+	    	    	
+	    			var method = 'POST';
+	    	    	var fileVal = {	
+	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+	    	        };
+	    	    	var params = {
+	    				isSysLog: true,
+	    				period : null
+	    			};
+	    	                	
+	    	        var value = JSON.stringify(fileVal);
+	    	        if($scope.showLog) console.log("Json value " + value);
+	    	                	
+	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets/fileupload/" + user, params, $scope.authHeaders, value);	
+	    	        $scope.progress += 25;
+	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: "Aggiornamento dati in corso...",'progress': $scope.progress});
+	    	        myDataPromise.then(function(result){
+	    	           if(result != null && result != ""){	// I have to check if it is correct
+	    	        	   console.log("Occupancy street file upload result: " + result);
+	    	        	   //$scope.provvClass = result.userClassList;
+	    	        	   //$scope.setLoadedPracticeVisible();
+	    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
+	    	        	   $scope.progress = 100;
+	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
+	    	           }
+	    	        });
+	    			break;	    			
+	    		default: break;	
+	    	}	    	
+    	}
+ 		if(cat == 2){
+    		// Case ps occupancy log
+	    	switch(type){
+	    		case 1:
+	    			// Case months value
+	    			var out_obj = angular.element(out);
+	    	    	
+	    			var method = 'POST';
+	    	    	var fileVal = {	
+	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+	    	        };
+	    	    	var params = {
+	    				isSysLog: true,
+	    				period : null
+	    			};
+	    	                	
+	    	        var value = JSON.stringify(fileVal);
+	    	        if($scope.showLog) console.log("Json value " + value);
+	    	                	
+	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings/fileupload/" + user, params, $scope.authHeaders, value);	
+	    	        $scope.progress += 25;
+	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: "Aggiornamento dati in corso...",'progress': $scope.progress});
+	    	        myDataPromise.then(function(result){
+	    	           if(result != null && result != ""){	// I have to check if it is correct
+	    	        	   console.log("Occupancy struct file upload result: " + result);
+	    	        	   //$scope.provvClass = result.userClassList;
+	    	        	   //$scope.setLoadedPracticeVisible();
+	    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
+	    	        	   $scope.progress = 100;
+	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
+	    	           }
+	    	        });
+	    			break;	    			
+	    		default: break;	
+	    	}	    	
+    	} 		
+ 		if(cat == 3){
     		// Case pm profit log
 	    	switch(type){
 	    		case 1:
 	    			// Case months value
 	    			var out_obj = angular.element(out);
-	    	    	console.log("Stampa log file excel: " + $scope.provv_class_val + out_obj.context.innerText);
 	    	    	
 	    			var method = 'POST';
-	    	    	
 	    	    	var fileVal = {	
 	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
 	    	        };
@@ -1113,17 +1197,52 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	        if($scope.showLog) console.log("Json value " + value);
 	    	                	
 	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters/fileupload/" + user, params, $scope.authHeaders, value);	
+	    	        $scope.progress += 25;
+	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: "Aggiornamento dati in corso...",'progress': $scope.progress});
 	    	        myDataPromise.then(function(result){
 	    	           if(result != null && result != ""){	// I have to check if it is correct
-	    	        	   //state = result;
-	    	        	   console.log("File upload result: " + result);
+	    	        	   console.log("Profit pm file upload result: " + result);
 	    	        	   //$scope.provvClass = result.userClassList;
 	    	        	   //$scope.setLoadedPracticeVisible();
 	    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
-	    	        	   // here I have to force a redirect
+	    	        	   $scope.progress = 100;
+	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
 	    	           }
 	    	        });
-	    			break;
+	    			break;	    			
+	    		default: break;	
+	    	}	    	
+    	}	
+    	if(cat == 4){
+    		// Case ps profit log
+	    	switch(type){
+	    		case 1:
+	    			// Case months value
+	    			var out_obj = angular.element(out);
+	    	    	
+	    			var method = 'POST';
+	    	    	var fileVal = {	
+	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+	    	        };
+	    	    	var params = {
+	    				isSysLog: true,
+	    				period : null
+	    			};
+	    	                	
+	    	        var value = JSON.stringify(fileVal);
+	    	        if($scope.showLog) console.log("Json value " + value);
+	    	                	
+	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkstructprofit/fileupload/" + user, params, $scope.authHeaders, value);	
+	    	        $scope.progress += 25;
+	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: "Aggiornamento dati in corso...",'progress': $scope.progress});
+	    	        myDataPromise.then(function(result){
+	    	           if(result != null && result != ""){	// I have to check if it is correct
+	    	        	   console.log("Profit ps file upload result: " + result);
+	    	        	   $scope.progress = 100;
+	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
+	    	           }
+	    	        });
+	    			break;	    			
 	    		default: break;	
 	    	}
     	}	

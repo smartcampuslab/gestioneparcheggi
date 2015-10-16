@@ -450,7 +450,7 @@ public class DynamicManager {
 		return null;
 	}	
 
-	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period) throws DatabaseException {
+	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws DatabaseException {
 		String[] ids = s.getId().split("@");
 		String pmId = ids[2];
 		s.setUpdateTime(timestamp);
@@ -509,7 +509,6 @@ public class DynamicManager {
 					//Integer oldVersion = getLastVersion(dl.getObjId());
 					//dl.setVersion(new Integer(oldVersion.intValue() + 1));
 					dl.setDeleted(false);
-					//dl.setContent(temp.toJSON());
 					@SuppressWarnings("unchecked")
 					Map<String,Object> map = ModelConverter.convert(s, Map.class);
 					dl.setValue(map);
@@ -533,7 +532,11 @@ public class DynamicManager {
 						if(s.getSlotsFree()!= 0){
 							double freeOccValue = findOccupationRate(null, null, s.getSlotsFree(), s.getSlotsOccupiedOnFree(), 2);
 							if(period == null || period.length == 0){
-								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp);
+								if(p_type != -1){
+									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp, p_type);
+								} else {
+									repo.updateStats(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp);
+								}
 							} else {
 								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp, period, 1);
 							}
@@ -541,7 +544,11 @@ public class DynamicManager {
 						if(s.getSlotsPaying() != 0){
 							double payingOccValue = findOccupationRate(null, null, s.getSlotsPaying(), s.getSlotsOccupiedOnPaying(), 2);
 							if(period == null || period.length == 0){
-								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp);
+								if(p_type != -1){
+									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp, p_type);
+								} else {
+									repo.updateStats(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp);
+								}
 							} else {
 								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp, period, 1);
 							}
@@ -549,7 +556,11 @@ public class DynamicManager {
 						if(s.getSlotsTimed() != 0){
 							double timedOccValue = findOccupationRate(null, null, s.getSlotsTimed(), s.getSlotsOccupiedOnTimed(), 2);
 							if(period == null || period.length == 0){
-								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp);
+								if(p_type != -1){
+									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp, p_type);
+								} else {
+									repo.updateStats(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp);
+								}
 							} else {
 								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp, period, 1);
 							}
@@ -557,7 +568,11 @@ public class DynamicManager {
 						if(s.getSlotsHandicapped() != 0){
 							double handicappedOccValue = findOccupationRate(null, null, s.getSlotsHandicapped(), s.getSlotsOccupiedOnHandicapped(), 2);
 							if(period == null || period.length == 0){
-								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp);
+								if(p_type != -1){
+									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp, p_type);
+								} else {
+									repo.updateStats(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp);
+								}
 							} else {
 								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp, period, 1);
 							}
@@ -807,7 +822,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkStructProfitAux: used to save a ProfitLogBean object for the new profit data in a parkingStructure
-	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog, long[] period) throws NotFoundException {
+	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog, long[] period,  int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -858,13 +873,17 @@ public class DynamicManager {
 		int profitVal = p.getProfit();
 		int ticketsVal = p.getTickets();
 		if(period == null || period.length == 0){
-			repo.updateStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
-			repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+			if(p_type != -1){
+				repo.updateDirectPeriodStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, p_type);
+				repo.updateDirectPeriodStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+			} else {
+				repo.updateStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
+				repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+			}
 		} else {
 			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period, 2);
 			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
 		}
-		
 	}
 	
 	// Method editParkingMeterAux: used to save a ProfitLogBean object for the new profit data in a parkingMeter
@@ -1059,6 +1078,7 @@ public class DynamicManager {
 			tot = tot_p;
 			occ = occ_p;
 		}
+		if(tot == 0)tot = 1;	// to solve the division by zero error
 		double rate = occ * 100 / tot;
 		return rate;
 	}

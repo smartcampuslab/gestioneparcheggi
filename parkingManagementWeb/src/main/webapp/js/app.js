@@ -94,7 +94,7 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'AuxCtrl',
     		controllerAs: 'aux_ctrl'
     	})
-    	.when('/aux/add', {
+    	.when('/aux/add/:at_id', {
     		templateUrl: 'partials/aux/add.html',
     		controller: 'AuxCtrl',
     		controllerAs: 'aux_ctrl'
