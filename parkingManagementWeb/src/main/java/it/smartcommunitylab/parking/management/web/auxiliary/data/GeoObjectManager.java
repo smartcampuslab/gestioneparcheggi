@@ -73,6 +73,7 @@ public class GeoObjectManager {
 	
 	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
 	private static final int OCCUPANCY_CELLS_OFFSET = 5;
+	private static final int OCCUPANCY_PS_CELLS_OFFSET = 2;
 	private static final int OCCUPANCY_CELLS_FIRSTVAL = 4;
 	
 	public List<Parking> getParkings(String agency) throws Exception { 
@@ -140,6 +141,21 @@ public class GeoObjectManager {
 		return street;
 	}
 	
+	public Parking getParkingByName(String name, String appId) throws Exception{
+		Parking park = null;
+		boolean find = false;
+		//return 
+		List<Parking> all = searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		for(int i = 0; i < all.size() && !find; i++){
+			Parking pk = all.get(i);
+			if(pk.getName().compareToIgnoreCase(name) == 0){
+				park = pk;
+				find = true;
+			}
+		}
+		return park;
+	}	
+	
 	public List<ParkMeter> getParkingMeters(String agency, double lat, double lon, double radius) throws Exception {
 		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
 	}
@@ -156,12 +172,12 @@ public class GeoObjectManager {
 		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, sysLog, period, p_type);
 	}
 	
-	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, boolean sysLog, long[] period) throws Exception, NotFoundException {
+	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog, period);
+		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog, period, p_type);
 	}
 	
 	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
@@ -586,15 +602,8 @@ public class GeoObjectManager {
 	        				tmpPSOcc.setPeriod(period);
 	        				
 	        				// here I load the vals
-	        				List<String> lcSlots = loadRicursive(att_and_vals, 0);
-	        				List<String> lsSlots = loadRicursive(att_and_vals, 1);
-	        				List<String> pSlots = loadRicursive(att_and_vals, 2);
-	        				List<String> doSlots = loadRicursive(att_and_vals, 3);
-	        				
-	        				tmpPSOcc.setOccLC(lcSlots);
-	        				tmpPSOcc.setOccLS(lsSlots);
-	        				tmpPSOcc.setOccP(pSlots);
-	        				tmpPSOcc.setOccDO(doSlots);
+	        				List<String> occSlots = loadRicursive(att_and_vals, 0, OCCUPANCY_PS_CELLS_OFFSET);
+	        				tmpPSOcc.setOccSlots(occSlots);
 	        				
 	        				logger.error(String.format("Corrected Object: %s", tmpPSOcc.toString()));
 	        				correctData.add(tmpPSOcc);
@@ -630,10 +639,10 @@ public class GeoObjectManager {
 	        				tmpSOcc.setPeriod(period);
 	        				
 	        				// here I load the vals
-	        				List<String> lcSlots = loadRicursive(att_and_vals, 0);
-	        				List<String> lsSlots = loadRicursive(att_and_vals, 1);
-	        				List<String> pSlots = loadRicursive(att_and_vals, 2);
-	        				List<String> doSlots = loadRicursive(att_and_vals, 3);
+	        				List<String> lcSlots = loadRicursive(att_and_vals, 0, OCCUPANCY_CELLS_OFFSET);
+	        				List<String> lsSlots = loadRicursive(att_and_vals, 1, OCCUPANCY_CELLS_OFFSET);
+	        				List<String> pSlots = loadRicursive(att_and_vals, 2, OCCUPANCY_CELLS_OFFSET);
+	        				List<String> doSlots = loadRicursive(att_and_vals, 3, OCCUPANCY_CELLS_OFFSET);
 	        				
 	        				tmpSOcc.setOccLC(lcSlots);
 	        				tmpSOcc.setOccLS(lsSlots);
@@ -746,9 +755,9 @@ public class GeoObjectManager {
     	return correctedVal;
     };
     
-    private List<String> loadRicursive(String[] arr, int first){
+    private List<String> loadRicursive(String[] arr, int first, int cell_offset){
     	List<String> correctedVal = new ArrayList<String>();
-    	for(int i = (first + OCCUPANCY_CELLS_FIRSTVAL); i < arr.length; i+=OCCUPANCY_CELLS_OFFSET){
+    	for(int i = (first + OCCUPANCY_CELLS_FIRSTVAL); i < arr.length; i+=cell_offset){
     		String cleandedVal = cleanField(arr[i]);
     		correctedVal.add(cleandedVal);
     	}

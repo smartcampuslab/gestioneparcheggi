@@ -105,8 +105,10 @@ pm.service('sharedDataService', function(){
          {occupancy:  100, difficulty_level: 'Impossible', extratime_estimation_min: 5, extratime_estimation_max: 15},
     ];
   
+    this.flux_view_tabs = [];
+    this.flux_add_tabs = [];
     
-    // Shared filter fields and mothods
+    // Shared filter fields and methods
     this.filter_topiclist;
     this.filter_space;
     this.filter_vis;
@@ -249,6 +251,13 @@ pm.service('sharedDataService', function(){
     	return this.report_list;
     };
     
+    this.setReportName = function(value){
+    	this.report_name = value;
+    };
+    this.getReportName = function(){
+    	return this.report_name;
+    };
+    
 	// Get and Set methods
 	this.getUsedLanguage = function(){
 		var value = sessionStorage.language;
@@ -258,6 +267,20 @@ pm.service('sharedDataService', function(){
 	this.setUsedLanguage = function(value){
 		sessionStorage.language = value;
 		this.usedLanguage = value;
+	};
+	
+	this.getFluxViewTabs = function(){
+		return this.flux_view_tabs;
+	};
+	this.setFluxViewTabs = function(value){
+		this.flux_view_tabs = value;
+	};
+	
+	this.getFluxAddTabs = function(){
+		return this.flux_add_tabs;
+	};
+	this.setFluxAddTabs = function(value){
+		this.flux_add_tabs = value;
 	};
 	
 	this.getName = function(){

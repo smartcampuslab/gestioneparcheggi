@@ -55,7 +55,7 @@ public class ObjectController  {
 
 	private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
-	private static final int DEFAULT_COUNT = 10000;
+	private static final int DEFAULT_COUNT = 1000;	// last 1000 values
 	private static final int NO_PERIOD = -1;
 	private static final int YEAR_PERIOD = 1;
 	private static final int MONTH_PERIOD = 2;
@@ -220,7 +220,7 @@ public class ObjectController  {
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
 	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period);
+			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -277,10 +277,29 @@ public class ObjectController  {
 			logger.info("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PSOccupancyData> allData = dataService.classStringToOPSObjArray(datas);
-			for(PSOccupancyData s : allData){
-				//Parking park = dataService.get
+			for(PSOccupancyData p : allData){
+				Parking park = dataService.getParkingByName(p.getpName(), agency);
+				if(park != null){
+					List<String> slotsOcc = p.getOccSlots();
+					for(int i = 0; i < slotsOcc.size(); i++){
+						boolean skipUpdate = true;
+						int slotsOccOnTotal = -1;
+						if(slotsOcc.get(i).compareTo("") != 0 && slotsOcc.get(i).compareTo("0") != 0){
+							slotsOccOnTotal = Integer.parseInt(slotsOcc.get(i));
+						}
+						if(slotsOccOnTotal != -1){
+							park.setSlotsOccupiedOnTotal(slotsOccOnTotal);
+							skipUpdate = false;
+						}
+						if(!skipUpdate){
+							int year = Integer.parseInt(p.getPeriod().getYear());
+							period = null;
+							park.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+							dataService.updateDynamicParkingData(park, agency, userId, isSysLog, period, MONTH_PERIOD);
+						}
+					}
+				}
 			}
-			
 			//dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {

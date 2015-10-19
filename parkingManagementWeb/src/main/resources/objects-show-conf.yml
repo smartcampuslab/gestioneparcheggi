@@ -230,6 +230,32 @@ providers:
           editable: false
           required: false
           visible: true
+     - id: Flux
+       attributes:
+        - code: link
+          editable: false
+          required: false
+          visible: true
+        - code: occupancyStreet
+          editable: true
+          required: false
+          visible: true
+        - code: occupancyStruct
+          editable: true
+          required: false
+          visible: true
+        - code: profitParkingMeter
+          editable: true
+          required: false
+          visible: true
+        - code: profitStruct
+          editable: true
+          required: false
+          visible: true
+        - code: allLogs
+          editable: false
+          required: false
+          visible: true
   - id: ComuneTrento
     appId: tn
     mapCenter: 46.071691, 11.120545
@@ -452,4 +478,30 @@ providers:
         - code: viewPage
           editable: false
           required: false
-          visible: true             
+          visible: true
+     - id: Flux
+       attributes:
+        - code: link
+          editable: false
+          required: false
+          visible: false
+        - code: occupancyStreet
+          editable: true
+          required: false
+          visible: true
+        - code: occupancyStruct
+          editable: true
+          required: false
+          visible: true
+        - code: profitParkingMeter
+          editable: true
+          required: false
+          visible: true
+        - code: profitStruct
+          editable: true
+          required: false
+          visible: true
+        - code: allLogs
+          editable: true
+          required: false
+          visible: true

@@ -1239,7 +1239,7 @@
 							<td width="5%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(pstruct.occupancyRate)}"></div></td><!-- {{area.color}} -->
 							<td width="5%" align="left">
-								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate }}%</span>
+								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate | number:0 }}%</span>
 								<span ng-show="pstruct.occupancyRate == '-1'">n.p.</span>
 							</td>
 							<td width="10%" align="center"><span ng-show="ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
@@ -1989,7 +1989,7 @@
 						<tr ng-if="$index != 0">
 							<td ng-repeat="col in rows track by $index">
 								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
-								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+								<span ng-if="$index != 0 && col!=-1">{{ col | number:0 }}</span>
 								<span ng-if="$index != 0 && col==-1">/</span>
 							</td>
 						</tr>
@@ -2184,7 +2184,7 @@
 						<tr ng-if="$index != 0">
 							<td ng-repeat="col in rows track by $index">
 								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
-								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+								<span ng-if="$index != 0 && col!=-1">{{ col | number:0 }}</span>
 								<span ng-if="$index != 0 && col==-1">/</span>
 							</td>
 						</tr>
@@ -2292,7 +2292,7 @@
 						<tr ng-if="$index != 0">
 							<td ng-repeat="col in rows track by $index">
 								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
-								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+								<span ng-if="$index != 0 && col!=-1">{{ col | number:0 }}</span>
 								<span ng-if="$index != 0 && col==-1">/</span>
 							</td>
 						</tr>
@@ -2405,7 +2405,7 @@
 						<tr ng-if="$index != 0">
 							<td ng-repeat="col in rows track by $index">
 								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
-								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+								<span ng-if="$index != 0 && col!=-1">{{ col | number:0 }}</span>
 								<span ng-if="$index != 0 && col==-1">/</span>
 							</td>
 						</tr>

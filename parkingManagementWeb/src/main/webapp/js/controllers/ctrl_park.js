@@ -238,35 +238,47 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	$scope.showedObjects = sharedDataService.getVisibleObjList();
 	    	for(var i = 0; i < $scope.showedObjects.length; i++){
 	    		if($scope.showedObjects[i].id == 'Area'){
-	    			showArea = true;
 	    			$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
-	    			area_tab_obj = { title:'Area', index: 1, content:"partials/edit/tabs/edit_area.html" };
+	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
+	    				showArea = true;
+	    				area_tab_obj = { title:'Area', index: 1, content:"partials/edit/tabs/edit_area.html" };
+	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'Zone'){
-	    			showZones = true;
 	    			$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
-	    			zone_tab_obj = { title:'Macrozona', index: 2, content:"partials/edit/tabs/edit_zone.html" };
+	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
+	    				showZones = true;
+	    				zone_tab_obj = { title:'Macrozona', index: 2, content:"partials/edit/tabs/edit_zone.html" };
+	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'Street'){
-	    			showStreets = true;
 	    			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
-	    			street_tab_obj = { title:'Via', index: 3, content:"partials/edit/tabs/edit_street.html" };
-	    		}
+	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
+	    				showStreets = true;
+	    				street_tab_obj = { title:'Via', index: 3, content:"partials/edit/tabs/edit_street.html" };
+	    			}
+	    		}	
 	    		if($scope.showedObjects[i].id == 'Ps'){
-	    			showPs = true;
 	    			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
-	    			ps_tab_obj = { title:'Parcheggio in struttura', index: 4, content:"partials/edit/tabs/edit_parkingstructure.html" };
+	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
+	    				showPs = true;
+	    				ps_tab_obj = { title:'Parcheggio in struttura', index: 4, content:"partials/edit/tabs/edit_parkingstructure.html" };
+	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'Pm'){
-	    			showPm = true;
 	    			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
-	    			pm_tab_obj = { title:'Parcometro', index: 5, content:"partials/edit/tabs/edit_parkingmeter.html" };
+	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
+	    				showPm = true;
+	    				pm_tab_obj = { title:'Parcometro', index: 5, content:"partials/edit/tabs/edit_parkingmeter.html" };
+	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'Bp'){
-	    			showBp = true;
 	    			$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
-	    			bp_tab_obj = { title:'Punti Bici', index: 6, content:"partials/edit/tabs/edit_bike.html" };
-	    		}
+	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
+	    				showBp = true;
+	    				bp_tab_obj = { title:'Punti Bici', index: 6, content:"partials/edit/tabs/edit_bike.html" };
+	    			}
+	    		}	
 	    	}
 	    	if(showArea){
 	    		parktabs.push(area_tab_obj);
@@ -288,6 +300,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	}
 	    	angular.copy(parktabs, $scope.editparktabs);
     	}
+    };
+    
+    $scope.checkIfObjectOnViewPage = function(object){
+    	var showOnPages = false;
+    	if(object != null && object.attributes != null){
+    		var attr = object.attributes;
+    		for(var i = 0; i < attr.length; i++){
+    			if(attr[i].code == "viewPage"){
+    				if(attr[i].visible){
+    					showOnPages = true;
+    				}
+    			}
+    		}
+    	}
+    	return showOnPages;
     };
     
     //Area Component settings
@@ -480,7 +507,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     //];
            
     $scope.setIndex = function($index, tab){
-       	$scope.tabIndex = $index;
+    	var localArea = sharedDataService.getSharedLocalAreas();
+   		if(localArea == null || localArea.length == 0){
+   			$scope.getAreasFromDb();
+   		}
+    	$scope.tabIndex = $index;
        	if(tab.index == 1){
        		$scope.getAreasFromDb();
        	}

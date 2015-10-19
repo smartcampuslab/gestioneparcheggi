@@ -756,7 +756,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingStructureAux: used to save a DataLogBean object for the new occupancy data in a parkingStructure
-	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period) throws NotFoundException {
+	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -815,7 +815,11 @@ public class DynamicManager {
 		int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
 		double statValue = findOccupationRate(total, occupied, 0, 0, 1);
 		if(period == null || period.length == 0){
-			repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
+			if(p_type != -1){
+				repo.updateDirectPeriodStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp, p_type);
+			} else {
+				repo.updateStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp);
+			}
 		} else {
 			repo.updateStatsPeriod(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp, period, 1);
 		}

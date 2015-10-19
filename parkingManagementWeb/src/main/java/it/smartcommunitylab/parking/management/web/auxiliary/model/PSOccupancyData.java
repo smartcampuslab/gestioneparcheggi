@@ -7,10 +7,7 @@ public class PSOccupancyData {
 	private String pName;
 	private String pAddress;
 	private FilterPeriod period;
-	private List<String> occLC;
-	private List<String> occLS;
-	private List<String> occP;
-	private List<String> occDO;
+	private List<String> occSlots;
 	
 	public String getpName() {
 		return pName;
@@ -24,20 +21,12 @@ public class PSOccupancyData {
 		return period;
 	}
 
-	public List<String> getOccLC() {
-		return occLC;
+	public List<String> getOccSlots() {
+		return occSlots;
 	}
 
-	public List<String> getOccLS() {
-		return occLS;
-	}
-
-	public List<String> getOccP() {
-		return occP;
-	}
-
-	public List<String> getOccDO() {
-		return occDO;
+	public void setOccSlots(List<String> occSlots) {
+		this.occSlots = occSlots;
 	}
 
 	public void setpName(String pName) {
@@ -52,37 +41,24 @@ public class PSOccupancyData {
 		this.period = period;
 	}
 
-	public void setOccLC(List<String> occLC) {
-		this.occLC = occLC;
-	}
-
-	public void setOccLS(List<String> occLS) {
-		this.occLS = occLS;
-	}
-
-	public void setOccP(List<String> occP) {
-		this.occP = occP;
-	}
-
-	public void setOccDO(List<String> occDO) {
-		this.occDO = occDO;
-	}
 
 	public PSOccupancyData() {
 		// TODO Auto-generated constructor stub
 	}
 
 	public PSOccupancyData(String pName, String pAddress, FilterPeriod period,
-			List<String> occLC, List<String> occLS, List<String> occP,
-			List<String> occDO) {
+			List<String> occSlots) {
 		super();
 		this.pName = pName;
 		this.pAddress = pAddress;
 		this.period = period;
-		this.occLC = occLC;
-		this.occLS = occLS;
-		this.occP = occP;
-		this.occDO = occDO;
+		this.occSlots = occSlots;
+	}
+
+	@Override
+	public String toString() {
+		return "PSOccupancyData [pName=" + pName + ", pAddress=" + pAddress
+				+ ", period=" + period + ", occSlots=" + occSlots + "]";
 	}
 
 }

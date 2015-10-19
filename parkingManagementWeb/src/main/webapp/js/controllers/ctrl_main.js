@@ -397,6 +397,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	    $scope.showedObjects = sharedDataService.getVisibleObjList();
 	    $scope.showBikeMenuLink = false;
 	    $scope.showDashboardMenuLink = false;
+	    $scope.showAuxMenuLink = false;
 	    for(var i = 0; i < $scope.showedObjects.length; i++){
 	    	if($scope.showedObjects[i].id == 'Bp'){
 	    		$scope.showBikeMenuLink = true;
@@ -408,7 +409,14 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	    		} else {
 	    			$scope.showDashboardMenuLink = false;
 	    		}
-	    	}	
+	    	}
+	    	if($scope.showedObjects[i].id == 'Flux'){
+	    		if($scope.showedObjects[i].attributes[0].visible){
+	    			$scope.showAuxMenuLink = true;
+	    		} else {
+	    			$scope.showAuxMenuLink = false;
+	    		}
+	    	}
 	    }
 	    if($scope.showDashboardMenuLink == false){
 	    	$scope.setHomeParkActive();

@@ -143,13 +143,504 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     
     // ------------------------ End timepicker section ------------------------------
     
-    $scope.logtabs = [ 
-        { title:'Rilevazioni occupazione vie', index: 1, content:"partials/aux/logs/street_logs.html", active: false, path: "/tplog/streets" },
-        { title:'Rilevazioni occupazione parcheggi', index: 2, content:"partials/aux/logs/parking_logs.html", active: false, path: "/tplog/parkings"},
-        { title:'Rilevazioni ricavi parcometri', index: 3, content:"partials/aux/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" },
-        { title:'Rilevazioni ricavi parcheggi', index: 4, content:"partials/aux/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" },
-        { title:'Storico Rilevazioni', index: 5, content:"partials/aux/logs/global_logs.html", active: true, path: "/tplog/all"}
-    ];
+    // ----------------------- Block to read conf params and show/hide elements -----------------------
+    var showArea = false;
+    var showStreets = false;
+    var showPm = false;
+    var showPs = false;
+    var showBp = false;
+    var showZones = false;
+    $scope.f_occStreet = null;
+    $scope.f_occStruct = null;
+    $scope.f_profParkingMeter = null;
+    $scope.f_profStruct = null;
+    $scope.f_allLogs = null;
+    $scope.logtabs = [];
+    $scope.addtabs = []; 
+    
+    $scope.allMapObjectLoaded = false;
+    
+    $scope.isAreaVisible = function(){
+    	return showArea;
+    };
+    
+    $scope.isStreetVisible = function(){
+    	return showStreets;
+    };
+
+    $scope.isPmVisible = function(){
+    	return showPm;
+    };
+
+    $scope.isPsVisible = function(){
+    	return showPs;
+    };
+    
+    $scope.isBpVisible = function(){
+    	return showBp;
+    };
+
+    $scope.isZonesVisible = function(){
+    	return showZones;
+    };
+    
+    $scope.setAllMapObjectLoaded = function(value){
+    	$scope.allMapObjectLoaded = value;
+    };
+    
+    $scope.getAllMapObjectLoaded = function(){
+    	return $scope.allMapObjectLoaded;
+    };
+    
+    // Methods to show/hide street area filter
+    $scope.showSAreaFilter = function(){
+    	$scope.showAreaStreetFilter = true;
+    };
+    
+    $scope.hideSAreaFilter = function(){
+    	//$scope.streetAreaFilter = null;
+    	$scope.showAreaStreetFilter = false;
+    };
+    
+    // Methods to show/hide street name filter
+    $scope.showStreetNameFilter = function(){
+    	$scope.showStreetFilter = true;
+    };
+    
+    $scope.hideStreetNameFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showStreetFilter = false;
+    };
+    
+    // Methods to show/hide area name filter
+    $scope.showAreaNameFilter = function(){
+    	$scope.showAreaFilter = true;
+    };
+    
+    $scope.hideAreaNameFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showAreaFilter = false;
+    };
+    
+    // Methods to show/hide zone name filter
+    $scope.showZoneNameFilter = function(){
+    	$scope.showZoneFilter = true;
+    };
+    
+    $scope.hideZoneNameFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showZoneFilter = false;
+    };
+    
+    // Methods to show/hide code filter
+    $scope.showCodeFilter = function(){
+    	$scope.showCodFilter = true;
+    };
+    
+    $scope.hideCodeFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showCodFilter = false;
+    };
+    
+    // Methods to show/hide note filter
+    $scope.showNoteFilter = function(){
+    	$scope.showNotFilter = true;
+    };
+    
+    $scope.hideNoteFilter = function(){
+    	//$scope.nameFilter = null;
+    	$scope.showNotFilter = false;
+    };
+    
+    // Methods to show/hide pm status filter
+    $scope.showPmStatusFilter = function(){
+    	$scope.showStatusPmFilter = true;
+    };
+    
+    $scope.hidePmStatusFilter = function(){
+    	//$scope.pmStatusFilter = '';
+    	$scope.showStatusPmFilter = false;
+    };
+    
+    // Methods to show/hide pm area filter
+    $scope.showPmAreaFilter = function(){
+    	$scope.showAreaPmFilter = true;
+    };
+    
+    $scope.hidePmAreaFilter = function(){
+    	$scope.pmAreaFilter = '';
+    	$scope.showAreaPmFilter = false;
+    };
+    
+    // Methods to show/hide ps area filter
+    $scope.showPsNameFilter = function(){
+    	$scope.showPsFilter = true;
+    };
+    
+    $scope.hidePsNameFilter = function(){
+    	$scope.pmAreaFilter = '';
+    	$scope.showPsFilter = false;
+    };    
+    
+    $scope.initComponents = function(){
+	    if($scope.logtabs == null || $scope.logtabs.length == 0){
+	    	var logAuxTabs = [];
+	    	var street_occ_tab_obj = {};
+	    	var struct_occ_tab_obj = {};
+	    	var pm_profit_tab_obj = {};
+	    	var struct_profit_tab_obj = {};
+	    	var all_logs_tab_obj = {};
+		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
+		   	for(var i = 0; i < $scope.showedObjects.length; i++){
+		   		//if($scope.showedObjects[i].id == 'Area'){
+		   		//	$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
+		   		//}
+		   		if($scope.showedObjects[i].id == 'Street'){
+		   			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
+		   		}
+		   		if($scope.showedObjects[i].id == 'Pm'){
+		   			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
+		   		}
+		   		if($scope.showedObjects[i].id == 'Ps'){
+		   			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
+		   		}
+		   		//if($scope.showedObjects[i].id == 'Bp'){
+		    	//	$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
+		    	//}
+		   		//if($scope.showedObjects[i].id == 'Zone'){
+		   		//	$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
+		   		//}
+		   		if($scope.showedObjects[i].id == 'Flux'){
+		   			var flux_obj = $scope.showedObjects[i].attributes;
+		   			$scope.loadFluxAttributes(flux_obj);	
+		   			for(var j = 0; j < flux_obj.length; j++){
+		   				if(flux_obj[j].code == "occupancyStreet"){
+		   					street_occ_tab_obj =  { title:'Rilevazioni occupazione vie', index: 1, content:"partials/aux/logs/street_logs.html", active: false, path: "/tplog/streets" };
+		   				}
+		   				if(flux_obj[j].code == "occupancyStruct"){
+		   					struct_occ_tab_obj = { title:'Rilevazioni occupazione parcheggi', index: 2, content:"partials/aux/logs/parking_logs.html", active: false, path: "/tplog/parkings" };
+		   				}
+		   				if(flux_obj[j].code == "profitParkingMeter"){
+		   					pm_profit_tab_obj =  { title:'Rilevazioni ricavi parcometri', index: 3, content:"partials/aux/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" };
+		   				}
+		   				if(flux_obj[j].code == "profitStruct"){
+		   					struct_profit_tab_obj =  { title:'Rilevazioni ricavi parcheggi', index: 4, content:"partials/aux/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" };
+		   				}
+		   				if(flux_obj[j].code == "allLogs"){
+		   					all_logs_tab_obj =  { title:'Storico Rilevazioni', index: 5, content:"partials/aux/logs/global_logs.html", active: true, path: "/tplog/all"};
+		   				}
+		   			}
+		   		}
+		   	}
+		   	// Here I load the tabs for logs
+		   	if($scope.f_occStreet.visible){
+		   		logAuxTabs.push(street_occ_tab_obj);
+		   	}
+		   	if($scope.f_occStruct.visible){
+		   		logAuxTabs.push(struct_occ_tab_obj);
+		   	}
+		   	if($scope.f_profParkingMeter.visible){
+		   		logAuxTabs.push(pm_profit_tab_obj);
+		   	}
+		   	if($scope.f_profStruct.visible){
+		   		logAuxTabs.push(struct_profit_tab_obj);
+		   	}
+		   	if($scope.f_allLogs.visible){
+		   		logAuxTabs.push(all_logs_tab_obj);
+		   	}
+		   	angular.copy(logAuxTabs, $scope.logtabs);
+		   	sharedDataService.setFluxViewTabs($scope.logtabs);
+	    }
+	    if($scope.addtabs == null || $scope.addtabs.length == 0){
+	    	var logAuxTabs = [];
+	    	var street_occ_tab_obj = {};
+	    	var struct_occ_tab_obj = {};
+	    	var pm_profit_tab_obj = {};
+	    	var struct_profit_tab_obj = {};
+		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
+		   	for(var i = 0; i < $scope.showedObjects.length; i++){
+		   		//if($scope.showedObjects[i].id == 'Area'){
+		   		//	$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
+		   		//}
+		   		if($scope.showedObjects[i].id == 'Street'){
+		   			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
+		   		}
+		   		if($scope.showedObjects[i].id == 'Pm'){
+		   			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
+		   		}
+		   		if($scope.showedObjects[i].id == 'Ps'){
+		   			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
+		   		}
+		   		//if($scope.showedObjects[i].id == 'Bp'){
+		    	//	$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
+		    	//}
+		   		//if($scope.showedObjects[i].id == 'Zone'){
+		   		//	$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
+		   		//}
+		   		if($scope.showedObjects[i].id == 'Flux'){
+		   			var flux_obj = $scope.showedObjects[i].attributes;
+		   			$scope.loadFluxAttributes(flux_obj);	
+		   			for(var j = 0; j < flux_obj.length; j++){
+		   				if(flux_obj[j].code == "occupancyStreet"){
+		   					street_occ_tab_obj =  { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false };
+		   				}
+		   				if(flux_obj[j].code == "occupancyStruct"){
+		   					struct_occ_tab_obj = { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false };
+		   				}
+		   				if(flux_obj[j].code == "profitParkingMeter"){
+		   					pm_profit_tab_obj =  { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false };
+		   				}
+		   				if(flux_obj[j].code == "profitStruct"){
+		   					struct_profit_tab_obj = { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false };
+		   				}
+		   			}
+		   		}
+		   	}
+		   	// Here I load the tabs for logs
+		   	if($scope.f_occStreet.editable){
+		   		logAuxTabs.push(street_occ_tab_obj);
+		   	}
+		   	if($scope.f_occStruct.editable){
+		   		logAuxTabs.push(struct_occ_tab_obj);
+		   	}
+		   	if($scope.f_profParkingMeter.editable){
+		   		logAuxTabs.push(pm_profit_tab_obj);
+		   	}
+		   	if($scope.f_profStruct.editable){
+		   		logAuxTabs.push(struct_profit_tab_obj);
+		   	}
+		   	angular.copy(logAuxTabs, $scope.addtabs);
+		   	sharedDataService.setFluxAddTabs($scope.addtabs);
+	    }	    
+    };
+    
+    //Area Component settings
+    $scope.loadAreaAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.a_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'fee'){
+    			$scope.a_fee = attributes[i];
+    		}
+    		if(attributes[i].code == 'timeSlot'){
+    			$scope.a_timeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'smsCode'){
+    			$scope.a_smsCode = attributes[i];
+    		}
+    		if(attributes[i].code == 'color'){
+    			$scope.a_color = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.a_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'viewPage'){
+    			if(attributes[i].visible){
+    				showArea = true;
+    			}
+    		}
+    	}
+    };
+    
+    //Street Component settings
+    $scope.loadStreetAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'streetReference'){
+    			$scope.s_streetRef = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.s_slotNum = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			$scope.s_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'timedParkSlotNumber'){
+    			$scope.s_timedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotNumber'){
+    			$scope.s_freeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			$scope.s_unusuableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'subscritionAllowedPark'){
+    			$scope.s_subscrition = attributes[i];
+    		}
+    		if(attributes[i].code == 'rateAreaId'){
+    			$scope.s_areaId = attributes[i];
+    		}
+    		if(attributes[i].code == 'zones'){
+    			$scope.s_zones = attributes[i];
+    		}
+    		if(attributes[i].code == 'pms'){
+    			$scope.s_pms = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.s_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'viewPage'){
+    			if(attributes[i].visible){
+    				showStreets = true;
+    			}
+    		}
+    	}
+    };
+    
+    //Pm Component settings
+    $scope.loadPmAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'code'){
+    			$scope.pm_code = attributes[i];
+    		}
+    		if(attributes[i].code == 'note'){
+    			$scope.pm_note = attributes[i];
+    		}
+    		if(attributes[i].code == 'status'){
+    			$scope.pm_status = attributes[i];
+    		}
+    		if(attributes[i].code == 'rateArea'){
+    			$scope.pm_rateArea = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.pm_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'viewPage'){
+    			if(attributes[i].visible){
+    				showPm = true;
+    			}
+    		}
+    	}
+    };
+    
+    //Ps Component settings
+    $scope.loadPsAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.ps_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'streetReference'){
+    			$scope.ps_address = attributes[i];
+    		}
+    		if(attributes[i].code == 'managementMode'){
+    			$scope.ps_management = attributes[i];
+    		}
+    		if(attributes[i].code == 'paymentMode'){
+    			$scope.ps_payment = attributes[i];
+    		}
+    		if(attributes[i].code == 'fee'){
+    			$scope.ps_fee = attributes[i];
+    		}
+    		if(attributes[i].code == 'timeSlot'){
+    			$scope.ps_timeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.ps_slotNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			$scope.ps_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			$scope.ps_unusuableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'phoneNumber'){
+    			$scope.ps_phoneNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.ps_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'viewPage'){
+    			if(attributes[i].visible){
+    				showPs = true;
+    			}
+    		}
+    	}
+    };
+    
+    //BikePoint Component settings
+    $scope.loadBikeAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.bp_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'bikeNumber'){
+    			$scope.bp_bikeNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'slotNumber'){
+    			$scope.bp_slotNumber = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.bp_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'viewPage'){
+    			if(attributes[i].visible){
+    				showBp = true;
+    			}
+    		}
+    	}
+    };
+    
+    //Zones Component settings
+    $scope.loadZoneAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.zone_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'submacro'){
+    			$scope.zone_submacro = attributes[i];
+    		}
+    		if(attributes[i].code == 'note'){
+    			$scope.zone_note = attributes[i];
+    		}
+    		if(attributes[i].code == 'status'){
+    			$scope.zone_status = attributes[i];
+    		}
+    		if(attributes[i].code == 'type'){
+    			$scope.zone_type = attributes[i];
+    		}
+    		if(attributes[i].code == 'color'){
+    			$scope.zone_color = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.zone_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'viewPage'){
+    			if(attributes[i].visible){
+    				showZones = true;
+    			}
+    		}
+    	}
+    };
+    
+    //Flux Component settings
+    $scope.loadFluxAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'occupancyStreet'){
+    			$scope.f_occStreet = attributes[i];
+    		}
+    		if(attributes[i].code == 'occupancyStruct'){
+    			$scope.f_occStruct = attributes[i];
+    		}
+    		if(attributes[i].code == 'profitParkingMeter'){
+    			$scope.f_profParkingMeter = attributes[i];
+    		}
+    		if(attributes[i].code == 'profitStruct'){
+    			$scope.f_profStruct = attributes[i];
+    		}
+    		if(attributes[i].code == 'allLogs'){
+    			$scope.f_allLogs = attributes[i];
+    		}
+    	}
+    };    
+    // ---------------------- End Block to read conf params and show/hide elements ---------------------       
+    
+//    $scope.logtabs = [ 
+//        { title:'Rilevazioni occupazione vie', index: 1, content:"partials/aux/logs/street_logs.html", active: false, path: "/tplog/streets" },
+//        { title:'Rilevazioni occupazione parcheggi', index: 2, content:"partials/aux/logs/parking_logs.html", active: false, path: "/tplog/parkings"},
+//        { title:'Rilevazioni ricavi parcometri', index: 3, content:"partials/aux/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" },
+//        { title:'Rilevazioni ricavi parcheggi', index: 4, content:"partials/aux/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" },
+//        { title:'Storico Rilevazioni', index: 5, content:"partials/aux/logs/global_logs.html", active: true, path: "/tplog/all"}
+//    ];
     
     $scope.showDetails = false;
     $scope.showFiltered = false;
@@ -221,6 +712,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	};
     // load data for the current tab for the current page
     var loadLogs = function() {
+    	if($scope.logtabs == null || $scope.logtabs.length == 0){
+    		$scope.logtabs = sharedDataService.getFluxViewTabs();
+    	}
     	if (!$scope.tabIndex) $scope.tabIndex = 0;
     	var logtab = $scope.logtabs[$scope.tabIndex];
     	var page = logtab.page;
@@ -347,12 +841,12 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		return totalEur.toFixed(2) + " ";
 	};
 	
-    $scope.addtabs = [ 
-        { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false },
-        { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false },
-        { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false },
-        { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false }
-    ];
+//    $scope.addtabs = [ 
+//        { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false },
+//        { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false },
+//        { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false },
+//        { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false }
+//    ];
                                 
     $scope.setAddIndex = function($index){
     	$scope.tabIndex = $index;
@@ -1076,6 +1570,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     };
     
     $scope.initActiveLogTab = function(id){
+    	if($scope.logtabs == null || $scope.logtabs.length == 0){
+    		$scope.logtabs = sharedDataService.getFluxViewTabs();
+    	}
     	if(id > 4) id = id - 4;
     	$scope.setIndex(id-1);
     	for(var i = 0; i < $scope.logtabs.length; i++){
@@ -1088,6 +1585,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     };
     
     $scope.initActiveAddLogTab = function(id){
+    	if($scope.addtabs == null || $scope.addtabs.length == 0){
+    		$scope.addtabs = sharedDataService.getFluxAddTabs();
+    	}
     	if(id > 4) id = id - 4;
     	$scope.setAddIndex(id-1);
     	for(var i = 0; i < $scope.addtabs.length; i++){
