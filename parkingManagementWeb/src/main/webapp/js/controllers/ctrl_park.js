@@ -459,6 +459,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		if(attributes[i].code == 'submacro'){
     			$scope.zone_submacro = attributes[i];
     		}
+    		if(attributes[i].code == 'submicro'){
+    			$scope.zone_submicro = attributes[i];
+    		}
     		if(attributes[i].code == 'note'){
     			$scope.zone_note = attributes[i];
     		}
@@ -473,6 +476,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     		if(attributes[i].code == 'geometry'){
     			$scope.zone_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'geomFromSubelement'){
+    			$scope.zone_geom_from_subelement = attributes[i];
     		}
     	}
     };
@@ -1087,14 +1093,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var correctedZones = [];
 		for(var i = 0; i < zones.length; i++){
 			var correctZone = {
-					id: zones[i].id,
-					id_app: zones[i].id_app,
-					color: zones[i].color,
-					name: zones[i].name,
-					submacro: zones[i].submacro,
-					type: zones[i].type,
-					note: zones[i].note,
-					geometry: $scope.correctMyGeometryPolygon(zones[i].geometry)
+				id: zones[i].id,
+				id_app: zones[i].id_app,
+				color: zones[i].color,
+				name: zones[i].name,
+				submacro: zones[i].submacro,
+				submicro: zones[i].submicro,
+				type: zones[i].type,
+				note: zones[i].note,
+				geometry: $scope.correctMyGeometryPolygon(zones[i].geometry),
+				geometryFromSubelement: zones[i].geometryFromSubelement
 			};
 			correctedZones.push(correctZone);
 		}
@@ -3116,10 +3124,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				id_app: zone.id_app,
 				name: zone.name,
 				submacro: zone.submacro,
+				submicro: zone.submicro,
 				color: myColor.substring(1, myColor.length),	// I have to remove '#' char
 				note: zone.note,
 				type: zone.type,
-				geometry: $scope.correctMyGeometryPolyline(editCorrectedPath)
+				geometry: $scope.correctMyGeometryPolyline(editCorrectedPath),
+				geometryFromSubelement: zone.geometryFromSubelement
 				//geometry: $scope.correctMyGeometryPolyline(polygon.path)
 			};
 			
@@ -3693,10 +3703,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				id_app: $scope.myAppId,
 				name: zone.name,
 				submacro: zone.submacro,
+				submicro: zone.submicro,
 				color: myColor.substring(1, myColor.length),	// I have to remove '#' char
 				note: zone.note,
 				type: zone.type,
-				geometry: $scope.correctMyGeometryPolyline(newCorrectedPath)
+				geometry: $scope.correctMyGeometryPolyline(newCorrectedPath),
+				geometryFromSubelement: zone.geometryFromSubelement
 				//geometry: $scope.correctMyGeometryPolyline(polygon.path)
 			};
 			

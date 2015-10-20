@@ -22,11 +22,13 @@ public class ZoneBean {
 	private String id_app;
 	private String name;
 	private String submacro;
+	private String submicro;
 	private String type;
 	private String note;
 	private String color;
 	private PolygonBean geometry;
-
+	private boolean geometryFromSubelement;
+	
 	public String getId() {
 		return id;
 	}
@@ -100,4 +102,20 @@ public class ZoneBean {
 		return pol;
 	}
 
+	public String getSubmicro() {
+		return submicro;
+	}
+
+	public void setSubmicro(String submicro) {
+		this.submicro = submicro;
+	}
+
+	public boolean isGeometryFromSubelement() {
+		return geometryFromSubelement;
+	}
+
+	public void setGeometryFromSubelement(boolean geometryFromSubelement) {
+		this.geometryFromSubelement = geometryFromSubelement;
+	}
+	
 }

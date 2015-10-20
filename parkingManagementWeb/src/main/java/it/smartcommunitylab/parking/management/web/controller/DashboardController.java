@@ -64,6 +64,7 @@ import org.apache.log4j.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -89,6 +90,14 @@ public class DashboardController {
 	
 	@Autowired
 	CSVManager csvManager;
+	
+	@Autowired
+	@Value("${smartcommunity.parkingmanagement.type.zone}")
+	private String ZONA;
+	
+	@Autowired
+	@Value("${smartcommunity.parkingmanagement.type.street}")
+	private String VIA;
 
 	MarkerIconStorage markerIconStorage;
 
@@ -147,14 +156,16 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/zone")
 	public @ResponseBody
 	List<ZoneBean> getAllZone(@PathVariable String appId) {
-		return storage.getAllZone(appId);
+		//return storage.getAllZone(appId);
+		return storage.getZoneByType(ZONA, appId);
 	}
 	
 	// Method without security
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/zone")
 	public @ResponseBody
 	List<ZoneBean> getAllZoneNS(@PathVariable String appId) {
-		return storage.getAllZone(appId);
+		//return storage.getAllZone(appId);
+		return storage.getZoneByType(ZONA, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/bikepoint")

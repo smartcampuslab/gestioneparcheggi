@@ -106,7 +106,10 @@ pm.service('sharedDataService', function(){
     ];
   
     this.flux_view_tabs = [];
-    this.flux_add_tabs = [];
+    this.showOccStreetLogEdit = false;
+    this.showOccStructLogEdit = false;
+    this.showProfPMLogEdit = false;
+    this.showProfStructLogEdit = false;
     
     // Shared filter fields and methods
     this.filter_topiclist;
@@ -276,11 +279,32 @@ pm.service('sharedDataService', function(){
 		this.flux_view_tabs = value;
 	};
 	
-	this.getFluxAddTabs = function(){
-		return this.flux_add_tabs;
+	this.getOccStreetLogEdit = function(){
+		return this.showOccStreetLogEdit;
 	};
-	this.setFluxAddTabs = function(value){
-		this.flux_add_tabs = value;
+	this.setOccStreetLogEdit = function(value){
+		this.showOccStreetLogEdit = value;
+	};
+	
+	this.getOccStructLogEdit = function(){
+		return this.showOccStructLogEdit;
+	};
+	this.setOccStructLogEdit = function(value){
+		this.showOccStructLogEdit = value;
+	};
+	
+	this.getProfPmLogEdit = function(){
+		return this.showProfPMLogEdit;
+	};
+	this.setProfPmLogEdit = function(value){
+		this.showProfPMLogEdit = value;
+	};
+	
+	this.getProfStructLogEdit = function(){
+		return this.showProfStructLogEdit;
+	};
+	this.setProfStructLogEdit = function(value){
+		this.showProfStructLogEdit = value;
 	};
 	
 	this.getName = function(){

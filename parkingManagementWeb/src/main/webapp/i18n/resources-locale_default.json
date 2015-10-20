@@ -255,9 +255,17 @@
     "value": "Macro",
     "description": "Intestazione colonna submacro in tabella lista zone"
 }, {
+    "key": "zone_submicro",
+    "value": "Microzona",
+    "description": "Intestazione colonna submicro in tabella lista zone"
+}, {
     "key": "zone_color",
     "value": "Colore",
     "description": "Intestazione colonna colore in tabella lista zone"
+}, {
+    "key": "zone_geometry_from_subelement",
+    "value": "Geometria da sottoelementi",
+    "description": "Label per campo 'geometria da sottoelementi' in zona"
 }, {
     "key": "no_zones_in_lists",
     "value": "Nessuna zona presente nel db",
@@ -695,6 +703,10 @@
     "value": "Campo 'sottozona' obbligatorio",
     "description": "Errore Campo sottozona obbligatorio"
 }, {
+    "key": "zone_submicro_err_required",
+    "value": "Campo 'microzona' obbligatorio",
+    "description": "Errore Campo microzona obbligatorio"
+}, {
     "key": "zone_type_err_required",
     "value": "Campo 'tipo zona' obbligatorio",
     "description": "Errore Campo tipo zona obbligatorio"
@@ -962,6 +974,10 @@
     "key": "zone_submacro_placeholder",
     "value": "Inserire il codice della sottozona",
     "description": "Testo placeholder campo submacro zona"
+}, {
+    "key": "zone_submicro_placeholder",
+    "value": "Inserire il codice della microzona",
+    "description": "Testo placeholder campo submicro zona"
 }, {
     "key": "zone_type_placeholder",
     "value": "Inserire il tipo/categoria si suddivisione in zone",

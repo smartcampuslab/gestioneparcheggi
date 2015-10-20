@@ -35,6 +35,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -49,6 +50,14 @@ public class EditingController {
 	StorageManager storage;
 
 	MarkerIconStorage markerIconStorage;
+	
+	@Autowired
+	@Value("${smartcommunity.parkingmanagement.type.zone}")
+	private String ZONA;
+	
+	@Autowired
+	@Value("${smartcommunity.parkingmanagement.type.street}")
+	private String MICROZONA;
 
 	@PostConstruct
 	private void init() throws IOException {
@@ -205,14 +214,31 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/zone")
 	public @ResponseBody
 	List<ZoneBean> getAllZoneByAppId(@PathVariable("appId") String appId) {
-		return storage.getAllZone(appId);
+		//return storage.getAllZone(appId);
+		return storage.getZoneByType(ZONA, appId);
 	}
 	
 	// Method without security
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone")
 	public @ResponseBody
 	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId) {
-		return storage.getAllZone(appId);
+		//return storage.getAllZone(appId);
+		return storage.getZoneByType(ZONA, appId);
+	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/microzone")
+	public @ResponseBody
+	List<ZoneBean> getAllMicroZoneByAppId(@PathVariable("appId") String appId) {
+		//return storage.getAllZone(appId);
+		return storage.getZoneByType(MICROZONA, appId);
+	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/microzone")
+	public @ResponseBody
+	List<ZoneBean> getAllMicroZoneNS(@PathVariable("appId") String appId) {
+		//return storage.getAllZone(appId);
+		return storage.getZoneByType(MICROZONA, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/zone/{zid}")

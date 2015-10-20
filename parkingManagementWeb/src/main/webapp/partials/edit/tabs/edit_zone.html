@@ -19,6 +19,10 @@
 					        			<td><strong>{{ 'zone_submacro' | i18n }}:</strong></td>
 					        			<td>&nbsp;{{ z.data.submacro }}</td>
 					        		</tr>
+					        		<tr ng-show="zone_submicro.visible">
+					        			<td><strong>{{ 'zone_submicro' | i18n }}:</strong></td>
+					        			<td>&nbsp;{{ z.data.submicro }}</td>
+					        		</tr>
 					        		<tr ng-show="zone_type.visible">
 					        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
 					        			<td>&nbsp;{{ z.data.type }}</td>
@@ -30,6 +34,10 @@
 					        		<tr ng-show="zone_color.visible">	
 										<td><strong>{{ 'zone_color' | i18n }}</strong></td>
 										<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+									</tr>
+									<tr ng-show="zone_geom_from_subelement.visible">	
+										<td><strong>{{ 'zone_geometry_from_subelement' | i18n }}</strong></td>
+										<td>&nbsp;{{ z.data.geometryFromSubelement | boolToString }}</td>
 									</tr>
 					        	</table>
 					        </div>
@@ -49,6 +57,10 @@
 					        			<td><strong>{{ 'zone_submacro' | i18n }}:</strong></td>
 					        			<td>&nbsp;{{ z.data.submacro }}</td>
 					        		</tr>
+					        		<tr ng-show="zone_submicro.visible">
+					        			<td><strong>{{ 'zone_submicro' | i18n }}:</strong></td>
+					        			<td>&nbsp;{{ z.data.submicro }}</td>
+					        		</tr>
 					        		<tr ng-show="zone_type.visible">
 					        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
 					        			<td>&nbsp;{{ z.data.type }}</td>
@@ -60,6 +72,10 @@
 					        		<tr ng-show="zone_color.visible">	
 										<td><strong>{{ 'zone_color' | i18n }}</strong></td>
 										<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+									</tr>
+									<tr ng-show="zone_geom_from_subelement.visible">	
+										<td><strong>{{ 'zone_geometry_from_subelement' | i18n }}</strong></td>
+										<td>&nbsp;{{ z.data.geometryFromSubelement | boolToString }}</td>
 									</tr>
 					        	</table>
 					        </div>
@@ -146,6 +162,10 @@
 							<td class="detailsViewZoneSX">{{ 'zone_submacro' | i18n }}:</td>
 							<td class="detailsViewZoneDX">{{ viewZone.submacro }}</td>
 						</tr>
+						<tr ng-show="zone_submicro.visible">
+					        <td class="detailsViewZoneSX">{{ 'zone_submicro' | i18n }}:</td>
+					        <td class="detailsViewZoneDX">{{ viewZone.submicro }}</td>
+					    </tr>
 						<tr ng-show="zone_type.visible">	
 							<td class="detailsViewZoneSX">{{ 'zone_type' | i18n }}:</td>
 							<td class="detailsViewZoneDX">{{ viewZone.type }}</td>
@@ -157,6 +177,10 @@
 						<tr ng-show="zone_color.visible">	
 							<td class="detailsViewZoneSX">{{ 'zone_color' | i18n }}</td>
 							<td class="detailsViewZoneDX"><span class="colorBox" ng-style="{'background-color': correctColor(viewZone.color)}"></span></td>
+						</tr>
+						<tr ng-show="zone_geom_from_subelement.visible">	
+							<td class="detailsViewZoneSX">{{ 'zone_geometry_from_subelement' | i18n }}</td>
+							<td class="detailsViewZoneDX">{{ viewZone.geometryFromSubelement | boolToString }}</td>
 						</tr>
 			   		</table>
 			   		<hr>
@@ -208,6 +232,11 @@
 					    	<input id="submacro" type="text" class="form-control" name="zSub" ng-model="zone.submacro" ng-required="zone_submacro.required" placeholder="{{ 'zone_submacro_placeholder' | i18n }}" >
 					   		<div class="field-error" ng-show="!isInit && form.zSub.$error.required">{{ 'zone_submacro_err_required' | i18n }}</div>
 					   	</div>
+					   	<div class="form-group" ng-show="zone_submicro.visible">
+					    	<label for="submacro">{{ 'zone_submicro' | i18n }}</label>
+					    	<input id="submacro" type="text" class="form-control" name="zSubMic" ng-model="zone.submicro" ng-required="zone_submicro.required" placeholder="{{ 'zone_submicro_placeholder' | i18n }}" >
+					   		<div class="field-error" ng-show="!isInit && form.zSubMic.$error.required">{{ 'zone_submicro_err_required' | i18n }}</div>
+					   	</div>
 					   	<div class="form-group" ng-show="zone_type.visible">
 					    	<label for="type">{{ 'zone_type' | i18n }}</label>
 					    	<input id="type" type="text" class="form-control" name="zType" ng-model="zone.type" ng-required="zone_type.required" placeholder="{{ 'zone_type_placeholder' | i18n }}" >
@@ -222,6 +251,9 @@
 					    	<label for="color">{{ 'zone_color' | i18n }}</label>
 					    	<input id="color" colorpicker="hex" colorpicker-with-input="true" type="text" class="form-control" name="zColor" ng-model="myColor" ng-required="zone_color.required" placeholder="{{ 'zone_color_placeholder' | i18n }}" >
 					    	<div class="field-error" ng-show="!isInit && form.zColor.$error.required">{{ 'zone_color_err_required' | i18n }}</div>
+					   	</div>
+					   	<div class="form-group" ng-show="zone_geom_from_subelement.editable">
+					   		<label><input id="geom_from_subele" type="checkbox" ng-model="zone.geometryFromSubelement">{{ 'zone_geometry_from_subelement' | i18n }}</label>
 					   	</div>
 					   	
 	<!-- 					<div class="form-group" ng-show="isEditing"> -->

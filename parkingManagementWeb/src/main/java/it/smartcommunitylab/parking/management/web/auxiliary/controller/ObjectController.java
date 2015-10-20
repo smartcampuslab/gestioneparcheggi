@@ -55,7 +55,7 @@ public class ObjectController  {
 
 	private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
-	private static final int DEFAULT_COUNT = 1000;	// last 1000 values
+	private static final int DEFAULT_COUNT = 500;	// last 500 values
 	private static final int NO_PERIOD = -1;
 	private static final int YEAR_PERIOD = 1;
 	private static final int MONTH_PERIOD = 2;

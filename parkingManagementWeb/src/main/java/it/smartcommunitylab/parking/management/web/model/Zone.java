@@ -20,12 +20,14 @@ import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 public class Zone {
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
-	private String name;
-	private String submacro;
-	private String type; 	//type of division(geo, green, history, etc)
+	private String name;		// name
+	private String submacro;	// macro zone id
+	private String submicro;	// micro zone id	// the composition of name, submacro and submicro have to be unique
+	private String type; 		//type of division(geo, green, history, etc)
 	private String note;
 	private String color;
 	private Polygon geometry;
+	private boolean geometryFromSubelement;
 	private Integer slotNumber;	// used in supply csv creation
 
 	public String getId() {
@@ -98,6 +100,22 @@ public class Zone {
 
 	public void setSlotNumber(Integer slotNumber) {
 		this.slotNumber = slotNumber;
+	}
+
+	public String getSubmicro() {
+		return submicro;
+	}
+
+	public void setSubmicro(String submicro) {
+		this.submicro = submicro;
+	}
+
+	public boolean isGeometryFromSubelement() {
+		return geometryFromSubelement;
+	}
+
+	public void setGeometryFromSubelement(boolean geometryFromSubelement) {
+		this.geometryFromSubelement = geometryFromSubelement;
 	}
 
 }

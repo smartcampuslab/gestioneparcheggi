@@ -150,13 +150,16 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     var showPs = false;
     var showBp = false;
     var showZones = false;
+    var showBtnAddOccStreet = false;
+    var showBtnAddOccStruct = false;
+    var showBtnAddProfPm = false;
+    var showBtnAddProfStruct = false;
     $scope.f_occStreet = null;
     $scope.f_occStruct = null;
     $scope.f_profParkingMeter = null;
     $scope.f_profStruct = null;
     $scope.f_allLogs = null;
     $scope.logtabs = [];
-    $scope.addtabs = []; 
     
     $scope.allMapObjectLoaded = false;
     
@@ -280,7 +283,23 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     $scope.hidePsNameFilter = function(){
     	$scope.pmAreaFilter = '';
     	$scope.showPsFilter = false;
-    };    
+    };  
+    
+    $scope.isOccStreetAddShow = function(){
+    	return sharedDataService.getOccStreetLogEdit();
+    };
+    
+    $scope.isOccStructAddShow = function(){
+    	return sharedDataService.getOccStructLogEdit();
+    };
+    
+    $scope.isProfPmAddShow = function(){
+    	return sharedDataService.getProfPmLogEdit();
+    };
+    
+    $scope.isProfStructAddShow = function(){
+    	return sharedDataService.getProfStructLogEdit();
+    };
     
     $scope.initComponents = function(){
 	    if($scope.logtabs == null || $scope.logtabs.length == 0){
@@ -332,6 +351,19 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   			}
 		   		}
 		   	}
+		   	// Here I check if I have to show/hide the log add buttons
+			if($scope.f_occStreet.editable){
+				sharedDataService.setOccStreetLogEdit(true);
+		   	}
+		   	if($scope.f_occStruct.editable){
+		   		sharedDataService.setOccStructLogEdit(true);
+		   	}
+		   	if($scope.f_profParkingMeter.editable){
+		   		sharedDataService.setProfPmLogEdit(true);
+		   	}
+		   	if($scope.f_profStruct.editable){
+		   		sharedDataService.setProfStructLogEdit(true);
+		   	}
 		   	// Here I load the tabs for logs
 		   	if($scope.f_occStreet.visible){
 		   		logAuxTabs.push(street_occ_tab_obj);
@@ -351,67 +383,58 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   	angular.copy(logAuxTabs, $scope.logtabs);
 		   	sharedDataService.setFluxViewTabs($scope.logtabs);
 	    }
-	    if($scope.addtabs == null || $scope.addtabs.length == 0){
-	    	var logAuxTabs = [];
-	    	var street_occ_tab_obj = {};
-	    	var struct_occ_tab_obj = {};
-	    	var pm_profit_tab_obj = {};
-	    	var struct_profit_tab_obj = {};
-		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
-		   	for(var i = 0; i < $scope.showedObjects.length; i++){
-		   		//if($scope.showedObjects[i].id == 'Area'){
-		   		//	$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
-		   		//}
-		   		if($scope.showedObjects[i].id == 'Street'){
-		   			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
-		   		}
-		   		if($scope.showedObjects[i].id == 'Pm'){
-		   			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
-		   		}
-		   		if($scope.showedObjects[i].id == 'Ps'){
-		   			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
-		   		}
-		   		//if($scope.showedObjects[i].id == 'Bp'){
-		    	//	$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
-		    	//}
-		   		//if($scope.showedObjects[i].id == 'Zone'){
-		   		//	$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
-		   		//}
-		   		if($scope.showedObjects[i].id == 'Flux'){
-		   			var flux_obj = $scope.showedObjects[i].attributes;
-		   			$scope.loadFluxAttributes(flux_obj);	
-		   			for(var j = 0; j < flux_obj.length; j++){
-		   				if(flux_obj[j].code == "occupancyStreet"){
-		   					street_occ_tab_obj =  { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false };
-		   				}
-		   				if(flux_obj[j].code == "occupancyStruct"){
-		   					struct_occ_tab_obj = { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false };
-		   				}
-		   				if(flux_obj[j].code == "profitParkingMeter"){
-		   					pm_profit_tab_obj =  { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false };
-		   				}
-		   				if(flux_obj[j].code == "profitStruct"){
-		   					struct_profit_tab_obj = { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false };
-		   				}
-		   			}
-		   		}
-		   	}
-		   	// Here I load the tabs for logs
-		   	if($scope.f_occStreet.editable){
-		   		logAuxTabs.push(street_occ_tab_obj);
-		   	}
-		   	if($scope.f_occStruct.editable){
-		   		logAuxTabs.push(struct_occ_tab_obj);
-		   	}
-		   	if($scope.f_profParkingMeter.editable){
-		   		logAuxTabs.push(pm_profit_tab_obj);
-		   	}
-		   	if($scope.f_profStruct.editable){
-		   		logAuxTabs.push(struct_profit_tab_obj);
-		   	}
-		   	angular.copy(logAuxTabs, $scope.addtabs);
-		   	sharedDataService.setFluxAddTabs($scope.addtabs);
-	    }	    
+//	    if($scope.addtabs == null || $scope.addtabs.length == 0){
+//	    	var logAuxTabs = [];
+//	    	var street_occ_tab_obj = {};
+//	    	var struct_occ_tab_obj = {};
+//	    	var pm_profit_tab_obj = {};
+//	    	var struct_profit_tab_obj = {};
+//		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
+//		   	for(var i = 0; i < $scope.showedObjects.length; i++){
+//		   		if($scope.showedObjects[i].id == 'Street'){
+//		   			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
+//		   		}
+//		   		if($scope.showedObjects[i].id == 'Pm'){
+//		   			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
+//		   		}
+//		   		if($scope.showedObjects[i].id == 'Ps'){
+//		   			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
+//		   		}
+//		   		if($scope.showedObjects[i].id == 'Flux'){
+//		   			var flux_obj = $scope.showedObjects[i].attributes;
+//		   			$scope.loadFluxAttributes(flux_obj);	
+//		   			for(var j = 0; j < flux_obj.length; j++){
+//		   				if(flux_obj[j].code == "occupancyStreet"){
+//		   					street_occ_tab_obj =  { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false };
+//		   				}
+//		   				if(flux_obj[j].code == "occupancyStruct"){
+//		   					struct_occ_tab_obj = { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false };
+//		   				}
+//		   				if(flux_obj[j].code == "profitParkingMeter"){
+//		   					pm_profit_tab_obj =  { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false };
+//		   				}
+//		   				if(flux_obj[j].code == "profitStruct"){
+//		   					struct_profit_tab_obj = { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false };
+//		   				}
+//		   			}
+//		   		}
+//		   	}
+//		   	// Here I load the tabs for logs
+//		   	if($scope.f_occStreet.editable){
+//		   		logAuxTabs.push(street_occ_tab_obj);
+//		   	}
+//		   	if($scope.f_occStruct.editable){
+//		   		logAuxTabs.push(struct_occ_tab_obj);
+//		   	}
+//		   	if($scope.f_profParkingMeter.editable){
+//		   		logAuxTabs.push(pm_profit_tab_obj);
+//		   	}
+//		   	if($scope.f_profStruct.editable){
+//		   		logAuxTabs.push(struct_profit_tab_obj);
+//		   	}
+//		   	angular.copy(logAuxTabs, $scope.addtabs);
+//		   	sharedDataService.setFluxAddTabs($scope.addtabs);
+//	    }	    
     };
     
     //Area Component settings
@@ -634,14 +657,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     };    
     // ---------------------- End Block to read conf params and show/hide elements ---------------------       
     
-//    $scope.logtabs = [ 
-//        { title:'Rilevazioni occupazione vie', index: 1, content:"partials/aux/logs/street_logs.html", active: false, path: "/tplog/streets" },
-//        { title:'Rilevazioni occupazione parcheggi', index: 2, content:"partials/aux/logs/parking_logs.html", active: false, path: "/tplog/parkings"},
-//        { title:'Rilevazioni ricavi parcometri', index: 3, content:"partials/aux/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" },
-//        { title:'Rilevazioni ricavi parcheggi', index: 4, content:"partials/aux/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" },
-//        { title:'Storico Rilevazioni', index: 5, content:"partials/aux/logs/global_logs.html", active: true, path: "/tplog/all"}
-//    ];
-    
     $scope.showDetails = false;
     $scope.showFiltered = false;
     $scope.maxLogs = 15;
@@ -767,7 +782,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.isAllLogLoaded = false;
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", null, $scope.authHeaders, null);
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", {skip: 0, count: 250}, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			var partialLogs = result;//$scope.globalLogs.concat(result);
 			var corrLog = null;
@@ -841,12 +856,12 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		return totalEur.toFixed(2) + " ";
 	};
 	
-//    $scope.addtabs = [ 
-//        { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false },
-//        { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false },
-//        { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false },
-//        { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false }
-//    ];
+    $scope.addtabs = [ 
+        { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false },
+        { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false },
+        { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false },
+        { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false }
+    ];
                                 
     $scope.setAddIndex = function($index){
     	$scope.tabIndex = $index;
@@ -1585,9 +1600,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     };
     
     $scope.initActiveAddLogTab = function(id){
-    	if($scope.addtabs == null || $scope.addtabs.length == 0){
-    		$scope.addtabs = sharedDataService.getFluxAddTabs();
-    	}
     	if(id > 4) id = id - 4;
     	$scope.setAddIndex(id-1);
     	for(var i = 0; i < $scope.addtabs.length; i++){
@@ -1605,6 +1617,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	var user = "999";
     	$scope.progress = 25;
  		$dialogs.wait("Aggiornamento dati in corso...", $scope.progress);
+ 		cat = 10;// for test to skip the web service call
  		if(cat == 1){
     		// Case street occupancy log
 	    	switch(type){
@@ -1748,5 +1761,12 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	}	
     };
     
+    $scope.showLogManualCreation = function(){
+    	$scope.showManualInsertion = true;
+    };
+    
+    $scope.hideLogManualCreation = function(){
+    	$scope.showManualInsertion = false;
+    };
     
 }]);    

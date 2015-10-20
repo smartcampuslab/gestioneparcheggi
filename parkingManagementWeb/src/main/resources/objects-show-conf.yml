@@ -188,6 +188,10 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: submicro
+          editable: false
+          required: false
+          visible: false
         - code: note
           editable: true
           required: false
@@ -202,6 +206,10 @@ providers:
           visible: true
         - code: geometry
           editable: true
+          required: false
+          visible: false
+        - code: geomFromSubelement
+          editable: false
           required: false
           visible: false
         - code: viewPage
@@ -494,11 +502,11 @@ providers:
           required: false
           visible: true
         - code: profitParkingMeter
-          editable: true
+          editable: false
           required: false
           visible: true
         - code: profitStruct
-          editable: true
+          editable: false
           required: false
           visible: true
         - code: allLogs

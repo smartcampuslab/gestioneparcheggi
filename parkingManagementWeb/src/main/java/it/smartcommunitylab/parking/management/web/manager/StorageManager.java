@@ -770,6 +770,24 @@ public class StorageManager {
 	}
 	
 	/**
+	 * Method getZoneByType: method used to get the zones of a specific type
+	 * @param type: type to find;
+	 * @param appId: agency id of the zone;
+	 * @return list of ZoneBean object of a specific type and agency
+	 */
+	public List<ZoneBean> getZoneByType(String type, String appId) {
+		List<ZoneBean> result = new ArrayList<ZoneBean>();
+		for (Zone z : mongodb.findAll(Zone.class)) {
+			if(z != null && z.getId_app().compareTo(appId) == 0){
+				if(z.getType().compareToIgnoreCase(type) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
+			}
+		}	
+		return result;
+	}
+	
+	/**
 	 * Method findZoneById: get a list of zone having a specific name
 	 * @param name: name of the zone to search
 	 * @return List of ZoneBean found
@@ -789,9 +807,12 @@ public class StorageManager {
 	public ZoneBean editZone(ZoneBean z, String appId) throws NotFoundException {
 		Zone zona = findById(z.getId(), Zone.class);
 		zona.setName(z.getName());
+		zona.setSubmacro(z.getSubmacro());
+		zona.setSubmicro(z.getSubmicro());
 		zona.setColor(z.getColor());
 		zona.setType(z.getType());
 		zona.setNote(z.getNote());
+		zona.setGeometryFromSubelement(z.isGeometryFromSubelement());
 		if(z.getGeometry()!= null && z.getGeometry().getPoints() != null && z.getGeometry().getPoints().size() > 0){
 			if(zona.getGeometry() != null && zona.getGeometry().getPoints() != null && zona.getGeometry().getPoints().size() > 0){
 				zona.getGeometry().getPoints().clear();

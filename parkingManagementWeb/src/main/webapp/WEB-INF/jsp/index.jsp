@@ -87,7 +87,7 @@ var ctx="<%=request.getContextPath()%>";
 			<li class="{{ isHomeDashboardActive() }}" ng-show="showDashboardMenuLink"><a href="#/dashboard/home" ng-click="setHomeDashboardActive()">{{ 'menu_bar-homedashboard' | i18n }}</a></li>
             <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
             <li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
-            <li class="{{ isHomeAuxActive() }}"><a href="#/aux/home" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li>
+            <li class="{{ isHomeAuxActive() }}" ng-show="showAuxMenuLink"><a href=#/aux/logs/1" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li><!-- href="#/aux/home" -->
 <!--             <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li> -->
 <!--             <li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li> -->
 <!--           	<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li> -->
@@ -111,7 +111,7 @@ var ctx="<%=request.getContextPath()%>";
 	<div class="container-fluid">
 <!-- 		<div class="row" style="margin-top:70px;"> -->
 		<div class="row">
-			<div class="col-md-1"></div>
+			<div class="col-md-1" ng-controller="AuxCtrl" ng-init="initComponents()"></div>	<!-- used only to init aux components -->
 			<div class="col-md-10">
 				<div class="panel panel-default" style="margin-top:100px;">
 			  		<div class="panel-body">
