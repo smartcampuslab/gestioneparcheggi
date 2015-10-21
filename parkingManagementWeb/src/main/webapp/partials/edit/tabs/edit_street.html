@@ -536,6 +536,12 @@
 					    	</div>
 					    	<div class="field-error" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>
 						</div>
+						<div class="form-group" ng-show="isEditing && s_zones.visible">
+					    	<label for="microzone">{{ 'street_zone' | i18n }}</label>
+					    	<select id="microzone" name="sMicroZone" class="form-control" ng-options="m as m.name for m in allMicrozones" ng-model="myMicrozone" ng-required="isEditing && s_zones.required">
+					    	</select>
+					   		<div class="field-error" ng-show="!isInit && form.sMicroZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>
+						</div>						
 						<div class="form-group" ng-show="s_pms.visible" >
 					    	<label for="dropdownPm1">{{ 'street_pm' | i18n }}</label>
 	<!-- 				    	<select id="zone" multiple ng-multiple="true" name="sZone" class="form-control" ng-options="z.name + '-' + z.submacro for z in allZones" ng-model="myZones" ng-required="s_zones.required"> -->
@@ -572,8 +578,8 @@
 					   		<td width="7%" align="right">
 	<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
 	<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateStreet(form, eStreet, myArea, myZones, myPms)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createStreet(form, eStreet, myNewArea, myZones, myPms)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateStreet(form, eStreet, myArea, myZones, myMicrozone, myPms)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createStreet(form, eStreet, myNewArea, myZones, myMicrozone, myPms)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>
 						</tr>
 						<tr>

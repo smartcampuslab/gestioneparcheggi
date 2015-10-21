@@ -32,6 +32,7 @@ pm.service('sharedDataService', function(){
 	
 	this.sharedLocalAreas = [];
 	this.sharedLocalZones = [];
+	this.sharedLocalMicroZones = [];
 	this.sharedLocalPms = [];
 	
 	this.allFamilyUpdated = false;
@@ -596,12 +597,22 @@ pm.service('sharedDataService', function(){
 		this.sharedLocalAreas = list;
 	};
 	
+	// Zones
 	this.getSharedLocalZones = function(){
 		return this.sharedLocalZones;
 	};
 	
 	this.setSharedLocalZones = function(list){
 		this.sharedLocalZones = list;
+	};
+	
+	// MicroZones
+	this.getSharedLocalMicroZones = function(){
+		return this.sharedLocalMicroZones;
+	};
+	
+	this.setSharedLocalMicroZones = function(list){
+		this.sharedLocalMicroZones = list;
 	};
 	
 	this.getSharedLocalPms = function(){

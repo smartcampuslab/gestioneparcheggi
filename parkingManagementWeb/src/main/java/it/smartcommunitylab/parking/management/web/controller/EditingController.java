@@ -224,22 +224,7 @@ public class EditingController {
 	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId) {
 		//return storage.getAllZone(appId);
 		return storage.getZoneByType(ZONA, appId);
-	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/microzone")
-	public @ResponseBody
-	List<ZoneBean> getAllMicroZoneByAppId(@PathVariable("appId") String appId) {
-		//return storage.getAllZone(appId);
-		return storage.getZoneByType(MICROZONA, appId);
-	}
-	
-	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/microzone")
-	public @ResponseBody
-	List<ZoneBean> getAllMicroZoneNS(@PathVariable("appId") String appId) {
-		//return storage.getAllZone(appId);
-		return storage.getZoneByType(MICROZONA, appId);
-	}
+	}	
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/zone/{zid}")
 	public @ResponseBody
@@ -256,6 +241,37 @@ public class EditingController {
 			@PathVariable("zid") String zid) {
 		return storage.removeZone(zid, appId);
 	}
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/microzone")
+	public @ResponseBody
+	List<ZoneBean> getAllMicroZoneByAppId(@PathVariable("appId") String appId) {
+		//return storage.getAllZone(appId);
+		return storage.getZoneByType(MICROZONA, appId);
+	}
+	
+	// Method without security
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/microzone")
+	public @ResponseBody
+	List<ZoneBean> getAllMicroZoneNS(@PathVariable("appId") String appId) {
+		//return storage.getAllZone(appId);
+		return storage.getZoneByType(MICROZONA, appId);
+	}
+	
+	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/microzone/{zid}")
+	public @ResponseBody
+	ZoneBean editMicroZone(@PathVariable("appId") String appId,
+			@PathVariable("zid") String zid,
+			@RequestBody ZoneBean zone) throws NotFoundException {
+		System.out.println(String.format("Zone to edit id:%s; name:%s; submacro:%s ", zone.getId(), zone.getName(), zone.getSubmacro()));
+		return storage.editZone(zone, appId);
+	}
+
+	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/microzone/{zid}")
+	public @ResponseBody
+	boolean deleteMicroZone(@PathVariable("appId") String appId,
+			@PathVariable("zid") String zid) {
+		return storage.removeZone(zid, appId);
+	}	
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/bikepoint")
 	public @ResponseBody

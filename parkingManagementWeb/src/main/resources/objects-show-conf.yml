@@ -209,9 +209,9 @@ providers:
           required: false
           visible: false
         - code: geomFromSubelement
-          editable: false
+          editable: true
           required: false
-          visible: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
