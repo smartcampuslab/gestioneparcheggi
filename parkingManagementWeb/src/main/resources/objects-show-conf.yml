@@ -209,13 +209,51 @@ providers:
           required: false
           visible: false
         - code: geomFromSubelement
+          editable: false
+          required: false
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: true
+     - id: MicroZone
+       attributes:
+        - code: name
+          editable: true
+          required: true
+          visible: true
+        - code: submacro
+          editable: false
+          required: false
+          visible: false
+        - code: submicro
+          editable: true
+          required: true
+          visible: true
+        - code: note
+          editable: true
+          required: false
+          visible: true
+        - code: type
+          editable: true
+          required: false
+          visible: true
+        - code: color
+          editable: false
+          required: false
+          visible: false
+        - code: geometry
+          editable: false
+          required: false
+          visible: false
+        - code: geomFromSubelement
           editable: true
           required: false
           visible: true
         - code: viewPage
           editable: false
           required: false
-          visible: true
+          visible: true          
      - id: Bp
        attributes:
         - code: name

@@ -321,6 +321,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.useAverageZoneOccupation = false;	// to remove this feature set the variable to false
 	var showOtherFilterSettings = false;
 	
+	 // DB type for zone. I have to implement a good solution for types
+    var macrozoneType = "macrozona kml";
+    var microzoneType = "microzona";
+	
 	$scope.setAverageZoneValue = function(value){
 		$scope.useAverageZoneOccupation = value;
 	};
@@ -4196,18 +4200,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    }
 	    		angular.copy(markers, $scope.bikePointMarkers);
 	    	}
-			$scope.getZonesFromDb(isFirst);
+			$scope.getZonesFromDb(isFirst, macrozoneType);
 		});
 	};
 	
-	$scope.getZonesFromDb = function(isFirst){
+	$scope.getZonesFromDb = function(isFirst, type){
 		$scope.zoneMapReady = false;
 		var allZones = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone", null, $scope.authHeaders, null);
-		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/zone", null, $scope.authHeaders, null);
+		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/zone/" + type, null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			angular.copy(result, allZones);
 			//console.log("Zone retrieved from db: " + JSON.stringify(result));

@@ -247,6 +247,10 @@
     "value": "Lista Zone",
     "description": "Titolo tabella lista zone"
 }, {
+    "key": "microzone_list",
+    "value": "Lista Vie",
+    "description": "Titolo tabella lista microzone"
+}, {
     "key": "zone_name",
     "value": "Nome",
     "description": "Intestazione colonna nome in tabella lista zone"
@@ -256,7 +260,7 @@
     "description": "Intestazione colonna submacro in tabella lista zone"
 }, {
     "key": "zone_submicro",
-    "value": "Microzona",
+    "value": "Cod",
     "description": "Intestazione colonna submicro in tabella lista zone"
 }, {
     "key": "zone_color",
@@ -599,6 +603,10 @@
     "value": "Zona",
     "description": "Label campo zona per oggetto strada"
 }, {
+    "key": "street_microzone",
+    "value": "Microzona",
+    "description": "Label campo microzona per oggetto strada"
+}, {
     "key": "street_pm",
     "value": "Parcometro",
     "description": "Label campo parcometro per oggetto strada"
@@ -650,6 +658,10 @@
     "key": "street_zone_select_err_required",
     "value": "Campo Zona di appartenenza obbligatorio.",
     "description": "Messaggio errore campo zona per strada obbligatorio"
+}, {
+    "key": "street_microzone_select_err_required",
+    "value": "Campo Microzona di appartenenza obbligatorio.",
+    "description": "Messaggio errore campo microzona per strada obbligatorio"
 }, {
     "key": "street_pm_select_err_required",
     "value": "Campo Parcometro associato alla strada obbligatorio.",

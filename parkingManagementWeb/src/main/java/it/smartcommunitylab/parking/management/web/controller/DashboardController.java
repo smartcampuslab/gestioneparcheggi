@@ -90,14 +90,6 @@ public class DashboardController {
 	
 	@Autowired
 	CSVManager csvManager;
-	
-	@Autowired
-	@Value("${smartcommunity.parkingmanagement.type.zone}")
-	private String ZONA;
-	
-	@Autowired
-	@Value("${smartcommunity.parkingmanagement.type.street}")
-	private String VIA;
 
 	MarkerIconStorage markerIconStorage;
 
@@ -153,19 +145,19 @@ public class DashboardController {
 		return storage.getAllArea(appId);
 	}
 
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/zone")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/zone/{zType}")
 	public @ResponseBody
-	List<ZoneBean> getAllZone(@PathVariable String appId) {
+	List<ZoneBean> getAllZone(@PathVariable String appId, @PathVariable("zType") String type) {
 		//return storage.getAllZone(appId);
-		return storage.getZoneByType(ZONA, appId);
+		return storage.getZoneByType(type, appId);
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/zone")
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/{appId}/zone/{zType}")
 	public @ResponseBody
-	List<ZoneBean> getAllZoneNS(@PathVariable String appId) {
+	List<ZoneBean> getAllZoneNS(@PathVariable String appId, @PathVariable("zType") String type) {
 		//return storage.getAllZone(appId);
-		return storage.getZoneByType(ZONA, appId);
+		return storage.getZoneByType(type, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/bikepoint")

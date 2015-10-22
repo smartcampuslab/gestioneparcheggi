@@ -34,6 +34,7 @@ import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -41,6 +42,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -50,15 +52,10 @@ public class EditingController {
 	StorageManager storage;
 
 	MarkerIconStorage markerIconStorage;
-	
-	@Autowired
-	@Value("${smartcommunity.parkingmanagement.type.zone}")
-	private String ZONA;
-	
-	@Autowired
-	@Value("${smartcommunity.parkingmanagement.type.street}")
-	private String MICROZONA;
 
+	private static final Logger logger = Logger
+			.getLogger(EditingController.class);
+	
 	@PostConstruct
 	private void init() throws IOException {
 		markerIconStorage = new MarkerIconStorage();
@@ -211,19 +208,28 @@ public class EditingController {
 		return storage.getAllZone("all");
 	}
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/zone")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/zone/{zType}")
 	public @ResponseBody
-	List<ZoneBean> getAllZoneByAppId(@PathVariable("appId") String appId) {
+	List<ZoneBean> getAllZoneByAppId(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
 		//return storage.getAllZone(appId);
-		return storage.getZoneByType(ZONA, appId);
+		logger.info("Zone type " + type);
+		if(type == null || type.compareTo("") == 0){
+			return storage.getAllZone("all");
+		} else {
+			return storage.getZoneByType(type, appId);
+		}
 	}
 	
 	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone")
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/{zType}")
 	public @ResponseBody
-	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId) {
+	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
 		//return storage.getAllZone(appId);
-		return storage.getZoneByType(ZONA, appId);
+		if(type == null || type.compareTo("") == 0){
+			return storage.getAllZone("all");
+		} else {
+			return storage.getZoneByType(type, appId);
+		}
 	}	
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/zone/{zid}")
@@ -241,37 +247,6 @@ public class EditingController {
 			@PathVariable("zid") String zid) {
 		return storage.removeZone(zid, appId);
 	}
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/microzone")
-	public @ResponseBody
-	List<ZoneBean> getAllMicroZoneByAppId(@PathVariable("appId") String appId) {
-		//return storage.getAllZone(appId);
-		return storage.getZoneByType(MICROZONA, appId);
-	}
-	
-	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/microzone")
-	public @ResponseBody
-	List<ZoneBean> getAllMicroZoneNS(@PathVariable("appId") String appId) {
-		//return storage.getAllZone(appId);
-		return storage.getZoneByType(MICROZONA, appId);
-	}
-	
-	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/microzone/{zid}")
-	public @ResponseBody
-	ZoneBean editMicroZone(@PathVariable("appId") String appId,
-			@PathVariable("zid") String zid,
-			@RequestBody ZoneBean zone) throws NotFoundException {
-		System.out.println(String.format("Zone to edit id:%s; name:%s; submacro:%s ", zone.getId(), zone.getName(), zone.getSubmacro()));
-		return storage.editZone(zone, appId);
-	}
-
-	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/microzone/{zid}")
-	public @ResponseBody
-	boolean deleteMicroZone(@PathVariable("appId") String appId,
-			@PathVariable("zid") String zid) {
-		return storage.removeZone(zid, appId);
-	}	
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/bikepoint")
 	public @ResponseBody
