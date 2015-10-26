@@ -116,7 +116,7 @@
     "description": "Label checkbox aree di tariffazione"
 }, {
     "key": "view_streets",
-    "value": "Vie",
+    "value": "Sottovie",
     "description": "Label checkbox vie"
 }, {
     "key": "view_streets_part",
@@ -168,7 +168,7 @@
 	"description": "Label operazioni"
 }, {
     "key": "street_list",
-    "value": "Lista Strade",
+    "value": "Lista Sottovie",
     "description": "Titolo tabella lista strade"
 }, {
     "key": "street_name",
@@ -754,6 +754,10 @@
     "key": "view_zones",
     "value": "Zone",
     "description": "Label zone in pagina visualizza/nascondi elementi"
+}, {
+    "key": "view_microzones",
+    "value": "Vie",
+    "description": "Label vie in pagina visualizza/nascondi elementi"
 }, {
     "key": "edit_area",
     "value": "Modifica Area",

@@ -213,9 +213,22 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z in s.zones track by z.id">
+														<tr ng-repeat="z in s.data.myZones track by z.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
 															<td width="80%">{{ z.name }} - {{ z.submacro }}</td>
+														</tr>
+													</table>
+												</td>
+											</tr>
+											<tr ng-show="s_zones.visible">	
+												<td>
+													<strong>{{ 'street_microzone' | i18n }}:</strong>
+												</td>
+												<td>
+													<table width="100%">
+														<tr ng-repeat="z in s.data.myMicrozones track by z.id">
+															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
+															<td width="80%">{{ z.name }} - {{ z.submicro }}</td>
 														</tr>
 													</table>
 												</td>
@@ -262,7 +275,7 @@
      						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="zone_name.visible">{{ z.data.name }}</span></h4>
+						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="zone_name.visible">{{ z.data.name }}</span><span ng-show="zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
 							        <div id="bodyContent">
 							        	<table>
 							        		<tr ng-show="zone_type.visible">
@@ -274,6 +287,31 @@
 							        			<td>&nbsp;{{ z.data.note }}</td>
 							        		</tr>
 							        		<tr ng-show="zone_color.visible">	
+												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
+												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+											</tr>
+							        	</table>
+							        </div>
+						        </div>
+						    </info-window>
+     					</shape>
+     					<shape name="polygon" ng-repeat="z in mapMicrozones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" on-click="showInfoWindow(event, z.info_windows_cod)">
+     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
+						        <div ng-non-bindable="">
+						          	<div id="siteNotice"></div>
+						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="microzone_name.visible">{{ z.data.name }}</span><span ng-show="microzone_submicro.visible">_{{ z.data.submicro }}</span></h4>
+							        <div id="bodyContent">
+							        	<table>
+							        		<tr ng-show="microzone_type.visible">
+							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
+							        			<td>&nbsp;{{ z.data.type }}</td>
+							        		</tr>
+											<tr ng-show="microzone_note.visible">
+							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
+							        			<td>&nbsp;{{ z.data.note }}</td>
+							        		</tr>
+							        		<tr ng-show="microzone_color.visible">	
 												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
 												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
 											</tr>
@@ -340,6 +378,14 @@
 									<td align="center" width="15%"><input id="rateArea" type="checkbox" ng-model="mapelements.rateareas" ng-click="changeAreaPolygons()"></td>
 									<td align="left" width="85%"><label for="rateArea">{{ 'view_areas' | i18n }}</label></td>
 								</tr>
+								<tr ng-show="isZonesVisible()">
+									<td align="center"><input id="zones" type="checkbox" ng-model="mapelements.zones" ng-click="changeZonePolygons()"></td>
+									<td align="left"><label for="zones">{{ 'view_zones' | i18n }}</label></td>
+								</tr>
+								<tr ng-show="isMicroZonesVisible()">
+									<td align="center"><input id="microzones" type="checkbox" ng-model="mapelements.microzones" ng-click="changeMicrozonePolygons()"></td>
+									<td align="left"><label for="microzones">{{ 'view_microzones' | i18n }}</label></td>
+								</tr>
 								<tr ng-show="isStreetVisible()">
 									<td align="center"><input id="streets" type="checkbox" ng-model="mapelements.streets" ng-click="changeStreetPolylines()"></td>
 									<td align="left"><label for="streets">{{ 'view_streets' | i18n }}</label></td>
@@ -355,10 +401,6 @@
 								<tr ng-show="isBpVisible()">
 									<td align="center"><input id="bikePoint" type="checkbox" ng-model="mapelements.bikepoints" ng-click="changeBikePointsMarkers()"></td>
 									<td align="left"><label for="bikePoint">{{ 'view_bikepoints' | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isZonesVisible()">
-									<td align="center"><input id="zones" type="checkbox" ng-model="mapelements.zones" ng-click="changeZonePolygons()"></td>
-									<td align="left"><label for="zones">{{ 'view_zones' | i18n }}</label></td>
 								</tr>
 							</table>
 						</div>

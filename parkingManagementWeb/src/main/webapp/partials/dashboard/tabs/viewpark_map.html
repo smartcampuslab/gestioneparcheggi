@@ -302,6 +302,10 @@
          		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zTime.stroke.weight }}"
          		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
+     		<shape name="polyline" ng-repeat="z in mapMicroZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+         		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
+         		on-click="showDetails(event, z, 4, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		</shape>
      		<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          		geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="{{ a.stroke.opacity }}" stroke-weight="{{ a.stroke.weight }}"
          		fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showDetails(event, a, 5, 0)"><!-- on-click="showInfoWindow(event, a.info_windows_cod)" -->
@@ -516,6 +520,37 @@
 										<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span>
 									</td>
 								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_microzone' | i18n }}</td>
+					</tr>
+					<tr ng-show="s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in sDetails.microzones track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.submacro }}</td>
+								</tr>
+<!-- 								<tr> -->
+<!-- 									<td class="detailsTableSX">{{ 'zone_color' | i18n }}:</td> -->
+<!-- 									<td class="detailsTableCX"></td> -->
+<!-- 									<td class="detailsTableDX"> -->
+<!-- 										<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span> -->
+<!-- 									</td> -->
+<!-- 								</tr> -->
 							</table>
 						<td>
 					</tr>

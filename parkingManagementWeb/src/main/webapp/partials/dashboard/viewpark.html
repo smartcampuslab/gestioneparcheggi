@@ -33,11 +33,11 @@
 					<tr ng-show="isZonesVisible()">
 						<td align="left"><label class="left-filter"><input id="zones" type="radio" ng-model="dashboard_space_list" value="macrozone" ng-click="showZoneList(dashboard_topics_list)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
 					</tr>
-					<tr ng-show="isStreetVisible()">
-						<td align="left"><label class="left-filter"><input id="streets" type="radio" ng-model="dashboard_space_list" value="microzone" ng-click="showStreetList(dashboard_topics_list)">&nbsp;{{ 'view_streets' | i18n }}</label></td>
+					<tr ng-show="isMicrozonesVisible()">
+						<td align="left"><label class="left-filter"><input id="microzones" type="radio" ng-model="dashboard_space_list" value="microzone" ng-click="showMicrozoneList(dashboard_topics_list)">&nbsp;{{ 'view_microzones' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
 					</tr>
 					<tr ng-show="isStreetVisible()">
-						<td align="left"><label class="left-filter"><input id="streets_part" type="radio" ng-model="dashboard_space_list" value="microzone_part" ng-click="showStreetPartList(dashboard_topics_list)" disabled>&nbsp;<span style="color:gray">{{ 'view_streets_part' | i18n }}</span></label></td>
+						<td align="left"><label class="left-filter"><input id="streets" type="radio" ng-model="dashboard_space_list" value="microzone_part" ng-click="showStreetList(dashboard_topics_list)">&nbsp;{{ 'view_streets' | i18n }}</label></td>
 					</tr>
 					<tr ng-show="isPsVisible()">
 						<td align="left"><label class="left-filter"><input id="pStruct" type="radio" ng-model="dashboard_space_list" value="parkingstructs" ng-click="showStructList(dashboard_topics_list)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>
@@ -82,11 +82,11 @@
 						<tr ng-show="isZonesVisible()">
 							<td align="left"><label class="left-filter"><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons(dashboard_topics)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
 						</tr>
-						<tr ng-show="isStreetVisible()">
-							<td align="left"><label class="left-filter"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
+						<tr ng-show="isMicrozonesVisible()">
+							<td align="left"><label class="left-filter"><input id="microzones" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeMicrozonePolygons(dashboard_topics)">&nbsp;{{ 'view_microzones' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
 						</tr>
 						<tr ng-show="isStreetVisible()">
-							<td align="left"><label class="left-filter"><input id="streets_part" type="checkbox" ng-model="dashboard_space.microzone_part" ng-click="changeStreetPolylines(dashboard_topics)" disabled >&nbsp;<span style="color:gray">{{ 'view_streets_part' | i18n }}</span></label></td><!-- ng-click="changeStreetAndPS()" -->
+							<td align="left"><label class="left-filter"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone_part" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
 						</tr>
 						<tr ng-show="isPsVisible()">
 							<td align="left"><label class="left-filter"><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td>

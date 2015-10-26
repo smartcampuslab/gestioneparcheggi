@@ -78,6 +78,19 @@
 											</table>
 										</td>
 									</tr>
+									<tr ng-show="s_zones.visible">	
+										<td>
+											<strong>{{ 'street_microzone' | i18n }}:</strong>
+										</td>
+										<td>
+											<table width="100%">
+												<tr ng-repeat="z in s.microzones track by z.id">
+													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
+													<td width="80%">{{ z.name }} - {{ z.submicro }}</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
 									<tr ng-show="s_areaId.visible">
 							        	<td colspan="2">
 							        		<strong>{{ 'street_area_name' | i18n }}:</strong>
@@ -186,6 +199,19 @@
 												<tr ng-repeat="z in s.zones track by z.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
 													<td width="80%">{{ z.name }} - {{ z.submacro }}</td>
+												</tr>
+											</table>
+										</td>
+									</tr>
+									<tr ng-show="s_zones.visible">	
+										<td>
+											<strong>{{ 'street_microzone' | i18n }}:</strong>
+										</td>
+										<td>
+											<table width="100%">
+												<tr ng-repeat="z in s.microzones track by z.id">
+													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
+													<td width="80%">{{ z.name }} - {{ z.submicro }}</td>
 												</tr>
 											</table>
 										</td>
@@ -371,6 +397,19 @@
 									<tr ng-repeat="z in viewStreet.myZones track by z.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
 										<td width="85%">{{ z.name }} - {{ z.submacro }}</td>
+									</tr>
+								</table>
+							</td>
+						</tr>
+						<tr ng-show="s_zones.visible">	
+							<td class="detailsViewStreetSX">
+								{{ 'street_microzone' | i18n }}:
+							</td>
+							<td class="detailsViewStreetDX">
+								<table width="100%">
+									<tr ng-repeat="z in viewStreet.mySubZones track by z.id">
+										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span></td>
+										<td width="85%">{{ z.name }} - {{ z.submicro }}</td>
 									</tr>
 								</table>
 							</td>

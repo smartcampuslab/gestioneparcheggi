@@ -287,16 +287,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.mapParkingStructureMarkers = [];
 	$scope.mapBikePointMarkers = [];
 	$scope.streetWS = [];
+	$scope.microzoneWS = [];
 	$scope.pstructWS = [];
 	$scope.allDataStructWS = [];
 	$scope.mapStreets = [];
 	$scope.mapZones = [];
+	$scope.mapMicroZones = [];
 	$scope.mapAreas = [];
 	$scope.actualParks = [];
 	
 	$scope.occupancyStreets = [];
 	$scope.occupancyAreas = [];
 	$scope.occupancyZones = [];
+	$scope.occupancyMicroZones = [];
 	$scope.occupancyParkingMeterMarkers = [];
 	$scope.occupancyParkingStructureMarkers = [];
 	$scope.mapStreetSelectedMarkers = [];
@@ -304,6 +307,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.profitStreets = [];
 	$scope.profitAreas = [];
 	$scope.profitZones = [];
+	$scope.profitMicroZones = [];
 	$scope.profitParkingMetersMarkers = [];
 	$scope.profitParkingStructureMarkers = [];
 	$scope.profitStructWS = [];
@@ -311,6 +315,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.timeCostStreets = [];
 	$scope.timeCostAreas = [];
 	$scope.timeCostZones = [];
+	$scope.timeCostMicroZones = [];
 	$scope.timeCostParkingStructureMarkers = [];
 	
 	$scope.profitStreetsList = [];
@@ -411,6 +416,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			title_map = "macrozona_";
 		} else if($scope.dashboard_space_list == "microzone"){
 			title_map = "via_";
+		} else if($scope.dashboard_space_list == "microzone_part"){
+			title_map = "sottovia_";
 		} else if($scope.dashboard_space_list == "parkingstructs"){
 			title_map = "parcheggiostruttura_";
 		} else if($scope.dashboard_space_list == "parkingmeter"){
@@ -574,7 +581,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	// --------------- Block for title of the map (describe the element showed in the map ------------------
-	$scope.title_map = "Offerta di sosta: Vie";
+	$scope.title_map = "Offerta di sosta: Sottovie";
 	$scope.update_title_map = function(inverse, type, exlude){
 		switch ($scope.dashboard_topics){
 			case "parkSupply": 
@@ -597,6 +604,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					if(type == "microzone"){
 						if(exlude != "microzone"){
 							$scope.title_map += "Vie, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "microzone_part"){
+						if(exlude != "microzone_part"){
+							$scope.title_map += "Sottovie, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
@@ -637,6 +650,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						}
 						$scope.controlCheckedArea(exlude);
 					}
+					if(type == "microzone_part"){
+						if(exlude != "microzone_part"){
+							$scope.title_map += "Sottovie, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
 					if(type == "parkingstructs"){
 						if(exlude != "parkingstructs"){
 							$scope.title_map += "Strutture Parcheggio, ";
@@ -665,6 +684,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					if(type == "microzone"){
 						if(exlude != "microzone"){
 							$scope.title_map += "Vie, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
+					if(type == "microzone_part"){
+						if(exlude != "microzone_part"){
+							$scope.title_map += "Sottovie, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
@@ -699,6 +724,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						}
 						$scope.controlCheckedArea(exlude);
 					}
+					if(type == "microzone_part"){
+						if(exlude != "microzone_part"){
+							$scope.title_map += "Sottovie, ";
+						}
+						$scope.controlCheckedArea(exlude);
+					}
 					if(type == "parkingstructs"){
 						if(exlude != "parkingstructs"){
 							$scope.title_map += "Strutture Parcheggio, ";
@@ -721,6 +752,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 		if($scope.dashboard_space.microzone && (exlude != "microzone")){
 			$scope.title_map += "Vie, ";
+		}
+		if($scope.dashboard_space.microzone_part && (exlude != "microzone_part")){
+			$scope.title_map += "Sottovie, ";
 		}
 		if($scope.dashboard_space.parkingstructs && (exlude != "parkingstructs")){
 			$scope.title_map += "Strutture Parcheggio, ";
@@ -748,6 +782,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     var showPs = false;
     var showBp = false;
     var showZones = false;
+    var showMicrozones = false;
     $scope.allMapObjectLoaded = false;
     
     $scope.isAreaVisible = function(){
@@ -772,6 +807,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 
     $scope.isZonesVisible = function(){
     	return showZones;
+    };
+    
+    $scope.isMicrozonesVisible = function(){
+    	return showMicrozones;
     };
     
     $scope.setAllMapObjectLoaded = function(value){
@@ -893,6 +932,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	}
 		   		if($scope.showedObjects[i].id == 'Zone'){
 		   			$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
+		   		}
+		   		if($scope.showedObjects[i].id == 'MicroZone'){
+		   			$scope.loadMicroZoneAttributes($scope.showedObjects[i].attributes);
 		   		}
 		   	}
 	    }
@@ -1073,6 +1115,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		if(attributes[i].code == 'submacro'){
     			$scope.zone_submacro = attributes[i];
     		}
+    		if(attributes[i].code == 'submicro'){
+    			$scope.zone_submicro = attributes[i];
+    		}
     		if(attributes[i].code == 'note'){
     			$scope.zone_note = attributes[i];
     		}
@@ -1088,6 +1133,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		if(attributes[i].code == 'geometry'){
     			$scope.zone_geometry = attributes[i];
     		}
+    		if(attributes[i].code == 'geomFromSubelement'){
+    			$scope.zone_geom_from_subelement = attributes[i];
+    		}
     		if(attributes[i].code == 'viewPage'){
     			if(attributes[i].visible){
     				showZones = true;
@@ -1095,6 +1143,44 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		}
     	}
     };
+    
+  //MicroZones Component settings
+    $scope.loadMicroZoneAttributes = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'name'){
+    			$scope.microzone_name = attributes[i];
+    		}
+    		if(attributes[i].code == 'submacro'){
+    			$scope.microzone_submacro = attributes[i];
+    		}
+    		if(attributes[i].code == 'submicro'){
+    			$scope.microzone_submicro = attributes[i];
+    		}
+    		if(attributes[i].code == 'note'){
+    			$scope.microzone_note = attributes[i];
+    		}
+    		if(attributes[i].code == 'status'){
+    			$scope.microzone_status = attributes[i];
+    		}
+    		if(attributes[i].code == 'type'){
+    			$scope.microzone_type = attributes[i];
+    		}
+    		if(attributes[i].code == 'color'){
+    			$scope.microzone_color = attributes[i];
+    		}
+    		if(attributes[i].code == 'geometry'){
+    			$scope.microzone_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'geomFromSubelement'){
+    			$scope.microzone_geom_from_subelement = attributes[i];
+    		}
+    		if(attributes[i].code == 'viewPage'){
+    			if(attributes[i].visible){
+    				showMicrozones = true;
+    			}
+    		}
+    	}
+    };       
     // ---------------------- End Block to read conf params and show/hide elements ---------------------   
     $scope.tabIndex = 0;
     $scope.viewparktabs = [ 
@@ -1265,7 +1351,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.dashboard_space = {
 			rate_area : false,
 			macrozone : false,
-			microzone : true,
+			microzone : false,
+			microzone_part : true,
 			parkingmeter : false,
 			parkingstructs : false
 		};
@@ -1276,7 +1363,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			hours : false
 		};
 		
-		$scope.dashboard_space_list = "microzone";
+		$scope.dashboard_space_list = "microzone_part";
 		//if(type == 1){
 		$scope.dashboard_topics = "parkSupply";
 		//} else {
@@ -1297,6 +1384,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.dashboard_space.macrozone = true;
 			} else if($scope.dashboard_space_list == "microzone"){
 				$scope.dashboard_space.microzone = true;
+			} else if($scope.dashboard_space_list == "microzone_part"){
+				$scope.dashboard_space.microzone_part = true;
 			} else if($scope.dashboard_space_list == "parkingmeter"){
 				$scope.dashboard_space.parkingmeter = true;
 			} else if($scope.dashboard_space_list == "parkingstructs"){
@@ -1313,6 +1402,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.dashboard_space_list = "macrozone";
 			} else if($scope.dashboard_space.microzone){
 				$scope.dashboard_space_list = "microzone";
+			} else if($scope.dashboard_space.microzone_part){
+				$scope.dashboard_space_list = "microzone_part";
 			} else if($scope.dashboard_space.parkingmeter){
 				$scope.dashboard_space_list = "parkingmeter";
 			} else if($scope.dashboard_space.parkingstructs){
@@ -1341,6 +1432,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			$scope.dashboard_space.rate_area = false;
 			$scope.dashboard_space.macrozone = false;
 			$scope.dashboard_space.microzone = false;
+			$scope.dashboard_space.microzone_part = false;
 			$scope.dashboard_space.parkingmeter = false;
 			$scope.dashboard_space.parkingstructs = false;
 		}
@@ -1375,6 +1467,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space.macrozone){
 							$scope.showZonePolygons(1);
 						} else if($scope.dashboard_space.microzone){
+							//$scope.showStreetPolylines(1);
+						} else if($scope.dashboard_space.microzone_part){
 							$scope.showStreetPolylines(1);
 						} else if($scope.dashboard_space.parkingmeter){
 							$scope.showParkingMetersMarkers();
@@ -1382,7 +1476,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 							$scope.showParkingStructuresMarkers(1);
 						}
 					} else {
-						$scope.dashboard_space.microzone = true;
+						$scope.dashboard_space.microzone_part = true;
 						$scope.dashboard_space.parkingmeter = false;
 						// Show parkingManagement objects
 						$scope.switchStreetMapObject(2, null, false);
@@ -1413,12 +1507,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space.macrozone){
 							$scope.showZonePolygons(2);
 						} else if($scope.dashboard_space.microzone){
+							//$scope.showStreetPolylines(2);
+						} else if($scope.dashboard_space.microzone_part){
 							$scope.showStreetPolylines(2);
 						} else if($scope.dashboard_space.parkingstructs){
 							$scope.showParkingStructuresMarkers(2);
 						}
 					} else {
-						$scope.dashboard_space.microzone = true;
+						$scope.dashboard_space.microzone_part = true;
 						$scope.dashboard_space.parkingmeter = false;
 						$scope.switchStreetMapObject(1, null, false);
 						$scope.switchZoneMapObject(1, null);
@@ -1446,6 +1542,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space.macrozone){
 							$scope.showZonePolygons(3);
 						} else if($scope.dashboard_space.microzone){
+							//$scope.showStreetPolylines(3);
+						} else if($scope.dashboard_space.microzone_part){
 							$scope.showStreetPolylines(3);
 						} else if($scope.dashboard_space.parkingmeter){
 							$scope.showProfitPMMarkers();
@@ -1458,7 +1556,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else {
 							$scope.switchPMMapObject(5, null);
 						}	
-						$scope.dashboard_space.microzone = false;
+						$scope.dashboard_space.microzone_part = false;
 						$scope.dashboard_space.parkingmeter = true;
 						$scope.switchStreetMapObject(5, null, true);
 						$scope.switchZoneMapObject(5, null);
@@ -1477,12 +1575,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space.macrozone){
 							$scope.showZonePolygons(4);
 						} else if($scope.dashboard_space.microzone){
+							//$scope.showStreetPolylines(4);
+						} else if($scope.dashboard_space.microzone_part){
 							$scope.showStreetPolylines(4);
 						} else if($scope.dashboard_space.parkingstructs){
 							$scope.showParkingStructuresMarkers(4);
 						}
 					} else {
-						$scope.dashboard_space.microzone = true;
+						$scope.dashboard_space.microzone_part = true;
 						$scope.dashboard_space.parkingmeter = false;
 						$scope.switchStreetMapObject(7, null, false);
 						$scope.switchZoneMapObject(7, null);
@@ -1515,6 +1615,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space_list == "macrozone"){
 							$scope.showZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone"){
+							//$scope.showStreetList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "microzone_part"){
 							$scope.showStreetList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "parkingmeter"){
 							$scope.showPMeterList($scope.dashboard_topics_list);
@@ -1522,7 +1624,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 							$scope.showStructList($scope.dashboard_topics_list);
 						}
 					} else {
-						$scope.dashboard_space_list = "microzone";
+						$scope.dashboard_space_list = "microzone_part";
 						$scope.showStreetList($scope.dashboard_topics_list);
 					}
 					break;
@@ -1537,6 +1639,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space_list == "macrozone"){
 							$scope.showZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone"){
+							//$scope.showStreetList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "microzone_part"){
 							$scope.showStreetList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "parkingmeter"){
 							$scope.showPMeterList($scope.dashboard_topics_list);
@@ -1544,7 +1648,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 							$scope.showStructList($scope.dashboard_topics_list);
 						}
 					} else {
-						$scope.dashboard_space_list = "microzone";
+						$scope.dashboard_space_list = "microzone_part";
 						$scope.showStreetList($scope.dashboard_topics_list);
 					}
 					break;
@@ -1559,6 +1663,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space_list == "macrozone"){
 							$scope.showZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone"){
+							//$scope.showStreetList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "microzone_part"){
 							$scope.showStreetList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "parkingmeter"){
 							$scope.showPMeterList($scope.dashboard_topics_list);
@@ -1581,6 +1687,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space_list == "macrozone"){
 							$scope.showZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone"){
+							//$scope.showStreetList($scope.dashboard_topics_list);
+						} else if($scope.dashboard_space_list == "microzone_part"){
 							$scope.showStreetList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "parkingmeter"){
 							$scope.showPMeterList($scope.dashboard_topics_list);
@@ -1588,7 +1696,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 							$scope.showStructList($scope.dashboard_topics_list);
 						}
 					} else {
-						$scope.dashboard_space_list = "microzone";
+						$scope.dashboard_space_list = "microzone_part";
 						$scope.showStreetList($scope.dashboard_topics_list);
 					}
 					break;
@@ -1774,6 +1882,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return tmpPolygon;
 	};
 	
+	// correctMyZones: used to correct the zone object with all the necessary data
 	$scope.correctMyZones = function(zones){
 		var correctedZones = [];
 		for(var i = 0; i < zones.length; i++){
@@ -1783,14 +1892,18 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				color: zones[i].color,
 				name: zones[i].name,
 				submacro: zones[i].submacro,
+				submicro: zones[i].submicro,
 				type: zones[i].type,
 				note: zones[i].note,
-				geometry: $scope.correctMyGeometryPolygon(zones[i].geometry)
+				geometry: $scope.correctMyGeometryPolygon(zones[i].geometry),
+				geometryFromSubelement: zones[i].geometryFromSubelement,
+				subelements: $scope.loadStreetsFromZone(zones[i].id),
+				label: zones[i].name + "_" + zones[i].submacro
 			};
 			correctedZones.push(correctZone);
 		}
 		return correctedZones;
-	};
+	};	
 	
 	$scope.castMyPaymentModeToString = function(myPm){
 		var correctedPm = "";
@@ -1834,6 +1947,40 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return found;
 	};
 	
+	$scope.addLabelToZoneObject = function(zone){
+    	var corrected_zone = {
+    		id: zone.id,
+    		id_app: zone.id_app,
+    		color: zone.color,
+    		name: zone.name,
+    		submacro: zone.submacro,
+    		submicro: zone.submicro,
+    		type: zone.type,
+    		note: zone.note,
+    		geometry: zone.geometry,
+    		geometryFromSubelement: zone.geometryFromSubelement,
+    		subelements: zone.subelements,
+    		label: zone.name + "_" + zone.submacro
+    	};
+    	return corrected_zone;
+    };	
+    
+    $scope.loadStreetsFromZone = function(z_id){
+		var z_streets = [];
+		if($scope.streetWS != null && $scope.streetWS.length > 0){
+			for(var i = 0; i < $scope.streetWS.length; i++){
+				var found = false;
+				for(var j = 0; (j < $scope.streetWS[i].zones.length) && !found; j++){
+					if($scope.streetWS[i].zones[j] == z_id){
+						found = true;
+						z_streets.push($scope.streetWS[i]);
+					}
+				}
+			}
+		}
+		return z_streets;
+	};
+	
 	// ----------------------------------------------------------------------------------------------
 	
 	// Method alignSelectedObjects: used to hide all selected object when the filter stat is changed
@@ -1857,6 +2004,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var toHideZone = $scope.map.shapes;
 			toHideZone[$scope.mapSelectedZones[0].id].setMap(null);
 			$scope.mapSelectedZones = [];
+		}
+		// For MicroZone
+		if($scope.mapSelectedMicroZones != null && $scope.mapSelectedMicroZones.length > 0){
+			var toHideZone = $scope.map.shapes;
+			toHideZone[$scope.mapSelectedMicroZones[0].id].setMap(null);
+			$scope.mapSelectedMicroZones = [];
 		}
 		// For Streets
 		if($scope.mapSelectedStreets != null && $scope.mapSelectedStreets.length > 0){
@@ -2232,10 +2385,87 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.mapStreetSelectedMarkers = [];
     };
     
+    // Show/hide microzones polygons
+    $scope.changeMicrozonePolygons = function(dashboardTopic){
+		//if(!$scope.mapelements.zones){
+    	if(dashboardTopic == "parkSupply"){
+	    	if(!$scope.dashboard_space.microzone){
+				$scope.showMicroZonePolygons(1);
+			} else {
+				$scope.hideMicroZonePolygons(1);
+			}
+    	} else if(dashboardTopic == "occupation"){
+    		if(!$scope.dashboard_space.microzone){
+				$scope.showMicroZonePolygons(2);
+			} else {
+				$scope.hideMicroZonePolygons(2);
+			}
+    	} else if(dashboardTopic == "receipts"){
+    		if(!$scope.dashboard_space.microzone){
+				$scope.showMicroZonePolygons(3);
+			} else {
+				$scope.hideMicroZonePolygons(3);
+			}
+    	} else if(dashboardTopic == "timeCost"){
+    		if(!$scope.dashboard_space.microzone){
+				$scope.showMicroZonePolygons(4);
+			} else {
+				$scope.hideMicroZonePolygons(4);
+			}
+    	}
+    	if(!$scope.dashboard_space.microzone){
+    		$scope.update_title_map(true, "microzone", "");
+    	} else {
+    		$scope.update_title_map(true, "microzone", "microzone");
+    	}
+	};   
+	
+	$scope.showMicroZonePolygons = function(type) {
+    	if(type == 1){
+    		$scope.mapMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, type, false, false)[0];
+    	} else if(type == 2){
+    		if($scope.occupancyMicroZones.length == 0){
+    			$scope.occupancyMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, type, true, false)[0];
+    		} else {
+    			$scope.occupancyMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, type, false, false)[0];
+    		}
+    	} else if(type == 3){
+    		if($scope.profitMicroZones.length == 0){
+    			$scope.profitMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, type, true, false)[0];
+    		} else {
+    			$scope.profitMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, type, false, false)[0];
+    		}
+    	} else if(type == 4){
+    		if($scope.timeCostMicroZones.length == 0){
+    			$scope.timeCostMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, type, true, false)[0];
+    		} else {
+    			$scope.timeCostMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, type, false, false)[0];
+    		}
+    	}
+    };
+    
+    $scope.hideMicroZonePolygons = function(type) {
+    	if(type == 1){
+    		$scope.mapMicroZones = $scope.initZonesOnMap($scope.microzoneWS, false, type, false, false)[0];
+    	} else if(type == 2){
+    		$scope.occupancyMicroZones = $scope.initZonesOnMap($scope.microzoneWS, false, type, false, false)[0];
+    	} else if(type == 3){
+    		$scope.profitMicroZones = $scope.initZonesOnMap($scope.microzoneWS, false, type, false, false)[0];
+    	} else if(type == 4){
+    		$scope.timeCostMicroZones = $scope.initZonesOnMap($scope.microzoneWS, false, type, false, false)[0];
+    	}
+    	$scope.hideAllMicroZones();
+    	$scope.detailsOpened = false;
+    	$scope.occupancyOpened = false;
+    	$scope.profitOpened = false;
+    	$scope.timeCostOpened = false;
+    	$scope.mapStreetSelectedMarkers = [];
+    };	
+    
     // Show/hide streets polygons
     $scope.changeStreetPolylines = function(dashboardTopic){
 		//if(!$scope.mapelements.streets){
-    	if(!$scope.dashboard_space.microzone){
+    	if(!$scope.dashboard_space.microzone_part){
     		if(dashboardTopic == "parkSupply"){
     			$scope.showStreetPolylines(1);
     		} else if(dashboardTopic == "occupation"){
@@ -2256,10 +2486,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     			$scope.hideStreetPolylines(4);
     		}
 		}
-    	if(!$scope.dashboard_space.microzone){
-    		$scope.update_title_map(true, "microzone", "");
+    	if(!$scope.dashboard_space.microzone_part){
+    		$scope.update_title_map(true, "microzone_part", "");
     	} else {
-    		$scope.update_title_map(true, "microzone", "microzone");
+    		$scope.update_title_map(true, "microzone_part", "microzone_part");
     	}
 	};
     
@@ -2358,6 +2588,77 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	}
     	$scope.alignSelectedObjects();
     };
+    
+    $scope.hideAllMicroZones = function(){
+	    var toHideZone = $scope.map.shapes;
+	    for(var i = 0; i < $scope.mapMicroZones.length; i++){
+	    	if($scope.mapMicroZones[i].data.subelements != null && $scope.mapMicroZones[i].data.subelements.length > 0){
+	    		if($scope.mapMicroZones[i].data.subelements.length == 1){
+	    			if(toHideZone[$scope.mapMicroZones[i].id] != null){
+	        			toHideZone[$scope.mapMicroZones[i].id].setMap(null);
+	        		}
+	    		} else {
+	    			for(var j = 0; j < $scope.mapMicroZones[i].data.subelements.length; j++){
+	    				var myId = $scope.correctObjId($scope.mapMicroZones[i].data.id, j);
+	    				if(toHideZone[myId] != null){
+	    					toHideZone[myId].setMap(null);
+			    		}
+	    			}
+	    		}
+	    	}	
+	    }
+	    for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+	    	if($scope.occupancyMicroZones[i].data.subelements != null && $scope.occupancyMicroZones[i].data.subelements.length > 0){
+	    		if($scope.occupancyMicroZones[i].data.subelements.length == 1){
+	    			if(toHideZone[$scope.occupancyMicroZones[i].id] != null){
+	        			toHideZone[$scope.occupancyMicroZones[i].id].setMap(null);
+	        		}
+	    		} else {
+	    			for(var j = 0; j < $scope.occupancyMicroZones[i].data.subelements.length; j++){
+	    				var myId = $scope.correctObjId($scope.occupancyMicroZones[i].data.id, j);
+	    				if(toHideZone[myId] != null){
+	    					toHideZone[myId].setMap(null);
+			    		}
+	    			}
+	    		}
+	    	}
+    	}
+    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
+    		if($scope.profitMicroZones[i].data.subelements != null && $scope.profitMicroZones[i].data.subelements.length > 0){
+	    		if($scope.profitMicroZones[i].data.subelements.length == 1){
+	    			if(toHideZone[$scope.profitMicroZones[i].id] != null){
+	        			toHideZone[$scope.profitMicroZones[i].id].setMap(null);
+	        		}
+	    		} else {
+	    			for(var j = 0; j < $scope.profitMicroZones[i].data.subelements.length; j++){
+	    				var myId = $scope.correctObjId($scope.profitMicroZones[i].data.id, j);
+	    				if(toHideZone[myId] != null){
+	    					toHideZone[myId].setMap(null);
+			    		}
+	    			}
+	    		}
+	    	}
+    	}
+    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+    		if($scope.timeCostMicroZones[i].data.subelements != null && $scope.timeCostMicroZones[i].data.subelements.length > 0){
+	    		if($scope.timeCostMicroZones[i].data.subelements.length == 1){
+	    			if(toHideZone[$scope.timeCostMicroZones[i].id] != null){
+	        			toHideZone[$scope.timeCostMicroZones[i].id].setMap(null);
+	        		}
+	    		} else {
+	    			for(var j = 0; j < $scope.timeCostMicroZones[i].data.subelements.length; j++){
+	    				var myId = $scope.correctObjId($scope.timeCostMicroZones[i].data.id, j);
+	    				if(toHideZone[myId] != null){
+	    					toHideZone[myId].setMap(null);
+			    		}
+	    			}
+	    		}
+	    	}
+    	}
+    	$scope.alignSelectedObjects();
+    };    
+    
+    
     
     $scope.hideAllAreas = function(areas){
     	var toHideArea = $scope.map.shapes;
@@ -2640,9 +2941,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		for(var i = 0; i < streets.length; i++){
 			var myAreaS = $scope.getLocalAreaById(streets[i].rateAreaId);
 			var myZones = [];
+			var mySubzones = [];
 			for(var j = 0; j < streets[i].zones.length; j++){
-				var zone = $scope.getLocalZoneById(streets[i].zones[j]);
-				myZones.push(zone);
+				var zone = $scope.getLocalZoneById(streets[i].zones[j], 2);
+				if(zone == null){
+					var subzone = $scope.getLocalMicroZoneById(streets[i].zones[j], 2);
+					if(subzone != null){
+						mySubzones.push(subzone);
+					}
+				} else {
+					myZones.push($scope.addLabelToZoneObject(zone));
+				}
 			}
 			var parkingMeters = streets[i].myPms;
 			var totalProfit = 0;
@@ -2696,6 +3005,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						data: streets[i],
 						area: myAreaS,
 						zones: myZones,
+						microzones: mySubzones,
 						pms: streets[i].myPms,
 						info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
 						info_windows_cod: "s" + streets[i].id,
@@ -2843,31 +3153,62 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			zones[i].tickets = zoneProfit[1];	// sum of tickets from pms in zone
 			zones[i].streetInZone = zoneProfit[2];
 			
-			if(zones[i].geometry != null && zones[i].geometry.points != null && zones[i].geometry.points.length > 0){
-				poligons = zones[i].geometry;
-				zone = {
-					id: zones[i].id,
-					path: $scope.correctPoints(poligons.points),
-					gpath: $scope.correctPointsGoogle(poligons.points),
-					stroke: {
-					    color: zColor,//$scope.correctColor(zones[i].color),
-					    weight: 3,
-					    opacity: 0.7
-					},
-					data: zones[i],
-					info_windows_cod: "z" + zones[i].id,
-					info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
-					editable: true,
-					draggable: true,
-					geodesic: false,
-					visible: visible,
-					fill: {
-					    color: zColor,//$scope.correctColor(zones[i].color),
-					    opacity: 0.5
+			if(zones[i].geometryFromSubelement){
+				var streets = zones[i].subelements;//$scope.loadStreetsFromZone(zones[i].id);
+				var color = $scope.lightgray;
+				if(streets != null && streets.length > 0){
+					color = streets[0].area_color;
+				}
+				if(streets != null && streets.length > 0){
+					for(var j = 0; j < streets.length; j++){
+						var polyline = streets[j].geometry;
+						zone = {
+							id: $scope.correctObjId(zones[i].id, j),
+							path: $scope.correctPoints(polyline.points),
+							gpath: $scope.correctPointsGoogle(polyline.points),
+							stroke: {
+							    color: $scope.correctColor(color),
+							    weight: 3
+							},
+							data: zones[i],
+							info_windows_pos: $scope.correctPointGoogle(polyline.points[1]),
+							info_windows_cod: "z" + zones[i].id,
+							editable: true,
+							draggable: true,
+							geodesic: false,
+							visible: visible,
+							subelements: streets
+						};
+						tmpZones.push(zone);
 					}
-				};	
-				
-				tmpZones.push(zone);
+				}
+			} else {
+				if(zones[i].geometry != null && zones[i].geometry.points != null && zones[i].geometry.points.length > 0){
+					poligons = zones[i].geometry;
+					zone = {
+						id: zones[i].id,
+						path: $scope.correctPoints(poligons.points),
+						gpath: $scope.correctPointsGoogle(poligons.points),
+						stroke: {
+						    color: zColor,//$scope.correctColor(zones[i].color),
+						    weight: 3,
+						    opacity: 0.7
+						},
+						data: zones[i],
+						info_windows_cod: "z" + zones[i].id,
+						info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
+						editable: true,
+						draggable: true,
+						geodesic: false,
+						visible: visible,
+						fill: {
+						    color: zColor,//$scope.correctColor(zones[i].color),
+						    opacity: 0.5
+						}
+					};	
+					
+					tmpZones.push(zone);
+				}
 			}
 		}
 		if(!firstTime){
@@ -2905,9 +3246,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
 			var zones = [];
+			var subzones = [];
 			for(var j = 0; j < streets[i].zones.length; j++){
-				var zone = $scope.getLocalZoneById(streets[i].zones[j]);
-				zones.push(zone);
+				var zone = $scope.getLocalZoneById(streets[i].zones[j], 2);
+				if(zone == null){
+					var subzone = $scope.getLocalMicroZoneById(streets[i].zones[j], 2);
+					if(subzone != null){
+						subzones.push(subzone);
+					}
+				} else {
+					zones.push($scope.addLabelToZoneObject(zone));
+				}
 			}
 			var pms = [];
 			if(streets[i].parkingMeters != null){
@@ -2925,6 +3274,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			mystreet.area_name = area.name;
 			mystreet.area_color= area.color;
 			mystreet.myZones = zones;
+			mystreet.myMicroZones = subzones;
 			mystreet.myPms = pms;
 			myStreets.push(mystreet);
 		}
@@ -2969,16 +3319,62 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};
 	
-	$scope.getLocalZoneById = function(id){
+	$scope.getLocalZoneById = function(id, type){
 		var find = false;
+		var corrZone = null;
 		var myZones = sharedDataService.getSharedLocalZones();
 		for(var i = 0; i < myZones.length && !find; i++){
 			if(myZones[i].id == id){
 				find = true;
-				return myZones[i];
+				if(type == 1){
+					corrZone = myZones[i];
+				} else {
+					corrZone = {
+						id: myZones[i].id,
+						id_app: myZones[i].id_app,
+						color: myZones[i].color,
+						name: myZones[i].name,
+						submacro: myZones[i].submacro,
+						submicro: myZones[i].submicro,
+						type: myZones[i].type,
+						note: myZones[i].note,
+						geometry: $scope.correctMyGeometryPolygon(myZones[i].geometry),
+						label: myZones[i].name + "_" + myZones[i].submacro
+					};
+				}			
 			}
 		}
-	};
+		return corrZone;
+	};	
+	
+	$scope.getLocalMicroZoneById = function(id, type){
+		var find = false;
+		var myMicroZones = sharedDataService.getSharedLocalMicroZones();
+		var corrMicrozone = null;
+		for(var i = 0; i < myMicroZones.length && !find; i++){
+			if(myMicroZones[i].id == id){
+				find = true;
+				if(type == 1){
+					corrMicrozone = myMicroZones[i];
+				} else {
+					corrMicrozone = {
+						id: myMicroZones[i].id,
+						id_app: myMicroZones[i].id_app,
+						color: myMicroZones[i].color,
+						name: myMicroZones[i].name,
+						submacro: myMicroZones[i].submacro,
+						submicro: myMicroZones[i].submicro,
+						type: myMicroZones[i].type,
+						note: myMicroZones[i].note,
+						geometry: $scope.correctMyGeometryPolygon(myMicroZones[i].geometry),
+						label: myMicroZones[i].name + "_" + myMicroZones[i].submacro
+					};
+				}
+				
+			}
+		}
+		return corrMicrozone;
+	};	
 	
 	$scope.initPMObjects = function(parkMeters){
 		var myPMs = [];
@@ -3190,7 +3586,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	//var hour = "10;12";
 		    	//$scope.getProfitParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
 		    	$scope.getProfitParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
-		    	$scope.dashboard_space.microzone = true;
+		    	$scope.dashboard_space.microzone_part = true;
 		    	$scope.dashboard_topics == "parkSupply";
 		    	if(showStreets){
 			    	$scope.updateStreetOccupancy($scope.streetWS);
@@ -3255,7 +3651,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	$scope.getOccupancyParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		    } else {
 		    	if(showStreets){
-			    	$scope.updateStreetProfit(isFirst, $scope.dashboard_space.microzone);
+			    	$scope.updateStreetProfit(isFirst, $scope.dashboard_space.microzone_part);
 				}
 			    if(showArea){
 			    	$scope.updateAreaProfit(isFirst);
@@ -3308,7 +3704,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 			if(showStreets){
 				if(isFirst){
-					$scope.updateStreetProfit(isFirst, $scope.dashboard_space.microzone);
+					$scope.updateStreetProfit(isFirst, $scope.dashboard_space.microzone_part);
 				}
 			}
 			if(showArea){
@@ -3861,7 +4257,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method updateStreetOccupancy: update all street maps Object elements with new occupation data retrieved from db
 	$scope.updateStreetOccupancy = function(streets){
-		if($scope.dashboard_space.microzone){	// I check if the street check is selected
+		if($scope.dashboard_space.microzone_part){	// I check if the street check is selected
 		    if($scope.dashboard_topics == "parkSupply"){
 		   		if($scope.mapStreets.length == 0){
 		   			$scope.mapStreets = $scope.initStreetsOnMap(streets, true, 1, false)[0];
@@ -3988,7 +4384,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method updateStreetProfit: update all street maps Object elements with new profit data retrieved from db
 	$scope.updateStreetProfit = function(firstTime, show){
 		$scope.profitStreetsList = $scope.initStreetsOnMap($scope.streetWS, show, 3, firstTime)[1];
-		if($scope.dashboard_space.microzone && $scope.dashboard_topics_list != "receipts" && !firstTime){	// I check if the street check is selected
+		if($scope.dashboard_space.microzone_part && $scope.dashboard_topics_list != "receipts" && !firstTime){	// I check if the street check is selected
 			if($scope.dashboard_topics == "parkSupply"){
 				if($scope.mapStreets.length == 0){
 			   		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, show, 1, false)[0];
@@ -4095,7 +4491,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method updateStreetTimeCost: update all street maps Object elements with new time cost data retrieved from occupancy in db
 	$scope.updateStreetTimeCost = function(streets){
-		if($scope.dashboard_space.microzone){	// I check if the street check is selected
+		if($scope.dashboard_space.microzone_part){	// I check if the street check is selected
 		    if($scope.dashboard_topics == "parkSupply"){
 		   		if($scope.mapStreets.length == 0){
 		   			$scope.mapStreets = $scope.initStreetsOnMap(streets, true, 1, false)[0];
@@ -4201,6 +4597,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    		angular.copy(markers, $scope.bikePointMarkers);
 	    	}
 			$scope.getZonesFromDb(isFirst, macrozoneType);
+			$scope.getZonesFromDb(isFirst, microzoneType);
 		});
 	};
 	
@@ -4214,17 +4611,26 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		myDataPromise.then(function(result){
 			angular.copy(result, allZones);
 			//console.log("Zone retrieved from db: " + JSON.stringify(result));
-		    	
-			$scope.zoneWS = $scope.correctMyZones(allZones);
-		 	sharedDataService.setSharedLocalZones($scope.zoneWS);
-		    if(showZones){
-		    	$scope.initZonesOnMap($scope.zoneWS, false, 1, false, true);
+		    if(type == macrozoneType){	
+				$scope.zoneWS = $scope.correctMyZones(allZones);
+			 	sharedDataService.setSharedLocalZones($scope.zoneWS);
+			    if(showZones){
+			    	$scope.initZonesOnMap($scope.zoneWS, false, 1, false, true);
+			    }
+		    } else {
+		    	$scope.microzoneWS = $scope.correctMyZones(allZones);
+			 	sharedDataService.setSharedLocalMicroZones($scope.microzoneWS);
+			    if(showMicrozones){
+			    	$scope.initZonesOnMap($scope.microzoneWS, false, 1, false, true);
+			    }
 		    }
 		    //$scope.getStreetsFromDb();
 		    //var d = new Date();
 		    //var hour = "10;12";
 		    //$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
-		    $scope.getOccupancyStreetsFromDb("", "1;12", "1,2,3,4,5,6,7", "wd", "0;23", 2, isFirst);
+		    if(type == macrozoneType){
+		    	$scope.getOccupancyStreetsFromDb("", "1;12", "1,2,3,4,5,6,7", "wd", "0;23", 2, isFirst);
+		    }
 		});
 	};
 	
