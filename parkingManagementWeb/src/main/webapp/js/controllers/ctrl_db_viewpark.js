@@ -782,7 +782,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     var showPs = false;
     var showBp = false;
     var showZones = false;
-    var showMicrozones = false;
+    var showMicroZones = false;
     $scope.allMapObjectLoaded = false;
     
     $scope.isAreaVisible = function(){
@@ -810,7 +810,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     };
     
     $scope.isMicrozonesVisible = function(){
-    	return showMicrozones;
+    	return showMicroZones;
     };
     
     $scope.setAllMapObjectLoaded = function(value){
@@ -1176,7 +1176,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		}
     		if(attributes[i].code == 'viewPage'){
     			if(attributes[i].visible){
-    				showMicrozones = true;
+    				showMicroZones = true;
     			}
     		}
     	}
@@ -1212,6 +1212,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     $scope.maxStreets = 13;
     $scope.maxZones = 13;
+    $scope.maxMicroZones = 13;
     $scope.maxAreas = 13;
     $scope.maxPStructs = 13;
     $scope.maxPMeters = 13;
@@ -1290,7 +1291,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
        		} else {
        			return 0;
        		}
-       	}
+       	} else if(type == 11){
+       		if($scope.microzoneWS != null){
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.microzoneWS.length/$scope.maxMicroZones);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxMicroZones);
+       			}
+       		} else {
+       			return 0;
+     		}
+       	} else if(type == 12){
+       		if($scope.profitMicroZonesList != null){
+       			if(list == null || list.length == 0){
+       				return Math.ceil($scope.profitMicroZonesList.length/$scope.maxMicroZones);
+       			} else {
+       				return Math.ceil(list.length/$scope.maxMicroZones);
+       			}
+       		} else {
+       			return 0;
+     		}
+       	} 
     };
     
     
@@ -1439,6 +1460,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.showZList = false;
+	$scope.showMicroZList = false;
 	$scope.showSList = true;
 	$scope.showAList = false;
 	$scope.showPSList = false;
@@ -1481,6 +1503,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						// Show parkingManagement objects
 						$scope.switchStreetMapObject(2, null, false);
 						$scope.switchZoneMapObject(2, null);
+						$scope.switchMicroZoneMapObject(2, null);
 						$scope.switchAreaMapObject(2, null);
 						$scope.switchParkingMapObject(2, null);
 						$scope.switchPMMapObject(2, null);
@@ -1517,6 +1540,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						$scope.dashboard_space.microzone_part = true;
 						$scope.dashboard_space.parkingmeter = false;
 						$scope.switchStreetMapObject(1, null, false);
+						$scope.switchMicroZoneMapObject(1, null);
 						$scope.switchZoneMapObject(1, null);
 						$scope.switchAreaMapObject(1, null);
 						$scope.switchParkingMapObject(1, null);	
@@ -1559,6 +1583,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						$scope.dashboard_space.microzone_part = false;
 						$scope.dashboard_space.parkingmeter = true;
 						$scope.switchStreetMapObject(5, null, true);
+						$scope.switchMicroZoneMapObject(5, null);
 						$scope.switchZoneMapObject(5, null);
 						$scope.switchAreaMapObject(5, null);
 						$scope.switchParkingMapObject(5, null);	
@@ -1585,6 +1610,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						$scope.dashboard_space.microzone_part = true;
 						$scope.dashboard_space.parkingmeter = false;
 						$scope.switchStreetMapObject(7, null, false);
+						$scope.switchMicroZoneMapObject(7, null);
 						$scope.switchZoneMapObject(7, null);
 						$scope.switchAreaMapObject(7, null);
 						$scope.switchParkingMapObject(7, null);
@@ -1615,7 +1641,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space_list == "macrozone"){
 							$scope.showZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone"){
-							//$scope.showStreetList($scope.dashboard_topics_list);
+							$scope.showMicroZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone_part"){
 							$scope.showStreetList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "parkingmeter"){
@@ -1639,7 +1665,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space_list == "macrozone"){
 							$scope.showZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone"){
-							//$scope.showStreetList($scope.dashboard_topics_list);
+							$scope.showMicroZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone_part"){
 							$scope.showStreetList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "parkingmeter"){
@@ -1663,7 +1689,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space_list == "macrozone"){
 							$scope.showZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone"){
-							//$scope.showStreetList($scope.dashboard_topics_list);
+							$scope.showMicroZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone_part"){
 							$scope.showStreetList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "parkingmeter"){
@@ -1687,7 +1713,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space_list == "macrozone"){
 							$scope.showZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone"){
-							//$scope.showStreetList($scope.dashboard_topics_list);
+							$scope.showMicroZoneList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "microzone_part"){
 							$scope.showStreetList($scope.dashboard_topics_list);
 						} else if($scope.dashboard_space_list == "parkingmeter"){
@@ -1741,7 +1767,18 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.showZoneList = function(type){
 		$scope.switchListShowType(type);
+		$scope.showMicroZList = false;
 		$scope.showZList = true;
+		$scope.showSList = false;
+		$scope.showAList = false;
+		$scope.showPSList = false;
+		$scope.showPMList = false;
+	};
+	
+	$scope.showMicroZoneList = function(type){
+		$scope.switchListShowType(type);
+		$scope.showMicroZList = true;
+		$scope.showZList = false;
 		$scope.showSList = false;
 		$scope.showAList = false;
 		$scope.showPSList = false;
@@ -1750,6 +1787,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.showAreaList = function(type){
 		$scope.switchListShowType(type);
+		$scope.showMicroZList = false;
 		$scope.showAList = true;
 		$scope.showZList = false;
 		$scope.showSList = false;
@@ -1767,6 +1805,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
 		// ----------------------------
 		$scope.switchListShowType(type);
+		$scope.showMicroZList = false;
 		$scope.showSList = true;
 		$scope.showZList = false;
 		$scope.showAList = false;
@@ -1776,6 +1815,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.showStructList = function(type){
 		$scope.switchListShowType(type);
+		$scope.showMicroZList = false;
 		$scope.showPSList = true;
 		$scope.showZList = false;
 		$scope.showSList = false;
@@ -1799,6 +1839,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 		$scope.pmStatusFilter = $scope.allPmStatusFilter[0].filter;
 		$scope.switchListShowType(type);
+		$scope.showMicroZList = false;
 		$scope.showPSList = false;
 		$scope.showZList = false;
 		$scope.showSList = false;
@@ -1935,6 +1976,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var totalEur = (intval / 100);
 		return totalEur.toFixed(2) + " ";
 	};
+	
+	$scope.correctObjId = function(id, i){
+		if(i == 0){
+			return id;
+		} else {
+			return id + '_' + i;
+		}
+	};	
 	
 	// Method checkIfAlreadyPresentInList: used to check if an element is already present in a list
 	$scope.checkIfAlreadyPresentInList = function(list, element){
@@ -2592,13 +2641,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.hideAllMicroZones = function(){
 	    var toHideZone = $scope.map.shapes;
 	    for(var i = 0; i < $scope.mapMicroZones.length; i++){
-	    	if($scope.mapMicroZones[i].data.subelements != null && $scope.mapMicroZones[i].data.subelements.length > 0){
-	    		if($scope.mapMicroZones[i].data.subelements.length == 1){
+	    	if($scope.mapMicroZones[i].subelements != null && $scope.mapMicroZones[i].subelements.length > 0){
+	    		if($scope.mapMicroZones[i].subelements.length == 1){
 	    			if(toHideZone[$scope.mapMicroZones[i].id] != null){
 	        			toHideZone[$scope.mapMicroZones[i].id].setMap(null);
 	        		}
 	    		} else {
-	    			for(var j = 0; j < $scope.mapMicroZones[i].data.subelements.length; j++){
+	    			for(var j = 0; j < $scope.mapMicroZones[i].subelements.length; j++){
 	    				var myId = $scope.correctObjId($scope.mapMicroZones[i].data.id, j);
 	    				if(toHideZone[myId] != null){
 	    					toHideZone[myId].setMap(null);
@@ -2608,13 +2657,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	}	
 	    }
 	    for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
-	    	if($scope.occupancyMicroZones[i].data.subelements != null && $scope.occupancyMicroZones[i].data.subelements.length > 0){
-	    		if($scope.occupancyMicroZones[i].data.subelements.length == 1){
+	    	if($scope.occupancyMicroZones[i].subelements != null && $scope.occupancyMicroZones[i].subelements.length > 0){
+	    		if($scope.occupancyMicroZones[i].subelements.length == 1){
 	    			if(toHideZone[$scope.occupancyMicroZones[i].id] != null){
 	        			toHideZone[$scope.occupancyMicroZones[i].id].setMap(null);
 	        		}
 	    		} else {
-	    			for(var j = 0; j < $scope.occupancyMicroZones[i].data.subelements.length; j++){
+	    			for(var j = 0; j < $scope.occupancyMicroZones[i].subelements.length; j++){
 	    				var myId = $scope.correctObjId($scope.occupancyMicroZones[i].data.id, j);
 	    				if(toHideZone[myId] != null){
 	    					toHideZone[myId].setMap(null);
@@ -2624,13 +2673,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	}
     	}
     	for(var i = 0; i < $scope.profitMicroZones.length; i++){
-    		if($scope.profitMicroZones[i].data.subelements != null && $scope.profitMicroZones[i].data.subelements.length > 0){
-	    		if($scope.profitMicroZones[i].data.subelements.length == 1){
+    		if($scope.profitMicroZones[i].subelements != null && $scope.profitMicroZones[i].subelements.length > 0){
+	    		if($scope.profitMicroZones[i].subelements.length == 1){
 	    			if(toHideZone[$scope.profitMicroZones[i].id] != null){
 	        			toHideZone[$scope.profitMicroZones[i].id].setMap(null);
 	        		}
 	    		} else {
-	    			for(var j = 0; j < $scope.profitMicroZones[i].data.subelements.length; j++){
+	    			for(var j = 0; j < $scope.profitMicroZones[i].subelements.length; j++){
 	    				var myId = $scope.correctObjId($scope.profitMicroZones[i].data.id, j);
 	    				if(toHideZone[myId] != null){
 	    					toHideZone[myId].setMap(null);
@@ -2640,13 +2689,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	}
     	}
     	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
-    		if($scope.timeCostMicroZones[i].data.subelements != null && $scope.timeCostMicroZones[i].data.subelements.length > 0){
-	    		if($scope.timeCostMicroZones[i].data.subelements.length == 1){
+    		if($scope.timeCostMicroZones[i].subelements != null && $scope.timeCostMicroZones[i].subelements.length > 0){
+	    		if($scope.timeCostMicroZones[i].subelements.length == 1){
 	    			if(toHideZone[$scope.timeCostMicroZones[i].id] != null){
 	        			toHideZone[$scope.timeCostMicroZones[i].id].setMap(null);
 	        		}
 	    		} else {
-	    			for(var j = 0; j < $scope.timeCostMicroZones[i].data.subelements.length; j++){
+	    			for(var j = 0; j < $scope.timeCostMicroZones[i].subelements.length; j++){
 	    				var myId = $scope.correctObjId($scope.timeCostMicroZones[i].data.id, j);
 	    				if(toHideZone[myId] != null){
 	    					toHideZone[myId].setMap(null);
@@ -3052,6 +3101,22 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};
 	
+	$scope.updateMicroZonesOccupancyTimeCost = function(){
+		for(var i = 0; i < $scope.microzoneWS.length; i++){
+			var slotsInZone = $scope.getTotalSlotsInZone($scope.microzoneWS[i].id);
+			$scope.microzoneWS[i].slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone(zones[i].id);
+			$scope.microzoneWS[i].slotOccupied = slotsInZone[1];
+			var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.microzoneWS[i].id);
+			if(zoneOccupancy != -1){
+				zoneOccupancy = slotsInZone[2];
+			}
+			var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+			$scope.microzoneWS[i].occupancy = (zoneOccupancy != -1) ? Math.round(zoneOccupancy) : zoneOccupancy;
+			$scope.microzoneWS[i].zColor = $scope.getOccupancyColor(zoneOccupancy);
+			$scope.microzoneWS[i].extratime = timeCost;
+		}
+	};
+	
 	// Method getExtratimeFromOccupancy: retrieve the correct extratime value from the occupancy rate of the object
 	$scope.getExtratimeFromOccupancy = function(occupancy){
 		if(occupancy < 0){
@@ -3154,10 +3219,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			zones[i].streetInZone = zoneProfit[2];
 			
 			if(zones[i].geometryFromSubelement){
-				var streets = zones[i].subelements;//$scope.loadStreetsFromZone(zones[i].id);
-				var color = $scope.lightgray;
+				var streets = $scope.loadStreetsFromZone(zones[i].id);//zones[i].subelements;//$scope.loadStreetsFromZone(zones[i].id);
+				var color = $scope.correctColor($scope.lightgray);
 				if(streets != null && streets.length > 0){
-					color = streets[0].area_color;
+					if(type == 1){
+						color = $scope.correctColor(streets[0].area_color);
+					} else {
+						color = zColor;
+					}
 				}
 				if(streets != null && streets.length > 0){
 					for(var j = 0; j < streets.length; j++){
@@ -3167,7 +3236,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 							path: $scope.correctPoints(polyline.points),
 							gpath: $scope.correctPointsGoogle(polyline.points),
 							stroke: {
-							    color: $scope.correctColor(color),
+							    color: color,
 							    weight: 3
 							},
 							data: zones[i],
@@ -3367,7 +3436,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						type: myMicroZones[i].type,
 						note: myMicroZones[i].note,
 						geometry: $scope.correctMyGeometryPolygon(myMicroZones[i].geometry),
-						label: myMicroZones[i].name + "_" + myMicroZones[i].submacro
+						label: myMicroZones[i].name + "_" + myMicroZones[i].submicro
 					};
 				}
 				
@@ -3598,11 +3667,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    if(showZones){
 			    	$scope.updateZoneOccupancy(true);
 			    }
+			    if(showMicroZones){
+			    	$scope.updateMicroZoneOccupancy(true);
+			    }
 			    if(showArea){
 			    	$scope.updateAreaOccupancy(true);
 			    }
 		    }
+		    // For list data
 			$scope.updateZonesOccupancyTimeCost();
+			$scope.updateMicroZonesOccupancyTimeCost();
 			$scope.updateAreasOccupancyTimeCost();
 		});
 	};
@@ -3658,6 +3732,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    }
 			    if(showZones){
 			    	$scope.updateZoneProfit(isFirst);
+			    }
+			    if(showMicroZones){
+			    	$scope.updateMicroZoneProfit(isFirst);
 			    }
 		    	$scope.closeLoadingMap();
 		    }
@@ -3715,6 +3792,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			if(showZones){
 				if(isFirst){
 					$scope.updateZoneProfit(isFirst);
+				}
+			}
+			if(showMicroZones){
+				if(isFirst){
+					$scope.updateMicroZoneProfit(isFirst);
 				}
 			}
 			
@@ -3797,6 +3879,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    if(showZones){
 				    	$scope.updateZoneOccupancy(false);
 				    }
+				    if(showMicroZones){
+				    	$scope.updateMicroZoneOccupancy(false);
+				    }
 				    if(showArea){
 				    	$scope.updateAreaOccupancy(false);
 				    }
@@ -3809,12 +3894,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    if(showZones){
 				    	$scope.updateZoneTimeCost(false);
 				    }
+				    if(showMicroZones){
+				    	$scope.updateMicroZoneTimeCost(false);
+				    }
 				    if(showArea){
 				    	$scope.updateAreaTimeCost(false);
 				    }
 			    }
 		    }
 		    $scope.updateZonesOccupancyTimeCost();
+		    $scope.updateMicroZonesOccupancyTimeCost();
 	    	$scope.updateAreasOccupancyTimeCost();
 	    	$scope.closeLoadingMap();
 		});
@@ -4216,7 +4305,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return [totalSlots, occupiedSlots, occupation];
 	};
 	
-	// Method getTotalSlotsInZone: used to count the total slots of a zone from the slots in streets
+	// Method getPaidSlotsInZone: used to count the total slots of a zone from the slots in streets
 	$scope.getPaidSlotsInZone = function(z_id){
 		var totalSlots = 0;
 		if($scope.streetWS != null && $scope.streetWS.length > 0){
@@ -4292,6 +4381,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		   		} else {
 		   			var tmpZ = $scope.initZonesOnMap($scope.zoneWS, true, 2, false, firstTime)[0];
 		   	    	$scope.switchZoneMapObject(4, tmpZ);
+		    	}
+		    }
+		}
+	};
+	
+	// Method updateMicroZoneOccupancy: update all microzone maps Object elements with new occupation data retrieved from db
+	$scope.updateMicroZoneOccupancy = function(firstTime){
+		if($scope.dashboard_space.microzone){	// I check if the zone check is selected
+		    if($scope.dashboard_topics == "parkSupply"){
+		   		if($scope.mapMicroZones.length == 0){
+		   			$scope.mapMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, 1, false, firstTime)[0];
+		   		} else {
+		   			var tmpZ = $scope.initZonesOnMap($scope.microzoneWS, true, 1, false, firstTime)[0];
+		   			$scope.switchMicroZoneMapObject(3, tmpZ);
+		   		}
+		   	} else {
+		   		if($scope.occupancyMicroZones.length == 0){
+		   			$scope.occupancyMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, 2, false, firstTime)[0];
+		   		} else {
+		   			var tmpZ = $scope.initMicroZonesOnMap($scope.microzoneWS, true, 2, false, firstTime)[0];
+		   	    	$scope.switchMicroZoneMapObject(4, tmpZ);
 		    	}
 		    }
 		}
@@ -4403,7 +4513,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};
 	
-	// Method updateZoneOccupancy: update all zone maps Object elements with new occupation data retrieved from db
+	// Method updateZoneProfit: update all zone maps Object elements with new occupation data retrieved from db
 	$scope.updateZoneProfit = function(firstTime){
 		$scope.profitZonesList = $scope.initZonesOnMap($scope.zoneWS, true, 3, false, firstTime)[1];
 		if($scope.dashboard_space.macrozone && $scope.dashboard_topics_list != "receipts"){	// I check if the zone check is selected
@@ -4420,6 +4530,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		   		} else {
 		   			var tmpZ = $scope.initZonesOnMap($scope.zoneWS, true, 3, false, firstTime)[0];
 		   	    	$scope.switchZoneMapObject(6, tmpZ);
+		    	}
+		    }
+		}
+	};
+	
+	$scope.updateMicroZoneProfit = function(firstTime){
+		$scope.profitMicroZonesList = $scope.initZonesOnMap($scope.microzoneWS, true, 3, false, firstTime)[1];
+		if($scope.dashboard_space.microzone && $scope.dashboard_topics_list != "receipts"){	// I check if the zone check is selected
+		    if($scope.dashboard_topics == "parkSupply"){
+		   		if($scope.mapMicroZones.length == 0){
+		   			$scope.mapMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, 1, false, firstTime)[0];
+		   		} else {
+		   			var tmpZ = $scope.initZonesOnMap($scope.microzoneWS, true, 1, false, firstTime)[0];
+		   			$scope.switchMicroZoneMapObject(5, tmpZ);
+		   		}
+		   	} else {
+		   		if($scope.profitMicroZones.length == 0){
+		   			$scope.profitMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, 3, false, firstTime)[0];
+		   		} else {
+		   			var tmpZ = $scope.initZonesOnMap($scope.microzoneWS, true, 3, false, firstTime)[0];
+		   	    	$scope.switchMicroZoneMapObject(6, tmpZ);
 		    	}
 		    }
 		}
@@ -4530,6 +4661,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    }
 		}
 	};
+	
+	// Method updateMicroZoneTimeCost: update all zone maps Object elements with new time cost data retrieved from occupancy in db
+	$scope.updateMicroZoneTimeCost = function(firstTime){
+		if($scope.dashboard_space.microzone){	// I check if the zone check is selected
+		    if($scope.dashboard_topics == "parkSupply"){
+		   		if($scope.mapMicroZones.length == 0){
+		   			$scope.mapMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, 1, fals, firstTime)[0];
+		   		} else {
+		   			var tmpZ = $scope.initZonesOnMap($scope.microzoneWS, true, 1, false, firstTime)[0];
+		   			$scope.switchMicroZoneMapObject(7, tmpZ);
+		   		}
+		   	} else {
+		   		if($scope.timeCostMicroZones.length == 0){
+		   			$scope.timeCostMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, 4, false, firstTime)[0];
+		   		} else {
+		   			var tmpZ = $scope.initZonesOnMap($scope.microzoneWS, true, 4, false, firstTime)[0];
+		   	    	$scope.switchMicroZoneMapObject(8, tmpZ);
+		    	}
+		    }
+		}
+	};	
 		    
     $scope.getParkingMetersFromDb = function(){
 	    var markers = [];
@@ -4620,7 +4772,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    } else {
 		    	$scope.microzoneWS = $scope.correctMyZones(allZones);
 			 	sharedDataService.setSharedLocalMicroZones($scope.microzoneWS);
-			    if(showMicrozones){
+			    if(showMicroZones){
 			    	$scope.initZonesOnMap($scope.microzoneWS, false, 1, false, true);
 			    }
 		    }
@@ -4639,11 +4791,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.mapParkingStructureSelectedMarkers = [];
 	$scope.mapSelectedStreets = [];
 	$scope.mapSelectedZones = [];
+	$scope.mapSelectedMicroZones = [];
 	$scope.mapSelectedAreas = [];
 	var pMDet = false;
 	var pSDet = false;
 	var streetDet = false;
 	var zoneDet = false;
+	var microZoneDet = false;
 	var areaDet = false;
 	
 	$scope.showPMDet = function(){
@@ -4651,6 +4805,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		pSDet = false;
 		streetDet = false;
 		zoneDet = false;
+		microZoneDet = false;
 		areaDet = false;
 	};
 	
@@ -4659,6 +4814,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		pSDet = true;
 		streetDet = false;
 		zoneDet = false;
+		microZoneDet = false;
 		areaDet = false;
 	};
 	
@@ -4667,6 +4823,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		pSDet = false;
 		streetDet = true;
 		zoneDet = false;
+		microZoneDet = false;
+		areaDet = false;
+	};
+	
+	$scope.showMicroZoneDet = function(){
+		pMDet = false;
+		pSDet = false;
+		streetDet = false;
+		microZoneDet = true;
+		zoneDet = false;
 		areaDet = false;
 	};
 	
@@ -4674,6 +4840,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		pMDet = false;
 		pSDet = false;
 		streetDet = false;
+		microZoneDet = false;
 		zoneDet = true;
 		areaDet = false;
 	};
@@ -4682,14 +4849,39 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		pMDet = false;
 		pSDet = false;
 		streetDet = false;
+		microZoneDet = false;
 		zoneDet = false;
 		areaDet = true;
 	};
 	
+	$scope.isPMDetShow = function(){
+		return pMDet;
+	};
+	
+	$scope.isPSDetShow = function(){
+		return pSDet;
+	};
+	
+	$scope.isStreetDetShow = function(){
+		return streetDet;
+	};
+	
+	$scope.isZoneDetShow = function(){
+		return zoneDet;
+	};
+	
+	$scope.isAreaDetShow = function(){
+		return areaDet;
+	};
+	
+	$scope.isMicroZoneDetShow = function(){
+		return microZoneDet;
+	};	
+	
 	// Method show Details: used to show an object details when selected on map
 	// params: - event (click on element in map);
 	//		   - object: selected object;
-	//	 	   - type: type of object: 1 pm, 2 ps, 3 street, 4 zone, 5 area;
+	//	 	   - type: type of object: 1 pm, 2 ps, 3 street, 4 zone, 5 area, 6 microzone;
 	//		   - theme: theme of the selection: 0 availability, 1 occupancy, 2 profit, 3 time cost;
 	$scope.showDetails = function(event, object, type, theme){	
 		$scope.theme = theme;	// used in close details panel
@@ -4908,6 +5100,45 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					$scope.initAreaOccupancyDiagram(object, 1);
 				}
 				break;
+			case 6:
+				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
+				object.stroke.weight = 7;	//10
+				object.stroke.opacity = 1.0;
+				//object.fill.opacity = 0.8;
+				var toDelZones = $scope.map.shapes;
+			    toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+			    if(theme == 0){
+				    for(var i = 0; i < $scope.mapMicroZones.length; i++){
+				    	if($scope.mapMicroZones[i].id == object.id){
+				    		$scope.mapMicroZones.splice(i, 1);
+				    	}
+				    }
+			    } else if(theme == 1){
+			    	for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+				    	if($scope.occupancyMicroZones[i].id == object.id){
+				    		$scope.occupancyMicroZones.splice(i, 1);
+				    	}
+				    }
+			    } else if(theme == 2){
+			    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
+				    	if($scope.profitMicroZones[i].id == object.id){
+				    		$scope.profitMicroZones.splice(i, 1);
+				    	}
+				    }
+			    } else if(theme == 3){
+			    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+				    	if($scope.timeCostMicroZones[i].id == object.id){
+				    		$scope.timeCostMicroZones.splice(i, 1);
+				    	}
+				    }
+			    }
+			    $scope.mapSelectedMicroZones.push(object);
+			    $scope.showMicroZoneDet();
+				$scope.microZDetails = object;
+				if(theme == 1 || theme == 3){
+					$scope.initMicroZoneOccupancyDiagram(object, 1);	
+				}
+				break;	
 		};
 		switch(theme){
 			case 0:
@@ -5027,6 +5258,22 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	} else if($scope.timeCostAreas.length > 0){
 	    		$scope.timeCostAreas.push(object);
 	    	}
+			break;
+		case 6:
+			$scope.mapSelectedMicroZones = [];
+			var toDelZone = $scope.map.shapes;
+	    	toDelZone[object.id].setMap(null);
+	    	object.stroke.weight = 3;
+	    	object.stroke.opacity = 1;
+	    	if($scope.mapMicroZones.length > 0){
+	    		$scope.mapMicroZones.push(object);
+	    	} else if($scope.occupancyMicroZones.length > 0){
+	    		$scope.occupancyMicroZones.push(object);
+	    	} else if($scope.profitMicroZones.length > 0){
+	    		$scope.profitMicroZones.push(object);
+	    	} else if($scope.timeCostMicroZones.length > 0){
+	    		$scope.timeCostMicroZones.push(object);
+	    	}
 			break;	
 		};
 	};
@@ -5071,6 +5318,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.aDetails = object;
 				//$scope.initAreaOccupancyDiagram(object, 2);
 				break;	
+			case 6:
+			    $scope.showMicroZoneDet();
+				$scope.microZDetails = object;
+				$scope.initMicroZoneOccupancyDiagram(object, 2);
+				break;	
 		};
 		$scope.detailsOpened = true;
 		return object;
@@ -5114,6 +5366,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.aDetails = object;
 				$scope.initAreaOccupancyDiagram(object, 2);
 				$scope.showReportCompare("1", "2", 4, 1);	// 4 = area, 1 = occupancy
+				break;
+			case 6:
+			    $scope.showMicroZoneDet();
+				$scope.microZDetails = object;
+				$scope.initMicroZoneOccupancyDiagram(object, 2);
+				//$scope.showReportCompare("1", "2", 5, 1);	// 5 = zone, 1 = occupancy
 				break;	
 		};
 		$scope.occupancyOpened = true;
@@ -5156,6 +5414,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.initAreaOccupancyDiagram(object, 2);
 				$scope.showReportCompare("1","2", 4, 3);	// 4 = area, 3 = time cost
 				break;	
+			case 6:
+			    $scope.showMicroZoneDet();
+				$scope.microZDetails = object;
+				$scope.initMicroZoneOccupancyDiagram(object, 2);
+				//$scope.showReportCompare("1","2", 5, 3);	// 5 = zone, 3 = time cost
+				break;	
 		};
 		$scope.timeCostOpened = true;
 		return object;
@@ -5193,30 +5457,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.aDetails = object;
 				//$scope.initAreaOccupancyDiagram(object);
 				$scope.showReportCompare("1", "2", 4, 2);	// 4 = area, 2 = profit
+				break;
+			case 6:
+			    $scope.showMicroZoneDet();
+				$scope.microZDetails = object;
+				//$scope.initZoneOccupancyDiagram(object, 2);
+				//$scope.showReportCompare("1", "2", 5, 2);	// 5 = zone, 2 = profit
 				break;	
 		};
 		$scope.profitOpened = true;
 		return object;
-	};
-	
-	$scope.isPMDetShow = function(){
-		return pMDet;
-	};
-	
-	$scope.isPSDetShow = function(){
-		return pSDet;
-	};
-	
-	$scope.isStreetDetShow = function(){
-		return streetDet;
-	};
-	
-	$scope.isZoneDetShow = function(){
-		return zoneDet;
-	};
-	
-	$scope.isAreaDetShow = function(){
-		return areaDet;
 	};
 	
 	$scope.closeAllDetails = function(theme){
@@ -5239,6 +5489,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 		if($scope.mapSelectedAreas.length > 0){
 			$scope.fixIfAlreadySelected($scope.mapSelectedAreas, 5, theme);
+		}
+		if($scope.mapSelectedMicroZones.length > 0){
+			$scope.fixIfAlreadySelected($scope.mapSelectedMicroZones, 6, theme);
 		}
 	};
 	
@@ -5355,6 +5608,25 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	}
 			}
 			$scope.mapSelectedAreas = [];
+			break;
+		case 6:
+			if(list.length > 0){
+				var object = list[0];
+				var toDelZone = $scope.map.shapes;
+		    	toDelZone[object.id].setMap(null);
+		    	object.stroke.weight = 3;
+		    	object.stroke.opacity = 1;
+		    	if(theme == 0){
+		    		$scope.mapMicroZones.push(object);
+		    	} else if(theme == 1){
+		    		$scope.occupancyMicroZones.push(object);
+		    	} else if(theme == 2){
+		    		$scope.profitMicroZones.push(object);
+		    	} else if(theme == 3){
+		    		$scope.timeCostMicroZones.push(object);
+		    	}
+			}
+			$scope.mapSelectedMicroZones = [];
 			break;	
 		}
 	};
@@ -5826,6 +6098,272 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		default:break;
     	}
     };
+    
+    // Method switchMicroZoneMapObject: used to switch (in map) from zone object to occupancy-zone object
+    $scope.switchMicroZoneMapObject = function(type, newList){
+    	if($scope.mapSelectedMicroZones != null && $scope.mapSelectedMicroZones.length > 0){
+    		$scope.detailsOpened = false;	// I close the details column
+    		$scope.occupancyOpened = false;
+    		$scope.profitOpened = false;
+			var toHideZone = $scope.map.shapes;
+			var object = {};
+			angular.copy($scope.mapSelectedMicroZones[0], object);
+			object.stroke.weight = 3;
+			object.stroke.opacity = 1;
+	    	//object.fill.opacity = 0.5;
+			if(type == 1 || type == 3){
+				$scope.mapMicroZones.push(object);
+			} else if (type == 2 || type == 4){
+				$scope.occupancyMicroZones.push(object);
+			} else if (type == 5 || type == 6){
+				$scope.profitMicroZones.push(object);
+			} else if (type == 7 || type == 8){
+				$scope.timeCostMicroZones.push(object);
+			}
+			toHideZone[$scope.mapSelectedMicroZones[0].id].setMap(null);
+			$scope.mapSelectedMicroZones = [];
+		}
+    	var toHideZones = $scope.map.shapes;
+    	switch(type){
+    		case 1: // from availability/profit/timeCost to occupancy
+    			if($scope.mapMicroZones != null && $scope.mapMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.mapMicroZones.length; i++){
+	    	    		toHideZones[$scope.mapMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.mapMicroZones[i];
+	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.mapMicroZones[i].data.id);
+	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapMicroZones[i].data.id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
+	    	    		$scope.occupancyMicroZones.push(object);
+	    	    	}
+	    			$scope.mapMicroZones = [];
+    			}
+    			if($scope.profitMicroZones != null && $scope.profitMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.profitMicroZones.length; i++){
+	    	    		toHideZones[$scope.profitMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.profitMicroZones[i];
+	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.profitMicroZones[i].data.id);
+	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.profitMicroZones[i].data.id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
+	    	    		$scope.occupancyMicroZones.push(object);
+	    	    	}
+	    			$scope.profitMicroZones = [];
+    			}
+    			if($scope.timeCostMicroZones != null && $scope.timeCostMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+	    	    		toHideZones[$scope.timeCostMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.timeCostMicroZones[i];
+	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.timeCostMicroZones[i].data.id);
+	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.timeCostMicroZones[i].data.id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
+	    	    		$scope.occupancyMicroZones.push(object);
+	    	    	}
+	    			$scope.timeCostMicroZones = [];
+    			}
+    			break;
+    		case 2: // from occupancy/profit/timeCost to availability
+    			if($scope.occupancyMicroZones != null && $scope.occupancyMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+	    	    		toHideZones[$scope.occupancyMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.occupancyMicroZones[i];
+	    	    		object.stroke.color = $scope.correctColor(object.data.color);
+	    	    		$scope.mapZones.push(object);
+	    	    	}
+	    	    	$scope.occupancyMicroZones = [];
+    			}
+    			if($scope.profitMicroZones != null && $scope.profitMicroZones.length > 0){
+    				for(var i = 0; i < $scope.profitMicroZones.length; i++){
+        	    		toHideZones[$scope.profitMicroZones[i].id].setMap(null);
+        	    		var object = $scope.profitMicroZones[i];
+        	    		object.stroke.color = $scope.correctColor(object.data.color);
+        	    		$scope.mapMicroZones.push(object);
+        	    	}
+        	    	$scope.profitMicroZones = [];
+    			}
+    			if($scope.timeCostMicroZones != null && $scope.timeCostMicroZones.length > 0){
+    				for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+        	    		toHideZones[$scope.timeCostMicroZones[i].id].setMap(null);
+        	    		var object = $scope.timeCostMicroZones[i];
+        	    		object.stroke.color = $scope.correctColor(object.data.color);
+        	    		$scope.mapMicroZones.push(object);
+        	    	}
+        	    	$scope.timeCostMicroZones = [];
+    			}
+    			break;
+    		case 3: // from availability to availability
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.mapMicroZones.length; i++){
+    	    		toHideZones[$scope.mapMicroZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		object.stroke.color = $scope.correctColor(object.data.color);
+    	    		tmpZones.push(object);
+    	    	}
+    	    	angular.copy(tmpZones, $scope.mapMicroZones);
+    			break;
+    		case 4: // from occupancy to occupancy
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+    	    		toHideZones[$scope.occupancyMicroZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.occupancyMicroZones[i].data.id);
+    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.occupancyZones[i].id);
+    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.occupancyMicroZones[i].data.id);
+    	    		if(zoneOccupancy != -1){
+    	    			zoneOccupancy = slotsInZone[2];
+    	    		}
+    	    		object.stroke.color = $scope.getOccupancyColor(zoneOccupancy);	//Here I have to add the streets that compose the zone
+    	    		//object.fill.color = $scope.getOccupancyColor(zoneOccupancy);
+    	    		tmpZones.push(object);
+    	    	}
+    	    	angular.copy(tmpZones, $scope.occupancyMicroZones);
+    			break;
+    		case 5: // from availability/occupancy/timeCost to profit
+    			if($scope.mapMicroZones != null && $scope.mapMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.mapMicroZones.length; i++){
+	    	    		toHideZones[$scope.mapMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.mapMicroZones[i];
+	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.mapMicroZones[i].data.id);
+	    	    		object.stroke.color = $scope.getProfitColor(zoneProfit[0]);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getProfitColor(zoneProfit[0]);
+	    	    		$scope.profitMicroZones.push(object);
+	    	    	}
+	    			$scope.mapMicroZones = [];
+    			}
+    			if($scope.occupancyMicroZones != null && $scope.occupancyMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+	    	    		toHideZones[$scope.occupancyMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.occupancyMicroZones[i];
+	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.occupancyMicroZones[i].data.id);
+	    	    		object.stroke.color = $scope.getProfitColor(zoneProfit[0]);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getProfitColor(zoneProfit[0]);
+	    	    		$scope.profitMicroZones.push(object);
+	    	    	}
+	    			$scope.occupancyMicroZones = [];
+    			}
+    			if($scope.timeCostMicroZones != null && $scope.timeCostMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+	    	    		toHideZones[$scope.timeCostMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.timeCostMicroZones[i];
+	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.timeCostMicroZones[i].data.id);
+	    	    		object.stroke.color = $scope.getProfitColor(zoneProfit[0]);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getProfitColor(zoneProfit[0]);
+	    	    		$scope.profitMicroZones.push(object);
+	    	    	}
+	    			$scope.timeCostMicroZones = [];
+    			}
+    			break;
+    		case 6: // from profit to profit
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
+    	    		toHideZones[$scope.profitMicroZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		//var zoneProfit = $scope.getStreetsInZoneProfit($scope.profitZones[i].id);
+    	    		object.stroke.color = $scope.getProfitColor(object.data.profit);	//Here I have to add the streets that compose the zone
+    	    		//object.fill.color = $scope.getProfitColor(object.data.profit);
+    	    		tmpZones.push(object);
+    	    	}
+    	    	angular.copy(tmpZones, $scope.profitMicroZones);
+    			break;
+    		case 7: // from availability/occupancy/profit to timeCost
+    			if($scope.mapMicroZones != null && $scope.mapMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.mapMicroZones.length; i++){
+	    	    		toHideZones[$scope.mapMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.mapMicroZones[i];
+	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.mapMicroZones[i].data.id);
+	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.mapMicroZones[i].data.id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getTimeCostColor(timeCost);
+	    	    		object.data.extratime = timeCost;
+	    	    		$scope.timeCostMicroZones.push(object);
+	    	    	}
+	    			$scope.mapMicroZones = [];
+    			}
+    			if($scope.occupancyMicroZones != null && $scope.occupancyMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+	    	    		toHideZones[$scope.occupancyMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.occupancyMicroZones[i];
+	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.occupancyMicroZones[i].data.id);
+	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.occupancyMicroZones[i].data.id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getTimeCostColor(timeCost);
+	    	    		object.data.extratime = timeCost;
+	    	    		$scope.timeCostMicroZones.push(object);
+	    	    	}
+	    			$scope.occupancyMicroZones = [];
+    			}
+    			if($scope.profitMicroZones != null && $scope.profitMicroZones.length > 0){
+	    			for(var i = 0; i < $scope.profitMicroZones.length; i++){
+	    	    		toHideZones[$scope.profitMicroZones[i].id].setMap(null);
+	    	    		var object = $scope.profitMicroZones[i];
+	    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.profitMicroZones[i].data.id);
+	    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.mapZones[i].id);
+	    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+	    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.profitMicroZones[i].data.id);
+	    	    		if(zoneOccupancy != -1){
+	    	    			zoneOccupancy = slotsInZone[2];
+	    	    		}
+	    	    		var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+	    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
+	    	    		//object.fill.color = $scope.getTimeCostColor(timeCost);
+	    	    		object.data.extratime = timeCost;
+	    	    		$scope.timeCostMicroZones.push(object);
+	    	    	}
+	    			$scope.profitMicroZones = [];
+    			}
+    			break;
+    		case 8: // from timeCost to timeCost
+    			var tmpZones = [];
+    	    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+    	    		toHideZones[$scope.timeCostMicroZones[i].id].setMap(null);
+    	    		var object = newList[i];
+    	    		var slotsInZone = $scope.getTotalSlotsInZone($scope.timeCostMicroZones[i].data.id);
+    	    		object.data.slotNumber = slotsInZone[0]; //$scope.getTotalSlotsInZone($scope.occupancyZones[i].id);
+    	    		object.data.slotOccupied = slotsInZone[1]; //Math.round(object.data.slotNumber * zoneOccupancy / 100);
+    	    		var zoneOccupancy = $scope.getStreetsInZoneOccupancy($scope.timeCostMicroZones[i].data.id);
+    	    		if(zoneOccupancy != -1){
+    	    			zoneOccupancy = slotsInZone[2];
+    	    		}
+    				var timeCost = $scope.getExtratimeFromOccupancy(zoneOccupancy);
+    	    		object.stroke.color = $scope.getTimeCostColor(timeCost);	//Here I have to add the streets that compose the zone
+    	    		//object.fill.color = $scope.getTimeCostColor(timeCost);
+    	    		object.data.extratime = timeCost;
+    	    		tmpZones.push(object);
+    	    	}
+    	    	angular.copy(tmpZones, $scope.timeCostMicroZones);
+    			break;	
+    		default:break;
+    	}
+    };    
     
     // Method switchAreaMapObject: used to switch (in map) from area object to occupancy-area object
     $scope.switchAreaMapObject = function(type, newList){
@@ -6768,7 +7306,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedTimed);
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedHandicapped);
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedReserved);
-    	$scope.chartStreetOccupiedParkComposition.options.title = "Posti occupati in strada";
+    	$scope.chartStreetOccupiedParkComposition.options.title = "Posti occupati in sottovia";
     	
     };
     
@@ -6819,6 +7357,54 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   	//}
   		$scope.chartZoneOccupancy.options.title = "Posti occupati in zona";
     };
+    
+    $scope.chartMicroZoneOccupancy = $scope.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 posti"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+    
+    $scope.initMicroZoneOccupancyDiagram = function(zone, type){
+    	$scope.chartMicroZoneOccupancy.data = [["Posti", "num"]];
+  	//for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
+    	var object;
+    	if(type == 1){
+    		object = zone.data;
+    	} else {
+    		object = zone;
+    	}
+  		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+  		var dataOcc = [ "Occupati", object.slotOccupied ];
+  		$scope.chartMicroZoneOccupancy.data.push(dataTot);
+  		$scope.chartMicroZoneOccupancy.data.push(dataOcc);
+  	//}
+  		$scope.chartMicroZoneOccupancy.options.title = "Posti occupati in via";
+    };    
     
     $scope.chartAreaOccupancy = $scope.chart = {
         "type": "PieChart",

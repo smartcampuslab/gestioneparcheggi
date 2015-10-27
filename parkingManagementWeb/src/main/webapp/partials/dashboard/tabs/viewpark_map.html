@@ -304,7 +304,23 @@
      		</shape>
      		<shape name="polyline" ng-repeat="z in mapMicroZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
-         		on-click="showDetails(event, z, 4, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		on-click="showDetails(event, z, 6, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		</shape>
+     		<shape name="polyline" ng-repeat="zSel in mapSelectedMicroZones" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
+         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zSel.stroke.weight }}"
+        		on-click="hideDetails(event, zSel, 6)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		</shape>
+     		<shape name="polyline" ng-repeat="zOcc in occupancyMicroZones" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
+         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zOcc.stroke.weight }}"
+         		on-click="showDetails(event, zOcc, 6, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		</shape>
+     		<shape name="polyline" ng-repeat="zProf in profitMicroZones" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
+         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zProf.stroke.weight }}"
+         		on-click="showDetails(event, zProf, 6, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		</shape>
+     		<shape name="polyline" ng-repeat="zTime in timeCostMicroZones" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
+         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zTime.stroke.weight }}"
+         		on-click="showDetails(event, zTime, 6, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          		geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="{{ a.stroke.opacity }}" stroke-weight="{{ a.stroke.weight }}"
@@ -655,6 +671,34 @@
 					</tr>
 				</table>
 			</div>
+			<div ng-show="isMicroZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ microZDetails.data.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="100%">
+					<tr ng-show="microzone_type.visible">
+						<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.type }}</td>
+					</tr>
+					<tr ng-show="microzone_note.visible">
+						<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="microzone_color.visible">
+						<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span class="colorBox" ng-style="{'background-color': correctColor(microZDetails.data.color)}"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
 			<div ng-show="isAreaDetShow()">
 				<table width="100%">
 					<tr>
@@ -910,7 +954,7 @@
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zone_submacro.visible"> - {{ zDetails.data.submacro }}</span></td>
 					</tr>
 				</table>	
 				<table width="95%">	
@@ -929,6 +973,31 @@
 					</tr>
 				</table>
 				<div google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+			</div>
+			<div ng-show="isMicroZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ microZDetails.data.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="95%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ microZDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(microZDetails.data.slotOccupied)">{{ microZDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(microZDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div google-chart chart="chartMicroZoneOccupancy" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
 			</div>
 			<div ng-show="isAreaDetShow()">
 				<table width="100%">
@@ -1158,7 +1227,7 @@
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zone_submacro.visible"> - {{ zDetails.data.submacro }}</span></td>
 					</tr>
 				</table>	
 				<table width="100%">	
@@ -1195,6 +1264,48 @@
 					</tr>
 				</table>
 			</div>
+			<div ng-show="isMicroZoneDetShow()">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ microZDetails.data.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.slotPaid }}</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="microZDetails.data.profit != -1">&nbsp;{{ correctEuroCent(microZDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="microZDetails.data.profit == -1">&nbsp;n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="microZDetails.data.tickets > 0">&nbsp;{{ microZDetails.data.tickets }}</span>
+							<span ng-if="microZDetails.data.tickets <= 0">&nbsp;n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>			
 			<div ng-show="isAreaDetShow()">
 				<table width="100%">
 					<tr>
@@ -1379,7 +1490,7 @@
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="microzone_submacro.visible"> - {{ zDetails.data.submacro }}</span></td>
 					</tr>
 				</table>	
 				<table width="99%">	
@@ -1416,6 +1527,52 @@
 							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min == zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
 							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min != zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} - {{ zDetails.data.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
 							<span ng-show="zDetails.data.extratime == null">n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isMicroZoneDetShow()">
+				<table width="99%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ microZDetails.data.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="99%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ microZDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(microZDetails.data.slotOccupied)">{{ microZDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(microZDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<div google-chart chart="chartMicroZoneOccupancy" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'element_costTime' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'element_waiting_time' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="microZDetails.data.extratime != null && microZDetails.data.extratime.extratime_estimation_min == microZDetails.data.extratime.extratime_estimation_max">{{ microZDetails.data.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="microZDetails.data.extratime != null && microZDetails.data.extratime.extratime_estimation_min != microZDetails.data.extratime.extratime_estimation_max">{{ microZDetails.data.extratime.extratime_estimation_min }} - {{ microZDetails.data.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="microZDetails.data.extratime == null">n.p.</span>
 						</td>
 					</tr>
 				</table>
