@@ -98,7 +98,7 @@
 							<tr ng-show="zoneWS.length != 0">
 								<th width="45%">
 									<span ng-show="microzone_name.visible">{{ 'zone_name' | i18n }}</span>&nbsp;
-									<a href ng-click="showZoneNameFilter();currentPageZ=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="showZoneNameFilter();currentPageMZ=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showZoneFilter">
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -110,7 +110,7 @@
 								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
-								ng-repeat="zone in microzoneWS | filter:nameFilter | orderBy: ['name', 'submacro'] |  startFrom:currentPageMZ*maxMicroZones | limitTo:maxMicroZones">
+								ng-repeat="zone in microzoneWS | filter:nameFilter | orderBy: ['name', 'submicro'] |  startFrom:currentPageMZ*maxMicroZones | limitTo:maxMicroZones">
 								<tr>
 									<td width="45%" align="left"><span ng-show="microzone_name.visible">{{zone.name}}</span></td>
 									<td align="center"><span ng-show="microzone_submacro.visible">{{zone.submacro}}</span></td>
@@ -131,7 +131,7 @@
 					<button class="btn btn-default"
 							ng-disabled="currentPageMZ == 0"
 							ng-click="currentPageMZ=currentPageMZ-1">{{ 'previous_label' | i18n }}</button>
-						{{currentPageZ+1}}/{{numberOfPages(7)}}
+						{{currentPageMZ+1}}/{{numberOfPages(7)}}
 					<button class="btn btn-default"
 							ng-disabled="currentPageMZ >= microzoneWS.length/maxMicroZones - 1"
 							ng-click="currentPageMZ=currentPageMZ+1">{{ 'next_label' | i18n }}</button>
@@ -249,7 +249,7 @@
 					   	<tr>
 					   		<td width="85%"></td>
 					   		<td width="8%" align="center">
-					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeZView()">{{ 'text_btn_close' | i18n  }}</button>
+					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeZView(zone.type)">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
 					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateZone(form, zone, myColor)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- editZone -->

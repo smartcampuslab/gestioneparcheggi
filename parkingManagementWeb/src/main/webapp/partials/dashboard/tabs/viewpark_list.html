@@ -396,6 +396,7 @@
 							<td width="7%" align="left">DO:{{street.timedParkSlotNumber}}</td>
 							<td width="7%" align="left">R:{{street.reservedSlotNumber}}</td>
 							<td width="6%" align="left">H:{{street.handicappedSlotNumber}}</td>
+<!-- 							<td width="6%" align="left">ND:{{street.unusuableSlotNumber}}</td> -->
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
@@ -447,7 +448,7 @@
 						</th><!-- colspan="2" -->
 						<th width="10%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="10%">{{ 'street_slots' | i18n }} Tot</th>
-						<th width="36%" colspan="4">{{ 'street_occupied_slots' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(1)"></th>
+						<th width="49%" colspan="7">{{ 'street_occupied_slots' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(1)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_1==true">
@@ -465,17 +466,20 @@
 								<span ng-show="street.occupancyRate == '-1'">n.p.</span>
 							</td>
 							<td width="10%" align="left">{{street.slotNumber}}</td>
-							<td width="9%" align="left">LC: {{street.freeParkSlotSignOccupied}}</td>
-							<td width="9%" align="left">LS: {{street.freeParkSlotOccupied}}</td>
-							<td width="9%" align="left">P: {{street.paidSlotOccupied}}</td>
-							<td width="9%" align="left">DO: {{street.timedParkSlotOccupied}}</td>
+							<td width="7%" align="left">LC: {{street.freeParkSlotSignOccupied}}</td>
+							<td width="7%" align="left">LS: {{street.freeParkSlotOccupied}}</td>
+							<td width="7%" align="left">P: {{street.paidSlotOccupied}}</td>
+							<td width="7%" align="left">DO: {{street.timedParkSlotOccupied}}</td>
+							<td width="6%" align="left">R: {{street.reservedSlotOccupied}}</td>
+							<td width="6%" align="left">H: {{street.handicappedSlotOccupied}}</td>
+							<td width="7%" align="left">ND:{{street.unusuableSlotNumber}}</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
 					<tr ng-show="areaWS.length == 0">
-						<td colspan="10"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+						<td colspan="13"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
 			</div>
@@ -918,7 +922,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (microzoneWS | filter:nameFilter) | orderBy: ['name'] |  startFrom:currentPageZa*maxMicroZones | limitTo:maxMicroZones">
+						ng-repeat="zone in filtered = (microzoneWS | filter:nameFilter) | orderBy: ['name','submicro'] |  startFrom:currentPageZa*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
 							<td width="25%" align="left"><span ng-show="microzone_name.visible">{{zone.name}}</span></td>
 							<td width="15%" align="center"><span ng-show="microzone_submicro.visible">{{zone.submicro}}</span></td>

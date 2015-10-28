@@ -136,8 +136,14 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'timedParkSlotNumber'){
     			$scope.s_timedSlot = attributes[i];
     		}
+    		if(attributes[i].code == 'paidSlotNumber'){
+    			$scope.s_paidSlot = attributes[i];
+    		}
     		if(attributes[i].code == 'freeParkSlotNumber'){
     			$scope.s_freeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotSignNumber'){
+    			$scope.s_freeSlotSign = attributes[i];
     		}
     		if(attributes[i].code == 'unusuableSlotNumber'){
     			$scope.s_unusuableSlot = attributes[i];

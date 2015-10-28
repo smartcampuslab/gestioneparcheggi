@@ -575,6 +575,10 @@
     "value": "Posti disco orario",
     "description": "Label campo posti disco orario per oggetto strada"
 }, {
+    "key": "street_paidpark_slot",
+    "value": "Posti a pagamento",
+    "description": "Label campo posti a pagamento per oggetto strada"
+}, {
     "key": "street_freepark_slot",
     "value": "Posti sosta libera",
     "description": "Label campo posti sosta libera per oggetto strada"
@@ -633,6 +637,10 @@
 }, {
     "key": "street_timedpark_slots_err_required",
     "value": "Campo posti 'disco orario' obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_paidpark_slots_err_required",
+    "value": "Campo posti 'pagamento' obbligatorio.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_freepark_slots_err_required",
@@ -874,6 +882,10 @@
     "key": "street_timedslot_placeholder",
     "value": "Inserire il numero di posti a disco-orario",
     "description": "Testo placeholder campo posti disco orario via"
+}, {
+    "key": "street_paidslot_placeholder",
+    "value": "Inserire il numero di posti a pagamento",
+    "description": "Testo placeholder campo posti a pagamento in via"
 }, {
     "key": "street_freeparkslot_placeholder",
     "value": "Inserire il numero di posti gratuiti",

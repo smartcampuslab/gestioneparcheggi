@@ -1566,7 +1566,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space.macrozone){
 							$scope.showZonePolygons(3);
 						} else if($scope.dashboard_space.microzone){
-							//$scope.showStreetPolylines(3);
+							$scope.showMicroZonePolygons(3);
 						} else if($scope.dashboard_space.microzone_part){
 							$scope.showStreetPolylines(3);
 						} else if($scope.dashboard_space.parkingmeter){
@@ -1600,7 +1600,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space.macrozone){
 							$scope.showZonePolygons(4);
 						} else if($scope.dashboard_space.microzone){
-							//$scope.showStreetPolylines(4);
+							$scope.showMicroZonePolygons(4);
 						} else if($scope.dashboard_space.microzone_part){
 							$scope.showStreetPolylines(4);
 						} else if($scope.dashboard_space.parkingstructs){
@@ -2641,72 +2641,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.hideAllMicroZones = function(){
 	    var toHideZone = $scope.map.shapes;
 	    for(var i = 0; i < $scope.mapMicroZones.length; i++){
-	    	if($scope.mapMicroZones[i].subelements != null && $scope.mapMicroZones[i].subelements.length > 0){
-	    		if($scope.mapMicroZones[i].subelements.length == 1){
-	    			if(toHideZone[$scope.mapMicroZones[i].id] != null){
-	        			toHideZone[$scope.mapMicroZones[i].id].setMap(null);
-	        		}
-	    		} else {
-	    			for(var j = 0; j < $scope.mapMicroZones[i].subelements.length; j++){
-	    				var myId = $scope.correctObjId($scope.mapMicroZones[i].data.id, j);
-	    				if(toHideZone[myId] != null){
-	    					toHideZone[myId].setMap(null);
-			    		}
-	    			}
-	    		}
-	    	}	
+	    	if(toHideZone[$scope.mapMicroZones[i].id] != null){
+    			toHideZone[$scope.mapMicroZones[i].id].setMap(null);
+    		}	
 	    }
 	    for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
-	    	if($scope.occupancyMicroZones[i].subelements != null && $scope.occupancyMicroZones[i].subelements.length > 0){
-	    		if($scope.occupancyMicroZones[i].subelements.length == 1){
-	    			if(toHideZone[$scope.occupancyMicroZones[i].id] != null){
-	        			toHideZone[$scope.occupancyMicroZones[i].id].setMap(null);
-	        		}
-	    		} else {
-	    			for(var j = 0; j < $scope.occupancyMicroZones[i].subelements.length; j++){
-	    				var myId = $scope.correctObjId($scope.occupancyMicroZones[i].data.id, j);
-	    				if(toHideZone[myId] != null){
-	    					toHideZone[myId].setMap(null);
-			    		}
-	    			}
-	    		}
-	    	}
+	    	if(toHideZone[$scope.occupancyMicroZones[i].id] != null){
+    			toHideZone[$scope.occupancyMicroZones[i].id].setMap(null);
+    		}
     	}
     	for(var i = 0; i < $scope.profitMicroZones.length; i++){
-    		if($scope.profitMicroZones[i].subelements != null && $scope.profitMicroZones[i].subelements.length > 0){
-	    		if($scope.profitMicroZones[i].subelements.length == 1){
-	    			if(toHideZone[$scope.profitMicroZones[i].id] != null){
-	        			toHideZone[$scope.profitMicroZones[i].id].setMap(null);
-	        		}
-	    		} else {
-	    			for(var j = 0; j < $scope.profitMicroZones[i].subelements.length; j++){
-	    				var myId = $scope.correctObjId($scope.profitMicroZones[i].data.id, j);
-	    				if(toHideZone[myId] != null){
-	    					toHideZone[myId].setMap(null);
-			    		}
-	    			}
-	    		}
-	    	}
+    		if(toHideZone[$scope.profitMicroZones[i].id] != null){
+    			toHideZone[$scope.profitMicroZones[i].id].setMap(null);
+    		}
     	}
     	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
-    		if($scope.timeCostMicroZones[i].subelements != null && $scope.timeCostMicroZones[i].subelements.length > 0){
-	    		if($scope.timeCostMicroZones[i].subelements.length == 1){
-	    			if(toHideZone[$scope.timeCostMicroZones[i].id] != null){
-	        			toHideZone[$scope.timeCostMicroZones[i].id].setMap(null);
-	        		}
-	    		} else {
-	    			for(var j = 0; j < $scope.timeCostMicroZones[i].subelements.length; j++){
-	    				var myId = $scope.correctObjId($scope.timeCostMicroZones[i].data.id, j);
-	    				if(toHideZone[myId] != null){
-	    					toHideZone[myId].setMap(null);
-			    		}
-	    			}
-	    		}
-	    	}
+    		if(toHideZone[$scope.timeCostMicroZones[i].id] != null){
+    			toHideZone[$scope.timeCostMicroZones[i].id].setMap(null);
+    		}
     	}
     	$scope.alignSelectedObjects();
     };    
-    
     
     
     $scope.hideAllAreas = function(areas){
@@ -2989,19 +2944,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		
 		for(var i = 0; i < streets.length; i++){
 			var myAreaS = $scope.getLocalAreaById(streets[i].rateAreaId);
-			var myZones = [];
-			var mySubzones = [];
-			for(var j = 0; j < streets[i].zones.length; j++){
-				var zone = $scope.getLocalZoneById(streets[i].zones[j], 2);
-				if(zone == null){
-					var subzone = $scope.getLocalMicroZoneById(streets[i].zones[j], 2);
-					if(subzone != null){
-						mySubzones.push(subzone);
-					}
-				} else {
-					myZones.push($scope.addLabelToZoneObject(zone));
-				}
-			}
+			//var myZones = [];
+			//var mySubzones = [];
+			//for(var j = 0; j < streets[i].myZones.length; j++){
+			//	var zone = $scope.getLocalZoneById(streets[i].myZones[j], 2);
+			//	if(zone == null){
+			//		var subzone = $scope.getLocalMicroZoneById(streets[i].myMicroZones[j], 2);
+			//		if(subzone != null){
+			//			mySubzones.push(subzone);
+			//		}
+			//	} else {
+			//		myZones.push($scope.addLabelToZoneObject(zone));
+			//	}
+			//}
 			var parkingMeters = streets[i].myPms;
 			var totalProfit = 0;
 			var totalTickets = 0;
@@ -3053,8 +3008,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						},
 						data: streets[i],
 						area: myAreaS,
-						zones: myZones,
-						microzones: mySubzones,
+						zones: streets[i].myZones,
+						microzones: streets[i].myMicroZones, //mySubzones,
 						pms: streets[i].myPms,
 						info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
 						info_windows_cod: "s" + streets[i].id,
@@ -3196,6 +3151,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				zColor = $scope.getOccupancyColor(zoneOccupancy);
 			} else if(type == 3){
 				zoneProfit = $scope.getStreetsInZoneProfit(zones[i].id);
+				//console.log(zones[i].name + " profit: " + zoneProfit[0] + " , " + zoneProfit[1]);
 				zColor = $scope.getProfitColor(zoneProfit[0]);
 			} else if(type == 4){
 				var slotsInZone = $scope.getTotalSlotsInZone(zones[i].id);
@@ -3374,6 +3330,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		street.timedParkSlotOccupied = (s_object.timedParkSlotOccupied != null && s_object.timedParkSlotOccupied > 0) ? s_object.timedParkSlotOccupied : 0;
 		street.handicappedSlotOccupied = (s_object.handicappedSlotOccupied != null && s_object.handicappedSlotOccupied > 0) ? s_object.handicappedSlotOccupied : 0;
 		street.reservedSlotOccupied = (s_object.reservedSlotOccupied != null && s_object.reservedSlotOccupied > 0) ? s_object.reservedSlotOccupied : 0;
+		street.unusuableSlotNumber = (s_object.unusuableSlotNumber != null && s_object.unusuableSlotNumber > 0) ? s_object.unusuableSlotNumber : 0;
 		return street;
 	};
 	
@@ -4161,6 +4118,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		if($scope.profitStreets != null && $scope.profitStreets.length > 0){				// map page case
 			for(var i = 0; i < $scope.profitStreets.length; i++){
 				var found = false;
+				// zone case
 				for(var j = 0; (j < $scope.profitStreets[i].zones.length && !found); j++){ 
 					if($scope.profitStreets[i].zones[j].id == z_id){
 						found = true;
@@ -4176,10 +4134,29 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						}
 					}
 				}
+				// microzone case
+				if(!found && $scope.profitStreets[i].microzones != null){
+					for(var j = 0; (j < $scope.profitStreets[i].microzones.length && !found); j++){ 
+						if($scope.profitStreets[i].microzones[j].id == z_id){
+							found = true;
+							streetsInZone += 1;
+							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
+								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
+									if($scope.profitStreets[i].pms[x] != null){
+										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
+											myPms.push($scope.profitStreets[i].pms[x].id);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
 			}
 		} else if($scope.profitStreetsList != null && $scope.profitStreetsList.length > 0){	// list page case
 			for(var i = 0; i < $scope.profitStreetsList.length; i++){
 				var found = false;
+				// zone case
 				for(var j = 0; (j < $scope.profitStreetsList[i].zones.length && !found); j++){ 
 					if($scope.profitStreetsList[i].zones[j] == z_id){
 						found = true;
@@ -4189,6 +4166,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 								if($scope.profitStreetsList[i].myPms[x] != null){
 									if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreetsList[i].myPms[x].id)){
 										myPms.push($scope.profitStreetsList[i].myPms[x].id);
+									}
+								}
+							}
+						}
+					}
+				}
+				// microzone case
+				if(!found && $scope.profitStreetsList[i].microzones != null){
+					for(var j = 0; (j < $scope.profitStreetsList[i].microzones.length && !found); j++){ 
+						if($scope.profitStreetsList[i].microzones[j] == z_id){
+							found = true;
+							streetsInZone += 1;
+							if($scope.profitStreetsList[i].myPms != null && $scope.profitStreetsList[i].myPms.length > 0){
+								for(var x = 0; x < $scope.profitStreetsList[i].myPms.length; x++){
+									if($scope.profitStreetsList[i].myPms[x] != null){
+										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreetsList[i].myPms[x].id)){
+											myPms.push($scope.profitStreetsList[i].myPms[x].id);
+										}
 									}
 								}
 							}
@@ -5974,7 +5969,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.mapZones.length; i++){
 	    	    		toHideZones[$scope.mapZones[i].id].setMap(null);
 	    	    		var object = $scope.mapZones[i];
-	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.mapZones[i].id);
+	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.mapZones[i].data.id);
 	    	    		object.stroke.color = $scope.getProfitColor(zoneProfit[0]);	//Here I have to add the streets that compose the zone
 	    	    		object.fill.color = $scope.getProfitColor(zoneProfit[0]);
 	    	    		$scope.profitZones.push(object);
@@ -5985,7 +5980,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.occupancyZones.length; i++){
 	    	    		toHideZones[$scope.occupancyZones[i].id].setMap(null);
 	    	    		var object = $scope.occupancyZones[i];
-	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.occupancyZones[i].id);
+	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.occupancyZones[i].data.id);
 	    	    		object.stroke.color = $scope.getProfitColor(zoneProfit[0]);	//Here I have to add the streets that compose the zone
 	    	    		object.fill.color = $scope.getProfitColor(zoneProfit[0]);
 	    	    		$scope.profitZones.push(object);
@@ -5996,7 +5991,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    			for(var i = 0; i < $scope.timeCostZones.length; i++){
 	    	    		toHideZones[$scope.timeCostZones[i].id].setMap(null);
 	    	    		var object = $scope.timeCostZones[i];
-	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.timeCostZones[i].id);
+	    	    		var zoneProfit = $scope.getStreetsInZoneProfit($scope.timeCostZones[i].data.id);
 	    	    		object.stroke.color = $scope.getProfitColor(zoneProfit[0]);	//Here I have to add the streets that compose the zone
 	    	    		object.fill.color = $scope.getProfitColor(zoneProfit[0]);
 	    	    		$scope.profitZones.push(object);

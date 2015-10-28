@@ -381,6 +381,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		if(attributes[i].code == 'timedParkSlotNumber'){
     			$scope.s_timedSlot = attributes[i];
     		}
+    		if(attributes[i].code == 'paidSlotNumber'){
+    			$scope.s_paidSlot = attributes[i];
+    		}
     		if(attributes[i].code == 'freeParkSlotNumber'){
     			$scope.s_freeSlot = attributes[i];
     		}
@@ -824,6 +827,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				if(type == 1){
 					corrZone = myZones[i];
 				} else {
+					var sub = (myZones[i].submacro != null) ? myZones[i].submacro : myZones[i].submicro;
 					corrZone = {
 						id: myZones[i].id,
 						id_app: myZones[i].id_app,
@@ -834,7 +838,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						type: myZones[i].type,
 						note: myZones[i].note,
 						geometry: $scope.correctMyGeometryPolygon(myZones[i].geometry),
-						label: myZones[i].name + "_" + myZones[i].submacro
+						label: myZones[i].name + "_" + sub
 					};
 				}			
 			}
@@ -852,6 +856,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				if(type == 1){
 					corrMicrozone = myMicroZones[i];
 				} else {
+					var sub = (myMicroZones[i].submacro != null) ? myMicroZones[i].submacro : myMicroZones[i].submicro;
 					corrMicrozone = {
 						id: myMicroZones[i].id,
 						id_app: myMicroZones[i].id_app,
@@ -862,7 +867,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						type: myMicroZones[i].type,
 						note: myMicroZones[i].note,
 						geometry: $scope.correctMyGeometryPolygon(myMicroZones[i].geometry),
-						label: myMicroZones[i].name + "_" + myMicroZones[i].submacro
+						label: myMicroZones[i].name + "_" + sub
 					};
 				}
 				
@@ -1215,6 +1220,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.correctMyZones = function(zones){
 		var correctedZones = [];
 		for(var i = 0; i < zones.length; i++){
+			var sub = (zones[i].submacro != null) ? zones[i].submacro : zones[i].submicro;
 			var correctZone = {
 				id: zones[i].id,
 				id_app: zones[i].id_app,
@@ -1227,7 +1233,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				geometry: $scope.correctMyGeometryPolygon(zones[i].geometry),
 				geometryFromSubelement: zones[i].geometryFromSubelement,
 				subelements: $scope.loadStreetsFromZone(zones[i].id),
-				label: zones[i].name + "_" + zones[i].submacro
+				label: zones[i].name + "_" + sub
 			};
 			correctedZones.push(correctZone);
 		}
@@ -1279,7 +1285,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				if(zone == null){
 					var subzone = $scope.getLocalMicroZoneById(streets[i].zones[j], 2);
 					if(subzone != null){
-						subzones.push(subzone);
+						subzones.push($scope.addLabelToZoneObject(subzone));
 					}
 				} else {
 					zones.push($scope.addLabelToZoneObject(zone));
@@ -1501,7 +1507,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				if(zone == null){
 					var subzone = $scope.getLocalMicroZoneById(street.zones[j], 1);
 					if(subzone != null){
-						mySubZones.push(subzone);
+						mySubZones.push($scope.addLabelToZoneObject(subzone));
 					}
 				} else {
 					myZones.push($scope.addLabelToZoneObject(zone));
@@ -3092,9 +3098,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					editCorrectedPath.push(point);
 				}
 			}
-			
-			var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
-			
+			//var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
+			var calculatedTotSlots = street.handicappedSlotNumber + street.reservedSlotNumber + street.paidSlotNumber + street.timedParkSlotNumber + street.freeParkSlotNumber + street.freeParkSlotSignNumber + street.unusuableSlotNumber;
 			var id = street.id;
 			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
@@ -3103,11 +3108,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				id: street.id,
 				id_app: street.id_app,
 				streetReference: street.streetReference,
-				slotNumber: street.slotNumber,
+				slotNumber: calculatedTotSlots,			//street.slotNumber,
 				handicappedSlotNumber: street.handicappedSlotNumber,
 				reservedSlotNumber: street.reservedSlotNumber,
 				timedParkSlotNumber:street.timedParkSlotNumber,
-				paidSlotNumber: calculatedPaidSlot, //street.paidSlotNumber,
+				paidSlotNumber: street.paidSlotNumber,	//calculatedPaidSlot, //street.paidSlotNumber,
 				freeParkSlotNumber: street.freeParkSlotNumber,
 				freeParkSlotSignNumber: street.freeParkSlotSignNumber,
 				unusuableSlotNumber: street.unusuableSlotNumber,
@@ -3600,7 +3605,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Zone
 	$scope.setZRemove = function(zone){
-		var delZone = $dialogs.confirm("Attenzione", "Vuoi cancellare la zona '" + zone.name + "-" + zone.submacro + "'?");
+		var sub = (zone.submacro != null) ? zone.submacro : zone.submicro;
+		var delZone = $dialogs.confirm("Attenzione", "Vuoi cancellare la zona '" + zone.name + "-" + sub + "'?");
 			delZone.result.then(function(btn){
 				// yes case
 				$scope.deleteZone(zone);
@@ -3749,7 +3755,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	if(toDelZone[zone.id] != null){
     		toDelZone[zone.id].setMap(null);
     	} else {
-    		toDelMicroZone[zone.id].setMap(null);
+    		if(toDelMicroZone[zone.id] != null){
+    			toDelMicroZone[zone.id].setMap(null);
+    		}
     	}
 		
     	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "zone/" + zone.id, null, $scope.authHeaders, null);
@@ -4556,6 +4564,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
     
     $scope.addLabelToZoneObject = function(zone){
+    	var sub = (zone.submacro != null) ? zone.submacro : zone.submicro;
     	var corrected_zone = {
     		id: zone.id,
     		id_app: zone.id_app,
@@ -4568,7 +4577,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		geometry: zone.geometry,
     		geometryFromSubelement: zone.geometryFromSubelement,
     		subelements: zone.subelements,
-    		label: zone.name + "_" + zone.submacro
+    		label: zone.name + "_" + sub
     	};
     	return corrected_zone;
     };
@@ -4599,7 +4608,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					if(zone == null){
 						var subzone = $scope.getLocalMicroZoneById(streets[i].zones[j], 1);
 						if(subzone != null){
-							mySubZones.push(subzone);
+							mySubZones.push($scope.addLabelToZoneObject(subzone));
 						}
 					} else {
 						myZones.push($scope.addLabelToZoneObject(zone));

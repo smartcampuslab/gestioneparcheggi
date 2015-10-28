@@ -173,10 +173,18 @@
 							        			<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
 							        		</tr>
+							        		<tr ng-show="s_paidSlot.visible">
+							        			<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
+							        			<td>&nbsp;{{ s.data.paidSlotNumber }}</td>
+							        		</tr>
 							        		<tr ng-show="s_freeSlot.visible">
 							        			<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
 							        		</tr>
+							        		<tr ng-show="s_freeSlotSign.visible">	
+												<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+												<td>&nbsp;{{  s.data.freeParkSlotSignNumber }}</td>
+											</tr>
 							        		<tr ng-show="s_unusuableSlot.visible">
 							        			<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
