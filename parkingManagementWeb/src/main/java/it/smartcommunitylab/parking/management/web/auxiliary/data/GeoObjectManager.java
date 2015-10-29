@@ -510,19 +510,22 @@ public class GeoObjectManager {
 		Street s = new Street();
 		s.setId("street@" + street.getId_app() + "@" + street.getId());
 		s.setAgency(street.getId_app());
-		if(ModelConverter.isValorisedSlots(street.getFreeParkSlotNumber()) && ModelConverter.isValorisedSlots(street.getFreeParkSlotSignNumber())){
-			int freeSlots = street.getFreeParkSlotNumber() + street.getFreeParkSlotSignNumber();
-			s.setSlotsFree(freeSlots);
-		} else {
-			if(ModelConverter.isValorisedSlots(street.getFreeParkSlotNumber())){
-				s.setSlotsFree(street.getFreeParkSlotNumber());
-			} else {
-				s.setSlotsFree(street.getFreeParkSlotSignNumber());
-			}
-		}
+//		if(ModelConverter.isValorisedSlots(street.getFreeParkSlotNumber()) && ModelConverter.isValorisedSlots(street.getFreeParkSlotSignNumber())){
+//			int freeSlots = street.getFreeParkSlotNumber() + street.getFreeParkSlotSignNumber();
+//			s.setSlotsFree(freeSlots);
+//		} else {
+//			if(ModelConverter.isValorisedSlots(street.getFreeParkSlotNumber())){
+//				s.setSlotsFree(street.getFreeParkSlotNumber());
+//			} else {
+//				s.setSlotsFree(street.getFreeParkSlotSignNumber());
+//			}
+//		}
+		s.setSlotsFree(street.getFreeParkSlotNumber());
+		s.setSlotsFreeSigned(street.getFreeParkSlotSignNumber());
 		s.setSlotsPaying(street.getPaidSlotNumber());
 		s.setSlotsTimed(street.getTimedParkSlotNumber());
 		s.setSlotsHandicapped(street.getHandicappedSlotNumber());
+		s.setSlotsReserved(street.getReservedSlotNumber());
 		s.setName(street.getStreetReference());
 		if(street.getGeometry()!= null && street.getGeometry().getPoints() != null && street.getGeometry().getPoints().size() > 0){
 			s.setPolyline(PolylineEncoder.encode(street.getGeometry().getPoints()));

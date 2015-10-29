@@ -2172,8 +2172,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.isInit = true;
 		
 		$scope.myZones = [];
-		$scope.myMacrozone = {};
-		$scope.myMicrozone = {};
+		//$scope.myMacrozone = {};
+		//$scope.myMicrozone = {};
 		$scope.myPms = [];
 		$scope.myArea = null;
 		$scope.myNewArea = null;
@@ -3099,7 +3099,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 			//var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
-			var calculatedTotSlots = street.handicappedSlotNumber + street.reservedSlotNumber + street.paidSlotNumber + street.timedParkSlotNumber + street.freeParkSlotNumber + street.freeParkSlotSignNumber + street.unusuableSlotNumber;
+			var calculatedTotSlots = $scope.initIfNull(street.handicappedSlotNumber) + $scope.initIfNull(street.reservedSlotNumber) + $scope.initIfNull(street.paidSlotNumber) + $scope.initIfNull(street.timedParkSlotNumber) + $scope.initIfNull(street.freeParkSlotNumber) + $scope.initIfNull(street.freeParkSlotSignNumber) + $scope.initIfNull(street.unusuableSlotNumber);
 			var id = street.id;
 			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
@@ -3871,6 +3871,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	$scope.initIfNull = function(value){
+		if(value == null || value == ""){
+			value = 0;
+		}
+		return parseInt(value);
+	};
 	
 	// Street
 	$scope.createStreet = function(form, street, area, zone, microzone, pms){
@@ -3886,18 +3892,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
 				newCorrectedPath.push(point);
 			};
-			var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
+			//var calculatedPaidSlot = street.slotNumber - street.handicappedSlotNumber - street.reservedSlotNumber - street.timedParkSlotNumber - street.freeParkSlotNumber - street.freeParkSlotSignNumber - street.unusuableSlotNumber;
+			var calculatedTotSlots = $scope.initIfNull(street.handicappedSlotNumber) + $scope.initIfNull(street.reservedSlotNumber) + $scope.initIfNull(street.paidSlotNumber) + $scope.initIfNull(street.timedParkSlotNumber) + $scope.initIfNull(street.freeParkSlotNumber) + $scope.initIfNull(street.freeParkSlotSignNumber) + $scope.initIfNull(street.unusuableSlotNumber);
 			
 			var method = 'POST';
 			var appId = sharedDataService.getConfAppId();
 			var data = {
 				id_app: $scope.myAppId,
 				streetReference: street.streetReference,
-				slotNumber: street.slotNumber,
+				slotNumber: calculatedTotSlots,//street.slotNumber,
 				handicappedSlotNumber: street.handicappedSlotNumber,
 				reservedSlotNumber : street.reservedSlotNumber,
 				timedParkSlotNumber: street.timedParkSlotNumber,
-				paidSlotNumber: calculatedPaidSlot, //street.paidSlotNumber,
+				paidSlotNumber: street.paidSlotNumber,//calculatedPaidSlot, //street.paidSlotNumber,
 				freeParkSlotNumber: street.freeParkSlotNumber,
 				freeParkSlotSignNumber: street.freeParkSlotSignNumber,
 				unusuableSlotNumber: street.unusuableSlotNumber,

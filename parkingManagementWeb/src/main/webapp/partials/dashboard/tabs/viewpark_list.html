@@ -2383,6 +2383,13 @@
 									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'street_unusuable_slot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ sDetails.unusuableSlotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
 							</table>	
 						</td>
 						<td width="34%">
@@ -2393,19 +2400,21 @@
 						  			</td>
 						   		</tr>
 								<tr>
-									<td class="detailsListTableSX">{{ 'street_freepark_slot_signed_db' | i18n }}:</td>
+									<td class="detailsListTableSX">{{ 'street_freepark_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">
-										<span ng-show="sDetails.freeParkSlotSignFree > 0">{{ sDetails.freeParkSlotSignFree }}</span>
-										<span ng-show="sDetails.freeParkSlotSignFree == 0">{{ sDetails.freeParkSlotFree }}</span>
-									</td>
+									<td class="detailsListTableDX">{{ sDetails.freeParkSlotFree }}</td>
 								</tr>
 								<tr>
+									<td class="detailsListTableSX">{{ 'street_freepark_slot_signed_db' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">{{ sDetails.freeParkSlotSignFree }}</td>
+								</tr>
+								<tr ng-show="s_paidSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_paid_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.paidSlotFree }}</td>
 								</tr>
-									<tr ng-show="s_timedSlot.visible">
+								<tr ng-show="s_timedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_timedpark_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.timedParkSlotFree }}</td>
@@ -2415,7 +2424,7 @@
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.handicappedSlotFree }}</td>
 								</tr>
-								<tr>
+								<tr ng-show="s_reservedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_reserved_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.reservedSlotFree }}</td>
@@ -2430,14 +2439,16 @@
 									</td>
 								</tr>
 								<tr>
-									<td class="detailsListTableSX">{{ 'street_freepark_slot_signed_occupied_db' | i18n }}:</td>
+									<td class="detailsListTableSX">{{ 'street_freepark_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">
-										<span ng-show="sDetails.freeParkSlotSignOccupied > 0">{{ sDetails.freeParkSlotSignOccupied }}</span>
-										<span ng-show="sDetails.freeParkSlotSignOccupied == 0">{{ sDetails.freeParkSlotOccupied }}</span>
-									</td>
+									<td class="detailsListTableDX">{{ sDetails.freeParkSlotOccupied }}</td>
 								</tr>
 								<tr>
+									<td class="detailsListTableSX">{{ 'street_freepark_slot_signed_occupied_db' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">{{ sDetails.freeParkSlotSignOccupied }}</td>
+								</tr>
+								<tr ng-show="s_paidSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_paid_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.paidSlotOccupied }}</td>
@@ -2452,7 +2463,7 @@
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.handicappedSlotOccupied }}</td>
 								</tr>
-								<tr>
+								<tr ng-show="s_reservedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_reserved_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.reservedSlotOccupied }}</td>

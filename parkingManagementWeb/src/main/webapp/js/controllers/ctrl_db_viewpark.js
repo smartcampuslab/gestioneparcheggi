@@ -981,11 +981,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		if(attributes[i].code == 'handicappedSlotNumber'){
     			$scope.s_handicappedSlot = attributes[i];
     		}
+    		if(attributes[i].code == 'reservedSlotNumber'){
+    			$scope.s_reservedSlot = attributes[i];
+    		}
     		if(attributes[i].code == 'timedParkSlotNumber'){
     			$scope.s_timedSlot = attributes[i];
     		}
+    		if(attributes[i].code == 'paidSlotNumber'){
+    			$scope.s_paidSlot = attributes[i];
+    		}
     		if(attributes[i].code == 'freeParkSlotNumber'){
     			$scope.s_freeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotSignNumber'){
+    			$scope.s_freeSlotSign = attributes[i];
     		}
     		if(attributes[i].code == 'unusuableSlotNumber'){
     			$scope.s_unusuableSlot = attributes[i];
@@ -7269,7 +7278,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
       		object = street;
       	}
       	// for Total slot
-    	var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+    	var dataTot = [ "Liberi", object.slotNumber - object.unusuableSlotNumber - object.slotOccupied ];
     	var dataOcc = [ "Occupati", object.slotOccupied ];
     	$scope.chartStreetOccupancy.data.push(dataTot);
     	$scope.chartStreetOccupancy.data.push(dataOcc);

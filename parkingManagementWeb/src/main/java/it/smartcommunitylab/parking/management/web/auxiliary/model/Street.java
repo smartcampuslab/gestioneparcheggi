@@ -39,6 +39,11 @@ public class Street implements Serializable {
 	private int slotsFree;
 	private int slotsOccupiedOnFree;
 	/**
+	 * parcheggi gratuiti con segnaletica totali/occupati
+	 */
+	private int slotsFreeSigned;
+	private int slotsOccupiedOnFreeSigned;
+	/**
 	 * parcheggi liberi totali/occupati
 	 */
 	private int slotsUnavailable;
@@ -57,7 +62,11 @@ public class Street implements Serializable {
 	 */
 	private int slotsHandicapped;
 	private int slotsOccupiedOnHandicapped;
-	
+	/**
+	 * parcheggi riservati totali/occupati
+	 */
+	private int slotsReserved;
+	private int slotsOccupiedOnReserved;
 
 	private String polyline;
 	
@@ -153,6 +162,38 @@ public class Street implements Serializable {
 		this.slotsOccupiedOnHandicapped = slotsOccupiedOnHandicapped;
 	}
 
+	public int getSlotsFreeSigned() {
+		return slotsFreeSigned;
+	}
+
+	public int getSlotsOccupiedOnFreeSigned() {
+		return slotsOccupiedOnFreeSigned;
+	}
+
+	public int getSlotsReserved() {
+		return slotsReserved;
+	}
+
+	public int getSlotsOccupiedOnReserved() {
+		return slotsOccupiedOnReserved;
+	}
+
+	public void setSlotsFreeSigned(int slotsFreeSigned) {
+		this.slotsFreeSigned = slotsFreeSigned;
+	}
+
+	public void setSlotsOccupiedOnFreeSigned(int slotsOccupiedOnFreeSigned) {
+		this.slotsOccupiedOnFreeSigned = slotsOccupiedOnFreeSigned;
+	}
+
+	public void setSlotsReserved(int slotsReserved) {
+		this.slotsReserved = slotsReserved;
+	}
+
+	public void setSlotsOccupiedOnReserved(int slotsOccupiedOnReserved) {
+		this.slotsOccupiedOnReserved = slotsOccupiedOnReserved;
+	}
+
 	public String getAreaId() {
 		return areaId;
 	}
@@ -161,8 +202,6 @@ public class Street implements Serializable {
 		this.areaId = areaId;
 	}
 	
-	
-
 	public String getId() {
 		return id;
 	}
@@ -226,7 +265,7 @@ public class Street implements Serializable {
 	public void setUser(Integer user) {
 		this.user = user;
 	}
-	
+
 	@Override
 	public String toString() {
 		return "Street [id=" + id + ", agency=" + agency + ", position="
@@ -234,12 +273,16 @@ public class Street implements Serializable {
 				+ ", description=" + description + ", updateTime=" + updateTime
 				+ ", version=" + version + ", user=" + user + ", slotsFree="
 				+ slotsFree + ", slotsOccupiedOnFree=" + slotsOccupiedOnFree
+				+ ", slotsFreeSigned=" + slotsFreeSigned
+				+ ", slotsOccupiedOnFreeSigned=" + slotsOccupiedOnFreeSigned
 				+ ", slotsUnavailable=" + slotsUnavailable + ", slotsPaying="
 				+ slotsPaying + ", slotsOccupiedOnPaying="
 				+ slotsOccupiedOnPaying + ", slotsTimed=" + slotsTimed
 				+ ", slotsOccupiedOnTimed=" + slotsOccupiedOnTimed
 				+ ", slotsHandicapped=" + slotsHandicapped
 				+ ", slotsOccupiedOnHandicapped=" + slotsOccupiedOnHandicapped
+				+ ", slotsReserved=" + slotsReserved
+				+ ", slotsOccupiedOnReserved=" + slotsOccupiedOnReserved
 				+ ", polyline=" + polyline + ", lastChange=" + lastChange
 				+ ", areaId=" + areaId + "]";
 	}
@@ -261,12 +304,16 @@ public class Street implements Serializable {
 		json += "\"description\":\"" + getDescription() + "\",";
 		json += "\"slotsFree\":" + getSlotsFree() + ",";
 		json += "\"slotsOccupiedOnFree\":" + getSlotsOccupiedOnFree() + ",";
+		json += "\"slotsFreeSigned\":" + getSlotsFreeSigned() + ",";
+		json += "\"slotsOccupiedOnFreeSigned\":" + getSlotsOccupiedOnFreeSigned() + ",";
 		json += "\"slotsPaying\":" + getSlotsPaying() + ",";
 		json += "\"slotsOccupiedOnPaying\":" + getSlotsOccupiedOnPaying() + ",";
 		json += "\"slotsTimed\":" + getSlotsTimed() + ",";
 		json += "\"slotsOccupiedOnTimed\":" + getSlotsOccupiedOnTimed() + ",";
 		json += "\"slotsHandicapped\":" + getSlotsHandicapped() + ",";
 		json += "\"slotsOccupiedOnHandicapped\":" + getSlotsOccupiedOnHandicapped() + ",";
+		json += "\"slotsReserved\":" + getSlotsReserved() + ",";
+		json += "\"slotsOccupiedOnReserved\":" + getSlotsOccupiedOnReserved() + ",";		
 		json += "\"slotsUnavailable\":" + getSlotsUnavailable() + ",";
 		json += "\"lastChange\":" + getLastChange() + ",";
 		json += "\"polyline\":\"" + getPolyline() + "\",";

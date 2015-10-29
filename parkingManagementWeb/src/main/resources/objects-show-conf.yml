@@ -66,6 +66,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: true
         - code: freeParkSlotNumber
           editable: true
           required: false
@@ -365,7 +369,15 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: true
         - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotSignNumber
           editable: true
           required: false
           visible: true

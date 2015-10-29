@@ -554,12 +554,12 @@
 							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
 							   	</div>
-							   	<div class="form-group" ng-show="s_unusuableSlot.visible">
-							    	<label for="unusuableSlot">{{ 'street_unusuable_slot' | i18n }}</label>
-							    	<input id="unusuableSlot" type="text" class="form-control" name="sUnusuableslot" ng-model="eStreet.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="s_unusuableSlot.required" placeholder="{{ 'street_unusuableslot_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.sUnusuableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.sUnusuableslot.$error.required">{{ 'street_unusuable_slots_err_required' | i18n }}</div>
-							   	</div>
+<!-- 							   	<div class="form-group" ng-show="s_unusuableSlot.visible"> -->
+<!-- 							    	<label for="unusuableSlot">{{ 'street_unusuable_slot' | i18n }}</label> -->
+<!-- 							    	<input id="unusuableSlot" type="text" class="form-control" name="sUnusuableslot" ng-model="eStreet.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="s_unusuableSlot.required" placeholder="{{ 'street_unusuableslot_placeholder' | i18n }}" > -->
+<!-- 							    	<div class="field-error" ng-show="!isInit && form.sUnusuableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div> -->
+<!-- 							    	<div class="field-error" ng-show="!isInit && form.sUnusuableslot.$error.required">{{ 'street_unusuable_slots_err_required' | i18n }}</div> -->
+<!-- 							   	</div> -->
 					   		</div>
 					   	</div>
 					   	<div class="form-group" ng-show="s_subscrition.visible">
@@ -591,17 +591,17 @@
 <!-- 					    	</div> -->
 <!-- 					    	<div class="field-error" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div> -->
 <!-- 						</div> -->
-						<div class="form-group" ng-show="isEditing && s_zones.visible && zone_name.visible">
-					    	<label for="microzone">{{ 'street_zone' | i18n }}</label>
-					    	<select id="microzone" name="sMicroZone" class="form-control" ng-model="myMacrozone" ng-options="m as m.label for m in myZones | orderBy: label" ng-required="isEditing && s_zones.required">
+						<div class="form-group" ng-show="s_zones.visible && zone_name.visible"><!-- isEditing &&  -->
+					    	<label for="zone">{{ 'street_zone' | i18n }}</label>
+					    	<select id="zone" name="sZone" class="form-control" ng-options="m as m.label for m in myZones | orderBy: m.label" ng-model="myMacrozone" ng-required="s_zones.required">
 <!-- 					    		<option value="{{myMacrozone}}">{{ myMacrozone.name }}_{{ myMacrozone.submacro }}</option> -->
 <!-- 					    		<option ng-repeat="m in myZones" value="{{m}}">{{ m.name }}_{{ m.submacro }}</option> -->
 					    	</select>
-					   		<div class="field-error" ng-show="!isInit && form.sMicroZone.$error.required">{{ 'street_microzone_select_err_required' | i18n }}</div>
+					   		<div class="field-error" ng-show="!isInit && form.sZone.$error.required">{{ 'street_zone_select_err_required' | i18n }}</div>
 						</div>
-						<div class="form-group" ng-show="isEditing && s_zones.visible && microzone_name.visible">
+						<div class="form-group" ng-show="s_zones.visible && microzone_name.visible"><!-- isEditing &&  -->
 					    	<label for="microzone">{{ 'street_microzone' | i18n }}</label>
-					    	<select id="microzone" name="sMicroZone" class="form-control" ng-options="m as m.label for m in allMicrozones | orderBy: label" ng-model="myMicrozone" ng-required="isEditing && s_zones.required">
+					    	<select id="microzone" name="sMicroZone" class="form-control" ng-options="m as m.label for m in allMicrozones | orderBy: m.label" ng-model="myMicrozone" ng-required="s_zones.required">
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sMicroZone.$error.required">{{ 'street_microzone_select_err_required' | i18n }}</div>
 						</div>						

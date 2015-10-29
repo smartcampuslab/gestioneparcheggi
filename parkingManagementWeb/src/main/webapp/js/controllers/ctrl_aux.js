@@ -7,6 +7,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
                                function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, invokeAuxWSService, getMyMessages, $timeout, FileUploader) { 
 	this.$scope = $scope;
     $scope.params = $routeParams;
+    $scope.systemUserNumber = 999;
     
     // ---------------------------------- START Code for file upload ------------------------------------
 	var uploader = $scope.uploader = new FileUploader({
@@ -1051,6 +1052,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	$scope.insertStreetLog = function(form, myStreetDetails){
 		$scope.showUpdatingSErrorMessage = false;
 		$scope.showUpdatingSSuccessMessage = false;
+		myStreetDetails.user = $scope.systemUserNumber;
 		
 		if($scope.checkCorrectSlots(myStreetDetails)){
 			
@@ -1077,12 +1079,16 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						user: parseInt(myStreetDetails.user), 
 						slotsFree: parseInt(myStreetDetails.slotsFree), 
 						slotsOccupiedOnFree: parseInt(myStreetDetails.slotsOccupiedOnFree), 
+						slotsFreeSigned: parseInt(myStreetDetails.slotsFreeSigned), 
+						slotsOccupiedOnFreeSigned: parseInt(myStreetDetails.slotsOccupiedOnFreeSigned), 
 						slotsPaying: parseInt(myStreetDetails.slotsPaying), 
 						slotsOccupiedOnPaying: parseInt(myStreetDetails.slotsOccupiedOnPaying), 
 						slotsTimed: parseInt(myStreetDetails.slotsTimed), 
 						slotsOccupiedOnTimed: parseInt(myStreetDetails.slotsOccupiedOnTimed), 
 						slotsHandicapped: parseInt(myStreetDetails.slotsHandicapped), 
 						slotsOccupiedOnHandicapped: parseInt(myStreetDetails.slotsOccupiedOnHandicapped),
+						slotsReserved: parseInt(myStreetDetails.slotsReserved), 
+						slotsOccupiedOnReserved: parseInt(myStreetDetails.slotsOccupiedOnReserved),
 						slotsUnavailable: parseInt(myStreetDetails.slotsUnavailable), 
 						polyline: myStreetDetails.polyline, 
 						areaId: myStreetDetails.areaId,
@@ -1118,6 +1124,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	$scope.insertParkingLog = function(form, myParkingDetails){
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
+		myParkingDetails.user = $scope.systemUserNumber;
 		if($scope.checkCorrectParkSlots(myParkingDetails)){
 			
 			var periodFrom = (myParkingDetails.logPeriodFrom != null) ? new Date(myParkingDetails.logPeriodFrom) : null;
@@ -1174,6 +1181,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	$scope.insertParkingProfitLog = function(form, myParkingProfitDetails){
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
+		myParkingProfitDetails.user = $scope.systemUserNumber;
 		if($scope.checkCorrectParkSlots(myParkingProfitDetails)){
 			
 			var periodFrom = (myParkingProfitDetails.logPeriodFrom != null) ? new Date(myParkingProfitDetails.logPeriodFrom) : null;
@@ -1233,7 +1241,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.showUpdatingPMErrorMessage = false;
 		$scope.showUpdatingPMSuccessMessage = false;
 		//if($scope.checkCorrectParkSlots(myParkingProfitDetails)){
-			
+		myPmProfitDetails.user = $scope.systemUserNumber;
 		var periodFrom = (myPmProfitDetails.logPeriodFrom != null) ? new Date(myPmProfitDetails.logPeriodFrom) : null;
 		var periodTo = (myPmProfitDetails.logPeriodTo != null) ? new Date(myPmProfitDetails.logPeriodTo) : null;
 		if(periodFrom != null)periodFrom.setHours(myPmProfitDetails.startTimePeriod.getHours(), myPmProfitDetails.startTimePeriod.getMinutes(), 0, 0);
@@ -1360,27 +1368,63 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     // Method checkCorrectSlots: used to check if the street occupancy values are correct
     $scope.checkCorrectSlots = function(street_details){
     	$scope.showMaxErrorFree = false;
+    	$scope.showMaxErrorFreeSigned = false;
     	$scope.showMaxErrorPaing = false;
     	$scope.showMaxErrorTimed = false;
+    	$scope.showMaxErrorHandicapped = false;
+    	$scope.showMaxErrorReserved = false;
+    	$scope.showMaxErrorUnusuable = false;
     	var available_free = street_details.slotsFree;
+    	var available_free_signed = street_details.slotsFreeSigned;
     	var available_paying = street_details.slotsPaying;
     	var available_timed = street_details.slotsTimed;
+    	var available_handicapped = street_details.slotsHandicapped;
+    	var available_reserved = street_details.slotsReserved;
+    	var available_all = available_free + available_free_signed + available_paying + available_timed + available_handicapped + available_reserved;
+    	var occupied_all = 0;
     	if(available_free!= null && available_free >= 0){
+    		occupied_all += street_details.slotsOccupiedOnFree;
     		if(available_free < street_details.slotsOccupiedOnFree){
     			$scope.showMaxErrorFree = true;
     		}
     	}
+    	if(available_free_signed!= null && available_free_signed >= 0){
+    		occupied_all += street_details.slotsOccupiedOnFreeSigned;
+    		if(available_free_signed < street_details.slotsOccupiedOnFreeSigned){
+    			$scope.showMaxErrorFreeSigned = true;
+    		}
+    	}
     	if(available_paying!= null && available_paying >= 0){
+    		occupied_all += street_details.slotsOccupiedOnPaying;
     		if(available_paying < street_details.slotsOccupiedOnPaying){
     			$scope.showMaxErrorPaing = true;
     		}
     	}
     	if(available_timed!= null && available_timed >= 0){
+    		occupied_all += street_details.slotsOccupiedOnTimed;
     		if(available_timed < street_details.slotsOccupiedOnTimed){
     			$scope.showMaxErrorTimed = true;
     		}
     	}
-    	if($scope.showMaxErrorFree || $scope.showMaxErrorPaing || $scope.showMaxErrorTimed){
+    	if(available_handicapped!= null && available_handicapped >= 0){
+    		occupied_all += street_details.slotsOccupiedOnHandicapped;
+    		if(available_handicapped < street_details.slotsOccupiedOnHandicapped){
+    			$scope.showMaxErrorHandicapped = true;
+    		}
+    	}
+    	if(available_reserved!= null && available_reserved >= 0){
+    		occupied_all += street_details.slotsOccupiedOnReserved;
+    		if(available_reserved < street_details.slotsOccupiedOnReserved){
+    			$scope.showMaxErrorReserved = true;
+    		}
+    	}
+    	var free_all = available_all - occupied_all;
+    	if(free_all > 0){
+    		if(free_all < street_details.slotsUnavailable){
+    			$scope.showMaxErrorUnusuable = true;
+    		}
+    	}
+    	if($scope.showMaxErrorFree || $scope.showMaxErrorFreeSigned || $scope.showMaxErrorPaing || $scope.showMaxErrorTimed  || $scope.showMaxErrorHandicapped || $scope.showMaxErrorReserved || $scope.showMaxErrorUnusuable){
     		return false;
     	} else {
     		return true;

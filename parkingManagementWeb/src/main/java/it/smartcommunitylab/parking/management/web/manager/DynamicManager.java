@@ -64,9 +64,12 @@ public class DynamicManager {
 
 	private static final Logger logger = Logger.getLogger(DynamicManager.class);
 	private static final String freeSlotType = "@free";
+	private static final String freeSlotSignedType = "@freeSign";
 	private static final String paidSlotType = "@paid";
 	private static final String timedSlotType = "@timed";
 	private static final String handicappedSlotType = "@handicapped";
+	private static final String reservedSlotType = "@reserved";
+	private static final String unusuabledSlotType = "@unusuabled";
 	
 	private static final String profit = "@profit";
 	private static final String tickets = "@tickets";
@@ -477,10 +480,12 @@ public class DynamicManager {
 				if (temp.getId().equals(pmId)) {
 					// Dynamic data
 					temp.setFreeParkSlotOccupied(s.getSlotsOccupiedOnFree());
-					//temp.setFreeParkSlotSignOccupied(s.getSlotsOccupiedOnFree());
+					temp.setFreeParkSlotSignOccupied(s.getSlotsOccupiedOnFreeSigned());
 					temp.setTimedParkSlotOccupied(s.getSlotsOccupiedOnTimed());
 					temp.setPaidSlotOccupied(s.getSlotsOccupiedOnPaying());
 					temp.setHandicappedSlotOccupied(s.getSlotsOccupiedOnHandicapped());
+					temp.setReservedSlotOccupied(s.getSlotsOccupiedOnReserved());
+					temp.setUnusuableSlotNumber(s.getSlotsUnavailable());
 					temp.setLastChange(timestamp);
 					mongodb.save(area);
 					
@@ -519,9 +524,10 @@ public class DynamicManager {
 					mongodb.save(dl);
 					logger.error(String.format("Updated street: %s", temp.toString()));
 					// Update Stat report
-					int[] total = {s.getSlotsFree(),s.getSlotsPaying(), s.getSlotsTimed()};
-					int[] occupied = {s.getSlotsOccupiedOnFree(),s.getSlotsOccupiedOnPaying(), s.getSlotsOccupiedOnTimed(), s.getSlotsUnavailable()};
-					double statValue = findOccupationRate(total, occupied, 0, 0, 1);
+					int[] total = {s.getSlotsFree(), s.getSlotsFreeSigned(), s.getSlotsPaying(), s.getSlotsTimed(), s.getSlotsHandicapped(), s.getSlotsReserved()};
+					int[] occupied = {s.getSlotsOccupiedOnFree(), s.getSlotsOccupiedOnFreeSigned(), s.getSlotsOccupiedOnPaying(), s.getSlotsOccupiedOnTimed(), s.getSlotsHandicapped(), s.getSlotsOccupiedOnReserved()};
+					double statValue = findOccupationRate(total, occupied, 0, 0, 1, s.getSlotsUnavailable());
+					int unavailableSlots = s.getSlotsUnavailable();
 					if(period == null || period.length == 0){
 						repo.updateStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp);
 					} else {
@@ -530,7 +536,7 @@ public class DynamicManager {
 					// Here I have to difference the type of the park: total, free, paying and timed - MULTIPARKOCC
 					if(countElements(total) > 1){	// Here I check if there are more than one element of park type
 						if(s.getSlotsFree()!= 0){
-							double freeOccValue = findOccupationRate(null, null, s.getSlotsFree(), s.getSlotsOccupiedOnFree(), 2);
+							double freeOccValue = findOccupationRate(null, null, s.getSlotsFree(), s.getSlotsOccupiedOnFree(), 2, unavailableSlots);
 							if(period == null || period.length == 0){
 								if(p_type != -1){
 									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp, p_type);
@@ -540,9 +546,31 @@ public class DynamicManager {
 							} else {
 								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + freeSlotType, null, freeOccValue, timestamp, period, 1);
 							}
+							if((s.getSlotsFree() - s.getSlotsOccupiedOnFree()) < unavailableSlots){
+								unavailableSlots = unavailableSlots - (s.getSlotsFree() - s.getSlotsOccupiedOnFree());
+							} else {
+								unavailableSlots = 0;
+							}
+						}
+						if(s.getSlotsFreeSigned()!= 0){
+							double freeSignOccValue = findOccupationRate(null, null, s.getSlotsFreeSigned(), s.getSlotsOccupiedOnFreeSigned(), 2, unavailableSlots);
+							if(period == null || period.length == 0){
+								if(p_type != -1){
+									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + freeSlotSignedType, null, freeSignOccValue, timestamp, p_type);
+								} else {
+									repo.updateStats(s.getId(), s.getAgency(), dl.getType() + freeSlotSignedType, null, freeSignOccValue, timestamp);
+								}
+							} else {
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + freeSlotSignedType, null, freeSignOccValue, timestamp, period, 1);
+							}
+							if((s.getSlotsFreeSigned() - s.getSlotsOccupiedOnFreeSigned()) < unavailableSlots){
+								unavailableSlots = unavailableSlots - (s.getSlotsFreeSigned() - s.getSlotsOccupiedOnFreeSigned());
+							} else {
+								unavailableSlots = 0;
+							}
 						}
 						if(s.getSlotsPaying() != 0){
-							double payingOccValue = findOccupationRate(null, null, s.getSlotsPaying(), s.getSlotsOccupiedOnPaying(), 2);
+							double payingOccValue = findOccupationRate(null, null, s.getSlotsPaying(), s.getSlotsOccupiedOnPaying(), 2, unavailableSlots);
 							if(period == null || period.length == 0){
 								if(p_type != -1){
 									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp, p_type);
@@ -552,9 +580,14 @@ public class DynamicManager {
 							} else {
 								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + paidSlotType, null, payingOccValue, timestamp, period, 1);
 							}
+							if((s.getSlotsPaying() - s.getSlotsOccupiedOnPaying()) < unavailableSlots){
+								unavailableSlots = unavailableSlots - (s.getSlotsPaying() - s.getSlotsOccupiedOnPaying());
+							} else {
+								unavailableSlots = 0;
+							}
 						}
 						if(s.getSlotsTimed() != 0){
-							double timedOccValue = findOccupationRate(null, null, s.getSlotsTimed(), s.getSlotsOccupiedOnTimed(), 2);
+							double timedOccValue = findOccupationRate(null, null, s.getSlotsTimed(), s.getSlotsOccupiedOnTimed(), 2, unavailableSlots);
 							if(period == null || period.length == 0){
 								if(p_type != -1){
 									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp, p_type);
@@ -564,9 +597,14 @@ public class DynamicManager {
 							} else {
 								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + timedSlotType, null, timedOccValue, timestamp, period, 1);
 							}
+							if((s.getSlotsTimed() - s.getSlotsOccupiedOnTimed()) < unavailableSlots){
+								unavailableSlots = unavailableSlots - (s.getSlotsTimed() - s.getSlotsOccupiedOnTimed());
+							} else {
+								unavailableSlots = 0;
+							}
 						}
 						if(s.getSlotsHandicapped() != 0){
-							double handicappedOccValue = findOccupationRate(null, null, s.getSlotsHandicapped(), s.getSlotsOccupiedOnHandicapped(), 2);
+							double handicappedOccValue = findOccupationRate(null, null, s.getSlotsHandicapped(), s.getSlotsOccupiedOnHandicapped(), 2, unavailableSlots);
 							if(period == null || period.length == 0){
 								if(p_type != -1){
 									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp, p_type);
@@ -575,6 +613,40 @@ public class DynamicManager {
 								}
 							} else {
 								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + handicappedSlotType, null, handicappedOccValue, timestamp, period, 1);
+							}
+							if((s.getSlotsHandicapped() - s.getSlotsOccupiedOnHandicapped()) < unavailableSlots){
+								unavailableSlots = unavailableSlots - (s.getSlotsHandicapped() - s.getSlotsOccupiedOnHandicapped());
+							} else {
+								unavailableSlots = 0;
+							}
+						}
+						if(s.getSlotsReserved() != 0){
+							double reservedOccValue = findOccupationRate(null, null, s.getSlotsReserved(), s.getSlotsOccupiedOnReserved(), 2, unavailableSlots);
+							if(period == null || period.length == 0){
+								if(p_type != -1){
+									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + reservedSlotType, null, reservedOccValue, timestamp, p_type);
+								} else {
+									repo.updateStats(s.getId(), s.getAgency(), dl.getType() + reservedSlotType, null, reservedOccValue, timestamp);
+								}
+							} else {
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + reservedSlotType, null, reservedOccValue, timestamp, period, 1);
+							}
+							if((s.getSlotsReserved() - s.getSlotsOccupiedOnReserved()) < unavailableSlots){
+								unavailableSlots = unavailableSlots - (s.getSlotsReserved() - s.getSlotsOccupiedOnReserved());
+							} else {
+								unavailableSlots = 0;
+							}
+						}
+						if(s.getSlotsUnavailable() != 0){
+							double unusualbedSlotVal = s.getSlotsUnavailable();
+							if(period == null || period.length == 0){
+								if(p_type != -1){
+									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp, p_type);
+								} else {
+									repo.updateStats(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp);
+								}
+							} else {
+								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp, period, 1);
 							}
 						}
 					}
@@ -812,8 +884,8 @@ public class DynamicManager {
 		mongodb.save(dl);
 		// Update Stat report
 		int[] total = {p.getSlotsTotal()};
-		int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
-		double statValue = findOccupationRate(total, occupied, 0, 0, 1);
+		int[] occupied = {p.getSlotsOccupiedOnTotal()};
+		double statValue = findOccupationRate(total, occupied, 0, 0, 1, p.getSlotsUnavailable());
 		if(period == null || period.length == 0){
 			if(p_type != -1){
 				repo.updateDirectPeriodStats(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp, p_type);
@@ -1068,21 +1140,26 @@ public class DynamicManager {
 	 * Method findOccupationRate: calculate the occupationRate
 	 * value from the free and occupied parks values
 	 */
-	private double findOccupationRate(int[] total, int[] occupied, int tot_p, int occ_p, int type){
+	private double findOccupationRate(int[] total, int[] occupied, int tot_p, int occ_p, int type, int unavailable){
 		int tot = 0;
 		int occ = 0;
 		if(type == 1){	// Case of total occupation
 			for(int i = 0; i < total.length; i++){
 				tot+=total[i];
 			}
+			tot = tot - unavailable;
 			for(int i = 0; i < occupied.length; i++){
 				occ+=occupied[i];
 			}
 		} else {	// Case of specific occupation
-			tot = tot_p;
+			int free = tot_p - occ_p;
+			if(unavailable > free){
+				unavailable = free;
+			}
+			tot = tot_p - unavailable;
 			occ = occ_p;
 		}
-		if(tot == 0)tot = 1;	// to solve the division by zero error
+		if(tot <= 0)tot = 1;	// to solve the division by zero error
 		double rate = occ * 100 / tot;
 		return rate;
 	}
@@ -1906,73 +1983,147 @@ public class DynamicManager {
 			sId = getCorrectId(s.getId(), "street", appId);
 			double occRate = 0;
 			double freeOccRate = 0;
+			double freeOccSignedRate = 0;
 			double paidOccRate = 0;
 			double timedOccRate = 0;
+			double handicappedOccRate = 0;
+			double reservedOccRate = 0;
 			int freeParks = 0;
+			int freeSignParks = 0;
 			int paidSlotParks = 0;
 			int timedParks = 0;
-			if(ModelConverter.isValorisedSlots(s.getFreeParkSlotNumber()) && ModelConverter.isValorisedSlots(s.getFreeParkSlotSignNumber())){
-				freeParks = s.getFreeParkSlotNumber() + s.getFreeParkSlotSignNumber();
-			} else {
-				if(ModelConverter.isValorisedSlots(s.getFreeParkSlotNumber())){
-					freeParks = s.getFreeParkSlotNumber();
-				} else {
-					freeParks = s.getFreeParkSlotSignNumber();
-				}
+			int handicappedParks = 0;
+			int reservedParks = 0;
+			int unusuabledParks = 0;
+			if(s.getFreeParkSlotNumber() != null){
+				freeParks = s.getFreeParkSlotNumber();
 			}
+			if(s.getFreeParkSlotSignNumber() != null){
+				freeSignParks = s.getFreeParkSlotSignNumber();
+			}
+//			if(ModelConverter.isValorisedSlots(s.getFreeParkSlotNumber()) && ModelConverter.isValorisedSlots(s.getFreeParkSlotSignNumber())){
+//				freeParks = s.getFreeParkSlotNumber() + s.getFreeParkSlotSignNumber();
+//			} else {
+//				if(ModelConverter.isValorisedSlots(s.getFreeParkSlotNumber())){
+//					freeParks = s.getFreeParkSlotNumber();
+//				} else {
+//					freeParks = s.getFreeParkSlotSignNumber();
+//				}
+//			}
 			if(s.getPaidSlotNumber() != null){
 				paidSlotParks = s.getPaidSlotNumber();
 			}
 			if(s.getTimedParkSlotNumber() != null){
 				timedParks = s.getTimedParkSlotNumber();
 			}
-			int[] parks = {freeParks, paidSlotParks, timedParks};
+			if(s.getHandicappedSlotNumber() != null){
+				handicappedParks = s.getHandicappedSlotNumber();
+			}
+			if(s.getReservedSlotNumber() != null){
+				reservedParks = s.getReservedSlotNumber();
+			}
+			int[] parks = {freeParks, freeSignParks, paidSlotParks, timedParks, handicappedParks, reservedParks};
 			int multipark = countElements(parks);
 			if(valueType == 1){
 				occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
 				if(multipark > 1){
 					freeOccRate = getOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+					freeOccSignedRate = getOccupationRateFromObject(sId, appId, type + freeSlotSignedType, params, years, months, dayType, days, hours);
 					paidOccRate = getOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
 					timedOccRate = getOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+					handicappedOccRate = getOccupationRateFromObject(sId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
+					reservedOccRate = getOccupationRateFromObject(sId, appId, type + reservedSlotType, params, years, months, dayType, days, hours);
 				}
+				unusuabledParks = (int)getOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			} else {
 				occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
 				if(multipark > 1){
 					freeOccRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+					freeOccSignedRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotSignedType, params, years, months, dayType, days, hours);
 					paidOccRate = getAverageOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
 					timedOccRate = getAverageOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+					handicappedOccRate = getAverageOccupationRateFromObject(sId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
+					reservedOccRate = getAverageOccupationRateFromObject(sId, appId, type + reservedSlotType, params, years, months, dayType, days, hours);
 				}
+				unusuabledParks = (int)getAverageOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			}
 			s.setOccupancyRate(occRate);
 			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
 			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotNumber() > 0){
+				int freeSlotNumber = s.getFreeParkSlotNumber();
+				if(unusuabledParks > 0){
+					freeSlotNumber = freeSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
 				if(multipark > 1){
-					s.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * freeOccRate / 100));
+					s.setFreeParkSlotOccupied((int)Math.round(freeSlotNumber * freeOccRate / 100));
 				} else {
-					s.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * occRate / 100));
+					s.setFreeParkSlotOccupied((int)Math.round(freeSlotNumber * occRate / 100));
 				}
 			}
 			if(s.getFreeParkSlotSignNumber() != null && s.getFreeParkSlotSignNumber() > 0){
+				int freeSlotSignNumber = s.getFreeParkSlotSignNumber();
+				if(unusuabledParks > 0){
+					freeSlotSignNumber = freeSlotSignNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
 				if(multipark > 1){
-					s.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * freeOccRate / 100));
+					s.setFreeParkSlotSignOccupied((int)Math.round(freeSlotSignNumber * freeOccSignedRate / 100));
 				} else {
-					s.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * occRate / 100));
+					s.setFreeParkSlotSignOccupied((int)Math.round(freeSlotSignNumber * occRate / 100));
 				}
 				
 			}
 			if(s.getPaidSlotNumber() != null && s.getPaidSlotNumber() > 0){
+				int paidSlotNumber = s.getPaidSlotNumber();
+				if(unusuabledParks > 0){
+					paidSlotNumber = paidSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
 				if(multipark > 1){
-					s.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * paidOccRate / 100));
+					s.setPaidSlotOccupied((int)Math.round(paidSlotNumber * paidOccRate / 100));
 				} else {
-					s.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * occRate / 100));
+					s.setPaidSlotOccupied((int)Math.round(paidSlotNumber * occRate / 100));
 				}
 			}
 			if(s.getTimedParkSlotNumber() != null && s.getTimedParkSlotNumber() > 0){
-				if(multipark > 1){
-					s.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * timedOccRate / 100));
-				} else {
-					s.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * occRate / 100));
+				int timedParkSlotNumber = s.getTimedParkSlotNumber();
+				if(unusuabledParks > 0){
+					timedParkSlotNumber = timedParkSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
 				}
+				if(multipark > 1){
+					s.setTimedParkSlotOccupied((int)Math.round(timedParkSlotNumber * timedOccRate / 100));
+				} else {
+					s.setTimedParkSlotOccupied((int)Math.round(timedParkSlotNumber * occRate / 100));
+				}
+			}
+			if(s.getHandicappedSlotNumber() != null && s.getHandicappedSlotNumber() > 0){
+				int handicappedSlotNumber = s.getHandicappedSlotNumber();
+				if(unusuabledParks > 0){
+					handicappedSlotNumber = handicappedSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
+				if(multipark > 1){
+					s.setHandicappedSlotOccupied((int)Math.round(handicappedSlotNumber * handicappedOccRate / 100));
+				} else {
+					s.setHandicappedSlotOccupied((int)Math.round(handicappedSlotNumber * occRate / 100));
+				}
+			}
+			if(s.getReservedSlotNumber() != null && s.getReservedSlotNumber() > 0){
+				int reservedSlotNumber = s.getReservedSlotNumber();
+				if(unusuabledParks > 0){
+					reservedSlotNumber = reservedSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
+				if(multipark > 1){
+					s.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * reservedOccRate / 100));
+				} else {
+					s.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * occRate / 100));
+				}
+			}
+			if(unusuabledParks > 0){
+				s.setUnusuableSlotNumber(unusuabledParks);
 			}
 			corrStreets.add(s);
 		}
@@ -2110,19 +2261,32 @@ public class DynamicManager {
 			sId = getCorrectId(s.getId(), "street", appId);
 			double occRate = 0;
 			double freeOccRate = 0;
+			double freeOccSignedRate = 0;
 			double paidOccRate = 0;
 			double timedOccRate = 0;
+			double handicappedOccRate = 0;
+			double reservedOccRate = 0;
 			int freeParks = 0;
+			int freeSignParks = 0;
 			int paidSlotParks = 0;
 			int timedParks = 0;
-			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotSignNumber() != null){
-				freeParks = s.getFreeParkSlotNumber()+s.getFreeParkSlotSignNumber();
-			} else {
-				if(s.getFreeParkSlotNumber() != null){
-					freeParks = s.getFreeParkSlotNumber();
-				} else {
-					freeParks = s.getFreeParkSlotSignNumber();
-				}
+			int handicappedParks = 0;
+			int reservedParks = 0;
+			int unusuabledParks = 0;
+//			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotSignNumber() != null){
+//				freeParks = s.getFreeParkSlotNumber()+s.getFreeParkSlotSignNumber();
+//			} else {
+//				if(s.getFreeParkSlotNumber() != null){
+//					freeParks = s.getFreeParkSlotNumber();
+//				} else {
+//					freeParks = s.getFreeParkSlotSignNumber();
+//				}
+//			}
+			if(s.getFreeParkSlotNumber() != null){
+				freeParks = s.getFreeParkSlotNumber();
+			}
+			if(s.getFreeParkSlotSignNumber() != null){
+				freeSignParks = s.getFreeParkSlotSignNumber();
 			}
 			if(s.getPaidSlotNumber() != null){
 				paidSlotParks = s.getPaidSlotNumber();
@@ -2130,22 +2294,36 @@ public class DynamicManager {
 			if(s.getTimedParkSlotNumber() != null){
 				timedParks = s.getTimedParkSlotNumber();
 			}
-			int[] parks = {freeParks, paidSlotParks, timedParks};
+			if(s.getHandicappedSlotNumber() != null){
+				handicappedParks = s.getHandicappedSlotNumber();
+			}
+			if(s.getReservedSlotNumber() != null){
+				reservedParks = s.getReservedSlotNumber();
+			}
+			int[] parks = {freeParks, freeSignParks, paidSlotParks, timedParks, handicappedParks, reservedParks};
 			int multipark = countElements(parks);
 			if(valueType == 1){
 				occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
 				if(multipark > 1){
 					freeOccRate = getOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+					freeOccSignedRate = getOccupationRateFromObject(sId, appId, type + freeSlotSignedType, params, years, months, dayType, days, hours);
 					paidOccRate = getOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
 					timedOccRate = getOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+					handicappedOccRate = getOccupationRateFromObject(sId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
+					reservedOccRate = getOccupationRateFromObject(sId, appId, type + reservedSlotType, params, years, months, dayType, days, hours);
 				}
+				unusuabledParks = (int)getOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			} else {
 				occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
 				if(multipark > 1){
 					freeOccRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+					freeOccSignedRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotSignedType, params, years, months, dayType, days, hours);
 					paidOccRate = getAverageOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
 					timedOccRate = getAverageOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+					handicappedOccRate = getAverageOccupationRateFromObject(sId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
+					reservedOccRate = getAverageOccupationRateFromObject(sId, appId, type + reservedSlotType, params, years, months, dayType, days, hours);
 				}
+				unusuabledParks = (int)getAverageOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			}
 			cs.setId(s.getId());
 			cs.setSlotNumber(s.getSlotNumber());
@@ -2153,42 +2331,84 @@ public class DynamicManager {
 			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
 			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotNumber() > 0){
 				cs.setFreeParkSlotNumber(s.getFreeParkSlotNumber());
+				int freeSlotNumber = s.getFreeParkSlotNumber();
+				if(unusuabledParks > 0){
+					freeSlotNumber = freeSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
 				if(multipark > 1){
-					cs.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * freeOccRate / 100));
+					cs.setFreeParkSlotOccupied((int)Math.round(freeSlotNumber * freeOccRate / 100));
 				} else {
-					cs.setFreeParkSlotOccupied((int)Math.round(s.getFreeParkSlotNumber() * occRate / 100));
+					cs.setFreeParkSlotOccupied((int)Math.round(freeSlotNumber * occRate / 100));
 				}
 			}
 			if(s.getFreeParkSlotSignNumber() != null && s.getFreeParkSlotSignNumber() > 0){
 				cs.setFreeParkSlotSignNumber(s.getFreeParkSlotSignNumber());
-				if(multipark > 1){
-					cs.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * freeOccRate / 100));
-				} else {
-					cs.setFreeParkSlotSignOccupied((int)Math.round(s.getFreeParkSlotSignNumber() * occRate / 100));
+				int freeSlotSignNumber = s.getFreeParkSlotSignNumber();
+				if(unusuabledParks > 0){
+					freeSlotSignNumber = freeSlotSignNumber - unusuabledParks;
+					unusuabledParks = 0;
 				}
-				
+				if(multipark > 1){
+					cs.setFreeParkSlotSignOccupied((int)Math.round(freeSlotSignNumber * freeOccSignedRate / 100));
+				} else {
+					cs.setFreeParkSlotSignOccupied((int)Math.round(freeSlotSignNumber * occRate / 100));
+				}
 			}
 			if(s.getPaidSlotNumber() != null && s.getPaidSlotNumber() > 0){
 				cs.setPaidSlotNumber(s.getPaidSlotNumber());
+				int paidSlotNumber = s.getPaidSlotNumber();
+				if(unusuabledParks > 0){
+					paidSlotNumber = paidSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
 				if(multipark > 1){
-					cs.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * paidOccRate / 100));
+					cs.setPaidSlotOccupied((int)Math.round(paidSlotNumber * paidOccRate / 100));
 				} else {
-					cs.setPaidSlotOccupied((int)Math.round(s.getPaidSlotNumber() * occRate / 100));
+					cs.setPaidSlotOccupied((int)Math.round(paidSlotNumber * occRate / 100));
 				}
 			}
 			if(s.getTimedParkSlotNumber() != null && s.getTimedParkSlotNumber() > 0){
 				cs.setTimedParkSlotNumber(s.getTimedParkSlotNumber());
+				int timedParkSlotNumber = s.getTimedParkSlotNumber();
+				if(unusuabledParks > 0){
+					timedParkSlotNumber = timedParkSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
 				if(multipark > 1){
-					cs.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * timedOccRate / 100));
+					cs.setTimedParkSlotOccupied((int)Math.round(timedParkSlotNumber * timedOccRate / 100));
 				} else {
-					cs.setTimedParkSlotOccupied((int)Math.round(s.getTimedParkSlotNumber() * occRate / 100));
+					cs.setTimedParkSlotOccupied((int)Math.round(timedParkSlotNumber * occRate / 100));
+				}
+			}
+			if(s.getHandicappedSlotNumber() != null && s.getHandicappedSlotNumber() > 0){
+				cs.setHandicappedSlotNumber(s.getHandicappedSlotNumber());
+				int handicappedSlotNumber = s.getHandicappedSlotNumber();
+				if(unusuabledParks > 0){
+					handicappedSlotNumber = handicappedSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
+				if(multipark > 1){
+					cs.setHandicappedSlotOccupied((int)Math.round(handicappedSlotNumber * handicappedOccRate / 100));
+				} else {
+					cs.setHandicappedSlotOccupied((int)Math.round(handicappedSlotNumber * occRate / 100));
 				}
 			}
 			if(s.getReservedSlotNumber() != null && s.getReservedSlotNumber() > 0){
 				cs.setReservedSlotNumber(s.getReservedSlotNumber());
+				int reservedSlotNumber = s.getReservedSlotNumber();
+				if(unusuabledParks > 0){
+					reservedSlotNumber = reservedSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+				}
+				if(multipark > 1){
+					cs.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * reservedOccRate / 100));
+				} else {
+					cs.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * occRate / 100));
+				}
 			}
-			if(s.getHandicappedSlotNumber() != null && s.getHandicappedSlotNumber() > 0){
-				cs.setHandicappedSlotNumber(s.getHandicappedSlotNumber());
+			if(unusuabledParks > 0){
+				cs.setUnusuableSlotNumber(unusuabledParks);
 			}
 			corrStreets.add(cs);
 		}

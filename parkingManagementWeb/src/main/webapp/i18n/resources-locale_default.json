@@ -1335,6 +1335,18 @@
     "value": "Posti gratuiti occupati",
     "description": "label per posti gratuiti occupati in via"
 }, {
+    "key": "log_slot_occupied_on_free_signed",
+    "value": "Posti gratuiti (con segnaletica) occupati",
+    "description": "label per posti gratuiti con segnaletica occupati in via"
+}, {
+    "key": "log_slot_occupied_on_reserved",
+    "value": "Posti riservati occupati",
+    "description": "label per posti riservati occupati in via"
+}, {
+    "key": "log_slot_occupied_on_handicapped",
+    "value": "Posti per disabili occupati",
+    "description": "label per posti disabili occupati in via"
+}, {
     "key": "log_slot_paying",
     "value": "Posti a pagamento",
     "description": "label per posti a pagamento in via"
@@ -1392,6 +1404,22 @@
     "description": "Placeholder per posti a pagamento occupati in creazione log via"
 }, {
     "key": "street_freeslotoccupied_placeholder",
+    "value": "Inserire numero posti occupati tra i gratuiti",
+    "description": "Placeholder per posti gratuiti occupati in creazione log via"
+}, {
+    "key": "street_freeslotoccupiedsigned_placeholder",
+    "value": "Inserire numero posti occupati tra i gratuiti (con segnaletica)",
+    "description": "Placeholder per posti gratuiti con segnaletica occupati in creazione log via"
+}, {
+    "key": "street_handicappedslotoccupied_placeholder",
+    "value": "Inserire numero posti occupati tra i riservati ai disabili",
+    "description": "Placeholder per posti per disabili occupati in creazione log via"
+}, {
+    "key": "street_reservedslotoccupied_placeholder",
+    "value": "Inserire numero posti occupati riservati",
+    "description": "Placeholder per posti riservati occupati in creazione log via"
+}, {
+    "key": "street_unavailableslot_placeholder",
     "value": "Inserire numero posti occupati tra i gratuiti",
     "description": "Placeholder per posti gratuiti occupati in creazione log via"
 }, {
@@ -1609,15 +1637,51 @@
 }, {
 	"key": "log_street_occupied_timed_error_min",
 	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore maggiore.",
-	"description": "Messaggio errore campo posti disco orario obbligatorio in creazione log via per valore troppo piccolo"
+	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_timed_error_max",
 	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore minore.",
-	"description": "Messaggio errore campo posti disco orario obbligatorio in creazione log via per valore troppo grande"
+	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_free_error_pattern",
 	"value": "Campo 'posti gratuiti occupati' non corretto. Inserire un valore numerico",
 	"description": "Messaggio campo posti gratuiti non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_free_signed_error_pattern",
+	"value": "Campo 'posti gratuiti occupati con segnaletica' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti gratuiti con segnaletica non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_free_signed_error_required",
+	"value": "Campo 'posti gratuiti occupati con segnaletica' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti gratuiti con segnaletica obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_reserved_error_pattern",
+	"value": "Campo 'posti riservati occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti riservati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_reserved_error_required",
+	"value": "Campo 'posti riservati occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti riservati obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_handicapped_error_pattern",
+	"value": "Campo 'posti per disabili occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti per disabili non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_handicapped_error_required",
+	"value": "Campo 'posti per disabili occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti per disabili obbligatorio in creazione log via"
+}, {
+	"key": "log_street_unavailable_error_pattern",
+	"value": "Campo 'posti inutilizzabili' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti inutilizzabili non corretto in creazione log via"
+}, {
+	"key": "log_street_unavailable_error_min",
+	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore maggiore",
+	"description": "Messaggio campo posti inutilizzabili non corretto (min) in creazione log via"
+}, {
+	"key": "log_street_unavailable_error_max",
+	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore minore",
+	"description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log via"
 }, {
 	"key": "log_street_occupied_free_error_required",
 	"value": "Campo 'posti gratuiti occupati' obbligatorio. Inserire un valore numerico",
@@ -1625,11 +1689,35 @@
 }, {
 	"key": "log_street_occupied_free_error_min",
 	"value": "Valore non corretto nel campo 'posti gratuiti occupati'. Inserire un valore maggiore",
-	"description": "Messaggio errore campo posti gratuiti obbligatorio in creazione log via per valore troppo piccolo"
+	"description": "Messaggio errore campo posti gratuiti non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_free_error_max",
 	"value": "Valore non corretto nel campo 'posti gratuiti occupati'. Inserire un valore minore",
-	"description": "Messaggio errore campo posti gratuiti obbligatorio in creazione log via per valore troppo grande"
+	"description": "Messaggio errore campo posti gratuiti non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_free_signed_error_min",
+	"value": "Valore non corretto nel campo 'posti gratuiti occupati con segnaletica'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti gratuiti con segnaletica non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_free_signed_error_max",
+	"value": "Valore non corretto nel campo 'posti gratuiti occupati con segnaletica'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti gratuiti con segnaletica non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_reserved_error_min",
+	"value": "Valore non corretto nel campo 'posti riservati occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti riservati non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_reserved_error_max",
+	"value": "Valore non corretto nel campo 'posti riservati occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti riservati non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_handicapped_error_min",
+	"value": "Valore non corretto nel campo 'posti per disabili occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti per disabili non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_handicapped_error_max",
+	"value": "Valore non corretto nel campo 'posti per disabili occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti per disabili non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_paid_error_pattern",
 	"value": "Campo 'posti a pagamento occupati' non corretto. Inserire un valore numerico",
