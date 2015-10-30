@@ -335,16 +335,16 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   			$scope.loadFluxAttributes(flux_obj);	
 		   			for(var j = 0; j < flux_obj.length; j++){
 		   				if(flux_obj[j].code == "occupancyStreet"){
-		   					street_occ_tab_obj =  { title:'Rilevazioni occupazione vie', index: 1, content:"partials/aux/logs/street_logs.html", active: false, path: "/tplog/streets" };
+		   					street_occ_tab_obj =  { title:'Rilevazioni occupazione parcheggi', index: 1, content:"partials/aux/logs/street_logs.html", active: false, path: "/tplog/streets" };
 		   				}
 		   				if(flux_obj[j].code == "occupancyStruct"){
-		   					struct_occ_tab_obj = { title:'Rilevazioni occupazione parcheggi', index: 2, content:"partials/aux/logs/parking_logs.html", active: false, path: "/tplog/parkings" };
+		   					struct_occ_tab_obj = { title:'Rilevazioni occupazione strutture', index: 2, content:"partials/aux/logs/parking_logs.html", active: false, path: "/tplog/parkings" };
 		   				}
 		   				if(flux_obj[j].code == "profitParkingMeter"){
 		   					pm_profit_tab_obj =  { title:'Rilevazioni ricavi parcometri', index: 3, content:"partials/aux/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" };
 		   				}
 		   				if(flux_obj[j].code == "profitStruct"){
-		   					struct_profit_tab_obj =  { title:'Rilevazioni ricavi parcheggi', index: 4, content:"partials/aux/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" };
+		   					struct_profit_tab_obj =  { title:'Rilevazioni ricavi strutture', index: 4, content:"partials/aux/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" };
 		   				}
 		   				if(flux_obj[j].code == "allLogs"){
 		   					all_logs_tab_obj =  { title:'Storico Rilevazioni', index: 5, content:"partials/aux/logs/global_logs.html", active: true, path: "/tplog/all"};
@@ -1661,7 +1661,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	var user = "999";
     	$scope.progress = 25;
  		$dialogs.wait("Aggiornamento dati in corso...", $scope.progress);
- 		cat = 10;// for test to skip the web service call
+ 		//cat = 10;// for test to skip the web service call
  		if(cat == 1){
     		// Case street occupancy log
 	    	switch(type){

@@ -122,7 +122,7 @@
 <!-- 	</div> -->
 	<div > <!-- ng-init="initWsView(2)" -->
 	<div class="col-md-12" align="center" ng-show="!detailsOpened && !occupancyOpened && !profitOpened  && !timeCostOpened"><!--  ng-class="{'col-md-10':!detailsOpened && !occupancyOpened, 'col-md-8':detailsOpened || occupancyOpened}" -->
-		<div ng-show="reportShareList.length > 0">
+		<div ng-if="reportShareList.length > 0 && addReportFunctions">
 			<table width="100%">
 				<tr valign="top">
 					<td width="50%"></td>
@@ -147,6 +147,19 @@
 						    	</ul>
 					    	</div>
 						</div>
+					</td>
+				</tr>
+			</table>
+		</div>
+		<div ng-if="!addReportFunctions" style="margin-bottom:10px">
+			<table width="100%">
+				<tr valign="top">
+					<td width="90%"></td>
+					<td width="10%" align="right">
+						<a href class="btn btn-default" ng-click="showLegend(1)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_occupancy_legend_button && !isOccupancyLegendShow()">{{ 'legend_open_label' | i18n }}</a><!-- <span class="glyphicon glyphicon-info-sign"></span> -->
+						<a href class="btn btn-default" ng-click="showLegend(2)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_profit_legend_button && !isProfitLegendShow()">{{ 'legend_open_label' | i18n }}</a><!-- <span class="glyphicon glyphicon-info-sign"></span> -->
+						<a href class="btn btn-default"ng-click="showLegend(3)" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}" ng-if="show_time_legend_button && !isTimeLegendShow()">{{ 'legend_open_label' | i18n }}</a><!-- <span class="glyphicon glyphicon-info-sign"></span> -->
+						<button ng-if="isOccupancyLegendShow() || isProfitLegendShow() || isTimeLegendShow()" type="button" class="btn btn-default" ng-click="closeAllLegend()" alt="{{ 'legend_alt_title_val' | i18n }}" title="{{ 'legend_alt_title_val' | i18n }}">{{ 'legend_close_label' | i18n }}</button>
 					</td>
 				</tr>
 			</table>
@@ -344,7 +357,7 @@
 								ng-click="currentPagePmp=currentPagePmp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getPMProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -497,7 +510,7 @@
 							ng-click="currentPageSo=currentPageSo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getStreetOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -570,7 +583,7 @@
 							ng-click="currentPageSp=currentPageSp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getStreetProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -647,7 +660,7 @@
 							ng-click="currentPageSt=currentPageSt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getStreetTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -764,7 +777,7 @@
 								ng-click="currentPageZo=currentPageZo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -829,7 +842,7 @@
 								ng-click="currentPageZp=currentPageZp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -897,7 +910,7 @@
 								ng-click="currentPageZt=currentPageZt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1012,7 +1025,7 @@
 								ng-click="currentPageZo=currentPageZo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1076,7 +1089,7 @@
 								ng-click="currentPageZp=currentPageZp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1143,7 +1156,7 @@
 								ng-click="currentPageZt=currentPageZt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1259,7 +1272,7 @@
 							ng-click="currentPageAo=currentPageAo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getAreaOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1324,7 +1337,7 @@
 							ng-click="currentPageAp=currentPageAp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getAreaProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1394,7 +1407,7 @@
 							ng-click="currentPageAt=currentPageAt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getAreaTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1521,7 +1534,7 @@
 								ng-click="currentPagePso=currentPagePso+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getStructureOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1585,7 +1598,7 @@
 								ng-click="currentPagePsp=currentPagePsp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getStructureProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -1656,7 +1669,7 @@
 								ng-click="currentPagePst=currentPagePst+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<button type="button" class="btn btn-primary btn" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
 						<a href class="btn btn-success" target="_blank" ng-click="getStructureTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
@@ -2334,7 +2347,7 @@
 						<td width="33%" align="right">
 <!-- 							<button type="button" class="btn btn-primary" ng-click="createReportCompare()">{{ 'text_btn_close' | i18n }}</button> -->
 <!-- 							&nbsp;&nbsp; -->
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getOccupancyParkingHistoryCsv(psDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -2540,7 +2553,7 @@
 						<td width="33%" align="right">
 <!-- 							<button type="button" class="btn btn-primary" ng-click="createReportCompare()">{{ 'text_btn_close' | i18n }}</button> -->
 <!-- 							&nbsp;&nbsp; -->
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getOccupancyStreetHistoryCsv(sDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -2646,7 +2659,7 @@
 						<td width="33%"></td>
 						<td width="34%"></td>
 						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getOccupancyZoneHistoryCsv(zDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -2865,7 +2878,7 @@
 						<td width="33%"></td>
 						<td width="34%"></td>
 						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getOccupancyAreaHistoryCsv(aDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -3029,7 +3042,7 @@
 						<td width="33%" align="right">
 <!-- 							<button type="button" class="btn btn-primary" ng-click="createReportCompare()">{{ 'text_btn_close' | i18n }}</button> -->
 <!-- 							&nbsp;&nbsp; -->
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getProfitParkingHistoryCsv(pmDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -3180,7 +3193,7 @@
 						<td width="33%" align="right">
 <!-- 							<button type="button" class="btn btn-primary" ng-click="createReportCompare()">{{ 'text_btn_close' | i18n }}</button> -->
 <!-- 							&nbsp;&nbsp; -->
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getProfitParkStructHistoryCsv(psDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -3329,7 +3342,7 @@
 						<td width="33%"></td>
 						<td width="34%"></td>
 						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getProfitStreetHistoryCsv(sDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -3473,7 +3486,7 @@
 						<td width="33%"></td>
 						<td width="34%"></td>
 						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getProfitZoneHistoryCsv(zDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -3759,7 +3772,7 @@
 						<td width="33%"></td>
 						<td width="34%"></td>
 						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getProfitAreaHistoryCsv(aDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -3916,7 +3929,7 @@
 						<td width="33%" align="right">
 <!-- 							<button type="button" class="btn btn-primary" ng-click="createReportCompare()">{{ 'text_btn_close' | i18n }}</button> -->
 <!-- 							&nbsp;&nbsp; -->
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getTimeCostParkingHistoryCsv(psDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -4057,7 +4070,7 @@
 						<td width="33%" align="right">
 <!-- 							<button type="button" class="btn btn-primary" ng-click="createReportCompare()">{{ 'text_btn_close' | i18n }}</button> -->
 <!-- 							&nbsp;&nbsp; -->
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getTimeCostStreetHistoryCsv(sDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -4188,7 +4201,7 @@
 						<td width="33%"></td>
 						<td width="34%"></td>
 						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getTimeCostZoneHistoryCsv(zDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
@@ -4457,7 +4470,7 @@
 						<td width="33%"></td>
 						<td width="34%"></td>
 						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
 							<a href class="btn btn-success" target="_blank" ng-click="getTimeCostAreaHistoryCsv(aDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>

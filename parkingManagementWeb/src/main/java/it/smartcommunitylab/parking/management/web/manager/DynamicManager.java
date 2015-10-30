@@ -529,7 +529,11 @@ public class DynamicManager {
 					double statValue = findOccupationRate(total, occupied, 0, 0, 1, s.getSlotsUnavailable());
 					int unavailableSlots = s.getSlotsUnavailable();
 					if(period == null || period.length == 0){
-						repo.updateStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp);
+						if(p_type != -1){
+							repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp, p_type);
+						} else {
+							repo.updateStats(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp);
+						}
 					} else {
 						repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType(), null, statValue, timestamp, period, 1);
 					}
@@ -637,20 +641,21 @@ public class DynamicManager {
 								unavailableSlots = 0;
 							}
 						}
-						if(s.getSlotsUnavailable() != 0){
-							double unusualbedSlotVal = s.getSlotsUnavailable();
-							if(period == null || period.length == 0){
-								if(p_type != -1){
-									repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp, p_type);
-								} else {
-									repo.updateStats(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp);
-								}
+					}
+					// this data can be present in the park with only a park type too
+					if(s.getSlotsUnavailable() != 0){
+						double unusualbedSlotVal = s.getSlotsUnavailable();
+						if(period == null || period.length == 0){
+							if(p_type != -1){
+								repo.updateDirectPeriodStats(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp, p_type);
 							} else {
-								repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp, period, 1);
+								repo.updateStats(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp);
 							}
+						} else {
+							repo.updateStatsPeriod(s.getId(), s.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp, period, 1);
 						}
 					}
-					break;
+					break;	// here I exit the loop
 				}
 			}
 		}
@@ -1387,6 +1392,9 @@ public class DynamicManager {
 					} else {
 						merge = -1.0;
 					}
+					if(merge > 100){
+						merge = 100;
+					}
 					tmp[i][j] = "" + merge;
 				} else {
 					double prof1 = Double.parseDouble(profits_1[0]);
@@ -2047,7 +2055,13 @@ public class DynamicManager {
 				}
 				unusuabledParks = (int)getAverageOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			}
+			if(occRate > 100){
+				occRate = 100;
+			}
 			s.setOccupancyRate(occRate);
+			if(unusuabledParks > 0){
+				s.setUnusuableSlotNumber(unusuabledParks);
+			}
 			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
 			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotNumber() > 0){
 				int freeSlotNumber = s.getFreeParkSlotNumber();
@@ -2121,9 +2135,6 @@ public class DynamicManager {
 				} else {
 					s.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * occRate / 100));
 				}
-			}
-			if(unusuabledParks > 0){
-				s.setUnusuableSlotNumber(unusuabledParks);
 			}
 			corrStreets.add(s);
 		}
@@ -2327,7 +2338,13 @@ public class DynamicManager {
 			}
 			cs.setId(s.getId());
 			cs.setSlotNumber(s.getSlotNumber());
+			if(occRate > 100){
+				occRate = 100;
+			}
 			cs.setOccupancyRate(occRate);
+			if(unusuabledParks > 0){
+				cs.setUnusuableSlotNumber(unusuabledParks);
+			}
 			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
 			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotNumber() > 0){
 				cs.setFreeParkSlotNumber(s.getFreeParkSlotNumber());
@@ -2406,9 +2423,6 @@ public class DynamicManager {
 				} else {
 					cs.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * occRate / 100));
 				}
-			}
-			if(unusuabledParks > 0){
-				cs.setUnusuableSlotNumber(unusuabledParks);
 			}
 			corrStreets.add(cs);
 		}

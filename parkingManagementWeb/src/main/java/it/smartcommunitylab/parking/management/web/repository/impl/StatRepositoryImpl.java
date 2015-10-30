@@ -240,19 +240,29 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		switch (p_type){
 			case 1:
 				// year period value
-				splittedVal = getSplittedDayTypeValue(value, 1);
-				double corrValWd = splittedVal[0];
-				double corrValWe = splittedVal[1] + splittedVal[2];
-				findAndUpdateStatsComposed(objectId, appId, type, params, corrValWd, timestamp, 4, year, 0, 0, 0, "wd", false);
-				findAndUpdateStatsComposed(objectId, appId, type, params, corrValWe, timestamp, 4, year, 0, 0, 0, "we", true);
+				if(type.contains(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName()) || type.contains(it.smartcommunitylab.parking.management.web.auxiliary.model.Parking.class.getCanonicalName())){
+					findAndUpdateStatsComposed(objectId, appId, type, params, value, timestamp, 4, year, 0, 0, 0, "wd", false);
+					findAndUpdateStatsComposed(objectId, appId, type, params, value, timestamp, 4, year, 0, 0, 0, "we", true);
+				} else {
+					splittedVal = getSplittedDayTypeValue(value, 1);
+					double corrValWd = splittedVal[0];
+					double corrValWe = splittedVal[1] + splittedVal[2];
+					findAndUpdateStatsComposed(objectId, appId, type, params, corrValWd, timestamp, 4, year, 0, 0, 0, "wd", false);
+					findAndUpdateStatsComposed(objectId, appId, type, params, corrValWe, timestamp, 4, year, 0, 0, 0, "we", true);
+				}
 				break;
 			case 2: 
 				// month period value
-				splittedVal = getSplittedDayTypeValue(value, 1);
-				corrValWd = splittedVal[0];
-				corrValWe = splittedVal[1] + splittedVal[2];
-				findAndUpdateStatsComposed(objectId, appId, type, params, corrValWd, timestamp, 3, year, month, 0, 0, "wd", false);
-				findAndUpdateStatsComposed(objectId, appId, type, params, corrValWe, timestamp, 3, year, month, 0, 0, "we", true);
+				if(type.contains(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName()) || type.contains(it.smartcommunitylab.parking.management.web.auxiliary.model.Parking.class.getCanonicalName())){
+					findAndUpdateStatsComposed(objectId, appId, type, params, value, timestamp, 3, year, month, 0, 0, "wd", false);
+					findAndUpdateStatsComposed(objectId, appId, type, params, value, timestamp, 3, year, month, 0, 0, "we", true);
+				} else {
+					splittedVal = getSplittedDayTypeValue(value, 1);
+					double corrValWd = splittedVal[0];
+					double corrValWe = splittedVal[1] + splittedVal[2];
+					findAndUpdateStatsComposed(objectId, appId, type, params, corrValWd, timestamp, 3, year, month, 0, 0, "wd", false);
+					findAndUpdateStatsComposed(objectId, appId, type, params, corrValWe, timestamp, 3, year, month, 0, 0, "we", true);
+				}
 				break;
 			case 3: 
 				// day period value

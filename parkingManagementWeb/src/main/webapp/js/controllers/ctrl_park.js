@@ -270,7 +270,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
 	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
 	    				showStreets = true;
-	    				street_tab_obj = { title:'Sottovia', index: 4, content:"partials/edit/tabs/edit_street.html" };
+	    				street_tab_obj = { title:'Parcheggio', index: 4, content:"partials/edit/tabs/edit_street.html" };
 	    			}
 	    		}	
 	    		if($scope.showedObjects[i].id == 'Ps'){

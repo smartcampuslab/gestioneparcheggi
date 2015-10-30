@@ -1,10 +1,10 @@
 [{
     "key": "app_tab-title",
-    "value": "App Parcheggi",
+    "value": "MetroParco",
     "description": "Titolo tab browser"
 }, {
     "key": "app_home-title",
-    "value": "App Parcheggi",
+    "value": "MetroParco",
     "description": "Titolo pagina home app"
 }, {
     "key": "app_home_info",
@@ -116,11 +116,11 @@
     "description": "Label checkbox aree di tariffazione"
 }, {
     "key": "view_streets",
-    "value": "Sottovie",
+    "value": "Parcheggi",
     "description": "Label checkbox vie"
 }, {
     "key": "view_streets_part",
-    "value": "Sottovie",
+    "value": "Parcheggi",
     "description": "Label checkbox sottovie"
 }, {
     "key": "view_parkingmeters",
@@ -168,7 +168,7 @@
 	"description": "Label operazioni"
 }, {
     "key": "street_list",
-    "value": "Lista Sottovie",
+    "value": "Lista Parcheggi",
     "description": "Titolo tabella lista strade"
 }, {
     "key": "street_name",

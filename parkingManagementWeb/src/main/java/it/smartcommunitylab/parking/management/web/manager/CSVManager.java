@@ -325,6 +325,12 @@ public class CSVManager {
 			writer.append("Posti Occupati (P)");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Occupati (DO)");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti per disabili (H)");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Riservati (R)");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Non Disponibili (ND)");
 			writer.append(CSV_NEWLINE);
 			
 			// Add the list of data in a table
@@ -344,11 +350,15 @@ public class CSVManager {
 				writer.append(s.getPaidSlotOccupied() + "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getTimedParkSlotOccupied() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getHandicappedSlotOccupied() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getReservedSlotOccupied() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append(s.getUnusuableSlotNumber() + "");
 				writer.append(CSV_NEWLINE);
 			}
 			
-			//String arr = writer.toString();
-			//ba = arr.getBytes();
 			writer.flush();
 			writer.close();
 			

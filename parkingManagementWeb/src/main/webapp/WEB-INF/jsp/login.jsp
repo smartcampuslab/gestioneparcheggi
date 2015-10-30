@@ -1,6 +1,6 @@
 <html>
 <head lang="it">
-<title>Parking App - Login</title>
+<title>MetroParco - Login</title>
 
 <link href="css/bootstrap.min.css" rel="stylesheet" type="text/css">
 <link href="css/bootstrap-theme.min.css" rel="stylesheet" type="text/css">

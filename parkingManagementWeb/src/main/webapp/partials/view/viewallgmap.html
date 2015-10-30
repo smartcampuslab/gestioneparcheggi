@@ -398,13 +398,13 @@
 									<td align="center"><input id="streets" type="checkbox" ng-model="mapelements.streets" ng-click="changeStreetPolylines()"></td>
 									<td align="left"><label for="streets">{{ 'view_streets' | i18n }}</label></td>
 								</tr>
-								<tr ng-show="isPmVisible()">
-									<td align="center"><input id="pMeters" type="checkbox" ng-model="mapelements.parkingmeters" ng-click="changeParkingMetersMarkers()"></td>
-									<td align="left"><label for="pMeters">{{ 'view_parkingmeters' | i18n }}</label></td>
-								</tr>
 								<tr ng-show="isPsVisible()">
 									<td align="center"><input id="pStruct" type="checkbox" ng-model="mapelements.parkingstructs" ng-click="changeParkingStructuresMarkers()"></td>
 									<td align="left"><label for="pStruct">{{ 'view_parkingstructs' | i18n }}</label></td>
+								</tr>
+								<tr ng-show="isPmVisible()">
+									<td align="center"><input id="pMeters" type="checkbox" ng-model="mapelements.parkingmeters" ng-click="changeParkingMetersMarkers()"></td>
+									<td align="left"><label for="pMeters">{{ 'view_parkingmeters' | i18n }}</label></td>
 								</tr>
 								<tr ng-show="isBpVisible()">
 									<td align="center"><input id="bikePoint" type="checkbox" ng-model="mapelements.bikepoints" ng-click="changeBikePointsMarkers()"></td>

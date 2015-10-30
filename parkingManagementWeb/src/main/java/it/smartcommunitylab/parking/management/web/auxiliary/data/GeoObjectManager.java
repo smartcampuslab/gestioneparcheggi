@@ -72,7 +72,7 @@ public class GeoObjectManager {
 	private MongoTemplate mongodb;
 	
 	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
-	private static final int OCCUPANCY_CELLS_OFFSET = 5;
+	private static final int OCCUPANCY_CELLS_OFFSET = 8;
 	private static final int OCCUPANCY_PS_CELLS_OFFSET = 2;
 	private static final int OCCUPANCY_CELLS_FIRSTVAL = 4;
 	
@@ -646,11 +646,16 @@ public class GeoObjectManager {
 	        				List<String> lsSlots = loadRicursive(att_and_vals, 1, OCCUPANCY_CELLS_OFFSET);
 	        				List<String> pSlots = loadRicursive(att_and_vals, 2, OCCUPANCY_CELLS_OFFSET);
 	        				List<String> doSlots = loadRicursive(att_and_vals, 3, OCCUPANCY_CELLS_OFFSET);
-	        				
+	        				List<String> hSlots = loadRicursive(att_and_vals, 4, OCCUPANCY_CELLS_OFFSET);
+	        				List<String> rSlots = loadRicursive(att_and_vals, 5, OCCUPANCY_CELLS_OFFSET);
+	        				List<String> ndSlots = loadRicursive(att_and_vals, 6, OCCUPANCY_CELLS_OFFSET);
 	        				tmpSOcc.setOccLC(lcSlots);
 	        				tmpSOcc.setOccLS(lsSlots);
 	        				tmpSOcc.setOccP(pSlots);
 	        				tmpSOcc.setOccDO(doSlots);
+	        				tmpSOcc.setOccH(hSlots);
+	        				tmpSOcc.setOccR(rSlots);
+	        				tmpSOcc.setSlotsND(ndSlots);
 	        				
 	        				logger.error(String.format("Corrected Object: %s", tmpSOcc.toString()));
 	        				correctData.add(tmpSOcc);

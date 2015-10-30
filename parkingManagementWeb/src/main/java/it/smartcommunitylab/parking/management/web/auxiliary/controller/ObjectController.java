@@ -322,12 +322,19 @@ public class ObjectController  {
 					List<String> slotsLS = s.getOccLS();
 					List<String> slotsP = s.getOccP();
 					List<String> slotsDO = s.getOccDO();
+					List<String> slotsH = s.getOccH();
+					List<String> slotsR = s.getOccR();
+					List<String> slotsND = s.getSlotsND();
+					
 					for(int i = 0; i < slotsLC.size(); i++){
 						boolean skipUpdate = true;
 						int slotOccLc = -1;
 						int slotOccLs = -1;
 						int slotOccP = -1;
 						int slotOccDO = -1;
+						int slotOccH = -1;
+						int slotOccR = -1;
+						int slotNumND = -1;
 						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("0") != 0){
 							slotOccLc = Integer.parseInt(slotsLC.get(i));
 						}
@@ -340,14 +347,22 @@ public class ObjectController  {
 						if(slotsDO.get(i).compareTo("") != 0 && slotsDO.get(i).compareTo("0") != 0){
 							slotOccDO = Integer.parseInt(slotsDO.get(i));
 						}
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("0") != 0){
+							slotOccH = Integer.parseInt(slotsH.get(i));
+						}
+						if(slotsR.get(i).compareTo("") != 0 && slotsR.get(i).compareTo("0") != 0){
+							slotOccR = Integer.parseInt(slotsR.get(i));
+						}
+						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("0") != 0){
+							slotNumND = Integer.parseInt(slotsND.get(i));
+						}
 						if(slotOccLc != -1){
-							street.setSlotsOccupiedOnFree(slotOccLc);
+							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
 							skipUpdate = false;
-						} else {
-							if(slotOccLs != -1){
-								street.setSlotsOccupiedOnFree(slotOccLs);
-								skipUpdate = false;
-							}
+						}
+						if(slotOccLs != -1){
+							street.setSlotsOccupiedOnFree(slotOccLs);
+							skipUpdate = false;
 						}
 						if(slotOccP != -1){
 							street.setSlotsOccupiedOnPaying(slotOccP);
@@ -355,6 +370,18 @@ public class ObjectController  {
 						}
 						if(slotOccDO != -1){
 							street.setSlotsOccupiedOnTimed(slotOccDO);
+							skipUpdate = false;
+						}
+						if(slotOccH != -1){
+							street.setSlotsOccupiedOnHandicapped(slotOccH);
+							skipUpdate = false;
+						}
+						if(slotOccR != -1){
+							street.setSlotsOccupiedOnReserved(slotOccR);
+							skipUpdate = false;
+						}
+						if(slotNumND != -1){
+							street.setSlotsUnavailable(slotNumND);
 							skipUpdate = false;
 						}
 						int year = Integer.parseInt(s.getPeriod().getYear());

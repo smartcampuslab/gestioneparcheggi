@@ -326,6 +326,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.useAverageZoneOccupation = false;	// to remove this feature set the variable to false
 	var showOtherFilterSettings = false;
 	
+	$scope.addReportFunctions = false;
+	
 	 // DB type for zone. I have to implement a good solution for types
     var macrozoneType = "macrozona kml";
     var microzoneType = "microzona";
@@ -5012,12 +5014,50 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    $scope.mapStreetSelectedMarkers.push(streetMarker);
 			    
 			    if(theme == 1){
-			    	object.data.freeParkSlotSignFree = (object.data.freeParkSlotSignNumber > 0) ? (object.data.freeParkSlotSignNumber - object.data.freeParkSlotSignOccupied) : 0;
-					object.data.freeParkSlotFree = (object.data.freeParkSlotNumber > 0) ? (object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied) : 0;
-					object.data.paidSlotFree = (object.data.paidSlotNumber > 0 ) ? (object.data.paidSlotNumber - object.data.paidSlotOccupied) : 0;
-					object.data.timedParkSlotFree = (object.data.timedParkSlotNumber > 0) ? (object.data.timedParkSlotNumber - object.data.timedParkSlotOccupied) : 0;
-					object.data.handicappedSlotFree = (object.data.handicappedSlotNumber > 0) ? (object.data.handicappedSlotNumber - object.data.handicappedSlotOccupied) : 0;
-					object.data.reservedSlotFree = (object.data.reservedSlotNumber > 0)? (object.data.reservedSlotNumber - object.data.reservedSlotOccupied) : 0;
+			    	var freeParkSlotDisp = (object.data.freeParkSlotNumber > 0) ? (object.data.freeParkSlotNumber - object.data.freeParkSlotOccupied) : 0;
+			    	var freeParkSlotSignDisp = (object.data.freeParkSlotSignNumber > 0) ? (object.data.freeParkSlotSignNumber - object.data.freeParkSlotSignOccupied) : 0;
+			    	var paidSlotDisp = (object.data.paidSlotNumber > 0 ) ? (object.data.paidSlotNumber - object.data.paidSlotOccupied) : 0;
+			    	var timedParkSlotDisp = (object.data.timedParkSlotNumber > 0) ? (object.data.timedParkSlotNumber - object.data.timedParkSlotOccupied) : 0;
+			    	var handicappedSlotDisp = (object.data.handicappedSlotNumber > 0) ? (object.data.handicappedSlotNumber - object.data.handicappedSlotOccupied) : 0;
+			    	var reservedSlotDisp = (object.data.reservedSlotNumber > 0)? (object.data.reservedSlotNumber - object.data.reservedSlotOccupied) : 0;
+			    	var unusuableSlot = object.data.unusuableSlotNumber;
+			    	// block to manage free slots and unusualbed slots
+			    	if(unusuableSlot > 0 && freeParkSlotDisp > 0){
+			    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(freeParkSlotDisp,unusuableSlot);
+			    		freeParkSlotDisp = tmpSlots[0];
+			    		unusuableSlot = tmpSlots[1];
+			    	}
+			    	if(unusuableSlot > 0 && freeParkSlotSignDisp > 0){
+			    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(freeParkSlotSignDisp,unusuableSlot);
+			    		freeParkSlotSignDisp = tmpSlots[0];
+			    		unusuableSlot = tmpSlots[1];
+			    	}
+			    	if(unusuableSlot > 0 && paidSlotDisp > 0){
+			    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(paidSlotDisp,unusuableSlot);
+			    		paidSlotDisp = tmpSlots[0];
+			    		unusuableSlot = tmpSlots[1];
+			    	}
+			    	if(unusuableSlot > 0 && timedParkSlotDisp > 0){
+			    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(timedParkSlotDisp,unusuableSlot);
+			    		timedParkSlotDisp = tmpSlots[0];
+			    		unusuableSlot = tmpSlots[1];
+			    	}
+			    	if(unusuableSlot > 0 && handicappedSlotDisp > 0){
+			    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(handicappedSlotDisp,unusuableSlot);
+			    		handicappedSlotDisp = tmpSlots[0];
+			    		unusuableSlot = tmpSlots[1];
+			    	}
+			    	if(unusuableSlot > 0 && reservedSlotDisp > 0){
+			    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(reservedSlotDisp,unusuableSlot);
+			    		reservedSlotDisp = tmpSlots[0];
+			    		unusuableSlot = tmpSlots[1];
+			    	}
+			    	object.data.freeParkSlotFree = freeParkSlotDisp;
+			    	object.data.freeParkSlotSignFree = freeParkSlotSignDisp;
+					object.data.paidSlotFree = paidSlotDisp;
+					object.data.timedParkSlotFree = timedParkSlotDisp;
+					object.data.handicappedSlotFree = handicappedSlotDisp;
+					object.data.reservedSlotFree = reservedSlotDisp;
 			    }
 			    $scope.showStreetDet();
 				$scope.sDetails = object;
@@ -5348,12 +5388,52 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 3:
 			    $scope.showStreetDet();
-				object.freeParkSlotSignFree = (object.freeParkSlotSignNumber > 0) ? (object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied) : 0;
-				object.freeParkSlotFree = (object.freeParkSlotNumber > 0) ? (object.freeParkSlotNumber - object.freeParkSlotOccupied) : 0;
-				object.paidSlotFree = (object.paidSlotNumber > 0 ) ? (object.paidSlotNumber - object.paidSlotOccupied) : 0;
-				object.timedParkSlotFree = (object.timedParkSlotNumber > 0) ? (object.timedParkSlotNumber - object.timedParkSlotOccupied) : 0;
-				object.handicappedSlotFree = (object.handicappedSlotNumber > 0) ? (object.handicappedSlotNumber - object.handicappedSlotOccupied) : 0;
-				object.reservedSlotFree = (object.reservedSlotNumber > 0)? (object.reservedSlotNumber - object.reservedSlotOccupied) : 0;
+				// Block to manage free slots and unusuabled slots
+				var freeParkSlotDisp = (object.freeParkSlotNumber > 0) ? (object.freeParkSlotNumber - object.freeParkSlotOccupied) : 0;
+		    	var freeParkSlotSignDisp = (object.freeParkSlotSignNumber > 0) ? (object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied) : 0;
+		    	var paidSlotDisp = (object.paidSlotNumber > 0 ) ? (object.paidSlotNumber - object.paidSlotOccupied) : 0;
+		    	var timedParkSlotDisp = (object.timedParkSlotNumber > 0) ? (object.timedParkSlotNumber - object.timedParkSlotOccupied) : 0;
+		    	var handicappedSlotDisp = (object.handicappedSlotNumber > 0) ? (object.handicappedSlotNumber - object.handicappedSlotOccupied) : 0;
+		    	var reservedSlotDisp = (object.reservedSlotNumber > 0)? (object.reservedSlotNumber - object.reservedSlotOccupied) : 0;
+		    	var unusuableSlot = object.unusuableSlotNumber;
+		    	// block to manage free slots and unusualbed slots
+		    	if(unusuableSlot > 0 && freeParkSlotDisp > 0){
+		    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(freeParkSlotDisp,unusuableSlot);
+		    		freeParkSlotDisp = tmpSlots[0];
+		    		unusuableSlot = tmpSlots[1];
+		    	}
+		    	if(unusuableSlot > 0 && freeParkSlotSignDisp > 0){
+		    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(freeParkSlotSignDisp,unusuableSlot);
+		    		freeParkSlotSignDisp = tmpSlots[0];
+		    		unusuableSlot = tmpSlots[1];
+		    	}
+		    	if(unusuableSlot > 0 && paidSlotDisp > 0){
+		    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(paidSlotDisp,unusuableSlot);
+		    		paidSlotDisp = tmpSlots[0];
+		    		unusuableSlot = tmpSlots[1];
+		    	}
+		    	if(unusuableSlot > 0 && timedParkSlotDisp > 0){
+		    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(timedParkSlotDisp,unusuableSlot);
+		    		timedParkSlotDisp = tmpSlots[0];
+		    		unusuableSlot = tmpSlots[1];
+		    	}
+		    	if(unusuableSlot > 0 && handicappedSlotDisp > 0){
+		    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(handicappedSlotDisp,unusuableSlot);
+		    		handicappedSlotDisp = tmpSlots[0];
+		    		unusuableSlot = tmpSlots[1];
+		    	}
+		    	if(unusuableSlot > 0 && reservedSlotDisp > 0){
+		    		var tmpSlots = $scope.calculateFreeAndUnusuableSlots(reservedSlotDisp,unusuableSlot);
+		    		reservedSlotDisp = tmpSlots[0];
+		    		unusuableSlot = tmpSlots[1];
+		    	}
+				object.freeParkSlotFree = freeParkSlotDisp;
+				object.freeParkSlotSignFree = freeParkSlotSignDisp;
+				object.paidSlotFree = paidSlotDisp;
+				object.timedParkSlotFree = timedParkSlotDisp;
+				object.handicappedSlotFree = handicappedSlotDisp;
+				object.reservedSlotFree = reservedSlotDisp;
+				
 				$scope.sDetails = object;
 			    $scope.initStreetOccupancyDiagram(object, 2);
 			    // To show the historycal data
@@ -5382,6 +5462,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return object;
 	};
 	
+	$scope.calculateFreeAndUnusuableSlots = function(free, unusuable){
+		free = free - unusuable;
+		if(free < 0){
+			unusuable = free * -1;		// I trasform the slots to positive;
+			free = 0;
+		} else {
+			unusuable = 0;
+		}
+		return [free, unusuable];
+	};
+	
 	$scope.showTimeCostInList = function(object, type){
 		switch(type){
 			case 1:
@@ -5396,12 +5487,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 3:
 			    $scope.showStreetDet();
-				//object.freeParkSlotSignFree = (object.freeParkSlotSignNumber > 0) ? (object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied) : 0;
-				//object.freeParkSlotFree = (object.freeParkSlotNumber > 0) ? (object.freeParkSlotNumber - object.freeParkSlotOccupied) : 0;
-				//object.paidSlotFree = (object.paidSlotNumber > 0 ) ? (object.paidSlotNumber - object.paidSlotOccupied) : 0;
-				//object.timedParkSlotFree = (object.timedParkSlotNumber > 0) ? (object.timedParkSlotNumber - object.timedParkSlotOccupied) : 0;
-				//object.handicappedSlotFree = (object.handicappedSlotNumber > 0) ? (object.handicappedSlotNumber - object.handicappedSlotOccupied) : 0;
-				//object.reservedSlotFree = (object.reservedSlotNumber > 0)? (object.reservedSlotNumber - object.reservedSlotOccupied) : 0;
 				$scope.sDetails = object;
 			    $scope.initStreetOccupancyDiagram(object, 2);
 			    $scope.showReportCompare("1","2", 3, 3);	// 3 = street, 3 = time cost
