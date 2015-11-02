@@ -89,9 +89,9 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(Street s : streets){
-				writer.append(s.getStreetReference());
+				writer.append(cleanCommaValue(s.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getArea_name());	// to convert to area name
+				writer.append(cleanCommaValue(s.getArea_name()));	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -140,7 +140,7 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(Zone z : zones){
-				writer.append(z.getName());
+				writer.append(cleanCommaValue(z.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(z.getSubmacro());	// to convert to area name
 				writer.append(CSV_SEPARATOR);
@@ -183,7 +183,7 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(RateArea a : areas){
-				writer.append(a.getName());
+				writer.append(cleanCommaValue(a.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getFee() + "");	// to convert to area name
 				writer.append(CSV_SEPARATOR);
@@ -232,9 +232,9 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(ParkingStructure ps : structures){
-				writer.append(ps.getName());
+				writer.append(cleanCommaValue(ps.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(ps.getStreetReference());	// to convert to area name
+				writer.append(cleanCommaValue(ps.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
 				writer.append((ps.isParkAndRide()) ? "Sì" : "No");
 				writer.append(CSV_SEPARATOR);
@@ -335,9 +335,9 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(OccupancyStreet s : streets){
-				writer.append(s.getStreetReference());
+				writer.append(cleanCommaValue(s.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getArea_name());	// to convert to area name
+				writer.append(cleanCommaValue(s.getArea_name()));
 				writer.append(CSV_SEPARATOR);
 				writer.append((s.getOccupancyRate() != -1) ? (s.getOccupancyRate() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
@@ -391,7 +391,7 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(OccupancyZone z : zones){
-				writer.append(z.getName());
+				writer.append(cleanCommaValue(z.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(z.getSubmacro());	// to convert to area name
 				writer.append(CSV_SEPARATOR);
@@ -437,7 +437,7 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(OccupancyRateArea a : areas){
-				writer.append(a.getName());
+				writer.append(cleanCommaValue(a.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getFee() + "");	// to convert to area name
 				writer.append(CSV_SEPARATOR);
@@ -483,9 +483,9 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(OccupancyParkingStructure ps : structures){
-				writer.append(ps.getName());
+				writer.append(cleanCommaValue(ps.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(ps.getStreetReference());	// to convert to area name
+				writer.append(cleanCommaValue(ps.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
 				writer.append((ps.getOccupancyRate() != -1) ? (ps.getOccupancyRate() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
@@ -629,9 +629,9 @@ public class CSVManager {
 
 			// Add the list of data in a table
 			for (ProfitStreet s : streets) {
-				writer.append(s.getStreetReference());
+				writer.append(cleanCommaValue(s.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getArea_name()); // to convert to area name
+				writer.append(cleanCommaValue(s.getArea_name()));	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append((s.getProfit() > -1) ? (s.getProfit() + "")
 						: "n.p.");
@@ -725,7 +725,7 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(ProfitZone z : zones){
-				writer.append(z.getName());
+				writer.append(cleanCommaValue(z.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(z.getSubmacro());	// to convert to area name
 				writer.append(CSV_SEPARATOR);
@@ -770,7 +770,7 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(ProfitRateArea a : areas){
-				writer.append(a.getName());
+				writer.append(cleanCommaValue(a.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getFee() + "");	// to convert to area name
 				writer.append(CSV_SEPARATOR);
@@ -813,9 +813,9 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(ProfitParkingStructure ps : structures){
-				writer.append(ps.getName());
+				writer.append(cleanCommaValue(ps.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(ps.getStreetReference());	// to convert to area name
+				writer.append(cleanCommaValue(ps.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -860,9 +860,9 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(TimeCostStreet s : streets){
-				writer.append(s.getStreetReference());
+				writer.append(cleanCommaValue(s.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getArea_name());	// to convert to area name
+				writer.append(cleanCommaValue(s.getArea_name()));	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append((s.getMinExtratime() != -1) ? (s.getMinExtratime() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
@@ -913,9 +913,9 @@ public class CSVManager {
 				
 			// Add the list of data in a table
 			for(TimeCostZone z : zones){
-				writer.append(z.getName());
+				writer.append(cleanCommaValue(z.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(z.getSubmacro());	// to convert to area name
+				writer.append(z.getSubmacro());
 				writer.append(CSV_SEPARATOR);
 				writer.append((z.getMinExtratime() != -1) ? (z.getMinExtratime() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
@@ -964,7 +964,7 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(TimeCostRateArea a : areas){
-				writer.append(a.getName());
+				writer.append(cleanCommaValue(a.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getFee() + "");	// to convert to area name
 				writer.append(CSV_SEPARATOR);
@@ -1015,9 +1015,9 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(TimeCostParkingStructure ps : structures){
-				writer.append(ps.getName());
+				writer.append(cleanCommaValue(ps.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(ps.getStreetReference());	// to convert to area name
+				writer.append(cleanCommaValue(ps.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
 				writer.append((ps.getMinExtratime() != -1) ? (ps.getMinExtratime() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
@@ -1056,9 +1056,9 @@ public class CSVManager {
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 				
-			writer.append(street.getStreetReference());
+			writer.append(cleanCommaValue(street.getStreetReference()));
 			writer.append(CSV_SEPARATOR);
-			writer.append(street.getArea_name());	// to convert to area name
+			writer.append(cleanCommaValue(street.getArea_name()));	// to convert to area name
 			writer.append(CSV_SEPARATOR);
 			writer.append(street.getSlotNumber() + "");
 			writer.append(CSV_NEWLINE);
@@ -1101,7 +1101,7 @@ public class CSVManager {
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 							
-			writer.append(zone.getName());
+			writer.append(cleanCommaValue(zone.getName()));
 			writer.append(CSV_SEPARATOR);
 			writer.append(zone.getSubmacro());	// to convert to area name
 			writer.append(CSV_SEPARATOR);
@@ -1146,7 +1146,7 @@ public class CSVManager {
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 							
-			writer.append(area.getName());
+			writer.append(cleanCommaValue(area.getName()));
 			writer.append(CSV_SEPARATOR);
 			writer.append(area.getFee() + " euro/ora");
 			writer.append(CSV_SEPARATOR);
@@ -1191,9 +1191,9 @@ public class CSVManager {
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 					
-			writer.append(struct.getName());
+			writer.append(cleanCommaValue(struct.getName()));
 			writer.append(CSV_SEPARATOR);
-			writer.append(struct.getStreetReference());	// to convert to area name
+			writer.append(cleanCommaValue(struct.getStreetReference()));
 			writer.append(CSV_SEPARATOR);
 			writer.append(struct.getSlotNumber() + "");
 			writer.append(CSV_NEWLINE);
@@ -1242,9 +1242,9 @@ public class CSVManager {
 				writer.append("Posti Totali");
 				writer.append(CSV_NEWLINE);
 					
-				writer.append(street.getStreetReference());
+				writer.append(cleanCommaValue(street.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(street.getArea_name());	// to convert to area name
+				writer.append(cleanCommaValue(street.getArea_name()));	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append(street.getSlotNumber() + "");
 				writer.append(CSV_NEWLINE);
@@ -1448,7 +1448,7 @@ public class CSVManager {
 				writer.append("Posti Totali");
 				writer.append(CSV_NEWLINE);
 								
-				writer.append(zone.getName());
+				writer.append(cleanCommaValue(zone.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(zone.getSubmacro());	// to convert to area name
 				writer.append(CSV_SEPARATOR);
@@ -1551,7 +1551,7 @@ public class CSVManager {
 				writer.append("Posti Totali");
 				writer.append(CSV_NEWLINE);
 								
-				writer.append(area.getName());
+				writer.append(cleanCommaValue(area.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(area.getFee() + " euro/ora");
 				writer.append(CSV_SEPARATOR);
@@ -1650,9 +1650,9 @@ public class CSVManager {
 				writer.append("Posti Totali");
 				writer.append(CSV_NEWLINE);
 							
-				writer.append(struct.getName());
+				writer.append(cleanCommaValue(struct.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(struct.getStreetReference());	// to convert to area name
+				writer.append(cleanCommaValue(struct.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(struct.getSlotNumber() + "");
 				writer.append(CSV_NEWLINE);
@@ -1746,9 +1746,9 @@ public class CSVManager {
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 				
-			writer.append(street.getStreetReference());
+			writer.append(cleanCommaValue(street.getStreetReference()));
 			writer.append(CSV_SEPARATOR);
-			writer.append(street.getArea_name());	// to convert to area name
+			writer.append(cleanCommaValue(street.getArea_name()));	// to convert to area name
 			writer.append(CSV_SEPARATOR);
 			writer.append(street.getSlotNumber() + "");
 			writer.append(CSV_NEWLINE);
@@ -1795,7 +1795,7 @@ public class CSVManager {
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 										
-			writer.append(zone.getName());
+			writer.append(cleanCommaValue(zone.getName()));
 			writer.append(CSV_SEPARATOR);
 			writer.append(zone.getSubmacro());
 			writer.append(CSV_SEPARATOR);
@@ -1844,7 +1844,7 @@ public class CSVManager {
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 										
-			writer.append(area.getName());
+			writer.append(cleanCommaValue(area.getName()));
 			writer.append(CSV_SEPARATOR);
 			writer.append(area.getFee() + " euro/ora");
 			writer.append(CSV_SEPARATOR);
@@ -1893,9 +1893,9 @@ public class CSVManager {
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 					
-			writer.append(struct.getName());
+			writer.append(cleanCommaValue(struct.getName()));
 			writer.append(CSV_SEPARATOR);
-			writer.append(struct.getStreetReference());	// to convert to area name
+			writer.append(cleanCommaValue(struct.getStreetReference()));
 			writer.append(CSV_SEPARATOR);
 			writer.append(struct.getSlotNumber() + "");
 			writer.append(CSV_NEWLINE);
@@ -2042,6 +2042,22 @@ public class CSVManager {
 		String cleanedVal = data;
 		if (data.contains(",")) {
 			cleanedVal = data.replaceAll(",", ".");
+		}
+		// part for accented chars
+		if(data.contains("à")){
+			cleanedVal = data.replaceAll("à", "a'");
+		}
+		if(data.contains("è")){
+			cleanedVal = data.replaceAll("è", "e'");
+		}
+		if(data.contains("ì")){
+			cleanedVal = data.replaceAll("ì", "i'");
+		}
+		if(data.contains("ò")){
+			cleanedVal = data.replaceAll("ò", "o'");
+		}
+		if(data.contains("ù")){
+			cleanedVal = data.replaceAll("ù", "u'");
 		}
 		return cleanedVal;
 	}
