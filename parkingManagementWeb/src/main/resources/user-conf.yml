@@ -1,14 +1,21 @@
 users: 
   - id: ComuneRovereto
-    username: rovereto
-    password: rovereto
+    username: rovereto1
+    password: metroRV#15
     appId: rv
     name: Comune
     surname: Rovereto
     mail: info@comune.rovereto.tn.it
   - id: ComuneTrento
-    username: trento
-    password: trento
+    username: trento1
+    password: metroTN$15
+    appId: tn
+    name: Comune
+    surname: Trento
+    mail: info@comune.trento.tn.it
+  - id: ComuneTrento
+    username: trentosc
+    password: trentoSC&15
     appId: tn
     name: Comune
     surname: Trento

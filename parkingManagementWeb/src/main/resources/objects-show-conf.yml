@@ -316,7 +316,7 @@ providers:
         - code: link
           editable: false
           required: false
-          visible: false
+          visible: true
      - id: Area
        attributes:
         - code: name
@@ -348,9 +348,9 @@ providers:
           required: false
           visible: false
         - code: viewPage
-          editable: false
+          editable: true
           required: false
-          visible: false
+          visible: true
      - id: Street
        attributes:
         - code: streetReference
@@ -404,7 +404,7 @@ providers:
         - code: pms
           editable: true
           required: false
-          visible: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -493,8 +493,12 @@ providers:
           visible: true
         - code: submacro
           editable: true
+          required: true
+          visible: false
+        - code: submicro
+          editable: false
           required: false
-          visible: true
+          visible: false
         - code: note
           editable: true
           required: false
@@ -509,6 +513,10 @@ providers:
           visible: true
         - code: geometry
           editable: true
+          required: false
+          visible: false
+        - code: geomFromSubelement
+          editable: false
           required: false
           visible: false
         - code: viewPage
@@ -540,9 +548,9 @@ providers:
      - id: Flux
        attributes:
         - code: link
-          editable: false
+          editable: true
           required: false
-          visible: false
+          visible: true
         - code: occupancyStreet
           editable: true
           required: false

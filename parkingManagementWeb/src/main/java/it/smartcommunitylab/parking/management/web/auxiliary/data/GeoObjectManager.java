@@ -520,12 +520,24 @@ public class GeoObjectManager {
 //				s.setSlotsFree(street.getFreeParkSlotSignNumber());
 //			}
 //		}
-		s.setSlotsFree(street.getFreeParkSlotNumber());
-		s.setSlotsFreeSigned(street.getFreeParkSlotSignNumber());
-		s.setSlotsPaying(street.getPaidSlotNumber());
-		s.setSlotsTimed(street.getTimedParkSlotNumber());
-		s.setSlotsHandicapped(street.getHandicappedSlotNumber());
-		s.setSlotsReserved(street.getReservedSlotNumber());
+		if(street.getFreeParkSlotNumber() != null){
+			s.setSlotsFree(street.getFreeParkSlotNumber());
+		}
+		if(street.getFreeParkSlotSignNumber() != null){
+			s.setSlotsFreeSigned(street.getFreeParkSlotSignNumber());
+		}
+		if(street.getPaidSlotNumber() != null){
+			s.setSlotsPaying(street.getPaidSlotNumber());
+		}
+		if(street.getTimedParkSlotNumber() != null){
+			s.setSlotsTimed(street.getTimedParkSlotNumber());
+		}
+		if(street.getHandicappedSlotNumber() != null){
+			s.setSlotsHandicapped(street.getHandicappedSlotNumber());
+		}
+		if(street.getReservedSlotNumber() != null){
+			s.setSlotsReserved(street.getReservedSlotNumber());
+		}
 		s.setName(street.getStreetReference());
 		if(street.getGeometry()!= null && street.getGeometry().getPoints() != null && street.getGeometry().getPoints().size() > 0){
 			s.setPolyline(PolylineEncoder.encode(street.getGeometry().getPoints()));

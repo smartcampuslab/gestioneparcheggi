@@ -1786,7 +1786,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		} else {
 			if(zone.geometry != null && zone.geometry.points.length > 0){
 				var toHide = $scope.vZoneMap.shapes;
-				var toMicroHide = $scope.vMicroZoneMap.shapes;
+				var toMicroHide = [];
+				if($scope.vMicroZoneMap != null){
+					toMicroHide = $scope.vMicroZoneMap.shapes;
+				}
 				if(toHide[zone.id] != null){
 					toHide[zone.id].setMap(null);
 				} else {
