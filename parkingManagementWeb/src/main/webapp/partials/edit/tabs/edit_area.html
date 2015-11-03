@@ -103,7 +103,7 @@
 									<a href ng-click="showAreaNameFilter();currentPageA=0" ng-show="!showAreaNFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaNFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showAreaNFilter">
-						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageA = 0" />
 						    		</div>
 								</th>
 								<th width="14%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>

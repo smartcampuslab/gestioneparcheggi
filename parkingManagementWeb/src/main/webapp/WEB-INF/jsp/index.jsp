@@ -71,6 +71,8 @@ var conf_map_center="<%=request.getAttribute("map_center")%>";
 var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
 var conf_widget_url="<%=request.getAttribute("widget_url")%>";
+var conf_macrozone_type="<%=request.getAttribute("macrozone_type")%>";
+var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
 var ctx="<%=request.getContextPath()%>";
 </script>
   

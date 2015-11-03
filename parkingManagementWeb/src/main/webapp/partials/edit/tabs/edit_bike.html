@@ -82,7 +82,7 @@
 													<a href ng-click="showBpNameFilter();currentPageBp=0" ng-show="!showBpFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 													<a href ng-click="nameFilter=null;hideBpNameFilter()" ng-show="showBpFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 													<div ng-show="showBpFilter">
-										    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+										    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageBp = 0" />
 										    		</div>
 												</th>
 												<th width="22%" class="myCenter"><span ng-show="bp_slotNumber.visible">{{ 'bp_slots' | i18n }}</span></th>

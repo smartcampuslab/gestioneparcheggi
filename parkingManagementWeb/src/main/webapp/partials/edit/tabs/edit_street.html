@@ -285,10 +285,10 @@
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="streetWS.length != 0">
 								<th width="35%">{{ 'street_name' | i18n }}&nbsp;
-									<a href ng-click="showStreetNameFilter();currentPageS=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="showStreetNameFilter();currentPageS = 0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showStreetFilter">
-						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageS = 0" />
 						    		</div>
 								</th>
 								<th width="15%">{{ 'street_slots' | i18n }}</th>
@@ -569,7 +569,7 @@
 						</div>
 					 	<div class="form-group" ng-show="isEditing && s_areaId.visible">
 					    	<label for="area">{{ 'street_area_name' | i18n }}</label>
-					    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="isEditing && s_areaId.required" ng-change="getAreaPM(myArea)">
+					    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea | orderBy: 'name'" ng-model="myArea" ng-required="isEditing && s_areaId.required" ng-change="getAreaPM(myArea)">
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 						</div>
@@ -593,7 +593,7 @@
 <!-- 						</div> -->
 						<div class="form-group" ng-show="s_zones.visible && zone_name.visible"><!-- isEditing &&  -->
 					    	<label for="zone">{{ 'street_zone' | i18n }}</label>
-					    	<select id="zone" name="sZone" class="form-control" ng-options="m as m.label for m in myZones | orderBy: m.label" ng-model="myMacrozone" ng-required="s_zones.required">
+					    	<select id="zone" name="sZone" class="form-control" ng-options="m as m.label for m in myZones | orderBy: 'label'" ng-model="myMacrozone" ng-required="s_zones.required">
 <!-- 					    		<option value="{{myMacrozone}}">{{ myMacrozone.name }}_{{ myMacrozone.submacro }}</option> -->
 <!-- 					    		<option ng-repeat="m in myZones" value="{{m}}">{{ m.name }}_{{ m.submacro }}</option> -->
 					    	</select>
@@ -601,7 +601,7 @@
 						</div>
 						<div class="form-group" ng-show="s_zones.visible && microzone_name.visible"><!-- isEditing &&  -->
 					    	<label for="microzone">{{ 'street_microzone' | i18n }}</label>
-					    	<select id="microzone" name="sMicroZone" class="form-control" ng-options="m as m.label for m in allMicrozones | orderBy: m.label" ng-model="myMicrozone" ng-required="s_zones.required">
+					    	<select id="microzone" name="sMicroZone" class="form-control" ng-options="m as m.label for m in allMicrozones | orderBy: 'label'" ng-model="myMicrozone" ng-required="s_zones.required">
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sMicroZone.$error.required">{{ 'street_microzone_select_err_required' | i18n }}</div>
 						</div>						

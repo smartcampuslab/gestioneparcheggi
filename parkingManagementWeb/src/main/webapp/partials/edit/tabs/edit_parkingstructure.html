@@ -180,7 +180,7 @@
 									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showPsFilter">
-						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPagePs = 0" />
 						    		</div>
 								</th>
 								<th width="35%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>

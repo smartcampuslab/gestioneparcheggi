@@ -61,7 +61,7 @@ providers:
         - code: reservedSlotNumber
           editable: true
           required: false
-          visible: true          
+          visible: true
         - code: timedParkSlotNumber
           editable: true
           required: false
@@ -202,7 +202,7 @@ providers:
           visible: true
         - code: type
           editable: true
-          required: false
+          required: true
           visible: true
         - code: color
           editable: true
@@ -240,7 +240,7 @@ providers:
           visible: true
         - code: type
           editable: true
-          required: false
+          required: true
           visible: true
         - code: color
           editable: false
@@ -365,6 +365,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: true
         - code: timedParkSlotNumber
           editable: true
           required: false
@@ -398,9 +402,9 @@ providers:
           required: true
           visible: false
         - code: zones
-          editable: true
+          editable: false
           required: false
-          visible: true
+          visible: false
         - code: pms
           editable: true
           required: false

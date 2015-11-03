@@ -303,23 +303,23 @@
          		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polyline" ng-repeat="z in mapMicroZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
-         		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
+         		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="{{ z.stroke.opacity }}" stroke-weight="{{ z.stroke.weight }}"
          		on-click="showDetails(event, z, 6, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polyline" ng-repeat="zSel in mapSelectedMicroZones" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
-         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zSel.stroke.weight }}"
+         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="{{ zSel.stroke.opacity }}" stroke-weight="{{ zSel.stroke.weight }}"
         		on-click="hideDetails(event, zSel, 6)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polyline" ng-repeat="zOcc in occupancyMicroZones" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
-         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zOcc.stroke.weight }}"
+         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="{{ zOcc.stroke.opacity }}" stroke-weight="{{ zOcc.stroke.weight }}"
          		on-click="showDetails(event, zOcc, 6, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polyline" ng-repeat="zProf in profitMicroZones" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
-         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zProf.stroke.weight }}"
+         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="{{ zProf.stroke.opacity }}" stroke-weight="{{ zProf.stroke.weight }}"
          		on-click="showDetails(event, zProf, 6, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polyline" ng-repeat="zTime in timeCostMicroZones" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
-         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zTime.stroke.weight }}"
+         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="{{ zTime.stroke.opacity }}" stroke-weight="{{ zTime.stroke.weight }}"
          		on-click="showDetails(event, zTime, 6, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
      		</shape>
      		<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"

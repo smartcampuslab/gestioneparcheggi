@@ -145,7 +145,7 @@
 											<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 											<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 											<div ng-show="showNotFilter">
-										    	 <input type="search" ng-model="noteFilter" placeholder="{{ 'filter_note_text' | i18n }}" />
+										    	 <input type="search" ng-model="noteFilter" placeholder="{{ 'filter_note_text' | i18n }}" ng-change="currentPagePm = 0" />
 										    </div>
 										</th>
 										<th width="18%" class="myCenter">

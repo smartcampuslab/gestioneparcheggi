@@ -170,6 +170,34 @@ pm.service('sharedDataService', function(){
     this.report_list.push(this.preloaded_report_1);
     this.report_list.push(this.preloaded_report_2);
     
+    this.zone_type_list = [];
+    this.microzone_type = "";
+    this.marcozone_type = "";
+    
+    this.setZoneTypeList = function(value){
+    	this.zone_type_list = value;
+    };
+    
+    this.getZoneTypeList = function(){
+    	return this.zone_type_list;
+    };
+    
+    this.setMicroZoneType = function(value){
+    	this.microzone_type = value;
+    };
+    
+    this.getMicroZoneType = function(){
+    	return this.microzone_type;
+    };
+    
+    this.setMacroZoneType = function(value){
+    	this.macrozone_type = value;
+    };
+    
+    this.getMacroZoneType = function(){
+    	return this.macrozone_type;
+    };    
+    
     this.setFilterTopicList = function(value){
     	this.filter_topiclist = value;
     };

@@ -1008,7 +1008,7 @@
     "description": "Testo placeholder campo submicro zona"
 }, {
     "key": "zone_type_placeholder",
-    "value": "Inserire il tipo/categoria si suddivisione in zone",
+    "value": "Inserire il tipo/categoria di suddivisione in zone",
     "description": "Testo placeholder campo tipo zona"
 }, {
     "key": "zone_note_placeholder",

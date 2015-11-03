@@ -3199,12 +3199,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					for(var j = 0; j < streets.length; j++){
 						var polyline = streets[j].geometry;
 						zone = {
-							id: $scope.correctObjId(zones[i].id, j),
+							id: "mz" +	streets[j].id,	//$scope.correctObjId(zones[i].id, j),	// I try to use id of street instead of id of zone
 							path: $scope.correctPoints(polyline.points),
 							gpath: $scope.correctPointsGoogle(polyline.points),
 							stroke: {
 							    color: color,
-							    weight: 3
+							    weight: 3,
+							    opacity: 0.6
 							},
 							data: zones[i],
 							info_windows_pos: $scope.correctPointGoogle(polyline.points[1]),
@@ -5146,37 +5147,62 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 6:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
-				object.stroke.weight = 7;	//10
+				object.stroke.weight = 4;	//10
 				object.stroke.opacity = 1.0;
 				//object.fill.opacity = 0.8;
 				var toDelZones = $scope.map.shapes;
-			    toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
-			    if(theme == 0){
-				    for(var i = 0; i < $scope.mapMicroZones.length; i++){
-				    	if($scope.mapMicroZones[i].id == object.id){
-				    		$scope.mapMicroZones.splice(i, 1);
-				    	}
+				for(var i = 0; i < object.subelements.length; i++){
+					var s = object.subelements[i];
+					var subId = "mz" + s.id;
+				    //toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+					toDelZones[subId].setMap(null);
+					if(theme == 0){
+					    for(var i = 0; i < $scope.mapMicroZones.length; i++){
+					    	if($scope.mapMicroZones[i].id == subId){		//object.id
+					    		$scope.mapMicroZones.splice(i, 1);
+					    	}
+					    }
+				    } else if(theme == 1){
+				    	for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+					    	if($scope.occupancyMicroZones[i].id == subId){	//object.id
+					    		$scope.occupancyMicroZones.splice(i, 1);
+					    	}
+					    }
+				    } else if(theme == 2){
+				    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
+					    	if($scope.profitMicroZones[i].id == subId){		//object.id
+					    		$scope.profitMicroZones.splice(i, 1);
+					    	}
+					    }
+				    } else if(theme == 3){
+				    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+					    	if($scope.timeCostMicroZones[i].id == subId){	//object.id
+					    		$scope.timeCostMicroZones.splice(i, 1);
+					    	}
+					    }
 				    }
-			    } else if(theme == 1){
-			    	for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
-				    	if($scope.occupancyMicroZones[i].id == object.id){
-				    		$scope.occupancyMicroZones.splice(i, 1);
-				    	}
-				    }
-			    } else if(theme == 2){
-			    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
-				    	if($scope.profitMicroZones[i].id == object.id){
-				    		$scope.profitMicroZones.splice(i, 1);
-				    	}
-				    }
-			    } else if(theme == 3){
-			    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
-				    	if($scope.timeCostMicroZones[i].id == object.id){
-				    		$scope.timeCostMicroZones.splice(i, 1);
-				    	}
-				    }
-			    }
-			    $scope.mapSelectedMicroZones.push(object);
+					var polyline = s.geometry;
+					var mzone = {
+							id: "mz" +	s.id,	//$scope.correctObjId(zones[i].id, j),	// I try to use id of street instead of id of zone
+							path: $scope.correctPoints(polyline.points),
+							gpath: $scope.correctPointsGoogle(polyline.points),
+							stroke: {
+							    color: object.stroke.color,
+							    weight: 4,
+							    opacity: 1.0
+							},
+							data: object.data,
+							info_windows_pos: $scope.correctPointGoogle(polyline.points[1]),
+							info_windows_cod: "z" + object.id,
+							editable: true,
+							draggable: true,
+							geodesic: false,
+							visible: true,
+							subelements: object.subelements
+						};
+			    	//$scope.mapSelectedMicroZones.push(object);
+			    	$scope.mapSelectedMicroZones.push(mzone);
+				}
 			    $scope.showMicroZoneDet();
 				$scope.microZDetails = object;
 				if(theme == 1 || theme == 3){
@@ -5699,9 +5725,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			$scope.mapSelectedAreas = [];
 			break;
 		case 6:
-			if(list.length > 0){
-				var object = list[0];
+			var mz = {};
+			for(mz in list){
+				var object = mz;
+				
+			//if(list.length > 0){
+			//	var object = list[0];
 				var toDelZone = $scope.map.shapes;
+				
 		    	toDelZone[object.id].setMap(null);
 		    	object.stroke.weight = 3;
 		    	object.stroke.opacity = 1;
@@ -5714,6 +5745,60 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	} else if(theme == 3){
 		    		$scope.timeCostMicroZones.push(object);
 		    	}
+				
+				
+				
+//				for(s in object.subelements){
+//					var subId = "mz" + s.id;
+//				    //toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
+//					toDelZones[subId].setMap(null);
+//					if(theme == 0){
+//					    for(var i = 0; i < $scope.mapMicroZones.length; i++){
+//					    	if($scope.mapMicroZones[i].id == subId){		//object.id
+//					    		$scope.mapMicroZones.splice(i, 1);
+//					    	}
+//					    }
+//				    } else if(theme == 1){
+//				    	for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+//					    	if($scope.occupancyMicroZones[i].id == subId){	//object.id
+//					    		$scope.occupancyMicroZones.splice(i, 1);
+//					    	}
+//					    }
+//				    } else if(theme == 2){
+//				    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
+//					    	if($scope.profitMicroZones[i].id == subId){		//object.id
+//					    		$scope.profitMicroZones.splice(i, 1);
+//					    	}
+//					    }
+//				    } else if(theme == 3){
+//				    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+//					    	if($scope.timeCostMicroZones[i].id == subId){	//object.id
+//					    		$scope.timeCostMicroZones.splice(i, 1);
+//					    	}
+//					    }
+//				    }
+//					var polyline = s.geometry;
+//					var mzone = {
+//							id: "mz" +	s.id,	//$scope.correctObjId(zones[i].id, j),	// I try to use id of street instead of id of zone
+//							path: $scope.correctPoints(polyline.points),
+//							gpath: $scope.correctPointsGoogle(polyline.points),
+//							stroke: {
+//							    color: object.stroke.color,
+//							    weight: 4,
+//							    opacity: 1.0
+//							},
+//							data: object.data,
+//							info_windows_pos: $scope.correctPointGoogle(polyline.points[1]),
+//							info_windows_cod: "z" + object.id,
+//							editable: true,
+//							draggable: true,
+//							geodesic: false,
+//							visible: visible,
+//							subelements: object.subelements
+//						};
+//			    	//$scope.mapSelectedMicroZones.push(object);
+//			    	$scope.mapSelectedMicroZones.push(mzone);
+//				}
 			}
 			$scope.mapSelectedMicroZones = [];
 			break;	

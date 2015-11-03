@@ -298,6 +298,12 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     //sharedDataService.setConfUrlWs(conf_url_ws);
     sharedDataService.setConfMapCenter(conf_map_center);
     sharedDataService.setConfMapZoom(conf_map_zoom);
+    var zone_types = [];
+    zone_types.push(conf_macrozone_type);
+    zone_types.push(conf_microzone_type);
+    sharedDataService.setZoneTypeList(zone_types);
+    sharedDataService.setMicroZoneType(conf_microzone_type);
+    sharedDataService.setMacroZoneType(conf_macrozone_type);
     
     $scope.widget_inport_url = conf_widget_url + "/viewall/" + conf_app_id;
  

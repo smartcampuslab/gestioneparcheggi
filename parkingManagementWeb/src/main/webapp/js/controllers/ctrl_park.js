@@ -20,8 +20,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.maxBPoints = 11;
     
     // DB type for zone. I have to implement a good solution for types
-    var macrozoneType = "macrozona kml";
-    var microzoneType = "microzona";
+    var macrozoneType = "";	//macrozona kml
+    var microzoneType = "";	//microzona
     
     // Variable declaration (without this in ie the edit/view features do not work)
     $scope.eStreet = {};
@@ -571,6 +571,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
    		if(localArea == null || localArea.length == 0){
    			$scope.getAreasFromDb();
    		}
+   		if(macrozoneType == ""){
+   			macrozoneType = sharedDataService.getMacroZoneType();
+   		}
+   		if(microzoneType == ""){
+   			microzoneType = sharedDataService.getMicroZoneType();
+   		}
    		// I load the streets if there are no streets loaded
    		if($scope.streetWS == null || $scope.streetWS.length == 0){
     		$scope.getStreetsFromDb();
@@ -983,6 +989,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allZones);
 	    	//console.log("Zone retrieved from db: " + JSON.stringify(result));
+	    	if(macrozoneType == ""){
+	   			macrozoneType = sharedDataService.getMacroZoneType();
+	   		}
+	    	if(microzoneType == ""){
+	   			microzoneType = sharedDataService.getMicroZoneType();
+	   		}
 	    	if(z_type == macrozoneType){
 	    		$scope.zoneWS = $scope.correctMyZones(allZones);
 		    	if(showZones)$scope.resizeMap("viewZone");
@@ -1769,7 +1781,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						gpath: $scope.correctPointsGoogle(polyline.points),
 						stroke: {
 						    color: $scope.correctColor(color),
-						    weight: 5
+						    weight: 4,
+						    opacity: 1.0
 						},
 						data: zone,
 						info_windows_pos: $scope.correctPointGoogle(polyline.points[1]),
@@ -1804,7 +1817,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					gpath: $scope.correctPointsGoogle(zone.geometry.points),
 					stroke: {
 					    color: $scope.correctColor(zone.color),
-					    weight: 4
+					    weight: 4,
+					    opacity: 1.0
 					},
 					data: zone,
 					info_windows_pos: $scope.correctPointGoogle(zone.geometry.points[1]),
@@ -2514,6 +2528,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		// Case create
 		$scope.isEditing = false;
 		$scope.isInit = true;
+		$scope.allZoneTypes = sharedDataService.getZoneTypeList();
 		
 		$scope.myColor = "";
 		
@@ -4661,6 +4676,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
 	
 	$scope.initZonesOnMap = function(zones, type){
+		if(macrozoneType == ""){
+   			macrozoneType = sharedDataService.getMacroZoneType();
+   		}
+    	if(microzoneType == ""){
+   			microzoneType = sharedDataService.getMicroZoneType();
+   		}
 		var zone = {};
 		var poligons = {};
 		if(($scope.zone_polygons != null && $scope.zone_polygons.length > 0) || ($scope.microzone_polygons != null && $scope.microzone_polygons.length > 0)){
@@ -4689,7 +4710,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 							gpath: $scope.correctPointsGoogle(polyline.points),
 							stroke: {
 							    color: $scope.correctColor(color),
-							    weight: 3
+							    weight: 3,
+							    opacity: 0.6
 							},
 							data: zones[i],
 							info_windows_pos: $scope.correctPointGoogle(polyline.points[1]),
@@ -4716,7 +4738,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						gpath: $scope.correctPointsGoogle(poligons.points),
 						stroke: {
 						    color: $scope.correctColor(zones[i].color),
-						    weight: 3
+						    weight: 3,
+						    opacity: 0.6
 						},
 						data: zones[i],
 						info_windows_pos: $scope.correctPointGoogle(poligons.points[1]),
