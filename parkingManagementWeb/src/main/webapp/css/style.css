@@ -152,6 +152,9 @@ ul.payment{
 
 */
 
+.table > tbody > tr > th {
+     vertical-align: middle;
+}
  
 .borderless td{
     border: 0;

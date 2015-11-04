@@ -1232,7 +1232,7 @@
     "description": "Testo pulsante aggiungi in edit parcheggi"
 }, {
     "key": "info_1",
-    "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario",
+    "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario, R: riservati, H: per disabili, ND: non disponibili",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_2",
@@ -1914,6 +1914,10 @@
 	"key": "report_management_button_label", 
 	"value": "Gestione Report",
 	"description": "Label pulsante gestione report"
+}, { 
+	"key": "system_log_author", 
+	"value": "Sistema",
+	"description": "Testo log di sistema se autore 999"
 }, { 
     "key": "time_vis",
     "value": "Visualizzazione"

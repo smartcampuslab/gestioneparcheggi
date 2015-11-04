@@ -24,7 +24,10 @@
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_author' | i18n }}</strong></td>
-				<td>{{ logDetails.author }}</td>
+				<td>
+					<span ng-show="logDetails.author == 999">{{ 'system_log_author' | i18n }}</span>
+					<span ng-show="logDetails.author != 999">{{ logDetails.author }}</span>
+				</td>
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_insertion' | i18n }}</strong></td>
@@ -109,7 +112,10 @@
 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'street_type_in_lists' | i18n }}</span>
 					</td>
 					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
-					<td width="15%" align="left">{{log.author}}</td>
+					<td width="15%" align="left">
+						<span ng-show="log.author == 999">{{ 'system_log_author' | i18n }}</span>
+						<span ng-show="log.author != 999">{{ log.author }}</span>
+					</td>
 					<td width="23%" align="left">
 <!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsTotal: {{log.value.slotsTotal}}, slotsOccupied: {{log.value.slotsOccupiedOnTotal}}, slotsUnavailable: {{log.value.slotsUnavailable}}</span> -->
 <!-- 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsFree: {{log.value.slotsFree}}, slotsOccupiedOnFree: {{log.value.slotsOccupiedOnFree}}, slotsPaying: {{log.value.slotsPaying}}, slotsOccupiedOnPaying: {{log.value.slotsOccupiedOnPaying}}, slotsTimed: {{log.value.slotsTimed}}, slotsOccupiedOnTimed: {{log.value.slotsOccupiedOnTimed}}, slotsHandicapped: {{log.value.slotsHandicapped}}</span> -->

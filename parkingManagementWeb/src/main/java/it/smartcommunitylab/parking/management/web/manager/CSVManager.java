@@ -2038,7 +2038,7 @@ public class CSVManager {
 	}
 	
 	// Method cleanCommaValue: used to remove the comma chars from a string
-	private String cleanCommaValue(String data) {
+	public String cleanCommaValue(String data) {
 		String cleanedVal = data;
 		if (data.contains(",")) {
 			cleanedVal = data.replaceAll(",", ".");

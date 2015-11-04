@@ -24,7 +24,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    step: 1,
 		    modelLabels: {'1': 'GE', '2': 'FE', '3': 'MA', '4': 'AP', '5': 'MA', '6': 'GI', '7':'LU', '8': 'AG', '9': 'SE', '10': 'OT', '11': 'NO', '12': 'DI'}
 	};
-	$scope.daySliderValue = "1;2;3;4;5;6;7";//(date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
+	//$scope.daySliderValue = "1;2;3;4;5;6;7";//(date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
+	$scope.daySliderValue = "1,2,3,4,5,6,7";
 	$scope.daySliderOptions = {       
 		    from: 1,
 		    to: 7,
@@ -82,25 +83,6 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
     sharedDataService.setFilterDowType($scope.dayOptions.value);
     sharedDataService.setFilterDowVal($scope.daySliderValue);
     sharedDataService.setFilterHour($scope.hourSliderValue);
-	
-	// Method resetDashboardFilter: used to clear all the filter options to the initial values. Never used
-//	$scope.resetDashboardFilter = function(){
-//		$scope.year = "";
-//		$scope.dayOptions = {value:'wd'};
-//		$scope.hourOptions = {value:'morning'};
-//		var date = new Date();
-//		var initialMonth = (date.getMonth() == 0 ? date.getMonth()+1 : date.getMonth());
-//		var endMonth = (date.getMonth()+1);
-//		$scope.monthSliderValue = "" + initialMonth +";"+endMonth + "";
-//		$scope.daySliderValue = (date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
-//		$scope.hourSliderValue = "10;12";
-//		// set all filter elements visible
-//		$scope.dashboard_filter = {
-//			months : true,
-//			dows : true,
-//			hours : true
-//		};
-//	};
 	
 	// Method updateFilterObject: used to set to "all" the value of months (case type == 1), day of week (case type == 2) or hours (case type == 3)
 	$scope.updateFilterObject = function(filter, type){	//, filtertype
@@ -3587,8 +3569,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-			
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streets", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -3620,10 +3601,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    }
 		    
 		    if(isFirst){
-		    	//var d = new Date();
-		    	//var hour = "10;12";
-		    	//$scope.getProfitParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
-		    	$scope.getProfitParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+		    	$scope.getOccupancyParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+		    	//$scope.getProfitParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		    	$scope.dashboard_space.microzone_part = true;
 		    	$scope.dashboard_topics == "parkSupply";
 		    	if(showStreets){
@@ -3670,8 +3649,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		console.log("Params passed in ws get call" + JSON.stringify(params)); //if($scope.showLogs)
-			
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkingmeters", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -3688,10 +3666,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    sharedDataService.setSharedLocalPms(allPMs);
 		    
 		    if(isFirst){
-		    	//var d = new Date();
-		    	//var hour = "10;12";
-		    	//$scope.getOccupancyParksFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
-		    	$scope.getOccupancyParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+		    	//$scope.getOccupancyParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+		    	$scope.getZonesFromDb(isFirst, macrozoneType);
+				$scope.getZonesFromDb(isFirst, microzoneType);
 		    } else {
 		    	if(showStreets){
 			    	$scope.updateStreetProfit(isFirst, $scope.dashboard_space.microzone_part);
@@ -3730,13 +3707,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		console.log("Params passed in ws get call" + JSON.stringify(params)); //if($scope.showLogs)
-			
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params)); 	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkstructs", params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 		    angular.copy(result, allPSs);
-		    //console.log("pss profit retrieved from db: " + JSON.stringify(result));	//if($scope.showLogs)
 		    //$scope.updateLoadingMapState();
 		    $scope.profitStructWS = allPSs;
 		    $scope.allDataStructWS = $scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS);	// here I obtain an object with correct occupancy and profit data
@@ -4407,7 +4382,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		   		if($scope.occupancyMicroZones.length == 0){
 		   			$scope.occupancyMicroZones = $scope.initZonesOnMap($scope.microzoneWS, true, 2, false, firstTime)[0];
 		   		} else {
-		   			var tmpZ = $scope.initMicroZonesOnMap($scope.microzoneWS, true, 2, false, firstTime)[0];
+		   			var tmpZ = $scope.initZonesOnMap($scope.microzoneWS, true, 2, false, firstTime)[0];
 		   	    	$scope.switchMicroZoneMapObject(4, tmpZ);
 		    	}
 		    }
@@ -4755,8 +4730,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    }
 	    		angular.copy(markers, $scope.bikePointMarkers);
 	    	}
-			$scope.getZonesFromDb(isFirst, macrozoneType);
-			$scope.getZonesFromDb(isFirst, microzoneType);
+	    	if(isFirst){
+	    		//$scope.getZonesFromDb(isFirst, macrozoneType);
+	    		//$scope.getZonesFromDb(isFirst, microzoneType);
+	    		$scope.getProfitParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+	    	}	
 		});
 	};
 	
@@ -5147,12 +5125,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case 6:
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
-				object.stroke.weight = 4;	//10
-				object.stroke.opacity = 1.0;
-				//object.fill.opacity = 0.8;
 				var toDelZones = $scope.map.shapes;
-				for(var i = 0; i < object.subelements.length; i++){
-					var s = object.subelements[i];
+				for(var z = 0; z < object.subelements.length; z++){
+					var s = object.subelements[z];
 					var subId = "mz" + s.id;
 				    //toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
 					toDelZones[subId].setMap(null);
@@ -5330,20 +5305,62 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	}
 			break;
 		case 6:
+			var subele = object.subelements;
+			if(subele != null){
+				for(var i = 0; i < subele.length; i++){
+					var s = subele[i];
+				//if(list.length > 0){
+				//	var object = list[0];
+					var toDelZone = $scope.map.shapes;
+					var sid = "mz" + s.id;
+			    	toDelZone[sid].setMap(null);
+			    	
+			    	var polyline = s.geometry;
+					var mzone = {
+							id: sid,
+							path: $scope.correctPoints(polyline.points),
+							gpath: $scope.correctPointsGoogle(polyline.points),
+							stroke: {
+							    color: object.stroke.color,
+							    weight: 3,
+							    opacity: 0.6
+							},
+							data: object.data,
+							info_windows_pos: $scope.correctPointGoogle(polyline.points[1]),
+							info_windows_cod: "z" + object.id,
+							editable: true,
+							draggable: true,
+							geodesic: false,
+							visible: true,
+							subelements: object.subelements
+					};
+			    	
+			    	if($scope.theme == 0){
+			    		$scope.mapMicroZones.push(mzone);
+			    	} else if($scope.theme == 1){
+			    		$scope.occupancyMicroZones.push(mzone);
+			    	} else if($scope.theme == 2){
+			    		$scope.profitMicroZones.push(mzone);
+			    	} else if($scope.theme == 3){
+			    		$scope.timeCostMicroZones.push(mzone);
+			    	}
+				}
+			}
 			$scope.mapSelectedMicroZones = [];
-			var toDelZone = $scope.map.shapes;
-	    	toDelZone[object.id].setMap(null);
-	    	object.stroke.weight = 3;
-	    	object.stroke.opacity = 1;
-	    	if($scope.mapMicroZones.length > 0){
-	    		$scope.mapMicroZones.push(object);
-	    	} else if($scope.occupancyMicroZones.length > 0){
-	    		$scope.occupancyMicroZones.push(object);
-	    	} else if($scope.profitMicroZones.length > 0){
-	    		$scope.profitMicroZones.push(object);
-	    	} else if($scope.timeCostMicroZones.length > 0){
-	    		$scope.timeCostMicroZones.push(object);
-	    	}
+//			$scope.mapSelectedMicroZones = [];
+//			var toDelZone = $scope.map.shapes;
+//	    	toDelZone[object.id].setMap(null);
+//	    	object.stroke.weight = 3;
+//	    	object.stroke.opacity = 0.6;
+//	    	if($scope.mapMicroZones.length > 0){
+//	    		$scope.mapMicroZones.push(object);
+//	    	} else if($scope.occupancyMicroZones.length > 0){
+//	    		$scope.occupancyMicroZones.push(object);
+//	    	} else if($scope.profitMicroZones.length > 0){
+//	    		$scope.profitMicroZones.push(object);
+//	    	} else if($scope.timeCostMicroZones.length > 0){
+//	    		$scope.timeCostMicroZones.push(object);
+//	    	}
 			break;	
 		};
 	};
@@ -5725,17 +5742,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			$scope.mapSelectedAreas = [];
 			break;
 		case 6:
-			var mz = {};
-			for(mz in list){
-				var object = mz;
-				
+			for(var i = 0; i < list.length; i++){
+				var object = list[i];				
 			//if(list.length > 0){
 			//	var object = list[0];
 				var toDelZone = $scope.map.shapes;
 				
 		    	toDelZone[object.id].setMap(null);
 		    	object.stroke.weight = 3;
-		    	object.stroke.opacity = 1;
+		    	object.stroke.opacity = 0.6;
 		    	if(theme == 0){
 		    		$scope.mapMicroZones.push(object);
 		    	} else if(theme == 1){
@@ -5745,60 +5760,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	} else if(theme == 3){
 		    		$scope.timeCostMicroZones.push(object);
 		    	}
-				
-				
-				
-//				for(s in object.subelements){
-//					var subId = "mz" + s.id;
-//				    //toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
-//					toDelZones[subId].setMap(null);
-//					if(theme == 0){
-//					    for(var i = 0; i < $scope.mapMicroZones.length; i++){
-//					    	if($scope.mapMicroZones[i].id == subId){		//object.id
-//					    		$scope.mapMicroZones.splice(i, 1);
-//					    	}
-//					    }
-//				    } else if(theme == 1){
-//				    	for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
-//					    	if($scope.occupancyMicroZones[i].id == subId){	//object.id
-//					    		$scope.occupancyMicroZones.splice(i, 1);
-//					    	}
-//					    }
-//				    } else if(theme == 2){
-//				    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
-//					    	if($scope.profitMicroZones[i].id == subId){		//object.id
-//					    		$scope.profitMicroZones.splice(i, 1);
-//					    	}
-//					    }
-//				    } else if(theme == 3){
-//				    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
-//					    	if($scope.timeCostMicroZones[i].id == subId){	//object.id
-//					    		$scope.timeCostMicroZones.splice(i, 1);
-//					    	}
-//					    }
-//				    }
-//					var polyline = s.geometry;
-//					var mzone = {
-//							id: "mz" +	s.id,	//$scope.correctObjId(zones[i].id, j),	// I try to use id of street instead of id of zone
-//							path: $scope.correctPoints(polyline.points),
-//							gpath: $scope.correctPointsGoogle(polyline.points),
-//							stroke: {
-//							    color: object.stroke.color,
-//							    weight: 4,
-//							    opacity: 1.0
-//							},
-//							data: object.data,
-//							info_windows_pos: $scope.correctPointGoogle(polyline.points[1]),
-//							info_windows_cod: "z" + object.id,
-//							editable: true,
-//							draggable: true,
-//							geodesic: false,
-//							visible: visible,
-//							subelements: object.subelements
-//						};
-//			    	//$scope.mapSelectedMicroZones.push(object);
-//			    	$scope.mapSelectedMicroZones.push(mzone);
-//				}
 			}
 			$scope.mapSelectedMicroZones = [];
 			break;	
@@ -8185,8 +8146,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/areacompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8234,8 +8194,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8284,8 +8243,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streetcompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8333,8 +8291,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructurecompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8382,8 +8339,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/areacompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8448,8 +8404,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8514,8 +8469,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/streetcompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8582,8 +8536,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkingmetercompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8650,8 +8603,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkstructcompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8819,8 +8771,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streetcompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
@@ -8874,8 +8825,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			valueType: valueType,
 			noCache: new Date().getTime()
 		};
-		//if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
 		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
 		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructurecompare/" + id, params, $scope.authHeaders, null);
 		myDataPromise.then(function(result){

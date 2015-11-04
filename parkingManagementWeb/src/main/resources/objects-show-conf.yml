@@ -560,9 +560,9 @@ providers:
           required: false
           visible: true
         - code: occupancyStruct
-          editable: true
+          editable: false
           required: false
-          visible: true
+          visible: false
         - code: profitParkingMeter
           editable: false
           required: false
@@ -570,7 +570,7 @@ providers:
         - code: profitStruct
           editable: false
           required: false
-          visible: true
+          visible: false
         - code: allLogs
           editable: true
           required: false

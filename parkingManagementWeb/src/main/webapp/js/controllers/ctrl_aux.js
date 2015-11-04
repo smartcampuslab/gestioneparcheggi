@@ -661,6 +661,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     $scope.showDetails = false;
     $scope.showFiltered = false;
     $scope.maxLogs = 15;
+    $scope.globalLogs = [];
     
     // reset tab view in log lists
     var resetView = function() {
@@ -689,7 +690,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var appId = sharedDataService.getConfAppId();
 		var myDataPromise = invokeAuxWSService.getProxy(method, appId + path, {skip: skip, count: count}, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
-			var partialLogs = result;//$scope.globalLogs.concat(result);
+			var partialLogs = result;
+			//$scope.globalLogs.concat(result);
 			var corrLog = null;
 			var nulogs = [];
 			for(var i = 0; i < partialLogs.length; i++){
@@ -720,6 +722,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			invokeAuxWSService.getProxy(method, appId + path+"/count", null, $scope.authHeaders, null)
 			.then(function(result) {
 				$scope.logtabs[$scope.tabIndex].count = result;
+				
 			    $scope.isLoadingLogs = false;
 				$scope.progress = 100;
 		    	$rootScope.$broadcast('dialogs.wait.complete');
@@ -777,42 +780,59 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		return $scope.logtabs[$scope.tabIndex].data;
 	};
 	
+	$scope.getAllLogsConfirm = function(){
+		var loadData = $dialogs.confirm("Attenzione", "Esportazione degli ultimi 1000 log in corso. Il processo di scaricamento dei dati di log puo' durare alcuni minuti. Continuare?");
+		loadData.result.then(function(btn){
+				// yes case
+				$scope.getAllLogsFromDbTP();
+				// Call the csv creation method
+			},function(btn){
+				// no case
+				// do nothing
+        });
+	};
+	
 	// Used to load all logs from db (only for CSV creation)
 	$scope.getAllLogsFromDbTP = function(){
-		$scope.globalLogs = [];
-		$scope.isAllLogLoaded = false;
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", {skip: 0, count: 250}, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			var partialLogs = result;//$scope.globalLogs.concat(result);
-			var corrLog = null;
-			for(var i = 0; i < partialLogs.length; i++){
-				corrLog = {
-					id:	partialLogs[i].id,
-					objId: partialLogs[i].objId,
-					type: partialLogs[i].type,
-					time: partialLogs[i].time,
-					logPeriod: partialLogs[i].logPeriod,
-					author: partialLogs[i].author,
-					agency: partialLogs[i].agency,
-			        deleted: partialLogs[i].deleted,
-			        year: partialLogs[i].year,
-			        month: partialLogs[i].month,
-			        week_day: partialLogs[i].week_day,
-			        timeSlot: partialLogs[i].tileSlot,
-			        holyday: partialLogs[i].holyday,
-			        isSystemLog: partialLogs[i].systemLog,
-			        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
-				};
-				//console.log("corrLog: " + JSON.stringify(corrLog));
-				$scope.globalLogs.push(corrLog);
-			}
-			//$scope.getAllProfitLogsFromDbTP();
-			$scope.logCounts =  partialLogs.length;
-		    $scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
-		    $scope.isAllLogLoaded = true;
-		});
+		if($scope.globalLogs != null && $scope.globalLogs.length > 0){
+			$scope.getAllLogCsv();
+		} else {
+			$scope.isAllLogLoaded = false;
+			var method = 'GET';
+			var appId = sharedDataService.getConfAppId();
+			var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", {skip: 0, count: 1000}, $scope.authHeaders, null);
+			myDataPromise.then(function(result){
+				var partialLogs = result;//$scope.globalLogs.concat(result);
+				var corrLog = null;
+				for(var i = 0; i < partialLogs.length; i++){
+					corrLog = {
+						id:	partialLogs[i].id,
+						objId: partialLogs[i].objId,
+						type: partialLogs[i].type,
+						time: partialLogs[i].time,
+						logPeriod: partialLogs[i].logPeriod,
+						author: partialLogs[i].author,
+						agency: partialLogs[i].agency,
+				        deleted: partialLogs[i].deleted,
+				        year: partialLogs[i].year,
+				        month: partialLogs[i].month,
+				        week_day: partialLogs[i].week_day,
+				        timeSlot: partialLogs[i].tileSlot,
+				        holyday: partialLogs[i].holyday,
+				        isSystemLog: partialLogs[i].systemLog,
+				        value: (partialLogs[i].valueString != null && partialLogs[i].valueString != "") ? JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString)) : {} //JSON.parse($scope.cleanStringForJSON(partialLogs[i].valueString))
+					};
+					//console.log("corrLog: " + JSON.stringify(corrLog));
+					$scope.globalLogs.push(corrLog);
+				}
+				//$scope.getAllProfitLogsFromDbTP();
+				$scope.logCounts =  partialLogs.length;
+			    $scope.logCountsPage = Math.ceil($scope.logCounts / $scope.maxLogs);
+			    $scope.isAllLogLoaded = true;
+			    // Csv creation
+			    $scope.getAllLogCsv();
+			});
+		}
 	};
 	
 	
@@ -876,7 +896,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var method = 'POST';
 		//var appId = sharedDataService.getConfAppId();
 		var value = JSON.stringify($scope.globalLogs);
-		
 	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
 	   	var myDataPromise = invokeAuxWSService.getProxy(method, "globallogs/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){

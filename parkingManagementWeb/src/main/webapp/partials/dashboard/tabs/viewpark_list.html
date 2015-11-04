@@ -366,7 +366,7 @@
 		<div ng-show="showSList && showParkSupplyLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="streetWS.length != 0">
+					<tr ng-show="streetWS.length != 0" >
 						<th width="20%">{{ 'street_name' | i18n }}&nbsp;
 							<a href ng-click="showStreetNameFilter();currentPageSa=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -384,13 +384,7 @@
 						    </div>	
 						</th>
 						<th width="9%">{{ 'street_slots' | i18n }} Tot</th>
-						<th width="41" colspan="6">{{ 'street_slots_composition' | i18n }}&nbsp;<i class="glyphicon glyphicon-sign"  ng-click="showInfo(2)"></i></th>
-<!-- 						<th width="9%">LS</th> -->
-<!-- 						<th width="9%">LC</th> -->
-<!-- 						<th width="9%">P</th> -->
-<!-- 						<th width="8%">DO</th> -->
-<!-- 						<th width="8%">R</th> -->
-<!-- 						<th width="8%">H</th> -->
+						<th width="41%" colspan="6">{{ 'street_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(2)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_2==true">
@@ -409,14 +403,13 @@
 							<td width="7%" align="left">DO:{{street.timedParkSlotNumber}}</td>
 							<td width="7%" align="left">R:{{street.reservedSlotNumber}}</td>
 							<td width="6%" align="left">H:{{street.handicappedSlotNumber}}</td>
-<!-- 							<td width="6%" align="left">ND:{{street.unusuableSlotNumber}}</td> -->
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="areaWS.length == 0">
-						<td colspan="10"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
+					<tr ng-show="streetWS.length == 0">
+						<td colspan="11"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
 			</div>
@@ -461,11 +454,11 @@
 						</th><!-- colspan="2" -->
 						<th width="10%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="10%">{{ 'street_slots' | i18n }} Tot</th>
-						<th width="49%" colspan="7">{{ 'street_occupied_slots' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(1)"></th>
+						<th width="49%" colspan="7" valign="top">{{ 'street_occupied_slots' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(1)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_1==true">
-						<td colspan="10"><div class="alert alert-info">{{ 'info_1' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(1)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
+						<td colspan="13"><div class="alert alert-info">{{ 'info_1' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(1)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
 					</tr>
 					<tbody class="animate-repeat"
 							ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPageSo*maxStreets | limitTo:maxStreets">
@@ -491,7 +484,7 @@
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="areaWS.length == 0">
+					<tr ng-show="streetWS.length == 0">
 						<td colspan="13"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -616,7 +609,7 @@
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_1==true">
-						<td colspan="10"><div class="alert alert-info">{{ 'info_1' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(1)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
+						<td colspan="10"><div class="alert alert-info">{{ 'info_2' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(1)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
 					</tr>
 					<tbody class="animate-repeat"
 							ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPageSt*maxStreets | limitTo:maxStreets">
@@ -641,7 +634,7 @@
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="areaWS.length == 0">
+					<tr ng-show="streetWS.length == 0">
 						<td colspan="8"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -1677,7 +1670,7 @@
 		</div>	
 	</div>
 	<div class="col-md-12" align="center" ng-show="detailsOpened || occupancyOpened || profitOpened || timeCostOpened">
-		<div ng-show="detailsOpened">
+		<div ng-if="detailsOpened">
 			<div class="alert alert-danger">
 				<table width="100%">
 					<tr>
@@ -1686,7 +1679,7 @@
 					</tr>
 				</table>
 			</div>	
-			<div ng-show="isPMDetShow()">
+			<div ng-if="isPMDetShow()">
 				<table width="100%">
 					<tr valign="top">
 						<td width="50%">	
@@ -1743,7 +1736,7 @@
 					</tr>			
 				</table>
 			</div>
-			<div ng-show="isPSDetShow()">
+			<div ng-if="isPSDetShow()">
 				<table width="100%">
 					<tr>
 						<td width="33%" align="left" valign="middle">
@@ -1818,7 +1811,7 @@
 					</tr>
 				</table>
 			</div>
-			<div ng-show="isStreetDetShow()">
+			<div ng-if="isStreetDetShow()">
 				<table width="100%">
 					<tr valign="top">
 						<td width="33%">	
@@ -1854,7 +1847,7 @@
 								<tr ng-show="s_zones.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
 									<td class="detailsListTableCXS"></td>
 									<td colspan="3">
-										<table width="100%" ng-repeat="z in sDetails.myZones track by z.id">
+										<table width="100%" ng-repeat="z in sDetails.myZones"><!-- track by z.id -->
 											<tr>
 												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
@@ -1884,22 +1877,22 @@
 								<tr ng-show="s_zones.visible  && (sDetails.myMicroZones != null && sDetails.myMicroZones.length > 0)">
 									<td class="detailsListTableCXS"></td>
 									<td colspan="3">
-										<table width="100%" ng-repeat="z in sDetails.myMicroZones track by $index">
+										<table width="100%" ng-repeat="mz in sDetails.myMicroZones"><!-- track by $index -->
 											<tr>
 												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
-												<td class="detailsListTableDXS">{{ z.name }}</td>
+												<td class="detailsListTableDXS">{{ mz.name }}</td>
 											</tr>
 											<tr>
 												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
-												<td class="detailsListTableDXS">{{ z.submicro }}</td>
+												<td class="detailsListTableDXS">{{ mz.submicro }}</td>
 											</tr>
 											<tr>
 												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
 												<td class="detailsListTableDXS">
-													<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span>
+													<span class="colorBox" ng-style="{'background-color': correctColor(mz.color)}"></span>
 												</td>
 											</tr>
 										</table>
@@ -1994,7 +1987,7 @@
 					</tr>
 				</table>										
 			</div>
-			<div ng-show="isZoneDetShow()">
+			<div ng-if="isZoneDetShow()">
 				<table width="100%">
 					<tr>
 						<td width="33%" valign="top">
@@ -2053,7 +2046,7 @@
 				</table>
 					
 			</div>
-			<div ng-show="isMicroZoneDetShow()">
+			<div ng-if="isMicroZoneDetShow()">
 				<table width="100%">
 					<tr>
 						<td width="33%" valign="top">
@@ -2112,7 +2105,7 @@
 				</table>
 					
 			</div>
-			<div ng-show="isAreaDetShow()">
+			<div ng-if="isAreaDetShow()">
 				<table width="100%">
 					<tr>
 						<td width="33%">
@@ -2174,7 +2167,7 @@
 				</table>
 			</div>        
 		</div>	
-		<div ng-show="occupancyOpened">
+		<div ng-if="occupancyOpened">
 			<div class="alert alert-danger">
 				<table width="100%">
 					<tr>
@@ -2885,7 +2878,7 @@
 				</table>
 			</div>        
 		</div>
-		<div ng-show="profitOpened">
+		<div ng-if="profitOpened">
 			<div class="alert alert-danger">
 				<table width="100%">
 					<tr>
@@ -3779,7 +3772,7 @@
 				</table>
 			</div>        
 		</div>
-		<div ng-show="timeCostOpened">
+		<div ng-if="timeCostOpened">
 			<div class="alert alert-danger">
 				<table width="100%">
 					<tr>

@@ -521,7 +521,7 @@ public class ObjectController  {
 	    	if(value != null){
 		    	if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0){
 			    	log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
-			    	log_value.put("name", (!value.isNull("name")) ? value.getString("name") : "n.p.");
+			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
 			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
 			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
 			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
@@ -542,7 +542,7 @@ public class ObjectController  {
 			    	log_value.put("areaId", (!value.isNull("areaId")) ? value.getString("areaId") : "n.p.");
 		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Parking") == 0){
 		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
-			    	log_value.put("name", (!value.isNull("name")) ? value.getString("name") : "n.p.");
+			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
 			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
 			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
 			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
@@ -555,7 +555,7 @@ public class ObjectController  {
 			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
 		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct") == 0){
 		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
-			    	log_value.put("name", (!value.isNull("name")) ? value.getString("name") : "n.p.");
+			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
 			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
 			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
 			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
