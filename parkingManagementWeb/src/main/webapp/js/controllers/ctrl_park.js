@@ -1021,7 +1021,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 	    	angular.copy(result, allBpoints);
-	    	console.log("BikePoints retrieved from db: " + JSON.stringify(result));
+	    	if($scope.showLogDates)console.log("BikePoints retrieved from db: " + JSON.stringify(result));
 	    	
 	    	for (var i = 0; i <  allBpoints.length; i++) {
 	    		markers.push(createMarkers(i, allBpoints[i], 3));

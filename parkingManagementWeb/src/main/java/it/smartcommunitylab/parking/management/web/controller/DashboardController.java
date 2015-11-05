@@ -1407,7 +1407,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupation/streethistory/csv")
 	public @ResponseBody
 	String createOccupationStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
-		logger.info("I am in historycal street csv creation.");
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
@@ -1429,15 +1428,15 @@ public class DashboardController {
 	// --------------------------------------- Zone Occupancy CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupation/zonehistory/csv")
 	public @ResponseBody
-	String createOccupationZoneHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_sub, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
-		logger.info("I am in historycal zone csv creation.");
+	String createOccupationZoneHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_submacro, @RequestParam(required=false) String dzone_submicro, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 	    	
 	    it.smartcommunitylab.parking.management.web.model.OccupancyZone z = new it.smartcommunitylab.parking.management.web.model.OccupancyZone();
 	    z.setName(dzone_name);
-	    z.setSubmacro(dzone_sub);
+	    z.setSubmacro(dzone_submacro);
+	    z.setSubmicro(dzone_submicro);
 	    z.setSlotNumber(Integer.parseInt(dzone_totalslot));
 		
 		try {
@@ -1453,7 +1452,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupation/areahistory/csv")
 	public @ResponseBody
 	String createOccupationAreaHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
-		logger.info("I am in historycal area csv creation.");
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
@@ -1475,7 +1473,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupation/parkingstructureshistory/csv")
 	public @ResponseBody
 	String createOccupationStructureHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dparking_name, @RequestParam(required=false) String dparking_streetreference, @RequestParam(required=false) String dparking_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
-		logger.info("I am in historycal parking csv creation.");
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
@@ -1498,7 +1495,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/streethistory/csv")
 	public @ResponseBody
 	String createProfitStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) {
-		logger.info("I am in profit street csv creation.");
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
     	
@@ -1519,14 +1515,14 @@ public class DashboardController {
 	// --------------------------------------- Zone Profit CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/zonehistory/csv")
 	public @ResponseBody
-	String createProfitZoneHistoryCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_sub, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) {
-		logger.info("I am in historycal zone csv creation.");
+	String createProfitZoneHistoryCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_submacro, @RequestParam(required=false) String dzone_submicro, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) {
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 		    	
 	    it.smartcommunitylab.parking.management.web.model.ProfitZone z = new it.smartcommunitylab.parking.management.web.model.ProfitZone();
 	    z.setName(dzone_name);
-	    z.setSubmacro(dzone_sub);
+	    z.setSubmacro(dzone_submacro);
+	    z.setSubmicro(dzone_submicro);
 	    z.setSlotNumber(Integer.parseInt(dzone_totalslot));
 			
 		try {
@@ -1541,7 +1537,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/areahistory/csv")
 	public @ResponseBody
 	String createProfitAreaHistoryCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot,  @RequestBody String[][] matrix) {
-		logger.info("I am in historycal area csv creation.");
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 			    	
@@ -1562,7 +1557,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/parkingmeterhistory/csv")
 	public @ResponseBody
 	String createProfitPMHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dparking_code, @RequestParam(required=false) String dparking_note, @RequestParam(required=false) String dparking_area, @RequestBody String[][] matrix) {
-		logger.info("I am in profit parkingmeter csv creation.");
 		String createdFile = "";
 		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
@@ -1587,7 +1581,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/parkstructhistory/csv")
 	public @ResponseBody
 	String createProfitStructureHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dparkstruct_name, @RequestParam(required=false) String dparkstruct_streetreference, @RequestParam(required=false) String dparkstruct_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
-		logger.info("I am in historycal parkstruct csv creation.");
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
@@ -1610,7 +1603,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timecost/areahistory/csv")
 	public @ResponseBody
 	String createTimeCostAreaHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot, @RequestBody String[][] matrix) {
-		logger.info("I am in historycal time cost area csv creation.");
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 	    	
@@ -1630,14 +1622,14 @@ public class DashboardController {
 	// --------------------------------------- Zone TimeCost CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timecost/zonehistory/csv")
 	public @ResponseBody
-	String createTimeCostZoneHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_sub, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) {
-		logger.info("I am in historycal time cost zone csv creation.");
+	String createTimeCostZoneHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_submacro, @RequestParam(required=false) String dzone_submicro, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) {
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 	    	
 	    it.smartcommunitylab.parking.management.web.model.OccupancyZone z = new it.smartcommunitylab.parking.management.web.model.OccupancyZone();
 	    z.setName(dzone_name);
-	    z.setSubmacro(dzone_sub);
+	    z.setSubmacro(dzone_submacro);
+	    z.setSubmicro(dzone_submicro);
 	    z.setSlotNumber(Integer.parseInt(dzone_totalslot));
 			
 		try {
@@ -1652,7 +1644,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timecost/streethistory/csv")
 	public @ResponseBody
 	String createTimeCostStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
-		logger.info("I am in historycal time cost street csv creation.");
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 	    	
@@ -1674,7 +1665,6 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timecost/parkingstructureshistory/csv")
 	public @ResponseBody
 	String createTimeCostStructureHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dparking_name, @RequestParam(required=false) String dparking_streetreference, @RequestParam(required=false) String dparking_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
-		logger.info("I am in historycal time cost parking csv creation.");
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");

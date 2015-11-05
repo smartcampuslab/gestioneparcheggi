@@ -525,7 +525,7 @@ public class DynamicManager {
 					logger.error(String.format("Updated street: %s", temp.toString()));
 					// Update Stat report
 					int[] total = {s.getSlotsFree(), s.getSlotsFreeSigned(), s.getSlotsPaying(), s.getSlotsTimed(), s.getSlotsHandicapped(), s.getSlotsReserved()};
-					int[] occupied = {s.getSlotsOccupiedOnFree(), s.getSlotsOccupiedOnFreeSigned(), s.getSlotsOccupiedOnPaying(), s.getSlotsOccupiedOnTimed(), s.getSlotsHandicapped(), s.getSlotsOccupiedOnReserved()};
+					int[] occupied = {s.getSlotsOccupiedOnFree(), s.getSlotsOccupiedOnFreeSigned(), s.getSlotsOccupiedOnPaying(), s.getSlotsOccupiedOnTimed(), s.getSlotsOccupiedOnHandicapped(), s.getSlotsOccupiedOnReserved()};
 					double statValue = findOccupationRate(total, occupied, 0, 0, 1, s.getSlotsUnavailable());
 					int unavailableSlots = s.getSlotsUnavailable();
 					if(period == null || period.length == 0){
@@ -1303,11 +1303,157 @@ public class DynamicManager {
 	public StreetBean getOccupationRateFromStreet(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		StreetBean s = findStreet(objectId);
 		String sId = getCorrectId(objectId, "street", appId);
+
 		double occRate = 0;
+		double freeOccRate = 0;
+		double freeOccSignedRate = 0;
+		double paidOccRate = 0;
+		double timedOccRate = 0;
+		double handicappedOccRate = 0;
+		double reservedOccRate = 0;
+		int freeParks = 0;
+		int freeSignParks = 0;
+		int paidSlotParks = 0;
+		int timedParks = 0;
+		int handicappedParks = 0;
+		int reservedParks = 0;
+		int unusuabledParks = 0;
+		int freeParks_occ = 0;
+		int freeSignParks_occ = 0;
+		int paidSlotParks_occ = 0;
+		int timedParks_occ = 0;
+		int handicappedParks_occ = 0;
+		int reservedParks_occ = 0;
+		if(s.getFreeParkSlotNumber() != null){
+			freeParks = s.getFreeParkSlotNumber();
+		}
+		if(s.getFreeParkSlotSignNumber() != null){
+			freeSignParks = s.getFreeParkSlotSignNumber();
+		}
+		if(s.getPaidSlotNumber() != null){
+			paidSlotParks = s.getPaidSlotNumber();
+		}
+		if(s.getTimedParkSlotNumber() != null){
+			timedParks = s.getTimedParkSlotNumber();
+		}
+		if(s.getHandicappedSlotNumber() != null){
+			handicappedParks = s.getHandicappedSlotNumber();
+		}
+		if(s.getReservedSlotNumber() != null){
+			reservedParks = s.getReservedSlotNumber();
+		}
+		int[] parks = {freeParks, freeSignParks, paidSlotParks, timedParks, handicappedParks, reservedParks};
+		int multipark = countElements(parks);
 		if(valueType == 1){
 			occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+			if(multipark > 1){
+				freeOccRate = getOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+				freeOccSignedRate = getOccupationRateFromObject(sId, appId, type + freeSlotSignedType, params, years, months, dayType, days, hours);
+				paidOccRate = getOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
+				timedOccRate = getOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+				handicappedOccRate = getOccupationRateFromObject(sId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
+				reservedOccRate = getOccupationRateFromObject(sId, appId, type + reservedSlotType, params, years, months, dayType, days, hours);
+			}
+			unusuabledParks = (int)getOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 		} else {
 			occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
+			if(multipark > 1){
+				freeOccRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
+				freeOccSignedRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotSignedType, params, years, months, dayType, days, hours);
+				paidOccRate = getAverageOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
+				timedOccRate = getAverageOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
+				handicappedOccRate = getAverageOccupationRateFromObject(sId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
+				reservedOccRate = getAverageOccupationRateFromObject(sId, appId, type + reservedSlotType, params, years, months, dayType, days, hours);
+			}
+			unusuabledParks = (int)getAverageOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
+		}
+		if(unusuabledParks > 0){
+			s.setUnusuableSlotNumber(unusuabledParks);
+		}
+		// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
+		if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotNumber() > 0){
+			int freeSlotNumber = s.getFreeParkSlotNumber();
+			if(unusuabledParks > 0){
+				freeSlotNumber = freeSlotNumber - unusuabledParks;
+				unusuabledParks = 0;
+			}
+			if(multipark > 1){
+				freeParks_occ = (int)Math.round(freeSlotNumber * freeOccRate / 100);
+			} else {
+				freeParks_occ = (int)Math.round(freeSlotNumber * occRate / 100);
+			}
+			s.setFreeParkSlotOccupied(freeParks_occ);
+		}
+		if(s.getFreeParkSlotSignNumber() != null && s.getFreeParkSlotSignNumber() > 0){
+			int freeSlotSignNumber = s.getFreeParkSlotSignNumber();
+			if(unusuabledParks > 0){
+				freeSlotSignNumber = freeSlotSignNumber - unusuabledParks;
+				unusuabledParks = 0;
+			}
+			if(multipark > 1){
+				freeSignParks_occ = (int)Math.round(freeSlotSignNumber * freeOccSignedRate / 100);
+			} else {
+				freeSignParks_occ = (int)Math.round(freeSlotSignNumber * occRate / 100);
+			}
+			s.setFreeParkSlotSignOccupied(freeSignParks_occ);
+		}
+		if(s.getPaidSlotNumber() != null && s.getPaidSlotNumber() > 0){
+			int paidSlotNumber = s.getPaidSlotNumber();
+			if(unusuabledParks > 0){
+				paidSlotNumber = paidSlotNumber - unusuabledParks;
+				unusuabledParks = 0;
+			}
+			if(multipark > 1){
+				paidSlotParks_occ = (int)Math.round(paidSlotNumber * paidOccRate / 100);
+			} else {
+				paidSlotParks_occ = (int)Math.round(paidSlotNumber * occRate / 100);
+			}
+			s.setPaidSlotOccupied(paidSlotParks_occ);
+		}
+		if(s.getTimedParkSlotNumber() != null && s.getTimedParkSlotNumber() > 0){
+			int timedParkSlotNumber = s.getTimedParkSlotNumber();
+			if(unusuabledParks > 0){
+				timedParkSlotNumber = timedParkSlotNumber - unusuabledParks;
+				unusuabledParks = 0;
+			}
+			if(multipark > 1){
+				timedParks_occ = (int)Math.round(timedParkSlotNumber * timedOccRate / 100);
+			} else {
+				timedParks_occ = (int)Math.round(timedParkSlotNumber * occRate / 100);
+			}
+			s.setTimedParkSlotOccupied(timedParks_occ);
+		}
+		if(s.getHandicappedSlotNumber() != null && s.getHandicappedSlotNumber() > 0){
+			int handicappedSlotNumber = s.getHandicappedSlotNumber();
+			if(unusuabledParks > 0){
+				handicappedSlotNumber = handicappedSlotNumber - unusuabledParks;
+				unusuabledParks = 0;
+			}
+			if(multipark > 1){
+				handicappedParks_occ = (int)Math.round(handicappedSlotNumber * handicappedOccRate / 100);
+			} else {
+				handicappedParks_occ = (int)Math.round(handicappedSlotNumber * occRate / 100);
+			}
+			s.setHandicappedSlotOccupied(handicappedParks_occ);
+		}
+		if(s.getReservedSlotNumber() != null && s.getReservedSlotNumber() > 0){
+			int reservedSlotNumber = s.getReservedSlotNumber();
+			if(unusuabledParks > 0){
+				reservedSlotNumber = reservedSlotNumber - unusuabledParks;
+				unusuabledParks = 0;
+			}
+			if(multipark > 1){
+				reservedParks_occ = (int)Math.round(reservedSlotNumber * reservedOccRate / 100);
+			} else {
+				reservedParks_occ = (int)Math.round(reservedSlotNumber * occRate / 100);
+			}
+			s.setReservedSlotOccupied(reservedParks_occ);
+		}
+		int[] totalSlot = {freeParks, freeSignParks, paidSlotParks, timedParks, handicappedParks, reservedParks};
+		int[] totalUsed = {freeParks_occ, freeSignParks_occ, paidSlotParks_occ, timedParks_occ, handicappedParks_occ, reservedParks_occ};
+		occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, s.getUnusuableSlotNumber());
+		if(occRate > 100){
+			occRate = 100;
 		}
 		s.setOccupancyRate(occRate);
 		
@@ -1333,14 +1479,16 @@ public class DynamicManager {
 	 */
 	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
 		String[][] occMatrix = null;
-		
 		ZoneBean z = findZoneById(objectId, appId);
 		List<StreetBean> streets = getAllStreets(z, null);
-		occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
-		for(int i = 1; i < streets.size(); i++){
-			occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+		if(streets != null && streets.size() > 0){
+			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			for(int i = 1; i < streets.size(); i++){
+				occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+			}
 		}
 		return cleanAverageMatrix(occMatrix, streets.size());
+		
 	}
 	
 	/**
@@ -1362,15 +1510,45 @@ public class DynamicManager {
 	 */
 	public String[][] getHistorycalDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
 		String[][] occMatrix = null;
+		String[][] tmpMatrix = null;
+		int[][] usedSlotMatrix = null;
+		int[][] sumSlotMatrix = null;
+		int totalSlot = 0;
 		
 		RateAreaBean a = getAreaById(objectId, appId);
 		List<StreetBean> streets = getAllStreets(a, null);
-		occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
-		for(int i = 1; i < streets.size(); i++){
-			occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+		if(streets != null && streets.size() > 0){
+			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
+			totalSlot = streets.get(0).getSlotNumber();
+			for(int i = 1; i < streets.size(); i++){
+				tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+				//occMatrix = mergeMatrix(occMatrix, tmpMatrix);
+				usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
+				sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
+				totalSlot += streets.get(i).getSlotNumber();
+			}
 		}
-		return cleanAverageMatrix(occMatrix, streets.size());
+		//return cleanAverageMatrix(occMatrix, streets.size());
+		return cleanSumSlotMatrix(sumSlotMatrix, totalSlot, occMatrix);
 	}	
+	
+	private int[][] calculateUsedSlot(StreetBean s, String[][] m){
+		int[][] tmp = new int[m.length][m[0].length];
+		for(int i = 1; i < m.length; i++){
+			for(int j = 1; j < m[0].length; j++){
+				double occ = Double.parseDouble(m[i][j]);
+				if(occ != -1.0){
+					int totSlots = s.getSlotNumber();
+					int occSlots = (int)Math.round(totSlots * occ / 100);
+					tmp[i][j] = occSlots;
+				} else {
+					tmp[i][j] = -1;
+				}
+			}
+		}
+		return tmp;
+	};
 	
 	// Method mergeMatrix: used to merge the value of two matrix (with same size) in a single matrix
 	public String[][] mergeMatrix(String[][] m1, String[][] m2){
@@ -1391,9 +1569,6 @@ public class DynamicManager {
 						merge = occ2;
 					} else {
 						merge = -1.0;
-					}
-					if(merge > 100){
-						merge = 100;
 					}
 					tmp[i][j] = "" + merge;
 				} else {
@@ -1428,14 +1603,67 @@ public class DynamicManager {
 		return tmp;
 	}
 	
+	// Method mergeMatrix: used to merge the value of two matrix (with same size) in a single matrix
+	public int[][] mergeSlotMatrix(int[][] m1, int[][] m2){
+		int[][] tmp = m1;
+		for(int i = 1; i < m1.length; i++){
+			for(int j = 1; j < m1[i].length; j++){
+				int slot1 = m1[i][j];
+				int slot2 = m2[i][j];
+				int merge = 0;
+				if((slot1 != -1) && (slot2 != -1)){
+					 merge = slot1 + slot2;
+				} else if((slot1 != -1) && (slot2 == -1)){
+					merge = slot1;
+				} else if((slot1 == -1) && (slot2 != -1)){
+					merge = slot2;
+				} else {
+					merge = -1;
+				}
+				tmp[i][j] = merge;
+			}
+		}
+		return tmp;
+	}
+	
 	// Method cleanAverageMatrix: used to calculate the average values from a matrix with the sum data
 	public String[][] cleanAverageMatrix(String[][] m1, int streets){
 		String[][] tmp = m1;
-		for(int i = 1; i < m1.length; i++){
-			for(int j = 1; j < m1[i].length; j++){
-				if(Double.parseDouble(m1[i][j]) != -1.0){
-					double average = Double.parseDouble(m1[i][j]) / streets;
-					tmp[i][j] = String.format("%.2f", average);
+		if(m1 != null && m1.length > 0){
+			for(int i = 1; i < m1.length; i++){
+				for(int j = 1; j < m1[i].length; j++){
+					if(Double.parseDouble(m1[i][j]) != -1.0){
+						double average = Double.parseDouble(m1[i][j]) / streets;
+						if(average > 100.0)average = 100.0;
+						tmp[i][j] = String.format("%.2f", average);
+					}
+				}
+			}
+		}
+		return tmp;
+	}
+	
+	public String[][] cleanSumSlotMatrix(int[][] m1, int slots, String[][] m2){
+		String[][] tmp = new String[m1.length][m1[0].length];
+		if(m1 != null && m1.length > 0){
+			for(int i = 1; i < m1.length; i++){
+				for(int j = 1; j < m1[i].length; j++){
+					if(m1[i][j] != -1){
+						if(slots == 0){
+							slots = 1;
+						}
+						double average = (m1[i][j] * 100) / slots;
+						tmp[i][j] = "" + String.format("%.2f", average);
+					} else {
+						tmp[i][j] = "-1.0";
+					}
+				}
+			}
+			for(int i = 0; i < m1.length; i++){
+				for(int j = 0; j < m1[i].length; j++){
+					if(i == 0 || j == 0){
+						tmp[i][j] = m2[i][j];
+					}
 				}
 			}
 		}
@@ -1630,6 +1858,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, b_month, dayType, days, hours, valueType).getOccupancyRate();
 					}
 				}
 			}
@@ -1652,6 +1881,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, null, b_dows, hours, valueType).getOccupancyRate();
 					}
 				}
 				byte[] b_dows = {(byte)(1)};
@@ -1663,6 +1893,7 @@ public class DynamicManager {
 					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 				} else if(objType == 4){
 					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					//occMatrix[i][7] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, null, b_dows, hours, valueType).getOccupancyRate();
 				}
 			}
 		} else if(matrixType.compareTo("14") == 0){
@@ -1684,6 +1915,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, dayType, days, b_hour, valueType).getOccupancyRate();
 					}
 				}	
 			}
@@ -1706,6 +1938,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, b_month, dayType, days, hours, valueType).getOccupancyRate();
 					}
 				}	
 			}
@@ -1728,6 +1961,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, null, b_dows, hours, valueType).getOccupancyRate();
 					}		
 				}	
 				byte[] b_dows = {(byte)(1)};
@@ -1739,6 +1973,7 @@ public class DynamicManager {
 					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 				} else if(objType == 4){
 					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					//occMatrix[i][7] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, null, b_dows, hours, valueType).getOccupancyRate();
 				}
 			}	
 		} else if(matrixType.compareTo("24") == 0){
@@ -1760,6 +1995,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, dayType, days, b_hour, valueType).getOccupancyRate();
 					}
 				}	
 			}
@@ -1783,6 +2019,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, null, b_dows, hours, valueType).getOccupancyRate();
 					}
 				}	
 			}
@@ -1798,6 +2035,7 @@ public class DynamicManager {
 					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 				} else if(objType == 4){
 					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, null, b_dows, hours, valueType).getOccupancyRate();
 				}
 			}	
 		} else if(matrixType.compareTo("32") == 0){
@@ -1820,6 +2058,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, null, b_dows, hours, valueType).getOccupancyRate();
 					}	
 				}	
 			}
@@ -1835,6 +2074,7 @@ public class DynamicManager {
 					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 				} else if(objType == 4){
 					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, null, b_dows, hours, valueType).getOccupancyRate();
 				}
 			}	
 		} else if(matrixType.compareTo("34") == 0){
@@ -1857,6 +2097,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, months, null, b_dows, b_hour, valueType).getOccupancyRate();
 					}
 				}	
 			}
@@ -1872,6 +2113,7 @@ public class DynamicManager {
 					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 				} else if(objType == 4){
 					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, months, null, b_dows, b_hour, valueType).getOccupancyRate();
 				}
 			}	
 		} else if(matrixType.compareTo("41") == 0){
@@ -1893,6 +2135,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, dayType, days, b_hour, valueType).getOccupancyRate();
 					}
 				}	
 			}
@@ -1915,6 +2158,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, dayType, days, b_hour, valueType).getOccupancyRate();
 					}
 				}	
 			}
@@ -1937,6 +2181,7 @@ public class DynamicManager {
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 					} else if(objType == 4){
 						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, months, null, b_dows, b_hour, valueType).getOccupancyRate();
 					}
 				}	
 				byte[] b_dows = {(byte)(1)};
@@ -1948,6 +2193,7 @@ public class DynamicManager {
 					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 				} else if(objType == 4){
 					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					//occMatrix[i][7] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, months, null, b_dows, b_hour, valueType).getOccupancyRate();
 				}
 			}
 		}
@@ -2003,6 +2249,12 @@ public class DynamicManager {
 			int handicappedParks = 0;
 			int reservedParks = 0;
 			int unusuabledParks = 0;
+			int freeParks_occ = 0;
+			int freeSignParks_occ = 0;
+			int paidSlotParks_occ = 0;
+			int timedParks_occ = 0;
+			int handicappedParks_occ = 0;
+			int reservedParks_occ = 0;
 			if(s.getFreeParkSlotNumber() != null){
 				freeParks = s.getFreeParkSlotNumber();
 			}
@@ -2070,10 +2322,11 @@ public class DynamicManager {
 					unusuabledParks = 0;
 				}
 				if(multipark > 1){
-					s.setFreeParkSlotOccupied((int)Math.round(freeSlotNumber * freeOccRate / 100));
+					freeParks_occ = (int)Math.round(freeSlotNumber * freeOccRate / 100);
 				} else {
-					s.setFreeParkSlotOccupied((int)Math.round(freeSlotNumber * occRate / 100));
+					freeParks_occ = (int)Math.round(freeSlotNumber * occRate / 100);
 				}
+				s.setFreeParkSlotOccupied(freeParks_occ);
 			}
 			if(s.getFreeParkSlotSignNumber() != null && s.getFreeParkSlotSignNumber() > 0){
 				int freeSlotSignNumber = s.getFreeParkSlotSignNumber();
@@ -2082,11 +2335,11 @@ public class DynamicManager {
 					unusuabledParks = 0;
 				}
 				if(multipark > 1){
-					s.setFreeParkSlotSignOccupied((int)Math.round(freeSlotSignNumber * freeOccSignedRate / 100));
+					freeSignParks_occ = (int)Math.round(freeSlotSignNumber * freeOccSignedRate / 100);
 				} else {
-					s.setFreeParkSlotSignOccupied((int)Math.round(freeSlotSignNumber * occRate / 100));
+					freeSignParks_occ = (int)Math.round(freeSlotSignNumber * occRate / 100);
 				}
-				
+				s.setFreeParkSlotSignOccupied(freeSignParks_occ);
 			}
 			if(s.getPaidSlotNumber() != null && s.getPaidSlotNumber() > 0){
 				int paidSlotNumber = s.getPaidSlotNumber();
@@ -2095,10 +2348,11 @@ public class DynamicManager {
 					unusuabledParks = 0;
 				}
 				if(multipark > 1){
-					s.setPaidSlotOccupied((int)Math.round(paidSlotNumber * paidOccRate / 100));
+					paidSlotParks_occ = (int)Math.round(paidSlotNumber * paidOccRate / 100);
 				} else {
-					s.setPaidSlotOccupied((int)Math.round(paidSlotNumber * occRate / 100));
+					paidSlotParks_occ = (int)Math.round(paidSlotNumber * occRate / 100);
 				}
+				s.setPaidSlotOccupied(paidSlotParks_occ);
 			}
 			if(s.getTimedParkSlotNumber() != null && s.getTimedParkSlotNumber() > 0){
 				int timedParkSlotNumber = s.getTimedParkSlotNumber();
@@ -2107,10 +2361,11 @@ public class DynamicManager {
 					unusuabledParks = 0;
 				}
 				if(multipark > 1){
-					s.setTimedParkSlotOccupied((int)Math.round(timedParkSlotNumber * timedOccRate / 100));
+					timedParks_occ = (int)Math.round(timedParkSlotNumber * timedOccRate / 100);
 				} else {
-					s.setTimedParkSlotOccupied((int)Math.round(timedParkSlotNumber * occRate / 100));
+					timedParks_occ = (int)Math.round(timedParkSlotNumber * occRate / 100);
 				}
+				s.setTimedParkSlotOccupied(timedParks_occ);
 			}
 			if(s.getHandicappedSlotNumber() != null && s.getHandicappedSlotNumber() > 0){
 				int handicappedSlotNumber = s.getHandicappedSlotNumber();
@@ -2119,10 +2374,11 @@ public class DynamicManager {
 					unusuabledParks = 0;
 				}
 				if(multipark > 1){
-					s.setHandicappedSlotOccupied((int)Math.round(handicappedSlotNumber * handicappedOccRate / 100));
+					handicappedParks_occ = (int)Math.round(handicappedSlotNumber * handicappedOccRate / 100);
 				} else {
-					s.setHandicappedSlotOccupied((int)Math.round(handicappedSlotNumber * occRate / 100));
+					handicappedParks_occ = (int)Math.round(handicappedSlotNumber * occRate / 100);
 				}
+				s.setHandicappedSlotOccupied(handicappedParks_occ);
 			}
 			if(s.getReservedSlotNumber() != null && s.getReservedSlotNumber() > 0){
 				int reservedSlotNumber = s.getReservedSlotNumber();
@@ -2131,10 +2387,20 @@ public class DynamicManager {
 					unusuabledParks = 0;
 				}
 				if(multipark > 1){
-					s.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * reservedOccRate / 100));
+					reservedParks_occ = (int)Math.round(reservedSlotNumber * reservedOccRate / 100);
 				} else {
-					s.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * occRate / 100));
+					reservedParks_occ = (int)Math.round(reservedSlotNumber * occRate / 100);
 				}
+				s.setReservedSlotOccupied(reservedParks_occ);
+			}
+			int[] totalSlot = {freeParks, freeSignParks, paidSlotParks, timedParks, handicappedParks, reservedParks};
+			int[] totalUsed = {freeParks_occ, freeSignParks_occ, paidSlotParks_occ, timedParks_occ, handicappedParks_occ, reservedParks_occ};
+			if(occRate != -1.0){	// Only if occRate is valorized
+				occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, s.getUnusuableSlotNumber());
+				if(occRate > 100){
+					occRate = 100;
+				}
+				s.setOccupancyRate(occRate);
 			}
 			corrStreets.add(s);
 		}

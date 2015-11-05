@@ -20,6 +20,7 @@ public class ProfitZone {
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String name;
 	private String submacro;
+	private String submicro;
 	private String type; 	//type of division(geo, green, history, etc)
 	private String note;
 	private String color;
@@ -57,6 +58,14 @@ public class ProfitZone {
 
 	public void setSubmacro(String submacro) {
 		this.submacro = submacro;
+	}
+
+	public String getSubmicro() {
+		return submicro;
+	}
+
+	public void setSubmicro(String submicro) {
+		this.submicro = submicro;
 	}
 
 	public String getType() {

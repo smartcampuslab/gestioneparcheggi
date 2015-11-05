@@ -1096,14 +1096,22 @@ public class CSVManager {
 			// Added the table cols headers
 			writer.append("Nome");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Macro");
+			if(zone.getSubmacro() != null){
+				writer.append("Macro");
+			} else {
+				writer.append("Cod");
+			}
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 							
 			writer.append(cleanCommaValue(zone.getName()));
 			writer.append(CSV_SEPARATOR);
-			writer.append(zone.getSubmacro());	// to convert to area name
+			if(zone.getSubmacro() != null){
+				writer.append(zone.getSubmacro());
+			} else {
+				writer.append(zone.getSubmicro());
+			}
 			writer.append(CSV_SEPARATOR);
 			writer.append(zone.getSlotNumber() + "");
 			writer.append(CSV_NEWLINE);
@@ -1443,14 +1451,22 @@ public class CSVManager {
 				// Added the table cols headers
 				writer.append("Nome");
 				writer.append(CSV_SEPARATOR);
-				writer.append("Macro");
+				if(zone.getSubmacro() != null){
+					writer.append("Macro");
+				} else {
+					writer.append("Cod");
+				}
 				writer.append(CSV_SEPARATOR);
 				writer.append("Posti Totali");
 				writer.append(CSV_NEWLINE);
 								
 				writer.append(cleanCommaValue(zone.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(zone.getSubmacro());	// to convert to area name
+				if(zone.getSubmacro() != null){
+					writer.append(zone.getSubmacro());
+				} else {
+					writer.append(zone.getSubmicro());
+				}
 				writer.append(CSV_SEPARATOR);
 				writer.append(zone.getSlotNumber() + "");
 				writer.append(CSV_NEWLINE);
@@ -1790,14 +1806,22 @@ public class CSVManager {
 			// Added the table cols headers
 			writer.append("Nome");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Macro");
+			if(zone.getSubmacro() != null){
+				writer.append("Macro");
+			} else {
+				writer.append("Cod");
+			}
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
 			writer.append(CSV_NEWLINE);
 										
 			writer.append(cleanCommaValue(zone.getName()));
 			writer.append(CSV_SEPARATOR);
-			writer.append(zone.getSubmacro());
+			if(zone.getSubmacro() != null){
+				writer.append(zone.getSubmacro());
+			} else {
+				writer.append(zone.getSubmicro());
+			}
 			writer.append(CSV_SEPARATOR);
 			writer.append(zone.getSlotNumber() + "");
 			writer.append(CSV_NEWLINE);

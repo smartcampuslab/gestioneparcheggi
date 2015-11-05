@@ -439,7 +439,7 @@ providers:
           editable: false
           required: false
           visible: true
-     - id: XPs
+     - id: Ps
        attributes:
         - code: name
           editable: true
@@ -455,7 +455,7 @@ providers:
           visible: true
         - code: paymentMode
           editable: true
-          required: true
+          required: false
           visible: true
         - code: fee
           editable: true
@@ -560,17 +560,17 @@ providers:
           required: false
           visible: true
         - code: occupancyStruct
-          editable: false
+          editable: true
           required: false
-          visible: false
+          visible: true
         - code: profitParkingMeter
-          editable: false
+          editable: true
           required: false
           visible: true
         - code: profitStruct
-          editable: false
+          editable: true
           required: false
-          visible: false
+          visible: true
         - code: allLogs
           editable: true
           required: false
