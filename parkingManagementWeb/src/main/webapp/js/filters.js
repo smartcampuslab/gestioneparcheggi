@@ -138,6 +138,10 @@ angular.module('pmFilters', []).filter('truncate', function() {
        	months = Math.floor(mesiRes);
 		return (months > 0) ? months : "< 1";
 	};
+}).filter('doubleWithTwoDecimals', function() {
+	return function(input){
+		return parseFloat(Math.round(input * 100) / 100).toFixed(2);
+	};
 }).filter('valueToTitle', function() {
 	return function(value, input){
 		var i=0, len=input.length;

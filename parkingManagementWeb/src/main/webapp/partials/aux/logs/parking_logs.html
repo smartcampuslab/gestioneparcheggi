@@ -292,11 +292,29 @@
 					   					</td>
 					   				</tr>
 					   				<tr>
-					   					<td><strong>{{ 'parking_unavailable_slot' | i18n }}</strong></td>
-					   					<td>{{ myParkingDetails.slotsUnavailable }}</td>
-					   					<td></td>
-					   					<td></td>
-					   				</tr>
+				   						<td><strong>{{ 'parking_unavailable_slot' | i18n }}</strong></td>
+				   						<td></td><!-- {{ myParkingDetails.slotsUnavailable }} -->
+				   						<td></td>
+				   						<td><input id="unavailableSlots" type="number" class="form-control" name="pUnavalableSlots" ng-pattern="onlyNumbers" ng-model="myParkingDetails.slotsUnavailable" placeholder="{{ 'park_unavailableslot_placeholder' | i18n }}" min="0" ng-change="checkCorrectParkSlots(myParkingDetails)"></td>
+				   					</tr>
+				   					<tr ng-show="!isInit && form.pUnavalableSlots.$error.pattern">
+				   						<td colspan="3"></td>
+				   						<td align="center">
+				   							<div class="alert alert-danger">{{ 'log_park_unavailable_error_pattern' | i18n }}</div>
+				   						</td>
+				   					</tr>
+				   					<tr ng-show="!isInit && form.pOccupiedslotOnFree.$error.min">
+				   						<td colspan="3"></td>
+				   						<td align="center">
+				   							<div class="alert alert-danger">{{ 'log_park_unavailable_error_min' | i18n }}</div>
+				   						</td>
+				   					</tr>
+				   					<tr ng-show="showMaxErrorUnusuable">
+				   						<td colspan="3"></td>
+				   						<td align="center">
+				   							<div class="alert alert-danger">{{ 'log_park_unavailable_error_max' | i18n }}</div>
+				   						</td>
+				   					</tr>
 					   			</table>
 					   	</div>
 				</div>

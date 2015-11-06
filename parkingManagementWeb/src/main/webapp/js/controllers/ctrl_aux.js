@@ -1473,13 +1473,18 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     // Method checkCorrectParkSlots: used to check if the parking occupancy value is correct
     $scope.checkCorrectParkSlots = function(park_details){
     	$scope.showMaxError = false;
+    	$scope.showMaxErrorUnusuable = false;
     	var available = park_details.slotsTotal;
     	if(available!= null && available >= 0){
     		if(available < park_details.slotsOccupiedOnTotal){
     			$scope.showMaxError = true;
     		}
     	}
-    	if($scope.showMaxError){
+    	var free_all = available - park_details.slotsOccupiedOnTotal;
+    	if(free_all < park_details.slotsUnavailable){
+    		$scope.showMaxErrorUnusuable = true;
+    	}
+    	if($scope.showMaxError || $scope.showMaxErrorUnusuable){
     		return false;
     	} else {
     		return true;

@@ -148,7 +148,7 @@ providers:
           visible: true
         - code: paymentMode
           editable: true
-          required: true
+          required: false
           visible: true
         - code: fee
           editable: true

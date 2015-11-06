@@ -73,7 +73,7 @@ public class GeoObjectManager {
 	
 	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
 	private static final int OCCUPANCY_CELLS_OFFSET = 8;
-	private static final int OCCUPANCY_PS_CELLS_OFFSET = 2;
+	private static final int OCCUPANCY_PS_CELLS_OFFSET = 3;
 	private static final int OCCUPANCY_CELLS_FIRSTVAL = 4;
 	
 	public List<Parking> getParkings(String agency) throws Exception { 
@@ -618,7 +618,9 @@ public class GeoObjectManager {
 	        				
 	        				// here I load the vals
 	        				List<String> occSlots = loadRicursive(att_and_vals, 0, OCCUPANCY_PS_CELLS_OFFSET);
+	        				List<String> ndSlots = loadRicursive(att_and_vals, 1, OCCUPANCY_PS_CELLS_OFFSET);
 	        				tmpPSOcc.setOccSlots(occSlots);
+	        				tmpPSOcc.setNdSlots(ndSlots);
 	        				
 	        				logger.error(String.format("Corrected Object: %s", tmpPSOcc.toString()));
 	        				correctData.add(tmpPSOcc);

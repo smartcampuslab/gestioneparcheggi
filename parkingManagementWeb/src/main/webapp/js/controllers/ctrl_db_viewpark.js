@@ -4765,7 +4765,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    //var hour = "10;12";
 		    //$scope.getOccupancyStreetsFromDb(d.getFullYear(), d.getMonth(), null, "wd", hour, 1, isFirst);
 		    if(type == macrozoneType){
-		    	$scope.getOccupancyStreetsFromDb("", "1;12", "1,2,3,4,5,6,7", "wd", "0;23", 2, isFirst);
+		    	$scope.getOccupancyStreetsFromDb("", "1;12", "1,2,3,4,5,6,7", "custom", "0;23", 2, isFirst);
 		    }
 		});
 	};
@@ -7241,7 +7241,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   		} else {
   			object = structure;
   		}
-  		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+  		var available = object.slotNumber;
+  		if(object.unusuableSlotNumber != -1){
+  			available = object.slotNumber - object.unusuableSlotNumber;
+  		}
+  		var dataTot = [ "Liberi", available - object.slotOccupied ];
   		var dataOcc = [ "Occupati", object.slotOccupied ];
   		$scope.chartPsOccupancy.data.push(dataTot);
   		$scope.chartPsOccupancy.data.push(dataOcc);

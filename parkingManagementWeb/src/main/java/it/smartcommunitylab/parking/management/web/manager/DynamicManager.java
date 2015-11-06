@@ -44,6 +44,7 @@ import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.StatRepository;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -900,6 +901,19 @@ public class DynamicManager {
 		} else {
 			repo.updateStatsPeriod(p.getId(), p.getAgency(), dl.getType(), null, statValue, timestamp, period, 1);
 		}
+		// this data can be present in the park with only a park type too
+		if(p.getSlotsUnavailable() != 0){
+			double unusualbedSlotVal = p.getSlotsUnavailable();
+			if(period == null || period.length == 0){
+				if(p_type != -1){
+					repo.updateDirectPeriodStats(p.getId(), p.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp, p_type);
+				} else {
+					repo.updateStats(p.getId(), p.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp);
+				}
+			} else {
+				repo.updateStatsPeriod(p.getId(), p.getAgency(), dl.getType() + unusuabledSlotType, null, unusualbedSlotVal, timestamp, period, 1);
+			}
+		}
 	}
 	
 	// Method editParkStructProfitAux: used to save a ProfitLogBean object for the new profit data in a parkingStructure
@@ -1233,7 +1247,8 @@ public class DynamicManager {
 		}
 		if(!res.isEmpty()){
 			//logger.info(String.format("Occupation Rate Aggregate Value = %f", res.get(key).getAggregateValue()));
-			return res.get(key).getLastValue();
+			//return res.get(key).getLastValue();
+			return res.get(key).getAggregateValue();
 		} else {
 			return -1.0;
 		}
@@ -1479,16 +1494,28 @@ public class DynamicManager {
 	 */
 	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
 		String[][] occMatrix = null;
+		String[][] tmpMatrix = null;
+		int[][] usedSlotMatrix = null;
+		int[][] unavailableSlotMatrix = null;
+		int[][] sumSlotMatrix = null;
+		int totalSlot = 0;
+		
 		ZoneBean z = findZoneById(objectId, appId);
 		List<StreetBean> streets = getAllStreets(z, null);
 		if(streets != null && streets.size() > 0){
 			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
+			totalSlot = streets.get(0).getSlotNumber();
 			for(int i = 1; i < streets.size(); i++){
-				occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+				//occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+				tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+				usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
+				sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
+				totalSlot += streets.get(i).getSlotNumber();
 			}
 		}
-		return cleanAverageMatrix(occMatrix, streets.size());
-		
+		//return cleanAverageMatrix(occMatrix, streets.size());
+		return cleanSumSlotMatrix(sumSlotMatrix, totalSlot, occMatrix);
 	}
 	
 	/**
@@ -1512,6 +1539,7 @@ public class DynamicManager {
 		String[][] occMatrix = null;
 		String[][] tmpMatrix = null;
 		int[][] usedSlotMatrix = null;
+		int[][] unavailableSlotMatrix = null;
 		int[][] sumSlotMatrix = null;
 		int totalSlot = 0;
 		
@@ -1853,11 +1881,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, b_month, dayType, days, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, b_month, dayType, days, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, i_year, b_month, dayType, days, hours);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, b_month, dayType, days, hours, valueType).getOccupancyRate();
 					}
 				}
@@ -1876,11 +1912,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, null, b_dows, hours, valueType).getOccupancyRate();
 					}
 				}
@@ -1888,11 +1932,19 @@ public class DynamicManager {
 				if(objType == 1){
 					occMatrix[i][7] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 				} else if(objType == 2){
-					occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+					if(valueType == 1){
+						occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+					} else {
+						occMatrix[i][7] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+					}
 				} else if(objType == 3){
 					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 				} else if(objType == 4){
-					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					if(valueType == 1){
+						occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					} else {
+						occMatrix[i][7] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					}
 					//occMatrix[i][7] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, null, b_dows, hours, valueType).getOccupancyRate();
 				}
 			}
@@ -1910,11 +1962,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, dayType, days, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, dayType, days, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, i_year, months, dayType, days, b_hour);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, dayType, days, b_hour, valueType).getOccupancyRate();
 					}
 				}	
@@ -1933,11 +1993,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, b_month, dayType, days, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, b_month, dayType, days, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, i_year, b_month, dayType, days, hours);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, b_month, dayType, days, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, b_month, dayType, days, hours); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, i_year, b_month, dayType, days, hours);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, b_month, dayType, days, hours, valueType).getOccupancyRate();
 					}
 				}	
@@ -1956,11 +2024,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, null, b_dows, hours, valueType).getOccupancyRate();
 					}		
 				}	
@@ -1968,11 +2044,19 @@ public class DynamicManager {
 				if(objType == 1){
 					occMatrix[i][7] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 				} else if(objType == 2){
-					occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+					if(valueType == 1){
+						occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+					} else {
+						occMatrix[i][7] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+					}
 				} else if(objType == 3){
 					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 				} else if(objType == 4){
-					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					if(valueType == 1){
+						occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					} else {
+						occMatrix[i][7] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					}
 					//occMatrix[i][7] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, null, b_dows, hours, valueType).getOccupancyRate();
 				}
 			}	
@@ -1990,11 +2074,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, dayType, days, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, dayType, days, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years, b_month, dayType, days, b_hour);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, dayType, days, b_hour, valueType).getOccupancyRate();
 					}
 				}	
@@ -2014,11 +2106,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, null, b_dows, hours, valueType).getOccupancyRate();
 					}
 				}	
@@ -2030,11 +2130,19 @@ public class DynamicManager {
 				if(objType == 1){
 					occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 				} else if(objType == 2){
-					occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+					if(valueType == 1){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+					} else {
+						occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, i_year, months, null, b_dows, hours);
+					}
 				} else if(objType == 3){
 					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, null, b_dows, hours); 
 				} else if(objType == 4){
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					if(valueType == 1){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					} else {
+						occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, i_year, months, null, b_dows, hours);
+					}
 					//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, null, b_dows, hours, valueType).getOccupancyRate();
 				}
 			}	
@@ -2053,11 +2161,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
-					} else if(objType == 3){
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+						}
+					}else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, null, b_dows, hours, valueType).getOccupancyRate();
 					}	
 				}	
@@ -2069,11 +2185,19 @@ public class DynamicManager {
 				if(objType == 1){
 					occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 				} else if(objType == 2){
-					occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+					if(valueType == 1){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+					} else {
+						occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years, b_month, null, b_dows, hours);
+					}
 				} else if(objType == 3){
 					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, null, b_dows, hours) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, null, b_dows, hours); 
 				} else if(objType == 4){
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					if(valueType == 1){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					} else {
+						occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, b_month, null, b_dows, hours);
+					}
 					//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, null, b_dows, hours, valueType).getOccupancyRate();
 				}
 			}	
@@ -2092,11 +2216,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, months, null, b_dows, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, months, null, b_dows, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years, months, null, b_dows, b_hour);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, months, null, b_dows, b_hour, valueType).getOccupancyRate();
 					}
 				}	
@@ -2108,11 +2240,19 @@ public class DynamicManager {
 				if(objType == 1){
 					occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 				} else if(objType == 2){
-					occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, months, null, b_dows, b_hour);
+					if(valueType == 1){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, months, null, b_dows, b_hour);
+					} else {
+						occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years, months, null, b_dows, b_hour);
+					}
 				} else if(objType == 3){
 					occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 				} else if(objType == 4){
-					occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					if(valueType == 1){
+						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					} else {
+						occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					}
 					//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, months, null, b_dows, b_hour, valueType).getOccupancyRate();
 				}
 			}	
@@ -2130,11 +2270,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, dayType, days, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, i_year, months, dayType, days, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, i_year, months, dayType, days, b_hour);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, i_year, months, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, i_year, months, dayType, days, b_hour); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, i_year, months, dayType, days, b_hour);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, i_year, months, dayType, days, b_hour, valueType).getOccupancyRate();
 					}
 				}	
@@ -2153,11 +2301,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, dayType, days, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years, b_month, dayType, days, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years, b_month, dayType, days, b_hour);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, b_month, dayType, days, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, b_month, dayType, days, b_hour); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, b_month, dayType, days, b_hour);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, b_month, dayType, days, b_hour, valueType).getOccupancyRate();
 					}
 				}	
@@ -2176,11 +2332,19 @@ public class DynamicManager {
 					if(objType == 1){
 						occMatrix[i][j] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 					} else if(objType == 2){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years,  months, null, b_dows, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years,  months, null, b_dows, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years,  months, null, b_dows, b_hour);
+						}
 					} else if(objType == 3){
 						occMatrix[i][j] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 					} else if(objType == 4){
-						occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+						if(valueType == 1){
+							occMatrix[i][j] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+						} else {
+							occMatrix[i][j] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+						}
 						//occMatrix[i][j] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, months, null, b_dows, b_hour, valueType).getOccupancyRate();
 					}
 				}	
@@ -2188,17 +2352,23 @@ public class DynamicManager {
 				if(objType == 1){
 					occMatrix[i][7] = "" + getSumProfitFromObject(pmId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(pmId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 				} else if(objType == 2){
-					occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years,  months, null, b_dows, b_hour);
+					if(valueType == 1){
+						occMatrix[i][7] = "" + getOccupationRateFromObject(psOccId, appId, type, params, years,  months, null, b_dows, b_hour);
+					} else {
+						occMatrix[i][7] = "" + getAverageOccupationRateFromObject(psOccId, appId, type, params, years,  months, null, b_dows, b_hour);
+					}
 				} else if(objType == 3){
 					occMatrix[i][7] = "" + getSumProfitFromObject(psProfId, appId, type + profit, params, years, months, null, b_dows, b_hour) + "/" + getSumProfitFromObject(psProfId, appId, type + tickets, params, years, months, null, b_dows, b_hour); 
 				} else if(objType == 4){
-					occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					if(valueType == 1){
+						occMatrix[i][7] = "" + getOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					} else {
+						occMatrix[i][7] = "" + getAverageOccupationRateFromObject(sId, appId, type, params, years, months, null, b_dows, b_hour);
+					}
 					//occMatrix[i][7] = "" + getOccupationRateFromStreet(objectId, appId, type, params, years, months, null, b_dows, b_hour, valueType).getOccupancyRate();
 				}
 			}
 		}
-		
-		
 //		double occRate = 0;
 //		if(valueType == 1){
 //			occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
@@ -2206,7 +2376,6 @@ public class DynamicManager {
 //			occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
 //		}
 //		s.setOccupancyRate(occRate);
-		
 		return occMatrix;
 	}
 	
@@ -2413,14 +2582,24 @@ public class DynamicManager {
 		String pId = "";
 		for(ParkingStructureBean p : parkings){
 			double occRate = 0;
+			int unusuabledParks = 0;
 			pId = getCorrectId(p.getId(), "parking", appId);
 			if(valueType == 1){
 				occRate = getOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+				unusuabledParks = (int)getOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			} else {
 				occRate = getAverageOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+				unusuabledParks = (int)getAverageOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			}
+			
 			p.setOccupancyRate(occRate);
-			p.setSlotOccupied((int)Math.round(p.getSlotNumber() * occRate / 100));
+			int totalSlot = p.getSlotNumber();
+			if(unusuabledParks > 0){
+				totalSlot = totalSlot - unusuabledParks;
+			}
+			//p.setSlotOccupied((int)Math.round(totalSlot * occRate / 100));
+			p.setSlotOccupied((int)Math.ceil(totalSlot * occRate / 100));
+			p.setUnusuableSlotNumber(unusuabledParks);
 		}
 
 		return parkings;
@@ -2717,16 +2896,25 @@ public class DynamicManager {
 		for(ParkingStructureBean p : parkings){
 			CompactParkingStructureBean cp = new CompactParkingStructureBean();
 			double occRate = 0;
+			int unusuabledParks = 0;
 			pId = getCorrectId(p.getId(), "parking", appId);
 			if(valueType == 1){
 				occRate = getOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+				unusuabledParks = (int)getOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			} else {
 				occRate = getAverageOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
+				unusuabledParks = (int)getAverageOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
 			}
 			cp.setId(p.getId());
 			cp.setOccupancyRate(occRate);
 			cp.setSlotNumber(p.getSlotNumber());
-			cp.setSlotOccupied((int)Math.round(p.getSlotNumber() * occRate / 100));
+			int totalSlot = p.getSlotNumber();
+			if(unusuabledParks > 0){
+				totalSlot = totalSlot - unusuabledParks;
+			}
+			//cp.setSlotOccupied((int)Math.round(totalSlot * occRate / 100));
+			cp.setSlotOccupied((int)Math.ceil(totalSlot * occRate / 100));
+			cp.setUnusuableSlotNumber(unusuabledParks);
 			correctedParkings.add(cp);
 		}
 

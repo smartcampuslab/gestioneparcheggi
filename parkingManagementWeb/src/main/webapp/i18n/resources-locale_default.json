@@ -1420,8 +1420,12 @@
     "description": "Placeholder per posti riservati occupati in creazione log via"
 }, {
     "key": "street_unavailableslot_placeholder",
-    "value": "Inserire numero posti occupati tra i gratuiti",
-    "description": "Placeholder per posti gratuiti occupati in creazione log via"
+    "value": "Inserire numero posti non disponibili",
+    "description": "Placeholder per posti non disponibili in creazione log via"
+}, {
+    "key": "park_unavailableslot_placeholder",
+    "value": "Inserire numero posti non disponibili",
+    "description": "Placeholder per posti non disponibili in creazione log parcheggio"
 }, {
     "key": "street_usercode_placeholder",
     "value": "Inserisci il codice utente",
@@ -1682,6 +1686,18 @@
 	"key": "log_street_unavailable_error_max",
 	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore minore",
 	"description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log via"
+}, {
+	"key": "log_park_unavailable_error_pattern",
+	"value": "Campo 'posti inutilizzabili' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti inutilizzabili non corretto in creazione log parcheggio"
+}, {
+	"key": "log_park_unavailable_error_min",
+	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore maggiore",
+	"description": "Messaggio campo posti inutilizzabili non corretto (min) in creazione log parcheggio"
+}, {
+	"key": "log_park_unavailable_error_max",
+	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore minore",
+	"description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log parcheggio"
 }, {
 	"key": "log_street_occupied_free_error_required",
 	"value": "Campo 'posti gratuiti occupati' obbligatorio. Inserire un valore numerico",
@@ -1990,4 +2006,13 @@
 }, {
     "key": "hour_vis",
     "value": "Fascia oraria"
+}, {
+    "key": "html_iframe_1",
+    "value": "<iframe src='"
+}, {
+    "key": "html_iframe_2",
+    "value": "' width='100%' height='800px' >"
+}, {
+    "key": "html_iframe_3",
+    "value": "</iframe>"
 }]

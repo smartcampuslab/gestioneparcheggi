@@ -468,7 +468,7 @@
 							<td width="12%" align="left">{{street.area_name}}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(street.occupancyRate)}"></div></td><!-- {{area.color}} -->
 							<td width="5%" align="left">
-								<span ng-show="street.occupancyRate != '-1'">{{ street.occupancyRate }}%</span>
+								<span ng-show="street.occupancyRate != '-1'">{{ street.occupancyRate | doubleWithTwoDecimals}}%</span>
 								<span ng-show="street.occupancyRate == '-1'">n.p.</span>
 							</td>
 							<td width="10%" align="left">{{street.slotNumber}}</td>
@@ -742,7 +742,7 @@
 							<td width="15%" align="left"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(zone.occupancy)}"></div></td>
 							<td width="10%" align="left">
-								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy}}%</span>
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
 								<span ng-show="zone.occupancy == '-1'">n.p.</span>
 							</td>
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
@@ -990,7 +990,7 @@
 							<td width="15%" align="left"><div class="colorBox" ng-show="microzone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(zone.occupancy)}"></div></td>
 							<td width="10%" align="left">
-								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy}}%</span>
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
 								<span ng-show="zone.occupancy == '-1'">n.p.</span>
 							</td>
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
@@ -1237,7 +1237,7 @@
 							<td width="20%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(area.occupancy)}"></div></td>
 							<td width="10%" align="left">
-								<span ng-show="area.occupancy != '-1'">{{area.occupancy}}%</span>
+								<span ng-show="area.occupancy != '-1'">{{area.occupancy  | doubleWithTwoDecimals}}%</span>
 								<span ng-show="area.occupancy == '-1'">n.p.</span>
 							</td>
 							<td width="15%" align="left">{{area.slotNumber}}</td>
@@ -1414,8 +1414,8 @@
 						<th width="15%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 						<th width="5%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 						<th width="10%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
-						<th width="10%" class="myCenter"><span ng-show="ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
-						<th width="10%" class="myCenter">{{ 'ps_occupiedslot' | i18n }}</th>
+						<th width="10%" class="myCenter"><span ng-show="ps_slotNumber.visible">{{ 'ps_slots' | i18n }}</span></th>
+						<th width="10%" class="myCenter" colspan="2">{{ 'ps_occupiedslot' | i18n }}</th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
@@ -1426,15 +1426,22 @@
 							<td width="5%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(pstruct.occupancyRate)}"></div></td><!-- {{area.color}} -->
 							<td width="5%" align="left">
-								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate | number:0 }}%</span>
+								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate | doubleWithTwoDecimals }}%</span>
 								<span ng-show="pstruct.occupancyRate == '-1'">n.p.</span>
 							</td>
-							<td width="10%" align="center"><span ng-show="ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
-							<td width="10%" align="center">
+							<td width="10%" align="center"><span ng-show="ps_slotNumber.visible">{{pstruct.slotNumber}}</span></td>
+							<td width="5%" align="center">
 								<span ng-show="pstruct.occupancyRate >= 0">{{pstruct.slotOccupied}}</span>
 								<span ng-show="pstruct.occupancyRate < 0">n.p.</span>		
 							</td>
-							
+							<td width="5%" align="left">
+								<span ng-show="pstruct.unusuableSlotNumber == -1">
+									ND:0
+								</span>
+								<span ng-show="pstruct.unusuableSlotNumber != -1">
+									ND:{{pstruct.unusuableSlotNumber}}
+								</span>
+							</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 							</td>
@@ -2264,6 +2271,16 @@
 									<td class="detailsListTableSXS">{{ 'ps_totalslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">{{ psDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="ps_unusuableSlot.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'ps_unusuable_slot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span ng-show="psDetails.unusuableSlotNumber != -1">{{ psDetails.unusuableSlotNumber }}</span>
+										<span ng-show="psDetails.unusuableSlotNumber == -1">0</span>
+									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>

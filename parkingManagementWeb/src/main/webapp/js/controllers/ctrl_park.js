@@ -1173,10 +1173,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return correctedPm;
 	};
 	
-	$scope.checkCorrectPaymode = function(myPm){
+	$scope.checkCorrectPaymode = function(myPm, isReq){
 		var correctedPm = true;
-		if(!myPm.cash_checked && !myPm.automated_teller_checked && !myPm.prepaid_card_checked && !myPm.parcometro_checked){
-			correctedPm = false;
+		if(isReq){
+			if(!myPm.cash_checked && !myPm.automated_teller_checked && !myPm.prepaid_card_checked && !myPm.parcometro_checked){
+				correctedPm = false;
+			}
 		}
 		return correctedPm;
 	};
@@ -3387,16 +3389,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// Update ParkingStructure Object
-	$scope.updatePstruct = function(form, ps, paymode, geo){
+	$scope.updatePstruct = function(form, ps, paymode, geo, req){
 		if(!form.$valid){
 			$scope.isInit=false;
-			if(!$scope.checkCorrectPaymode(paymode)){
+			if(!$scope.checkCorrectPaymode(paymode, req)){
 				$scope.setMyPaymentoErrMode(true);
 			} else {
 				$scope.setMyPaymentoErrMode(false);
 			}
 		} else {
-			if(!$scope.checkCorrectPaymode(paymode)){
+			if(!$scope.checkCorrectPaymode(paymode, req)){
 				$scope.isInit=false;
 				$scope.setMyPaymentoErrMode(true);
 			} else {
@@ -3997,16 +3999,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// ParkingStructure
-	$scope.createPstruct = function(form, ps, paymode, geo){
+	$scope.createPstruct = function(form, ps, paymode, geo, req){
 		if(!form.$valid){
 			$scope.isInit=false;
-			if(!$scope.checkCorrectPaymode(paymode)){
+			if(!$scope.checkCorrectPaymode(paymode, req)){
 				$scope.setMyPaymentoErrMode(true);
 			} else {
 				$scope.setMyPaymentoErrMode(false);
 			}
 		} else {
-			if(!$scope.checkCorrectPaymode(paymode)){
+			if(!$scope.checkCorrectPaymode(paymode, req)){
 				$scope.isInit=false;
 				$scope.setMyPaymentoErrMode(true);
 			} else {
