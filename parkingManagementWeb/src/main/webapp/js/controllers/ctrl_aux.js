@@ -845,6 +845,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 //			$scope.showFiltered = false;
 //		}
 		$scope.logDetails = log;
+		if(log.value.slotsHandicapped == null){
+			log.value.slotsHandicapped = 0;
+		}
+		$scope.logDetails.value.slotsPaying = log.value.slotsTotal - log.value.slotsHandicapped;
 		$scope.json_log_value = JSON.stringify(log, undefined, 4);
 	};
 	
@@ -1014,6 +1018,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getParkDetailData = function(park){
 		$scope.myParkingDetails = park;
+		if($scope.myParkingDetails.slotsHandicapped == null){
+			$scope.myParkingDetails.slotsHandicapped = 0;
+		}
+		$scope.myParkingDetails.slotsPaying = $scope.myParkingDetails.slotsTotal - $scope.myParkingDetails.slotsHandicapped;
 		$scope.initParkTimeValues(1);
 		$scope.parkLoadedAndSelected = true;
 		// to hide the messages (error or success)
@@ -1171,7 +1179,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						updateTime: $scope.getLogMillis(myParkingDetails.loghour, myParkingDetails.logtime), 
 						user: parseInt(myParkingDetails.user), 
 						slotsTotal: parseInt(myParkingDetails.slotsTotal), 
-						slotsOccupiedOnTotal: parseInt(myParkingDetails.slotsOccupiedOnTotal),
+						slotsOccupiedOnTotal: parseInt(myParkingDetails.slotsOccupiedOnPaying),	// I consider this value as the occupied on paying
+						slotsHandicapped: parseInt(myParkingDetails.slotsHandicapped),
+						slotsOccupiedOnHandicapped: parseInt(myParkingDetails.slotsOccupiedOnHandicapped),
 						slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), 
 						lastChange:myParkingDetails.lastChange
 					};
@@ -1477,17 +1487,26 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     $scope.checkCorrectParkSlots = function(park_details){
     	$scope.showMaxError = false;
     	$scope.showMaxErrorUnusuable = false;
-    	var available = park_details.slotsTotal;
+    	$scope.showMaxErrorHandicapped = false;
+    	var available = park_details.slotsTotal - park_details.slotsHandicapped;
+    	var available_handicapped = park_details.slotsHandicapped;
     	if(available!= null && available >= 0){
-    		if(available < park_details.slotsOccupiedOnTotal){
+    		if(available < park_details.slotsOccupiedOnPaying){
     			$scope.showMaxError = true;
     		}
     	}
-    	var free_all = available - park_details.slotsOccupiedOnTotal;
-    	if(free_all < park_details.slotsUnavailable){
-    		$scope.showMaxErrorUnusuable = true;
+    	if(available_handicapped!= null && available_handicapped >= 0){
+    		if(available_handicapped < park_details.slotsOccupiedOnHandicapped){
+    			$scope.showMaxErrorHandicapped = true;
+    		}
     	}
-    	if($scope.showMaxError || $scope.showMaxErrorUnusuable){
+    	if(!$scope.showMaxErrorHandicapped){
+	    	var free_all = park_details.slotsTotal - park_details.slotsOccupiedOnPaying - park_details.slotsOccupiedOnHandicapped;
+	    	if(free_all < park_details.slotsUnavailable){
+	    		$scope.showMaxErrorUnusuable = true;
+	    	}
+    	}
+    	if($scope.showMaxError || $scope.showMaxErrorUnusuable || $scope.showMaxErrorHandicapped){
     		return false;
     	} else {
     		return true;

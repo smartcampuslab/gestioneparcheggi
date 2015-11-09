@@ -471,6 +471,10 @@
     "value": "Campo Proprietario struttura obbligatorio.",
     "description": "Messaggio errore proprietario struttura obbligatorio"
 }, {
+    "key": "parkingstructure_phone_err_required",
+    "value": "Campo Telefono struttura obbligatorio.",
+    "description": "Messaggio errore telefono struttura obbligatorio"
+}, {
     "key": "parkingstructure_geometry_select_err_pattern",
     "value": "Valore posizione lat-lng non corretto",
     "description": "Messaggio errore campo geometry struttura non corretto"
@@ -1388,15 +1392,15 @@
     "description": "titolo pagina dettaglio log"
 }, {
     "key": "new_log_street",
-    "value": "Crea Log Via",
+    "value": "Crea Log Parcheggio",
     "description": "Titolo pannello in creazione log via"
 }, {
     "key": "street_name_log",
-    "value": "Nome via",
+    "value": "Nome parcheggio",
     "description": "Label per select in creazione log via"
 }, {
     "key": "street_log_placeholder",
-    "value": "Seleziona il nome della via",
+    "value": "Seleziona il nome del parcheggio",
     "description": "Placeholder per select in creazione log via"
 }, {
     "key": "street_name_select_err_required",
@@ -1430,6 +1434,10 @@
     "key": "street_unavailableslot_placeholder",
     "value": "Inserire numero posti non disponibili",
     "description": "Placeholder per posti non disponibili in creazione log via"
+}, {
+    "key": "park_handicappedslotoccupied_placeholder",
+    "value": "Inserire numero posti occupati tra i riservati ai disabili",
+    "description": "Placeholder per posti per disabili occupati in creazione log parcheggio"
 }, {
     "key": "park_unavailableslot_placeholder",
     "value": "Inserire numero posti non disponibili",
@@ -1496,7 +1504,7 @@
 	"description": "Messaggio successo in creazione log via in db"
 }, {
     "key": "new_log_parking",
-    "value": "Crea Log Parcheggio",
+    "value": "Crea Log Struttura",
     "description": "Titolo pannello in creazione log parcheggio"
 }, {
     "key": "new_log_parkingmeter",
@@ -1504,11 +1512,11 @@
     "description": "Titolo pannello in creazione log parcometro"
 }, {
     "key": "parking_name_log",
-    "value": "Nome parcheggio",
+    "value": "Nome struttura",
     "description": "Label per select in creazione log parcheggio"
 }, {
     "key": "parking_log_placeholder",
-    "value": "Seleziona il nome del parcheggio",
+    "value": "Seleziona il nome della struttura",
     "description": "Placeholder per select in creazione log parcheggio"
 }, {
     "key": "pm_code_log",
@@ -1706,6 +1714,22 @@
 	"key": "log_park_unavailable_error_max",
 	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore minore",
 	"description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log parcheggio"
+}, {
+	"key": "log_park_occupied_handicapped_error_pattern",
+	"value": "Campo 'posti per disabili occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti per disabili non corretto in creazione log parcheggio"
+}, {
+	"key": "log_park_occupied_handicapped_error_required",
+	"value": "Campo 'posti per disabili occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti per disabili obbligatorio in creazione log parcheggio"
+}, {
+	"key": "log_park_occupied_handicapped_error_min",
+	"value": "Valore non corretto nel campo 'posti per disabili occupati'. Inserire un valore maggiore",
+	"description": "Messaggio campo posti per disabili troppo piccolo in creazione log parcheggio"
+}, {
+	"key": "log_park_occupied_handicapped_error_max",
+	"value": "Valore non corretto nel campo 'posti per disabili occupati'. Inserire un valore minore",
+	"description": "Messaggio campo posti per disabili troppo grande in creazione log parcheggio"
 }, {
 	"key": "log_street_occupied_free_error_required",
 	"value": "Campo 'posti gratuiti occupati' obbligatorio. Inserire un valore numerico",

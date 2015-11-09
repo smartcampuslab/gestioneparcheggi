@@ -33,6 +33,8 @@ public class Parking implements Serializable  {
 	
 	private int slotsTotal;
 	private int slotsOccupiedOnTotal;
+	private int slotsHandicapped;
+	private int slotsOccupiedOnHandicapped;
 	private int slotsUnavailable;
 	private LastChange lastChange;
 	
@@ -54,6 +56,22 @@ public class Parking implements Serializable  {
 
 	public void setSlotsUnavailable(int mSlotsUnavailable) {
 		this.slotsUnavailable = mSlotsUnavailable;
+	}
+
+	public int getSlotsHandicapped() {
+		return slotsHandicapped;
+	}
+
+	public int getSlotsOccupiedOnHandicapped() {
+		return slotsOccupiedOnHandicapped;
+	}
+
+	public void setSlotsHandicapped(int slotsHandicapped) {
+		this.slotsHandicapped = slotsHandicapped;
+	}
+
+	public void setSlotsOccupiedOnHandicapped(int slotsOccupiedOnHandicapped) {
+		this.slotsOccupiedOnHandicapped = slotsOccupiedOnHandicapped;
 	}
 
 	public LastChange getLastChange() {
@@ -149,6 +167,8 @@ public class Parking implements Serializable  {
 		json += "\"description\":\"" + getDescription() + "\",";
 		json += "\"slotsTotal\":" + getSlotsTotal() + ",";
 		json += "\"slotsOccupiedOnTotal\":" + getSlotsOccupiedOnTotal() + ",";
+		json += "\"slotsHandicapped\":" + getSlotsHandicapped() + ",";
+		json += "\"slotsOccupiedOnHandicapped\":" + getSlotsOccupiedOnHandicapped() + ",";
 		json += "\"slotsUnavailable\":" + getSlotsUnavailable() + ",";
 		json += "\"lastChange\":" + getUpdateTime() + "";
 		json += "}";

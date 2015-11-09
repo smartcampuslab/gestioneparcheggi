@@ -549,14 +549,16 @@ public class GeoObjectManager {
 		return s;
 	}
 	
-	
-	
+
 	private Parking castPMStructureBeanToParking(ParkingStructureBean park){
 		//logger.error(String.format("Park to be casted : %s", park.toJSON()));
 		Parking p = new Parking();
 		p.setId("parking@" + park.getId_app() + "@" + park.getId());
 		p.setAgency(park.getId_app());
 		p.setSlotsTotal(park.getSlotNumber());
+		if(park.getHandicappedSlotNumber() != null){
+			p.setSlotsHandicapped(park.getHandicappedSlotNumber());
+		}
 		p.setName(park.getName());
 		if(park.getGeometry()!= null){
 			p.setPosition(new double[]{park.getGeometry().getLat(), park.getGeometry().getLng()});
