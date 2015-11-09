@@ -93,6 +93,10 @@
 							        			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
 							        		</tr>
+							        		<tr ng-show="ps_manager.visible">
+							        			<td><strong>{{ 'ps_manager' | i18n }}:</strong></td>
+							        			<td>&nbsp;{{ ps.data.manager }}</td>
+							        		</tr>
 							        		<tr ng-show="ps_management.visible">
 							        			<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.managementMode }}</td>

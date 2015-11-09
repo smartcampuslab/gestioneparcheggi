@@ -174,6 +174,8 @@ pm.service('sharedDataService', function(){
     this.microzone_type = "";
     this.marcozone_type = "";
     
+    this.ps_managers = [];
+    
     this.setZoneTypeList = function(value){
     	this.zone_type_list = value;
     };
@@ -196,7 +198,15 @@ pm.service('sharedDataService', function(){
     
     this.getMacroZoneType = function(){
     	return this.macrozone_type;
-    };    
+    };  
+    
+    this.setPsManagerVals = function(value){
+    	this.ps_managers = value;
+    };
+    
+    this.getPsManagerVals = function(){
+    	return this.ps_managers;
+    };
     
     this.setFilterTopicList = function(value){
     	this.filter_topiclist = value;

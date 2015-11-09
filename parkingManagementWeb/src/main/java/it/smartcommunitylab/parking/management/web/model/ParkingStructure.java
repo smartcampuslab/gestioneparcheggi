@@ -31,6 +31,7 @@ public class ParkingStructure {
 	private String streetReference;
 	private String managementMode;
 	private String fee_note;
+	private String manager;		// used to specify if the park is a municipality park or a private manager park
 	private Integer fee_val;	// in eurocent / hour
 	private String timeSlot;	// used in csv creation for openingTime string value
 	private OpeningTime openingTime;
@@ -195,6 +196,14 @@ public class ParkingStructure {
 		return openingTime;
 	}
 
+	public String getManager() {
+		return manager;
+	}
+
+	public void setManager(String manager) {
+		this.manager = manager;
+	}
+
 	public void setOpeningTime(OpeningTime openingTime) {
 		this.openingTime = openingTime;
 	}
@@ -206,6 +215,7 @@ public class ParkingStructure {
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"fee_note\":\"" + getFee_note() + "\",";
+		json += "\"manager\":\"" + getManager() + "\",";
 		json += "\"fee_val\":" + getFee_val() + ",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";

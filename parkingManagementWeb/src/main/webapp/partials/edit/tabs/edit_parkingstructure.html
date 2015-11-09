@@ -26,7 +26,7 @@
 						       		</tr>
 									<tr ng-show="ps_fee.visible">
 						       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
-						       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+						       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</td>
 						       			<td ng-if="ps.data.fee_val == null">&nbsp;n.p.</td>
 						       		</tr>
 						       		<tr ng-show="ps_fee.visible">
@@ -42,6 +42,10 @@
 						       			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
 						       		</tr>
+						       		<tr ng-show="ps_manager.visible">
+							        	<td><strong>{{ 'ps_manager' | i18n }}:</strong></td>
+							        	<td>&nbsp;{{ ps.data.manager }}</td>
+							        </tr>
 						       		<tr ng-show="ps_management.visible">
 						       			<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ ps.data.managementMode }}</td>
@@ -95,7 +99,7 @@
 						       		</tr>
 									<tr ng-show="ps_fee.visible">
 						       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
-						       			<td ng-if="sps.data.fee_val != null">&nbsp;{{ sps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+						       			<td ng-if="sps.data.fee_val != null">&nbsp;{{ sps.data.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</td>
 						       			<td ng-if="sps.data.fee_val == null">&nbsp;n.p.</td>
 						       		</tr>
 						       		<tr ng-show="ps_fee.visible">
@@ -111,6 +115,10 @@
 						       			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ sps.data.phoneNumber }}</td>
 						       		</tr>
+						       		<tr ng-show="ps_manager.visible">
+							        	<td><strong>{{ 'ps_manager' | i18n }}:</strong></td>
+							        	<td>&nbsp;{{ sps.data.manager }}</td>
+							        </tr>
 						       		<tr ng-show="ps_management.visible">
 						       			<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ sps.data.managementMode }}</td>
@@ -234,7 +242,7 @@
 						</tr>
 						<tr ng-show="ps_fee.visible">
 							<td class="detailsViewStructSX">{{ 'ps_fee_val' | i18n }}:</td>
-							<td ng-if="viewParkingStructure.fee_val != null" class="detailsViewStructDX">{{ viewParkingStructure.fee_val }} {{ 'euro_hour' | i18n }}</td>
+							<td ng-if="viewParkingStructure.fee_val != null" class="detailsViewStructDX">{{ viewParkingStructure.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</td>
 							<td ng-if="viewParkingStructure.fee_val == null" class="detailsViewStructDX">n.p.</td>
 						</tr>
 						<tr ng-show="ps_fee.visible">
@@ -251,6 +259,10 @@
 						<tr ng-show="ps_phoneNumber.visible">	
 							<td class="detailsViewStructSX">{{ 'ps_phone' | i18n }}:</td>
 							<td class="detailsViewStructDX">{{ viewParkingStructure.phoneNumber }}</td>
+						</tr>
+						<tr ng-show="ps_manager.visible">
+							<td class="detailsViewStructSX">{{ 'ps_manager' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.manager }}</td>
 						</tr>
 						<tr ng-show="ps_management.visible">	
 							<td class="detailsViewStructSX">{{ 'ps_management_mode' | i18n }}:</td>
@@ -426,6 +438,14 @@
 					    	<input id="phone" type="text" class="form-control" name="pPhone" ng-model="parkingStructure.phoneNumber" ng-pattern="onlyNumbers" ng-required="ps_phoneNumber.required" placeholder="{{ 'ps_phone_placeholder' | i18n }}" ><!-- phonePattern -->
 					    	<div class="field-error" ng-show="!isInit && form.pPhone.$error.pattern">{{ 'parkingstructure_phone_err_pattern' | i18n }}</div>
 					    	<div class="field-error" ng-show="!isInit && form.pPhone.$error.required">{{ 'parkingstructure_phone_err_required' | i18n }}</div>
+					   	</div>
+					   	<div class="form-group" ng-show="ps_manager.visible">
+					    	<label for="manager">{{ 'ps_manager' | i18n }}</label>
+<!-- 					    	<input id="manager" type="text" class="form-control" name="pManager" ng-model="parkingStructure.manager" ng-required="ps_manager.required" placeholder="{{ 'ps_manager_placeholder' | i18n }}" > -->
+					    	<select id="manager" name="pManager" class="form-control" ng-options="m for m in allManagers" ng-model="parkingStructure.manager" ng-required="ps_manager.required">
+					    		<option value="">{{ 'ps_manager_placeholder' | i18n }}</option>
+					    	</select>
+					    	<div class="field-error" ng-show="!isInit && form.pManager.$error.required">{{ 'parkingstructure_manager_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="ps_management.visible">
 					    	<label for="managementMode">{{ 'ps_management_mode' | i18n }}</label>

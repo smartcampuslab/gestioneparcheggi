@@ -375,6 +375,10 @@
     "value": "Telefono",
     "description": "Label telefono struttura"
 }, {
+    "key": "ps_manager",
+    "value": "Proprietario",
+    "description": "Label proprietario struttura"
+}, {
     "key": "ps_fee",
     "value": "Tariffa sosta",
     "description": "Label tariffa sosta in struttura"
@@ -462,6 +466,10 @@
     "key": "parkingstructure_phone_err_pattern",
     "value": "Campo Telefono non corretto.",
     "description": "Messaggio errore telefono struttura non corretto"
+}, {
+    "key": "parkingstructure_manager_err_required",
+    "value": "Campo Proprietario struttura obbligatorio.",
+    "description": "Messaggio errore proprietario struttura obbligatorio"
 }, {
     "key": "parkingstructure_phone_err_required",
     "value": "Campo Telefono struttura obbligatorio.",
@@ -966,6 +974,10 @@
     "key": "ps_phone_placeholder",
     "value": "Inserire il numero di telefono della struttura",
     "description": "Testo placeholder campo telefono struttura"
+}, { 
+    "key": "ps_manager_placeholder",
+    "value": "Inserire il proprietario della struttura",
+    "description": "Testo placeholder campo proprietario struttura"
 }, {
     "key": "ps_mmode_placeholder",
     "value": "Indicare la modalita' di gestione della struttura",

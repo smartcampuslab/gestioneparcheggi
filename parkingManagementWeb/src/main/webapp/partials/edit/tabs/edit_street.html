@@ -107,7 +107,7 @@
 														</tr>
 														<tr>	
 															<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-															<td>{{ s.area.fee }}</td>
+															<td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 														</tr>
 														<tr>	
 															<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -236,7 +236,7 @@
 														</tr>
 														<tr>	
 															<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-															<td>{{ s.area.fee }}</td>
+															<td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 														</tr>
 														<tr>	
 															<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -442,7 +442,7 @@
 						</tr>
 						<tr ng-show="s_areaId.visible">	
 							<td class="detailsViewStreetSX">{{ 'area_rate' | i18n }}:</td>
-							<td class="detailsViewStreetDX">{{ myArea.fee }}</td>
+							<td class="detailsViewStreetDX">{{ myArea.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 						</tr>
 						<tr ng-show="s_areaId.visible">	
 							<td class="detailsViewStreetSX">{{ 'area_time' | i18n }}:</td>

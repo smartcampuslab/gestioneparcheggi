@@ -1,4 +1,4 @@
-<div class="col-md-12" align="center" ng-init="initParkLogCreation()" ><!-- style="height: 250px" -->
+<div class="col-md-12" align="center" ng-init="initPmProfitLogCreation()" ><!-- style="height: 250px" -->
 	<div ng-show="!showManualInsertion && showDetails">
 		<h4 align="left"><strong>{{ 'log_details' | i18n }}</strong></h4>
 		<table class="table table-striped" style="width: 100%">
@@ -7,12 +7,12 @@
 				<td>{{ logDetails.objId }}</td>
 			</tr>
 			<tr>
-				<td width="30%"><strong>{{ 'log_object_name' | i18n }}</strong></td>
-				<td>{{ logDetails.value.name }}</td>
+				<td width="30%"><strong>{{ 'log_object_code' | i18n }}</strong></td>
+				<td>{{ logDetails.value.code }} - {{ logDetails.value.note }}</td>
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_type' | i18n }}</strong></td>
-				<td>{{ 'parking_type_in_lists' | i18n }}</td>
+				<td>{{ 'pm_type_in_lists' | i18n }}</td>
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_time' | i18n }}</strong></td>
@@ -41,30 +41,18 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-<!-- 					<div class="well"> -->
-						<table width="100%">
-							<tr>
-								<td width="30%"><strong>{{ 'log_total_slot' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsTotal}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_occupied_on_total' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsOccupiedOnTotal}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsUnavailable}}</td>
-							</tr>
-						</table>
-<!-- 					</div> -->
+					<table width="100%">
+						<tr>
+							<td width="30%"><strong>{{ 'ps_profit' | i18n }}</strong></td>
+							<td>{{correctEuroCent(logDetails.value.profit)}}{{ 'euro' | i18n }}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'ps_tickets' | i18n }}</strong></td>
+							<td>{{logDetails.value.tickets}}</td>
+						</tr>
+					</table>
 				</td>
 			</tr>
-<!-- 			<tr> -->
-<!-- 				<td colspan="2"><strong>{{ 'log_value' | i18n }}</strong></td> -->
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<td colspan="2"><pre ng-bind-html="json_log_value"></pre></td> -->
-<!-- 			</tr> -->
 		</table>
 		<table style="width: 100%">
 			<tr>	
@@ -75,21 +63,21 @@
 		</table>
 	</div>
 	<div ng-show="!showManualInsertion && !showDetails">
-		<div ng-show="isOccStructAddShow()">
+		<div ng-show="isProfPmAddShow()">
 			<table width="100%">
 	   			<tr>
 	   				<td width="50%" align="left">
-<!-- 	   					<h3 class="panel-title"><strong>{{ 'new_log_parking' | i18n }}</strong></h3> -->
+<!-- 	   					<h3 class="panel-title"><strong>{{ 'new_log_parkingmeter' | i18n }}</strong></h3> -->
 	   				</td>
-	   				<td width="40%" align="right">
+					<td width="40%" align="right">
 						<a href ng-click="showLogManualCreation()" class="btn btn-success" type="button">Carica Log Singolo</a>
 					</td>
-					<td width="10%" align="right">
-						<a href="#/aux/add/uploadfile/2/1" class="btn btn-success" type="button">Carica Log da File</a>
+	   				<td width="10%" align="right">
+						<a href="#/auxiliary/add/uploadfile/3/1" class="btn btn-success" type="button">Carica File Log</a>
 					</td>
 	   			</tr>
 	   		</table>
-	   	</div>	
+		</div>
 		<div class="logwrapper">
 			<table class="table table-striped" style="width: 100%">
 				<tr ng-show="getLogData().length != 0">
@@ -97,8 +85,8 @@
 					<th width="24%">{{ 'log_objId' | i18n }}</th>
 					<th width="15%">{{ 'log_type' | i18n }}</th>
 					<th width="15%">{{ 'log_time' | i18n }}</th>
-					<th width="15%">{{ 'log_author' | i18n }}</th>
-					<th width="23%">{{ 'log_object_name' | i18n }}</th>
+					<th width="8%">{{ 'log_author' | i18n }}</th>
+					<th width="30%">{{ 'log_object_code' | i18n }}</th>
 					<th width="5%"></th>
 				</tr>
 				<tbody class="animate-repeat"
@@ -109,17 +97,19 @@
 					<td width="24%" align="left">{{log.objId}}</td>
 					<td width="15%" align="left">
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'parking_type_in_lists' | i18n }}</span>
-						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">{{ 'street_type_in_lists' | i18n }}</span>
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct'">{{ 'park_profit_type_in_lists' | i18n }}</span>
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Street'">{{ 'street_type_in_lists' | i18n }}</span>
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{ 'pm_type_in_lists' | i18n }}</span>
 					</td>
 					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
-					<td width="15%" align="left">
+					<td width="8%" align="left">
 						<span ng-show="log.author == 999">{{ 'system_log_author' | i18n }}</span>
 						<span ng-show="log.author != 999">{{ log.author }}</span>
 					</td>
-					<td width="23%" align="left">
+					<td width="30%" align="left">
 <!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsTotal: {{log.value.slotsTotal}}, slotsOccupied: {{log.value.slotsOccupiedOnTotal}}, slotsUnavailable: {{log.value.slotsUnavailable}}</span> -->
 <!-- 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsFree: {{log.value.slotsFree}}, slotsOccupiedOnFree: {{log.value.slotsOccupiedOnFree}}, slotsPaying: {{log.value.slotsPaying}}, slotsOccupiedOnPaying: {{log.value.slotsOccupiedOnPaying}}, slotsTimed: {{log.value.slotsTimed}}, slotsOccupiedOnTimed: {{log.value.slotsOccupiedOnTimed}}, slotsHandicapped: {{log.value.slotsHandicapped}}</span> -->
-						{{log.value.name}}
+						{{log.value.code}} - {{log.value.note}}
 					</td>
 					<td width="5%" align="center">
 						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewDetails(2, log)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
@@ -133,8 +123,7 @@
 		</div>
 		<table width="100%">
 			<tr>
-				<td width="33%">
-				</td>
+				<td width="33%"></td>
                 <td width="34%" align="center">
                     <button class="btn btn-default"
                         ng-disabled="geCturrentPage() == 0"
@@ -155,44 +144,48 @@
 	<div class="col-md-12" ng-show="showManualInsertion">
 		<form role="form" name="form">
 			<div class="panel panel-default" width="90%">
-			  	<table width="100%">
+		   		<table width="100%">
 		   			<tr>
 		   				<td width="50%" align="left">
-		   					<h3 class="panel-title"><strong>{{ 'new_log_parking' | i18n }}</strong></h3>
+		   					<h3 class="panel-title"><strong>{{ 'new_log_parkingmeter' | i18n }}</strong></h3>
 		   				</td>
 		   				<td width="50%" align="right">
 	   						<a href ng-click="hideLogManualCreation()" type="button" class="btn btn-danger btn-xs" ><i class="glyphicon glyphicon-remove"></i></a>
-	   					</td>	
+	   					</td>
 		   			</tr>
 		   		</table>
 			  	<div class="panel-body">
 			  		<div class="form-group">
-				    	<label for="parkN">{{ 'parking_name_log' | i18n }}</label>
-				    	<select id="parkN" name="parkN" class="form-control" ng-options="p as p.name for p in allParking" ng-model="myParking" required ng-change="getParkDetailData(myParking)">
-				    		<option value="">{{ 'parking_log_placeholder' | i18n }}</option>
+				    	<label for="parkN">{{ 'pm_code_log' | i18n }}</label>
+				    	<select id="parkN" name="parkN" class="form-control" ng-options="p as p.code for p in allPmProfit | orderBy:'code'" ng-model="myPm" required ng-change="getPmProfitDetailData(myPm)">
+				    		<option value="">{{ 'pm_log_placeholder' | i18n }}</option>
 				    	</select>
 				   		<div class="alert alert-danger" ng-show="!isInit && form.parkN.$error.required">{{ 'parking_name_select_err_required' | i18n }}</div>
 					</div>
-					<table width="100%" ng-show="parkLoadedAndSelected">
+					<table width="100%" ng-show="pmProfitLoadedAndSelected">
 						<tr>
 							<td><strong>{{ 'park_id' | i18n }}</strong></td>
-							<td>{{ myParkingDetails.id }}</td>
+							<td>{{ myPmProfitDetails.id }}</td>
 						</tr>
 						<tr>
-							<td><strong>{{ 'park_name' | i18n }}</strong></td>
-							<td>{{ myParkingDetails.name }}</td>
+							<td><strong>{{ 'pm_code' | i18n }}</strong></td>
+							<td>{{ myPmProfitDetails.code }}</td>
+						</tr>
+						<tr>
+							<td><strong>{{ 'pm_note' | i18n }}</strong></td>
+							<td>{{ myPmProfitDetails.note }}</td>
 						</tr>
 						<tr>
 							<td colspan="2"><hr/></td>
 						</tr>
 					</table>
-<!-- 					<div class="form-group" ng-show="parkLoadedAndSelected"> -->
+<!-- 					<div class="form-group" ng-show="pmProfitLoadedAndSelected"> -->
 <!-- 						<label for="totalSlot">{{ 'parking_user_log' | i18n }}</label> -->
-<!-- 				    	<input id="totalSlot" type="text" class="form-control" name="sUserLog" ng-model="myParkingDetails.user" ng-pattern="onlyNumbers" placeholder="{{ 'street_usercode_placeholder' | i18n }}" required > -->
+<!-- 				    	<input id="totalSlot" type="text" class="form-control" name="sUserLog" ng-model="myPmProfitDetails.user" ng-pattern="onlyNumbers" placeholder="{{ 'street_usercode_placeholder' | i18n }}" required > -->
 <!-- 					   	<div class="alert alert-danger" ng-show="!isInit && form.sUserLog.$error.required">{{ 'parking_userlog_err_required' | i18n }}</div> -->
 <!-- 					   	<div class="alert alert-danger" ng-show="!isInit && form.sUserLog.$error.pattern">{{ 'parking_userlog_pattern' | i18n }}</div> -->
 <!-- 					</div> -->
-					<div class="form-group" ng-show="parkLoadedAndSelected">
+					<div class="form-group" ng-show="pmProfitLoadedAndSelected">
 						<label class="group-label" for="logtime">{{ 'parking_time_log' | i18n }}:</label>
 				   		<div class="panel panel-default" width="90%">
 					   		<div class="panel-body">
@@ -200,24 +193,24 @@
 									<tr>
 										<td width="6%"><strong>{{ 'parking_day_log' | i18n }}: </strong></td>
 										<td width="39%">
-											<input id="logtime" name="pLogTime" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myParkingDetails.loghour" is-open="pLogtime.open" ng-click="pLogtime.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required />
+											<input id="logtime" name="pmLogTime" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myPmProfitDetails.loghour" is-open="pmLogtime.open" ng-click="pmLogtime.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required />
 										</td>
 										<td width="5%" align="center"><strong>{{ 'log_period_time' | i18n }}: </strong></td>
 										<td width="50%">
-											<timepicker id="time" name="pLogOra" ng-model="myParkingDetails.logtime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian" required></timepicker>
+											<timepicker id="time" name="pmLogOra" ng-model="myPmProfitDetails.logtime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian" required></timepicker>
 										</td>
 									</tr>
 									<tr>
 										<td colspan="4">
-											<div class="alert alert-danger" ng-show="!isInit && form.pLogTime.$error.required">{{ 'parking_timelog_err_required' | i18n }}</div>
-											<div class="alert alert-danger" ng-show="!isInit && form.pLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div>
+											<div class="alert alert-danger" ng-show="!isInit && form.pmLogTime.$error.required">{{ 'parking_timelog_err_required' | i18n }}</div>
+											<div class="alert alert-danger" ng-show="!isInit && form.pmLogOra.$error.required">{{ 'log_time_error_required' | i18n }}</div>
 										</td>
 									</tr>
 								</table>
 							</div>
 						</div>
 				    </div>
-					<div ng-show="parkLoadedAndSelected">
+					<div ng-show="pmProfitLoadedAndSelected">
 						<label class="group-label" >{{ 'log_period' | i18n }}</label>
 				   		<div class="panel panel-default" width="90%">
 					   		<div class="panel-body">
@@ -225,21 +218,21 @@
 						    		<tr>
 						    			<td width="6%"><strong>{{ 'log_period_from_date' | i18n }}: </strong></td>
 						    			<td width="39%">
-						    				<input id="logperiodf" name="psLogPeriodF" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myParkingDetails.logPeriodFrom" is-open="plogperiodf.open" ng-click="plogperiodf.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+						    				<input id="logperiodf" name="pmLogPeriodF" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myPmProfitDetails.logPeriodFrom" is-open="pmlogperiodf.open" ng-click="pmlogperiodf.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
 						    			</td>
 						    			<td width="5%" align="center"><strong>{{ 'log_period_time' | i18n }}: </strong></td>
 						    			<td width="50%">
-						    				<timepicker ng-model="myParkingDetails.startTimePeriod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+						    				<timepicker ng-model="myPmProfitDetails.startTimePeriod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
 						    			</td>
 						    		</tr>
 						    		<tr>
 						    			<td width="6%"><strong>{{ 'log_period_to_date' | i18n }}: </strong></td>
 						    			<td width="39%">
-						    				<input id="logperiodt" name="psLogPeriodT" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myParkingDetails.logPeriodTo" is-open="plogperiodt.open" ng-click="plogperiodt.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+						    				<input id="logperiodt" name="pmLogPeriodT" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="myPmProfitDetails.logPeriodTo" is-open="pmlogperiodt.open" ng-click="pmlogperiodt.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
 						    			</td>
 						    			<td width="5%" align="center"><strong>{{ 'log_period_time' | i18n }}: </strong></td>
 						    			<td width="50%">
-						    				<timepicker ng-model="myParkingDetails.endTimePeriod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+						    				<timepicker ng-model="myPmProfitDetails.endTimePeriod" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
 						    			</td>
 						    		</tr>
 						    		<tr ng-show="(showErrorFromMajorTo)">
@@ -256,71 +249,46 @@
 					   		</div>
 					   	</div>
 					</div>
-					<div ng-show="parkLoadedAndSelected">
-					   	<label class="group-label"  for="totalSlot">{{ 'parking_slots' | i18n }}</label>
+					<div ng-show="pmProfitLoadedAndSelected">
+					   	<label class="group-label" for="totalSlot">{{ 'parking_profit' | i18n }}</label>
 					   	<div class="panel panel-default" width="90%">
 					   		<div class="panel-body">
 					   			<table width="100%">
 					   				<tr>
-					   					<td width="25%"><strong>{{ 'parking_totalslot' | i18n }}</strong></td>
-					   					<td width="5%">{{ myParkingDetails.slotsTotal }}</td>
-					   					<td width="20%"><strong>{{ 'parking_occupied_slot' | i18n }}</strong></td>
-					   					<td width="50%"><input id="occupiedSlot" type="number" class="form-control" name="pOccupiedslot" ng-model="myParkingDetails.slotsOccupiedOnTotal" ng-pattern="onlyNumbers" placeholder="{{ 'parking_slotoccupied_placeholder' | i18n }}" min="0" required ng-change="checkCorrectParkSlots(myParkingDetails)"></td>
+					   					<td width="35%"><strong>{{ 'parking_profit_val' | i18n }}</strong></td>
+					   					<td><input id="profitVal" type="number" class="form-control" name="pmProfit" ng-model="myPmProfitDetails.profit" ng-pattern="onlyNumbers" placeholder="{{ 'parking_profit_placeholder' | i18n }}" min="0" required></td>
 					   				</tr>
-					   				<tr ng-show="!isInit && form.pOccupiedslot.$error.pattern">
-					   					<td colspan="3" width="50%"></td>
-					   					<td align="center">
-					   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_pattern' | i18n }}</div>
+					   				<tr ng-show="!isInit && form.pmProfit.$error.pattern">
+					   					<td colspan="2">
+					   						<div class="alert alert-danger">{{ 'log_parking_profit_error_pattern' | i18n }}</div>
 					   					</td>
 					   				</tr>
-					   				<tr ng-show="!isInit && form.pOccupiedslot.$error.required">
-					   					<td colspan="3" width="50%"></td>
-					   					<td align="center">
-					   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_required' | i18n }}</div>
-					   					</td>
-					   				</tr>
-					   				<tr ng-show="!isInit && form.pOccupiedslot.$error.min">
-					   					<td colspan="3" width="50%"></td>
-					   					<td align="center">
-					   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_min' | i18n }}</div>
-					   					</td>
-					   				</tr>
-					   				<tr ng-show="showMaxError">
-					   					<td colspan="3" width="50%"></td>
-					   					<td align="center">
-					   						<div class="alert alert-danger">{{ 'log_parking_occupied_error_max' | i18n }}</div>
+					   				<tr ng-show="!isInit && form.pmProfit.$error.required">
+					   					<td colspan="2">
+					   						<div class="alert alert-danger">{{ 'log_parking_profit_error_required' | i18n }}</div>
 					   					</td>
 					   				</tr>
 					   				<tr>
-				   						<td><strong>{{ 'parking_unavailable_slot' | i18n }}</strong></td>
-				   						<td></td><!-- {{ myParkingDetails.slotsUnavailable }} -->
-				   						<td></td>
-				   						<td><input id="unavailableSlots" type="number" class="form-control" name="pUnavalableSlots" ng-pattern="onlyNumbers" ng-model="myParkingDetails.slotsUnavailable" placeholder="{{ 'park_unavailableslot_placeholder' | i18n }}" min="0" ng-change="checkCorrectParkSlots(myParkingDetails)"></td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.pUnavalableSlots.$error.pattern">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_park_unavailable_error_pattern' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.pOccupiedslotOnFree.$error.min">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_park_unavailable_error_min' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="showMaxErrorUnusuable">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_park_unavailable_error_max' | i18n }}</div>
-				   						</td>
-				   					</tr>
+					   					<td width="35%"><strong>{{ 'parking_tickets_val' | i18n }}</strong></td>
+					   					<td><input id="ticketNum" type="number" class="form-control" name="pmTickets" ng-model="myPmProfitDetails.tickets" ng-pattern="onlyNumbers" placeholder="{{ 'parking_tickets_placeholder' | i18n }}" min="0" required></td>
+					   				</tr>
+					   				<tr ng-show="!isInit && form.pmTickets.$error.pattern">
+					   					<td colspan="2">
+					   						<div class="alert alert-danger">{{ 'log_parking_tickets_error_pattern' | i18n }}</div>
+					   					</td>
+					   				</tr>
+					   				<tr ng-show="!isInit && form.pmTickets.$error.required">
+					   					<td colspan="2">
+					   						<div class="alert alert-danger">{{ 'log_parking_tickets_error_required' | i18n }}</div>
+					   					</td>
+					   				</tr>
 					   			</table>
-					   	</div>
-				</div>
-				<div class="alert alert-danger" ng-show="showUpdatingPErrorMessage">{{ 'err_in_log_parking_inserting' | i18n }}</div>
-				<div class="alert alert-success" ng-show="showUpdatingPSuccessMessage">{{ 'succ_in_log_parking_inserting' | i18n }}</div>
-		   		<table width="97%">			
+					   		</div>
+					   	</div>	
+					</div>
+				<div class="alert alert-danger" ng-show="showUpdatingPMErrorMessage">{{ 'err_in_log_parking_inserting' | i18n }}</div>
+				<div class="alert alert-success" ng-show="showUpdatingPMSuccessMessage">{{ 'succ_in_log_parking_inserting' | i18n }}</div>
+		   		<table width="97%" ng-show="pmProfitLoadedAndSelected">			
 				   	<tr>
 				   		<td width="85%"></td>
 				   		<td width="8%" align="center">
@@ -328,7 +296,7 @@
 				   			<a href ng-click="hideLogManualCreation()" type="button" class="btn btn-default btn-lg" >{{ 'text_btn_close' | i18n }}</a>
 				   		</td>
 				   		<td width="7%" align="right">
-				   			<button type="button" class="btn btn-primary btn-lg" ng-click="insertParkingLog(form, myParkingDetails)">{{ 'text_btn_save' | i18n  }}</button>
+				   			<button type="button" class="btn btn-primary btn-lg" ng-click="insertPmProfitLog(form, myPmProfitDetails)">{{ 'text_btn_save' | i18n  }}</button>
 				   		</td>
 					</tr>
 					<tr>
@@ -336,6 +304,6 @@
 					</tr>
 				</table>
 		   	</div>
-	   	</form>	
-	</div>
+	   	</form>
+	</div>	
 </div>

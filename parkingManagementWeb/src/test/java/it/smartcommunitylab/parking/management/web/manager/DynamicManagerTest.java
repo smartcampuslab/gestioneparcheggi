@@ -394,11 +394,15 @@ public class DynamicManagerTest {
 //					}
 //					long updateTime = myOldStreets.get(i).getTime() + MILLISINYEAR;	//2013 + 1 anno
 //					
-//					s.setSlotsFree(freeSlots);
-//					s.setSlotsOccupiedOnFree(occupiedOnFree);
-//					s.setSlotsPaying(slotsPaying);
+//					//s.setSlotsFree(freeSlots);
+//					if(s.getSlotsFree() > 0){
+//						s.setSlotsOccupiedOnFree(occupiedOnFree);
+//					} else {
+//						s.setSlotsOccupiedOnFreeSigned(occupiedOnFree);
+//					}
+//					//s.setSlotsPaying(slotsPaying);
 //					s.setSlotsOccupiedOnPaying(occupiedOnPaying);
-//					s.setSlotsTimed(slotsTimed);
+//					//s.setSlotsTimed(slotsTimed);
 //					s.setSlotsOccupiedOnTimed(occupiedOnTimed);
 //					if(unavailableSlot > 0){
 //						System.out.println("unavailableSlots " + unavailableSlot);
@@ -467,11 +471,11 @@ public class DynamicManagerTest {
 //					}
 //					long updateTime = myOldStreets.get(i).getTime() + MILLISINYEAR;	//2013 + 1 anno
 //					
-//					s.setSlotsFree(freeSlots);
+//					//s.setSlotsFree(freeSlots);
 //					s.setSlotsOccupiedOnFree(occupiedOnFree);
-//					s.setSlotsPaying(slotsPaying);
+//					//s.setSlotsPaying(slotsPaying);
 //					s.setSlotsOccupiedOnPaying(occupiedOnPaying);
-//					s.setSlotsTimed(slotsTimed);
+//					//s.setSlotsTimed(slotsTimed);
 //					s.setSlotsOccupiedOnTimed(occupiedOnTimed);
 //					if(unavailableSlot > 0){
 //						System.out.println("unavailableSlots " + unavailableSlot);

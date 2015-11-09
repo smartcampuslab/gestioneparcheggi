@@ -1044,6 +1044,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		if(attributes[i].code == 'managementMode'){
     			$scope.ps_management = attributes[i];
     		}
+    		if(attributes[i].code == 'manager'){
+    			$scope.ps_manager = attributes[i];
+    		}
     		if(attributes[i].code == 'paymentMode'){
     			$scope.ps_payment = attributes[i];
     		}
@@ -4002,6 +4005,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						name: oldParks[i].name,
 						streetReference: oldParks[i].streetReference,
 						managementMode: oldParks[i].managementMode,
+						manager: oldParks[i].manager,
 						fee: oldParks[i].fee,
 						timeSlot: oldParks[i].timeSlot,
 						slotNumber: newParks[j].slotNumber,
@@ -4041,6 +4045,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						name: occupancyStructs[i].name,
 						streetReference: occupancyStructs[i].streetReference,
 						managementMode: occupancyStructs[i].managementMode,
+						manager: occupancyStructs[i].manager,
 						fee_val: $scope.correctFeeData(occupancyStructs[i].fee_val),
 						fee_note: occupancyStructs[i].fee_note,
 						timeSlot: occupancyStructs[i].timeSlot,
@@ -7984,6 +7989,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var dowType = sharedDataService.getFilterDowType();
 			var dowVal = sharedDataService.getFilterDowVal();
 			var hour = sharedDataService.getFilterHour();
+			var visVal = sharedDataService.getFilterVis();
+			var valueType = 2;
+			if(visVal == "vis_last_value"){
+				valueType = 1;
+			}
 			//-----------------------------------------------------
 		
 			switch(object){
@@ -7993,7 +8003,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						// occupation data (in pm no)
 					} else if(type == 2){
 						// profit data
-						$scope.getHistorycalProfitPmFromDb($scope.pmDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalProfitPmFromDb($scope.pmDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 3){
 						// time cost data (in pm no)
 					}
@@ -8002,13 +8012,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					// ps
 					if(type == 1){
 						// occupation data
-						$scope.getHistorycalOccupancyParkingFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalOccupancyParkingFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 2){
 						// profit data
-						$scope.getHistorycalProfitPsFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalProfitPsFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 3){
 						// time cost data
-						$scope.getHistorycalTimeCostParkingFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalTimeCostParkingFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					}
 					break;
 				case 3: 
@@ -8016,52 +8026,52 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					if(type == 1){
 						// occupation data
 						// Here I have to create the historycal data
-						$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 2){
 						// profit data
-						$scope.getHistorycalProfitStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalProfitStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 3){
 						// time cost data
-						$scope.getHistorycalTimeCostStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalTimeCostStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					}
 					break;
 				case 4: 
 					// area
 					if(type == 1){
 						// occupation data
-						$scope.getHistorycalOccupancyAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalOccupancyAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 2){
 						// profit data
-						$scope.getHistorycalProfitAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalProfitAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 3){
 						// time cost data
-						$scope.getHistorycalTimeCostAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalTimeCostAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					}
 					break;
 				case 5: 
 					// zone
 					if(type == 1){
 						// occupation data
-						$scope.getHistorycalOccupancyZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalOccupancyZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 2){
 						// profit data
-						$scope.getHistorycalProfitZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalProfitZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 3){
 						// time cost data
-						$scope.getHistorycalTimeCostZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalTimeCostZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					}
 					break;
 				case 6: 
 					// microzone
 					if(type == 1){
 						// occupation data
-						$scope.getHistorycalOccupancyMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalOccupancyMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 2){
 						// profit data
-						$scope.getHistorycalProfitMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalProfitMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					} else if(type == 3){
 						// time cost data
-						$scope.getHistorycalTimeCostMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+						$scope.getHistorycalTimeCostMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 					}
 					break;	
 			}
@@ -8076,6 +8086,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var dowType = sharedDataService.getFilterDowType();
 		var dowVal = sharedDataService.getFilterDowVal();
 		var hour = sharedDataService.getFilterHour();
+		var visVal = sharedDataService.getFilterVis();
+		var valueType = 2;
+		if(visVal == "vis_last_value"){
+			valueType = 1;
+		}
 		//-----------------------------------------------------
 		
 		switch(object){
@@ -8085,7 +8100,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				// occupation data (in pm no)
 			} else if(type == 2){
 				// profit data
-				$scope.getHistorycalProfitPmFromDb($scope.pmDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalProfitPmFromDb($scope.pmDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 3){
 				// time cost data (in pm no)
 			}
@@ -8094,65 +8109,65 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			// ps
 			if(type == 1){
 				// occupation data
-				$scope.getHistorycalOccupancyParkingFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalOccupancyParkingFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 2){
 				// profit data
-				$scope.getHistorycalProfitPsFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalProfitPsFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 3){
 				// time cost data
-				$scope.getHistorycalTimeCostParkingFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalTimeCostParkingFromDb($scope.psDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			}
 			break;
 		case 3: 
 			// street
 			if(type == 1){
 				// occupation data
-				$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalOccupancyStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 2){
 				// profit data
-				$scope.getHistorycalProfitStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalProfitStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 3){
 				// time cost data
-				$scope.getHistorycalTimeCostStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalTimeCostStreetFromDb($scope.sDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			}
 			break;
 		case 4: 
 			// area
 			if(type == 1){
 				// occupation data
-				$scope.getHistorycalOccupancyAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalOccupancyAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 2){
 				// profit data
-				$scope.getHistorycalProfitAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalProfitAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 3){
 				// time cost data
-				$scope.getHistorycalTimeCostAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalTimeCostAreaFromDb($scope.aDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			}
 			break;
 		case 5: 
 			// zone
 			if(type == 1){
 				// occupation data
-				$scope.getHistorycalOccupancyZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalOccupancyZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 2){
 				// profit data
-				$scope.getHistorycalProfitZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalProfitZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 3){
 				// time cost data
-				$scope.getHistorycalTimeCostZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalTimeCostZoneFromDb($scope.zDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			}
 			break;
 		case 6: 
 			// microzone
 			if(type == 1){
 				// occupation data
-				$scope.getHistorycalOccupancyMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalOccupancyMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 2){
 				// profit data
-				$scope.getHistorycalProfitMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalProfitMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			} else if(type == 3){
 				// time cost data
-				$scope.getHistorycalTimeCostMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, 1);
+				$scope.getHistorycalTimeCostMicroZoneFromDb($scope.microZDetails.id, verticalVal, orizontalVal, year, month, dowVal, dowType, hour, valueType);
 			}
 			break;	
 		}

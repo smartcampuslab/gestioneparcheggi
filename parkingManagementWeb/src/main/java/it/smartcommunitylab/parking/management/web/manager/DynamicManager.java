@@ -1765,6 +1765,8 @@ public class DynamicManager {
 	
 	public String[][] getHistorycalDataFromObject(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
 		//StreetBean s = findStreet(objectId);
+		logger.info("Historical street data type : " + valueType);
+		
 		String sId = "";
 		String psOccId = "";
 		String psProfId = "";

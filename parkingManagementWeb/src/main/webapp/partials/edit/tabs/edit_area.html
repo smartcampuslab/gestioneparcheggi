@@ -116,7 +116,7 @@
 			<!-- 					ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageA*maxPractices | limitTo:maxPractices"> -->
 								<tr>
 									<td width="25%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
-									<td width="14%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
+									<td width="14%" align="left"><span ng-show="a_fee.visible">{{area.fee | euroVal}} {{ 'euro_hour' | i18n }}</span></td>
 									<td width="31%" align="left"><span ng-show="a_timeSlot.visible">{{area.timeSlot}}</span></td>
 									<td width="10%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 									<td width="20%" align="center">
@@ -154,7 +154,7 @@
 						</tr>
 						<tr ng-show="a_fee.visible">	
 							<td class="detailsViewAreaSX">{{ 'area_rate' | i18n }}:</td>
-							<td class="detailsViewAreaDX">{{ viewArea.fee }} {{ 'euro_hour' | i18n }}</td>
+							<td class="detailsViewAreaDX">{{ viewArea.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 						</tr>
 						<tr ng-show="a_timeSlot.visible">	
 							<td class="detailsViewAreaSX">{{ 'area_time' | i18n }}:</td>

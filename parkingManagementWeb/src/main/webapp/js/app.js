@@ -54,8 +54,8 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'ParkCtrl',
     		controllerAs: 'park_ctrl'
     	})
-    	.when('/aux/home', {
-    		templateUrl: 'partials/aux/home.html',
+    	.when('/auxiliary/home', {
+    		templateUrl: 'partials/auxiliary/home.html',
     		controller: 'MainCtrl',
     		controllerAs: 'main'
     	})
@@ -89,18 +89,18 @@ pm.config(['$routeProvider', '$locationProvider',
 //    		controller: 'ViewCtrlGmap',
 //    		controllerAs: 'view_ctrl_gmap'
 //    	})
-    	.when('/aux/logs/:id', {
-    		templateUrl: 'partials/aux/logs.html',
+    	.when('/auxiliary/logs/:id', {
+    		templateUrl: 'partials/auxiliary/logs.html',
     		controller: 'AuxCtrl',
     		controllerAs: 'aux_ctrl'
     	})
-    	.when('/aux/add/:at_id', {
-    		templateUrl: 'partials/aux/add.html',
+    	.when('/auxiliary/add/:at_id', {
+    		templateUrl: 'partials/auxiliary/add.html',
     		controller: 'AuxCtrl',
     		controllerAs: 'aux_ctrl'
     	})
-    	.when('/aux/add/uploadfile/:objtype/:objperiod', {
-    		templateUrl: 'partials/aux/upload/upload_file.html',
+    	.when('/auxiliary/add/uploadfile/:objtype/:objperiod', {
+    		templateUrl: 'partials/auxiliary/upload/upload_file.html',
     		controller: 'AuxCtrl',
     		controllerAs: 'aux_ctrl'
     	})

@@ -453,6 +453,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: manager
+          editable: true
+          required: true
+          visible: true
         - code: paymentMode
           editable: true
           required: false

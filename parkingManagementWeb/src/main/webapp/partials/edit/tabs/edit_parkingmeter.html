@@ -43,7 +43,7 @@
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ pm.area.fee }}</td>
+																	<td>{{ pm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -97,7 +97,7 @@
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ spm.area.fee }}</td>
+																	<td>{{ spm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -253,7 +253,7 @@
 							</tr>
 							<tr ng-show="pm_rateArea.visible">	
 								<td class="detailsViewParkmeterSX">{{ 'area_rate' | i18n }}:</td>
-								<td class="detailsViewParkmeterDX">{{ myArea.fee }}</td>
+								<td class="detailsViewParkmeterDX">{{ myArea.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 							</tr>
 							<tr ng-show="pm_rateArea.visible">	
 								<td class="detailsViewParkmeterSX">{{ 'area_time' | i18n }}:</td>

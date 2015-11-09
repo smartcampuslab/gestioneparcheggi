@@ -294,6 +294,12 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	sharedDataService.setSurname(user_surname);
     }
     
+    $scope.initPsManagers = function(vals){
+    	var tmp = [];
+    	tmp = vals.split(",");
+    	return tmp;
+    };
+    
     sharedDataService.setConfAppId(conf_app_id);
     //sharedDataService.setConfUrlWs(conf_url_ws);
     sharedDataService.setConfMapCenter(conf_map_center);
@@ -304,6 +310,8 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     sharedDataService.setZoneTypeList(zone_types);
     sharedDataService.setMicroZoneType(conf_microzone_type);
     sharedDataService.setMacroZoneType(conf_macrozone_type);
+    var ps_manager_vals = $scope.initPsManagers(conf_ps_managers);
+    sharedDataService.setPsManagerVals(ps_manager_vals);
     
     $scope.widget_inport_url = conf_widget_url + "/viewall/" + conf_app_id;
  

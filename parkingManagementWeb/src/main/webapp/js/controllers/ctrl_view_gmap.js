@@ -209,6 +209,9 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'managementMode'){
     			$scope.ps_management = attributes[i];
     		}
+    		if(attributes[i].code == 'manager'){
+    			$scope.ps_manager = attributes[i];
+    		}
     		if(attributes[i].code == 'paymentMode'){
     			$scope.ps_payment = attributes[i];
     		}

@@ -396,7 +396,7 @@
 					<tr>
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
+						<td class="detailsTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
@@ -424,11 +424,16 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
 					</tr>
+					<tr ng-show="ps_manager.visible">
+						<td class="detailsTitleTableSX">{{ 'ps_manager' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">{{ psDetails.data.manager }}</td>	
+					</tr>
 					<tr ng-show="ps_fee.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td ng-if="psDetails.data.fee_val != null" class="detailsTitleTableDX">
-							{{ psDetails.data.fee_val }} {{ 'euro_hour' | i18n }}
+							{{ psDetails.data.fee_val | euroVal }} {{ 'euro_hour' | i18n }}
 						</td>
 						<td ng-if="psDetails.data.fee_val == null" class="detailsTitleTableDX">
 							n.p.
@@ -586,7 +591,7 @@
 					<tr>
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ sDetails.area.fee }}</td>
+						<td class="detailsTableDX">{{ sDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'area_time' | i18n }}:</td>
@@ -716,7 +721,7 @@
 					<tr ng-show="a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
+						<td class="detailsTableDX">{{ aDetails.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr ng-show="a_timeSlot.visible">
 						<td class="detailsTableSX">{{ 'area_time' | i18n }}:</td>
@@ -792,7 +797,7 @@
 					<tr>
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
+						<td class="detailsTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
@@ -1037,7 +1042,7 @@
 					<tr ng-show="a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
+						<td class="detailsTableDX">{{ aDetails.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'area_total_slots' | i18n }}:</td>
@@ -1107,7 +1112,7 @@
 					<tr>
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ pmDetails.area.fee }}</td>
+						<td class="detailsTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
@@ -1276,7 +1281,7 @@
 						<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) | euroVal }} {{ 'euro' | i18n }}</span>
 							<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
 						</td>
 					</tr>
@@ -1318,7 +1323,7 @@
 						<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-if="microZDetails.data.profit != -1">&nbsp;{{ correctEuroCent(microZDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="microZDetails.data.profit != -1">&nbsp;{{ correctEuroCent(microZDetails.data.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 							<span ng-if="microZDetails.data.profit == -1">&nbsp;n.p.</span>
 						</td>
 					</tr>
@@ -1344,7 +1349,7 @@
 					<tr ng-show="a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
+						<td class="detailsTableDX">{{ aDetails.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'area_total_slots' | i18n }}:</td>
@@ -1365,7 +1370,7 @@
 						<td class="detailsTableSX">{{ 'area_profit' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-if="aDetails.data.profit != -1">&nbsp;{{ correctEuroCent(aDetails.data.profit) }}{{ 'euro' | i18n }}</span>
+							<span ng-if="aDetails.data.profit != -1">&nbsp;{{ correctEuroCent(aDetails.data.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 							<span ng-if="aDetails.data.profit == -1">&nbsp;n.p.</span>
 						</td>
 					</tr>
@@ -1615,7 +1620,7 @@
 					<tr ng-show="a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ aDetails.data.fee }}</td>
+						<td class="detailsTableDX">{{ aDetails.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'area_total_slots' | i18n }}:</td>

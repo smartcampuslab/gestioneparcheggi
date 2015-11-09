@@ -19,7 +19,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.maxMicroZones = 8;
     $scope.maxBPoints = 11;
     
-    // DB type for zone. I have to implement a good solution for types
+    // DB type for zone
     var macrozoneType = "";	//macrozona kml
     var microzoneType = "";	//microzona
     
@@ -443,6 +443,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     		if(attributes[i].code == 'managementMode'){
     			$scope.ps_management = attributes[i];
+    		}
+    		if(attributes[i].code == 'manager'){
+    			$scope.ps_manager = attributes[i];
     		}
     		if(attributes[i].code == 'paymentMode'){
     			$scope.ps_payment = attributes[i];
@@ -2442,6 +2445,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.editPsMarkers = [];
 		$scope.newPsMarkers = [];
 		
+		$scope.allManagers = sharedDataService.getPsManagerVals();
+		
 		$scope.myPayment = {
 			cash_checked: false,
 			automated_teller_checked: false,
@@ -3440,6 +3445,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					fee_note: ps.fee_note,
 					timeSlot: ps.timeSlot,
 					openingTime: openingPeriod,
+					manager: ps.manager,
 					managementMode: ps.managementMode,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: $scope.correctMyPaymentMode(paymode),
@@ -4048,6 +4054,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					timeSlot : ps.timeSlot,
 					openingTime: openingPeriod,
 					managementMode: ps.managementMode,
+					manager: ps.manager,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: $scope.correctMyPaymentMode(paymode),
 					slotNumber: ps.slotNumber,

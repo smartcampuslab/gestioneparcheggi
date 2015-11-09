@@ -335,19 +335,19 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   			$scope.loadFluxAttributes(flux_obj);	
 		   			for(var j = 0; j < flux_obj.length; j++){
 		   				if(flux_obj[j].code == "occupancyStreet"){
-		   					street_occ_tab_obj =  { title:'Rilevazioni occupazione parcheggi', index: 1, content:"partials/aux/logs/street_logs.html", active: false, path: "/tplog/streets" };
+		   					street_occ_tab_obj =  { title:'Rilevazioni occupazione parcheggi', index: 1, content:"partials/auxiliary/logs/street_logs.html", active: false, path: "/tplog/streets" };
 		   				}
 		   				if(flux_obj[j].code == "occupancyStruct"){
-		   					struct_occ_tab_obj = { title:'Rilevazioni occupazione strutture', index: 2, content:"partials/aux/logs/parking_logs.html", active: false, path: "/tplog/parkings" };
+		   					struct_occ_tab_obj = { title:'Rilevazioni occupazione strutture', index: 2, content:"partials/auxiliary/logs/parking_logs.html", active: false, path: "/tplog/parkings" };
 		   				}
 		   				if(flux_obj[j].code == "profitParkingMeter"){
-		   					pm_profit_tab_obj =  { title:'Rilevazioni ricavi parcometri', index: 3, content:"partials/aux/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" };
+		   					pm_profit_tab_obj =  { title:'Rilevazioni ricavi parcometri', index: 3, content:"partials/auxiliary/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" };
 		   				}
 		   				if(flux_obj[j].code == "profitStruct"){
-		   					struct_profit_tab_obj =  { title:'Rilevazioni ricavi strutture', index: 4, content:"partials/aux/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" };
+		   					struct_profit_tab_obj =  { title:'Rilevazioni ricavi strutture', index: 4, content:"partials/auxiliary/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" };
 		   				}
 		   				if(flux_obj[j].code == "allLogs"){
-		   					all_logs_tab_obj =  { title:'Storico Rilevazioni', index: 5, content:"partials/aux/logs/global_logs.html", active: true, path: "/tplog/all"};
+		   					all_logs_tab_obj =  { title:'Storico Rilevazioni', index: 5, content:"partials/auxiliary/logs/global_logs.html", active: true, path: "/tplog/all"};
 		   				}
 		   			}
 		   		}
@@ -548,6 +548,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     		}
     		if(attributes[i].code == 'managementMode'){
     			$scope.ps_management = attributes[i];
+    		}
+    		if(attributes[i].code == 'manager'){
+    			$scope.ps_manager = attributes[i];
     		}
     		if(attributes[i].code == 'paymentMode'){
     			$scope.ps_payment = attributes[i];

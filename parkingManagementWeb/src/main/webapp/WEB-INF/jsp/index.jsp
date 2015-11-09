@@ -73,6 +73,7 @@ var object_to_show="<%=request.getAttribute("object_showed")%>";
 var conf_widget_url="<%=request.getAttribute("widget_url")%>";
 var conf_macrozone_type="<%=request.getAttribute("macrozone_type")%>";
 var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
+var conf_ps_managers="<%=request.getAttribute("ps_managers")%>";
 var ctx="<%=request.getContextPath()%>";
 </script>
   
@@ -89,7 +90,7 @@ var ctx="<%=request.getContextPath()%>";
 			<li class="{{ isHomeDashboardActive() }}" ng-show="showDashboardMenuLink"><a href="#/dashboard/home" ng-click="setHomeDashboardActive()">{{ 'menu_bar-homedashboard' | i18n }}</a></li>
             <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
             <li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
-            <li class="{{ isHomeAuxActive() }}" ng-show="showAuxMenuLink"><a href=#/aux/logs/1" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li><!-- href="#/aux/home" -->
+            <li class="{{ isHomeAuxActive() }}" ng-show="showAuxMenuLink"><a href=#/auxiliary/logs/1" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li><!-- href="#/aux/home" -->
 <!--             <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li> -->
 <!--             <li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li> -->
 <!--           	<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li> -->

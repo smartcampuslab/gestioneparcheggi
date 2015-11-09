@@ -326,7 +326,7 @@
 							</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(pmeter.profit)}"></div></td><!-- {{area.color}} -->
 							<td width="10%" align="left">
-								<span ng-show="pmeter.profit > -1">{{ correctEuroCent(pmeter.profit) }}{{ 'euro' | i18n }}</span>
+								<span ng-show="pmeter.profit > -1">{{ correctEuroCent(pmeter.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 								<span ng-show="pmeter.profit <= -1">n.p.</span>
 							</td>
 							<td width="15%" align="left">
@@ -544,7 +544,7 @@
 							<td width="15%" align="left">{{street.area_name}}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(street.profit)}"></div></td><!-- {{area.color}} -->
 							<td width="12%" align="left">
-								<span ng-show="street.profit > -1">{{ correctEuroCent(street.profit) }}{{ 'euro' | i18n }}</span>
+								<span ng-show="street.profit > -1">{{ correctEuroCent(street.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 								<span ng-show="street.profit <= -1">n.p.</span>
 							</td>
 							<td width="13%" align="left">
@@ -804,7 +804,7 @@
 							<td width="15%" align="left"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(zone.profit)}"></div></td>
 							<td width="10%" align="left">
-								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) }}{{ 'euro' | i18n }}</span>
+								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 								<span ng-show="zone.profit <= -1">n.p.</span>
 							</td>
 							<td width="10%" align="left">
@@ -1051,7 +1051,7 @@
 							<td width="15%" align="left"><div class="colorBox" ng-show="microzone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(zone.profit)}"></div></td>
 							<td width="10%" align="left">
-								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) }}{{ 'euro' | i18n }}</span>
+								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 								<span ng-show="zone.profit <= -1">n.p.</span>
 							</td>
 							<td width="10%" align="left">
@@ -1178,7 +1178,7 @@
 						<tr>
 							<td width="20%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
 							<td width="10%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
-							<td width="15%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="15%" align="left"><span ng-show="a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
 							<td width="30%" align="left">{{area.smsCode}}</td>
 							<td width="15%" align="left">{{area.slotNumber}}</td>
 							<td width="10%" align="center">
@@ -1233,7 +1233,7 @@
 			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAo*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="10%" align="left"><span ng-show="a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
 							<td width="20%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(area.occupancy)}"></div></td>
 							<td width="10%" align="left">
@@ -1295,11 +1295,11 @@
 			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAp*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="10%" align="left"><span ng-show="a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
 							<td width="20%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(area.profit)}"></div></td>
 							<td width="10%" align="left">
-								<span ng-show="area.profit > -1">{{ correctEuroCent(area.profit) }}{{ 'euro' | i18n }}</span>
+								<span ng-show="area.profit > -1">{{ correctEuroCent(area.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 								<span ng-show="area.profit <= -1">n.p.</span>
 							</td>
 							<td width="10%" align="left">
@@ -1363,7 +1363,7 @@
 							<td width="15%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
 							<td width="5%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
 							<td width="20%" align="left">
-								<span ng-if="pstruct.fee_val != null">{{ pstruct.fee_val }} {{ 'euro_hour' | i18n }}</span>
+								<span ng-if="pstruct.fee_val != null">{{ pstruct.fee_val | euroVal}} {{ 'euro_hour' | i18n }}</span>
 								<span ng-if="pstruct.fee_val == null">n.p.</span>
 							</td>
 							<td width="20%" align="left">
@@ -1494,7 +1494,7 @@
 			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAt*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee}} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee | euroVal}} {{ 'euro_hour' | i18n }}</span></td>
 							<td width="15%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(area.extratime)}"></div></td>
 							<td width="15%" align="left">
@@ -1562,7 +1562,7 @@
 							<td width="8%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(pstruct.profit)}"></div></td><!-- {{area.color}} -->
 							<td width="10%" align="left">
-								<span ng-show="pstruct.profit > -1">{{ correctEuroCent(pstruct.profit) }}{{ 'euro' | i18n }}</span>
+								<span ng-show="pstruct.profit > -1">{{ correctEuroCent(pstruct.profit) | euroVal }} {{ 'euro' | i18n }}</span>
 								<span ng-show="pstruct.profit <= -1">n.p.</span>
 							</td>
 							<td width="10%" align="left">
@@ -1726,7 +1726,7 @@
 								<tr>	
 									<td class="detailsListTableSX">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ pmDetails.area.fee }} Euro/ora</td>
+									<td class="detailsListTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro' | i18n }}</td>
 								</tr>
 								<tr>	
 									<td class="detailsListTableSX">{{ 'area_color' | i18n }}</td>
@@ -1764,6 +1764,13 @@
 						        	<td class="detailsListTableDXS">{{ psDetails.parkAndRide | boolToString }}</td>
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
+						        <tr>
+								 	<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableSXS">{{ 'ps_manager' | i18n }}:</td>
+						        	<td class="detailsListTableCXS"></td>
+						        	<td class="detailsListTableDXS">{{ psDetails.manager }}</td>
+						        	<td class="detailsListTableCXS"></td>
+						        </tr>
 							</table>
 						</td>
 						<td width="34%" valign="middle">
@@ -1772,7 +1779,7 @@
 									<td class="detailsListTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">
-										<span ng-if="psDetails.fee_val != null">{{ psDetails.fee_val }} {{ 'euro_hour' | i18n }}</span>
+										<span ng-if="psDetails.fee_val != null">{{ psDetails.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</span>
 										<span ng-if="psDetails.fee_val == null">n.p.</span>
 									</td>
 								</tr>
@@ -2147,7 +2154,7 @@
 								<tr ng-show="a_fee.visible">
 									<td class="detailsListTableSX">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ aDetails.fee }} {{ 'euro_hour' | i18n }}</td>
+									<td class="detailsListTableDX">{{ aDetails.fee | euroVal}} {{ 'euro_hour' | i18n }}</td>
 								</tr>
 							</table>
 						</td>
@@ -2216,7 +2223,7 @@
 					<tr>	
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ pmDetails.area.fee }} Euro/ora</td>
+						<td class="detailsTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
 					<tr>	
 						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
@@ -2792,7 +2799,7 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
+									<td class="detailsListTableDXS">{{ aDetails.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
@@ -2945,7 +2952,7 @@
 								<tr>	
 									<td class="detailsListTableSX">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ pmDetails.area.fee }} Euro/ora</td>
+									<td class="detailsListTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 								</tr>
 							</table>
 						</td>
@@ -2960,7 +2967,7 @@
 									<td class="detailsNumberListTableSX">{{ 'element_profit' | i18n }}:</td>
 									<td class="detailsNumbeListTableCX"></td>
 									<td class="detailsNumberListTableDX">
-										<span ng-if="pmDetails.profit != -1">{{ correctEuroCent(pmDetails.profit) }}{{ 'euro' | i18n }}</span>
+										<span ng-if="pmDetails.profit != -1">{{ correctEuroCent(pmDetails.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 										<span ng-if="pmDetails.profit == -1">n.p.</span>
 									</td>
 								</tr>
@@ -3111,7 +3118,7 @@
 									<td class="detailsNumberListTableSX">{{ 'element_profit' | i18n }}:</td>
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">
-										<span ng-if="psDetails.profit > -1">{{ correctEuroCent(psDetails.profit) }}{{ 'euro' | i18n }}</span>
+										<span ng-if="psDetails.profit > -1">{{ correctEuroCent(psDetails.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 										<span ng-if="psDetails.profit <= -1">n.p.</span>
 									</td>
 								</tr>
@@ -3262,7 +3269,7 @@
 									<td class="detailsNumberListTableSX">{{ 'element_profit' | i18n }}:</td>
 									<td class="detailsNumbeListTableCX"></td>
 									<td class="detailsNumberListTableDX">
-										<span ng-if="sDetails.profit != -1">{{ correctEuroCent(sDetails.profit) }}{{ 'euro' | i18n }}</span>
+										<span ng-if="sDetails.profit != -1">{{ correctEuroCent(sDetails.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 										<span ng-if="sDetails.profit == -1">n.p.</span>
 									</td>
 								</tr>
@@ -3406,7 +3413,7 @@
 									<td class="detailsListTableSX">{{ 'zone_profit' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">
-										<span ng-if="zDetails.profit > 0">&nbsp;{{ correctEuroCent(zDetails.profit) }}{{ 'euro' | i18n }}</span>
+										<span ng-if="zDetails.profit > 0">&nbsp;{{ correctEuroCent(zDetails.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 										<span ng-if="zDetails.profit <= 0">&nbsp;n.p.</span>
 									</td>
 								</tr>
@@ -3550,7 +3557,7 @@
 									<td class="detailsListTableSX">{{ 'zone_profit' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">
-										<span ng-if="microZDetails.profit > 0">&nbsp;{{ correctEuroCent(microZDetails.profit) }}{{ 'euro' | i18n }}</span>
+										<span ng-if="microZDetails.profit > 0">&nbsp;{{ correctEuroCent(microZDetails.profit) | euroVal }}{{ 'euro' | i18n }}</span>
 										<span ng-if="microZDetails.profit <= 0">&nbsp;n.p.</span>
 									</td>
 								</tr>
@@ -3659,7 +3666,7 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
+									<td class="detailsListTableDXS">{{ aDetails.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 							</table>
@@ -4361,7 +4368,7 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ aDetails.fee }} Euro/ora</td>
+									<td class="detailsListTableDXS">{{ aDetails.fee | euroVal}} {{ 'euro_hour' | i18n }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
