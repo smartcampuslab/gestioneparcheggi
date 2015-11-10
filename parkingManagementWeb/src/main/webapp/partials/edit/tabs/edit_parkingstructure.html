@@ -68,6 +68,10 @@
 															<td width="45%"><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
 															<td width="55%">{{ ps.data.slotNumber }}</td>
 														</tr>
+														<tr ng-show="ps_slotNumber.visible">
+															<td><strong>{{ 'ps_paying_slot' | i18n }}:</strong></td>
+															<td>{{ ps.data.payingSlotNumber }}</td>
+														</tr>
 														<tr ng-show="ps_handicappedSlot.visible">	
 															<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
 															<td>{{ ps.data.handicappedSlotNumber }}</td>
@@ -140,6 +144,10 @@
 														<tr ng-show="ps_slotNumber.visible">
 															<td width="45%"><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
 															<td width="55%">{{ sps.data.slotNumber }}</td>
+														</tr>
+														<tr ng-show="ps_slotNumber.visible">
+															<td><strong>{{ 'ps_paying_slot' | i18n }}:</strong></td>
+															<td>{{ sps.data.payingSlotNumber }}</td>
 														</tr>
 														<tr ng-show="ps_handicappedSlot.visible">	
 															<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
@@ -275,6 +283,10 @@
 						<tr ng-show="ps_slotNumber.visible">	
 							<td class="detailsViewStructSX">{{ 'ps_totalslot' | i18n }}:</td>
 							<td class="detailsViewStructDX">{{ viewParkingStructure.slotNumber }}</td>
+						</tr>
+						<tr ng-show="ps_slotNumber.visible">
+							<td class="detailsViewStructSX">{{ 'ps_paying_slot' | i18n }}:</td>
+							<td class="detailsViewStructDX">{{ viewParkingStructure.payingSlotNumber }}</td>
 						</tr>
 						<tr ng-show="ps_handicappedSlot.visible">	
 							<td class="detailsViewStructSX">{{ 'ps_handicapped_slot' | i18n }}:</td>
@@ -472,10 +484,10 @@
 					   	<div class="subpanel panel panel-default" width="95%">
 					   		<div class="panel-body">
 							   	<div class="form-group" ng-show="ps_slotNumber.visible">
-							    	<label for="totalSlot">{{ 'ps_totalslot' | i18n }}</label>
-							    	<input id="totalSlot" type="text" class="form-control" name="pTotalslot" ng-model="parkingStructure.slotNumber" ng-pattern="onlyNumbers" ng-required="ps_slotNumber.required" placeholder="{{ 'ps_totalslot_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.pTotalslot.$error.required">{{ 'parkingstructure_slots_err_required' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.pTotalslot.$error.pattern">{{ 'parkingstructure_slots_err_pattern' | i18n }}</div>
+							    	<label for="totalSlot">{{ 'ps_paying_slot' | i18n }}</label>
+							    	<input id="totalSlot" type="text" class="form-control" name="pPayingslot" ng-model="parkingStructure.payingSlotNumber" ng-pattern="onlyNumbers" ng-required="ps_slotNumber.required" placeholder="{{ 'ps_payingslot_placeholder' | i18n }}" >
+							    	<div class="field-error" ng-show="!isInit && form.pPayingslot.$error.required">{{ 'parkingstructure_payingslots_err_required' | i18n }}</div>
+							    	<div class="field-error" ng-show="!isInit && form.pPayingslot.$error.pattern">{{ 'parkingstructure_payingslots_err_pattern' | i18n }}</div>
 							   	</div>
 								<div class="form-group" ng-show="ps_handicappedSlot.visible">
 							    	<label for="handicappedSlot">{{ 'ps_handicapped_slot' | i18n }}</label>

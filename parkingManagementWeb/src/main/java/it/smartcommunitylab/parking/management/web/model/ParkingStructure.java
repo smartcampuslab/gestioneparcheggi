@@ -37,8 +37,9 @@ public class ParkingStructure {
 	private OpeningTime openingTime;
 	private Point geometry;
 	
-	private Integer slotNumber;
-	private Integer slotOccupied;
+	private Integer slotNumber;		
+	private Integer payingSlotNumber;
+	private Integer payingSlotOccupied;		// on Paying
 	private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
 	private Integer unusuableSlotNumber;
@@ -144,8 +145,16 @@ public class ParkingStructure {
 		return paymentMode;
 	}
 
-	public Integer getSlotOccupied() {
-		return slotOccupied;
+	public Integer getPayingSlotNumber() {
+		return payingSlotNumber;
+	}
+
+	public void setPayingSlotNumber(Integer payingSlotNumber) {
+		this.payingSlotNumber = payingSlotNumber;
+	}
+
+	public Integer getPayingSlotOccupied() {
+		return payingSlotOccupied;
 	}
 
 	public Integer getHandicappedSlotNumber() {
@@ -160,8 +169,8 @@ public class ParkingStructure {
 		return unusuableSlotNumber;
 	}
 
-	public void setSlotOccupied(Integer slotOccupied) {
-		this.slotOccupied = slotOccupied;
+	public void setPayingSlotOccupied(Integer slotOccupied) {
+		this.payingSlotOccupied = slotOccupied;
 	}
 
 	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
@@ -219,7 +228,8 @@ public class ParkingStructure {
 		json += "\"fee_val\":" + getFee_val() + ",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"slotOccupied\":\"" + getSlotOccupied() + "\",";
+		json += "\"slotPaying\":\"" + getPayingSlotNumber() + "\",";
+		json += "\"slotOccupiedOnPaying\":\"" + getPayingSlotOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";

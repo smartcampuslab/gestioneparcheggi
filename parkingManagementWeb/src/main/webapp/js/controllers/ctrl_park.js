@@ -3432,6 +3432,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					};
 				}
 				
+				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber) + $scope.initIfNull(ps.unusuableSlotNumber);
 				var id = ps.id;
 				var appId = sharedDataService.getConfAppId();
 				var method = 'PUT';
@@ -3449,7 +3450,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					managementMode: ps.managementMode,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: $scope.correctMyPaymentMode(paymode),
-					slotNumber: ps.slotNumber,
+					slotNumber: totalStructSlots,
+					payingSlotNumber: ps.payingSlotNumber,
 					handicappedSlotNumber: ps.handicappedSlotNumber,
 					unusuableSlotNumber: ps.unusuableSlotNumber,
 					geometry: $scope.correctMyGeometry(geo),
@@ -4043,6 +4045,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					};
 				}
 				
+				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber) + $scope.initIfNull(ps.unusuableSlotNumber);
 				var method = 'POST';
 				var appId = sharedDataService.getConfAppId();
 				var data = {
@@ -4057,7 +4060,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					manager: ps.manager,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: $scope.correctMyPaymentMode(paymode),
-					slotNumber: ps.slotNumber,
+					slotNumber: totalStructSlots,
+					payingSlotNumber: ps.payingSlotNumber,
 					handicappedSlotNumber: ps.handicappedSlotNumber,
 					unusuableSlotNumber: ps.unusuableSlotNumber,
 					geometry: $scope.correctMyGeometry(geo),

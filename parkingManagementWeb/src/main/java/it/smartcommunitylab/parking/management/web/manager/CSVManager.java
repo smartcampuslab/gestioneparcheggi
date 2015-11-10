@@ -227,6 +227,8 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
 			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Standard");
+			writer.append(CSV_SEPARATOR);
 			writer.append("Posti per disabili");
 			writer.append(CSV_NEWLINE);
 			
@@ -249,6 +251,8 @@ public class CSVManager {
 				writer.append(ps.getTimeSlot());
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getPayingSlotNumber() >= 0) ? (ps.getPayingSlotNumber() + "") : "0");
 				writer.append(CSV_SEPARATOR);
 				writer.append((ps.getHandicappedSlotNumber() >= 0) ? (ps.getHandicappedSlotNumber() + "") : "0");
 				writer.append(CSV_NEWLINE);
@@ -478,7 +482,9 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati");
+			writer.append("Posti Occupati (S)");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati (H)");
 			writer.append(CSV_NEWLINE);
 			
 			// Add the list of data in a table
@@ -491,10 +497,11 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
-				writer.append((ps.getSlotOccupied() >= 0) ? (ps.getSlotOccupied() + "") : "0");
+				writer.append((ps.getPayingSlotOccupied() >= 0) ? (ps.getPayingSlotOccupied() + "") : "n.p." );
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getHandicappedSlotOccupied() >= 0) ? (ps.getHandicappedSlotOccupied() + "") : "n.p." );
 				writer.append(CSV_NEWLINE);
 			}
-			
 			//String arr = writer.toString();
 			//ba = arr.getBytes();
 			writer.flush();

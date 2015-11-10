@@ -479,18 +479,24 @@
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
 					</tr>
-					<tr>
-						<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
+					<tr ng-show="ps_slotNumber.visible">
+						<td class="detailsTableSX">{{ 'ps_paying_slot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">
-							<span ng-show="psDetails.data.slotOccupied >= 0">{{ psDetails.data.slotOccupied }}</span>
-							<span ng-show="psDetails.data.slotOccupied < 0">n.p.</span>
-						</td>
+						<td class="detailsTableDX">{{ psDetails.data.payingSlotNumber }}</td>
 					</tr>
-					<!-- 								<tr ng-show="ps_handicappedSlot.visible">	 -->
-					<!-- 									<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td> -->
-					<!-- 									<td>{{ psDetails.data.handicappedSlotNumber }}</td> -->
-					<!-- 								</tr> -->
+					<tr ng-show="ps_handicappedSlot.visible">
+						<td class="detailsTableSX">{{ 'ps_handicapped_slot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ psDetails.data.handicappedSlotNumber }}</td>
+					</tr>
+<!-- 					<tr> -->
+<!-- 						<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td> -->
+<!-- 						<td class="detailsTableCX"></td> -->
+<!-- 						<td class="detailsTableDX"> -->
+<!-- 							<span ng-show="psDetails.data.slotOccupied >= 0">{{ psDetails.data.slotOccupied }}</span> -->
+<!-- 							<span ng-show="psDetails.data.slotOccupied < 0">n.p.</span> -->
+<!-- 						</td> -->
+<!-- 					</tr> -->
 					<!-- 								<tr ng-show="ps_unusuableSlot.visible">	 -->
 					<!-- 									<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td> -->
 					<!-- 									<td>{{ psDetails.data.unusuableSlotNumber }}</td> -->
@@ -838,16 +844,32 @@
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
 					</tr>
-					<tr>
-						<td class="detailsTableSX">{{ 'ps_occupiedslot' | i18n }}:</td>
+					<tr ng-show="ps_unusuableSlot.visible">
+						<td class="detailsTableSX">{{ 'ps_unusuable_slot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-show="isCorrectNumber(psDetails.data.slotOccupied)">{{ psDetails.data.slotOccupied }}</span>
-							<span ng-show="!isCorrectNumber(psDetails.data.slotOccupied)">n.p.</span>
+							<span ng-show="psDetails.data.unusuableSlotNumber != -1">{{ psDetails.data.unusuableSlotNumber }}</span>
+							<span ng-show="psDetails.data.unusuableSlotNumber == -1">0</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'ps_paying_occupiedslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(psDetails.data.payingSlotOccupied)">{{ psDetails.data.payingSlotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(psDetails.data.payingSlotOccupied)">n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'ps_handicapped_occupiedslot' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(psDetails.data.handicappedSlotOccupied)">{{ psDetails.data.handicappedSlotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(psDetails.data.handicappedSlotOccupied)">n.p.</span>
 						</td>
 					</tr>
 				</table>
-				<div google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.slotOccupied)" />
+				<div google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.payingSlotOccupied)" />
 			</div>
 			<div ng-show="isStreetDetShow()">
 				<table width="98%">

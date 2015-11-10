@@ -33,7 +33,8 @@ public class ParkingStructureBean {
 	private OpeningTime openingTime;
 	private PointBean geometry;
 	private Integer slotNumber;
-	private Integer slotOccupied;
+	private Integer payingSlotNumber;
+	private Integer payingSlotOccupied;
 	private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
 	private Integer unusuableSlotNumber;
@@ -85,8 +86,20 @@ public class ParkingStructureBean {
 		this.slotNumber = slotNumber;
 	}
 
-	public Integer getSlotOccupied() {
-		return slotOccupied;
+	public Integer getPayingSlotNumber() {
+		return payingSlotNumber;
+	}
+
+	public Integer getPayingSlotOccupied() {
+		return payingSlotOccupied;
+	}
+
+	public void setPayingSlotNumber(Integer payingSlotNumber) {
+		this.payingSlotNumber = payingSlotNumber;
+	}
+
+	public void setPayingSlotOccupied(Integer payingSlotOccupied) {
+		this.payingSlotOccupied = payingSlotOccupied;
 	}
 
 	public Integer getHandicappedSlotNumber() {
@@ -99,10 +112,6 @@ public class ParkingStructureBean {
 
 	public Integer getUnusuableSlotNumber() {
 		return unusuableSlotNumber;
-	}
-
-	public void setSlotOccupied(Integer slotOccupied) {
-		this.slotOccupied = slotOccupied;
 	}
 
 	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
@@ -237,7 +246,8 @@ public class ParkingStructureBean {
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"slotOccupied\":\"" + getSlotOccupied() + "\",";
+		json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
+		json += "\"payingSlotOccupied\":\"" + getPayingSlotOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";

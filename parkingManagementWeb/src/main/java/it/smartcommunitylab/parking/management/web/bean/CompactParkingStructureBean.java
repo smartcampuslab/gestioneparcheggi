@@ -19,23 +19,19 @@ public class CompactParkingStructureBean {
 
 	private String id;
 	private Integer slotNumber;
-	private Integer slotOccupied;
+	private Integer payingSlotNumber;
+	private Integer payingSlotOccupied;
 	private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
 	private Integer unusuableSlotNumber;
 	private double occupancyRate;	// I use it only in the bean and not in the db object
 	
-
 	public Integer getSlotNumber() {
 		return slotNumber;
 	}
 
 	public void setSlotNumber(Integer slotNumber) {
 		this.slotNumber = slotNumber;
-	}
-
-	public Integer getSlotOccupied() {
-		return slotOccupied;
 	}
 
 	public Integer getHandicappedSlotNumber() {
@@ -48,10 +44,6 @@ public class CompactParkingStructureBean {
 
 	public Integer getUnusuableSlotNumber() {
 		return unusuableSlotNumber;
-	}
-
-	public void setSlotOccupied(Integer slotOccupied) {
-		this.slotOccupied = slotOccupied;
 	}
 
 	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
@@ -82,11 +74,28 @@ public class CompactParkingStructureBean {
 		this.occupancyRate = occupancyRate;
 	}
 
+	public Integer getPayingSlotNumber() {
+		return payingSlotNumber;
+	}
+
+	public Integer getPayingSlotOccupied() {
+		return payingSlotOccupied;
+	}
+
+	public void setPayingSlotNumber(Integer payingSlotNumber) {
+		this.payingSlotNumber = payingSlotNumber;
+	}
+
+	public void setPayingSlotOccupied(Integer payingSlotOccupied) {
+		this.payingSlotOccupied = payingSlotOccupied;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"slotOccupied\":\"" + getSlotOccupied() + "\",";
+		json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
+		json += "\"payingSlotOccupied\":\"" + getPayingSlotOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";

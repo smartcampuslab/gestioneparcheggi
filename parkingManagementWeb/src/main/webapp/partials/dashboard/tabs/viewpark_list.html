@@ -1341,7 +1341,7 @@
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="pstructWS.length != 0">
-						<th width="25%">
+						<th width="20%">
 							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
 							<a href ng-click="showPsNameFilter();currentPagePsa=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -1349,35 +1349,41 @@
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>						
 						</th>
-						<th width="15%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<th width="30%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 						<th width="5%">{{ 'ps_park_and_ride_title' | i18n }}</th>
-						<th width="20%">{{ 'ps_fee_det_val' | i18n }}</th>
-						<th width="20%">{{ 'ps_time' | i18n }}</th>
-						<th width="10%" class="myCenter">{{ 'ps_slots' | i18n }}</th>
+						<th width="10%">{{ 'ps_fee_det_val' | i18n }}</th>
+						<th width="10%">{{ 'ps_time' | i18n }}</th>
+						<th width="10%" class="myCenter" >{{ 'ps_slots' | i18n }}</th>
+						<th width="10%" colspan="2">{{ 'ps_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
-					</tr>					
+					</tr>
+					<tr ng-show="showInfo_3==true">
+						<td colspan="9"><div class="alert alert-info">{{ 'info_3' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(3)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
+					</tr>
 					<tbody class="animate-repeat"
 						ng-repeat="pstruct in filtered = (allDataStructWS | filter:nameFilter) | orderBy:['name'] | startFrom:currentPagePsa*maxPStructs | limitTo:maxPStructs">
 						<tr>
-							<td width="25%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
-							<td width="15%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="20%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
+							<td width="30%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
 							<td width="5%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
-							<td width="20%" align="left">
+							<td width="10%" align="left">
 								<span ng-if="pstruct.fee_val != null">{{ pstruct.fee_val | euroVal}} {{ 'euro_hour' | i18n }}</span>
 								<span ng-if="pstruct.fee_val == null">n.p.</span>
 							</td>
-							<td width="20%" align="left">
+							<td width="10%" align="left">
 								<span ng-if="pstruct.openingTime != null" ng-repeat="ops in pstruct.openingTime.period">{{ ops.from }} - {{ ops.to }};</span>
 								<span ng-if="pstruct.openingTime == null">n.p.</span>
 							</td>
 							<td width="10%" align="center">{{pstruct.slotNumber}}</td>
+							<td width="5%" align="left">S: {{pstruct.payingSlotNumber}}</td>
+							<td width="5%" align="left">H: {{pstruct.handicappedSlotNumber}}</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 							</td>
 						</tr>
 					</tbody>
 					<tr ng-show="pstructWS.length == 0">
-						<td colspan="8"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
+						<td colspan="9"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
 			</div>
@@ -1411,18 +1417,21 @@
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="15%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<th width="34%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 						<th width="5%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 						<th width="10%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="10%" class="myCenter"><span ng-show="ps_slotNumber.visible">{{ 'ps_slots' | i18n }}</span></th>
-						<th width="10%" class="myCenter" colspan="2">{{ 'ps_occupiedslot' | i18n }}</th>
+						<th width="21%" class="myCenter" colspan="3">{{ 'ps_occupiedslot' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tr ng-show="showInfo_3==true">
+						<td colspan="10"><div class="alert alert-info">{{ 'info_3' | i18n }}&nbsp;&nbsp;<span ng-click="hideInfo(3)"><b>{{ 'info_close' | i18n }}</b></span></div></td>
 					</tr>
 					<tbody class="animate-repeat"
 						ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPagePso*maxPStructs | limitTo:maxPStructs">
 						<tr>
 							<td width="15%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
-							<td width="15%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="34%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
 							<td width="5%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(pstruct.occupancyRate)}"></div></td><!-- {{area.color}} -->
 							<td width="5%" align="left">
@@ -1430,17 +1439,17 @@
 								<span ng-show="pstruct.occupancyRate == '-1'">n.p.</span>
 							</td>
 							<td width="10%" align="center"><span ng-show="ps_slotNumber.visible">{{pstruct.slotNumber}}</span></td>
-							<td width="5%" align="center">
-								<span ng-show="pstruct.occupancyRate >= 0">{{pstruct.slotOccupied}}</span>
-								<span ng-show="pstruct.occupancyRate < 0">n.p.</span>		
+							<td width="7%" align="left">
+								<span ng-show="pstruct.occupancyRate >= 0">S: {{pstruct.payingSlotOccupied}}</span>
+								<span ng-show="pstruct.occupancyRate < 0">S: 0</span>		
 							</td>
-							<td width="5%" align="left">
-								<span ng-show="pstruct.unusuableSlotNumber == -1">
-									ND:0
-								</span>
-								<span ng-show="pstruct.unusuableSlotNumber != -1">
-									ND:{{pstruct.unusuableSlotNumber}}
-								</span>
+							<td width="7%" align="left">
+								<span ng-show="pstruct.occupancyRate >= 0">H: {{pstruct.handicappedSlotOccupied}}</span>
+								<span ng-show="pstruct.occupancyRate < 0">H: 0</span>		
+							</td>
+							<td width="7%" align="left">
+								<span ng-show="pstruct.unusuableSlotNumber != -1">ND: {{pstruct.unusuableSlotNumber}}</span>
+								<span ng-show="pstruct.unusuableSlotNumber == -1">ND: 0</span>
 							</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
@@ -1448,7 +1457,7 @@
 						</tr>
 					</tbody>
 					<tr ng-show="pstructWS.length == 0">
-						<td colspan="8"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
+						<td colspan="10"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
 			</div>
@@ -1632,7 +1641,7 @@
 								<span ng-show="pstruct.extratime == null">n.p.</span>
 							</td>
 							<td width="10%" align="left">
-								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate }}%</span>
+								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate | doubleWithTwoDecimals }}%</span>
 								<span ng-show="pstruct.occupancyRate == '-1'">n.p.</span>
 							</td>
 							<td width="12%" align="center">{{pstruct.slotNumber}}</td>
@@ -1810,7 +1819,12 @@
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">{{ psDetails.slotNumber }}</td>
 								</tr>
-								<tr>
+								<tr ng-show="ps_slotNumber.visible">
+									<td class="detailsNumberListTableSX">{{ 'ps_paying_slot' | i18n }}:</td>
+									<td class="detailsNumberListTableCX"></td>
+									<td class="detailsNumberListTableDX">{{ psDetails.payingSlotNumber }}</td>
+								</tr>
+								<tr ng-show="ps_handicappedSlot.visible">
 									<td class="detailsNumberListTableSX">{{ 'ps_handicapped_slot' | i18n }}:</td>
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">{{ psDetails.handicappedSlotNumber }}</td>
@@ -2292,18 +2306,28 @@
 								</tr>
 								<tr>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableSXS">{{ 'ps_occupiedslot' | i18n }}:</td>
+									<td class="detailsListTableSXS">{{ 'ps_paying_occupiedslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">
-										<span ng-show="isCorrectNumber(psDetails.slotOccupied)">{{ psDetails.slotOccupied }}</span>
-										<span ng-show="!isCorrectNumber(psDetails.slotOccupied)">n.p.</span>
+										<span ng-show="isCorrectNumber(psDetails.payingSlotOccupied)">{{ psDetails.payingSlotOccupied }}</span>
+										<span ng-show="!isCorrectNumber(psDetails.payingSlotOccupied)">n.p.</span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'ps_handicapped_occupiedslot' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span ng-show="isCorrectNumber(psDetails.handicappedSlotOccupied)">{{ psDetails.handicappedSlotOccupied }}</span>
+										<span ng-show="!isCorrectNumber(psDetails.handicappedSlotOccupied)">n.p.</span>
 									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>	
 							</table>
 						</td>
 						<td width="55%" valign="middle" align="center">
-							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.slotOccupied)"/>
+							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
 						</td>
 					</tr>
 					<tr>
@@ -3879,15 +3903,15 @@
 									<td class="detailsListTableSXS">{{ 'ps_occupiedslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">
-										<span ng-show="isCorrectNumber(psDetails.slotOccupied)">{{ psDetails.slotOccupied }}</span>
-										<span ng-show="!isCorrectNumber(psDetails.slotOccupied)">n.p.</span>
+										<span ng-show="isCorrectNumber(psDetails.payingSlotOccupied)">{{ psDetails.slotOccupied }}</span>
+										<span ng-show="!isCorrectNumber(psDetails.payingSlotOccupied)">n.p.</span>
 									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>	
 							</table>
 						</td>
 						<td width="55%" valign="middle" align="center">
-							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.slotOccupied)"/>
+							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
 						</td>
 					</tr>
 					<tr>

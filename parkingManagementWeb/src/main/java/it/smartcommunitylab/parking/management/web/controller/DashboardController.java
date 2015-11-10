@@ -577,13 +577,14 @@ public class DashboardController {
 	    	
 		for(int i = 0; i < structList.length(); i++){
 		   	JSONObject struct = structList.getJSONObject(i);
-		    logger.error(String.format("Struct Data: %s", struct.toString()));
+		    //logger.error(String.format("Struct Data: %s", struct.toString()));
 		    String id = struct.getString("id");
 		    String id_app = struct.getString("id_app");
 		    String name = struct.getString("name");
-		    String streetReference = struct.getString("streetReference");
-		    String managementMode = struct.getString("managementMode");
-		    String phoneNumber = struct.getString("phoneNumber");
+		    String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
+	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
+	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
+	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
 		    Integer fee_val = (!struct.isNull("fee_val")) ? struct.getInt("fee_val") : 0;
 		    String fee_note = (!struct.isNull("fee_note")) ? struct.getString("fee_note") : "n.p.";
 		    String opening = "n.p.";
@@ -600,6 +601,7 @@ public class DashboardController {
 		    	}
 		    }
 		    Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
+		    Integer payingSlotNumber = (!struct.isNull("payingSlotNumber")) ? struct.getInt("payingSlotNumber") : 0;
 		    Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
 		    Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
 		    ParkingStructure ps = new ParkingStructure();
@@ -608,11 +610,13 @@ public class DashboardController {
 		    ps.setName(name);
 		    ps.setStreetReference(streetReference);
 		    ps.setManagementMode(managementMode);
+		    ps.setManager(manager);
 		    ps.setPhoneNumber(phoneNumber);
 		    ps.setFee_val(fee_val);
 		    ps.setFee_note(fee_note);
 		    ps.setTimeSlot(opening);	// String value
 		    ps.setSlotNumber(slotNumber);
+		    ps.setPayingSlotNumber(payingSlotNumber);
 		    ps.setHandicappedSlotNumber(handicappedSlotNumber);
 		    ps.setUnusuableSlotNumber(unusuableSlotNumber);
 		    structData.add(ps);
@@ -859,18 +863,20 @@ public class DashboardController {
     	
 	    for(int i = 0; i < structList.length(); i++){
 	    	JSONObject struct = structList.getJSONObject(i);
-	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	logger.error(String.format("Struct Data: %s", struct.toString()));
 	    	String id = struct.getString("id");
 	    	String id_app = struct.getString("id_app");
 	    	String name = struct.getString("name");
-	    	String streetReference = struct.getString("streetReference");
-	    	String managementMode = struct.getString("managementMode");
-	    	String phoneNumber = struct.getString("phoneNumber");
+	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
+	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
+	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
+	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
 	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
-	    	String timeSlot = struct.getString("timeSlot");
+	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
 	    	Integer occupancyRate = (!struct.isNull("occupancyRate")) ? struct.getInt("occupancyRate") : 0;
 	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
-	    	Integer slotOccupied = (!struct.isNull("slotOccupied")) ? struct.getInt("slotOccupied") : 0;
+	    	Integer payingSlotNumber = (!struct.isNull("payingSlotNumber")) ? struct.getInt("payingSlotNumber") : 0;
+	    	Integer payingSlotOccupied = (!struct.isNull("payingSlotOccupied")) ? struct.getInt("payingSlotOccupied") : 0;
 	    	Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
 	    	Integer handicappedSlotOccupied = (!struct.isNull("handicappedSlotOccupied")) ? struct.getInt("handicappedSlotOccupied") : 0;
 	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
@@ -880,12 +886,14 @@ public class DashboardController {
 	    	ops.setName(name);
 	    	ops.setStreetReference(streetReference);
 	    	ops.setManagementMode(managementMode);
+	    	ops.setManager(manager);
 	    	ops.setPhoneNumber(phoneNumber);
 	    	ops.setFee(fee);
 	    	ops.setTimeSlot(timeSlot);
 	    	ops.setOccupancyRate(occupancyRate);
 	    	ops.setSlotNumber(slotNumber);
-	    	ops.setSlotOccupied(slotOccupied);
+	    	ops.setPayingSlotNumber(payingSlotNumber);
+	    	ops.setPayingSlotOccupied(payingSlotOccupied);
 	    	ops.setHandicappedSlotNumber(handicappedSlotNumber);
 	    	ops.setHandicappedSlotOccupied(handicappedSlotOccupied);
 	    	ops.setUnusuableSlotNumber(unusuableSlotNumber);
@@ -1143,11 +1151,12 @@ public class DashboardController {
 	    	String id = struct.getString("id");
 	    	String id_app = struct.getString("id_app");
 	    	String name = struct.getString("name");
-	    	String streetReference = struct.getString("streetReference");
-	    	String managementMode = struct.getString("managementMode");
-	    	String phoneNumber = struct.getString("phoneNumber");
+	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
+	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
+	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
+	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
 	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
-	    	String timeSlot = struct.getString("timeSlot");
+	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
 	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
 	    	Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
 	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
@@ -1159,6 +1168,7 @@ public class DashboardController {
 	    	pps.setName(name);
 	    	pps.setStreetReference(streetReference);
 	    	pps.setManagementMode(managementMode);
+	    	pps.setManager(manager);
 	    	pps.setPhoneNumber(phoneNumber);
 	    	pps.setFee(fee);
 	    	pps.setTimeSlot(timeSlot);
@@ -1367,15 +1377,16 @@ public class DashboardController {
     	
 	    for(int i = 0; i < structList.length(); i++){
 	    	JSONObject struct = structList.getJSONObject(i);
-	    	//logger.error(String.format("Street Data: %s", street.toString()));
+	    	//logger.error(String.format("Struct Data: %s", struct.toString()));
 	    	String id = struct.getString("id");
 	    	String id_app = struct.getString("id_app");
 	    	String name = struct.getString("name");
-	    	String streetReference = struct.getString("streetReference");
-	    	String managementMode = struct.getString("managementMode");
-	    	String phoneNumber = struct.getString("phoneNumber");
+	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
+	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
+	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
+	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
 	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
-	    	String timeSlot = struct.getString("timeSlot");
+	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
 	    	Integer occupancyRate = (!struct.isNull("occupancyRate")) ? struct.getInt("occupancyRate") : 0;
 	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
 	    	Integer slotOccupied = (!struct.isNull("slotOccupied")) ? struct.getInt("slotOccupied") : 0;
@@ -1393,6 +1404,7 @@ public class DashboardController {
 	    	tps.setName(name);
 	    	tps.setStreetReference(streetReference);
 	    	tps.setManagementMode(managementMode);
+	    	tps.setManager(manager);
 	    	tps.setPhoneNumber(phoneNumber);
 	    	tps.setFee(fee);
 	    	tps.setTimeSlot(timeSlot);

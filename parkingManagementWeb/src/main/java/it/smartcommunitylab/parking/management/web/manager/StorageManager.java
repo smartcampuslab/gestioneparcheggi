@@ -718,6 +718,7 @@ public class StorageManager {
 		entity.setManager(entityBean.getManager());
 		entity.setPhoneNumber(entityBean.getPhoneNumber());
 		entity.setSlotNumber(entityBean.getSlotNumber());
+		entity.setPayingSlotNumber(entityBean.getPayingSlotNumber());
 		entity.setHandicappedSlotNumber(entityBean.getHandicappedSlotNumber());
 		entity.setUnusuableSlotNumber(entityBean.getUnusuableSlotNumber());
 		entity.setStreetReference(entityBean.getStreetReference());

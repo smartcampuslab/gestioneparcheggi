@@ -73,7 +73,7 @@ public class GeoObjectManager {
 	
 	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
 	private static final int OCCUPANCY_CELLS_OFFSET = 8;
-	private static final int OCCUPANCY_PS_CELLS_OFFSET = 3;
+	private static final int OCCUPANCY_PS_CELLS_OFFSET = 4;
 	private static final int OCCUPANCY_CELLS_FIRSTVAL = 4;
 	
 	public List<Parking> getParkings(String agency) throws Exception { 
@@ -556,6 +556,9 @@ public class GeoObjectManager {
 		p.setId("parking@" + park.getId_app() + "@" + park.getId());
 		p.setAgency(park.getId_app());
 		p.setSlotsTotal(park.getSlotNumber());
+		if(park.getPayingSlotNumber() != null){
+			p.setSlotsPaying(park.getPayingSlotNumber());
+		}
 		if(park.getHandicappedSlotNumber() != null){
 			p.setSlotsHandicapped(park.getHandicappedSlotNumber());
 		}
@@ -620,8 +623,10 @@ public class GeoObjectManager {
 	        				
 	        				// here I load the vals
 	        				List<String> occSlots = loadRicursive(att_and_vals, 0, OCCUPANCY_PS_CELLS_OFFSET);
-	        				List<String> ndSlots = loadRicursive(att_and_vals, 1, OCCUPANCY_PS_CELLS_OFFSET);
+	        				List<String> hSlots = loadRicursive(att_and_vals, 1, OCCUPANCY_PS_CELLS_OFFSET);
+	        				List<String> ndSlots = loadRicursive(att_and_vals, 2, OCCUPANCY_PS_CELLS_OFFSET);
 	        				tmpPSOcc.setOccSlots(occSlots);
+	        				tmpPSOcc.setHSlots(hSlots);
 	        				tmpPSOcc.setNdSlots(ndSlots);
 	        				
 	        				logger.error(String.format("Corrected Object: %s", tmpPSOcc.toString()));

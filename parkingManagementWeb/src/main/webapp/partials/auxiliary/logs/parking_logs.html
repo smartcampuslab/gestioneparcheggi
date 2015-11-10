@@ -44,12 +44,12 @@
 <!-- 					<div class="well"> -->
 						<table width="100%">
 							<tr>
-								<td width="30%"><strong>{{ 'log_slot_paying' | i18n }}</strong></td>
+								<td width="30%"><strong>{{ 'log_slot_standard' | i18n }}</strong></td>
 								<td>{{logDetails.value.slotsPaying}}</td>
 							</tr>
 							<tr>
-								<td width="30%"><strong>{{ 'log_slot_occupied_on_total' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsOccupiedOnTotal}}</td>
+								<td width="30%"><strong>{{ 'log_slot_occupied_on_standard' | i18n }}</strong></td>
+								<td>{{logDetails.value.slotsOccupiedOnPaying}}</td>
 							</tr>
 							<tr>
 								<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
@@ -270,7 +270,7 @@
 					   		<div class="panel-body">
 					   			<table width="100%">
 					   				<tr>
-					   					<td width="25%"><strong>{{ 'log_slot_paying' | i18n }}</strong></td>
+					   					<td width="25%"><strong>{{ 'ps_paying_slot' | i18n }}</strong></td>
 					   					<td width="5%">{{ myParkingDetails.slotsPaying }}</td>
 					   					<td width="20%"><strong>{{ 'parking_occupied_slot' | i18n }}</strong></td>
 					   					<td width="50%"><input id="occupiedSlot" type="number" class="form-control" name="pOccupiedslot" ng-model="myParkingDetails.slotsOccupiedOnPaying" ng-pattern="onlyNumbers" placeholder="{{ 'parking_slotoccupied_placeholder' | i18n }}" min="0" required ng-change="checkCorrectParkSlots(myParkingDetails)"></td>

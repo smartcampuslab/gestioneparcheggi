@@ -26,6 +26,7 @@ public class TimeCostParkingStructure {
 	private String name;	
 	private String streetReference;
 	private String managementMode;
+	private String manager;
 	private String fee;
 	private String timeSlot;
 	private Integer slotNumber;
@@ -156,6 +157,14 @@ public class TimeCostParkingStructure {
 
 	public void setMaxExtratime(Integer maxExtratime) {
 		this.maxExtratime = maxExtratime;
+	}
+
+	public String getManager() {
+		return manager;
+	}
+
+	public void setManager(String manager) {
+		this.manager = manager;
 	}
 
 	public String toJSON(){

@@ -55,8 +55,20 @@
 							<td>{{logDetails.value.slotsTotal}}</td>
 						</tr>
 						<tr>
-							<td width="30%"><strong>{{ 'log_slot_occupied_on_total' | i18n }}</strong></td>
-							<td>{{logDetails.value.slotsOccupiedOnTotal}}</td>
+							<td width="30%"><strong>{{ 'log_slot_standard' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsPaying}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_occupied_on_standard' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsOccupiedOnPaying}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsHandicapped}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_occupied_on_handicapped' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsOccupiedOnHandicapped}}</td>
 						</tr>
 						<tr>
 							<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
@@ -109,6 +121,14 @@
 						<tr>
 							<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
 							<td>{{logDetails.value.slotsHandicapped}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_occupied_on_handicapped' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsOccupiedOnHandicapped}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsUnavailable}}</td>
 						</tr>
 					</table>
 				</td>
@@ -239,9 +259,9 @@
 						<span ng-if="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">{{log.value.code}}</span><!--  - {{log.value.note}} -->
 					</td>
 					<td width="45%" align="left">
-						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">Tot: {{log.value.slotsTotal}}, Occ: {{log.value.slotsOccupiedOnTotal}}, Non Disp.: {{log.value.slotsUnavailable}}</span>
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">S: {{log.value.slotsPaying}}, S Occ.: {{log.value.slotsOccupiedOnPaying}}, H: {{log.value.slotsHandicapped}}, H Occ: {{log.value.slotsOccupiedOnHandicapped}}, Non Disp.: {{log.value.slotsUnavailable}}</span>
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct'">Profit: {{correctEuroCent(log.value.profit)}}, Ticket: {{log.value.tickets}}</span>
-						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Street'">G: {{log.value.slotsFree}}, G Occ.: {{log.value.slotsOccupiedOnFree}}, P: {{log.value.slotsPaying}}, P Occ.: {{log.value.slotsOccupiedOnPaying}}, T: {{log.value.slotsTimed}}, T Occ.: {{log.value.slotsOccupiedOnTimed}}, D: {{log.value.slotsHandicapped}}</span>
+						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Street'">G: {{log.value.slotsFree}}, G Occ.: {{log.value.slotsOccupiedOnFree}}, P: {{log.value.slotsPaying}}, P Occ.: {{log.value.slotsOccupiedOnPaying}}, T: {{log.value.slotsTimed}}, T Occ.: {{log.value.slotsOccupiedOnTimed}}, H: {{log.value.slotsHandicapped}}, H Occ: {{log.value.slotsOccupiedOnHandicapped}}, Non Disp.: {{log.value.slotsUnavailable}}</span>
 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter'">Profit: {{correctEuroCent(log.value.profit)}}, Ticket: {{log.value.tickets}}</span>
 					</td>
 					<td width="3%" align="center">

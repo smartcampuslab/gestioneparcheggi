@@ -32,22 +32,32 @@ public class Parking implements Serializable  {
 	private Integer user;
 	
 	private int slotsTotal;
-	private int slotsOccupiedOnTotal;
+	private int slotsPaying;			// Total
+	private int slotsOccupiedOnPaying;	// Total
 	private int slotsHandicapped;
 	private int slotsOccupiedOnHandicapped;
 	private int slotsUnavailable;
 	private LastChange lastChange;
 	
+
 	public int getSlotsTotal() {
 		return slotsTotal;
 	}
 
-	public int getSlotsOccupiedOnTotal() {
-		return slotsOccupiedOnTotal;
+	public int getSlotsPaying() {
+		return slotsPaying;
 	}
 
-	public void setSlotsOccupiedOnTotal(int mSlotsOccupiedOnTotal) {
-		this.slotsOccupiedOnTotal = mSlotsOccupiedOnTotal;
+	public int getSlotsOccupiedOnPaying() {
+		return slotsOccupiedOnPaying;
+	}
+
+	public void setSlotsPaying(int slotsPaying) {
+		this.slotsPaying = slotsPaying;
+	}
+
+	public void setSlotsOccupiedOnPaying(int slotsOccupiedOnPaying) {
+		this.slotsOccupiedOnPaying = slotsOccupiedOnPaying;
 	}
 
 	public int getSlotsUnavailable() {
@@ -166,7 +176,8 @@ public class Parking implements Serializable  {
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"description\":\"" + getDescription() + "\",";
 		json += "\"slotsTotal\":" + getSlotsTotal() + ",";
-		json += "\"slotsOccupiedOnTotal\":" + getSlotsOccupiedOnTotal() + ",";
+		json += "\"slotsPaying\":" + getSlotsTotal() + ",";
+		json += "\"slotsOccupiedOnPaying\":" + getSlotsOccupiedOnPaying() + ",";
 		json += "\"slotsHandicapped\":" + getSlotsHandicapped() + ",";
 		json += "\"slotsOccupiedOnHandicapped\":" + getSlotsOccupiedOnHandicapped() + ",";
 		json += "\"slotsUnavailable\":" + getSlotsUnavailable() + ",";

@@ -4009,7 +4009,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						fee: oldParks[i].fee,
 						timeSlot: oldParks[i].timeSlot,
 						slotNumber: newParks[j].slotNumber,
-						slotOccupied: newParks[j].slotOccupied,
+						slotOccupied: parseInt(newParks[j].payingSlotOccupied) + parseInt(newParks[j].handicappedSlotOccupied), 
+						payingSlotNumber: newParks[j].payingSlotNumber,
+						payingSlotOccupied: newParks[j].payingSlotOccupied,
 						handicappedSlotNumber: newParks[j].handicappedSlotNumber,
 						handicappedSlotOccupied: newParks[j].handicappedSlotOccupied,
 						unusuableSlotNumber: newParks[j].unusuableSlotNumber,
@@ -4051,7 +4053,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						timeSlot: occupancyStructs[i].timeSlot,
 						openingTime: occupancyStructs[i].openingTime,
 						slotNumber: occupancyStructs[i].slotNumber,
-						slotOccupied: occupancyStructs[i].slotOccupied,
+						slotOccupied: parseInt(occupancyStructs[i].payingSlotOccupied) + parseInt(occupancyStructs[i].handicappedSlotOccupied), 
+						payingSlotNumber: occupancyStructs[i].payingSlotNumber,
+						payingSlotOccupied: occupancyStructs[i].payingSlotOccupied,
 						handicappedSlotNumber: occupancyStructs[i].handicappedSlotNumber,
 						handicappedSlotOccupied: occupancyStructs[i].handicappedSlotOccupied,
 						unusuableSlotNumber: occupancyStructs[i].unusuableSlotNumber,
@@ -7247,11 +7251,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   			object = structure;
   		}
   		var available = object.slotNumber;
+  		var occ = parseInt(object.payingSlotOccupied) + parseInt(object.handicappedSlotOccupied);
   		if(object.unusuableSlotNumber != -1){
-  			available = object.slotNumber - object.unusuableSlotNumber;
+  			available -= object.unusuableSlotNumber;
   		}
-  		var dataTot = [ "Liberi", available - object.slotOccupied ];
-  		var dataOcc = [ "Occupati", object.slotOccupied ];
+  		var dataTot = [ "Liberi", available - occ ];
+  		var dataOcc = [ "Occupati", occ ];
   		$scope.chartPsOccupancy.data.push(dataTot);
   		$scope.chartPsOccupancy.data.push(dataOcc);
   	//}
@@ -7609,6 +7614,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     			break;
     		case 2:
     			$scope.showInfo_2 = true;
+    			break;
+    		case 3:
+    			$scope.showInfo_3 = true;
     			break;	
     		default:
 				break;
@@ -7625,6 +7633,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     			break;
     		case 2:
     			$scope.showInfo_2 = false;
+    			break;
+    		case 3:
+    			$scope.showInfo_3 = false;
     			break;	
     		default:
 				break;

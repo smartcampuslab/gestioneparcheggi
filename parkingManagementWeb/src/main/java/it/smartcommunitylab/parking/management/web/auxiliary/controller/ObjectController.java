@@ -281,19 +281,28 @@ public class ObjectController  {
 				Parking park = dataService.getParkingByName(p.getpName(), agency);
 				if(park != null){
 					List<String> slotsOcc = p.getOccSlots();
+					List<String> slotsH = p.getHSlots();
 					List<String> slotsND = p.getNdSlots();
 					for(int i = 0; i < slotsOcc.size(); i++){
 						boolean skipUpdate = true;
-						int slotsOccOnTotal = -1;
+						int slotsOccOnPaying = -1;
+						int slotsOccOnHandicapped = -1;
 						int slotNumND = -1;
 						if(slotsOcc.get(i).compareTo("") != 0 && slotsOcc.get(i).compareTo("0") != 0){
-							slotsOccOnTotal = Integer.parseInt(slotsOcc.get(i));
+							slotsOccOnPaying = Integer.parseInt(slotsOcc.get(i));
+						}
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("0") != 0){
+							slotsOccOnHandicapped = Integer.parseInt(slotsH.get(i));
 						}
 						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("0") != 0){
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
-						if(slotsOccOnTotal != -1){
-							park.setSlotsOccupiedOnTotal(slotsOccOnTotal);
+						if(slotsOccOnPaying != -1){
+							park.setSlotsOccupiedOnPaying(slotsOccOnPaying);
+							skipUpdate = false;
+						}
+						if(slotsOccOnHandicapped != -1){
+							park.setSlotsOccupiedOnHandicapped(slotsOccOnHandicapped);
 							skipUpdate = false;
 						}
 						if(slotNumND != -1){

@@ -26,10 +26,12 @@ public class OccupancyParkingStructure {
 	private String name;	
 	private String streetReference;
 	private String managementMode;
+	private String manager;
 	private String fee;
 	private String timeSlot;
 	private Integer slotNumber;
-	private Integer slotOccupied;
+	private Integer payingSlotNumber;	
+	private Integer payingSlotOccupied;
 	private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
 	private Integer unusuableSlotNumber;
@@ -109,10 +111,6 @@ public class OccupancyParkingStructure {
 		this.id = id;
 	}
 
-	public Integer getSlotOccupied() {
-		return slotOccupied;
-	}
-
 	public Integer getHandicappedSlotNumber() {
 		return handicappedSlotNumber;
 	}
@@ -123,10 +121,6 @@ public class OccupancyParkingStructure {
 
 	public Integer getUnusuableSlotNumber() {
 		return unusuableSlotNumber;
-	}
-
-	public void setSlotOccupied(Integer slotOccupied) {
-		this.slotOccupied = slotOccupied;
 	}
 
 	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
@@ -149,6 +143,30 @@ public class OccupancyParkingStructure {
 		this.occupancyRate = occupancyRate;
 	}
 
+	public String getManager() {
+		return manager;
+	}
+
+	public void setManager(String manager) {
+		this.manager = manager;
+	}
+	
+	public Integer getPayingSlotNumber() {
+		return payingSlotNumber;
+	}
+
+	public Integer getPayingSlotOccupied() {
+		return payingSlotOccupied;
+	}
+
+	public void setPayingSlotNumber(Integer payingSlotNumber) {
+		this.payingSlotNumber = payingSlotNumber;
+	}
+
+	public void setPayingSlotOccupied(Integer payingSlotOccupied) {
+		this.payingSlotOccupied = payingSlotOccupied;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -156,7 +174,8 @@ public class OccupancyParkingStructure {
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"slotOccupied\":\"" + getSlotOccupied() + "\",";
+		json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
+		json += "\"payingSlotOccupied\":\"" + getPayingSlotOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";

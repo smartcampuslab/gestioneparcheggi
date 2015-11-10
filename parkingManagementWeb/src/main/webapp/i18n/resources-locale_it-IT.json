@@ -239,6 +239,10 @@
     "value": "Posti",
     "description": "Intestazione colonna posti in tabella lista strutture"
 }, {
+    "key": "ps_slots_composition",
+    "value": "Comp.",
+    "description": "Intestazione colonna composizione posti in tabella lista strutture"
+}, {
     "key": "no_ps_in_lists",
     "value": "Nessuna struttura presente nel db",
     "description": "Messaggio nessuna struttura in db"
@@ -355,6 +359,10 @@
     "value": "Capienza",
     "description": "Label capienza struttura"
 }, {
+    "key": "ps_paying_slot",
+    "value": "Posti standard",
+    "description": "Label posti a pagamento in struttura"
+}, {
     "key": "ps_handicapped_slot",
     "value": "Posti per disabili",
     "description": "Label posti per disabili struttura"
@@ -442,6 +450,14 @@
     "key": "parkingstructure_slots_err_pattern",
     "value": "Valore non corretto. Inserire un valore numerico",
     "description": "Messaggio errore campo capienza non corretto"
+}, {
+    "key": "parkingstructure_payingslots_err_required",
+    "value": "Campo 'Posti standard' obbligatorio",
+    "description": "Messaggio errore campo posti standard obbligatorio"
+}, {
+    "key": "parkingstructure_payingslots_err_pattern",
+    "value": "Valore non corretto. Inserire un valore numerico",
+    "description": "Messaggio errore campo 'Posti standard' non corretto"
 }, {
     "key": "parkingstructure_handicapped_slots_err_required",
     "value": "Campo Posti per disabili obbligatorio",
@@ -987,6 +1003,10 @@
     "value": "Inserire il numero totale di posti della struttura",
     "description": "Testo placeholder campo posti totali struttura"
 }, {
+    "key": "ps_payingslot_placeholder",
+    "value": "Inserire il numero di posti standard della struttura",
+    "description": "Testo placeholder campo posti standard della struttura"
+}, {
     "key": "ps_handicappedslot_placeholder",
     "value": "Inserire il numero di posti riservati ai disabili",
     "description": "Testo placeholder campo posti disabili struttura"
@@ -1127,6 +1147,14 @@
     "value": "Occupati",
     "description": "Label posti occupati in dettagli struttura pagina dashboard"
 }, {
+    "key": "ps_paying_occupiedslot",
+    "value": "Occupati standard",
+    "description": "Label posti occupati standard in dettagli struttura pagina dashboard"
+}, {
+    "key": "ps_handicapped_occupiedslot",
+    "value": "Occupati per disabili",
+    "description": "Label posti occupati per disabili in dettagli struttura pagina dashboard"
+}, {
     "key": "street_occupiedslot",
     "value": "Occupati",
     "description": "Label posti occupati in dettagli strada pagina dashboard"
@@ -1251,6 +1279,10 @@
     "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario, R: riservati, H: per disabili",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
+    "key": "info_3",
+    "value": "S: standard, H: per disabili",
+    "description": "Testo pannello informativo per occupazione parcheggi in struttura"
+}, {
     "key": "info_close",
     "value": "CHIUDI",
     "description": "Link per chiusura pannello informativo"
@@ -1366,6 +1398,14 @@
     "key": "log_slot_occupied_on_paying",
     "value": "Posti a pagamento occupati",
     "description": "label per posti a pagamento occupati in via"
+}, {
+    "key": "log_slot_standard",
+    "value": "Posti standard",
+    "description": "label per posti standard in struttura"
+}, {
+    "key": "log_slot_occupied_on_standard",
+    "value": "Posti standard occupati",
+    "description": "label per posti standard occupati in via"
 }, {
     "key": "log_slot_timed",
     "value": "Posti a disco orario",
