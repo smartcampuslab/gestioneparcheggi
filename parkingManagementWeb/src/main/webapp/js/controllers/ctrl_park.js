@@ -3418,7 +3418,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					}
 					fee_eurocent = parseFloat(ps.fee_val) * 100;
 				}
-				fee_eurocent = Math.ceil(fee_eurocent);
+				fee_eurocent = Math.round(fee_eurocent);
 				
 				// openingPeriod
 				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
@@ -3433,7 +3433,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					};
 				}
 				
-				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber) + $scope.initIfNull(ps.unusuableSlotNumber);
+				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber); // + $scope.initIfNull(ps.unusuableSlotNumber);
 				var id = ps.id;
 				var appId = sharedDataService.getConfAppId();
 				var method = 'PUT';
@@ -4032,7 +4032,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					}
 					fee_eurocent = parseFloat(ps.fee_val) * 100;
 				}
-				fee_eurocent = Math.ceil(fee_eurocent);
+				fee_eurocent = Math.round(fee_eurocent);
 				
 				// openingPeriod
 				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
@@ -4047,7 +4047,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					};
 				}
 				
-				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber) + $scope.initIfNull(ps.unusuableSlotNumber);
+				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber);// + $scope.initIfNull(ps.unusuableSlotNumber);
 				var method = 'POST';
 				var appId = sharedDataService.getConfAppId();
 				var data = {
