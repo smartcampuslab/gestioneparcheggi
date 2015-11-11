@@ -624,7 +624,7 @@
 								<span ng-show="street.extratime == null">n.p.</span>
 							</td>
 							<td width="10%" align="left">
-								<span ng-show="street.occupancyRate != '-1'">{{ street.occupancyRate }}%</span>
+								<span ng-show="street.occupancyRate != '-1'">{{ street.occupancyRate  | doubleWithTwoDecimals }}%</span>
 								<span ng-show="street.occupancyRate == '-1'">n.p.</span>
 							</td>
 							<td width="10%" align="left">{{street.slotNumber}}</td>
@@ -875,7 +875,7 @@
 								<span ng-show="zone.extratime == null">n.p.</span>
 							</td>
 							<td width="10%" align="left">
-								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy}}%</span>
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals }}%</span>
 								<span ng-show="zone.occupancy == '-1'">n.p.</span>
 							</td>
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
@@ -1121,7 +1121,7 @@
 								<span ng-show="zone.extratime == null">n.p.</span>
 							</td>
 							<td width="10%" align="left">
-								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy}}%</span>
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
 								<span ng-show="zone.occupancy == '-1'">n.p.</span>
 							</td>
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
@@ -1237,7 +1237,7 @@
 							<td width="20%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(area.occupancy)}"></div></td>
 							<td width="10%" align="left">
-								<span ng-show="area.occupancy != '-1'">{{area.occupancy  | doubleWithTwoDecimals}}%</span>
+								<span ng-show="area.occupancy != '-1'">{{area.occupancy | doubleWithTwoDecimals}}%</span>
 								<span ng-show="area.occupancy == '-1'">n.p.</span>
 							</td>
 							<td width="15%" align="left">{{area.slotNumber}}</td>
@@ -1512,7 +1512,7 @@
 								<span ng-show="area.extratime == null">n.p.</span>
 							</td>
 							<td width="10%" align="left">
-								<span ng-show="area.occupancy != '-1'">{{area.occupancy}}%</span>
+								<span ng-show="area.occupancy != '-1'">{{area.occupancy | doubleWithTwoDecimals}}%</span>
 								<span ng-show="area.occupancy == '-1'">n.p.</span>
 							</td>
 							<td width="10%" align="left">{{area.slotNumber}}</td>

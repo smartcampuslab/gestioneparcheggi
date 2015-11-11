@@ -288,26 +288,32 @@ public class ObjectController  {
 						int slotsOccOnPaying = -1;
 						int slotsOccOnHandicapped = -1;
 						int slotNumND = -1;
-						if(slotsOcc.get(i).compareTo("") != 0 && slotsOcc.get(i).compareTo("0") != 0){
+						if(slotsOcc.get(i).compareTo("") != 0 && slotsOcc.get(i).compareTo("-1") != 0){
 							slotsOccOnPaying = Integer.parseInt(slotsOcc.get(i));
 						}
-						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("0") != 0){
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
 							slotsOccOnHandicapped = Integer.parseInt(slotsH.get(i));
 						}
-						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("0") != 0){
+						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
 						if(slotsOccOnPaying != -1){
 							park.setSlotsOccupiedOnPaying(slotsOccOnPaying);
 							skipUpdate = false;
+						} else {
+							park.setSlotsOccupiedOnPaying(0);
 						}
 						if(slotsOccOnHandicapped != -1){
 							park.setSlotsOccupiedOnHandicapped(slotsOccOnHandicapped);
 							skipUpdate = false;
+						} else {
+							park.setSlotsOccupiedOnHandicapped(0);
 						}
 						if(slotNumND != -1){
 							park.setSlotsUnavailable(slotNumND);
 							skipUpdate = false;
+						} else {
+							park.setSlotsUnavailable(-1);
 						}
 						if(!skipUpdate){
 							int year = Integer.parseInt(p.getPeriod().getYear());
@@ -353,54 +359,68 @@ public class ObjectController  {
 						int slotOccH = -1;
 						int slotOccR = -1;
 						int slotNumND = -1;
-						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("0") != 0){
+						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("-1") != 0){
 							slotOccLc = Integer.parseInt(slotsLC.get(i));
 						}
-						if(slotsLS.get(i).compareTo("") != 0 && slotsLS.get(i).compareTo("0") != 0){
+						if(slotsLS.get(i).compareTo("") != 0 && slotsLS.get(i).compareTo("-1") != 0){
 							slotOccLs = Integer.parseInt(slotsLS.get(i));
 						}
-						if(slotsP.get(i).compareTo("") != 0 && slotsP.get(i).compareTo("0") != 0){
+						if(slotsP.get(i).compareTo("") != 0 && slotsP.get(i).compareTo("-1") != 0){
 							slotOccP = Integer.parseInt(slotsP.get(i));
 						}
-						if(slotsDO.get(i).compareTo("") != 0 && slotsDO.get(i).compareTo("0") != 0){
+						if(slotsDO.get(i).compareTo("") != 0 && slotsDO.get(i).compareTo("-1") != 0){
 							slotOccDO = Integer.parseInt(slotsDO.get(i));
 						}
-						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("0") != 0){
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
 							slotOccH = Integer.parseInt(slotsH.get(i));
 						}
-						if(slotsR.get(i).compareTo("") != 0 && slotsR.get(i).compareTo("0") != 0){
+						if(slotsR.get(i).compareTo("") != 0 && slotsR.get(i).compareTo("-1") != 0){
 							slotOccR = Integer.parseInt(slotsR.get(i));
 						}
-						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("0") != 0){
+						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
 						if(slotOccLc != -1){
 							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
 							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnFreeSigned(0);
 						}
 						if(slotOccLs != -1){
 							street.setSlotsOccupiedOnFree(slotOccLs);
 							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnFree(0);
 						}
 						if(slotOccP != -1){
 							street.setSlotsOccupiedOnPaying(slotOccP);
 							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnPaying(0);
 						}
 						if(slotOccDO != -1){
 							street.setSlotsOccupiedOnTimed(slotOccDO);
 							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnTimed(0);
 						}
 						if(slotOccH != -1){
 							street.setSlotsOccupiedOnHandicapped(slotOccH);
 							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnHandicapped(0);
 						}
 						if(slotOccR != -1){
 							street.setSlotsOccupiedOnReserved(slotOccR);
 							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnReserved(0);
 						}
 						if(slotNumND != -1){
 							street.setSlotsUnavailable(slotNumND);
 							skipUpdate = false;
+						} else {
+							street.setSlotsUnavailable(-1);
 						}
 						int year = Integer.parseInt(s.getPeriod().getYear());
 						period = null;

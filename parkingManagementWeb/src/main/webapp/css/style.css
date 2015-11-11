@@ -197,6 +197,11 @@ div.logwrapper {
     height: 700px; 
 }
 
+div.map_margins {
+	margin-bottom: 10px;
+    margin-top: 10px;
+}
+
 pre {
     outline: 1px solid #ccc; 
     padding: 5px; 

@@ -40,6 +40,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -242,9 +243,10 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				double fee = 0.0;
 				if(ps.getFee_val() >= 0){
-					fee = ps.getFee_val() / 100;
+					fee = ps.getFee_val() / 100.0;
 				}
-				writer.append(cleanCommaValue(fee + ""));
+				DecimalFormat df = new DecimalFormat("#.00");
+				writer.append("" + df.format(fee));
 				writer.append(CSV_SEPARATOR);
 				writer.append(cleanCommaValue(ps.getFee_note()));
 				writer.append(CSV_SEPARATOR);
@@ -485,6 +487,8 @@ public class CSVManager {
 			writer.append("Posti Occupati (S)");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Occupati (H)");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Non Disponibili (ND)");
 			writer.append(CSV_NEWLINE);
 			
 			// Add the list of data in a table
@@ -500,6 +504,8 @@ public class CSVManager {
 				writer.append((ps.getPayingSlotOccupied() >= 0) ? (ps.getPayingSlotOccupied() + "") : "n.p." );
 				writer.append(CSV_SEPARATOR);
 				writer.append((ps.getHandicappedSlotOccupied() >= 0) ? (ps.getHandicappedSlotOccupied() + "") : "n.p." );
+				writer.append(CSV_SEPARATOR);
+				writer.append((ps.getUnusuableSlotNumber() >= 0) ? (ps.getUnusuableSlotNumber() + "") : "n.p." );
 				writer.append(CSV_NEWLINE);
 			}
 			//String arr = writer.toString();
@@ -2074,21 +2080,24 @@ public class CSVManager {
 		if (data.contains(",")) {
 			cleanedVal = data.replaceAll(",", ".");
 		}
+		if (cleanedVal.contains(";")) {
+			cleanedVal = cleanedVal.replaceAll(";", "-");
+		}
 		// part for accented chars
-		if(data.contains("à")){
-			cleanedVal = data.replaceAll("à", "a'");
+		if(cleanedVal.contains("à")){
+			cleanedVal = cleanedVal.replaceAll("à", "a'");
 		}
-		if(data.contains("è")){
-			cleanedVal = data.replaceAll("è", "e'");
+		if(cleanedVal.contains("è")){
+			cleanedVal = cleanedVal.replaceAll("è", "e'");
 		}
-		if(data.contains("ì")){
-			cleanedVal = data.replaceAll("ì", "i'");
+		if(cleanedVal.contains("ì")){
+			cleanedVal = cleanedVal.replaceAll("ì", "i'");
 		}
-		if(data.contains("ò")){
-			cleanedVal = data.replaceAll("ò", "o'");
+		if(cleanedVal.contains("ò")){
+			cleanedVal = cleanedVal.replaceAll("ò", "o'");
 		}
-		if(data.contains("ù")){
-			cleanedVal = data.replaceAll("ù", "u'");
+		if(cleanedVal.contains("ù")){
+			cleanedVal = cleanedVal.replaceAll("ù", "u'");
 		}
 		return cleanedVal;
 	}

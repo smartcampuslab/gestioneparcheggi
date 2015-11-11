@@ -40,7 +40,7 @@
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ pm.area.fee }}</td>
+																	<td>{{ pm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -77,7 +77,7 @@
 							        		</tr>
 											<tr ng-show="ps_fee.visible">
 								       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
-								       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+								       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val | centToeuroVal }} {{ 'euro_hour' | i18n }}</td>
 								       			<td ng-if="ps.data.fee_val == null">&nbsp;n.p.</td>
 								       		</tr>
 							        		<tr ng-show="ps_fee.visible">
@@ -123,10 +123,10 @@
 																	<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
 																	<td>{{ ps.data.handicappedSlotNumber }}</td>
 																</tr>
-																<tr ng-show="ps_unusuableSlot.visible">	
-																	<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td>
-																	<td>{{ ps.data.unusuableSlotNumber }}</td>
-																</tr>
+<!-- 																<tr ng-show="ps_unusuableSlot.visible">	 -->
+<!-- 																	<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td> -->
+<!-- 																	<td>{{ ps.data.unusuableSlotNumber }}</td> -->
+<!-- 																</tr> -->
 															</table>
 														</div>
 													</div>
@@ -257,7 +257,7 @@
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ s.area.fee }}</td>
+																	<td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -343,7 +343,7 @@
 							        	<table>
 											<tr ng-show="a_fee.visible">	
 												<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
-												<td width="55%">{{ a.data.fee }}</td>
+												<td width="55%">{{ a.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 											</tr>
 											<tr ng-show="a_timeSlot.visible">	
 												<td><strong>{{ 'area_time' | i18n }}:</strong></td>

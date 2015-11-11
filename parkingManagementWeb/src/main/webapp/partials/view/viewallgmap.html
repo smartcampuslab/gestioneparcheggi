@@ -38,7 +38,7 @@
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ pm.area.fee }}</td>
+																	<td>{{ pm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -77,7 +77,7 @@
 							        		</tr>
 											<tr ng-show="ps_fee.visible">
 								       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
-								       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val }} {{ 'euro_hour' | i18n }}</td>
+								       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val | centToeuroVal }} {{ 'euro_hour' | i18n }}</td>
 								       			<td ng-if="ps.data.fee_val == null">&nbsp;n.p.</td>
 								       		</tr>
 							        		<tr ng-show="ps_fee.visible">
@@ -123,10 +123,10 @@
 																	<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
 																	<td>{{ ps.data.handicappedSlotNumber }}</td>
 																</tr>
-																<tr ng-show="ps_unusuableSlot.visible">	
-																	<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td>
-																	<td>{{ ps.data.unusuableSlotNumber }}</td>
-																</tr>
+<!-- 																<tr ng-show="ps_unusuableSlot.visible">	 -->
+<!-- 																	<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td> -->
+<!-- 																	<td>{{ ps.data.unusuableSlotNumber }}</td> -->
+<!-- 																</tr> -->
 															</table>
 														</div>
 													</div>
@@ -257,7 +257,7 @@
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ s.area.fee }}</td>
+																	<td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -343,7 +343,7 @@
 							        	<table>
 											<tr ng-show="a_fee.visible">	
 												<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
-												<td width="55%">{{ a.data.fee }}</td>
+												<td width="55%">{{ a.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 											</tr>
 											<tr ng-show="a_timeSlot.visible">	
 												<td><strong>{{ 'area_time' | i18n }}:</strong></td>
@@ -419,18 +419,28 @@
 					</div>
 				</div>
 			</div>
-			<div class="row" ng-controller="MainCtrl">
-				<div class="col-md-12">
-					<div class="panel panel-default">
-					  <div class="panel-body">
-					    <h5><strong>{{ 'html_iframe_1' | i18n }}{{ widget_inport_url }}{{ 'html_iframe_2' | i18n }}{{ 'html_iframe_3' | i18n }}</strong></h5>
-					  </div>
+			<div class="row" ng-controller="MainCtrl"><!--  -->
+				<div class="col-md-8">
+					<div class="map_margins">
+						<p>Copia il codice in basso per importare il widget nel tuo portale</p>
 					</div>
-<!-- 					<div class="well" style="margin-top:20px;"> -->
-						
-<!-- 					</div> -->
+					<div class="highlight">
+<!-- 						<pre> -->
+							<code class="language-html" data-lang="html">
+								<span class="nt">&lt;iframe</span> <span class="na">src=</span><span class="s">"</span><span>{{ widget_inport_url }}</span><span class="s">"</span> <span class="na">width=</span><span class="s">"100%"</span> <span class="na">height=</span><span class="s">"700px"</span> <span class="nt">&gt;</span> <span class="nt">&lt;/iframe</span><span class="nt">&gt;</span>
+							</code>
+<!-- 						</pre> -->
+					</div>
 				</div>
+				<div class="col-md-4"></div>	
+					
+<!-- 					<div class="panel panel-default"> -->
+<!-- 					  <div class="panel-body"> -->
+<!-- 					    <h5><strong>{{ 'html_iframe_1' | i18n }}{{ widget_inport_url }}{{ 'html_iframe_2' | i18n }}{{ 'html_iframe_3' | i18n }}</strong></h5> -->
+<!-- 					  </div> -->
+<!-- 					</div> -->
 			</div>
+<!-- 			</div> -->
 <!-- 		</form> -->
 <!-- 	</div> -->
 <!-- </div> -->

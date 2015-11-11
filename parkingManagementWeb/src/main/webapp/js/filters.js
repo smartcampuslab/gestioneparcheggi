@@ -144,8 +144,18 @@ angular.module('pmFilters', []).filter('truncate', function() {
 	};
 }).filter('euroVal', function() {
 	return function(input){
+		if(typeof input == "string"){
+			if(input.indexOf(",") > -1){
+				input = input.replace(",", ".");
+			}
+		}
 		input = parseFloat(input);
 		return "" + parseFloat(Math.round(input * 100) / 100).toFixed(2);
+	};
+}).filter('centToeuroVal', function() {
+	return function(input){
+		input = parseInt(input);
+		return "" + parseFloat(Math.round(input * 1) / 100).toFixed(2);
 	};
 }).filter('valueToTitle', function() {
 	return function(value, input){

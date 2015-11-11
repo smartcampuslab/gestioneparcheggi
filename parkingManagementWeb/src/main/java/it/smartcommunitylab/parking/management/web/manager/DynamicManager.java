@@ -644,7 +644,7 @@ public class DynamicManager {
 						}
 					}
 					// this data can be present in the park with only a park type too
-					if(s.getSlotsUnavailable() != 0){
+					if(s.getSlotsUnavailable() != -1){
 						double unusualbedSlotVal = s.getSlotsUnavailable();
 						if(period == null || period.length == 0){
 							if(p_type != -1){
@@ -940,7 +940,7 @@ public class DynamicManager {
 			}
 		}
 		// this data can be present in the park with only a park type too
-		if(p.getSlotsUnavailable() != 0){
+		if(p.getSlotsUnavailable() != -1){
 			double unusualbedSlotVal = p.getSlotsUnavailable();
 			if(period == null || period.length == 0){
 				if(p_type != -1){

@@ -3416,8 +3416,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					if(ps.fee_val.indexOf(",") > -1){
 						ps.fee_val = ps.fee_val.replace(",", ".");
 					}
-					fee_eurocent = Number(ps.fee_val) * 100;
+					fee_eurocent = parseFloat(ps.fee_val) * 100;
 				}
+				fee_eurocent = Math.ceil(fee_eurocent);
 				
 				// openingPeriod
 				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
@@ -4029,8 +4030,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					if(ps.fee_val.indexOf(",") > -1){
 						ps.fee_val = ps.fee_val.replace(",", ".");
 					}
-					fee_eurocent = Number(ps.fee_val) * 100;
+					fee_eurocent = parseFloat(ps.fee_val) * 100;
 				}
+				fee_eurocent = Math.ceil(fee_eurocent);
 				
 				// openingPeriod
 				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};

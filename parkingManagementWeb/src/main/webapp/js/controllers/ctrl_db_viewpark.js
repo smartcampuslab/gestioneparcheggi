@@ -3886,6 +3886,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    $scope.actualParks = allParks;
 		    $scope.pstructWS = allParks;
 		    
+		    // to correct null values in parking slots
+		    for(var i = 0; i < $scope.pstructWS.length; i++){
+		    	if($scope.pstructWS[i].unusuableSlotNumber == null || $scope.pstructWS[i].unusuableSlotNumber == ""){
+		    		$scope.pstructWS[i].unusuableSlotNumber = 0;
+		    	}
+		    	if($scope.pstructWS[i].payingSlotOccupied == null || $scope.pstructWS[i].payingSlotOccupied == ""){
+		    		$scope.pstructWS[i].payingSlotOccupied = 0;
+		    	}
+		    	if($scope.pstructWS[i].handicappedSlotOccupied == null || $scope.pstructWS[i].handicappedSlotOccupied == ""){
+		    		$scope.pstructWS[i].handicappedSlotOccupied = 0;
+		    	}
+		    }
+		    
 			if(showPs){
 				for (var i = 0; i <  allParks.length; i++) {
 			    	markers.push(createMarkers(i, allParks[i], 4));
@@ -3998,6 +4011,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var found = false;
 			for(var j = 0; ((j < newParks.length) && !found); j++){
 				if(oldParks[i].id == newParks[j].id){
+					if(newParks[j].unusuableSlotNumber == null || newParks[j].unusuableSlotNumber == ""){
+						newParks[j].unusuableSlotNumber = 0;
+					}
 					found = true;
 					var p = {
 						id: oldParks[i].id,

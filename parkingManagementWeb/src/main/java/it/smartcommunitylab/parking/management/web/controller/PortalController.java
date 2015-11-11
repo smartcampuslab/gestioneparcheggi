@@ -63,6 +63,10 @@ public class PortalController extends SCController{
 	private String mainURL;
 	
 	@Autowired
+	@Value("${smartcommunity.parkingmanagement.widget.url}")
+	private String widgetURL;
+	
+	@Autowired
 	@Value("${smartcommunity.parkingmanagement.type.zone}")
 	private String macrozoneType;
 	
@@ -101,7 +105,7 @@ public class PortalController extends SCController{
 		model.addAttribute("app_id", objectToShow.getAppId());
 		model.addAttribute("map_center", objectToShow.getMapCenter());
 		model.addAttribute("map_zoom", objectToShow.getMapZoom());
-		model.addAttribute("widget_url", mainURL);
+		model.addAttribute("widget_url", widgetURL);
 		model.addAttribute("macrozone_type", macrozoneType);
 		model.addAttribute("microzone_type", microzoneType);
 		model.addAttribute("ps_managers", psManagers);
