@@ -113,7 +113,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'geometry'){
     			$scope.a_geometry = attributes[i];
     		}
-    		if(attributes[i].code == 'viewPage'){
+    		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				showArea = true;
     			}
@@ -163,7 +163,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'geometry'){
     			$scope.s_geometry = attributes[i];
     		}
-    		if(attributes[i].code == 'viewPage'){
+    		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				showStreets = true;
     			}
@@ -189,7 +189,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'geometry'){
     			$scope.pm_geometry = attributes[i];
     		}
-    		if(attributes[i].code == 'viewPage'){
+    		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				showPm = true;
     			}
@@ -236,7 +236,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'geometry'){
     			$scope.ps_geometry = attributes[i];
     		}
-    		if(attributes[i].code == 'viewPage'){
+    		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				showPs = true;
     			}
@@ -259,7 +259,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'geometry'){
     			$scope.bp_geometry = attributes[i];
     		}
-    		if(attributes[i].code == 'viewPage'){
+    		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				showBp = true;
     			}
@@ -297,7 +297,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'geomFromSubelement'){
     			$scope.microzone_geom_from_subelement = attributes[i];
     		}
-    		if(attributes[i].code == 'viewPage'){
+    		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				showZones = true;
     			}
@@ -335,7 +335,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     		if(attributes[i].code == 'geomFromSubelement'){
     			$scope.microzone_geom_from_subelement = attributes[i];
     		}
-    		if(attributes[i].code == 'viewPage'){
+    		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				showMicroZones = true;
     			}

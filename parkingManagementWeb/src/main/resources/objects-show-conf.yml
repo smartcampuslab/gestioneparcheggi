@@ -44,6 +44,10 @@ providers:
           editable: false
           required: false
           visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: true
      - id: Street
        attributes:
         - code: streetReference
@@ -105,7 +109,11 @@ providers:
         - code: viewPage
           editable: false
           required: false
-          visible: true          
+          visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: true
      - id: Pm
        attributes:
         - code: code
@@ -131,7 +139,11 @@ providers:
         - code: viewPage
           editable: false
           required: false
-          visible: true          
+          visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: true
      - id: Ps
        attributes:
         - code: name
@@ -181,7 +193,11 @@ providers:
         - code: viewPage
           editable: false
           required: false
-          visible: true          
+          visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: true
      - id: Zone
        attributes:
         - code: name
@@ -217,6 +233,10 @@ providers:
           required: false
           visible: false
         - code: viewPage
+          editable: false
+          required: false
+          visible: true
+        - code: widget
           editable: false
           required: false
           visible: true
@@ -257,7 +277,11 @@ providers:
         - code: viewPage
           editable: false
           required: false
-          visible: true          
+          visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: false
      - id: Bp
        attributes:
         - code: name
@@ -277,6 +301,10 @@ providers:
           required: true
           visible: true
         - code: viewPage
+          editable: false
+          required: false
+          visible: true
+        - code: widget
           editable: false
           required: false
           visible: true
@@ -351,6 +379,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: true
      - id: Street
        attributes:
         - code: streetReference
@@ -413,6 +445,10 @@ providers:
           editable: false
           required: false
           visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: true
      - id: Pm
        attributes:
         - code: code
@@ -436,6 +472,10 @@ providers:
           required: true
           visible: true
         - code: viewPage
+          editable: false
+          required: false
+          visible: true
+        - code: widget
           editable: false
           required: false
           visible: true
@@ -493,6 +533,10 @@ providers:
           editable: false
           required: false
           visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: true
      - id: Zone
        attributes:
         - code: name
@@ -531,6 +575,10 @@ providers:
           editable: false
           required: false
           visible: true
+        - code: widget
+          editable: false
+          required: false
+          visible: true
      - id: Bp
        attributes:
         - code: name
@@ -550,6 +598,10 @@ providers:
           required: true
           visible: true
         - code: viewPage
+          editable: false
+          required: false
+          visible: true
+        - code: widget
           editable: false
           required: false
           visible: true

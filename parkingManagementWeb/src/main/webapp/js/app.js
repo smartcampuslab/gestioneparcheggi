@@ -79,26 +79,16 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'ViewCtrlGmap',
     		controllerAs: 'view_ctrl_gmap'
     	})
-//    	.when('/viewallrv', {
-//    		templateUrl: 'partials/view/viewallgmapnosec.html',
-//    		controller: 'ViewCtrlGmap',
-//    		controllerAs: 'view_ctrl_gmap'
-//    	})
-//    	.when('/viewalltn', {
-//    		templateUrl: 'partials/view/viewallgmapnosec.html',
-//    		controller: 'ViewCtrlGmap',
-//    		controllerAs: 'view_ctrl_gmap'
-//    	})
     	.when('/auxiliary/logs/:id', {
     		templateUrl: 'partials/auxiliary/logs.html',
     		controller: 'AuxCtrl',
     		controllerAs: 'aux_ctrl'
     	})
-    	.when('/auxiliary/add/:at_id', {
-    		templateUrl: 'partials/auxiliary/add.html',
-    		controller: 'AuxCtrl',
-    		controllerAs: 'aux_ctrl'
-    	})
+//    	.when('/auxiliary/add/:at_id', {
+//    		templateUrl: 'partials/auxiliary/add.html',
+//    		controller: 'AuxCtrl',
+//    		controllerAs: 'aux_ctrl'
+//    	})
     	.when('/auxiliary/add/uploadfile/:objtype/:objperiod', {
     		templateUrl: 'partials/auxiliary/upload/upload_file.html',
     		controller: 'AuxCtrl',

@@ -281,6 +281,31 @@
 						        </div>
 						    </info-window>
      					</shape>
+     					<shape name="polyline" ng-repeat="z in mapMicrozones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" on-click="showInfoWindow(event, z.info_windows_cod);showDetails(event, z, 6)">
+     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
+						        <div ng-non-bindable="">
+						          	<div id="siteNotice"></div>
+						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="microzone_name.visible">{{ z.data.name }}</span><span ng-show="microzone_submicro.visible">_{{ z.data.submicro }}</span></h4>
+							        <div id="bodyContent">
+							        	<table>
+							        		<tr ng-show="microzone_type.visible">
+							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
+							        			<td>&nbsp;{{ z.data.type }}</td>
+							        		</tr>
+											<tr ng-show="microzone_note.visible">
+							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
+							        			<td>&nbsp;{{ z.data.note }}</td>
+							        		</tr>
+							        		<tr ng-show="microzone_color.visible">	
+												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
+												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+											</tr>
+							        	</table>
+							        </div>
+						        </div>
+						    </info-window>
+     					</shape>
 						<shape name="polygon" ng-repeat="z in mapZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
          					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
@@ -299,31 +324,6 @@
 							        			<td>&nbsp;{{ z.data.note }}</td>
 							        		</tr>
 							        		<tr ng-show="zone_color.visible">	
-												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-     					</shape>
-     					<shape name="polygon" ng-repeat="z in mapMicrozones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
-         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" on-click="showInfoWindow(event, z.info_windows_cod)">
-     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="microzone_name.visible">{{ z.data.name }}</span><span ng-show="microzone_submicro.visible">_{{ z.data.submicro }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="microzone_type.visible">
-							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.type }}</td>
-							        		</tr>
-											<tr ng-show="microzone_note.visible">
-							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.note }}</td>
-							        		</tr>
-							        		<tr ng-show="microzone_color.visible">	
 												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
 												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
 											</tr>
