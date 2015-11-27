@@ -27,6 +27,7 @@ public class ParkingStructureBean {
 	private String streetReference;
 	private String managementMode;
 	private String manager;
+	private String municipality;
 	private Integer fee_val;
 	private String fee_note;
 	private String timeSlot;
@@ -238,6 +239,14 @@ public class ParkingStructureBean {
 		this.manager = manager;
 	}
 
+	public String getMunicipality() {
+		return municipality;
+	}
+
+	public void setMunicipality(String municipality) {
+		this.municipality = municipality;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -255,8 +264,9 @@ public class ParkingStructureBean {
 		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
 		json += "\"profit\":\"" + getProfit() + "\",";
 		json += "\"tickets\":\"" + getTickets() + "\",";
-		json += "\"parkAndRide\":\"" + isParkAndRide() + "\"";
-		json += "\"manager\":\"" + getManager() + "\"";
+		json += "\"parkAndRide\":\"" + isParkAndRide() + "\",";
+		json += "\"manager\":\"" + getManager() + "\",";
+		json += "\"municipality\":\"" + getMunicipality() + "\"";
 		json += "}";
 		return json;
 	}

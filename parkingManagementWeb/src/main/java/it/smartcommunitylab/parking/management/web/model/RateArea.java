@@ -28,6 +28,7 @@ public class RateArea {
 	private String smsCode;
 	private String color;
 	private String note;
+	private String municipality;
 	private List<Polygon> geometry;
 	private Integer slotNumber;	// used in supply csv creation
 
@@ -128,6 +129,14 @@ public class RateArea {
 
 	public void setSlotNumber(Integer slotNumber) {
 		this.slotNumber = slotNumber;
+	}
+
+	public String getMunicipality() {
+		return municipality;
+	}
+
+	public void setMunicipality(String municipality) {
+		this.municipality = municipality;
 	}
 
 }

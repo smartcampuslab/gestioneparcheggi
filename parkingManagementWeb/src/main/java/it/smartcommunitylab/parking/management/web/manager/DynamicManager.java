@@ -82,6 +82,8 @@ public class DynamicManager {
 	private static final int HOUR_VALS = 25;
 	private static final String[] MONTHS_LABEL = {"Gen", "Feb", "Mar", "Apr", "Mag", "Giu", "Lug", "Ago", "Set", "Ott", "Nov", "Dic"};
 	private static final String[] DOWS_LABEL = {"Lun", "Mar", "Mer", "Gio", "Ven", "Sab", "Dom"};
+	private static final String[] MONTHS_LABEL_ENG = {"Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"};
+	private static final String[] DOWS_LABEL_ENG = {"Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"};
 	private static final String[] HOURS_LABEL = {"00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23"};
 
 	@Autowired
@@ -1532,7 +1534,7 @@ public class DynamicManager {
 	 * @param objType: type of object to find: street, parkingmeter, parking structure
 	 * @return String matrix with the zone occupancy compare
 	 */
-	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		String[][] occMatrix = null;
 		String[][] tmpMatrix = null;
 		int[][] usedSlotMatrix = null;
@@ -1543,12 +1545,12 @@ public class DynamicManager {
 		ZoneBean z = findZoneById(objectId, appId);
 		List<StreetBean> streets = getAllStreets(z, null);
 		if(streets != null && streets.size() > 0){
-			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
 			totalSlot = streets.get(0).getSlotNumber();
 			for(int i = 1; i < streets.size(); i++){
 				//occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
-				tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+				tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 				usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
 				sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
 				totalSlot += streets.get(i).getSlotNumber();
@@ -1575,7 +1577,7 @@ public class DynamicManager {
 	 * @param objType: type of object to find: street, parkingmeter, parking structure
 	 * @return String matrix with the area occupancy compare
 	 */
-	public String[][] getHistorycalDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+	public String[][] getHistorycalDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		String[][] occMatrix = null;
 		String[][] tmpMatrix = null;
 		int[][] usedSlotMatrix = null;
@@ -1586,11 +1588,11 @@ public class DynamicManager {
 		RateAreaBean a = getAreaById(objectId, appId);
 		List<StreetBean> streets = getAllStreets(a, null);
 		if(streets != null && streets.size() > 0){
-			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
 			totalSlot = streets.get(0).getSlotNumber();
 			for(int i = 1; i < streets.size(); i++){
-				tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+				tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 				//occMatrix = mergeMatrix(occMatrix, tmpMatrix);
 				usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
 				sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
@@ -1738,7 +1740,7 @@ public class DynamicManager {
 		return tmp;
 	}
 	
-	public String[][] getHistorycalProfitDataFromStreet(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+	public String[][] getHistorycalProfitDataFromStreet(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		String[][] profMatrix = null;
 		
 		StreetBean s = findStreet(objectId);
@@ -1746,17 +1748,17 @@ public class DynamicManager {
 		if(pmCodes != null && pmCodes.size() > 0){
 			ParkingMeterBean pmb = findParkingMeter(pmCodes.get(0));
 			//ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
-			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			for(int i = 1; i < pmCodes.size(); i++){
 				pmb = findParkingMeter(pmCodes.get(i));
 				//pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
-				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang));
 			}
 		}
 		return profMatrix;	//cleanAverageMatrix(profMatrix, pmCodes.size());
 	}
 	
-	public String[][] getHistorycalProfitDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+	public String[][] getHistorycalProfitDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		String[][] profMatrix = null;
 	
 		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
@@ -1777,33 +1779,33 @@ public class DynamicManager {
 		if(pmCodes != null && pmCodes.size() > 0){
 			//ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
 			ParkingMeterBean pmb = findParkingMeter(pmCodes.get(0));
-			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			for(int i = 1; i < pmCodes.size(); i++){
 				//pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
 				pmb = findParkingMeter(pmCodes.get(i));
-				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang));
 			}
 		}
 		return profMatrix;	//cleanAverageMatrix(profMatrix, pmCodes.size());
 	}
 	
-	public String[][] getHistorycalProfitDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+	public String[][] getHistorycalProfitDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		String[][] profMatrix = null;
 		
 		RateArea a = mongodb.findById(objectId, RateArea.class);
 		List<ParkingMeter> pms = a.getParkingMeters();
 		if(pms != null && pms.size() > 0){
 			ParkingMeterBean pmb = findParkingMeter(pms.get(0).getId());
-			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType);
+			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			for(int i = 1; i < pms.size(); i++){
 				pmb = findParkingMeter(pms.get(i).getId());
-				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
+				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang));
 			}
 		}
 		return profMatrix;	//cleanAverageMatrix(profMatrix, pmCodes.size());
 	}
 	
-	public String[][] getHistorycalDataFromObject(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType){
+	public String[][] getHistorycalDataFromObject(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		//StreetBean s = findStreet(objectId);
 		String sId = "";
 		String psOccId = "";
@@ -1909,9 +1911,17 @@ public class DynamicManager {
 		
 		if(matrixType.compareTo("12") == 0){
 			// case years-months
-			occMatrix[0][0] = "Anno/Mese";
+			if(lang == 0){
+				occMatrix[0][0] = "Anno/Mese";
+			} else {
+				occMatrix[0][0] = "Year/Month";
+			}
 			for(int x = 0; x < MONTHS_LABEL.length; x++){
-				occMatrix[0][x + 1] = MONTHS_LABEL[x];
+				if(lang == 0){
+					occMatrix[0][x + 1] = MONTHS_LABEL[x];
+				} else {
+					occMatrix[0][x + 1] = MONTHS_LABEL_ENG[x];
+				}
 			}
 			for(int i = 1; i < occMatrix.length; i++){
 				occMatrix[i][0] = (year - (i - 1)) + "";
@@ -1940,9 +1950,17 @@ public class DynamicManager {
 			}
 		} else if(matrixType.compareTo("13") == 0){
 			// case years-dows
-			occMatrix[0][0] = "Anno/Settimana";
+			if(lang == 0){
+				occMatrix[0][0] = "Anno/Settimana";
+			} else {
+				occMatrix[0][0] = "Year/Day Of Week";
+			}
 			for(int x = 0; x < DOWS_LABEL.length; x++){
-				occMatrix[0][x + 1] = DOWS_LABEL[x];
+				if(lang == 0){
+					occMatrix[0][x + 1] = DOWS_LABEL[x];
+				} else {
+					occMatrix[0][x + 1] = DOWS_LABEL_ENG[x];
+				}
 			}
 			for(int i = 1; i < occMatrix.length; i++){
 				occMatrix[i][0] = (year - (i - 1)) + "";
@@ -1990,7 +2008,11 @@ public class DynamicManager {
 			}
 		} else if(matrixType.compareTo("14") == 0){
 			// case years-hours
-			occMatrix[0][0] = "Anno/Ora";
+			if(lang == 0){
+				occMatrix[0][0] = "Anno/Ora";
+			} else {
+				occMatrix[0][0] = "Year/Hour";
+			}
 			for(int x = 0; x < HOURS_LABEL.length; x++){
 				occMatrix[0][x + 1] = HOURS_LABEL[x];
 			}
@@ -2021,12 +2043,20 @@ public class DynamicManager {
 			}
 		} else if(matrixType.compareTo("21") == 0){
 			// case months-years
-			occMatrix[0][0] = "Mese/Anno";
+			if(lang == 0){
+				occMatrix[0][0] = "Mese/Anno";
+			} else {
+				occMatrix[0][0] = "Month/Year";
+			}
 			for(int x = 0; x < 5; x++){
 				occMatrix[0][x + 1] = (year - x) + "";
 			}
 			for(int i = 1; i < occMatrix.length; i++){
-				occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				if(lang == 0){
+					occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				} else {
+					occMatrix[i][0] = MONTHS_LABEL_ENG[i - 1];
+				}
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_month = {(byte)(i - 1)};
 					int[] i_year = {(year - (j - 1))};
@@ -2052,12 +2082,24 @@ public class DynamicManager {
 			}
 		} else if(matrixType.compareTo("23") == 0){
 			// case months-dows
-			occMatrix[0][0] = "Mese/Settimana";
+			if(lang == 0){
+				occMatrix[0][0] = "Mese/Settimana";
+			} else {
+				occMatrix[0][0] = "Month/Day Of Week";
+			}
 			for(int x = 0; x < DOWS_LABEL.length; x++){
-				occMatrix[0][x + 1] = DOWS_LABEL[x];
+				if(lang == 0){
+					occMatrix[0][x + 1] = DOWS_LABEL[x];
+				} else {
+					occMatrix[0][x + 1] = DOWS_LABEL_ENG[x];
+				}
 			}
 			for(int i = 1; i < occMatrix.length; i++){
-				occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				if(lang == 0){
+					occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				} else {
+					occMatrix[i][0] = MONTHS_LABEL_ENG[i - 1];
+				}
 				byte[] b_month = {(byte)(i - 1)};
 				for(int j = 1; j < occMatrix[i].length-1; j++){
 					byte[] b_dows = {(byte)(j + 1)};
@@ -2102,12 +2144,20 @@ public class DynamicManager {
 			}	
 		} else if(matrixType.compareTo("24") == 0){
 			// case months-hours
-			occMatrix[0][0] = "Mese/Ora";
+			if(lang == 0){
+				occMatrix[0][0] = "Mese/Ora";
+			} else {
+				occMatrix[0][0] = "Month/Hour";
+			}
 			for(int x = 0; x < HOURS_LABEL.length; x++){
 				occMatrix[0][x + 1] = HOURS_LABEL[x];
 			}
 			for(int i = 1; i < occMatrix.length; i++){
-				occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				if(lang == 0){
+					occMatrix[i][0] = MONTHS_LABEL[i - 1];
+				} else {
+					occMatrix[i][0] = MONTHS_LABEL_ENG[i - 1];
+				}
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_month = {(byte)(i - 1)};
 					byte[] b_hour = {(byte)(j - 1)};
@@ -2132,14 +2182,22 @@ public class DynamicManager {
 				}	
 			}
 		} else if(matrixType.compareTo("31") == 0){
-			// case years-months
-			occMatrix[0][0] = "Settimana/Anno";
+			// case dows-years
+			if(lang == 0){
+				occMatrix[0][0] = "Settimana/Anno";
+			} else {
+				occMatrix[0][0] = "Day Of Week/Year";
+			}
 			for(int x = 0; x < 5; x++){
 				occMatrix[0][x + 1] = (year - x) + "";
 			}
 			int i = 0;
 			for(i = 1; i < occMatrix.length-1; i++){
-				occMatrix[i][0] = DOWS_LABEL[i - 1];
+				if(lang == 0){
+					occMatrix[i][0] = DOWS_LABEL[i - 1];
+				} else {
+					occMatrix[i][0] = DOWS_LABEL_ENG[i - 1];
+				}
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_dows = {(byte)(i + 1)};
 					int[] i_year = {(year-(j - 1))}; 
@@ -2163,7 +2221,11 @@ public class DynamicManager {
 					}
 				}	
 			}
-			occMatrix[i][0] = DOWS_LABEL[i - 1];
+			if(lang == 0){
+				occMatrix[i][0] = DOWS_LABEL[i - 1];
+			} else {
+				occMatrix[i][0] = DOWS_LABEL_ENG[i - 1];
+			}
 			for(int j = 1; j < occMatrix[i].length; j++){
 				byte[] b_dows = {(byte)1};
 				int[] i_year = {(year-(j - 1))};
@@ -2187,14 +2249,26 @@ public class DynamicManager {
 				}
 			}	
 		} else if(matrixType.compareTo("32") == 0){
-			// case years-dows
-			occMatrix[0][0] = "Settimana/Mese";
+			// case dows-month
+			if(lang == 0){
+				occMatrix[0][0] = "Settimana/Mese";
+			} else {
+				occMatrix[0][0] = "Day Of Week/Month";
+			}
 			for(int x = 0; x < MONTHS_LABEL.length; x++){
-				occMatrix[0][x + 1] = MONTHS_LABEL[x];
+				if(lang == 0){
+					occMatrix[0][x + 1] = MONTHS_LABEL[x];
+				} else {
+					occMatrix[0][x + 1] = MONTHS_LABEL_ENG[x];
+				}
 			}
 			int i = 0;
 			for(i = 1; i < occMatrix.length-1; i++){
-				occMatrix[i][0] = DOWS_LABEL[i - 1];
+				if(lang == 0){
+					occMatrix[i][0] = DOWS_LABEL[i - 1];
+				} else {
+					occMatrix[i][0] = DOWS_LABEL_ENG[i - 1];
+				}
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_dows = {(byte)(i + 1)};
 					byte[] b_month = {(byte)(j - 1)};
@@ -2218,7 +2292,11 @@ public class DynamicManager {
 					}	
 				}	
 			}
-			occMatrix[i][0] = DOWS_LABEL[i - 1];
+			if(lang == 0){
+				occMatrix[i][0] = DOWS_LABEL[i - 1];
+			} else {
+				occMatrix[i][0] = DOWS_LABEL_ENG[i - 1];
+			}
 			for(int j = 1; j < occMatrix[i].length; j++){
 				byte[] b_dows = {(byte)1};
 				byte[] b_month = {(byte)(j - 1)};
@@ -2242,14 +2320,22 @@ public class DynamicManager {
 				}
 			}	
 		} else if(matrixType.compareTo("34") == 0){
-			// case years-hours
-			occMatrix[0][0] = "Settimana/Ora";
+			// case dow-hours
+			if(lang == 0){
+				occMatrix[0][0] = "Settimana/Ora";
+			} else {
+				occMatrix[0][0] = "Day Of Week/Hour";
+			}
 			for(int x = 0; x < HOURS_LABEL.length; x++){
 				occMatrix[0][x + 1] = HOURS_LABEL[x];
 			}
 			int i = 0;
 			for(i = 1; i < occMatrix.length-1; i++){
-				occMatrix[i][0] = DOWS_LABEL[i - 1];
+				if(lang == 0){
+					occMatrix[i][0] = DOWS_LABEL[i - 1];
+				} else {
+					occMatrix[i][0] = DOWS_LABEL_ENG[i - 1];
+				}
 				for(int j = 1; j < occMatrix[i].length; j++){
 					byte[] b_dows = {(byte)(i + 1)};
 					byte[] b_hour = {(byte)(j - 1)};
@@ -2273,7 +2359,11 @@ public class DynamicManager {
 					}
 				}	
 			}
-			occMatrix[i][0] = DOWS_LABEL[i - 1];
+			if(lang == 0){
+				occMatrix[i][0] = DOWS_LABEL[i - 1];
+			} else {
+				occMatrix[i][0] = DOWS_LABEL_ENG[i - 1];
+			}
 			for(int j = 1; j < occMatrix[i].length; j++){
 				byte[] b_dows = {(byte)1};
 				byte[] b_hour = {(byte)(j - 1)};
@@ -2297,8 +2387,12 @@ public class DynamicManager {
 				}
 			}	
 		} else if(matrixType.compareTo("41") == 0){
-			// case years-months
-			occMatrix[0][0] = "Ora/Anno";
+			// case hour-years
+			if(lang == 0){
+				occMatrix[0][0] = "Ora/Anno";
+			} else {
+				occMatrix[0][0] = "Hour/Year";
+			}
 			for(int x = 0; x < 5; x++){
 				occMatrix[0][x + 1] = (year - x) + "";
 			}
@@ -2328,10 +2422,18 @@ public class DynamicManager {
 				}	
 			}
 		} else if(matrixType.compareTo("42") == 0){
-			// case years-dows
-			occMatrix[0][0] = "Ora/Mese";
+			// case hour-month
+			if(lang == 0){
+				occMatrix[0][0] = "Ora/Mese";
+			} else {
+				occMatrix[0][0] = "Hour/Month";
+			}
 			for(int x = 0; x < MONTHS_LABEL.length; x++){
-				occMatrix[0][x + 1] = MONTHS_LABEL[x];
+				if(lang == 0){
+					occMatrix[0][x + 1] = MONTHS_LABEL[x];
+				} else {
+					occMatrix[0][x + 1] = MONTHS_LABEL_ENG[x];
+				}
 			}
 			for(int i = 1; i < occMatrix.length; i++){
 				occMatrix[i][0] = HOURS_LABEL[i - 1];
@@ -2359,10 +2461,18 @@ public class DynamicManager {
 				}	
 			}
 		} else if(matrixType.compareTo("43") == 0){
-			// case months-dows
-			occMatrix[0][0] = "Ora/Settimana";
+			// case hour-dows
+			if(lang == 0){
+				occMatrix[0][0] = "Ora/Settimana";
+			} else {
+				occMatrix[0][0] = "Hour/Day Of Week";
+			}
 			for(int x = 0; x < DOWS_LABEL.length; x++){
-				occMatrix[0][x + 1] = DOWS_LABEL[x];
+				if(lang == 0){
+					occMatrix[0][x + 1] = DOWS_LABEL[x];
+				} else {
+					occMatrix[0][x + 1] = DOWS_LABEL_ENG[x];
+				}
 			}
 			for(int i = 1; i < occMatrix.length; i++){
 				occMatrix[i][0] = HOURS_LABEL[i - 1];

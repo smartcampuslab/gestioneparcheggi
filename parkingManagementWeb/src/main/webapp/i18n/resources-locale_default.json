@@ -807,6 +807,10 @@
     "value": "note",
     "description": "Campo note area"
 }, {
+    "key": "area_municipality",
+    "value": "comune",
+    "description": "Campo comune area"
+}, {
     "key": "area_name_err_required",
     "value": "Campo 'nome Area' obbligatorio",
     "description": "Errore Campo nome area obbligatorio"
@@ -834,6 +838,10 @@
     "key": "area_note_err_required",
     "value": "Campo 'note' area obbligatorio",
     "description": "Errore Campo note area obbligatorio"
+}, {
+    "key": "area_municipality_err_required",
+    "value": "Campo 'comune' area obbligatorio",
+    "description": "Errore Campo comune area obbligatorio"
 }, {
     "key": "area_color_err_required",
     "value": "Campo 'colore' area obbligatorio",
@@ -878,6 +886,10 @@
     "key": "area_note_placeholder",
     "value": "Inserire eventuali note",
     "description": "Testo placeholder campo note area"
+}, {
+    "key": "area_municipality_placeholder",
+    "value": "Inserire comune area",
+    "description": "Testo placeholder campo comune area"
 }, {
     "key": "area_color_placeholder",
     "value": "Scegliere il colore dell'area",
@@ -2087,4 +2099,104 @@
 }, {
     "key": "html_iframe_3",
     "value": "</iframe>"
-}]
+}, {
+    "key": "dash_map_tab",
+    "value": "Mappa"
+}, {
+    "key": "dash_list_tab",
+    "value": "Lista"
+}, {
+    "key": "widget_copy_text",
+    "value": "Copia il codice in basso per importare il widget nel tuo portale"
+}, {
+    "key": "manage_area_tab",
+    "value": "Area"
+}, {
+    "key": "manage_zone_tab",
+    "value": "Macrozona"
+}, {
+    "key": "manage_microzone_tab",
+    "value": "Via"
+}, {
+    "key": "manage_street_tab",
+    "value": "Parcheggio"
+}, {
+    "key": "manage_structure_tab",
+    "value": "Parcheggio in struttura"
+}, {
+    "key": "manage_parkingmeter_tab",
+    "value": "Parcometro"
+}, {
+    "key": "manage_bikepoint_tab",
+    "value": "Punti Bici"
+}, {
+    "key": "parking_occupation_logs_tab",
+    "value": "Rilevazioni occupazione parcheggi"
+}, {
+    "key": "structure_occupation_logs_tab",
+    "value": "Rilevazioni occupazione strutture"
+}, {
+    "key": "parkingmeter_profit_logs_tab",
+    "value": "Rilevazioni ricavi parcometri"
+}, {
+    "key": "structure_profit_logs_tab",
+    "value": "Rilevazioni ricavi strutture"
+}, {
+    "key": "history_log_tab",
+    "value": "Storico Rilevazioni"
+}, {
+    "key": "btn_load_log_text",
+    "value": "Carica Log Singolo"
+}, {
+    "key": "btn_load_file_log_text",
+    "value": "Carica Log da File"
+}, {
+    "key": "occupation_log_street_title",
+    "value": "Log occupazione vie"
+}, {
+    "key": "occupation_log_struct_title",
+    "value": "Log occupazione strutture"
+}, {
+    "key": "profit_log_pm_title",
+    "value": "Log incassi parcometri"
+}, {
+    "key": "profit_log_struct_title",
+    "value": "Log incassi strutture"
+}, {
+    "key": "log_actual_values",
+    "value": "Valori attuali"
+}, {
+    "key": "log_month_values",
+    "value": "Valori mensili"
+}, {
+    "key": "log_year_values",
+    "value": "Valori annuali"
+}, {
+    "key": "log_week_day_values",
+    "value": "Valori giorno settimana"
+}, {
+    "key": "log_hour_values",
+    "value": "Valori orari"
+}, {
+    "key": "btn_load_text",
+    "value": "Carica"
+}, {
+    "key": "btn_remove_text",
+    "value": "Rimuovi"
+}, {
+    "key": "load_file_name",
+    "value": "Nome File"
+}, {
+    "key": "load_file_size",
+    "value": "Dimensione"
+}, {
+    "key": "load_file_state",
+    "value": "Stato"
+}, {
+    "key": "load_file_actions",
+    "value": "Azioni"
+}, {
+    "key": "legend_not_available",
+    "value": "non disp"
+}
+]

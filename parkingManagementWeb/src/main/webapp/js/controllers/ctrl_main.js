@@ -76,6 +76,8 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	//});
     };
     
+    //$scope.setItalianLanguage();
+    
     $scope.setUserLocale = function(lan){
     	var lan_uri = '';
     	if(lan == "it-IT"){
@@ -300,6 +302,12 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	return tmp;
     };
     
+    $scope.initMunicipalities = function(vals){
+    	var tmp = [];
+    	tmp = vals.split(",");
+    	return tmp;
+    };
+    
     sharedDataService.setConfAppId(conf_app_id);
     //sharedDataService.setConfUrlWs(conf_url_ws);
     sharedDataService.setConfMapCenter(conf_map_center);
@@ -312,6 +320,8 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     sharedDataService.setMacroZoneType(conf_macrozone_type);
     var ps_manager_vals = $scope.initPsManagers(conf_ps_managers);
     sharedDataService.setPsManagerVals(ps_manager_vals);
+    var municipalities_vals = $scope.initMunicipalities(conf_municipalities);
+    sharedDataService.setMunicipalityVals(municipalities_vals);
     
     $scope.widget_inport_url = conf_widget_url + "/viewall/" + conf_app_id;
  

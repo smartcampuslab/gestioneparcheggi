@@ -77,6 +77,9 @@ public class StorageManager {
 		area.setFee(a.getFee());
 		area.setSmsCode(a.getSmsCode());
 		area.setTimeSlot(a.getTimeSlot());
+		if(a.getMunicipality() != null){
+			area.setMunicipality(a.getMunicipality());
+		}
 		if (area.getGeometry() != null) {
 			area.getGeometry().clear();
 		} else {
@@ -103,6 +106,27 @@ public class StorageManager {
 		}
 		return result;
 	}
+	
+	public List<RateAreaBean> getAllArea(String appId, String municipality) {
+		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
+		//logger.error(String.format("Area app id: %s", appId));
+		for (RateArea a : mongodb.findAll(RateArea.class)) {
+			if(a != null && appId.compareTo("all") == 0 ){
+				if(municipality.compareTo("all") == 0){
+					result.add(ModelConverter.convert(a, RateAreaBean.class));
+				} else if(a.getMunicipality().compareTo(municipality) == 0){
+					result.add(ModelConverter.convert(a, RateAreaBean.class));
+				}
+			} else if(a != null && a.getId_app().compareTo(appId) == 0){
+				if(municipality.compareTo("all") == 0){
+					result.add(ModelConverter.convert(a, RateAreaBean.class));
+				} else if(a.getMunicipality().compareTo(municipality) == 0){
+					result.add(ModelConverter.convert(a, RateAreaBean.class));
+				}
+			}
+		}
+		return result;
+	}	
 	
 	public RateAreaBean getAreaById(String areaId, String appId) {
 		RateArea a = mongodb.findById(areaId, RateArea.class);
@@ -161,6 +185,18 @@ public class StorageManager {
 				}
 			}
 		}
+		return result;
+	}
+	
+	public List<ParkingMeterBean> getAllParkingMeters(String appId, String municipality) {
+		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
+
+		for (RateAreaBean temp : getAllArea(appId, municipality)) {
+			if(temp != null && temp.getId_app().compareTo(appId) == 0){
+				result.addAll(getAllParkingMeters(temp, appId));
+			}
+		}
+
 		return result;
 	}
 	
@@ -277,6 +313,20 @@ public class StorageManager {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		//logger.error("I am in GET ALL STREETS");
 		for (RateAreaBean temp : getAllArea(appId)) {
+			if(temp != null && appId.compareTo("all") == 0){
+				result.addAll(getAllStreets(temp, "all"));
+			} else if(temp != null && temp.getId_app().compareTo(appId) == 0){
+				result.addAll(getAllStreets(temp, appId));
+			}
+		}
+
+		return result;
+	}
+	
+	public List<StreetBean> getAllStreets(String appId, String municipality) {
+		List<StreetBean> result = new ArrayList<StreetBean>();
+		//logger.error("I am in GET ALL STREETS");
+		for (RateAreaBean temp : getAllArea(appId, municipality)) {
 			if(temp != null && appId.compareTo("all") == 0){
 				result.addAll(getAllStreets(temp, "all"));
 			} else if(temp != null && temp.getId_app().compareTo(appId) == 0){
@@ -539,6 +589,7 @@ public class StorageManager {
 		bici.setName(pb.getName());
 		bici.setSlotNumber(pb.getSlotNumber());
 		bici.setBikeNumber(pb.getBikeNumber());
+		bici.setMunicipality(pb.getMunicipality());
 		bici.getGeometry().setLat(pb.getGeometry().getLat());
 		bici.getGeometry().setLng(pb.getGeometry().getLng());
 		mongodb.save(bici);
@@ -603,6 +654,27 @@ public class StorageManager {
 		}
 		return result;
 	}
+	
+	public List<BikePointBean> getAllBikePoints(String appId, String municipality) {
+		List<BikePointBean> result = new ArrayList<BikePointBean>();
+		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
+			if(bp != null && appId.compareTo("all") == 0){
+				if(municipality.compareTo("all") == 0){
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				} else if(bp.getMunicipality().compareTo(municipality) == 0) {
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				}
+			} else if(bp != null && bp.getId_app().compareTo(appId) == 0){
+			//logger.info(String.format("Bike point found : %s", pb.toString()));
+				if(municipality.compareTo("all") == 0){
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				} else if(bp.getMunicipality().compareTo(municipality) == 0) {
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				}
+			}
+		}
+		return result;
+	}	
 	
 	/**
 	 * Method getBikePointsByName: return a list of BikePointBean having a specific name
@@ -681,6 +753,26 @@ public class StorageManager {
 		return result;
 	}
 	
+	public List<ParkingStructureBean> getAllParkingStructure(String appId, String municipality) {
+		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
+		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
+			if(entity != null && appId.compareTo("all") == 0){
+				if(municipality.compareTo("all") == 0){
+					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+				} else if(entity.getMunicipality().compareTo(municipality) == 0){
+					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+				}
+			} else if(entity != null && entity.getId_app().compareTo(appId) == 0){
+				if(municipality.compareTo("all") == 0){
+					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+				} else if(entity.getMunicipality().compareTo(municipality) == 0){
+					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+				}
+			}
+		}
+		return result;
+	}
+	
 	public ParkingStructureBean findParkingStructure(String id) throws NotFoundException {
 		ParkingStructure entity = findById(id,ParkingStructure.class);
 		ParkingStructureBean ps = null;
@@ -716,6 +808,7 @@ public class StorageManager {
 		entity.setName(entityBean.getName());
 		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean.getPaymentMode()));
 		entity.setManager(entityBean.getManager());
+		entity.setMunicipality(entityBean.getMunicipality());
 		entity.setPhoneNumber(entityBean.getPhoneNumber());
 		entity.setSlotNumber(entityBean.getSlotNumber());
 		entity.setPayingSlotNumber(entityBean.getPayingSlotNumber());
@@ -749,6 +842,26 @@ public class StorageManager {
 				result.add(ModelConverter.convert(z, ZoneBean.class));
 			} else if(z != null && z.getId_app().compareTo(appId) == 0){
 				result.add(ModelConverter.convert(z, ZoneBean.class));
+			}
+		}
+		return result;
+	}
+	
+	public List<ZoneBean> getAllZone(String appId, String municipality) {
+		List<ZoneBean> result = new ArrayList<ZoneBean>();
+		for (Zone z : mongodb.findAll(Zone.class)) {
+			if(z != null && appId.compareTo("all") == 0){
+				if(municipality.compareTo("all") == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				} else if(z.getMunicipality().compareTo(municipality) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
+			} else if(z != null && z.getId_app().compareTo(appId) == 0){
+				if(municipality.compareTo("all") == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				} else if(z.getMunicipality().compareTo(municipality) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
 			}
 		}
 		return result;
@@ -814,6 +927,7 @@ public class StorageManager {
 		zona.setColor(z.getColor());
 		zona.setType(z.getType());
 		zona.setNote(z.getNote());
+		zona.setMunicipality(z.getMunicipality());
 		zona.setGeometryFromSubelement(z.isGeometryFromSubelement());
 		if(z.getGeometry()!= null && z.getGeometry().getPoints() != null && z.getGeometry().getPoints().size() > 0){
 			if(zona.getGeometry() != null && zona.getGeometry().getPoints() != null && zona.getGeometry().getPoints().size() > 0){

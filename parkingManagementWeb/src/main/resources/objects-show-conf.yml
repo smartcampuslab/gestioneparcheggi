@@ -366,7 +366,11 @@ providers:
         - code: note
           editable: true
           required: false
-          visible: true  
+          visible: true
+        - code: municipality
+          editable: true
+          required: true
+          visible: true
         - code: color
           editable: true
           required: true

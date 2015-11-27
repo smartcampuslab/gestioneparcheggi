@@ -26,6 +26,7 @@ public class Zone {
 	private String type; 		//type of division(geo, green, history, etc)
 	private String note;
 	private String color;
+	private String municipality;
 	private Polygon geometry;
 	private boolean geometryFromSubelement;
 	private Integer slotNumber;	// used in supply csv creation
@@ -116,6 +117,14 @@ public class Zone {
 
 	public void setGeometryFromSubelement(boolean geometryFromSubelement) {
 		this.geometryFromSubelement = geometryFromSubelement;
+	}
+
+	public String getMunicipality() {
+		return municipality;
+	}
+
+	public void setMunicipality(String municipality) {
+		this.municipality = municipality;
 	}
 
 }

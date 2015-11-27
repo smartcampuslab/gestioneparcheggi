@@ -8,15 +8,15 @@
     "description": "Titolo pagina home app"
 }, {
     "key": "app_home_info",
-    "value": "Descrizione App",
+    "value": "App Description",
     "description": "Titolo sezione info pagina home app"
 }, {
     "key": "app_home_park_info",
-    "value": "Descrizione App Gestione Parcheggi",
+    "value": "Parking Management App Description",
     "description": "Titolo sezione info pagina home park app"
 }, {
     "key": "app_home_aux_info",
-    "value": "Descrizione App Gestione Flussi",
+    "value": "Log Management App Description",
     "description": "Titolo sezione info pagina home aux app"
 }, {
     "key": "app_home_info_text",
@@ -40,7 +40,7 @@
     "description": "Valore link menu per Logout"
 }, {
     "key": "usefull_link",
-    "value": "Contatti",
+    "value": "Links",
     "description": "Valore link menu per Contatti"
 }, {
     "key": "menu_bar-homedashboard",
@@ -48,23 +48,23 @@
     "description": "Valore link menu per dashboard - soste"
 }, {
     "key": "menu_bar-homepark",
-    "value": "Gestione Offerta",
+    "value": "Data Management",
     "description": "Valore link menu per editing parcheggi"
 }, {
     "key": "menu_bar-homeaux",
-    "value": "Gestione Flussi",
+    "value": "Logs Management",
     "description": "Valore link menu per editing punti bici"
 }, {
     "key": "park_menu_list",
-    "value": "Funzionalita'",
+    "value": "Functionalities",
     "description": "Titolo menu app gestione parcheggi"
 }, {
     "key": "menu_bar-parkediting",
-    "value": "Editing parcheggi",
+    "value": "Parking editing",
     "description": "Valore link menu per editing parcheggi"
 }, {
     "key": "menu_bar-bikeediting",
-    "value": "Editing punti bici",
+    "value": "Bike point editing",
     "description": "Valore link menu per editing punti bici"
 }, {
     "key": "menu_bar-parkview",
@@ -72,123 +72,123 @@
     "description": "Valore link menu per visualizzazione elementi"
 }, {
     "key": "parkEditingPanelTitle",
-    "value": "Editor parcheggi",
+    "value": "Parking editor",
     "description": "Titolo pannello per editing parcheggi"
 }, {
     "key": "bikeEditingPanelTitle",
-    "value": "Editor punti bici",
+    "value": "Bike point editor",
     "description": "Titolo pannello per editing punti bici"
 }, {
     "key": "viewAllPanelTitle",
-    "value": "Visualizza",
+    "value": "View",
     "description": "Titolo pannello per visualizzazione"
 }, {
     "key": "view_hide_block_title",
-    "value": "Visualizza",
+    "value": "View",
     "description": "Titolo pannello per impostazione di visualizzazione oggetti sulla mappa"
 }, {
     "key": "loading_text",
-    "value": "Caricamento in corso",
+    "value": "Loading",
     "description": "Testo per caricamento dati in corso"
 }, {
 	"key": "previous_label",
-	"value": "Prec",
+	"value": "Prev",
 	"description": "Label precedente"
 }, {
 	"key": "next_label",
-	"value": "Succ",
+	"value": "Next",
 	"description": "Label successivo"
 }, {
 	"key": "link_edit_title",
-	"value": "Modifica",
+	"value": "Edit",
 	"description": "Title link modifica"
 }, {
 	"key": "link_view_title",
-	"value": "Visualizza",
+	"value": "View",
 	"description": "Title link visualizza"
 }, {
 	"key": "link_remove_title",
-	"value": "Elimina",
+	"value": "Delete",
 	"description": "Title link elimina"
 }, {
     "key": "view_areas",
-    "value": "Aree di tariffazione",
+    "value": "Rateing areas",
     "description": "Label checkbox aree di tariffazione"
 }, {
     "key": "view_streets",
-    "value": "Parcheggi",
+    "value": "Parking lots",
     "description": "Label checkbox vie"
 }, {
     "key": "view_streets_part",
-    "value": "Parcheggi",
+    "value": "Parking lots",
     "description": "Label checkbox sottovie"
 }, {
     "key": "view_parkingmeters",
-    "value": "Parcometri",
+    "value": "Parking meters",
     "description": "Label checkbox parcometri"
 }, {
     "key": "view_parkingstructs",
-    "value": "Parcheggi in struttura",
+    "value": "Parking structures",
     "description": "Label checkbox parcheggi in strutture"
 }, {
     "key": "view_bikepoints",
-    "value": "Punti bici",
+    "value": "Bike points",
     "description": "Label checkbox punti bici"
 }, {
     "key": "object_list_block_title",
-    "value": "Modifica Componenti",
+    "value": "Edit components",
     "description": "Titolo pannello per modifica componenti parcheggio"
 }, {
     "key": "area_list",
-    "value": "Lista Aree",
+    "value": "Areas List",
     "description": "Titolo tabella lista aree"
 }, {
     "key": "area_name",
-    "value": "Nome",
+    "value": "Name",
     "description": "Intestazione colonna nome in tabella lista aree"
 }, {
     "key": "area_rate",
-    "value": "Tariffa",
+    "value": "Rate",
     "description": "Intestazione colonna tariffa in tabella lista aree"
 }, {
     "key": "area_time",
-    "value": "Orario",
+    "value": "Hours",
     "description": "Intestazione colonna orario in tabella lista aree"
 }, {
     "key": "area_color",
-    "value": "Colore",
+    "value": "Color",
     "description": "Intestazione colonna colore in tabella lista aree"
 }, {
     "key": "no_areas_in_lists",
-    "value": "Nessuna area presente nel db",
+    "value": "No area found",
     "description": "Messaggio nessuna area in db"
 }, {
 	"key": "operations",
-	"value": "Azioni",
+	"value": "Actions",
 	"description": "Label operazioni"
 }, {
     "key": "street_list",
-    "value": "Lista Parcheggi",
+    "value": "Parking List",
     "description": "Titolo tabella lista strade"
 }, {
     "key": "street_name",
-    "value": "Nome",
+    "value": "Name",
     "description": "Intestazione colonna nome in tabella lista strade"
 }, {
     "key": "street_slots",
-    "value": "Posti",
+    "value": "Slots",
     "description": "Intestazione colonna parcheggi in tabella lista strade"
 }, {
     "key": "street_slots_composition",
-    "value": "Composizione",
+    "value": "Composition",
     "description": "Intestazione colonna composizione posti in tabella lista strade"
 }, {
     "key": "street_free_slots",
-    "value": "Posti liberi",
+    "value": "Free slots",
     "description": "Label parcheggi liberi in strade pagina dashboard"
 }, {
     "key": "street_occupied_slots",
-    "value": "Posti occupati",
+    "value": "Occupied slots",
     "description": "Label parcheggi occupati in strade pagina dashboard"
 }, {
     "key": "street_area_name",
@@ -196,19 +196,19 @@
     "description": "Intestazione colonna area in tabella lista strade"
 }, {
     "key": "no_streets_in_lists",
-    "value": "Nessuna strada presente nel db",
+    "value": "No park found",
     "description": "Messaggio nessuna strada in db"
 }, {
     "key": "pm_list",
-    "value": "Lista Parchimetri",
+    "value": "Parking meters list",
     "description": "Titolo tabella lista parchimetri"
 }, {
     "key": "pm_code",
-    "value": "Codice",
+    "value": "Code",
     "description": "Intestazione colonna codice in tabella lista parchimetri"
 }, {
     "key": "pm_note",
-    "value": "Note",
+    "value": "Notes",
     "description": "Intestazione colonna parcheggi in tabella lista parchimetri"
 }, {
     "key": "pm_area_name",
@@ -216,27 +216,27 @@
     "description": "Intestazione colonna area in tabella lista parchimetri"
 }, {
     "key": "no_pm_in_lists",
-    "value": "Nessun parchimetro presente nel db",
+    "value": "No parking meter found",
     "description": "Messaggio nessun parchimetro in db"
 }, {
     "key": "ps_list",
-    "value": "Lista Strutture",
+    "value": "Structures list",
     "description": "Titolo tabella lista strutture"
 }, {
     "key": "ps_name",
-    "value": "Nome",
+    "value": "Name",
     "description": "Intestazione colonna nome in tabella lista strutture"
 }, {
     "key": "ps_address",
-    "value": "Indirizzo",
+    "value": "Address",
     "description": "Intestazione colonna indirizzo in tabella lista strutture"
 }, {
     "key": "ps_time",
-    "value": "Orario",
+    "value": "Hours",
     "description": "Intestazione colonna orario in tabella lista strutture"
 }, {
     "key": "ps_slots",
-    "value": "Posti",
+    "value": "Slots",
     "description": "Intestazione colonna posti in tabella lista strutture"
 }, {
     "key": "ps_slots_composition",
@@ -244,19 +244,19 @@
     "description": "Intestazione colonna composizione posti in tabella lista strutture"
 }, {
     "key": "no_ps_in_lists",
-    "value": "Nessuna struttura presente nel db",
+    "value": "No structures found",
     "description": "Messaggio nessuna struttura in db"
 }, {
     "key": "zone_list",
-    "value": "Lista Zone",
+    "value": "Zone list",
     "description": "Titolo tabella lista zone"
 }, {
     "key": "microzone_list",
-    "value": "Lista Vie",
+    "value": "Street list",
     "description": "Titolo tabella lista microzone"
 }, {
     "key": "zone_name",
-    "value": "Nome",
+    "value": "Name",
     "description": "Intestazione colonna nome in tabella lista zone"
 }, {
     "key": "zone_submacro",
@@ -268,147 +268,147 @@
     "description": "Intestazione colonna submicro in tabella lista zone"
 }, {
     "key": "zone_color",
-    "value": "Colore",
+    "value": "Color",
     "description": "Intestazione colonna colore in tabella lista zone"
 }, {
     "key": "zone_geometry_from_subelement",
-    "value": "Geometria da sottoelementi",
+    "value": "Sub-elements geometry",
     "description": "Label per campo 'geometria da sottoelementi' in zona"
 }, {
     "key": "no_zones_in_lists",
-    "value": "Nessuna zona presente nel db",
+    "value": "No zone found",
     "description": "Messaggio nessuna zona in db"
 }, {
     "key": "edit_parkingmeter",
-    "value": "Modifica parcometro",
+    "value": "Edit parking meter",
     "description": "Titolo pagina editing parcometro"
 }, {
     "key": "pm_status",
-    "value": "Stato",
+    "value": "Status",
     "description": "Label stato parcometro"
 }, {
     "key": "pm_geometry",
-    "value": "Posizione",
+    "value": "Position",
     "description": "Label geometry parcometro"
 }, {
     "key": "parkingmeter_code_err_required",
-    "value": "Campo Codice Parcometro obbligatorio",
+    "value": "Parking meter code field is mandatory",
     "description": "Messaggio errore campo codice parcometro obbligatorio"
 }, {
     "key": "parkingmeter_code_err_already_exist",
-    "value": "Codice Parcometro gia' in uso. Utilizzare un codice diverso.",
+    "value": "Parking meter value already used. Use another value.",
     "description": "Messaggio errore campo codice parcometro gia' in uso"
 }, {
     "key": "parkingmeter_note_err_required",
-    "value": "Campo Note Parcometro obbligatorio",
+    "value": "Parking meter name field is mandatory",
     "description": "Messaggio errore campo note parcometro obbligatorio"
 }, {
     "key": "parkingmeter_status_select_err_required",
-    "value": "Campo Stato Parcometro obbligatorio",
+    "value": "Parking meter state field is mandatory",
     "description": "Messaggio errore campo stato parcometro obbligatorio"
 }, {
     "key": "parkingmeter_area_select_err_required",
-    "value": "Campo Area di tariffazione obbligatorio",
+    "value": "Parking meter rating area field is mandatory",
     "description": "Messaggio errore campo area di tariffazione obbligatorio"
 }, {
     "key": "parkingmeter_geometry_select_err_pattern",
-    "value": "Valore posizione lat-lng non corretto",
+    "value": "Incorrect lat-long position value",
     "description": "Messaggio errore campo geometry parcometro non corretto"
 }, {
     "key": "parkingmeter_geometry_select_err_required",
-    "value": "Valore posizione lat-lng obbligatorio",
+    "value": "Lat-lng position value is mandatory",
     "description": "Messaggio errore campo geometry parcometro obblilgatorio"
 }, {
     "key": "text_btn_save",
-    "value": "Salva",
+    "value": "Save",
     "description": "Testo pulsante 'salva'"
 }, {
     "key": "err_in_update_parkingmeter",
-    "value": "Errore nell'aggiornamento del parcometro. DB non pronto.",
+    "value": "Parking meter editing error. DB not ready.",
     "description": "Messaggio errore aggiornamento parcometro"
 }, {
     "key": "err_in_delete_parkingmeter",
-    "value": "Errore nella cancellazione del parcometro. DB non pronto.",
+    "value": "Parking meter deleting error. DB not ready.",
     "description": "Messaggio errore cancellazione parcometro"
 }, {
     "key": "view_parkingmeter",
-    "value": "Dettagli parcometro",
+    "value": "Parking meter detail",
     "description": "Titolo pagina view parcometro"
 }, {
     "key": "text_btn_close",
-    "value": "Chiudi",
+    "value": "Close",
     "description": "Testo pulsante 'chiudi'"
 }, {
     "key": "text_btn_edit",
-    "value": "Modifica",
+    "value": "Edit",
     "description": "Testo pulsante 'modifica'"
 }, {
     "key": "edit_parkingstructure",
-    "value": "Modifica parcheggio in struttura",
+    "value": "Edit parking structure",
     "description": "Titolo pagina editing parcometro"
 }, {
     "key": "ps_geometry",
-    "value": "Posizione",
+    "value": "Position",
     "description": "Label geometry parcometro"
 }, {
     "key": "ps_slots",
-    "value": "Posti",
+    "value": "Slots",
     "description": "Label posti struttura"
 }, {
     "key": "ps_totalslot",
-    "value": "Capienza",
+    "value": "Capacity",
     "description": "Label capienza struttura"
 }, {
     "key": "ps_paying_slot",
-    "value": "Posti standard",
+    "value": "Standard slots",
     "description": "Label posti a pagamento in struttura"
 }, {
     "key": "ps_handicapped_slot",
-    "value": "Posti per disabili",
+    "value": "Handicapped slots",
     "description": "Label posti per disabili struttura"
 }, {
     "key": "ps_unusuable_slot",
-    "value": "Posti non usabili",
+    "value": "Unusable slots",
     "description": "Label posti non usabili struttura"
 }, {
     "key": "ps_payment_mode",
-    "value": "Modalita' di pagamento",
+    "value": "Payment mode",
     "description": "Label modalita' di pagamento struttura"
 }, {
     "key": "ps_management_mode",
-    "value": "Modalita' di gestione",
+    "value": "Management mode",
     "description": "Label modalita' di gestione struttura"
 }, {
     "key": "ps_phone",
-    "value": "Telefono",
+    "value": "Phone",
     "description": "Label telefono struttura"
 }, {
     "key": "ps_manager",
-    "value": "Proprietario",
+    "value": "Owner",
     "description": "Label proprietario struttura"
 }, {
     "key": "ps_fee",
-    "value": "Tariffa sosta",
+    "value": "Stop rate",
     "description": "Label tariffa sosta in struttura"
 }, {
     "key": "ps_fee_det_val",
-    "value": "Euro/Ora",
+    "value": "Euro/Hour",
     "description": "Label dettagli tariffa sosta oraria in struttura"
 }, {
     "key": "ps_fee_det_note",
-    "value": "Note",
+    "value": "Notes",
     "description": "Label dettagli tariffa sosta note in struttura"
 }, {
     "key": "ps_fee_val",
-    "value": "Tariffa sosta oraria",
+    "value": "Stop rate time",
     "description": "Label tariffa sosta oraria in struttura"
 }, {
     "key": "ps_fee_note",
-    "value": "Tariffa sosta note",
+    "value": "Stop rate note",
     "description": "Label tariffa sosta note in struttura"
 }, {
     "key": "ps_park_and_ride",
-    "value": "Parcheggio Park&Ride",
+    "value": "Park&Ride",
     "description": "Label checkbox park and ride in parcheggio struttura"
 }, {
     "key": "ps_park_and_ride_det",
@@ -420,131 +420,131 @@
     "description": "Titolo campo park and ride in lista parcheggio struttura"
 }, {
     "key": "parkingstructure_name_err_required",
-    "value": "Campo Nome Struttura obbligatorio",
+    "value": "Structure name filed is mandatory",
     "description": "Messaggio errore campo nome struttura obbligatorio"
 }, {
     "key": "parkingstructure_address_err_required",
-    "value": "Campo Indirizzo Struttura obbligatorio",
+    "value": "Structure address field is mandatory",
     "description": "Messaggio errore campo indirizzo struttura obbligatorio"
 }, {
     "key": "parkingstructure_management_mode_select_err_required",
-    "value": "Campo Modalita' di gestione obbligatorio",
+    "value": "Management mode field is mandatory",
     "description": "Messaggio errore campo gestione obbligatorio"
 }, {
     "key": "parkingstructure_payment_mode_select_err_required",
-    "value": "Campo Modalita' di pagamento obbligatorio. Selezionare almeno uno strumento di pagamento.",
+    "value": "Payment mode field is mandatory. Select at least a payment tool.",
     "description": "Messaggio errore campo modalita' pagamento obbligatorio"
 }, {
     "key": "parkingstructure_fee_err_required",
-    "value": "Campo Tariffa sosta 'euro/ora' o 'note' obbligatorio. Valorizzare almeno uno dei due campi",
+    "value": "Stop rate 'euro/hour' or 'notes' field is mandatory. Valorize at least one field",
     "description": "Messaggio errore campo tariffa obbligatorio"
 }, {
     "key": "parkingstructure_fee_err_pattern",
-    "value": "Campo Tariffa sosta non corretto. Inserire un valore decimale",
+    "value": "Stop rate filed not correct. Insert a decimal value",
     "description": "Messaggio errore pattern campo tariffa"
 }, {
     "key": "parkingstructure_slots_err_required",
-    "value": "Campo Capienza obbligatorio",
+    "value": "Capacity field is mandatory",
     "description": "Messaggio errore campo capienza obbligatorio"
 }, {
     "key": "parkingstructure_slots_err_pattern",
-    "value": "Valore non corretto. Inserire un valore numerico",
+    "value": "Incorrect value. Insert a numeric value",
     "description": "Messaggio errore campo capienza non corretto"
 }, {
     "key": "parkingstructure_payingslots_err_required",
-    "value": "Campo 'Posti standard' obbligatorio",
+    "value": "'Standard slots' filed is mandatory",
     "description": "Messaggio errore campo posti standard obbligatorio"
 }, {
     "key": "parkingstructure_payingslots_err_pattern",
-    "value": "Valore non corretto. Inserire un valore numerico",
+    "value": "Incorrect value. Insert a numeric value",
     "description": "Messaggio errore campo 'Posti standard' non corretto"
 }, {
     "key": "parkingstructure_handicapped_slots_err_required",
-    "value": "Campo Posti per disabili obbligatorio",
+    "value": "'Handicapped slots' filed is mandatory",
     "description": "Messaggio errore campo capienza obbligatorio"
 }, {
     "key": "parkingstructure_unusuable_slots_err_required",
-    "value": "Campo Posti non utilizzabili obbligatorio",
+    "value": "'Unusable slots' filed is mandatory",
     "description": "Messaggio errore campo capienza obbligatorio"
 }, {
     "key": "parkingstructure_openingtime_err_pattern",
-    "value": "Campo Orario non corretto. Inserire un valore nel formato hh:mm - hh:mm",
+    "value": "Hours field not correct. Insert a value in the format hh:mm - hh:mm",
     "description": "Messaggio errore campo orario struttura non corretto"
 }, {
     "key": "parkingstructure_openingtime_err_required",
-    "value": "Campo Orario Struttura obbligatorio",
+    "value": "'Structure hours' filed is mandatory",
     "description": "Messaggio errore campo orario struttura obbligatorio"
 }, {
     "key": "parkingstructure_management_err_required",
-    "value": "Campo modalita' di gestione Struttura obbligatorio",
+    "value": "'Management mode' filed is mandatory",
     "description": "Messaggio errore campo gestione struttura obbligatorio"
 }, {
     "key": "parkingstructure_phone_err_pattern",
-    "value": "Campo Telefono non corretto.",
+    "value": "Phone field is not correct.",
     "description": "Messaggio errore telefono struttura non corretto"
 }, {
     "key": "parkingstructure_manager_err_required",
-    "value": "Campo Proprietario struttura obbligatorio.",
+    "value": "'Owner' filed is mandatory.",
     "description": "Messaggio errore proprietario struttura obbligatorio"
 }, {
     "key": "parkingstructure_phone_err_required",
-    "value": "Campo Telefono struttura obbligatorio.",
+    "value": "'Phone' filed is mandatory.",
     "description": "Messaggio errore telefono struttura obbligatorio"
 }, {
     "key": "parkingstructure_geometry_select_err_pattern",
-    "value": "Valore posizione lat-lng non corretto",
+    "value": "'Lat-long position' field is not correct",
     "description": "Messaggio errore campo geometry struttura non corretto"
 }, {
     "key": "parkingstructure_geometry_select_err_required",
-    "value": "Valore posizione lat-lng obbligatorio",
+    "value": "'Lat-long position' field is mandatory",
     "description": "Messaggio errore campo geometry struttura obbligatorio"
 }, {
     "key": "err_in_update_parkingstructure",
-    "value": "Errore nell'aggiornamento della struttura. DB non pronto.",
+    "value": "Editing structure error. DB not ready.",
     "description": "Messaggio errore aggiornamento struttura"
 }, {
     "key": "err_in_delete_parkingstructure",
-    "value": "Errore nella cancellazione della struttura. DB non pronto.",
+    "value": "Deleting structure error. DB not ready.",
     "description": "Messaggio errore cancellazione struttura"
 }, {
     "key": "view_parkingstructure",
-    "value": "Dettagli struttura parcheggio",
+    "value": "Parking structure details",
     "description": "Titolo pagina view struttura"
 }, {
     "key": "no_bp_in_lists",
-    "value": "Nessun punto bici presente nel db",
+    "value": "No bike point found in DB",
     "description": "Messaggio nessun punto bici in db"
 }, {
     "key": "bp_list",
-    "value": "Lista Punti Bici",
+    "value": "Bike point list",
     "description": "Titolo tabella lista punti bici"
 }, {
     "key": "bp_name",
-    "value": "Nome",
+    "value": "Name",
     "description": "Intestazione colonna nome in tabella lista punti bici"
 }, {
     "key": "bp_slots",
-    "value": "Posti bici",
+    "value": "Bike slots",
     "description": "Intestazione colonna posti bici in tabella lista punti bici"
 }, {
     "key": "bp_bikes",
-    "value": "Bici",
+    "value": "Bike number",
     "description": "Intestazione colonna bici in tabella lista punti bici"
 }, {
     "key": "edit_bikepoint",
-    "value": "Modifica punto bici",
+    "value": "Bike point editing",
     "description": "Titolo pagina editing punto bici"
 }, {
     "key": "bp_geometry",
-    "value": "Posizione",
+    "value": "Position",
     "description": "Label geometry punto bici"
 }, {
     "key": "err_in_update_bikepoint",
-    "value": "Errore nell'aggiornamento del punto bici. DB non pronto.",
+    "value": "Bike point editing error. DB non pronto.",
     "description": "Messaggio errore aggiornamento punto bici"
 }, {
     "key": "err_in_delete_bikepoint",
-    "value": "Errore nella cancellazione del punto bici. DB non pronto.",
+    "value": "Bike point deleting error. DB non pronto.",
     "description": "Messaggio errore cancellazione punto bici"
 }, {
     "key": "bikepoint_name_err_required",
@@ -788,7 +788,7 @@
     "description": "Label zone in pagina visualizza/nascondi elementi"
 }, {
     "key": "view_microzones",
-    "value": "Vie",
+    "value": "Street",
     "description": "Label vie in pagina visualizza/nascondi elementi"
 }, {
     "key": "edit_area",
@@ -806,6 +806,10 @@
     "key": "area_note",
     "value": "note",
     "description": "Campo note area"
+}, {
+    "key": "area_municipality",
+    "value": "comune",
+    "description": "Campo comune area"
 }, {
     "key": "area_name_err_required",
     "value": "Campo 'nome Area' obbligatorio",
@@ -834,6 +838,10 @@
     "key": "area_note_err_required",
     "value": "Campo 'note' area obbligatorio",
     "description": "Errore Campo note area obbligatorio"
+}, {
+    "key": "area_municipality_err_required",
+    "value": "Campo 'comune' area obbligatorio",
+    "description": "Errore Campo comune area obbligatorio"
 }, {
     "key": "area_color_err_required",
     "value": "Campo 'colore' area obbligatorio",
@@ -878,6 +886,10 @@
     "key": "area_note_placeholder",
     "value": "Inserire eventuali note",
     "description": "Testo placeholder campo note area"
+}, {
+    "key": "area_municipality_placeholder",
+    "value": "Inserire comune area",
+    "description": "Testo placeholder campo comune area"
 }, {
     "key": "area_color_placeholder",
     "value": "Scegliere il colore dell'area",
@@ -1072,59 +1084,59 @@
     "description": "Label pulsante cancella poligoni in area edit"
 }, {
     "key": "btn_remove_last_polygons",
-    "value": "Cancella ultimo",
+    "value": "Delete last",
     "description": "Label pulsante cancella ultimo poligono in area edit"
 }, {
     "key": "filter_code_title",
-    "value": "Filtra per Codice",
+    "value": "Filter by code",
     "description": "Title icona filtro per codice"
 }, {
     "key": "filter_name_title",
-    "value": "Filtra per Nome",
+    "value": "Filter by name",
     "description": "Title icona filtro per nome"
 }, {
     "key": "filter_note_title",
-    "value": "Filtra per Note",
+    "value": "Filter by notes",
     "description": "Title icona filtro per note"
 }, {
     "key": "filter_name_text",
-    "value": "Inserisci nome oggetto...",
+    "value": "Insert object name...",
     "description": "Testo filtro nome oggetto"
 }, {
     "key": "filter_code_text",
-    "value": "Inserisci codice oggetto...",
+    "value": "Insert code...",
     "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_note_text",
-    "value": "Inserisci nota...",
+    "value": "Insert note...",
     "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_area_title",
-    "value": "Filtra per Area",
+    "value": "Filter by area",
     "description": "Title icona filtro per area"
 }, {
     "key": "filter_status_title",
-    "value": "Filtra per Stato",
+    "value": "Filter by state",
     "description": "Title icona filtro per stato"
 }, {
     "key": "element_details",
-    "value": "DETTAGLI",
+    "value": "DETAILS",
     "description": "Title panel object details"
 }, {
     "key": "park_parkSupply",
-    "value": "Offerta di sosta",
+    "value": "Parking supply",
     "description": "Label per check offerta di sosta"
 }, {
     "key": "park_occupation",
-    "value": "Occupazione",
+    "value": "Occupation",
     "description": "Label per check occupazione"
 }, {
     "key": "park_receipts",
-    "value": "Incasso",
+    "value": "Profit",
     "description": "Label per check incasso"
 }, {
     "key": "park_timeCost",
-    "value": "Tempo ricerca",
+    "value": "Searching time",
     "description": "Label per check tempo ricerca"
 }, {
     "key": "park_pr",
@@ -1132,87 +1144,87 @@
     "description": "Label per check park and ride"
 }, {
     "key": "park_budget",
-    "value": "Bilancio",
+    "value": "Balance",
     "description": "Label per check bilancio"
 }, {
 	"key": "ps_fee_details",
-	"value": "Tariffa oraria",
+	"value": "Hourly rate",
 	"description": "Label per tariffa oraria in dettagli oggetto dashboard"
 }, {
     "key": "view_macrozones",
-    "value": "Macrozone",
+    "value": "Macrozones",
     "description": "Label macrozone in pagina dashboard"
 }, {
     "key": "ps_occupiedslot",
-    "value": "Occupati",
+    "value": "Occupied",
     "description": "Label posti occupati in dettagli struttura pagina dashboard"
 }, {
     "key": "ps_paying_occupiedslot",
-    "value": "Occupati standard",
+    "value": "Standard occupied",
     "description": "Label posti occupati standard in dettagli struttura pagina dashboard"
 }, {
     "key": "ps_handicapped_occupiedslot",
-    "value": "Occupati per disabili",
+    "value": "Handicapped occupied",
     "description": "Label posti occupati per disabili in dettagli struttura pagina dashboard"
 }, {
     "key": "street_occupiedslot",
-    "value": "Occupati",
+    "value": "Occupied",
     "description": "Label posti occupati in dettagli strada pagina dashboard"
 }, {
     "key": "element_occupancy",
-    "value": "Occupazione",
+    "value": "Occupancy",
     "description": "Title panel object occupancy"
 }, {
     "key": "street_handicapped_slot_occupied_db",
-    "value": "per disabili",
+    "value": "handicapped",
     "description": "Label campo posti disabili per oggetto strada"
 }, {
     "key": "street_reserved_slot_occupied_db",
-    "value": "riservati",
+    "value": "reserved",
     "description": "Label campo posti riservati per oggetto strada"
 }, {
     "key": "street_timedpark_slot_occupied_db",
-    "value": "disco orario",
+    "value": "timed",
     "description": "Label campo posti disco orario per oggetto strada"
 }, {
     "key": "street_freepark_slot_occupied_db",
-    "value": "sosta libera",
+    "value": "free",
     "description": "Label campo posti sosta libera per oggetto strada"
 }, {
     "key": "street_freepark_slot_signed_occupied_db",
-    "value": "sosta libera (segnaletica)",
+    "value": "free (with signposting)",
     "description": "Label campo posti sosta libera per oggetto strada"
 }, {
     "key": "street_paid_slot_occupied_db",
-    "value": "a pagamento",
+    "value": "paid",
     "description": "Label campo posti a pagamento per oggetto strada"
 }, {
     "key": "street_handicapped_slot_db",
-    "value": "per disabili",
+    "value": "handicapped",
     "description": "Label campo posti disabili per oggetto strada in dashboard"
 }, {
     "key": "street_reserved_slot_db",
-    "value": "riservati",
+    "value": "reserved",
     "description": "Label campo posti riservati per oggetto strada in dashboard"
 }, {
     "key": "street_timedpark_slot_db",
-    "value": "disco orario",
+    "value": "timed",
     "description": "Label campo posti disco orario per oggetto strada in dashboard"
 }, {
     "key": "street_freepark_slot_db",
-    "value": "sosta libera",
+    "value": "free",
     "description": "Label campo posti sosta libera per oggetto strada in dashboard"
 }, {
     "key": "street_freepark_slot_signed_db",
-    "value": "sosta libera (segnaletica)",
+    "value": "free (with signposting)",
     "description": "Label campo posti sosta libera con segnaletica per oggetto strada in dashboard"
 }, {
     "key": "street_paid_slot_db",
-    "value": "a pagamento",
+    "value": "paid",
     "description": "Label campo posti a pagamento per oggetto strada in dashboard"
 }, {
     "key": "street_average_occupation",
-    "value": "Occupazione media",
+    "value": "Average occupancy",
     "description": "Label per valore occupazione media per oggetto strada in dashboard"
 }, {
     "key": "street_occupation_not_present",
@@ -1220,47 +1232,47 @@
     "description": "Testo dato non presente per valore occupazione media strada in dashboard"
 }, {
     "key": "zone_total_slots",
-    "value": "Posti totali",
+    "value": "Total slots",
     "description": "Testo label posti totali zona in dashboard"
 }, {
     "key": "zone_occupied_slots",
-    "value": "Posti occupati",
+    "value": "Occupied slots",
     "description": "Testo label posti occupati zona in dashboard"
 }, {
     "key": "area_total_slots",
-    "value": "Posti totali",
+    "value": "Total slots",
     "description": "Testo label posti totali area in dashboard"
 }, {
     "key": "area_paid_slots",
-    "value": "Posti a pagamento",
+    "value": "Paid slots",
     "description": "Testo label posti a pagamento in area in dashboard"
 }, {
     "key": "area_occupied_slots",
-    "value": "Posti occupati",
+    "value": "Occupied slots",
     "description": "Testo label posti occupati area in dashboard"
 }, {
     "key": "space_filter_title",
-    "value": "Zone di sosta interessate",
+    "value": "Parking zones interested",
     "description": "Testo label posti occupati area in dashboard"
 }, {
     "key": "occupation_filter_title",
-    "value": "Visualizza DATI",
+    "value": "View DATA",
     "description": "Testo label dati di filto in dashboard"
 }, {
     "key": "left_filter_title",
-    "value": "IMPOSTA FILTRO",
+    "value": "FILTER SET UP",
     "description": "Testo label filtro di sinistra in dashboard"
 }, {
 	"key": "other_settings",
-	"value": "Altre Impostazioni",
+	"value": "Other settings",
 	"description": "Label per altre impostazioni in settaggio filtro occupazione"
 }, {
 	"key": "use_average_zone_occ",
-	"value": "Occupazione Media di Zona",
+	"value": "Zone average occupancy",
 	"description": "Label per checkbox di occupazione media di zona in filtro occupazione"
 }, {
     "key": "euro_hour",
-    "value": "€/ora",
+    "value": "€/hour",
     "description": "Simbolo tariffa oraria"
 }, {
     "key": "euro",
@@ -1268,227 +1280,227 @@
     "description": "Simbolo euro per valore tariffario"
 }, {
     "key": "add_new_object",
-    "value": "AGGIUNGI",
+    "value": "ADD",
     "description": "Testo pulsante aggiungi in edit parcheggi"
 }, {
     "key": "info_1",
-    "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario, R: riservati, H: per disabili, ND: non disponibili",
+    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped, ND: not available",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_2",
-    "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario, R: riservati, H: per disabili",
+    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_3",
-    "value": "S: standard, H: per disabili",
+    "value": "S: standard, H: handicapped",
     "description": "Testo pannello informativo per occupazione parcheggi in struttura"
 }, {
     "key": "info_close",
-    "value": "CHIUDI",
+    "value": "CLOSE",
     "description": "Link per chiusura pannello informativo"
 }, {
     "key": "info_alt_title",
-    "value": "Visualizza informazioni",
+    "value": "View informations",
     "description": "Testo per attributo alt o title del link per il pannello informativo"
 }, {
     "key": "csv_btn_create",
-    "value": "Esporta Dati",
+    "value": "Data Export",
     "description": "Testo bottone per creazione del file csv"
 }, {
     "key": "report_btn_automate",
-    "value": "Crea Report",
+    "value": "Create Report",
     "description": "Testo bottone per creazione report periodico"
 }, {
     "key": "csv_link_alt_title",
-    "value": "Scarica file csv",
+    "value": "Download csv file",
     "description": "Testo per attributo alt o title del link per il download del file csv"
 }, {
     "key": "view_logs_link_text",
-    "value": "Visualizza Flussi",
+    "value": "View Flux",
     "description": "Testo per per pulsante view logs - ausiliari"
 }, {
     "key": "new_logs_link_text",
-    "value": "Aggiungi Rilevazione",
+    "value": "Add log",
     "description": "Testo per per pulsante new logs - ausiliari"
 }, {
     "key": "log_objId",
-    "value": "Id Oggetto",
+    "value": "Object Id",
     "description": "intestazione colonna id oggetto in lista log globali"
 }, {
     "key": "log_type",
-    "value": "Tipo",
+    "value": "Type",
     "description": "intestazione colonna tipo oggetto in lista log globali"
 }, {
     "key": "log_time",
-    "value": "Ora",
+    "value": "Time",
     "description": "intestazione colonna ora oggetto in lista log globali"
 }, {
     "key": "log_author",
-    "value": "Autore",
+    "value": "Author",
     "description": "intestazione colonna autore oggetto in lista log globali"
 }, {
     "key": "log_value",
-    "value": "Valore",
+    "value": "Value",
     "description": "intestazione colonna valore oggetto in lista log globali"
 }, {
     "key": "log_object_name",
-    "value": "Nome oggetto",
+    "value": "Object name",
     "description": "intestazione colonna nome oggetto in lista log globali"
 }, {
     "key": "log_object_code",
-    "value": "Codice oggetto",
+    "value": "Object code",
     "description": "intestazione colonna codice oggetto in lista log globali"
 }, {
     "key": "no_logs_in_lists",
-    "value": "Nessun log trovato",
+    "value": "No log found",
     "description": "messaggio nessun valore in lista log globali"
 }, {
     "key": "parking_type_in_lists",
-    "value": "Parcheggio (Occupazione)",
+    "value": "Parking (Occupancy)",
     "description": "Valore per tipo oggetto parcheggio"
 }, {
     "key": "park_profit_type_in_lists",
-    "value": "Parcheggio (Ricavo)",
+    "value": "Parking (Profit)",
     "description": "Valore per tipo oggetto parcheggio"
 }, {
     "key": "street_type_in_lists",
-    "value": "Via",
+    "value": "Street",
     "description": "Valore per tipo oggetto via"
 }, {
     "key": "pm_type_in_lists",
-    "value": "Parcometro",
+    "value": "Parking meter",
     "description": "Valore per tipo oggetto parcometro"
 }, {
     "key": "log_total_slot",
-    "value": "Posti totali",
+    "value": "Total slots",
     "description": "label per posti totali parcheggio"
 }, {
     "key": "log_slot_occupied_on_total",
-    "value": "Posti occupati",
+    "value": "Occupied slots",
     "description": "label per posti occupati in parcheggio"
 }, {
     "key": "log_slot_unavailable",
-    "value": "Posti non disponibili",
+    "value": "Unusable slots",
     "description": "label per posti non disponibili in parcheggio"
 }, {
     "key": "log_slot_free",
-    "value": "Posti gratuiti",
+    "value": "Free slots",
     "description": "label per posti gratuiti in via"
 }, {
     "key": "log_slot_occupied_on_free",
-    "value": "Posti gratuiti occupati",
+    "value": "Occupied on free",
     "description": "label per posti gratuiti occupati in via"
 }, {
     "key": "log_slot_occupied_on_free_signed",
-    "value": "Posti gratuiti (con segnaletica) occupati",
+    "value": "Occupied on free (with signposting)",
     "description": "label per posti gratuiti con segnaletica occupati in via"
 }, {
     "key": "log_slot_occupied_on_reserved",
-    "value": "Posti riservati occupati",
+    "value": "Occupied on reserved",
     "description": "label per posti riservati occupati in via"
 }, {
     "key": "log_slot_occupied_on_handicapped",
-    "value": "Posti per disabili occupati",
+    "value": "Occupied on handicapped",
     "description": "label per posti disabili occupati in via"
 }, {
     "key": "log_slot_paying",
-    "value": "Posti a pagamento",
+    "value": "Paid slots",
     "description": "label per posti a pagamento in via"
 }, {
     "key": "log_slot_occupied_on_paying",
-    "value": "Posti a pagamento occupati",
+    "value": "Occupied on paid",
     "description": "label per posti a pagamento occupati in via"
 }, {
     "key": "log_slot_standard",
-    "value": "Posti standard",
+    "value": "Standard slots",
     "description": "label per posti standard in struttura"
 }, {
     "key": "log_slot_occupied_on_standard",
-    "value": "Posti standard occupati",
+    "value": "Occupied on standard",
     "description": "label per posti standard occupati in via"
 }, {
     "key": "log_slot_timed",
-    "value": "Posti a disco orario",
+    "value": "Timed slots",
     "description": "label per posti a disco orario in via"
 }, {
     "key": "log_slot_occupied_on_timed",
-    "value": "Posti a disco orario occupati",
+    "value": "Occupied on timed",
     "description": "label per posti a disco orario occupati in via"
 }, {
     "key": "log_slot_handicapped",
-    "value": "Posti per disabili",
+    "value": "Handicapped slots",
     "description": "label per posti per disabili in via"
 }, {
     "key": "link_filter_log_title",
-    "value": "Filtra per oggetto",
+    "value": "Filter by object",
     "description": "titolo icona per filtro su oggetti in log"
 }, {
     "key": "log_filtered_list",
-    "value": "Lista log oggetto",
+    "value": "Object log list",
     "description": "titolo pagina lista log filtrati"
 }, {
     "key": "log_details",
-    "value": "Dettagli Log",
+    "value": "Log Details",
     "description": "titolo pagina dettaglio log"
 }, {
     "key": "new_log_street",
-    "value": "Crea Log Parcheggio",
+    "value": "Create Parking Log",
     "description": "Titolo pannello in creazione log via"
 }, {
     "key": "street_name_log",
-    "value": "Nome parcheggio",
+    "value": "Parking name",
     "description": "Label per select in creazione log via"
 }, {
     "key": "street_log_placeholder",
-    "value": "Seleziona il nome del parcheggio",
+    "value": "Select parking name",
     "description": "Placeholder per select in creazione log via"
 }, {
     "key": "street_name_select_err_required",
-    "value": "Campo 'Nome via' obbligatorio",
+    "value": "'Stree name' field is mandatory",
     "description": "Placeholder per select in creazione log via"
 }, {
     "key": "street_timedslotoccupied_placeholder",
-    "value": "Inserire numero posti occupati a disco orario",
+    "value": "Insert the occupied slot number on timed",
     "description": "Placeholder per posti disco orario occupati in creazione log via"
 }, {
     "key": "street_paidslotoccupied_placeholder",
-    "value": "Inserire numero posti occupati a pagamento",
+    "value": "Insert the occupied slot number on paid",
     "description": "Placeholder per posti a pagamento occupati in creazione log via"
 }, {
     "key": "street_freeslotoccupied_placeholder",
-    "value": "Inserire numero posti occupati tra i gratuiti",
+    "value": "Insert the occupied slot number on free",
     "description": "Placeholder per posti gratuiti occupati in creazione log via"
 }, {
     "key": "street_freeslotoccupiedsigned_placeholder",
-    "value": "Inserire numero posti occupati tra i gratuiti (con segnaletica)",
+    "value": "Insert the occupied slot number on free (with signposting)",
     "description": "Placeholder per posti gratuiti con segnaletica occupati in creazione log via"
 }, {
     "key": "street_handicappedslotoccupied_placeholder",
-    "value": "Inserire numero posti occupati tra i riservati ai disabili",
+    "value": "Insert the occupied slot number on handicapped",
     "description": "Placeholder per posti per disabili occupati in creazione log via"
 }, {
     "key": "street_reservedslotoccupied_placeholder",
-    "value": "Inserire numero posti occupati riservati",
+    "value": "Insert the occupied slot number on reserved",
     "description": "Placeholder per posti riservati occupati in creazione log via"
 }, {
     "key": "street_unavailableslot_placeholder",
-    "value": "Inserire numero posti non disponibili",
+    "value": "Insert the unusuable slot number",
     "description": "Placeholder per posti non disponibili in creazione log via"
 }, {
     "key": "park_handicappedslotoccupied_placeholder",
-    "value": "Inserire numero posti occupati tra i riservati ai disabili",
+    "value": "Insert the occupied slot number on handicapped",
     "description": "Placeholder per posti per disabili occupati in creazione log parcheggio"
 }, {
     "key": "park_unavailableslot_placeholder",
-    "value": "Inserire numero posti non disponibili",
+    "value": "Insert the unusuable slot number",
     "description": "Placeholder per posti non disponibili in creazione log parcheggio"
 }, {
     "key": "street_usercode_placeholder",
-    "value": "Inserisci il codice utente",
+    "value": "Insert the user code",
     "description": "Placeholder per codice utente in creazione log via"
 }, {
     "key": "street_user_log",
-    "value": "Codice Utente",
+    "value": "User Code",
     "description": "Label codice utente in creazione log via"
 }, {
     "key": "street_time_log",
@@ -1496,79 +1508,79 @@
     "description": "Label orario in creazione log via"
 }, {
     "key": "street_day_log",
-    "value": "Giorno",
+    "value": "Day",
     "description": "Label orario in creazione log via"
 }, {
     "key": "street_timelog_err_required",
-    "value": "Campo ora log obbligatorio",
+    "value": "'Log Time' field is mandatory",
     "description": "Messaggio orario log mancante in creazione log via"
 }, {
     "key": "street_period_err",
-    "value": "Periodo inserito non corretto, data di inizio maggiore di data di fine",
+    "value": "The inserted period in not correct, starting date is greater then the final date",
     "description": "Messaggio errore periodo in creazione log via"
 }, {
 	"key": "datepicker_button_today",
-	"value": "Oggi",
+	"value": "Today",
 	"description": "Testo pulsante datapicker per oggi"
 }, {
 	"key": "datepicker_button_canc",
-	"value": "Cancella",
+	"value": "Delete",
 	"description": "Testo pulsante datapicker per cancella"
 }, {
 	"key": "datepicker_button_close",
-	"value": "Chiudi",
+	"value": "Close",
 	"description": "Testo pulsante datapicker per chiudi"
 }, {
 	"key": "log_time_error_required",
-	"value": "Ora obbligatoria",
+	"value": "'Time' field is mandatory",
 	"description": "Messaggio ora log mancante in creazione log via"
 }, {
 	"key": "log_time_error_pattern",
-	"value": "Ora non corretta. Inserire un  orario nel formato hh:mm:ss",
+	"value": "'Time' field is not correct. Insert a value in the hh:mm:ss values",
 	"description": "Messaggio ora log non corretta in creazione log via"
 }, {
 	"key": "street_userlog_err_required",
-	"value": "Campo user log obbligatorio",
+	"value": "'User log' field is mandatory",
 	"description": "Messaggio user log mancante in creazione log via"
 }, {
 	"key": "street_userlog_pattern",
-	"value": "Campo user log non corretto: iserire un valore numerico",
+	"value": "'User log' field is not correct: insert a numeric value",
 	"description": "Messaggio user log non corretta in creazione log via"
 }, {
 	"key": "err_in_log_street_inserting",
-	"value": "Errore nell'inserimento del log: DB non pronto. Riprovare piu' tardi",
+	"value": "Error in inserting new log: DB is not ready. Try again later",
 	"description": "Messaggio errore in db in creazione log via"
 }, {
 	"key": "succ_in_log_street_inserting",
-	"value": "Inserimento nuovo log avvenuto con successo",
+	"value": "New log inserting success",
 	"description": "Messaggio successo in creazione log via in db"
 }, {
     "key": "new_log_parking",
-    "value": "Crea Log Struttura",
+    "value": "Create Structure Log",
     "description": "Titolo pannello in creazione log parcheggio"
 }, {
     "key": "new_log_parkingmeter",
-    "value": "Crea Log Parcometro",
+    "value": "Create Parking meter Log",
     "description": "Titolo pannello in creazione log parcometro"
 }, {
     "key": "parking_name_log",
-    "value": "Nome struttura",
+    "value": "Structure name",
     "description": "Label per select in creazione log parcheggio"
 }, {
     "key": "parking_log_placeholder",
-    "value": "Seleziona il nome della struttura",
+    "value": "Select the structure name",
     "description": "Placeholder per select in creazione log parcheggio"
 }, {
     "key": "pm_code_log",
-    "value": "Codice parcometro",
+    "value": "Parking meter code",
     "description": "Label per select in creazione log parcometro"
 }, {
     "key": "pm_log_placeholder",
-    "value": "Seleziona il codice del parcometro",
+    "value": "Select the parking meter code",
     "description": "Placeholder per select in creazione log parcometro"
 }, {
     "key": "parking_name_select_err_required",
-    "value": "Campo 'Nome parcheggio' obbligatorio",
+    "value": "'Parking name' field is mandatory",
     "description": "Placeholder per select in creazione log parcheggio"
 }, {
     "key": "park_id",
@@ -1576,11 +1588,11 @@
     "description": "Label id parcheggio in creazione log parcheggio"
 }, {
     "key": "park_name",
-    "value": "Nome",
+    "value": "Name",
     "description": "Label nome parcheggio in creazione log parcheggio"
 }, {
     "key": "parking_user_log",
-    "value": "Codice Utente",
+    "value": "User Code",
     "description": "Label codice utente in creazione log parcheggio"
 }, {
     "key": "parking_time_log",
@@ -1588,91 +1600,91 @@
     "description": "Label orario in creazione log parcheggio"
 }, {
     "key": "parking_day_log",
-    "value": "Giorno",
+    "value": "Day",
     "description": "Label orario in creazione log parcheggio"
 }, {
     "key": "parking_profit",
-    "value": "Incasso",
+    "value": "Profit",
     "description": "Titolo incasso in creazione log parcheggio"
 }, {
     "key": "parking_profit_val",
-    "value": "Valore Incasso (in eurocent)",
+    "value": "Profit value (in eurocent)",
     "description": "Label incasso in creazione log parcheggio"
 }, {
     "key": "parking_profit_placeholder",
-    "value": "Inserire il valore di incasso in eurocent. Es: 1,35 euro = 135 eurocent.",
+    "value": "Insert the profit value in eurocent. Es: 1,35 euro = 135 eurocent.",
     "description": "Valore placeholder incasso in creazione log parcheggio"
 }, {
     "key": "parking_tickets_val",
-    "value": "Num ticket",
+    "value": "Ticket number",
     "description": "Label numero ticket in creazione log parcheggio"
 }, {
     "key": "parking_tickets_placeholder",
-    "value": "Inserire il numero di ticket emessi.",
+    "value": "Insert the number of emitted tickets.",
     "description": "Valore placeholder tickets in creazione log parcheggio"
 }, {
     "key": "log_parking_profit_error_pattern",
-    "value": "Valore non corretto nel campo 'Incasso'. Inserire un valore decimale con virgola es: 1,35",
+    "value": "'Profit' field value is not correct. Insert a decimal value es: 1,35",
     "description": "Messaggio errore valore non corretto in campo incasso in creazione log parcheggio"
 }, {
     "key": "log_parking_profit_error_required",
-    "value": "Campo 'Incasso' obbligatorio. Inserire un valore decimale corretto.",
+    "value": "'Profit' field value is mandatory. Insert a decimal value.",
     "description": "Messaggio errore valore obbligatorio in campo incasso in creazione log parcheggio"
 }, {
     "key": "log_parking_tickets_error_pattern",
-    "value": "Valore non corretto nel campo 'Num Ticket'. Inserire un valore numerico intero.",
+    "value": "'Ticket number' field is not correct. Insert an integer value.",
     "description": "Messaggio errore valore non corretto in campo tickets in creazione log parcheggio"
 }, {
     "key": "log_parking_tickets_error_required",
-    "value": "Campo 'Num Ticket' obbligatorio. Inserire un valore intero corretto.",
+    "value": "'Ticket number' field is mandatory. Insert a correct integer value.",
     "description": "Messaggio errore valore obbligatorio in campo tickets in creazione log parcheggio"
 }, {
     "key": "parking_period_err",
-    "value": "Periodo inserito non corretto, data di inizio maggiore di data di fine",
+    "value": "Incorrect inserted period, starting date is greater then the final date",
     "description": "Messaggio errore periodo in creazione log parcheggio"
 }, {
     "key": "parking_timelog_err_required",
-    "value": "Campo ora log obbligatorio",
+    "value": "'Log time' field is mandatory",
     "description": "Messaggio orario log mancante in creazione log parcheggio"
 }, {
 	"key": "parking_userlog_err_required",
-	"value": "Campo user log obbligatorio",
+	"value": "'Log user' field is mandatory",
 	"description": "Messaggio user log mancante in creazione log parcheggio"
 }, {
 	"key": "parking_userlog_pattern",
-	"value": "Campo user log non corretto: iserire un valore numerico",
+	"value": "'Log user' field is not correct: insert a numeric value",
 	"description": "Messaggio user log non corretta in creazione log parcheggio"
 }, {
 	"key": "err_in_log_parking_inserting",
-	"value": "Errore nell'inserimento del log: DB non pronto. Riprovare piu' tardi",
+	"value": "Error in new log insertion: DB is not ready. Try again later",
 	"description": "Messaggio errore in db in creazione log parcheggio"
 }, {
 	"key": "succ_in_log_parking_inserting",
-	"value": "Inserimento nuovo log avvenuto con successo",
+	"value": "New log insertion success",
 	"description": "Messaggio successo in creazione log parcheggio in db"
 }, {
 	"key": "parking_slots",
-	"value": "Posti",
+	"value": "Slots",
 	"description": "Titolo pannello posti in creazione log parcheggio"
 }, {
 	"key": "parking_totalslot",
-	"value": "Posti totali",
+	"value": "Total slots",
 	"description": "Label per campo posti totali in creazione log parcheggio"
 }, {
 	"key": "parking_occupied_slot",
-	"value": "Posti occupati",
+	"value": "Occupied slots",
 	"description": "Label per campo posti occupati in creazione log parcheggio"
 }, {
 	"key": "parking_slotoccupied_placeholder",
-	"value": "Inerire il numero di posti occupati",
+	"value": "Insert the occupied slots number",
 	"description": "Valore placeholder per campo posti occupati in creazione log parcheggio"
 }, {
 	"key": "parking_unavailable_slot",
-	"value": "Posti non disponibili",
+	"value": "Unusable slots",
 	"description": "Label per campo posti non disponibili in creazione log parcheggio"
 }, {
 	"key": "log_parking_occupied_error_pattern",
-	"value": "Valore non corretto nel campo 'posti occupati'. Inserire un valore numerico",
+	"value": "'Occupied slots' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti non corretto in creazione log parcheggio"
 }, {
 	"key": "log_parking_occupied_error_required",
@@ -1936,148 +1948,148 @@
 	"description": "Messaggio errore periodo data da o data a mancanti in inserimento log"
 }, { 
 	"key": "cmp_report_creation_button", 
-	"value": "Confronta Valori",
+	"value": "Compare values",
 	"description": "Testo pulsante per creazione report di comparazione in lista dati"
 }, { 
 	"key": "cmp_report_creation_panel", 
-	"value": "Costruzione report di confronto",
+	"value": "Compare report creation",
 	"description": "Titolo pannello per creazione report di comparazione in lista dati"
 }, { 
 	"key": "vertical_compare_values", 
-	"value": "Valori verticali",
+	"value": "Vertical values",
 	"description": "Label select valori verticali per creazione report di comparazione in lista dati"
 }, { 
 	"key": "orizontal_compare_values", 
-	"value": "Valori orizzontali",
+	"value": "Horizontal values",
 	"description": "Label select valori orizzontali per creazione report di comparazione in lista dati"
 }, { 
 	"key": "vertical_data_select_err_required", 
-	"value": "Errore in creazione report di confronto: selezione obbligatoria per campo 'valori verticali'",
+	"value": "Creating report compare error: you have to select a value for 'verical values'",
 	"description": "Testo errore in creazione report di comparazione: campo valori verticali obbligatorio"
 }, { 
 	"key": "orizontal_data_select_err_required", 
-	"value": "Errore in creazione report di confronto: selezione obbligatoria per campo 'valori orizzontali'",
+	"value": "Creating report compare error: you have to select a value for 'horizontal'",
 	"description": "Testo errore in creazione report di comparazione: campo valori orizzontali obbligatorio"
 }, { 
 	"key": "create_comparation_report_btn", 
-	"value": "Crea Report",
+	"value": "Create Report",
 	"description": "Testo pulsate creazione nuovo report di confronto"
 }, { 
 	"key": "profit_history_table_label", 
-	"value": "Profitto (€)",
+	"value": "Profit (€)",
 	"description": "Titolo tabella profitto in dettagli storici parcometro"
 }, { 
 	"key": "tickets_history_table_label", 
-	"value": "Ticket emessi",
+	"value": "Emitted tickets",
 	"description": "Titolo tabella ticket in dettagli storici parcometro"
 }, { 
 	"key": "legend_alt_title_val", 
-	"value": "Visualizza legenda",
+	"value": "Show legend",
 	"description": "Alt e title link per visualizzazione legenda"
 }, { 
 	"key": "legend_occupancy_label", 
-	"value": "Legenda occupazione",
+	"value": "Occupation legend",
 	"description": "Label per legenda occupazione"
 }, { 
 	"key": "legend_profit_label", 
-	"value": "Legenda incassi",
+	"value": "Profit legend",
 	"description": "Label per legenda incassi"
 }, { 
 	"key": "legend_time_label", 
-	"value": "Legenda tempo ricerca",
+	"value": "Search time legend",
 	"description": "Label per legenda tempo ricerca"
 }, { 
 	"key": "legend_np_data", 
-	"value": "non disp",
+	"value": "not available",
 	"description": "Valore dato non disponibile in legenda"
 }, { 
 	"key": "legend_open_label", 
-	"value": "Mostra legenda",
+	"value": "Show legend",
 	"description": "Label pulsante mostra legenda"
 }, { 
 	"key": "legend_close_label", 
-	"value": "Nascondi legenda",
+	"value": "Hide legend",
 	"description": "Label pulsante chiudi legenda"
 }, { 
 	"key": "report_management_button_label", 
-	"value": "Gestione Report",
+	"value": "Report management",
 	"description": "Label pulsante gestione report"
 }, { 
 	"key": "system_log_author", 
-	"value": "Sistema",
+	"value": "System",
 	"description": "Testo log di sistema se autore 999"
 }, { 
     "key": "time_vis",
-    "value": "Visualizzazione"
+    "value": "View"
 }, {
     "key": "vis_last_value",
-    "value": "Ultimo valore"
+    "value": "Last value"
 }, {
     "key": "vis_medium",
-    "value": "Valore medio"
+    "value": "Average value"
 }, {
     "key": "vis_medium_year",
-    "value": "Medio ultimo anno"
+    "value": "Average of last year"
 }, {
     "key": "vis_medium_month",
-    "value": "Medio ultimo mese"
+    "value": "Average of last month"
 }, {
     "key": "vis_medium_day",
-    "value": "Medio ultimo giorno"
+    "value": "Average of last day"
 }, {
     "key": "year_vis",
-    "value": "Anno"
+    "value": "Year"
 }, {
     "key": "all_years_vis",
-    "value": "Tutti"
+    "value": "All"
 }, {
     "key": "month_vis",
-    "value": "Mese"
+    "value": "Month"
 }, {
     "key": "day_vis",
-    "value": "Giorno"
+    "value": "Day"
 }, {
     "key": "wd_vis",
-    "value": "Feriale"
+    "value": "Weekday"
 }, {
     "key": "we_vis",
-    "value": "Festivo"
+    "value": "Holiday"
 }, {
     "key": "mon_vis",
-    "value": "Lu"
+    "value": "Mo"
 }, {
     "key": "tue_vis",
-    "value": "Ma"
+    "value": "Tu"
 }, {
     "key": "wed_vis",
-    "value": "Me"
+    "value": "We"
 }, {
     "key": "thu_vis",
-    "value": "Gi"
+    "value": "Th"
 }, {
     "key": "fri_vis",
-    "value": "Ve"
+    "value": "Fr"
 }, {
     "key": "sat_vis",
     "value": "Sa"
 }, {
     "key": "sun_vis",
-    "value": "Do"
+    "value": "Su"
 }, {
     "key": "custom_vis",
-    "value": "Definisci periodo"
+    "value": "Set up period"
 }, {
     "key": "morning_vis",
-    "value": "Matt"
+    "value": "Am"
 }, {
     "key": "afternoon_vis",
-    "value": "Pome"
+    "value": "Pm"
 }, {
     "key": "night_vis",
-    "value": "Sera"
+    "value": "Even"
 }, {
     "key": "hour_vis",
-    "value": "Fascia oraria"
+    "value": "Time slot"
 }, {
     "key": "html_iframe_1",
     "value": "<iframe src='"
@@ -2087,4 +2099,103 @@
 }, {
     "key": "html_iframe_3",
     "value": "</iframe>"
+}, {
+    "key": "dash_map_tab",
+    "value": "Map"
+}, {
+    "key": "dash_list_tab",
+    "value": "List"
+}, {
+    "key": "widget_copy_text",
+    "value": "Copy the code below to import the widget in your portal"
+}, {
+    "key": "manage_area_tab",
+    "value": "Area"
+}, {
+    "key": "manage_zone_tab",
+    "value": "Macrozone"
+}, {
+    "key": "manage_microzone_tab",
+    "value": "Street"
+}, {
+    "key": "manage_street_tab",
+    "value": "Parking"
+}, {
+    "key": "manage_structure_tab",
+    "value": "Structure Parking"
+}, {
+    "key": "manage_parkingmeter_tab",
+    "value": "Parking Meter"
+}, {
+    "key": "manage_bikepoint_tab",
+    "value": "Bike Point"
+}, {
+    "key": "parking_occupation_logs_tab",
+    "value": "Parking occupation log"
+}, {
+    "key": "structure_occupation_logs_tab",
+    "value": "Struct occupation log"
+}, {
+    "key": "parkingmeter_profit_logs_tab",
+    "value": "Parkingmeter profit log"
+}, {
+    "key": "structure_profit_logs_tab",
+    "value": "Struct profit log"
+}, {
+    "key": "history_log_tab",
+    "value": "Historical log"
+}, {
+    "key": "btn_load_log_text",
+    "value": "Load Single Log"
+}, {
+    "key": "btn_load_file_log_text",
+    "value": "Load Log from File"
+}, {
+    "key": "occupation_log_street_title",
+    "value": "Occupation street log"
+}, {
+    "key": "occupation_log_struct_title",
+    "value": "Occupation structure log"
+}, {
+    "key": "profit_log_pm_title",
+    "value": "Profit parking meter log"
+}, {
+    "key": "profit_log_struct_title",
+    "value": "Profit structure log"
+}, {
+    "key": "log_actual_values",
+    "value": "Actual values"
+}, {
+    "key": "log_month_values",
+    "value": "Month values"
+}, {
+    "key": "log_year_values",
+    "value": "Year values"
+}, {
+    "key": "log_week_day_values",
+    "value": "Week day values"
+}, {
+    "key": "log_hour_values",
+    "value": "Hour values"
+}, {
+    "key": "btn_load_text",
+    "value": "Load"
+}, {
+    "key": "btn_remove_text",
+    "value": "Remove"
+}, {
+    "key": "load_file_name",
+    "value": "File Name"
+}, {
+    "key": "load_file_size",
+    "value": "Size"
+}, {
+    "key": "load_file_state",
+    "value": "State"
+}, {
+    "key": "load_file_actions",
+    "value": "Actions"
+}, {
+    "key": "legend_not_available",
+    "value": "not avail."
 }]

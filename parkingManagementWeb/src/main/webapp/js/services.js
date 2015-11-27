@@ -175,6 +175,7 @@ pm.service('sharedDataService', function(){
     this.marcozone_type = "";
     
     this.ps_managers = [];
+    this.municipality = [];
     
     this.setZoneTypeList = function(value){
     	this.zone_type_list = value;
@@ -206,6 +207,14 @@ pm.service('sharedDataService', function(){
     
     this.getPsManagerVals = function(){
     	return this.ps_managers;
+    };
+    
+    this.setMunicipalityVals = function(value){
+    	this.municipality = value;
+    };
+    
+    this.getMunicipalityVals = function(){
+    	return this.municipality;
     };
     
     this.setFilterTopicList = function(value){

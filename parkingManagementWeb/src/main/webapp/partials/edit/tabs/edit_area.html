@@ -27,6 +27,10 @@
 										<td width="45%"><strong>{{ 'area_sms' | i18n }}:</strong></td>
 										<td width="55%">{{ a.data.smsCode }}</td>
 									</tr>
+									<tr ng-show="a_municipality.visible">	
+										<td><strong>{{ 'area_municipality' | i18n }}:</strong></td>
+										<td>{{ a.data.municipality }}</td>
+									</tr>
 									<tr ng-show="a_note.visible">	
 										<td><strong>{{ 'area_note' | i18n }}:</strong></td>
 										<td>{{ a.data.note }}</td>
@@ -60,6 +64,10 @@
 									<tr ng-show="a_smsCode.visible">	
 										<td width="45%"><strong>{{ 'area_sms' | i18n }}:</strong></td>
 										<td width="55%">{{ a.data.smsCode }}</td>
+									</tr>
+									<tr ng-show="a_municipality.visible">	
+										<td><strong>{{ 'area_municipality' | i18n }}:</strong></td>
+										<td>{{ a.data.municipality }}</td>
 									</tr>
 									<tr ng-show="a_note.visible">	
 										<td><strong>{{ 'area_note' | i18n }}:</strong></td>
@@ -164,6 +172,10 @@
 							<td class="detailsViewAreaSX">{{ 'area_sms' | i18n }}:</td>
 							<td class="detailsViewAreaDX">{{ viewArea.smsCode }}</td>
 						</tr>
+						<tr ng-show="a_municipality.visible">	
+							<td class="detailsViewAreaSX">{{ 'area_municipality' | i18n }}:</td>
+							<td class="detailsViewAreaDX">{{ viewArea.municipality }}</td>
+						</tr>
 						<tr ng-show="a_note.visible">	
 							<td class="detailsViewAreaSX">{{ 'area_note' | i18n }}:</td>
 							<td class="detailsViewAreaDX">{{ viewArea.note }}</td>
@@ -201,8 +213,8 @@
 			  		<div class="panel-body">
 			  			<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing" -->
 			  				<div id="panelMap" align ="center" ng-show="!isEditing">
-									<button ng-click="removeAllNewPolygons()" type="button" class="btn btn-default" >{{ 'btn_remove_all_polygons' | i18n }}</button>
-	        						<button ng-click="removeLastNewPolygon()" type="button" class="btn btn-default" >{{ 'btn_remove_last_polygons' | i18n }}</button>
+								<button ng-click="removeAllNewPolygons()" type="button" class="btn btn-default" >{{ 'btn_remove_all_polygons' | i18n }}</button>
+	        					<button ng-click="removeLastNewPolygon()" type="button" class="btn btn-default" >{{ 'btn_remove_last_polygons' | i18n }}</button>
 							</div>
 	<!-- 						<ui-gmap-google-map id="11" center="aCreateMap.center" draggable="true" zoom="aCreateMap.zoom" options="aCreateMap.options" control="aCreateMap.control" bounds="aCreateMap.bounds" events="aCreateMap.events"> -->
 	<!-- 							<ui-gmap-polygon static="false" path="newArea.path" stroke="newArea.stroke" visible="newArea.visible" geodesic="newArea.geodesic" fill="newArea.fill" fit="false" editable="newArea.editable" draggable="newArea.draggable"></ui-gmap-polygon> -->
@@ -245,6 +257,13 @@
 					    	<label for="sms">{{ 'area_sms' | i18n }}</label>
 					    	<input id="sms" type="text" class="form-control" name="aSms" ng-model="area.smsCode" ng-required="a_smsCode.required"  placeholder="{{ 'area_sms_placeholder' | i18n }}" >
 					   		<div class="field-error" ng-show="!isInit && form.aSms.$error.required">{{ 'area_smscode_err_required' | i18n }}</div>
+					   	</div>
+					   	<div class="form-group" ng-show="a_municipality.visible">
+					    	<label for="manager">{{ 'area_municipality' | i18n }}</label>
+					    	<select id="municipality" name="pMunicipality" class="form-control" ng-options="m for m in allMunicipality" ng-model="area.municipality" ng-required="area_municipality.required">
+					    		<option value="">{{ 'area_municipality_placeholder' | i18n }}</option>
+					    	</select>
+					    	<div class="field-error" ng-show="!isInit && form.pMunicipality.$error.required">{{ 'area_municipality_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="a_note.visible">
 					    	<label for="note">{{ 'area_note' | i18n }}</label>

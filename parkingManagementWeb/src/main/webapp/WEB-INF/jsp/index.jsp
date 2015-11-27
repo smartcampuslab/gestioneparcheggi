@@ -74,12 +74,13 @@ var conf_widget_url="<%=request.getAttribute("widget_url")%>";
 var conf_macrozone_type="<%=request.getAttribute("macrozone_type")%>";
 var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
 var conf_ps_managers="<%=request.getAttribute("ps_managers")%>";
+var conf_municipalities="<%=request.getAttribute("municipalities")%>";
 var ctx="<%=request.getContextPath()%>";
 </script>
   
 </head>
 <body>
-	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()">
+	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()"><!-- ng-init="setItalianLanguage()" -->
     <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
       <div class="container-fluid" style="margin-left:160px; margin-right:160px">
         <div class="collapse navbar-collapse">
@@ -103,7 +104,7 @@ var ctx="<%=request.getContextPath()%>";
 <!--             		<li><a href="http://www.trentinosociale.it/index.php/Servizi-ai-cittadini/Guida-ai-servizi/per-destinatari/Anziani/Abitare-o-disporre-di-un-alloggio-adeguato-e-sicuro/Contributo-sul-canone-di-affitto" target="_blank">{{ 'document_link_allowances' | i18n }}</a></li> -->
 <!--             	</ul> -->
 <!--           	</li> -->
-          	<li><a href="mailto:myweb.edilizia@comunitadellavallagarina.tn.it?Subject=Info%20MyWeb" target="_top" alt="myweb.edilizia@comunitadellavallagarina.tn.it" title="myweb.edilizia@comunitadellavallagarina.tn.it">{{ 'usefull_link'| i18n }}</a></li>
+<!--           	<li><a href="mailto:myweb.edilizia@comunitadellavallagarina.tn.it?Subject=Info%20MyWeb" target="_top" alt="myweb.edilizia@comunitadellavallagarina.tn.it" title="myweb.edilizia@comunitadellavallagarina.tn.it">{{ 'usefull_link'| i18n }}</a></li> -->
           	<li class="{{ isActiveItaLang() }}"><a href ng-click="setItalianLanguage()">IT</a></li>
           	<li class="{{ isActiveEngLang() }}"><a href ng-click="setEnglishLanguage()">EN</a></li>
             <li><a href="" ng-click="logout()">{{ 'menu_bar-logout' | i18n }}</a></li> <!-- href="logout" -->

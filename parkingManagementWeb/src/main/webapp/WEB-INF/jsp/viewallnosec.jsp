@@ -70,6 +70,7 @@ var conf_widget_url="<%=request.getAttribute("widget_url")%>";
 var conf_macrozone_type="<%=request.getAttribute("macrozone_type")%>";
 var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
 var conf_ps_managers="<%=request.getAttribute("ps_managers")%>";
+var conf_municipalities="<%=request.getAttribute("municipalities")%>";
 <%-- Prevent the backspace key from navigating back. --%>
 $(document).unbind('keydown').bind('keydown', function (event) {
     var doPrevent = false;

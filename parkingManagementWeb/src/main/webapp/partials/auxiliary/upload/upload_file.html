@@ -1,7 +1,7 @@
 <div ng-init="setUploadParams(params.objtype, params.objperiod)" >
 <div class="panel panel-default" >
 	<div class="panel-heading">
-   		<h3 class="panel-title"><strong>{{ uploadFileType }} - {{ uploadFilePeriod }}</strong></h3>
+   		<h3 class="panel-title"><strong>{{ uploadFileType | i18n }} - {{ uploadFilePeriod  | i18n }}</strong></h3>
 	</div>
 	<div class="panel-body">
 		<table style="width: 100%">
@@ -35,11 +35,11 @@
 					<table class="table" ng-show="uploader.queue!=null && uploader.queue.length > 0" style="width: 98%">
 						<thead>
 							<tr>
-								<th width="50%">Nome File</th>
-								<th ng-show="uploader.isHTML5">Dimensione</th>
+								<th width="50%">{{ 'load_file_name' | i18n }}</th>
+								<th ng-show="uploader.isHTML5">{{ 'load_file_size' | i18n }}</th>
 								<!-- <th ng-show="uploader.isHTML5">Progresso</th> -->
-								<th>Stato</th>
-								<th align="center">Azioni</th>
+								<th>{{ 'load_file_state' | i18n }}</th>
+								<th align="center">{{ 'load_file_actions' | i18n }}</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -59,30 +59,30 @@
 									<a href="#/auxiliary/logs/1" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(1,0);item.remove()"
 										ng-show="params.objtype == 1 && params.objperiod == 0">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/1" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(1,1);item.remove()"
 										ng-show="params.objtype == 1 && params.objperiod == 1">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/1" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(1,2);item.remove()"
 										ng-show="params.objtype == 1 && params.objperiod == 2">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/1" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(1,3);item.remove()"
 										ng-show="params.objtype == 1 && params.objperiod == 3">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/1" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(1,4);item.remove()"
 										ng-show="params.objtype == 1 && params.objperiod == 4">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a type="button" class="btn btn-danger btn-lg" ng-click="item.remove()">
-	 								    <span class="glyphicon glyphicon-trash"></span> Rimuovi
+	 								    <span class="glyphicon glyphicon-trash"></span> {{ 'btn_remove_text' | i18n }}
 									</a>
 								</td>
 								<td nowrap ng-show="params.objtype == 2">
@@ -90,30 +90,30 @@
 									<a href="#/auxiliary/logs/2" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(2,0);item.remove()"
 										ng-show="params.objtype == 2 && params.objperiod == 0">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/2" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(2,1);item.remove()"
 										ng-show="params.objtype == 2 && params.objperiod == 1">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/2" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(2,2);item.remove()"
 										ng-show="params.objtype == 2 && params.objperiod == 2">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/2" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(2,3);item.remove()"
 										ng-show="params.objtype == 2 && params.objperiod == 3">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/2" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(2,4);item.remove()"
 										ng-show="params.objtype == 2 && params.objperiod == 4">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a type="button" class="btn btn-danger btn-lg" ng-click="item.remove()">
-	 								    <span class="glyphicon glyphicon-trash"></span> Rimuovi
+	 								    <span class="glyphicon glyphicon-trash"></span> {{ 'btn_remove_text' | i18n }}
 									</a>
 								</td>
 								<td nowrap ng-show="params.objtype == 3">
@@ -121,30 +121,30 @@
 									<a href="#/auxiliary/logs/3" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(3,0);item.remove()"
 										ng-show="params.objtype == 3 && params.objperiod == 0">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/3" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(3,1);item.remove()"
 										ng-show="params.objtype == 3 && params.objperiod == 1">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/3" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(3,2);item.remove()"
 										ng-show="params.objtype == 3 && params.objperiod == 2">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/3" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(3,3);item.remove()"
 										ng-show="params.objtype == 3 && params.objperiod == 3">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/3" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(3,4);item.remove()"
 										ng-show="params.objtype == 3 && params.objperiod == 4">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a type="button" class="btn btn-danger btn-lg" ng-click="item.remove()">
-	 								    <span class="glyphicon glyphicon-trash"></span> Rimuovi
+	 								    <span class="glyphicon glyphicon-trash"></span> {{ 'btn_remove_text' | i18n }}
 									</a>
 								</td>
 								<td nowrap ng-show="params.objtype == 4">
@@ -152,30 +152,30 @@
 									<a href="#/auxiliary/logs/4" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(4,0);item.remove()"
 										ng-show="params.objtype == 4 && params.objperiod == 0">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/4" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(4,1);item.remove()"
 										ng-show="params.objtype == 4 && params.objperiod == 1">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/4" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(4,2);item.remove()"
 										ng-show="params.objtype == 4 && params.objperiod == 2">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/4" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(4,3);item.remove()"
 										ng-show="params.objtype == 4 && params.objperiod == 3">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a href="#/auxiliary/logs/4" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(4,4);item.remove()"
 										ng-show="params.objtype == 4 && params.objperiod == 4">
-										<span class="glyphicon glyphicon-upload"></span> Carica
+										<span class="glyphicon glyphicon-upload"></span> {{ 'btn_load_text' | i18n }}
 									</a>
 									<a type="button" class="btn btn-danger btn-lg" ng-click="item.remove()">
-	 								    <span class="glyphicon glyphicon-trash"></span> Rimuovi
+	 								    <span class="glyphicon glyphicon-trash"></span> {{ 'btn_remove_text' | i18n }}
 									</a>
 								</td>
 							</tr>

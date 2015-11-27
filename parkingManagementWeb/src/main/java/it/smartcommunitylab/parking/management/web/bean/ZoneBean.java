@@ -26,6 +26,7 @@ public class ZoneBean {
 	private String type;
 	private String note;
 	private String color;
+	private String municipality;
 	private PolygonBean geometry;
 	private boolean geometryFromSubelement;
 	
@@ -116,6 +117,14 @@ public class ZoneBean {
 
 	public void setGeometryFromSubelement(boolean geometryFromSubelement) {
 		this.geometryFromSubelement = geometryFromSubelement;
+	}
+
+	public String getMunicipality() {
+		return municipality;
+	}
+
+	public void setMunicipality(String municipality) {
+		this.municipality = municipality;
 	}
 	
 }

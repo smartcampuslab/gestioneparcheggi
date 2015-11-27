@@ -28,6 +28,7 @@ public class RateAreaBean implements Serializable {
 	private String smsCode;
 	private String color;
 	private String note;
+	private String municipality;
 	private List<PolygonBean> geometry;
 
 	public String getId() {
@@ -100,6 +101,14 @@ public class RateAreaBean implements Serializable {
 
 	public void setNote(String note) {
 		this.note = note;
+	}
+
+	public String getMunicipality() {
+		return municipality;
+	}
+
+	public void setMunicipality(String municipality) {
+		this.municipality = municipality;
 	}
 
 }

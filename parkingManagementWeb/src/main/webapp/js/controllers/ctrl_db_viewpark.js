@@ -262,6 +262,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection
 	$scope.showLogs = false;
 	
+	$scope.wait_dialog_text_string_it = "Aggiornamento dati in corso...";
+	$scope.wait_dialog_text_string_en = "Loading elements...";
+	$scope.wait_dialog_title_string_it = "Attendere Prego";
+	$scope.wait_dialog_title_string_en = "Please Wait";
+	
 	$scope.parkingMetersMarkers = [];
 	$scope.parkingStructureMarkers = [];
 	$scope.bikePointMarkers = [];
@@ -346,16 +351,32 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    'Accept': 'application/json;charset=UTF-8'
 	};
 	
+	$scope.getLoadingText = function(){
+		if(sharedDataService.getUsedLanguage() == 'ita'){
+			return $scope.wait_dialog_text_string_it;
+		} else {
+			return $scope.wait_dialog_text_string_en;
+		}
+	};
+	
+	$scope.getLoadingTitle = function(){
+		if(sharedDataService.getUsedLanguage() == 'ita'){
+			return $scope.wait_dialog_title_string_it;
+		} else {
+			return $scope.wait_dialog_title_string_en;
+		}
+	};
+	
 	$scope.progress = 25;
 	
 	$scope.loadMapsObject = function(){
 		$scope.progress += 25;
-		$dialogs.wait("Aggiornamento dati su mappa in corso...",$scope.progress);
+		$dialogs.wait($scope.getLoadingText(),$scope.progress, $scope.getLoadingTitle());
 	};
 	
 	$scope.updateLoadingMapState = function(){
 		$scope.progress += 25;
-    	$rootScope.$broadcast('dialogs.wait.progress',{msg: "Aggiornamento dati su mappa in corso...",'progress': $scope.progress});
+    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
 	};
 	
 	$scope.closeLoadingMap = function(){
@@ -566,46 +587,54 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// --------------- Block for title of the map (describe the element showed in the map ------------------
 	$scope.title_map = "Offerta di sosta: Parcheggi";
+	$scope.title_map_eng = "Parking supply: Parking lots";
 	$scope.update_title_map = function(inverse, type, exlude){
 		switch ($scope.dashboard_topics){
 			case "parkSupply": 
 				$scope.title_map = "Offerta di sosta: ";
+				$scope.title_map_eng = "Parking supply: ";
 				if(!inverse){
 					$scope.controlCheckedArea("");
 				} else {
 					if(type == "rate_area"){
 						if(exlude != "rate_area"){
-							$scope.title_map += "Aree Tariffarie, ";
+							$scope.title_map = "Aree Tariffarie, ";
+							$scope.title_map_eng = "Rateing areas, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "macrozone"){
 						if(exlude != "macrozone"){
 							$scope.title_map += "Macrozone, ";
+							$scope.title_map_eng += "Macrozones, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "microzone"){
 						if(exlude != "microzone"){
 							$scope.title_map += "Vie, ";
+							$scope.title_map_eng += "Streets, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "microzone_part"){
 						if(exlude != "microzone_part"){
 							$scope.title_map += "Parcheggi, ";
+							$scope.title_map_eng += "Parking lots, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "parkingstructs"){
 						if(exlude != "parkingstructs"){
 							$scope.title_map += "Strutture Parcheggio, ";
+							$scope.title_map_eng += "Parking structures, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "parkingmeter"){
 						if(exlude != "parkingmeter"){
 							$scope.title_map += "Parcometri, ";
+							$scope.title_map_eng += "Parking meters, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
@@ -613,36 +642,42 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case "occupation": 
 				$scope.title_map = "Occupazione: ";
+				$scope.title_map_eng = "Occupation: ";
 				if(!inverse){
 					$scope.controlCheckedArea("");
 				} else {
 					if(type == "rate_area"){
 						if(exlude != "rate_area"){
-							$scope.title_map += "Aree Tariffarie, ";
+							$scope.title_map = "Aree Tariffarie, ";
+							$scope.title_map_eng = "Rateing areas, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "macrozone"){
 						if(exlude != "macrozone"){
 							$scope.title_map += "Macrozone, ";
+							$scope.title_map_eng += "Macrozones, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "microzone"){
 						if(exlude != "microzone"){
 							$scope.title_map += "Vie, ";
+							$scope.title_map_eng += "Streets, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "microzone_part"){
 						if(exlude != "microzone_part"){
 							$scope.title_map += "Parcheggi, ";
+							$scope.title_map_eng += "Parking lots, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "parkingstructs"){
 						if(exlude != "parkingstructs"){
 							$scope.title_map += "Strutture Parcheggio, ";
+							$scope.title_map_eng += "Parking structures, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
@@ -650,36 +685,42 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case "receipts": 
 				$scope.title_map = "Incasso: ";
+				$scope.title_map_eng = "Profit: ";
 				if(!inverse){
 					$scope.controlCheckedArea("");
 				} else {
 					if(type == "rate_area"){
 						if(exlude != "rate_area"){
-							$scope.title_map += "Aree Tariffarie, ";
+							$scope.title_map = "Aree Tariffarie, ";
+							$scope.title_map_eng = "Rateing areas, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "macrozone"){
 						if(exlude != "macrozone"){
 							$scope.title_map += "Macrozone, ";
+							$scope.title_map_eng += "Macrozones, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "microzone"){
 						if(exlude != "microzone"){
 							$scope.title_map += "Vie, ";
+							$scope.title_map_eng += "Streets, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "microzone_part"){
 						if(exlude != "microzone_part"){
 							$scope.title_map += "Parcheggi, ";
+							$scope.title_map_eng += "Parking lots, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "parkingstructs"){
 						if(exlude != "parkingstructs"){
 							$scope.title_map += "Strutture Parcheggio, ";
+							$scope.title_map_eng += "Parking structures, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
@@ -687,36 +728,42 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				break;
 			case "timeCost": 
 				$scope.title_map = "Costo di accesso: ";
+				$scope.title_map_eng = "Searching time: ";
 				if(!inverse){
 					$scope.controlCheckedArea("");
 				} else {
 					if(type == "rate_area"){
 						if(exlude != "rate_area"){
-							$scope.title_map += "Aree Tariffarie, ";
+							$scope.title_map = "Aree Tariffarie, ";
+							$scope.title_map_eng = "Rateing areas, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "macrozone"){
 						if(exlude != "macrozone"){
 							$scope.title_map += "Macrozone, ";
+							$scope.title_map_eng += "Macrozones, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "microzone"){
 						if(exlude != "microzone"){
 							$scope.title_map += "Vie, ";
+							$scope.title_map_eng += "Streets, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "microzone_part"){
 						if(exlude != "microzone_part"){
 							$scope.title_map += "Parcheggi, ";
+							$scope.title_map_eng += "Parking lots, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
 					if(type == "parkingstructs"){
 						if(exlude != "parkingstructs"){
 							$scope.title_map += "Strutture Parcheggio, ";
+							$scope.title_map_eng += "Parking structures, ";
 						}
 						$scope.controlCheckedArea(exlude);
 					}
@@ -725,28 +772,43 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			default: break;
 		}
 		$scope.title_map = $scope.title_map.substring(0, $scope.title_map.length - 2);
+		$scope.title_map_eng = $scope.title_map_eng.substring(0, $scope.title_map_eng.length - 2);
 	};
 	
 	$scope.controlCheckedArea = function(exlude){
 		if($scope.dashboard_space.rate_area && (exlude != "rate_area")){
 			$scope.title_map += "Aree Tariffarie, ";
+			$scope.title_map_eng += "Rateing areas, ";
 		}
 		if($scope.dashboard_space.macrozone && (exlude != "macrozone")){
 			$scope.title_map += "Macrozone, ";
+			$scope.title_map_eng += "Macrozones, ";
 		}
 		if($scope.dashboard_space.microzone && (exlude != "microzone")){
 			$scope.title_map += "Vie, ";
+			$scope.title_map_eng += "Streets, ";
 		}
 		if($scope.dashboard_space.microzone_part && (exlude != "microzone_part")){
 			$scope.title_map += "Parcheggi, ";
+			$scope.title_map_eng += "Parking lots, ";
 		}
 		if($scope.dashboard_space.parkingstructs && (exlude != "parkingstructs")){
 			$scope.title_map += "Strutture Parcheggio, ";
+			$scope.title_map_eng += "Parking structures, ";
 		}
 		if($scope.dashboard_space.parkingmeter && (exlude != "parkingmeter")){
 			$scope.title_map += "Parcometri, ";
+			$scope.title_map_eng += "Parkingmeters, ";
 		}
 	};
+	
+	$scope.isActiveItalian = function(){
+        return (sharedDataService.getUsedLanguage() == 'ita');
+    };
+                  			
+    $scope.isActiveEnglish = function(){
+    	return (sharedDataService.getUsedLanguage() == 'eng');
+    };
 	
 	// ---------------------------------------------------------------------------------------------
 	
@@ -1180,8 +1242,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     // ---------------------- End Block to read conf params and show/hide elements ---------------------   
     $scope.tabIndex = 0;
     $scope.viewparktabs = [ 
-        { title:'Mappa', index: 1, content:"partials/dashboard/tabs/viewpark_map.html" },
-        { title:'Lista', index: 2, content:"partials/dashboard/tabs/viewpark_list.html", disabled:false }
+        { title:'dash_map_tab', index: 1, content:"partials/dashboard/tabs/viewpark_map.html" },
+        { title:'dash_list_tab', index: 2, content:"partials/dashboard/tabs/viewpark_list.html", disabled:false }
     ];
     
     $scope.firstIndexSet = true;
@@ -7961,22 +8023,22 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// list for vertical and orizontal value;
 	$scope.allCmpVal = [
-	    {cod:"1", val:"Anni"},
-	    {cod:"2", val:"Mesi"},
-	    {cod:"3", val:"Giorni settimana"},
-	    {cod:"4", val:"Ore"}
+	    {cod:"1", val:"Anni", eng_val: "Years"},
+	    {cod:"2", val:"Mesi", eng_val: "Months"},
+	    {cod:"3", val:"Giorni settimana", eng_val: "Days of Week"},
+	    {cod:"4", val:"Ore", eng_val: "Hours"}
 	];
 	
 	$scope.filteredOCmpVal = [
-	    {cod:"2", val:"Mesi"},
-		{cod:"3", val:"Giorni settimana"},
-		{cod:"4", val:"Ore"}                     
+	    {cod:"2", val:"Mesi", eng_val: "Months"},
+		{cod:"3", val:"Giorni settimana", eng_val: "Days of Week"},
+		{cod:"4", val:"Ore", eng_val: "Hours"}                     
 	];
 	
 	$scope.filteredVCmpVal = [
-	    {cod:"1", val:"Anni"},
-		{cod:"3", val:"Giorni settimana"},
-		{cod:"4", val:"Ore"}                     
+	    {cod:"1", val:"Anni", eng_val: "Years"},
+		{cod:"3", val:"Giorni settimana", eng_val: "Days of Week"},
+		{cod:"4", val:"Ore", eng_val: "Hours"}                     
 	];
 	
 	$scope.updateOrizzSelect = function(verticalVal){
@@ -8206,6 +8268,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalOccupancyStreetsFromDb: used to retrieve the historycal streets occupancy data from the db
 	$scope.getHistorycalOccupancyAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8220,6 +8283,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8254,6 +8318,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalOccupancyZoneFromDb: used to retrieve the historycal zones occupancy data from the db
 	$scope.getHistorycalOccupancyZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8268,6 +8333,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8302,6 +8368,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalOccupancyMicroZoneFromDb: used to retrieve the historycal microzone occupancy data from the db
 	$scope.getHistorycalOccupancyMicroZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8316,6 +8383,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8351,6 +8419,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalOccupancyStreetFromDb: used to retrieve the historycal streets occupancy data from the db
 	$scope.getHistorycalOccupancyStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8366,6 +8435,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8399,6 +8469,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalOccupancyParkingFromDb: used to retrieve the historycal parking occupancy data from the db
 	$scope.getHistorycalOccupancyParkingFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8414,6 +8485,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8448,6 +8520,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalProfitAreaFromDb: used to retrieve the historycal area profit data from the db
 	$scope.getHistorycalProfitAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8462,6 +8535,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8513,6 +8587,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalProfitZoneFromDb: used to retrieve the historycal zone profit data from the db
 	$scope.getHistorycalProfitZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8527,6 +8602,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8578,6 +8654,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalProfitZoneFromDb: used to retrieve the historycal zone profit data from the db
 	$scope.getHistorycalProfitMicroZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8592,6 +8669,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8651,6 +8729,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalProfitStreetFromDb: used to retrieve the historycal street profit data from the db
 	$scope.getHistorycalProfitStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8665,6 +8744,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8717,6 +8797,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalProfitPmFromDb: used to retrieve the historycal parking profit data from the db
 	$scope.getHistorycalProfitPmFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8732,6 +8813,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8784,6 +8866,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalProfitPsFromDb: used to retrieve the historycal parkStruct profit data from the db
 	$scope.getHistorycalProfitPsFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8799,6 +8882,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8851,6 +8935,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalTimeCostAreaFromDb: used to retrieve the historycal streets extratime cost data from the db
 	$scope.getHistorycalTimeCostAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8865,6 +8950,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8901,6 +8987,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalTimeCostZoneFromDb: used to retrieve the historycal zone extratime cost data from the db
 	$scope.getHistorycalTimeCostZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8915,6 +9002,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -8952,6 +9040,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalTimeCostMicroZoneFromDb: used to retrieve the historycal microzone extratime cost data from the db
 	$scope.getHistorycalTimeCostMicroZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -8966,6 +9055,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -9004,6 +9094,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalTimeCostStreetFromDb: used to retrieve the historycal streets extratime cost data from the db
 	$scope.getHistorycalTimeCostStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -9019,6 +9110,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -9058,6 +9150,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalTimeCostParkingFromDb: used to retrieve the historycal parking occupancy data from the db
 	$scope.getHistorycalTimeCostParkingFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
 		var hourRange = $scope.chekIfAllRange(hour, 3);
@@ -9073,6 +9166,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			dayType: dayType,
 			hour: $scope.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			lang: language,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	

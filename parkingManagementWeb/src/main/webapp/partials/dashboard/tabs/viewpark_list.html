@@ -173,7 +173,7 @@
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': orange}"></span>&nbsp;50%-75% |</td>
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': yellow}"></span>&nbsp;25%-50% |</td>
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;0%-25% |</td>
-					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;{{ 'legend_not_available' | i18n }}</td>
 <!-- 					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td> -->
 				</tr>
 			</table>
@@ -187,7 +187,7 @@
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': orange}"></span>&nbsp;2000-5000{{ 'euro' | i18n }} |</td>
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;1000-2000{{ 'euro' | i18n }} |</td>
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgreen}"></span>&nbsp;< 1000{{ 'euro' | i18n }} |</td>
-					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;{{ 'legend_not_available' | i18n }}</td>
 <!-- 					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td> -->
 				</tr>
 			</table>
@@ -202,7 +202,7 @@
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': yellow}"></span>&nbsp;1 - 3 min |</td>
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': green}"></span>&nbsp;1 min |</td>
 					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgreen}"></span>&nbsp;0 min |</td>
-					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;non disp</td>
+					<td align="left"> <span class="colorBox" ng-style="{'background-color': lightgray}"></span>&nbsp;{{ 'legend_not_available' | i18n }}</td>
 <!-- 					<td align="right"><button type="button" class="btn btn-danger btn-xs" ng-click="closeAllLegend()"><i class="glyphicon glyphicon-remove"></i></button></td> -->
 				</tr>
 			</table>
@@ -2342,7 +2342,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 1)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 1)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 1)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2351,7 +2353,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 1)">
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2548,7 +2552,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 1)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 1)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 1)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2557,7 +2563,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2656,7 +2664,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
+									<select ng-show="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
+									</select>
+									<select ng-show="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2665,7 +2675,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-show="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-show="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2762,7 +2774,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2771,7 +2785,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2875,7 +2891,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 1)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 1)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 1)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2884,7 +2902,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3018,7 +3038,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 1, 2)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 1, 2)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 1, 2)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3027,7 +3049,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 1, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 1, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 1, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3169,7 +3193,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 2)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 2)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 2)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3178,7 +3204,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3320,7 +3348,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 2)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 2)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 2)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3329,7 +3359,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3464,7 +3496,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3473,7 +3507,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3609,7 +3645,9 @@
 							    <td width="47%">
 							    	<div class="form-group">
 										<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-										<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)">
+										<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)">
+										</select>
+										<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)">
 										</select>
 									   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 									</div>
@@ -3618,7 +3656,9 @@
 							    <td width="48%">
 							    	<div class="form-group">
 										<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-										<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)"><!--  ng-disabled="lockOrizontalValSelect" -->
+										<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)"><!--  ng-disabled="lockOrizontalValSelect" -->
+										</select>
+										<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)"><!--  ng-disabled="lockOrizontalValSelect" -->
 										</select>
 										<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 									</div>
@@ -3752,7 +3792,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3761,7 +3803,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3926,7 +3970,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 3)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 3)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 3)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -3935,7 +3981,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 3)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 3)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 2, 3)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4067,7 +4115,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 3)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 3)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 3)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4076,7 +4126,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 3)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 3)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 3, 3)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4200,7 +4252,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4209,7 +4263,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4331,7 +4387,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4340,7 +4398,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4469,7 +4529,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 3)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 3)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 3)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4478,7 +4540,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 3)">
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 3)">
+									</select>
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 3)">
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>

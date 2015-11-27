@@ -4,7 +4,7 @@
 <!-- 	</div> -->
 <!-- 	<div class="panel-body"> -->
 		<tabset ng-controller="ParkCtrl" ng-init="initComponents()">
-			<tab  ng-repeat="tab in editparktabs" heading="{{ tab.title }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index, tab)">
+			<tab  ng-repeat="tab in editparktabs" heading="{{ tab.title | i18n }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index, tab)">
 				<br>
 				<div ng-include="tab.content"></div>
 			</tab>

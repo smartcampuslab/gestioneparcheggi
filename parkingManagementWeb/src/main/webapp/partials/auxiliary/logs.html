@@ -1,5 +1,5 @@
 <tabset ng-controller="AuxCtrl" ng-init="initActiveLogTab(params.id)"><!-- ;getAllLogsFromDbTP() -->
-	<tab  ng-repeat="tab in logtabs" heading="{{ tab.title }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index)">
+	<tab  ng-repeat="tab in logtabs" heading="{{ tab.title | i18n }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index)">
 		<br>
 		<div ng-include="tab.content"></div>
 	</tab>

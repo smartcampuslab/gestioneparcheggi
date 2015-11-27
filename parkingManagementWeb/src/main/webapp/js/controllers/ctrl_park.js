@@ -249,49 +249,49 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    			$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
 	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
 	    				showArea = true;
-	    				area_tab_obj = { title:'Area', index: 1, content:"partials/edit/tabs/edit_area.html" };
+	    				area_tab_obj = { title:'manage_area_tab', index: 1, content:"partials/edit/tabs/edit_area.html" };
 	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'Zone'){
 	    			$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
 	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
 	    				showZones = true;
-	    				zone_tab_obj = { title:'Macrozona', index: 2, content:"partials/edit/tabs/edit_zone.html" };
+	    				zone_tab_obj = { title:'manage_zone_tab', index: 2, content:"partials/edit/tabs/edit_zone.html" };
 	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'MicroZone'){
 	    			$scope.loadMicroZoneAttributes($scope.showedObjects[i].attributes);
 	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
 	    				showMicroZones = true;
-	    				microzone_tab_obj = { title:'Via', index: 3, content:"partials/edit/tabs/edit_microzone.html" };
+	    				microzone_tab_obj = { title:'manage_microzone_tab', index: 3, content:"partials/edit/tabs/edit_microzone.html" };
 	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'Street'){
 	    			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
 	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
 	    				showStreets = true;
-	    				street_tab_obj = { title:'Parcheggio', index: 4, content:"partials/edit/tabs/edit_street.html" };
+	    				street_tab_obj = { title:'manage_street_tab', index: 4, content:"partials/edit/tabs/edit_street.html" };
 	    			}
 	    		}	
 	    		if($scope.showedObjects[i].id == 'Ps'){
 	    			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
 	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
 	    				showPs = true;
-	    				ps_tab_obj = { title:'Parcheggio in struttura', index: 5, content:"partials/edit/tabs/edit_parkingstructure.html" };
+	    				ps_tab_obj = { title:'manage_structure_tab', index: 5, content:"partials/edit/tabs/edit_parkingstructure.html" };
 	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'Pm'){
 	    			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
 	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
 	    				showPm = true;
-	    				pm_tab_obj = { title:'Parcometro', index: 6, content:"partials/edit/tabs/edit_parkingmeter.html" };
+	    				pm_tab_obj = { title:'manage_parkingmeter_tab', index: 6, content:"partials/edit/tabs/edit_parkingmeter.html" };
 	    			}
 	    		}
 	    		if($scope.showedObjects[i].id == 'Bp'){
 	    			$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
 	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
 	    				showBp = true;
-	    				bp_tab_obj = { title:'Punti Bici', index: 7, content:"partials/edit/tabs/edit_bike.html" };
+	    				bp_tab_obj = { title:'manage_bikepoint_tab', index: 7, content:"partials/edit/tabs/edit_bike.html" };
 	    			}
 	    		}	
 	    	}
@@ -349,6 +349,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     		if(attributes[i].code == 'smsCode'){
     			$scope.a_smsCode = attributes[i];
+    		}
+    		if(attributes[i].code == 'municipality'){
+    			$scope.a_municipality = attributes[i];
     		}
     		if(attributes[i].code == 'note'){
     			$scope.a_note = attributes[i];
@@ -2010,6 +2013,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.isInit = true;
 		
 		$scope.myColor = "";
+		$scope.allMunicipality = sharedDataService.getMunicipalityVals();
 		
 		// Case edit
 		if(area != null){
