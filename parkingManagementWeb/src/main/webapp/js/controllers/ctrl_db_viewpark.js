@@ -24,6 +24,12 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    step: 1,
 		    modelLabels: {'1': 'GE', '2': 'FE', '3': 'MA', '4': 'AP', '5': 'MA', '6': 'GI', '7':'LU', '8': 'AG', '9': 'SE', '10': 'OT', '11': 'NO', '12': 'DI'}
 	};
+	$scope.monthSliderOptionsEng = {       
+		    from: 1,
+		    to: 12,
+		    step: 1,
+		    modelLabels: {'1': 'JA', '2': 'FE', '3': 'MA', '4': 'AP', '5': 'MA', '6': 'JU', '7':'JU', '8': 'AU', '9': 'SE', '10': 'OC', '11': 'NO', '12': 'DE'}
+	};
 	//$scope.daySliderValue = "1;2;3;4;5;6;7";//(date.getDay() == 0 ? date.getDay() : date.getDay()-1)+";"+(date.getDay());
 	$scope.daySliderValue = "1,2,3,4,5,6,7";
 	$scope.daySliderOptions = {       
@@ -75,6 +81,14 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 		    to: 23,
 		    step: 1
 	};
+	
+	$scope.isActiveItalian = function(){
+        return (sharedDataService.getUsedLanguage() == 'ita');
+    };
+                  			
+    $scope.isActiveEnglish = function(){
+    	return (sharedDataService.getUsedLanguage() == 'eng');
+    };
 	
 	// init shared filter values
 	sharedDataService.setFilterVis($scope.vis);	

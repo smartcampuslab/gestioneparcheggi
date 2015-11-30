@@ -123,7 +123,8 @@
 							<label class="left-filter"><input id="monthFilter" type="checkbox" ng-model="dashboard_filter.months" ng-click="updateFilterObject(dashboard_filter, 1)">&nbsp;{{'month_vis'| i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->
 <!-- 	                        <br/><br/> -->
 								<div ng-show="dashboard_filter.months">
-									<input ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" ng-change="updateMonth(monthSliderValue)" /><!-- ng-change="updateSearch()" -->
+									<input ng-if="isActiveItalian()" ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" ng-change="updateMonth(monthSliderValue)" /><!-- ng-change="updateSearch()" -->
+									<input ng-if="isActiveEnglish()" ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptionsEng" ng-change="updateMonth(monthSliderValue)" /><!-- ng-change="updateSearch()" -->
 								</div>
 <!-- 							<br/> -->
 						</td>
