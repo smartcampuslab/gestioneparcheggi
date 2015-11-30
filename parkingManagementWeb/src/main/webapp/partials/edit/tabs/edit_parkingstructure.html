@@ -52,7 +52,10 @@
 						       		</tr>
 						       		<tr>
 										<td><strong>{{ 'ps_park_and_ride' | i18n }}:</strong></td>
-										<td>&nbsp;{{ ps.data.parkAndRide | boolToString }}</td>
+										<td>&nbsp;
+											<span ng-if="isUsedItaLang()">{{ ps.data.parkAndRide | boolToString }}</span>
+											<span ng-if="isUsedEngLang()">{{ ps.data.parkAndRide | boolToStringEng }}</span>
+										</td>
 									</tr>
 						       		<tr ng-show="ps_payment.visible">
 						       			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
@@ -129,7 +132,10 @@
 						       		</tr>
 						       		<tr>
 										<td><strong>{{ 'ps_park_and_ride' | i18n }}:</strong></td>
-										<td>&nbsp;{{ sps.data.parkAndRide | boolToString }}</td>
+										<td>&nbsp;
+											<span ng-if="isUsedItaLang()">{{ sps.data.parkAndRide | boolToString }}</span>
+											<span ng-if="isUsedEngLang()">{{ sps.data.parkAndRide | boolToStringEng }}</span>
+										</td>
 									</tr>
 						       		<tr ng-show="ps_payment.visible">
 						       			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
@@ -209,7 +215,10 @@
 								<tr>
 									<td width="32%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 									<td width="35%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
-									<td width="8%" align="center">{{ pstruct.parkAndRide | boolToString }}</td>
+									<td width="8%" align="center">
+										<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
+										<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
+									</td>
 									<td width="5%" align="center"><span ng-show="ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
 									<td width="20%" align="center">
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
@@ -302,7 +311,10 @@
 						</tr>
 						<tr>
 							<td class="detailsViewStructSX">{{ 'ps_park_and_ride' | i18n }}:</td>
-							<td class="detailsViewStructDX">{{ viewParkingStructure.parkAndRide | boolToString }}</td>
+							<td class="detailsViewStructDX">
+								<span ng-if="isUsedItaLang()">{{ viewParkingStructure.parkAndRide | boolToString }}</span>
+								<span ng-if="isUsedEngLang()">{{ viewParkingStructure.parkAndRide | boolToStringEng }}</span>
+							</td>
 						</tr>
 			   		</table>
 			   		<hr>

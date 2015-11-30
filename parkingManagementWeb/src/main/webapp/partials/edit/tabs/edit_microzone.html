@@ -35,7 +35,10 @@
 									</tr>
 									<tr ng-show="microzone_geom_from_subelement.visible">	
 										<td><strong>{{ 'zone_geometry_from_subelement' | i18n }}</strong></td>
-										<td>&nbsp;{{ z.data.geometryFromSubelement | boolToString }}</td>
+										<td>&nbsp;
+											<span ng-if="isUsedItaLang()">{{ z.data.geometryFromSubelement | boolToString }}</span>
+											<span ng-if="isUsedEngLang()">{{ z.data.geometryFromSubelement | boolToStringEng }}</span>
+										</td>
 									</tr>
 					        	</table>
 					        </div>
@@ -72,7 +75,10 @@
 									</tr>
 									<tr ng-show="microzone_geom_from_subelement.visible">	
 										<td><strong>{{ 'zone_geometry_from_subelement' | i18n }}</strong></td>
-										<td>&nbsp;{{ z.data.geometryFromSubelement | boolToString }}</td>
+										<td>&nbsp;
+											<span ng-if="isUsedItaLang()">{{ z.data.geometryFromSubelement | boolToString }}</span>
+											<span ng-if="isUsedEngLang()">{{ z.data.geometryFromSubelement | boolToStringEng }}</span>
+										</td>
 									</tr>
 					        	</table>
 					        </div>
@@ -171,7 +177,10 @@
 						</tr>
 						<tr ng-show="microzone_geom_from_subelement.visible">	
 							<td class="detailsViewZoneSX">{{ 'zone_geometry_from_subelement' | i18n }}</td>
-							<td class="detailsViewZoneDX">{{ viewZone.geometryFromSubelement | boolToString }}</td>
+							<td class="detailsViewZoneDX">
+								<span ng-if="isUsedItaLang()">{{ viewZone.geometryFromSubelement | boolToString }}</span>
+								<span ng-if="isUsedEngLang()">{{ viewZone.geometryFromSubelement | boolToStringEng }}</span>
+							</td>
 						</tr>
 			   		</table>
 			   		<hr>

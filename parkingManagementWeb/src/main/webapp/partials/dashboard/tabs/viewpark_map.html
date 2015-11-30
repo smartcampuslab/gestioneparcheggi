@@ -376,8 +376,8 @@
 						<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
-							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
+							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
+							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 						</td>
 					</tr>
 					<tr>
@@ -422,7 +422,10 @@
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride_det' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
+						<td class="detailsTitleTableDX">
+							<span ng-if="isUsedItaLang()">{{ psDetails.data.parkAndRide | boolToString }}</span>
+							<span ng-if="isUsedEngLang()">{{ psDetails.data.parkAndRide | boolToStringEng }}</span>
+						</td>
 					</tr>
 					<tr ng-show="ps_manager.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_manager' | i18n }}:</td>
@@ -783,8 +786,8 @@
 						<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
-							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
+							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
+							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 						</td>
 					</tr>
 					<tr ng-show="pm_rateArea.visible">
@@ -827,7 +830,10 @@
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride_det' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
+						<td class="detailsTitleTableDX">
+							<span ng-if="isUsedItaLang()">{{ psDetails.data.parkAndRide | boolToString }}</span>
+							<span ng-if="isUsedEngLang()">{{ psDetails.data.parkAndRide | boolToStringEng }}</span>
+						</td>
 					</tr>
 				</table>
 				<table width="100%">
@@ -1112,8 +1118,8 @@
 						<td class="detailsTitleTableSX">{{ 'pm_status' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">
-							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>Attivo</strong></span>
-							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>Disattivo</strong></span>
+							<span ng-show="pmDetails.data.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
+							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 						</td>
 					</tr>
 				</table>	
@@ -1181,7 +1187,10 @@
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride_det' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
+						<td class="detailsTitleTableDX">
+							<span ng-if="isUsedItaLang()">{{ psDetails.data.parkAndRide | boolToString }}</span>
+							<span ng-if="isUsedEngLang()">{{ psDetails.data.parkAndRide | boolToStringEng }}</span>
+						</td>
 					</tr>
 				</table>	
 				<table width="100%">	
@@ -1435,7 +1444,10 @@
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride_det' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">{{ psDetails.data.parkAndRide | boolToString }}</td>
+						<td class="detailsTitleTableDX">
+							<span ng-if="isUsedItaLang()">{{ psDetails.data.parkAndRide | boolToString }}</span>
+							<span ng-if="isUsedEngLang()">{{ psDetails.data.parkAndRide | boolToStringEng }}</span>
+						</td>
 					</tr>
 				</table>
 				<table width="99%">			

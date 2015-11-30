@@ -45,7 +45,10 @@
 							    	</tr>
 							    	<tr ng-show="s_subscrition.visible">
 							    		<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
+							    		<td>&nbsp;
+							    			<span ng-if="isUsedItaLang()">{{ s.data.subscritionAllowedPark | boolToString }}</span>
+							    			<span ng-if="isUsedEngLang()">{{ s.data.subscritionAllowedPark | boolToStringEng }}</span>
+							    		</td>
 							    	</tr>
 <!-- 							    	<tr ng-show="s_areaId.visible">	 -->
 <!-- 										<td> -->
@@ -174,7 +177,10 @@
 							    	</tr>
 							    	<tr ng-show="s_subscrition.visible">
 							    		<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
+							    		<td>&nbsp;
+							    			<span ng-if="isUsedItaLang()">{{ s.data.subscritionAllowedPark | boolToString }}</span>
+							    			<span ng-if="isUsedEngLang()">{{ s.data.subscritionAllowedPark | boolToStringEng }}</span>
+							    		</td>
 							    	</tr>
 <!-- 							    	<tr ng-show="s_areaId.visible">	 -->
 <!-- 										<td> -->
@@ -381,7 +387,10 @@
 						</tr>
 						<tr ng-show="s_subscrition.visible">	
 							<td class="detailsViewStreetSX">{{ 'street_subscription_allowed' | i18n }}:</td>
-							<td class="detailsViewStreetDX">{{ viewStreet.subscritionAllowedPark | boolToString}}</td>
+							<td class="detailsViewStreetDX">
+								<span ng-if="isUsedItaLang()">{{ viewStreet.subscritionAllowedPark | boolToString}}</span>
+								<span ng-if="isUsedEngLang()">{{ viewStreet.subscritionAllowedPark | boolToStringEng}}</span>
+							</td>
 						</tr>
 						<tr ng-show="s_geometry.visible">	
 							<td class="detailsViewStreetSX">{{ 'street_geometry' | i18n }}</td>
@@ -564,7 +573,11 @@
 					   	</div>
 					   	<div class="form-group" ng-show="s_subscrition.visible">
 					    	<label for="subscription">{{ 'street_subscription_allowed' | i18n }}</label>
-					    	<select id="subscription" name="sSubscription" class="form-control" ng-options="s.value as s.desc for s in subscriptions" ng-model="eStreet.subscritionAllowedPark">
+					    	<select ng-if="isUsedItaLang()" id="subscription" name="sSubscription" class="form-control" ng-options="s.value as s.desc for s in subscriptions" ng-model="eStreet.subscritionAllowedPark">
+<!-- 					    		<option ng-repeat="s in subscriptions" value="{{s.value}}">{{ s.desc | i18n}}</option> -->
+					    	</select>
+					    	<select ng-if="isUsedEngLang()" id="subscription" name="sSubscription" class="form-control" ng-options="s.value as s.desc_eng for s in subscriptions" ng-model="eStreet.subscritionAllowedPark">
+<!-- 					    		<option ng-repeat="s in subscriptions" value="{{s.value}}">{{ s.desc | i18n}}</option> -->
 					    	</select>
 						</div>
 					 	<div class="form-group" ng-show="isEditing && s_areaId.visible">
@@ -614,7 +627,7 @@
 							</script>
 							<div class="dropdown">
 								<button class="btn btn-default dropdown-toggle" type="button" id="dropdownPm1" data-toggle="dropdown" aria-expanded="true">
-								Seleziona Parcometri
+								{{ 'street_edit_pm_select' | i18n }}
 								<span class="caret"></span>
 		 						</button>
 						    	<ul class="dropdown-menu scrollable-menu" role="menu" aria-labelledby="dropdownPm1">

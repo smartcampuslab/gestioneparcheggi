@@ -27,8 +27,8 @@
 											<tr ng-show="pm_status.visible">
 							        			<td><strong>{{ 'pm_status' | i18n }}:</strong></td>
 							        			<td>
-							        				<span ng-show="pm.data.status=='ACTIVE'">Attivo</span>
-													<span ng-show="pm.data.status!='ACTIVE'">Disattivo</span>
+							        				<span ng-show="pm.data.status=='ACTIVE'">{{ 'active_pm_state' | i18n }}</span>
+													<span ng-show="pm.data.status!='ACTIVE'">{{ 'inactive_pm_state' | i18n }}</span>
 												</td>	
 							        		</tr>
 							        		<tr ng-show="pm_rateArea.visible">
@@ -81,8 +81,8 @@
 											<tr ng-show="pm_status.visible">
 							        			<td><strong>{{ 'pm_status' | i18n }}:</strong></td>
 							        			<td>
-							        				<span ng-show="spm.data.status=='ACTIVE'">Attivo</span>
-													<span ng-show="spm.data.status!='ACTIVE'">Disattivo</span>
+							        				<span ng-show="spm.data.status=='ACTIVE'">{{ 'active_pm_state' | i18n }}</span>
+													<span ng-show="spm.data.status!='ACTIVE'">{{ 'inactive_pm_state' | i18n }}</span>
 												</td>	
 							        		</tr>
 							        		<tr ng-show="pm_rateArea.visible">
@@ -229,8 +229,8 @@
 							<tr ng-show="pm_status.visible">
 								<td class="detailsViewParkmeterSX">{{ 'pm_status' | i18n }}:</td>
 								<td class="detailsViewParkmeterDX">	 
-									<span ng-show="viewParckingMeter.status=='ACTIVE'">Attivo</span>
-									<span ng-show="viewParckingMeter.status!='ACTIVE'">Disattivo</span>
+									<span ng-show="viewParckingMeter.status=='ACTIVE'">{{ 'active_pm_state' | i18n }}</span>
+									<span ng-show="viewParckingMeter.status!='ACTIVE'">{{ 'inactive_pm_state' | i18n }}</span>
 								</td>
 							</tr>
 							<tr ng-show="pm_geometry.visible">
@@ -303,7 +303,10 @@
 					   	</div>
 					   	<div class="form-group" ng-show="pm_status.visible">
 					    	<label for="status">{{ 'pm_status' | i18n }}</label>
-					    	<select id="status" name="pStatus" class="form-control" ng-options="s.descrizione for s in listaStati" ng-model="myStatus" ng-required="pm_status.required">
+					    	<select ng-if="isUsedItaLang()" id="status" name="pStatus" class="form-control" ng-options="s.descrizione for s in listaStati" ng-model="myStatus" ng-required="pm_status.required">
+					    		<option value="">{{ 'pm_status_placeholder' | i18n }}</option>
+					    	</select>
+					    	<select ng-if="isUsedEngLang()" id="status" name="pStatus" class="form-control" ng-options="s.descrizione_eng for s in listaStati" ng-model="myStatus" ng-required="pm_status.required">
 					    		<option value="">{{ 'pm_status_placeholder' | i18n }}</option>
 					    	</select>
 					    	<div class="field-error" ng-show="!isInit && form.pStatus.$error.required">{{ 'parkingmeter_status_select_err_required' | i18n }}</div>

@@ -561,6 +561,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
     };
     
+    $scope.getUsedLang = function(){
+    	return sharedDataService.getUsedLanguage();
+    };
+    
+    $scope.isUsedItaLang = function(){
+    	return ($scope.getUsedLang() == 'ita');
+    };
+    
+    $scope.isUsedEngLang = function(){
+    	return ($scope.getUsedLang() == 'eng');
+    };
+    
     // ---------------------- End Block to read conf params and show/hide elements ---------------------
     
     // The tab directive will use this data
@@ -633,11 +645,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.listaStati = [{
 			idObj: "ACTIVE",
 			descrizione: "Attivo",
+			descrizione_eng: "Active",
 			filter: "ON-ACTIVE"
 		},
 		{
 			idObj: "INACTIVE",
 			descrizione: "Disattivo",
+			descrizione_eng: "Off",
 			filter: "OFF-INACTIVE"
 		}
 	];
@@ -700,11 +714,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.subscriptions = [
         {
         	value: true,
-        	desc: "Si'"
+        	desc: "Si'",
+        	desc_eng: "Yes"
         },
         {
         	value: false,
-        	desc: "No"
+        	desc: "No",
+        	desc_eng: "No"
         }
     ];
     

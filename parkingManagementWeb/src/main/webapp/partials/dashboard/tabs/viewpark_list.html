@@ -250,8 +250,8 @@
 								<span ng-show="pm_note.visible">{{pmeter.note}}</span>
 							</td>
 							<td width="10%" align="left">
-						        <span ng-show="pmeter.status=='ACTIVE'"><strong>Attivo</strong></span>
-								<span ng-show="pmeter.status!='ACTIVE'"><strong>Disattivo</strong></span>
+						        <span ng-show="pmeter.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
+								<span ng-show="pmeter.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 							</td>
 							<td width="5%" align="center"><div class="colorBox" ng-show="pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
 							<td width="15%" align="left">
@@ -321,8 +321,8 @@
 							<td width="10%" align="left">{{pmeter.code}}</td>
 							<td width="25%" align="left"><span ng-show="pm_note.visible">{{pmeter.note}}</span></td>
 							<td width="5%" align="left">
-						        <span ng-show="pmeter.status=='ACTIVE'"><strong>Attivo</strong></span>
-								<span ng-show="pmeter.status!='ACTIVE'"><strong>Disattivo</strong></span>
+						        <span ng-show="pmeter.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
+								<span ng-show="pmeter.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 							</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(pmeter.profit)}"></div></td><!-- {{area.color}} -->
 							<td width="10%" align="left">
@@ -1365,7 +1365,10 @@
 						<tr>
 							<td width="20%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="30%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
-							<td width="5%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
+							<td width="5%" align="left">
+								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
+								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
+							</td>
 							<td width="10%" align="left">
 								<span ng-if="pstruct.fee_val != null">{{ pstruct.fee_val | euroVal}} {{ 'euro_hour' | i18n }}</span>
 								<span ng-if="pstruct.fee_val == null">n.p.</span>
@@ -1432,7 +1435,10 @@
 						<tr>
 							<td width="15%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="34%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
-							<td width="5%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
+							<td width="5%" align="left">
+								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
+								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
+							</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(pstruct.occupancyRate)}"></div></td><!-- {{area.color}} -->
 							<td width="5%" align="left">
 								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate | doubleWithTwoDecimals }}%</span>
@@ -1568,7 +1574,10 @@
 						<tr>
 							<td width="16%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="16%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
-							<td width="8%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
+							<td width="8%" align="left">
+								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
+								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
+							</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(pstruct.profit)}"></div></td><!-- {{area.color}} -->
 							<td width="10%" align="left">
 								<span ng-show="pstruct.profit > -1">{{ correctEuroCent(pstruct.profit) | euroVal }} {{ 'euro' | i18n }}</span>
@@ -1633,7 +1642,10 @@
 						<tr>
 							<td width="16%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
 							<td width="16%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
-							<td width="8%" align="left">{{ pstruct.parkAndRide | boolToString }}</td>
+							<td width="8%" align="left">
+								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
+								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
+							</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(pstruct.extratime)}"></div></td><!-- {{area.color}} -->
 							<td width="10%" align="left">
 								<span ng-show="pstruct.extratime != null && pstruct.extratime.extratime_estimation_min != pstruct.extratime.extratime_estimation_max">{{ pstruct.extratime.extratime_estimation_min }} - {{ pstruct.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
@@ -1714,8 +1726,8 @@
 									<td class="detailsListTableSX">{{ 'pm_status' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">
-										<span ng-show="pmDetails.status=='ACTIVE'"><strong>Attivo</strong></span>
-										<span ng-show="pmDetails.status!='ACTIVE'"><strong>Disattivo</strong></span>
+										<span ng-show="pmDetails.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
+										<span ng-show="pmDetails.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 									</td>	
 								</tr>
 							</table>
@@ -1770,10 +1782,13 @@
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_park_and_ride_title' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
-						        	<td class="detailsListTableDXS">{{ psDetails.parkAndRide | boolToString }}</td>
+						        	<td class="detailsListTableDXS">
+						        		<span ng-if="isUsedItaLang()">{{ psDetails.parkAndRide | boolToString }}</span>
+						        		<span ng-if="isUsedEngLang()">{{ psDetails.parkAndRide | boolToStringEng }}</span>
+						        	</td>
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
-						        <tr>
+						        <tr ng-show="ps_manager.visible">
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_manager' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
@@ -2215,8 +2230,8 @@
 						<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-show="pmDetails.status=='ACTIVE'"><strong>Attivo</strong></span>
-							<span ng-show="pmDetails.status!='ACTIVE'"><strong>Disattivo</strong></span>
+							<span ng-show="pmDetails.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
+							<span ng-show="pmDetails.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 						</td>	
 					</tr>
 					<tr ng-show="pm_rateArea.visible">
@@ -2269,7 +2284,10 @@
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_park_and_ride_title' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
-						        	<td class="detailsListTableDXS">{{ psDetails.parkAndRide | boolToString }}</td>
+						        	<td class="detailsListTableDXS">
+						        		<span ng-if="isUsedItaLang()">{{ psDetails.parkAndRide | boolToString }}</span>
+						        		<span ng-if="isUsedEngLang()">{{ psDetails.parkAndRide | boolToStringEng }}</span>
+						        	</td>
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
 								<tr>
@@ -2974,8 +2992,8 @@
 									<td class="detailsListTableSXS">{{ 'pm_status' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">
-										<span ng-show="pmDetails.status=='ACTIVE'"><strong>Attivo</strong></span>
-										<span ng-show="pmDetails.status!='ACTIVE'"><strong>Disattivo</strong></span>
+										<span ng-show="pmDetails.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
+										<span ng-show="pmDetails.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 									</td>
 									<td class="detailsListTableCXS"></td>	
 								</tr>
@@ -3131,7 +3149,10 @@
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_park_and_ride_title' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
-						        	<td class="detailsListTableDXS">{{ psDetails.parkAndRide | boolToString }}</td>
+						        	<td class="detailsListTableDXS">
+						        		<span ng-if="isUsedItaLang()">{{ psDetails.parkAndRide | boolToString }}</span>
+										<span ng-if="isUsedEngLang()">{{ psDetails.parkAndRide | boolToStringEng }}</span>
+									</td>	
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
 							</table>
@@ -3893,7 +3914,10 @@
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_park_and_ride_title' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
-						        	<td class="detailsListTableDXS">{{ psDetails.parkAndRide | boolToString }}</td>
+						        	<td class="detailsListTableDXS">
+						        		<span ng-if="isUsedItaLang()">{{ psDetails.parkAndRide | boolToString }}</span>
+						        		<span ng-if="isUsedEngLang()">{{ psDetails.parkAndRide | boolToStringEng }}</span>
+						        	</td>
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
 								<tr>

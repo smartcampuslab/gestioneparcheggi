@@ -67,6 +67,10 @@ angular.module('pmFilters', []).filter('truncate', function() {
 	return function(input){
 		return input ? 'SI' : 'NO';
 	};
+}).filter('boolToStringEng', function() {
+	return function(input){
+		return input ? 'YES' : 'NO';
+	};
 }).filter('cleanStrangeValues', function() {
 	return function(input){
 		if(input == null || input==""){

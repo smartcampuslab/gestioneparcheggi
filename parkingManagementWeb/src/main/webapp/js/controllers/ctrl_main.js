@@ -76,7 +76,10 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	//});
     };
     
-    //$scope.setItalianLanguage();
+    if(sharedDataService.getUsedLanguage() == 'ita'){
+    	// here I force ita for the first app access
+    	$scope.setItalianLanguage();
+    }
     
     $scope.setUserLocale = function(lan){
     	var lan_uri = '';

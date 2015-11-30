@@ -1929,6 +1929,18 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	];
 	
+	$scope.getUsedLang = function(){
+    	return sharedDataService.getUsedLanguage();
+    };
+    
+    $scope.isUsedItaLang = function(){
+    	return ($scope.getUsedLang() == 'ita');
+    };
+    
+    $scope.isUsedEngLang = function(){
+    	return ($scope.getUsedLang() == 'eng');
+    };
+	
 	$scope.correctColor = function(value){
 		return "#" + value;
 	};

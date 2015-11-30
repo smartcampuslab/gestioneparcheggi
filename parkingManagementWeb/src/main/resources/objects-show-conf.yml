@@ -31,7 +31,11 @@ providers:
         - code: note
           editable: true
           required: false
-          visible: true          
+          visible: true
+        - code: municipality
+          editable: false
+          required: false
+          visible: false
         - code: color
           editable: true
           required: true
@@ -368,9 +372,9 @@ providers:
           required: false
           visible: true
         - code: municipality
-          editable: true
-          required: true
-          visible: true
+          editable: false
+          required: false
+          visible: false
         - code: color
           editable: true
           required: true

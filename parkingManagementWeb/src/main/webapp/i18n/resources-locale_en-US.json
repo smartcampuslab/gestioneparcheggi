@@ -548,187 +548,187 @@
     "description": "Messaggio errore cancellazione punto bici"
 }, {
     "key": "bikepoint_name_err_required",
-    "value": "Campo 'nome punto bici' obbligatorio.",
+    "value": "'Bike point name' field is mandatory.",
     "description": "Messaggio errore campo nome punto bici obbligatorio"
 }, {
     "key": "bikepoint_slots_err_pattern",
-    "value": "Valore non corretto per il Campo 'posti bici'. Inserire un valore numerico.",
+    "value": "'Bike point slots' field not correct. Insert a numeric value.",
     "description": "Messaggio errore campo posti punto bici non corretto"
 }, {
     "key": "bikepoint_slots_err_required",
-    "value": "Campo 'posti bici' obbligatorio.",
+    "value": "'Bike slots' field is mandatory.",
     "description": "Messaggio errore campo posti punto bici obbligatorio"
 }, {
     "key": "bikepoint_bikes_err_pattern",
-    "value": "Valore non corretto per il Campo 'numero bici'. Inserire un valore numerico.",
+    "value": "'Bike number' field is not correct. Use a numeric value.",
     "description": "Messaggio errore campo bici in punto bici non corretto"
 }, {
     "key": "bikepoint_bikes_err_required",
-    "value": "Campo 'numero bici' obbligatorio.",
+    "value": "'Bike number' field is mandatory.",
     "description": "Messaggio errore campo bici in punto bici obbligatorio"
 }, {
     "key": "bikepoint_geometry_select_err_pattern",
-    "value": "Valore non corretto per il Campo 'posizione' punto bici. Inserire un valore lat-lng.",
+    "value": "'Bike point position' field value is not correct. Insert a lat-long value.",
     "description": "Messaggio errore campo posizione punto bici non corretto"
 }, {
     "key": "bikepoint_geometry_select_err_required",
-    "value": "Valore campo 'posizione' punto bici obbligatorio.",
+    "value": "'Bike point position' field value is mandatory",
     "description": "Messaggio errore campo posizione punto bici obbligatorio"
 }, {
     "key": "view_bikepoint",
-    "value": "Dettagli punto bici",
+    "value": "Bike point details",
     "description": "Titolo pagina view punto bici"
 }, {
     "key": "edit_street",
-    "value": "Modifica Strada",
+    "value": "Edit street",
     "description": "Titolo pagina editing strade"
 }, {
     "key": "street_address",
-    "value": "Via di riferimento",
+    "value": "Referenced street",
     "description": "Label campo strada di riferimento per oggetto strada"
 }, {
     "key": "street_handicapped_slot",
-    "value": "Posti riservati ai disabili",
+    "value": "Handicapped slots",
     "description": "Label campo posti disabili per oggetto strada"
 }, {
     "key": "street_reserved_slot",
-    "value": "Posti riservati",
+    "value": "Reserved slots",
     "description": "Label campo posti riservati per oggetto strada"
 }, {
     "key": "street_timedpark_slot",
-    "value": "Posti disco orario",
+    "value": "Timed slots",
     "description": "Label campo posti disco orario per oggetto strada"
 }, {
     "key": "street_paidpark_slot",
-    "value": "Posti a pagamento",
+    "value": "Paid slots",
     "description": "Label campo posti a pagamento per oggetto strada"
 }, {
     "key": "street_freepark_slot",
-    "value": "Posti sosta libera",
+    "value": "Free park slots",
     "description": "Label campo posti sosta libera per oggetto strada"
 }, {
     "key": "street_freepark_slot_signed",
-    "value": "Posti sosta libera con segnaletica",
+    "value": "Free park slots with signposting",
     "description": "Label campo posti sosta libera con segnaletica per oggetto strada"
 }, {
     "key": "street_paid_slot",
-    "value": "Posti a pagamento",
+    "value": "Paid slots",
     "description": "Label campo posti a pagamento per oggetto strada"
 }, {
     "key": "street_totalslot",
-    "value": "Posti totali",
+    "value": "Total slot number",
     "description": "Label campo posti totali per oggetto strada"
 }, {
     "key": "street_unusuable_slot",
-    "value": "Posti inutilizzabili",
+    "value": "Unusable slots",
     "description": "Label campo posti non usabili per oggetto strada"
 }, {
     "key": "street_subscription_allowed",
-    "value": "Sosta con abbonamento",
+    "value": "Park with subscription",
     "description": "Label campo sosta con abbonamento per oggetto strada"
 }, {
     "key": "street_zone",
-    "value": "Zona",
+    "value": "Zone",
     "description": "Label campo zona per oggetto strada"
 }, {
     "key": "street_microzone",
-    "value": "Microzona",
+    "value": "Microzone",
     "description": "Label campo microzona per oggetto strada"
 }, {
     "key": "street_pm",
-    "value": "Parcometro",
+    "value": "Parkingmeter",
     "description": "Label campo parcometro per oggetto strada"
 }, {
     "key": "street_pms",
-    "value": "Lista Parcometri",
+    "value": "Parkingmeter list",
     "description": "Label campo parcometri per oggetto strada"
 }, {
     "key": "street_geometry",
-    "value": "Posizione",
+    "value": "Position",
     "description": "Label geometry per strada"
 }, {
     "key": "street_slots_err_required",
-    "value": "Campo posti totali obbligatorio.",
+    "value": "'Total slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_handicapped_slots_err_required",
-    "value": "Campo posti per disabili obbligatorio.",
+    "value": "'Handicapped slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_reserved_slots_err_required",
-    "value": "Campo posti riservati obbligatorio.",
+    "value": "'Reserved slots' field is mandatory.",
     "description": "Messaggio errore campo posti riservati in strada obbligatorio"
 }, {
     "key": "street_timedpark_slots_err_required",
-    "value": "Campo posti 'disco orario' obbligatorio.",
+    "value": "'Timed park slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_paidpark_slots_err_required",
-    "value": "Campo posti 'pagamento' obbligatorio.",
+    "value": "'Paid park slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_freepark_slots_err_required",
-    "value": "Campo posti gratuiti obbligatorio.",
+    "value": "'Free park slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_freepark_slots_sign_err_required",
-    "value": "Campo posti gratuiti obbligatorio.",
+    "value": "'Signed free park slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_unusuable_slots_err_required",
-    "value": "Campo posti inutilizzabili obbligatorio.",
+    "value": "'Unusable slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_slots_err_pattern",
-    "value": "Valore non corretto, inserire un valore numerico.",
+    "value": "Not correct value. Insert an integer value",
     "description": "Messaggio errore campo posti in strada non corretto"
 }, {
     "key": "street_area_select_err_required",
-    "value": "Campo Area di tariffazione obbligatorio.",
+    "value": "'Rating area' field is mandatory.",
     "description": "Messaggio errore campo area per strada obbligatorio"
 }, {
     "key": "street_zone_select_err_required",
-    "value": "Campo Zona di appartenenza obbligatorio.",
+    "value": "'Referenced zone' field is mandatory.",
     "description": "Messaggio errore campo zona per strada obbligatorio"
 }, {
     "key": "street_microzone_select_err_required",
-    "value": "Campo Microzona di appartenenza obbligatorio.",
+    "value": "'Referenced microzone' field is mandatory.",
     "description": "Messaggio errore campo microzona per strada obbligatorio"
 }, {
     "key": "street_pm_select_err_required",
-    "value": "Campo Parcometro associato alla strada obbligatorio.",
+    "value": "'Street parkingmeter' field is mandatory.",
     "description": "Messaggio errore campo pm per strada obbligatorio"
 }, {
     "key": "street_geometry_select_err_pattern",
-    "value": "Campo Posizione strada non corretto.",
+    "value": "'Street position' field is not correct. Insert a 'lat-long' value",
     "description": "Messaggio errore posizione strada non corretto"
 }, {
     "key": "street_geometry_select_err_required",
-    "value": "Campo Posizione strada obbligatorio.",
+    "value": "'Street position' field is mandatory.",
     "description": "Messaggio errore posizione strada obbligatorio"
 }, {
     "key": "street_reference_err_required",
-    "value": "Campo indirizzo strada obbligatorio.",
+    "value": "'Street address' field is mandatory.",
     "description": "Messaggio errore indirizzo strada obbligatorio"
 }, {
     "key": "view_street",
-    "value": "Dettagli via",
+    "value": "Street details",
     "description": "Titolo pagina dettagli via"
 }, {
     "key": "err_in_update_street",
-    "value": "Errore nell'aggiornamento della via. DB non pronto.",
+    "value": "Error in street update. Not ready db. Try again later.",
     "description": "Messaggio errore aggiornamento via"
 }, {
     "key": "err_in_delete_street",
-    "value": "Errore nella cancellazione della via. DB non pronto.",
+    "value": "Error in street delete. Not ready db. Try again later.",
     "description": "Messaggio errore cancellazione via"
 }, {
     "key": "edit_zone",
-    "value": "Modifica Zona",
+    "value": "Update zone",
     "description": "Titolo pagina editing zona"
 }, {
     "key": "zone_type",
-    "value": "Tipo",
+    "value": "Type",
     "description": "Campo tipo zona"
 }, {
     "key": "zone_note",
@@ -736,55 +736,55 @@
     "description": "Campo note zona"
 }, {
     "key": "zone_geometry",
-    "value": "Posizione",
+    "value": "Position",
     "description": "Campo posizione di una zona"
 }, {
     "key": "zone_name_err_required",
-    "value": "Campo 'nome zona' obbligatorio",
+    "value": "'Zone name' field is mandatory",
     "description": "Errore Campo nome zona obbligatorio"
 }, {
     "key": "zone_submacro_err_required",
-    "value": "Campo 'sottozona' obbligatorio",
+    "value": "'Macrozone' field is mandatory",
     "description": "Errore Campo sottozona obbligatorio"
 }, {
     "key": "zone_submicro_err_required",
-    "value": "Campo 'microzona' obbligatorio",
+    "value": "'Microzone' field is mandatory",
     "description": "Errore Campo microzona obbligatorio"
 }, {
     "key": "zone_type_err_required",
-    "value": "Campo 'tipo zona' obbligatorio",
+    "value": "'Zone type' field is mandatory",
     "description": "Errore Campo tipo zona obbligatorio"
 }, {
     "key": "zone_note_err_required",
-    "value": "Campo 'note' obbligatorio",
+    "value": "'Notes' field is mandatory",
     "description": "Errore Campo note zona obbligatorio"
 }, {
     "key": "zone_color_err_required",
-    "value": "Campo 'colore' obbligatorio",
+    "value": "'Color' field is mandatory",
     "description": "Errore Campo colore zona obbligatorio"
 }, {
     "key": "zone_geometry_err_pattern",
-    "value": "Campo 'posizione' non corretto",
+    "value": "'Position' field is not correct",
     "description": "Errore Campo posizione non corretto"
 }, {
     "key": "zone_geometry_err_required",
-    "value": "Campo 'geometria' zona obbligatorio",
+    "value": "'Geometry zone' field is mandatory",
     "description": "Errore Campo geometria zona obbligatorio"
 }, {
     "key": "err_in_update_zone",
-    "value": "Errore nell'aggiornamento della zona. DB non pronto.",
+    "value": "Error in zone update. Not ready db. Try again later.",
     "description": "Messaggio errore aggiornamento zona"
 }, {
     "key": "err_in_delete_zone",
-    "value": "Errore nella cancellazione della zona. DB non pronto.",
+    "value": "Error in zone delete. Not ready db. Try again later.",
     "description": "Messaggio errore cancellazione zona"
 }, {
     "key": "view_zone",
-    "value": "Dettagli Zona",
+    "value": "Zone details",
     "description": "Titolo pagina dettagli zona"
 }, {
     "key": "view_zones",
-    "value": "Zone",
+    "value": "Zones",
     "description": "Label zone in pagina visualizza/nascondi elementi"
 }, {
     "key": "view_microzones",
@@ -792,31 +792,31 @@
     "description": "Label vie in pagina visualizza/nascondi elementi"
 }, {
     "key": "edit_area",
-    "value": "Modifica Area",
+    "value": "Edit Area",
     "description": "Titolo pagina editing area"
 }, {
     "key": "area_geometry",
-    "value": "Posizione",
+    "value": "Position",
     "description": "Campo posizione in mappa area"
 }, {
     "key": "area_sms",
-    "value": "servizio telepark - cod.area",
+    "value": "Telepark service - area code",
     "description": "Campo codice sms telepark area"
 }, {
     "key": "area_note",
-    "value": "note",
+    "value": "notes",
     "description": "Campo note area"
 }, {
     "key": "area_municipality",
-    "value": "comune",
+    "value": "municipality",
     "description": "Campo comune area"
 }, {
     "key": "area_name_err_required",
-    "value": "Campo 'nome Area' obbligatorio",
+    "value": "'Area name' field is mandatory",
     "description": "Errore Campo nome area obbligatorio"
 }, {
     "key": "area_fee_err_required",
-    "value": "Campo 'tariffa oraria area' obbligatorio",
+    "value": "'Area hour rate' field is mandatory",
     "description": "Errore Campo tariffa area obbligatorio"
 }, {
     "key": "area_fee_err_pattern",
@@ -824,263 +824,263 @@
     "description": "Errore Campo tariffa area non corretto"
 }, {
     "key": "area_openingtime_err_pattern",
-    "value": "Campo 'orario area' non corretto. Inserire un valore nel formato hh:mm - hh:mm",
+    "value": "'Area hours' field is not correct. Insert a time period in 'hh:mm - hh:mm' format",
     "description": "Errore Campo orario area non corretto"
 }, {
     "key": "area_openingtime_err_required",
-    "value": "Campo 'orario area' obbligatorio",
+    "value": "'Area hours' field is mandatory",
     "description": "Errore Campo orario area obbligatorio"
 }, {
     "key": "area_smscode_err_required",
-    "value": "Campo 'codice telepark' area obbligatorio",
+    "value": "'Telepark service code' field is mandatory",
     "description": "Errore Campo sms code area obbligatorio"
 }, {
     "key": "area_note_err_required",
-    "value": "Campo 'note' area obbligatorio",
+    "value": "'Notes' field is mandatory",
     "description": "Errore Campo note area obbligatorio"
 }, {
     "key": "area_municipality_err_required",
-    "value": "Campo 'comune' area obbligatorio",
+    "value": "'Area municipality' field is mandatory",
     "description": "Errore Campo comune area obbligatorio"
 }, {
     "key": "area_color_err_required",
-    "value": "Campo 'colore' area obbligatorio",
+    "value": "'Area color' field is mandatory",
     "description": "Errore Campo colore area"
 }, {
     "key": "err_in_update_area",
-    "value": "Errore nell'aggiornamento dell' area. DB non pronto.",
+    "value": "Area update error. Not ready db. Try again later",
     "description": "Errore aggiornamento area"
 }, {
     "key": "err_in_delete_area",
-    "value": "Errore nella cancellazione dell' area. DB non pronto.",
+    "value": "Area delete error. Not ready db. Try again later",
     "description": "Errore cancellazione area"
 }, {
     "key": "view_area",
-    "value": "Dettagli Area",
+    "value": "Area details",
     "description": "Titolo pagina visualizza area"
 }, {
     "key": "area_geometry_err_pattern",
-    "value": "Campo 'geometria' area non corretto",
+    "value": "'Area geometry' field is not correct",
     "description": "Errore pattern campo geometry area"
 }, {
     "key": "area_geometry_err_required",
-    "value": "Campo 'geometria' area obbligatorio",
+    "value": "'Area geometry' field is required",
     "description": "Errore campo geometry area obbligatorio"
 }, {
     "key": "area_name_placeholder",
-    "value": "Inserire il nome dell'area",
+    "value": "Insert the area name",
     "description": "Testo placeholder campo nome area"
 }, {
     "key": "area_fee_placeholder",
-    "value": "Inserire la tariffa oraria dell'area (euro/ora) nel formato decimale (es: 0,50)",
+    "value": "Insert the area hour fee value (euro/hour) in the decimal format (es: 0,50)",
     "description": "Testo placeholder campo tariffa oraria area"
 }, {
     "key": "area_time_placeholder",
-    "value": "Inserire l'orario in cui l'area e' a pagamento (da - a) nel formato hh:mm",
+    "value": "Insert the area period value (from - to) in the 'hh:mm' format",
     "description": "Testo placeholder campo orario area"
 }, {
     "key": "area_sms_placeholder",
-    "value": "Inserire il codice del serivzio telepark",
+    "value": "Insert the teleparc service code",
     "description": "Testo placeholder campo telepark area"
 }, {
     "key": "area_note_placeholder",
-    "value": "Inserire eventuali note",
+    "value": "Insert notes value",
     "description": "Testo placeholder campo note area"
 }, {
     "key": "area_municipality_placeholder",
-    "value": "Inserire comune area",
+    "value": "Insert the area municipality value",
     "description": "Testo placeholder campo comune area"
 }, {
     "key": "area_color_placeholder",
-    "value": "Scegliere il colore dell'area",
+    "value": "Choose the area color",
     "description": "Testo placeholder campo telepark area"
 }, {
     "key": "street_area_placeholder",
-    "value": "Scegliere l'area tariffaria a cui la via appartiene",
+    "value": "Choose the street referenced rate area",
     "description": "Testo placeholder campo area tariffaria via"
 }, {
     "key": "street_address_placeholder",
-    "value": "Inserire l'indirizzo di riferimento della via",
+    "value": "Insert the street referenced address",
     "description": "Testo placeholder campo indirizzo via"
 }, {
     "key": "street_totalslot_placeholder",
-    "value": "Inserire il numero totale di posti della via",
+    "value": "Insert the total slot number of the street",
     "description": "Testo placeholder campo posti totali via"
 }, {
     "key": "street_handicappedslot_placeholder",
-    "value": "Inserire il numero di posti riservati ai disabili",
+    "value": "Insert the handicapped slots number",
     "description": "Testo placeholder campo posti disabili via"
 }, {
     "key": "street_reservedslot_placeholder",
-    "value": "Inserire il numero di posti riservati",
+    "value": "Insert the reserved slots number",
     "description": "Testo placeholder campo posti riservati in via"
 }, {
     "key": "street_timedslot_placeholder",
-    "value": "Inserire il numero di posti a disco-orario",
+    "value": "Insert the timed park slots number",
     "description": "Testo placeholder campo posti disco orario via"
 }, {
     "key": "street_paidslot_placeholder",
-    "value": "Inserire il numero di posti a pagamento",
+    "value": "Insert the paid park slots number",
     "description": "Testo placeholder campo posti a pagamento in via"
 }, {
     "key": "street_freeparkslot_placeholder",
-    "value": "Inserire il numero di posti gratuiti",
+    "value": "Insert the free park slots number",
     "description": "Testo placeholder campo posti gratuiti via"
 }, {
     "key": "street_freeparkslotsign_placeholder",
-    "value": "Inserire il numero di posti gratuiti (con segnaletica)",
+    "value": "Insert the free park signed slots number",
     "description": "Testo placeholder campo posti gratuiti con segnaletica in via"
 }, {
     "key": "street_unusuableslot_placeholder",
-    "value": "Inserire il numero di posti inutilizzabili",
+    "value": "Insert the unusalbe slots number",
     "description": "Testo placeholder campo posti inutilizzabili via"
 }, {
     "key": "pm_code_placeholder",
-    "value": "Inserire il codice del parcometro",
+    "value": "Insert the parking meter code value",
     "description": "Testo placeholder campo codice parcometro"
 }, {
     "key": "pm_note_placeholder",
-    "value": "Inserire eventuali note relative al parcometro",
+    "value": "Insert the parking meter notes",
     "description": "Testo placeholder campo note parcometro"
 }, {
     "key": "pm_status_placeholder",
-    "value": "Settare lo stato del parcometro (attivo o disattivo)",
+    "value": "Select the parking meter state",
     "description": "Testo placeholder campo stato parcometro"
 }, {
     "key": "pm_area_placeholder",
-    "value": "Settare l'area di appartenenza del parcometro",
+    "value": "Select the parking meter rate area",
     "description": "Testo placeholder campo area parcometro"
 }, {
     "key": "pm_geo_placeholder",
-    "value": "Scegliere la posizione del parcometro (click sulla mappa)",
+    "value": "Choose the parking meter position (click on map)",
     "description": "Testo placeholder campo posizione parcometro"
 }, {
     "key": "ps_name_placeholder",
-    "value": "Inserire il nome della struttura",
+    "value": "Insert the structure name",
     "description": "Testo placeholder campo nome struttura"
 }, {
     "key": "ps_address_placeholder",
-    "value": "Inserire l'indirizzo della struttura",
+    "value": "Insert the structure address",
     "description": "Testo placeholder campo indirizzo struttura"
 }, {
     "key": "ps_fee_placeholder",
-    "value": "Inserire la tariffa oraria della struttura (euro/ora) nel formato decimale (es: 0,50)",
+    "value": "Insert the hourly rate (euro/hour) value in the decimal format (es: 0,50)",
     "description": "Testo placeholder campo tariffa oraria struttura"
 }, {
     "key": "ps_fee_note_placeholder",
-    "value": "Inserire eventuali note sulla tariffa oraria della struttura",
+    "value": "Insert the hourly rate notes",
     "description": "Testo placeholder campo tariffa oraria struttura"
 }, {
     "key": "ps_time_placeholder",
-    "value": "Inserire l'orario di apertura della struttura (da - a) nel formato hh:mm",
+    "value": "Insert the structure opening hours (from - to) in the 'hh:mm' format",
     "description": "Testo placeholder campo orario struttura"
 }, {
     "key": "ps_time_placeholder_from",
-    "value": "Inserire l'orario di apertura nel formato hh:mm",
+    "value": "Insert the structure opening time in the format 'hh:mm'",
     "description": "Testo placeholder campo orario struttura"
 }, {
     "key": "ps_time_placeholder_to",
-    "value": "Inserire l'orario di chiusura nel formato hh:mm",
+    "value": "Insert the structure closing time in the format 'hh:mm'",
     "description": "Testo placeholder campo orario struttura"
 }, {
     "key": "add_time_period",
-    "value": "Aggungi periodo apertura",
+    "value": "Add opening time period",
     "description": "Testo placeholder campo orario struttura"
 }, {
     "key": "ps_opening_from",
-    "value": "Dalle",
+    "value": "From",
     "description": "Testo placeholder campo orario struttura periodo da"
 }, {
     "key": "ps_opening_to",
-    "value": "Alle",
+    "value": "To",
     "description": "Testo placeholder campo orario struttura periodo a"
 }, {
     "key": "ps_time_period_delete",
-    "value": "Cancella",
+    "value": "Delete",
     "description": "Testo pulsante per cancellazione periodo apertura da lista"
 }, { 
     "key": "ps_phone_placeholder",
-    "value": "Inserire il numero di telefono della struttura",
+    "value": "Insert the structure phone number",
     "description": "Testo placeholder campo telefono struttura"
 }, { 
     "key": "ps_manager_placeholder",
-    "value": "Inserire il proprietario della struttura",
+    "value": "Insert the structure owner",
     "description": "Testo placeholder campo proprietario struttura"
 }, {
     "key": "ps_mmode_placeholder",
-    "value": "Indicare la modalita' di gestione della struttura",
+    "value": "Insert the structure management mode",
     "description": "Testo placeholder campo modalita' gestione struttura"
 }, {
     "key": "ps_totalslot_placeholder",
-    "value": "Inserire il numero totale di posti della struttura",
+    "value": "Insert the total slots number",
     "description": "Testo placeholder campo posti totali struttura"
 }, {
     "key": "ps_payingslot_placeholder",
-    "value": "Inserire il numero di posti standard della struttura",
+    "value": "Insert the standard slots number",
     "description": "Testo placeholder campo posti standard della struttura"
 }, {
     "key": "ps_handicappedslot_placeholder",
-    "value": "Inserire il numero di posti riservati ai disabili",
+    "value": "Insert the handicapped slots number",
     "description": "Testo placeholder campo posti disabili struttura"
 }, {
     "key": "ps_unusuableslot_placeholder",
-    "value": "Inserire il numero di posti non utilizzabili",
+    "value": "Insert the unusable slots number",
     "description": "Testo placeholder campo posti non utilizzabili struttura"
 }, { 
     "key": "ps_geo_placeholder",
-    "value": "Scegliere la posizione della struttura (click sulla mappa)",
+    "value": "Select the structure position (click on map)",
     "description": "Testo placeholder campo posti disco orario via"
 }, { 
     "key": "ps_period_overlap_error",
-    "value": "Attenzione: il nuovo periodo apertura si sovrappone a periodi gia' inseriti",
+    "value": "Attention: the new opening period overlaps an existing period",
     "description": "Testo messaggio di errore per periodo sovrapposto in ora apertura struttura"
 }, { 
     "key": "ps_period_from_to_error",
-    "value": "Periodo inserito non corretto: ora di apertura maggiore di ora di chiusura",
+    "value": "Incorrecte inserte period: opening time is grater then closing time",
     "description": "Testo messaggio di errore per periodo non corretto in ora apertura struttura"
 }, {
     "key": "zone_name_placeholder",
-    "value": "Inserire il nome della zona",
+    "value": "Insert the zone name",
     "description": "Testo placeholder campo nome zona"
 }, {
     "key": "zone_submacro_placeholder",
-    "value": "Inserire il codice della sottozona",
+    "value": "Insert the macrozone code",
     "description": "Testo placeholder campo submacro zona"
 }, {
     "key": "zone_submicro_placeholder",
-    "value": "Inserire il codice della microzona",
+    "value": "Insert the microzone code",
     "description": "Testo placeholder campo submicro zona"
 }, {
     "key": "zone_type_placeholder",
-    "value": "Inserire il tipo/categoria di suddivisione in zone",
+    "value": "Select the type/category of the zone",
     "description": "Testo placeholder campo tipo zona"
 }, {
     "key": "zone_note_placeholder",
-    "value": "Inserire eventuali note relative alla zona",
+    "value": "Insert zone notes value",
     "description": "Testo placeholder campo note zona"
 }, {
     "key": "zone_color_placeholder",
-    "value": "Scegliere il colore della zona",
+    "value": "Choose the zone color",
     "description": "Testo placeholder campo colore zona"
 }, {
     "key": "bp_name_placeholder",
-    "value": "Inserire il nome del punto bici",
+    "value": "Insert the bike point name",
     "description": "Testo placeholder campo nome punto bici"
 }, {
     "key": "bp_slotnumber_placeholder",
-    "value": "Inserire il numero totale di posti bici",
+    "value": "Insert the bike point total slot number",
     "description": "Testo placeholder campo posti bici punto bici"
 }, {
     "key": "bp_bikenumber_placeholder",
-    "value": "Inserire il numero di bici presenti nel punto bici",
+    "value": "Insert the bike point total bike number",
     "description": "Testo placeholder campo numero bici punto bici"
 }, {
     "key": "bp_geo_placeholder",
-    "value": "Scegliere la posizione del punto bici (click sulla mappa)",
+    "value": "Choose the bike point position (click on map)",
     "description": "Testo placeholder campo posizione punto bici"
 }, {
     "key": "btn_remove_all_polygons",
-    "value": "Cancella poligoni",
+    "value": "Delete poligons",
     "description": "Label pulsante cancella poligoni in area edit"
 }, {
     "key": "btn_remove_last_polygons",
@@ -1688,163 +1688,163 @@
 	"description": "Messaggio campo posti non corretto in creazione log parcheggio"
 }, {
 	"key": "log_parking_occupied_error_required",
-	"value": "Campo 'posti occupati' obbligatorio. Inserire un valore numerico",
+	"value": "'Occupied slots' field is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti obbligatorio in creazione log parcheggio"
 }, {
 	"key": "log_parking_occupied_error_min",
-	"value": "Valore non corretto nel campo 'posti occupati'. Inserire un valore maggiore",
+	"value": "'Occupied slots' field value is not correct. Insert a bigger value",
 	"description": "Messaggio errore campo posti non corretto in creazione log parcheggio per valore troppo piccolo"
 }, {
 	"key": "log_parking_occupied_error_max",
-	"value": "Valore non corretto nel campo 'posti occupati'. Inserire un valore minore",
+	"value": "'Occupied slots' field value is not correct. Insert a smaller value",
 	"description": "Messaggio errore campo posti non corretto in creazione log parcheggio per valore troppo grande"
 }, {
 	"key": "log_street_occupied_timed_error_pattern",
-	"value": "Campo 'posti disco orario occupati' non corretto. Inserire un valore numerico",
+	"value": "'Occupied slots on timed park' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti disco orario non corretto in creazione log via"
 }, {
 	"key": "log_street_occupied_timed_error_required",
-	"value": "Campo 'posti disco orario occupati' obbligatorio. Inserire un valore numerico",
+	"value": "'Occupied slots on timed park' field is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti disco orario obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_timed_error_min",
-	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore maggiore.",
+	"value": "'Occupied slots on timed park' field value is not correct. Insert a bigger value.",
 	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_timed_error_max",
-	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore minore.",
+	"value": "'Occupied slots on timed park' field value is not correct. Insert a smaller value.",
 	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_free_error_pattern",
-	"value": "Campo 'posti gratuiti occupati' non corretto. Inserire un valore numerico",
+	"value": "'Occupied slots on free' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti gratuiti non corretto in creazione log via"
 }, {
 	"key": "log_street_occupied_reserved_error_pattern",
-	"value": "Campo 'posti riservati occupati' non corretto. Inserire un valore numerico",
+	"value": "'Occupied slots on reserved' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti riservati non corretto in creazione log via"
 }, {
 	"key": "log_street_occupied_free_signed_error_pattern",
-	"value": "Campo 'posti gratuiti occupati con segnaletica' non corretto. Inserire un valore numerico",
+	"value": "'Occupied slots on free signed' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti gratuiti con segnaletica non corretto in creazione log via"
 }, {
 	"key": "log_street_occupied_free_signed_error_required",
-	"value": "Campo 'posti gratuiti occupati con segnaletica' obbligatorio. Inserire un valore numerico",
+	"value": "'Occupied slots on free signed' field value is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti gratuiti con segnaletica obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_reserved_error_required",
-	"value": "Campo 'posti riservati occupati' obbligatorio. Inserire un valore numerico",
+	"value": "'Occupied slots on reserved' field value is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti riservati obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_handicapped_error_pattern",
-	"value": "Campo 'posti per disabili occupati' non corretto. Inserire un valore numerico",
+	"value": "'Occupied slots on handicapped' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti per disabili non corretto in creazione log via"
 }, {
 	"key": "log_street_occupied_handicapped_error_required",
-	"value": "Campo 'posti per disabili occupati' obbligatorio. Inserire un valore numerico",
+	"value": "'Occupied slots on handicapped' field value is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti per disabili obbligatorio in creazione log via"
 }, {
 	"key": "log_street_unavailable_error_pattern",
-	"value": "Campo 'posti inutilizzabili' non corretto. Inserire un valore numerico",
+	"value": "'Unusable slots' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti inutilizzabili non corretto in creazione log via"
 }, {
 	"key": "log_street_unavailable_error_min",
-	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore maggiore",
+	"value": "'Unusable slots' field value is not correct. Insert a bigger value",
 	"description": "Messaggio campo posti inutilizzabili non corretto (min) in creazione log via"
 }, {
 	"key": "log_street_unavailable_error_max",
-	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore minore",
+	"value": "'Unusable slots' field value is not correct. Insert a smaller value",
 	"description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log via"
 }, {
 	"key": "log_park_unavailable_error_pattern",
-	"value": "Campo 'posti inutilizzabili' non corretto. Inserire un valore numerico",
+	"value": "'Unusable slots' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti inutilizzabili non corretto in creazione log parcheggio"
 }, {
 	"key": "log_park_unavailable_error_min",
-	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore maggiore",
+	"value": "'Unusable slots' field value is not correct. Insert a bigger value",
 	"description": "Messaggio campo posti inutilizzabili non corretto (min) in creazione log parcheggio"
 }, {
 	"key": "log_park_unavailable_error_max",
-	"value": "Valore non corretto nel campo 'posti inutilizzabili'. Inserire un valore minore",
+	"value": "'Unusable slots' field value is not correct. Insert a smaller value",
 	"description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log parcheggio"
 }, {
 	"key": "log_park_occupied_handicapped_error_pattern",
-	"value": "Campo 'posti per disabili occupati' non corretto. Inserire un valore numerico",
+	"value": "'Occupied slots on handicapped' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti per disabili non corretto in creazione log parcheggio"
 }, {
 	"key": "log_park_occupied_handicapped_error_required",
-	"value": "Campo 'posti per disabili occupati' obbligatorio. Inserire un valore numerico",
+	"value": "'Occupied slots on handicapped' field value is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti per disabili obbligatorio in creazione log parcheggio"
 }, {
 	"key": "log_park_occupied_handicapped_error_min",
-	"value": "Valore non corretto nel campo 'posti per disabili occupati'. Inserire un valore maggiore",
+	"value": "'Occupied slots on handicapped' field value is not correct. Insert a bigger value",
 	"description": "Messaggio campo posti per disabili troppo piccolo in creazione log parcheggio"
 }, {
 	"key": "log_park_occupied_handicapped_error_max",
-	"value": "Valore non corretto nel campo 'posti per disabili occupati'. Inserire un valore minore",
+	"value": "'Occupied slots on handicapped' field value is not correct. Insert a smaller value",
 	"description": "Messaggio campo posti per disabili troppo grande in creazione log parcheggio"
 }, {
 	"key": "log_street_occupied_free_error_required",
-	"value": "Campo 'posti gratuiti occupati' obbligatorio. Inserire un valore numerico",
+	"value": "'Occupied slots on free park' field value is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti gratuiti obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_free_error_min",
-	"value": "Valore non corretto nel campo 'posti gratuiti occupati'. Inserire un valore maggiore",
+	"value": "'Occupied slots on free park' field value is not correct. Insert a bigger value",
 	"description": "Messaggio errore campo posti gratuiti non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_free_error_max",
-	"value": "Valore non corretto nel campo 'posti gratuiti occupati'. Inserire un valore minore",
+	"value": "'Occupied slots on free park' field value is not correct. Insert a smaller value",
 	"description": "Messaggio errore campo posti gratuiti non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_free_signed_error_min",
-	"value": "Valore non corretto nel campo 'posti gratuiti occupati con segnaletica'. Inserire un valore maggiore",
+	"value": "'Occupied slots on free park signed' field value is not correct. Insert a bigger value",
 	"description": "Messaggio errore campo posti gratuiti con segnaletica non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_free_signed_error_max",
-	"value": "Valore non corretto nel campo 'posti gratuiti occupati con segnaletica'. Inserire un valore minore",
+	"value": "'Occupied slots on free park signed' field value is not correct. Insert a smaller value",
 	"description": "Messaggio errore campo posti gratuiti con segnaletica non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_reserved_error_min",
-	"value": "Valore non corretto nel campo 'posti riservati occupati'. Inserire un valore maggiore",
+	"value": "'Occupied slots on reserved' field value is not correct. Insert a bigger value",
 	"description": "Messaggio errore campo posti riservati non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_reserved_error_max",
-	"value": "Valore non corretto nel campo 'posti riservati occupati'. Inserire un valore minore",
+	"value": "'Occupied slots on reserved' field value is not correct. Insert a smaller value",
 	"description": "Messaggio errore campo posti riservati non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_handicapped_error_min",
-	"value": "Valore non corretto nel campo 'posti per disabili occupati'. Inserire un valore maggiore",
+	"value": "'Occupied slots on handicapped' field value is not correct. Insert a bigger value",
 	"description": "Messaggio errore campo posti per disabili non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_handicapped_error_max",
-	"value": "Valore non corretto nel campo 'posti per disabili occupati'. Inserire un valore minore",
+	"value": "'Occupied slots on handicapped' field value is not correct. Insert a smaller value",
 	"description": "Messaggio errore campo posti per disabili non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_paid_error_pattern",
-	"value": "Campo 'posti a pagamento occupati' non corretto. Inserire un valore numerico",
+	"value": "'Occupied slots on paid park' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti a pagamento non corretto in creazione log via"
 }, {
 	"key": "log_street_occupied_paid_error_required",
-	"value": "Campo 'posti a pagamento occupati' obbligatorio. Inserire un valore numerico",
+	"value": "'Occupied slots on paid park' field value is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti a pagamento obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_paid_error_min",
-	"value": "Valore non corretto nel campo 'posti a pagamento occupati'. Inserire un valore maggiore",
+	"value": "'Occupied slots on paid park' field value is not correct. Insert a bigger value",
 	"description": "Messaggio errore campo posti a pagamento obbligatorio in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_paid_error_max",
-	"value": "Valore non corretto nel campo 'posti a pagamento occupati'. Inserire un valore minore",
+	"value": "'Occupied slots on paid park' field value is not correct. Insert a smaller value",
 	"description": "Messaggio errore campo posti a pagamento obbligatorio in creazione log via per valore troppo grande"
 }, {
 	"key": "system_log_alt_title",
-	"value": "Log inserito da sistema",
+	"value": "System log",
 	"description": "Titolo alt per icona log di sistema"
 }, {
 	"key": "log_insertion",
-	"value": "Log inserito da",
+	"value": "User log from ",
 	"description": "Label per campo tipo inserimento log"
 }, {
 	"key": "log_system_insertion_value",
-	"value": "form di sistema",
+	"value": "System form",
 	"description": "Valore per tipo inserimento log"
 }, {
 	"key": "log_client_insertion_value",
@@ -1852,71 +1852,71 @@
 	"description": "Valore per tipo inserimento log"
 }, { 
 	"key": "pm_profit",
-	"value": "Incasso",
+	"value": "Profit",
 	"description": "Label per valore di incasso parcometro"
 }, { 
 	"key": "pm_tickets",
-	"value": "N.Ticket",
+	"value": "Ticket num",
 	"description": "Label per numero ticket emessi da parcometro"
 }, { 
 	"key": "ps_profit",
-	"value": "Incasso",
+	"value": "Profit",
 	"description": "Label per valore di incasso struttura parcheggio"
 }, { 
 	"key": "ps_tickets",
-	"value": "N.Ticket",
+	"value": "Ticket num",
 	"description": "Label per numero ticket emessi da struttura parcheggio"
 }, { 
 	"key": "street_profit",
-	"value": "Incasso",
+	"value": "Profit",
 	"description": "Label per valore di incasso via"
 }, { 
 	"key": "street_tickets",
-	"value": "N.Ticket",
+	"value": "Ticket num",
 	"description": "Label per numero ticket emessi in via"
 }, { 
 	"key": "street_profits",
-	"value": "Incassi",
+	"value": "Profit",
 	"description": "Titolo sezione incasso via"
 }, {
 	"key": "zone_paid_slots",
-	"value": "Posti a pagamento",
+	"value": "Paid slot number",
 	"description": "Label per posti a pagamento in sezione incasso zona"
 }, {
 	"key": "zone_profit", 
-	"value": "Incasso",
+	"value": "Profit",
 	"description": "Label per valore di incasso zona"
 }, {
 	"key": "zone_tickets", 
-	"value": "N.Ticket",
+	"value": "Ticket num",
 	"description": "Label per numero ticket emessi in zona"
 }, {
 	"key": "area_total_pms", 
-	"value": "Num. Parcometri",
+	"value": "Parking meter num.",
 	"description": "Label per numero parcometri in area"
 }, {
 	"key": "area_profit", 
-	"value": "Incasso",
+	"value": "Profit",
 	"description": "Label per valore di incasso area"
 }, {
 	"key": "area_tickets", 
-	"value": "N.Ticket",
+	"value": "Ticket num",
 	"description": "Label per numero ticket emessi in area"
 }, {
 	"key": "element_profit", 
-	"value": "Incasso",
+	"value": "Profit",
 	"description": "Label per valore di incasso in elemento in lista"
 }, { 
 	"key": "element_tickets", 
-	"value": "N.Ticket",
+	"value": "Ticket num",
 	"description": "Label per numero ticket emessi in elemento in lista"
 }, { 
 	"key": "element_costTime", 
-	"value": "Tempo di ricerca",
+	"value": "Search time",
 	"description": "Label per costo di accesso in posto"
 }, { 
 	"key": "element_waiting_time", 
-	"value": "Tempo attesa",
+	"value": "Waiting time",
 	"description": "Label per tempo di attesa per parcheggio"
 }, { 
 	"key": "element_waiting_min", 
@@ -1924,27 +1924,27 @@
 	"description": "Label per minuti di attesa per parcheggio"
 }, { 
 	"key": "log_period", 
-	"value": "Periodo",
+	"value": "Period",
 	"description": "Label per periodo temporale specifico in inserimento log"
 }, { 
 	"key": "log_period_from_date", 
-	"value": "Dal",
+	"value": "From",
 	"description": "Label per inizio periodo in inserimento log"
 }, { 
 	"key": "log_period_to_date", 
-	"value": "Al",
+	"value": "To",
 	"description": "Label per fine periodo in inserimento log"
 }, { 
 	"key": "log_period_time", 
-	"value": "Ora",
+	"value": "Period time",
 	"description": "Label per ora periodo in inserimento log"
 }, { 
 	"key": "from_to_period_err", 
-	"value": "Periodo inserito non corretto: data inizio maggiore di data fine.",
+	"value": "Incorrected inserted period: starting date is greater than ending date.",
 	"description": "Messaggio errore periodo data da maggiore di data a in inserimento log"
 }, { 
 	"key": "start_or_end_emplty_period_err", 
-	"value": "Data di inizio o di fine periodo mancante. Inserire entrambi i valori per continuare.",
+	"value": "Starting and ending dates are missing. Please inserte the two values.",
 	"description": "Messaggio errore periodo data da o data a mancanti in inserimento log"
 }, { 
 	"key": "cmp_report_creation_button", 
@@ -2198,4 +2198,19 @@
 }, {
     "key": "legend_not_available",
     "value": "not avail."
+}, {
+    "key": "street_edit_pm_select",
+    "value": "Parking meter select"
+}, {
+    "key": "active_pm_state",
+    "value": "Active"
+}, {
+    "key": "inactive_pm_state",
+    "value": "Off"
+}, {
+    "key": "yes_val_select",
+    "value": "Yes"
+}, {
+    "key": "no_val_select",
+    "value": "No"
 }]

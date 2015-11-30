@@ -63,6 +63,18 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     	return showMicroZones;
     };
     
+    $scope.getUsedLang = function(){
+    	return sharedDataService.getUsedLanguage();
+    };
+    
+    $scope.isUsedItaLang = function(){
+    	return ($scope.getUsedLang() == 'ita');
+    };
+    
+    $scope.isUsedEngLang = function(){
+    	return ($scope.getUsedLang() == 'eng');
+    };
+    
     $scope.initComponents = function(){
 	    if($scope.editparktabs == null || $scope.editparktabs.length == 0){
 		   	$scope.showedObjects = sharedDataService.getVisibleObjList();

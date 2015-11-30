@@ -2198,4 +2198,19 @@
 }, {
     "key": "legend_not_available",
     "value": "non disp"
+}, {
+    "key": "street_edit_pm_select",
+    "value": "Seleziona Parcometri"
+}, {
+    "key": "active_pm_state",
+    "value": "Attivo"
+}, {
+    "key": "inactive_pm_state",
+    "value": "Disattivo"
+}, {
+    "key": "yes_val_select",
+    "value": "Sì"
+}, {
+    "key": "no_val_select",
+    "value": "No"
 }]

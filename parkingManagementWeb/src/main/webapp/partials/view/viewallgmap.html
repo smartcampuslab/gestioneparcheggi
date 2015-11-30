@@ -22,8 +22,8 @@
 											<tr ng-show="pm_status.visible">
 							        			<td><strong>{{ 'pm_status' | i18n }}:</strong></td>
 							        			<td>
-							        				<span ng-show="pm.data.status=='ACTIVE'">Attivo</span>
-													<span ng-show="pm.data.status!='ACTIVE'">Disattivo</span>
+							        				<span ng-show="pm.data.status=='ACTIVE'">{{ 'active_pm_state' | i18n }}</span>
+													<span ng-show="pm.data.status!='ACTIVE'">{{ 'inactive_pm_state' | i18n }}</span>
 												</td>	
 							        		</tr>
 							        		<tr ng-show="pm_rateArea.visible">
@@ -103,7 +103,10 @@
 							        		</tr>
 							        		<tr>
 												<td><strong>{{ 'ps_park_and_ride' | i18n }}:</strong></td>
-												<td>&nbsp;{{ ps.data.parkAndRide | boolToString }}</td>
+												<td>&nbsp;
+													<span ng-if="isUsedItaLang()">{{ ps.data.parkAndRide | boolToString }}</span>
+													<span ng-if="isUsedEngLang()">{{ ps.data.parkAndRide | boolToStringEng }}</span>
+												</td>
 											</tr>
 							        		<tr ng-show="ps_payment.visible">
 							        			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
@@ -195,7 +198,10 @@
 							        		</tr>
 							        		<tr ng-show="s_subscrition.visible">
 							        			<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ s.data.subscritionAllowedPark | boolToString }}</td>
+							        			<td>&nbsp;
+							        				<span ng-if="isUsedItaLang()">{{ s.data.subscritionAllowedPark | boolToString }}</span>
+													<span ng-if="isUsedEngLang()">{{ s.data.subscritionAllowedPark | boolToStringEng }}</span>
+							        			</td>
 							        		</tr>
 <!-- 							        		<tr ng-show="s_areaId.visible">	 -->
 <!-- 												<td> -->
