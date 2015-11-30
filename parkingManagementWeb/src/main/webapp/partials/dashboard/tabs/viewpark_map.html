@@ -619,13 +619,13 @@
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
 					</tr>
-					<tr>
-						<td class="detailsTableSX">{{ 'street_average_occupation' | i18n }}:</td>
-						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">
-							<span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span>
-							<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.occupancyRate }}</span>
-						</td>
+<!-- 					<tr> -->
+<!-- 						<td class="detailsTableSX">{{ 'street_average_occupation' | i18n }}:</td> -->
+<!-- 						<td class="detailsTableCX"></td> -->
+<!-- 						<td class="detailsTableDX"> -->
+<!-- 							<span ng-show="sDetails.data.occupancyRate == -1">{{ 'street_occupation_not_present' | i18n }}</span> -->
+<!-- 							<span ng-show="sDetails.data.occupancyRate != -1">{{ sDetails.data.occupancyRate }}</span> -->
+<!-- 						</td> -->
 						<!-- 								       		<td colspan="2"> -->
 						<!-- 								       			<strong>{{ 'street_slots' | i18n }}:</strong> -->
 						<!-- 										       		<div class="panel panel-default"> -->
@@ -659,7 +659,7 @@
 						<!-- 											        </div> -->
 						<!-- 										        </div> -->
 						<!-- 								       		</td> -->
-					</tr>
+<!-- 					</tr> -->
 				</table>
 			</div>
 			<div ng-show="isZoneDetShow()">
