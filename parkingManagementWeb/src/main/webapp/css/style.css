@@ -543,6 +543,24 @@ div #panelMap {
 }
 .custom-file-input:active::before {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+}
+
+.footer {
+	background-color: #1E88E5;
+	padding: 0px;
+}
+
+.footer img{
+/* 	height: 95px; */
+	width: 12%;
+	padding: 5px 5px 5px 5px;
+	display: block;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.footer div{
+	align: center;
 }    
 
 .navbar-brand > img {
@@ -569,7 +587,7 @@ div #panelMap {
 .navbar-inverse {
     background-image: none;
     background-color: #ffffff;
-    border-bottom-color: #3b81c3;
+    border-bottom-color: #1E88E5;
     border-bottom-width: 5px;
 }
 
@@ -578,12 +596,12 @@ div #panelMap {
     color: #000000;
 }
 .navbar-inverse .navbar-nav>li>a:hover {
-    color: #3b81c3 !important;
+    color: #1E88E5 !important;
 	background: none !important;
 }
 
 .navbar-inverse .navbar-nav>li.active>a {
-    color: #3b81c3 !important;
+    color: #1E88E5 !important;
     font-weight: bold !important;
     background: none !important;
     box-shadow: none !important;
@@ -597,7 +615,7 @@ div #panelMap {
 }
 
 .nav-tabs>li.active>a {
-	color: #3b81c3;
+	color: #1E88E5;
 	font-weight: bold;
 }
 
@@ -606,7 +624,7 @@ div #panelMap {
     font-weight: bold;
 }
 .nav-tabs>li:not(.active)>a:hover {
-    color: #3b81c3;
+    color: #1E88E5;
 	background: none;
 	border: 0;
 }
@@ -618,17 +636,17 @@ div #panelMap {
 }
 
 .dialog-header-confirm {
-	background-color: #3b81c3;
+	background-color: #1E88E5;
 }
 
 .alert.alert-danger {
 	background: none;
 	border: 0px;
-	border-bottom: 2px solid #3b81c3;
+	border-bottom: 2px solid #1E88E5;
     box-shadow: none;
     -webkit-box-shadow: none;
     border-radius: 0px;
-    color: #3b81c3;
+    color: #1E88E5;
     padding-left: 0px;
     padding-right: 0px;
     padding-bottom: 5px;
@@ -648,11 +666,11 @@ div #panelMap {
 }
 
 .detailsTableColSpan hr {
-	border-top-color: #3b81c3;
+	border-top-color: #1E88E5;
 }
 
 .btn-primary {
-	background-image: linear-gradient(to bottom, #3b81c3 0, #1460a4 100%);
+	background-image: linear-gradient(to bottom, #1E88E5 0, #1460a4 100%);
 }
 .btn-primary:hover {
     background-image: linear-gradient(to bottom, #1460a4 0, #1460a4 100%);
@@ -661,11 +679,11 @@ div #panelMap {
 .panel-success > .panel-heading, .panel-default > .panel-heading {
 	background: none;
     border: 0px;
-    border-bottom: 2px solid #3b81c3;
+    border-bottom: 2px solid #1E88E5;
     box-shadow: none;
     -webkit-box-shadow: none;
     border-radius: 0px;
-    color: #3b81c3;
+    color: #1E88E5;
     padding-left: 0px;
     padding-bottom: 5px;
 }
@@ -685,14 +703,14 @@ label {
 }
 
 label.group-label {
-    border-bottom: 2px solid #3b81c3;
+    border-bottom: 2px solid #1E88E5;
     width: 100%;
 }
 
 .subpanel {
 	border-radius: 0;
-    border-top: 2px solid #3b81c3;
-	border-bottom: 2px solid #3b81c3;
+    border-top: 2px solid #1E88E5;
+	border-bottom: 2px solid #1E88E5;
 }
 
 .subpanel label {
