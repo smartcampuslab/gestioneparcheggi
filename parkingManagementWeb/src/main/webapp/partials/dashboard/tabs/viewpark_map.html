@@ -875,7 +875,8 @@
 						</td>
 					</tr>
 				</table>
-				<div google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.payingSlotOccupied)" />
+				<div ng-if="isActiveItalian()" google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.payingSlotOccupied)" />
+				<div ng-if="isActiveEnglish()" google-chart chart="chartPsOccupancy_eng" style="" ng-show="isCorrectNumber(psDetails.data.payingSlotOccupied)" />
 			</div>
 			<div ng-show="isStreetDetShow()">
 				<table width="98%">
@@ -1031,7 +1032,8 @@
 						</td>
 					</tr>
 				</table>
-				<div google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+				<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+				<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
 			</div>
 			<div ng-show="isMicroZoneDetShow()">
 				<table width="100%">
@@ -1056,7 +1058,8 @@
 						</td>
 					</tr>
 				</table>
-				<div google-chart chart="chartMicroZoneOccupancy" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
+				<div ng-if="isActiveItalian()" google-chart chart="chartMicroZoneOccupancy" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
+				<div ng-if="isActiveEnglish()" google-chart chart="chartMicroZoneOccupancy_eng" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
 			</div>
 			<div ng-show="isAreaDetShow()">
 				<table width="100%">
@@ -1086,7 +1089,8 @@
 						</td>
 					</tr>
 				</table>
-				<div google-chart chart="chartAreaOccupancy" style="" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />
+				<div ng-if="isActiveItalian()" google-chart chart="chartAreaOccupancy" style="" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />
+				<div ng-if="isActiveEnglish()" google-chart chart="chartAreaOccupancy_eng" style="" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />
 			</div>
 		</div>
 		<div ng-show="profitOpened">
@@ -1474,7 +1478,8 @@
 					</tr>
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
-							<div google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartPsOccupancy" style="" ng-show="isCorrectNumber(psDetails.data.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartPsOccupancy_eng" style="" ng-show="isCorrectNumber(psDetails.data.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>
@@ -1574,7 +1579,8 @@
 					</tr>
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
-							<div google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>
@@ -1620,7 +1626,8 @@
 					</tr>
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
-							<div google-chart chart="chartMicroZoneOccupancy" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartMicroZoneOccupancy" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartMicroZoneOccupancy_eng" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>
@@ -1671,7 +1678,8 @@
 					</tr>
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
-							<div google-chart chart="chartAreaOccupancy" style="" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartAreaOccupancy" style="" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartAreaOccupancy_eng" style="" ng-show="isCorrectNumber(aDetails.data.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>

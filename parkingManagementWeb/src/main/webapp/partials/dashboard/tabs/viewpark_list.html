@@ -2020,7 +2020,8 @@
 							</table>
 						</td>
 						<td width="33%">
-						    	<div google-chart chart="chartStreetParkAvailability" style="{{chart.cssStyle}}"/>				
+						    	<div ng-if="isActiveItalian()" google-chart chart="chartStreetParkAvailability" style="{{chart.cssStyle}}"/>
+						    	<div ng-if="isActiveEnglish()" google-chart chart="chartStreetParkAvailability_eng" style="{{chart.cssStyle}}"/>
 						</td>
 					</tr>
 				</table>										
@@ -2345,7 +2346,8 @@
 							</table>
 						</td>
 						<td width="55%" valign="middle" align="center">
-							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
+							<div ng-if="isActiveItalian()" google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
+							<div ng-if="isActiveEnglish()" google-chart chart="chartPsOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
 						</td>
 					</tr>
 					<tr>
@@ -2549,13 +2551,16 @@
 					</tr>
 					<tr>
 						<td width="33%">
-						    <div google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
+						    <div ng-if="isActiveItalian()" google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
+						    <div ng-if="isActiveEnglish()" google-chart chart="chartStreetOccupancy_eng" style="{{chart.cssStyle}}"/>
 						</td>
 						<td width="34%">
-						    <div google-chart chart="chartStreetFreeParkAvailability" style="{{chart.cssStyle}}"/>
+						    <div ng-if="isActiveItalian()" google-chart chart="chartStreetFreeParkAvailability" style="{{chart.cssStyle}}"/>
+						    <div ng-if="isActiveEnglish()" google-chart chart="chartStreetFreeParkAvailability_eng" style="{{chart.cssStyle}}"/>
 						</td>
 						<td width="33%">
-						    <div google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/>
+						    <div ng-if="isActiveItalian()" google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/>
+						    <div ng-if="isActiveEnglish()" google-chart chart="chartStreetOccupiedParkComposition_eng" style="{{chart.cssStyle}}"/>
 						</td>
 					</tr>
 					<tr>
@@ -2667,7 +2672,8 @@
 							</table>
 						</td>
 						<td width="60%" valign="top">
-							<div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>
@@ -2682,9 +2688,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select ng-show="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
 									</select>
-									<select ng-show="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2693,9 +2699,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select ng-show="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
-									<select ng-show="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2894,7 +2900,8 @@
 							</table>
 						</td>
 						<td width="60%">
-							<div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" /> 
+							<div ng-if="isActiveItalian()" google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartAreaOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" /> 
 						</td>
 					</tr>
 					<tr>
@@ -3979,7 +3986,8 @@
 							</table>
 						</td>
 						<td width="55%" valign="middle" align="center">
-							<div google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
+							<div ng-if="isActiveItalian()" google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
+							<div ng-if="isActiveEnglish()" google-chart chart="chartPsOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
 						</td>
 					</tr>
 					<tr>
@@ -4120,7 +4128,8 @@
 								<tr ng-show="pm_rateArea.visible">
 									<td class="detailsListTableCXS"></td>
 						   			<td colspan="3" class="detailsTableColSpanS">
-						   				<div google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
+						   				<div ng-if="isActiveItalian()" google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
+						   				<div ng-if="isActiveEnglish()" google-chart chart="chartStreetOccupancy_eng" style="{{chart.cssStyle}}"/>
 						   			</td>
 						   			<td class="detailsListTableCXS"></td>
 						   		</tr>
@@ -4261,7 +4270,8 @@
 							</table>
 						</td>
 						<td width="60%" valign="top">
-							<div google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>
@@ -4538,7 +4548,8 @@
 							</table>
 						</td>
 						<td width="60%">
-							<div google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" /> 
+							<div ng-if="isActiveItalian()" google-chart chart="chartAreaOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartAreaOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(aDetails.slotOccupied)" /> 
 						</td>
 					</tr>
 					<tr>

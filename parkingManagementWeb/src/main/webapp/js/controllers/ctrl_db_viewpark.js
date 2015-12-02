@@ -1551,6 +1551,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				$scope.hideAllAreas($scope.areaWS);
 				$scope.hideAllZones();
 				$scope.hideAllStreets(false);
+				$scope.hideAllMicroZones(false);
 			}
 			switch($scope.dashboard_topics){
 				case "parkSupply": 
@@ -1561,7 +1562,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space.macrozone){
 							$scope.showZonePolygons(1);
 						} else if($scope.dashboard_space.microzone){
-							//$scope.showStreetPolylines(1);
+							$scope.showMicroZonePolygons(1);
 						} else if($scope.dashboard_space.microzone_part){
 							$scope.showStreetPolylines(1);
 						} else if($scope.dashboard_space.parkingmeter){
@@ -1602,7 +1603,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						} else if($scope.dashboard_space.macrozone){
 							$scope.showZonePolygons(2);
 						} else if($scope.dashboard_space.microzone){
-							//$scope.showStreetPolylines(2);
+							$scope.showMicroZonePolygons(2);
 						} else if($scope.dashboard_space.microzone_part){
 							$scope.showStreetPolylines(2);
 						} else if($scope.dashboard_space.parkingstructs){
@@ -2129,7 +2130,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var object = {};
 			angular.copy($scope.mapSelectedAreas[0], object);
 			object.stroke.weight = 3;
-			toHideArea[$scope.mapSelectedAreas[0].id].setMap(null);
+			for(var i = 0; i < $scope.mapSelectedAreas.length; i++){
+				toHideArea[$scope.mapSelectedAreas[i].id].setMap(null);
+			}
 			$scope.mapSelectedAreas = [];
 		}
 		// For Zone
@@ -2141,7 +2144,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		// For MicroZone
 		if($scope.mapSelectedMicroZones != null && $scope.mapSelectedMicroZones.length > 0){
 			var toHideZone = $scope.map.shapes;
-			toHideZone[$scope.mapSelectedMicroZones[0].id].setMap(null);
+			for(var i = 0; i < $scope.mapSelectedMicroZones.length; i++){
+				toHideZone[$scope.mapSelectedMicroZones[i].id].setMap(null);
+			}
 			$scope.mapSelectedMicroZones = [];
 		}
 		// For Streets
@@ -2587,7 +2592,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	} else if(type == 4){
     		$scope.timeCostMicroZones = $scope.initZonesOnMap($scope.microzoneWS, false, type, false, false)[0];
     	}
-    	$scope.hideAllMicroZones();
+    	$scope.hideAllMicroZones(false);
     	$scope.detailsOpened = false;
     	$scope.occupancyOpened = false;
     	$scope.profitOpened = false;
@@ -2678,6 +2683,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    		$scope.occupancyStreets = [];
 	    		$scope.profitStreets = [];
 	    		$scope.timeCostStreets = [];
+	    		$scope.mapStreetSelectedMarkers = [];
 	    	}
 	    	$scope.alignSelectedObjects();
     	}
@@ -2722,29 +2728,38 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.alignSelectedObjects();
     };
     
-    $scope.hideAllMicroZones = function(){
-	    var toHideZone = $scope.map.shapes;
-	    for(var i = 0; i < $scope.mapMicroZones.length; i++){
-	    	if(toHideZone[$scope.mapMicroZones[i].id] != null){
-    			toHideZone[$scope.mapMicroZones[i].id].setMap(null);
-    		}	
-	    }
-	    for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
-	    	if(toHideZone[$scope.occupancyMicroZones[i].id] != null){
-    			toHideZone[$scope.occupancyMicroZones[i].id].setMap(null);
-    		}
+    $scope.hideAllMicroZones = function(all){
+    	if($scope.map != null){
+		    var toHideZone = $scope.map.shapes;
+		    for(var i = 0; i < $scope.mapMicroZones.length; i++){
+		    	if(toHideZone[$scope.mapMicroZones[i].id] != null){
+	    			toHideZone[$scope.mapMicroZones[i].id].setMap(null);
+	    		}	
+		    }
+		    for(var i = 0; i < $scope.occupancyMicroZones.length; i++){
+		    	if(toHideZone[$scope.occupancyMicroZones[i].id] != null){
+	    			toHideZone[$scope.occupancyMicroZones[i].id].setMap(null);
+	    		}
+	    	}
+	    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
+	    		if(toHideZone[$scope.profitMicroZones[i].id] != null){
+	    			toHideZone[$scope.profitMicroZones[i].id].setMap(null);
+	    		}
+	    	}
+	    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
+	    		if(toHideZone[$scope.timeCostMicroZones[i].id] != null){
+	    			toHideZone[$scope.timeCostMicroZones[i].id].setMap(null);
+	    		}
+	    	}
+	    	if(all){
+	    		toHideZone = null;
+	    		$scope.mapMicroZones = [];
+	    		$scope.occupancyMicroZones = [];
+	    		$scope.profitMicroZones = [];
+	    		$scope.timeCostMicroZones = [];
+	    	}
+	    	$scope.alignSelectedObjects();
     	}
-    	for(var i = 0; i < $scope.profitMicroZones.length; i++){
-    		if(toHideZone[$scope.profitMicroZones[i].id] != null){
-    			toHideZone[$scope.profitMicroZones[i].id].setMap(null);
-    		}
-    	}
-    	for(var i = 0; i < $scope.timeCostMicroZones.length; i++){
-    		if(toHideZone[$scope.timeCostMicroZones[i].id] != null){
-    			toHideZone[$scope.timeCostMicroZones[i].id].setMap(null);
-    		}
-    	}
-    	$scope.alignSelectedObjects();
     };    
     
     
@@ -3502,6 +3517,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.initWsView = function(type, isInit){
 		$scope.hideAllStreets(true);	// Method used to hide all streets from map after tab switch
+		$scope.hideAllMicroZones(true);	// Method used to hide all microzone from map after tab switch
 		//$scope.parkingMetersMarkers = [];
 		//$scope.parkingStructureMarkers = [];
 	   	if(!isInit){
@@ -7311,6 +7327,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
       	$scope.chartStreetOccupiedParkComposition.data = [["Posti occupati", "number"]];
       	$scope.chartZoneOccupancy.data = [["Posti", "num"]];
       	$scope.chartAreaOccupancy.data = [["Posti", "num"]];
+      	$scope.chartPsOccupancy_eng.data = [["Slots", "num"]];
+      	$scope.chartStreetParkAvailability_eng.data = [["Slots", "number"]];
+    	$scope.chartStreetOccupancy_eng.data = [["Slots", "number"]];
+      	$scope.chartStreetFreeParkAvailability_eng.data = [["Free slots", "number"]];
+      	$scope.chartStreetOccupiedParkComposition_eng.data = [["Occupied slots", "number"]];
+      	$scope.chartZoneOccupancy_eng.data = [["Slots", "num"]];
+      	$scope.chartAreaOccupancy_eng.data = [["Slots", "num"]];
     };
     
     $scope.chartPsOccupancy = $scope.chart = {
@@ -7343,10 +7366,41 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   		  },
   		  "displayed": true
     };
+    
+    $scope.chartPsOccupancy_eng = $scope.chart = {
+    		  "type": "PieChart",
+    		  "data": [],
+    		  "options": {
+    		    "displayExactValues": true,
+    		    "width": "100%",
+    		    "height": "100%",
+    		    "is3D": true,
+    		    "legend": {
+    		    	"position": 'top',
+    		    	"textStyle": {"color": 'black', "fontSize" : 10}
+        	    },
+    		    "chartArea": {
+    		      "left": 5,
+    		      "top": 50,
+    		      "bottom": 0,
+    		      "width": "100%",
+    		      "height": "100%"
+    		    }
+    		  },
+    		  "formatters": {
+    		    "number": [
+    		      {
+    		        "columnNum": 1,
+    		        "pattern": "#0 slots"
+    		      }
+    		    ]
+    		  },
+    		  "displayed": true
+      };
   
     $scope.initPsOccupancyDiagram = function(structure, type){
     	$scope.chartPsOccupancy.data = [["Posti", "num"]];
-  	
+    	$scope.chartPsOccupancy_eng.data = [["Slots", "num"]];
   	//for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
   		var object;
   		if(type == 1){
@@ -7359,12 +7413,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   		if(object.unusuableSlotNumber != -1){
   			available -= object.unusuableSlotNumber;
   		}
+  		// Ita
   		var dataTot = [ "Liberi", available - occ ];
   		var dataOcc = [ "Occupati", occ ];
   		$scope.chartPsOccupancy.data.push(dataTot);
   		$scope.chartPsOccupancy.data.push(dataOcc);
-  	//}
   		$scope.chartPsOccupancy.options.title = "Posti occupati in struttura";
+  		// Eng
+  		var dataTot_eng = [ "Free", available - occ ];
+  		var dataOcc_eng = [ "Occupied", occ ];
+  		$scope.chartPsOccupancy_eng.data.push(dataTot_eng);
+  		$scope.chartPsOccupancy_eng.data.push(dataOcc_eng);
+  	//}
+  		$scope.chartPsOccupancy_eng.options.title = "Occupied slots in structure";
     };
     
     $scope.chartStreetParkAvailability = $scope.chart = {
@@ -7398,15 +7459,47 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
        	"displayed": true
     };
     
+    $scope.chartStreetParkAvailability_eng = $scope.chart = {
+            "type": "PieChart",
+            "data": [],
+            "options": {
+                "displayExactValues": true,
+                "width": "100%",
+                "height": "100%",
+                "is3D": true,
+                "legend": {
+                	"position": 'top',
+                	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+           	    "chartArea": {
+           	      "left": 5,
+           	      "top": 50,
+           	      "bottom": 0,
+           	      "width": "100%",
+           	      "height": "100%"
+           	    }
+           	},
+           	"formatters": {
+           	    "number": [
+           	        {
+           	        	"columnNum": 1,
+           	        	"pattern": "#0 slots"
+           	        }
+           	    ]
+           	},
+           	"displayed": true
+        };
+    
     $scope.initStreetParkSupplyDiagram = function(street, type){
       	$scope.chartStreetParkAvailability.data = [["Posti", "number"]];
+      	$scope.chartStreetParkAvailability_eng.data = [["Slots", "number"]];
       	var object = null;
       	if(type == 1){
       		object = street.data;
       	} else {
       		object = street;
       	}
-    	// for slot composition
+    	// for slot composition ita
     	var freeFree = [ "Gratuiti", object.freeParkSlotNumber ];
     	var freeFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignNumber ];
     	var freePaid = [ "A pagamento", object.paidSlotNumber ];
@@ -7419,7 +7512,21 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.chartStreetParkAvailability.data.push(freeTimed);
     	$scope.chartStreetParkAvailability.data.push(freeHandicapped);
     	$scope.chartStreetParkAvailability.data.push(freeReserved);
-    	$scope.chartStreetParkAvailability.options.title = "Composizione posti";	
+    	$scope.chartStreetParkAvailability.options.title = "Composizione posti";
+    	// eng
+    	var freeFree_eng = [ "Free", object.freeParkSlotNumber ];
+    	var freeFreeSigned_eng = [ "Free (signed)", object.freeParkSlotSignNumber ];
+    	var freePaid_eng = [ "Paid", object.paidSlotNumber ];
+    	var freeTimed_eng = [ "Timed", object.timedParkSlotNumber ];
+    	var freeHandicapped_eng = [ "Handicapped", object.handicappedSlotNumber ];
+    	var freeReserved_eng = [ "Reserved", object.reservedSlotNumber ];
+    	$scope.chartStreetParkAvailability_eng.data.push(freeFree_eng);
+    	$scope.chartStreetParkAvailability_eng.data.push(freeFreeSigned_eng);
+    	$scope.chartStreetParkAvailability_eng.data.push(freePaid_eng);
+    	$scope.chartStreetParkAvailability_eng.data.push(freeTimed_eng);
+    	$scope.chartStreetParkAvailability_eng.data.push(freeHandicapped_eng);
+    	$scope.chartStreetParkAvailability_eng.data.push(freeReserved_eng);
+    	$scope.chartStreetParkAvailability_eng.options.title = "Slots composition";
     };
     
     $scope.chartStreetOccupancy = $scope.chart = {
@@ -7513,12 +7620,108 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
        	    ]
        	},
       	"displayed": true
-    };    
+    };
+    
+    $scope.chartStreetOccupancy_eng = $scope.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 slots"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+        
+        $scope.chartStreetFreeParkAvailability_eng = $scope.chart = {
+            "type": "PieChart",
+            "data": [],
+            "options": {
+                "displayExactValues": true,
+                "width": "100%",
+                "height": "100%",
+                "is3D": true,
+                "legend": {
+                	"position": 'top',
+           	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+           	    "chartArea": {
+           	      "left": 5,
+           	      "top": 50,
+           	      "bottom": 0,
+           	      "width": "100%",
+           	      "height": "100%"
+           	    }
+           	},
+          	"formatters": {
+           	    "number": [
+          	        {
+           	        	"columnNum": 1,
+           	        	"pattern": "#0 slots"
+           	        }
+           	    ]
+           	},
+          	"displayed": true
+        };
+        
+        $scope.chartStreetOccupiedParkComposition_eng = $scope.chart = {
+            "type": "PieChart",
+            "data": [],
+            "options": {
+                "displayExactValues": true,
+                "width": "100%",
+                "height": "100%",
+                "is3D": true,
+                "legend": {
+                  	"position": 'top',
+           	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+           	    "chartArea": {
+           	      "left": 5,
+           	      "top": 50,
+           	      "bottom": 0,
+           	      "width": "100%",
+           	      "height": "100%"
+           	    }
+           	},
+          	"formatters": {
+           	    "number": [
+          	        {
+           	        	"columnNum": 1,
+           	        	"pattern": "#0 slots"
+           	        }
+           	    ]
+           	},
+          	"displayed": true
+        };
     
     $scope.initStreetOccupancyDiagram = function(street, type){
       	$scope.chartStreetOccupancy.data = [["Posti", "number"]];
       	$scope.chartStreetFreeParkAvailability.data = [["Posti liberi", "number"]];
       	$scope.chartStreetOccupiedParkComposition.data = [["Posti occupati", "number"]];
+      	$scope.chartStreetOccupancy_eng.data = [["Slots", "number"]];
+      	$scope.chartStreetFreeParkAvailability_eng.data = [["Free slots", "number"]];
+      	$scope.chartStreetOccupiedParkComposition_eng.data = [["Occupied slots", "number"]];
       	var object = null;
       	if(type == 1){
       		object = street.data;
@@ -7528,9 +7731,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
       	// for Total slot
     	var dataTot = [ "Liberi", object.slotNumber - object.unusuableSlotNumber - object.slotOccupied ];
     	var dataOcc = [ "Occupati", object.slotOccupied ];
+    	var dataTot_eng = [ "Free", object.slotNumber - object.unusuableSlotNumber - object.slotOccupied ];
+    	var dataOcc_eng = [ "Occupied", object.slotOccupied ];
     	$scope.chartStreetOccupancy.data.push(dataTot);
     	$scope.chartStreetOccupancy.data.push(dataOcc);
     	$scope.chartStreetOccupancy.options.title = "Posti in strada";
+    	$scope.chartStreetOccupancy_eng.data.push(dataTot_eng);
+    	$scope.chartStreetOccupancy_eng.data.push(dataOcc_eng);
+    	$scope.chartStreetOccupancy_eng.options.title = "Slots in street";
     	// for Free slot
     	var freeFree = [ "Gratuiti", object.freeParkSlotNumber - object.freeParkSlotOccupied ];
     	var freeFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied ];
@@ -7538,6 +7746,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	var freeTimed = [ "Disco Orario", object.timedParkSlotNumber - object.timedParkSlotOccupied ];
     	var freeHandicapped = [ "Per disabili", object.handicappedSlotNumber - object.handicappedSlotOccupied ];
     	var freeReserved = [ "Riservati", object.reservedSlotNumber - object.reservedSlotOccupied ];
+    	var freeFree_eng = [ "Free", object.freeParkSlotNumber - object.freeParkSlotOccupied ];
+    	var freeFreeSigned_eng = [ "Free (signed)", object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied ];
+    	var freePaid_eng = [ "Paid", object.paidSlotNumber - object.paidSlotOccupied ];
+    	var freeTimed_eng = [ "Timed", object.timedParkSlotNumber - object.timedParkSlotOccupied ];
+    	var freeHandicapped_eng = [ "Handicapped", object.handicappedSlotNumber - object.handicappedSlotOccupied ];
+    	var freeReserved_eng = [ "Reserved", object.reservedSlotNumber - object.reservedSlotOccupied ];
     	$scope.chartStreetFreeParkAvailability.data.push(freeFree);
     	$scope.chartStreetFreeParkAvailability.data.push(freeFreeSigned);
     	$scope.chartStreetFreeParkAvailability.data.push(freePaid);
@@ -7545,6 +7759,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.chartStreetFreeParkAvailability.data.push(freeHandicapped);
     	$scope.chartStreetFreeParkAvailability.data.push(freeReserved);
     	$scope.chartStreetFreeParkAvailability.options.title = "Posti liberi in strada";
+    	$scope.chartStreetFreeParkAvailability_eng.data.push(freeFree_eng);
+    	$scope.chartStreetFreeParkAvailability_eng.data.push(freeFreeSigned_eng);
+    	$scope.chartStreetFreeParkAvailability_eng.data.push(freePaid_eng);
+    	$scope.chartStreetFreeParkAvailability_eng.data.push(freeTimed_eng);
+    	$scope.chartStreetFreeParkAvailability_eng.data.push(freeHandicapped_eng);
+    	$scope.chartStreetFreeParkAvailability_eng.data.push(freeReserved_eng);
+    	$scope.chartStreetFreeParkAvailability_eng.options.title = "Free slots in street";
     	// for Occupied slot
     	var occupiedFree = [ "Gratuiti", object.freeParkSlotOccupied ];
     	var occupiedFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignOccupied ];
@@ -7552,6 +7773,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	var occupiedTimed = [ "Disco Orario", object.timedParkSlotOccupied ];
     	var occupiedHandicapped = [ "Per disabili", object.handicappedSlotOccupied ];
     	var occupiedReserved = [ "Riservati", object.reservedSlotOccupied ];
+    	var occupiedFree_eng = [ "Free", object.freeParkSlotOccupied ];
+    	var occupiedFreeSigned_eng = [ "Free (signed)", object.freeParkSlotSignOccupied ];
+    	var occupiedPaid_eng = [ "Paid", object.paidSlotOccupied ];
+    	var occupiedTimed_eng = [ "Timed", object.timedParkSlotOccupied ];
+    	var occupiedHandicapped_eng = [ "Handicapped", object.handicappedSlotOccupied ];
+    	var occupiedReserved_eng = [ "Reserved", object.reservedSlotOccupied ];
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedFree);
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedFreeSigned);
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedPaid);
@@ -7559,7 +7786,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedHandicapped);
     	$scope.chartStreetOccupiedParkComposition.data.push(occupiedReserved);
     	$scope.chartStreetOccupiedParkComposition.options.title = "Posti occupati in sottovia";
-    	
+    	$scope.chartStreetOccupiedParkComposition_eng.data.push(occupiedFree_eng);
+    	$scope.chartStreetOccupiedParkComposition_eng.data.push(occupiedFreeSigned_eng);
+    	$scope.chartStreetOccupiedParkComposition_eng.data.push(occupiedPaid_eng);
+    	$scope.chartStreetOccupiedParkComposition_eng.data.push(occupiedTimed_eng);
+    	$scope.chartStreetOccupiedParkComposition_eng.data.push(occupiedHandicapped_eng);
+    	$scope.chartStreetOccupiedParkComposition_eng.data.push(occupiedReserved_eng);
+    	$scope.chartStreetOccupiedParkComposition_eng.options.title = "Occupied slots in park";
     };
     
     $scope.chartZoneOccupancy = $scope.chart = {
@@ -7593,8 +7826,40 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         	"displayed": true
         };
     
+    $scope.chartZoneOccupancy_eng = $scope.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 slots"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+    
     $scope.initZoneOccupancyDiagram = function(zone, type){
     	$scope.chartZoneOccupancy.data = [["Posti", "num"]];
+    	$scope.chartZoneOccupancy_eng.data = [["Slots", "num"]];
   	//for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
     	var object;
     	if(type == 1){
@@ -7606,8 +7871,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
   		var dataOcc = [ "Occupati", object.slotOccupied ];
   		$scope.chartZoneOccupancy.data.push(dataTot);
   		$scope.chartZoneOccupancy.data.push(dataOcc);
+  		var dataTot_eng = [ "Free", object.slotNumber - object.slotOccupied ];
+  		var dataOcc_eng = [ "Occupated", object.slotOccupied ];
+  		$scope.chartZoneOccupancy.data.push(dataTot_eng);
+  		$scope.chartZoneOccupancy.data.push(dataOcc_eng);
   	//}
   		$scope.chartZoneOccupancy.options.title = "Posti occupati in zona";
+  		$scope.chartZoneOccupancy_eng.options.title = "Occupied slots in zone";
     };
     
     $scope.chartMicroZoneOccupancy = $scope.chart = {
@@ -7641,8 +7911,40 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
         	"displayed": true
         };
     
+    $scope.chartMicroZoneOccupancy_eng = $scope.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 slots"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+    
     $scope.initMicroZoneOccupancyDiagram = function(zone, type){
     	$scope.chartMicroZoneOccupancy.data = [["Posti", "num"]];
+    	$scope.chartMicroZoneOccupancy_eng.data = [["Slots", "num"]];
   	//for(var i = 0; i < $scope.occupancyParkingStructureMarkers.length; i++){
     	var object;
     	if(type == 1){
@@ -7650,12 +7952,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	} else {
     		object = zone;
     	}
+    	// ita
   		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
   		var dataOcc = [ "Occupati", object.slotOccupied ];
   		$scope.chartMicroZoneOccupancy.data.push(dataTot);
   		$scope.chartMicroZoneOccupancy.data.push(dataOcc);
+  		// eng
+  		var dataTot_eng = [ "Free", object.slotNumber - object.slotOccupied ];
+  		var dataOcc_eng = [ "Occupied", object.slotOccupied ];
+  		$scope.chartMicroZoneOccupancy_eng.data.push(dataTot_eng);
+  		$scope.chartMicroZoneOccupancy_eng.data.push(dataOcc_eng);
   	//}
   		$scope.chartMicroZoneOccupancy.options.title = "Posti occupati in via";
+  		$scope.chartMicroZoneOccupancy_eng.options.title = "Occupied slots in street";
     };    
     
     $scope.chartAreaOccupancy = $scope.chart = {
@@ -7689,19 +7998,58 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
       	"displayed": true
     };
     
+    $scope.chartAreaOccupancy_eng = $scope.chart = {
+            "type": "PieChart",
+            "data": [],
+            "options": {
+                "displayExactValues": true,
+                "width": "100%",
+                "height": "100%",
+                "is3D": true,
+                "legend": {
+                	"position": 'top',
+                	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+                "chartArea": {
+                  "left": 5,
+                  "top": 50,
+                  "bottom": 0,
+                  "width": "100%",
+                  "height": "100%"
+                }
+            },
+            "formatters": {
+                "number": [
+                    {
+                    	"columnNum": 1,
+                    	"pattern": "#0 slots"
+                    }
+                ]
+            },
+          	"displayed": true
+        };
+    
     $scope.initAreaOccupancyDiagram = function(area, type){
     	$scope.chartAreaOccupancy.data = [["Posti", "num"]];
+    	$scope.chartAreaOccupancy_eng.data = [["Slots", "num"]];
     	var object;
     	if(type == 1){
     		object = area.data;
     	} else {
     		object = area;
     	}
+    	// ita
   		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
   		var dataOcc = [ "Occupati", object.slotOccupied ];
   		$scope.chartAreaOccupancy.data.push(dataTot);
   		$scope.chartAreaOccupancy.data.push(dataOcc);
   		$scope.chartAreaOccupancy.options.title = "Posti occupati in area";
+  		// eng
+  		var dataTot_eng = [ "Free", object.slotNumber - object.slotOccupied ];
+  		var dataOcc_eng = [ "Occupied", object.slotOccupied ];
+  		$scope.chartAreaOccupancy_eng.data.push(dataTot_eng);
+  		$scope.chartAreaOccupancy_eng.data.push(dataOcc_eng);
+  		$scope.chartAreaOccupancy_eng.options.title = "Street occupied in area";
     };
 	
    // ---------------------------------------------- End block Utilization diagrams --------------------------------------
