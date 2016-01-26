@@ -23,16 +23,37 @@ import java.util.Map;
 public class AppComponent {
 
 	private String id;
+	private String type;
+	private String label;
+	private String title;
 	private List<CompAttribute> attributes;
 	
 	public String getId() {
 		return id;
+	}
+	public String getType() {
+		return type;
+	}
+	public String getLabel() {
+		return label;
+	}
+	public String getTitle() {
+		return title;
 	}
 	public List<CompAttribute> getAttributes() {
 		return attributes;
 	}
 	public void setId(String id) {
 		this.id = id;
+	}
+	public void setType(String type) {
+		this.type = type;
+	}
+	public void setLabel(String label) {
+		this.label = label;
+	}
+	public void setTitle(String title) {
+		this.title = title;
 	}
 	public void setAttributes(List<CompAttribute> attributes) {
 		this.attributes = attributes;
@@ -63,6 +84,9 @@ public class AppComponent {
 	public String toJson(){
 		return "{" +
 			"\"id\": \"" + id + "\"," +
+			"\"type\": \"" + type + "\"," +
+			"\"label\": \"" + label + "\"," +
+			"\"title\": \"" + title + "\"," +
 			"\"attributes\": \"" + getAttributesString() + "\"" +
 			"}";
 	}
@@ -70,6 +94,9 @@ public class AppComponent {
 	public Map<String, Object> toMap(){
 		Map<String,Object> comp = new HashMap<String,Object>();
 		comp.put("id", id);
+		comp.put("type", type);
+		comp.put("label", label);
+		comp.put("title", title);
 		comp.put("attributes", getAttributesMap());
 		return comp;
 	}

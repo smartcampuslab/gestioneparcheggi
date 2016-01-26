@@ -43,9 +43,10 @@ public class ParkingStructureBean {
 	private String phoneNumber;
 	private Long lastChange;
 	private double occupancyRate;	// I use it only in the bean and not in the db object
-	private double profit;	// in eurocent
-	private int tickets;	// number of tickets
+	private double profit;			// in eurocent
+	private int tickets;			// number of tickets
 	private boolean parkAndRide;
+	private List<String> zones;		// list of related zones (id)
 	
 	public String getId_app() {
 		return id_app;
@@ -245,6 +246,14 @@ public class ParkingStructureBean {
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 	public String toJSON(){

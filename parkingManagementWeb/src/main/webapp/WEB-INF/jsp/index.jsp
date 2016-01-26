@@ -41,12 +41,13 @@
 <script src="js/controllers/ctrl_main.js"></script>
 <script src="js/controllers/ctrl_park.js"></script>
 <script src="js/controllers/ctrl_bike.js"></script>
-<!-- <script src="js/controllers/ctrl_view.js"></script> -->
 <script src="js/controllers/ctrl_view_gmap.js"></script>
 <script src="js/controllers/ctrl_db_viewpark.js"></script>
-
+<script src="js/services/serv.js"></script>
+<script src="js/services/serv_shared.js"></script>
+<script src="js/services/serv_initialize.js"></script>
 <script src="js/filters.js?1001"></script>
-<script src="js/services.js?1001"></script>
+<!-- <script src="js/services.js?1001"></script> -->
 <script src="js/directives.js"></script>
 
 <script src="lib/angular-file-upload.js" type="text/javascript"></script>
@@ -68,6 +69,7 @@ var user_surname="<%=request.getAttribute("user_surname")%>";
 var no_sec="<%=request.getAttribute("no_sec")%>";
 var conf_app_id="<%=request.getAttribute("app_id")%>";
 var conf_map_center="<%=request.getAttribute("map_center")%>";
+var conf_map_recenter="<%=request.getAttribute("map_recenter")%>";
 var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
 var conf_widget_url="<%=request.getAttribute("widget_url")%>";
@@ -75,6 +77,8 @@ var conf_macrozone_type="<%=request.getAttribute("macrozone_type")%>";
 var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
 var conf_ps_managers="<%=request.getAttribute("ps_managers")%>";
 var conf_municipalities="<%=request.getAttribute("municipalities")%>";
+var conf_elements="<%=request.getAttribute("elements")%>";
+var conf_filters="<%=request.getAttribute("filters")%>";
 var ctx="<%=request.getContextPath()%>";
 </script>
   

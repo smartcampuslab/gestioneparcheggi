@@ -132,14 +132,29 @@ public class PortalController extends SCController{
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/viewall/{appId}")
-	public ModelAndView viewAllElementsRv(ModelMap model, @PathVariable String appId) {
+	public ModelAndView viewAllElementsRv(ModelMap model, @PathVariable String appId, @RequestParam(required=false) String elements, @RequestParam(required=false) String filters, @RequestParam(required=false) String zoom, @RequestParam(required=false) String center) {
+		String p_elements;
+		String p_filters;
+		p_elements = elements;
+		p_filters = filters;
 		model.addAttribute("no_sec", "true");
 		model.addAttribute("app_id", appId);
 		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetailsByAppId(appId);
+		String mapcenter = null;
+		String mapzoom = objectToShow.getMapZoom();
+		if(center != null && center != ""){
+			mapcenter = center;
+		}
+		if(zoom != null && zoom != ""){
+			mapzoom = zoom;
+		}
 		model.addAttribute("map_center", objectToShow.getMapCenter());
-		model.addAttribute("map_zoom", objectToShow.getMapZoom());
+		model.addAttribute("map_zoom", mapzoom);
+		model.addAttribute("map_recenter", mapcenter);
 		model.addAttribute("widget_url", mainURL);
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
+		model.addAttribute("elements", p_elements);
+		model.addAttribute("filters", p_filters);
 //		model.addAttribute("show_area", view_rv_area);
 //		model.addAttribute("show_street", view_rv_street);
 //		model.addAttribute("show_pm", view_rv_pm);

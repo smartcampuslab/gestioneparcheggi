@@ -27,6 +27,7 @@ public class ZoneBean {
 	private String note;
 	private String color;
 	private String municipality;
+	private PointBean centermap;
 	private PolygonBean geometry;
 	private boolean geometryFromSubelement;
 	
@@ -125,6 +126,14 @@ public class ZoneBean {
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
+	}
+
+	public PointBean getCentermap() {
+		return centermap;
+	}
+
+	public void setCentermap(PointBean centermap) {
+		this.centermap = centermap;
 	}
 	
 }

@@ -30,6 +30,7 @@ public class RateAreaBean implements Serializable {
 	private String note;
 	private String municipality;
 	private List<PolygonBean> geometry;
+	private List<String> zones;	//List with the id of the associated zone
 
 	public String getId() {
 		return id;
@@ -109,6 +110,14 @@ public class RateAreaBean implements Serializable {
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 }

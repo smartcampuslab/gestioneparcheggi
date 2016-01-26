@@ -219,7 +219,7 @@
 <!-- 						    </div> -->
 						</th>
 						<th width="30%">
-							<span ng-show="pm_note.visible">{{ 'pm_note' | i18n }}</span>
+							<span ng-show="pmconf.pm_note.visible">{{ 'pm_note' | i18n }}</span>
 							<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showNotFilter">
@@ -227,7 +227,7 @@
 						    </div>
 						</th>
 						<th width="10%">
-							<span ng-show="pm_status.visible">{{ 'pm_status' | i18n }}</span>
+							<span ng-show="pmconf.pm_status.visible">{{ 'pm_status' | i18n }}</span>
 							<a href ng-click="showPmStatusFilter();currentPagePm=0" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="pmStatusFilter=null;hidePmStatusFilter()" ng-show="showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<select id="f_pm_status" ng-show="showStatusPmFilter" class="form-control" ng-options="s.idObj as s.descrizione for s in allPmStatusFilter" ng-model="pmStatusFilter">
@@ -247,22 +247,22 @@
 						<tr>
 							<td width="10%" align="left">{{pmeter.code}}</td>
 							<td width="30%" align="left">
-								<span ng-show="pm_note.visible">{{pmeter.note}}</span>
+								<span ng-show="pmconf.pm_note.visible">{{pmeter.note}}</span>
 							</td>
 							<td width="10%" align="left">
 						        <span ng-show="pmeter.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
 								<span ng-show="pmeter.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 							</td>
-							<td width="5%" align="center"><div class="colorBox" ng-show="pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
+							<td width="5%" align="center"><div class="colorBox" ng-show="pmconf.pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
 							<td width="15%" align="left">
-								<span ng-show="pm_rateArea.visible">{{pmeter.area_name}}</span>
+								<span ng-show="pmconf.pm_rateArea.visible">{{pmeter.area_name}}</span>
 							</td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(pmeter, 1)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="pstructWS.length == 0">
+					<tr ng-show="parkingMeterWS.length == 0">
 						<td colspan="6"><strong>{{ 'no_pm_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -297,7 +297,7 @@
 <!-- 						    </div> -->
 						</th>
 						<th width="20%">
-							<span ng-show="pm_note.visible">{{ 'pm_note' | i18n }}</span>
+							<span ng-show="pmconf.pm_note.visible">{{ 'pm_note' | i18n }}</span>
 							<a href ng-click="showNoteFilter();currentPagePmp=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showNotFilter">
@@ -305,7 +305,7 @@
 						    </div>
 						</th>
 						<th width="10%" class="myCenter">
-							<span ng-show="pm_status.visible">{{ 'pm_status' | i18n }}</span>
+							<span ng-show="pmconf.pm_status.visible">{{ 'pm_status' | i18n }}</span>
 							<a href ng-click="showPmStatusFilter();currentPagePmp=0" ng-show="!showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="pmStatusFilter=null;hidePmStatusFilter()" ng-show="showStatusPmFilter" alt="{{ 'filter_status_title' | i18n }}" title="{{ 'filter_status_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<select id="f_pm_status" ng-show="showStatusPmFilter" class="form-control" ng-options="s.idObj as s.descrizione for s in allPmStatusFilter" ng-model="pmStatusFilter">
@@ -319,7 +319,7 @@
 						ng-repeat="pmeter in filtered = (parkingMeterWS | filter:noteFilter | filter:codeFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:['-profit', 'code'] | startFrom:currentPagePmp*maxPMeters | limitTo:maxPMeters">
 						<tr>
 							<td width="10%" align="left">{{pmeter.code}}</td>
-							<td width="25%" align="left"><span ng-show="pm_note.visible">{{pmeter.note}}</span></td>
+							<td width="25%" align="left"><span ng-show="pmconf.pm_note.visible">{{pmeter.note}}</span></td>
 							<td width="5%" align="left">
 						        <span ng-show="pmeter.status=='ACTIVE'"><strong>{{ 'active_pm_state' | i18n }}</strong></span>
 								<span ng-show="pmeter.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
@@ -339,7 +339,7 @@
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="pstructWS.length == 0">
+					<tr ng-show="parkingMeterWS.length == 0">
 						<td colspan="5"><strong>{{ 'no_pm_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -558,7 +558,7 @@
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="areaWS.length == 0">
+					<tr ng-show="profitStreetsList.length == 0">
 						<td colspan="8"><strong>{{ 'no_streets_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -665,15 +665,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="zoneWS.length != 0">
 						<th width="25%">
-							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="15%" class="myCenter"><span ng-show="zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
-						<th width="15%"><span ng-show="zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" class="myCenter"><span ng-show="zconf0.zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf0.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 						<th width="15%" align="left">{{ 'zone_type' | i18n }}</th>
 						<th width="20%" align="left">{{ 'zone_total_slots' | i18n }}</th>
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
@@ -681,10 +681,10 @@
 					<tbody class="animate-repeat"
 						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['name'] |  startFrom:currentPageZa*maxZones | limitTo:maxZones">
 						<tr>
-							<td width="25%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
-							<td width="15%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
-							<td width="15%" align="left"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
-							<td width="15%" align="left">{{zone.type}}</td>
+							<td width="25%" align="left"><span ng-show="zconf0.zone_name.visible">{{zone.name}}</span></td>
+							<td width="15%" align="center"><span ng-show="zconf0.zone_submacro.visible">{{zone.submacro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf0.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="zone.myType.label">{{zone.myType.label}}</span></td>
 							<td width="20%" align="left">{{zone.slotNumber}}</td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
@@ -719,15 +719,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="zoneWS.length != 0">
 						<th width="20%">
-							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%" class="myCenter"><span ng-show="zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
-						<th width="15%"><span ng-show="zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="10%" class="myCenter"><span ng-show="zconf0.zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf0.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
 						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
@@ -737,9 +737,9 @@
 						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxZones | limitTo:maxZones">
 				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageZo*maxPractices | limitTo:maxPractices"> -->
 						<tr>
-							<td width="20%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
-							<td width="10%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
-							<td width="15%" align="left"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="20%" align="left"><span ng-show="zconf0.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf0.zone_submacro.visible">{{zone.submacro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf0.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(zone.occupancy)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
@@ -781,15 +781,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="profitZonesList.length != 0">
 						<th width="20%">
-							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%" class="myCenter"><span ng-show="zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
-						<th width="15%"><span ng-show="zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="10%" class="myCenter"><span ng-show="zconf0.zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf0.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
 						<th width="10%">{{ 'element_tickets' | i18n }}</th>
 						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }}</th>
@@ -797,11 +797,10 @@
 					</tr>
 					<tbody class="animate-repeat"
 						ng-repeat="zone in filtered = (profitZonesList | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxZones | limitTo:maxZones">
-				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageZp*maxPractices | limitTo:maxPractices"> -->
 						<tr>
-							<td width="20%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
-							<td width="10%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
-							<td width="15%" align="left"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="20%" align="left"><span ng-show="zconf0.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf0.zone_submacro.visible">{{zone.submacro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf0.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(zone.profit)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) | euroVal }}{{ 'euro' | i18n }}</span>
@@ -846,15 +845,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="zoneWS.length != 0">
 						<th width="20%">
-							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%" class="myCenter"><span ng-show="zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
-						<th width="10%"><span ng-show="zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="10%" class="myCenter"><span ng-show="zconf0.zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
+						<th width="10%"><span ng-show="zconf0.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
 						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
 						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
@@ -863,11 +862,10 @@
 					</tr>
 					<tbody class="animate-repeat"
 						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxZones | limitTo:maxZones">
-				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageZt*maxPractices | limitTo:maxPractices"> -->
 						<tr>
-							<td width="20%" align="left"><span ng-show="zone_name.visible">{{zone.name}}</span></td>
-							<td width="10%" align="center"><span ng-show="zone_submacro.visible">{{zone.submacro}}</span></td>
-							<td width="10%" align="left"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="20%" align="left"><span ng-show="zconf0.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf0.zone_submacro.visible">{{zone.submacro}}</span></td>
+							<td width="10%" align="left"><div class="colorBox" ng-show="zconf0.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(zone.extratime)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min != zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} - {{ zone.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
@@ -914,15 +912,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="microzoneWS.length != 0">
 						<th width="25%">
-							<span ng-show="zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="15%" class="myCenter"><span ng-show="microzone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
-						<th width="15%"><span ng-show="microzone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" class="myCenter"><span ng-show="zconf1.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf1.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 						<th width="15%" align="left">{{ 'zone_type' | i18n }}</th>
 						<th width="20%" align="left">{{ 'zone_total_slots' | i18n }}</th>
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
@@ -930,10 +928,10 @@
 					<tbody class="animate-repeat"
 						ng-repeat="zone in filtered = (microzoneWS | filter:nameFilter) | orderBy: ['name','submicro'] |  startFrom:currentPageZa*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
-							<td width="25%" align="left"><span ng-show="microzone_name.visible">{{zone.name}}</span></td>
-							<td width="15%" align="center"><span ng-show="microzone_submicro.visible">{{zone.submicro}}</span></td>
-							<td width="15%" align="left"><div class="colorBox" ng-show="microzone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
-							<td width="15%" align="left">{{zone.type}}</td>
+							<td width="25%" align="left"><span ng-show="zconf1.zone_name.visible">{{zone.name}}</span></td>
+							<td width="15%" align="center"><span ng-show="zconf1.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf1.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="zone.myType.label">{{zone.myType.label}}</span></td>
 							<td width="20%" align="left">{{zone.slotNumber}}</td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,6)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
@@ -968,15 +966,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="microzoneWS.length != 0">
 						<th width="20%">
-							<span ng-show="microzone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%" class="myCenter"><span ng-show="microzone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
-						<th width="15%"><span ng-show="microzone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="10%" class="myCenter"><span ng-show="zconf1.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf1.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
 						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
@@ -985,9 +983,9 @@
 					<tbody class="animate-repeat"
 						ng-repeat="zone in filtered = (microzoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
-							<td width="20%" align="left"><span ng-show="microzone_name.visible">{{zone.name}}</span></td>
-							<td width="10%" align="center"><span ng-show="microzone_submicro.visible">{{zone.submicro}}</span></td>
-							<td width="15%" align="left"><div class="colorBox" ng-show="microzone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="20%" align="left"><span ng-show="zconf1.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf1.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf1.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(zone.occupancy)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
@@ -1029,15 +1027,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="profitMicroZonesList.length != 0">
 						<th width="20%">
-							<span ng-show="microzone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%" class="myCenter"><span ng-show="microzone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
-						<th width="15%"><span ng-show="microzone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="10%" class="myCenter"><span ng-show="zconf1.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf1.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
 						<th width="10%">{{ 'element_tickets' | i18n }}</th>
 						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }}</th>
@@ -1046,9 +1044,9 @@
 					<tbody class="animate-repeat"
 						ng-repeat="zone in filtered = (profitMicroZonesList | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
-							<td width="20%" align="left"><span ng-show="microzone_name.visible">{{zone.name}}</span></td>
-							<td width="10%" align="center"><span ng-show="microzone_submicro.visible">{{zone.submicro}}</span></td>
-							<td width="15%" align="left"><div class="colorBox" ng-show="microzone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="20%" align="left"><span ng-show="zconf1.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf1.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf1.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(zone.profit)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) | euroVal }}{{ 'euro' | i18n }}</span>
@@ -1093,15 +1091,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="microzoneWS.length != 0">
 						<th width="20%">
-							<span ng-show="microzone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%" class="myCenter"><span ng-show="microzone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
-						<th width="10%"><span ng-show="microzone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="10%" class="myCenter"><span ng-show="zconf1.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="10%"><span ng-show="zconf1.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
 						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
 						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
@@ -1111,9 +1109,9 @@
 					<tbody class="animate-repeat"
 						ng-repeat="zone in filtered = (microzoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
-							<td width="20%" align="left"><span ng-show="microzone_name.visible">{{zone.name}}</span></td>
-							<td width="10%" align="center"><span ng-show="microzone_submicro.visible">{{zone.submicro}}</span></td>
-							<td width="10%" align="left"><div class="colorBox" ng-show="microzone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="20%" align="left"><span ng-show="zconf1.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf1.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="10%" align="left"><div class="colorBox" ng-show="zconf1.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(zone.extratime)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min != zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} - {{ zone.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
@@ -1160,15 +1158,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="areaWS.length != 0">
 						<th width="20%">
-							<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>
+							<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>
 							<a href ng-click="showAreaNameFilter();currentPageAa=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
-						<th width="15%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="10%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
+						<th width="15%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
 						<th width="30%">{{ 'area_sms' | i18n }}</th>
 						<th width="15%" align="left">{{ 'area_total_slots' | i18n }}</th>
 						<th class="myCenter" width="10%">{{ 'operations' | i18n }}</th>
@@ -1176,9 +1174,9 @@
 					<tbody class="animate-repeat"
 						ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['name'] | startFrom:currentPageAa*maxAreas | limitTo:maxAreas">
 						<tr>
-							<td width="20%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
-							<td width="15%" align="left"><span ng-show="a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="20%" align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
+							<td width="10%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
 							<td width="30%" align="left">{{area.smsCode}}</td>
 							<td width="15%" align="left">{{area.slotNumber}}</td>
 							<td width="10%" align="center">
@@ -1214,15 +1212,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="areaWS.length != 0">
 						<th width="15%">
-							<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>
+							<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>
 							<a href ng-click="showAreaNameFilter();currentPageAo=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-						<th width="20%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
+						<th width="10%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="20%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="15%" align="left">{{ 'area_total_slots' | i18n }} Tot</th>
 						<th width="15%" align="left">{{ 'area_occupied_slots' | i18n }}</th>
@@ -1232,9 +1230,9 @@
 						ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['-occupancy', 'name'] | startFrom:currentPageAo*maxAreas | limitTo:maxAreas">
 			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAo*maxPractices | limitTo:maxPractices"> -->
 						<tr>
-							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
-							<td width="20%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
+							<td width="10%" align="left"><span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="20%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(area.occupancy)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="area.occupancy != '-1'">{{area.occupancy | doubleWithTwoDecimals}}%</span>
@@ -1276,15 +1274,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="profitAreaList.length != 0">
 						<th width="15%">
-							<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>
+							<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>
 							<a href ng-click="showAreaNameFilter();currentPageAp=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-						<th width="20%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
+						<th width="10%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="20%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
 						<th width="10%">{{ 'element_tickets' | i18n }}</th>
 						<th width="15%" align="left">{{ 'area_total_slots' | i18n }}</th>
@@ -1294,9 +1292,9 @@
 						ng-repeat="area in filtered = (profitAreaList | filter:nameFilter) | orderBy:['-profit', 'name'] | startFrom:currentPageAp*maxAreas | limitTo:maxAreas">
 			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAp*maxPractices | limitTo:maxPractices"> -->
 						<tr>
-							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
-							<td width="20%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
+							<td width="10%" align="left"><span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="20%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(area.profit)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="area.profit > -1">{{ correctEuroCent(area.profit) | euroVal }}{{ 'euro' | i18n }}</span>
@@ -1342,14 +1340,14 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="pstructWS.length != 0">
 						<th width="20%">
-							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
+							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
 							<a href ng-click="showPsNameFilter();currentPagePsa=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>						
 						</th>
-						<th width="30%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<th width="30%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 						<th width="5%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 						<th width="10%">{{ 'ps_fee_det_val' | i18n }}</th>
 						<th width="10%">{{ 'ps_time' | i18n }}</th>
@@ -1363,8 +1361,8 @@
 					<tbody class="animate-repeat"
 						ng-repeat="pstruct in filtered = (allDataStructWS | filter:nameFilter) | orderBy:['name'] | startFrom:currentPagePsa*maxPStructs | limitTo:maxPStructs">
 						<tr>
-							<td width="20%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
-							<td width="30%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="20%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
+							<td width="30%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
 							<td width="5%" align="left">
 								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
 								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
@@ -1413,17 +1411,17 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="pstructWS.length != 0">
 						<th width="15%">
-							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
+							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
 							<a href ng-click="showPsNameFilter();currentPagePso=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="34%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<th width="34%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 						<th width="5%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 						<th width="10%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
-						<th width="10%" class="myCenter"><span ng-show="ps_slotNumber.visible">{{ 'ps_slots' | i18n }}</span></th>
+						<th width="10%" class="myCenter"><span ng-show="psconf.ps_slotNumber.visible">{{ 'ps_slots' | i18n }}</span></th>
 						<th width="21%" class="myCenter" colspan="3">{{ 'ps_occupiedslot' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
@@ -1433,8 +1431,8 @@
 					<tbody class="animate-repeat"
 						ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPagePso*maxPStructs | limitTo:maxPStructs">
 						<tr>
-							<td width="15%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
-							<td width="34%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="15%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
+							<td width="34%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
 							<td width="5%" align="left">
 								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
 								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
@@ -1444,7 +1442,7 @@
 								<span ng-show="pstruct.occupancyRate != '-1'">{{ pstruct.occupancyRate | doubleWithTwoDecimals }}%</span>
 								<span ng-show="pstruct.occupancyRate == '-1'">n.p.</span>
 							</td>
-							<td width="10%" align="center"><span ng-show="ps_slotNumber.visible">{{pstruct.slotNumber}}</span></td>
+							<td width="10%" align="center"><span ng-show="psconf.ps_slotNumber.visible">{{pstruct.slotNumber}}</span></td>
 							<td width="7%" align="left">
 								<span ng-show="pstruct.occupancyRate >= 0">S: {{pstruct.payingSlotOccupied}}</span>
 								<span ng-show="pstruct.occupancyRate < 0">S: 0</span>		
@@ -1490,15 +1488,15 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="areaWS.length != 0">
 						<th width="15%">
-							<span ng-show="a_name.visible">{{ 'area_name' | i18n }}</span>
+							<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>
 							<a href="" ng-click="showAreaNameFilter();currentPageAt=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href="" ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}">
 						    </div>
 						</th>
-						<th width="10%"><span ng-show="a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-						<th width="15%"><span ng-show="a_color.visible">{{ 'area_color' | i18n }}</span></th>
+						<th width="10%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="15%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
 						<th width="20%" colspan="2">{{ 'element_costTime' | i18n }}</th>
 						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
 						<th width="10%" align="left">{{ 'area_total_slots' | i18n }} Tot</th>
@@ -1506,11 +1504,10 @@
 						<th class="myCenter" width="10%">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat" ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['-occupancy', 'name'] | startFrom:currentPageAt*maxAreas | limitTo:maxAreas">
-			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAt*maxPractices | limitTo:maxPractices"> -->
 						<tr>
-							<td width="15%" align="left"><span ng-show="a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="a_fee.visible">{{area.fee | euroVal}} {{ 'euro_hour' | i18n }}</span></td>
-							<td width="15%" align="center"><div class="colorBox" ng-show="a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
+							<td width="10%" align="left"><span ng-show="aconf.a_fee.visible">{{area.fee | euroVal}} {{ 'euro_hour' | i18n }}</span></td>
+							<td width="15%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(area.extratime)}"></div></td>
 							<td width="15%" align="left">
 								<span ng-show="area.extratime != null &amp;&amp; area.extratime.extratime_estimation_min != area.extratime.extratime_estimation_max">{{ area.extratime.extratime_estimation_min }} - {{ area.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
@@ -1555,14 +1552,14 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="profitStructWS.length != 0">
 						<th width="16%">
-							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
+							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
 							<a href ng-click="showPsNameFilter();currentPagePsp=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="16%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<th width="16%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 						<th width="8%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
 						<th width="10%">{{ 'element_tickets' | i18n }}</th>
@@ -1572,8 +1569,8 @@
 					<tbody class="animate-repeat"
 						ng-repeat="pstruct in filtered = (profitStructWS | filter:nameFilter) | orderBy:['-profit', 'name'] | startFrom:currentPagePsp*maxPStructs | limitTo:maxPStructs">
 						<tr>
-							<td width="16%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
-							<td width="16%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="16%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
+							<td width="16%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
 							<td width="8%" align="left">
 								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
 								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
@@ -1587,7 +1584,7 @@
 								<span ng-show="pstruct.tickets > -1">{{ pstruct.tickets }}</span>
 								<span ng-show="pstruct.tickets <= -1">n.p.</span>
 							</td>
-							<td width="15%" align="center"><span ng-show="ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
+							<td width="15%" align="center"><span ng-show="psconf.ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 							</td>
@@ -1622,26 +1619,26 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="pstructWS.length != 0">
 						<th width="16%">
-							<span ng-show="ps_name.visible">{{ 'ps_name' | i18n }}</span>
+							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
 							<a href ng-click="showPsNameFilter();currentPagePst=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="16%"><span ng-show="ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<th width="16%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 						<th width="8%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
 						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
-						<th width="12%" class="myCenter"><span ng-show="ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
+						<th width="12%" class="myCenter"><span ng-show="psconf.ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
 						<th width="13%" class="myCenter">{{ 'ps_occupiedslot' | i18n }}</th>
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
 						ng-repeat="pstruct in filtered = (allDataStructWS | filter:nameFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPagePst*maxPStructs | limitTo:maxPStructs">
 						<tr>
-							<td width="16%" align="left"><span ng-show="ps_name.visible">{{pstruct.name}}</span></td>
-							<td width="16%" align="left"><span ng-show="ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="16%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
+							<td width="16%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
 							<td width="8%" align="left">
 								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
 								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
@@ -1707,7 +1704,7 @@
 					<tr valign="top">
 						<td width="50%">	
 							<table width="100%">
-								<tr ng-show="pm_rateArea.visible">
+								<tr ng-show="pmconf.pm_rateArea.visible">
 									<td colspan="3" class="detailsTableColSpanLeft">
 										{{ 'view_parkingmeter' | i18n }}
 									</td>
@@ -1717,12 +1714,12 @@
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ pmDetails.code }}</td>
 								</tr>
-								<tr ng-show="pm_note.visible">
+								<tr ng-show="pmconf.pm_note.visible">
 									<td class="detailsListTableSX">{{ 'pm_note' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">&nbsp;{{ pmDetails.note }}</td>
 								</tr>
-								<tr ng-show="pm_status.visible">
+								<tr ng-show="pmconf.pm_status.visible">
 									<td class="detailsListTableSX">{{ 'pm_status' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">
@@ -1734,7 +1731,7 @@
 						</td>
 						<td width="50%">
 							<table width="100%">
-								<tr ng-show="pm_rateArea.visible">
+								<tr ng-show="pmconf.pm_rateArea.visible">
 									<td colspan="3" class="detailsTableColSpanLeft">
 										{{ 'pm_area_name' | i18n }}
 									</td>
@@ -1771,7 +1768,7 @@
 									<td class="detailsListTableDXS">{{ psDetails.name }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								 <tr ng-show="ps_address.visible">
+								 <tr ng-show="psconf.ps_address.visible">
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_address' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
@@ -1788,7 +1785,7 @@
 						        	</td>
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
-						        <tr ng-show="ps_manager.visible">
+						        <tr ng-show="psconf.ps_manager.visible">
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_manager' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
@@ -1799,7 +1796,7 @@
 						</td>
 						<td width="34%" valign="middle">
 							<table width="100%">
-								<tr ng-show="ps_slotNumber.visible">
+								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsListTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">
@@ -1824,22 +1821,22 @@
 						</td>
 						<td width="33%" valign="middle">
 							<table width="100%">
-								<tr ng-show="pm_rateArea.visible">
+								<tr ng-show="pmconf.pm_rateArea.visible">
 						   			<td colspan="3" class="detailsTableColSpanLeft">
 										{{ 'ps_slots' | i18n }}
 						  			</td>
 								</tr>
-								<tr ng-show="ps_slotNumber.visible">
+								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsNumberListTableSX">{{ 'ps_totalslot' | i18n }}:</td>
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">{{ psDetails.slotNumber }}</td>
 								</tr>
-								<tr ng-show="ps_slotNumber.visible">
+								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsNumberListTableSX">{{ 'ps_paying_slot' | i18n }}:</td>
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">{{ psDetails.payingSlotNumber }}</td>
 								</tr>
-								<tr ng-show="ps_handicappedSlot.visible">
+								<tr ng-show="psconf.ps_handicappedSlot.visible">
 									<td class="detailsNumberListTableSX">{{ 'ps_handicapped_slot' | i18n }}:</td>
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">{{ psDetails.handicappedSlotNumber }}</td>
@@ -1870,19 +1867,12 @@
 						        	</td>
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
-<!-- 						        <tr> -->
-<!-- 						        	<td class="detailsListTableCXS"></td> -->
-<!-- 							        <td colspan="3" class="detailsTableColSpanS"> -->
-<!-- 							        	<hr/> -->
-<!-- 							        </td> -->
-<!-- 							        <td class="detailsListTableCXS"></td> -->
-<!-- 							    </tr> -->
-						        <tr ng-show="s_zones.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
+						        <tr ng-show="sconf.s_zones0.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
 						        	<td class="detailsListTableCXS"></td>
-									<td colspan="3" align="left"><strong>{{ 'street_zone' | i18n }}</strong></td>
+									<td colspan="3" align="left"><strong>{{ 'street_zonemacro' | i18n }}</strong></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="s_zones.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
+								<tr ng-show="sconf.s_zones0.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
 									<td class="detailsListTableCXS"></td>
 									<td colspan="3">
 										<table width="100%" ng-repeat="z in sDetails.myZones"><!-- track by z.id -->
@@ -1907,12 +1897,12 @@
 									<td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="s_zones.visible  && (sDetails.myMicroZones != null && sDetails.myMicroZones.length > 0)">
+								<tr ng-show="sconf.s_zones0.visible  && (sDetails.myMicroZones != null && sDetails.myMicroZones.length > 0)">
 						        	<td class="detailsListTableCXS"></td>
-									<td colspan="3" align="left"><strong>{{ 'street_microzone' | i18n }}</strong></td>
+									<td colspan="3" align="left"><strong>{{ 'street_zonemicro' | i18n }}</strong></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="s_zones.visible  && (sDetails.myMicroZones != null && sDetails.myMicroZones.length > 0)">
+								<tr ng-show="sconf.s_zones0.visible  && (sDetails.myMicroZones != null && sDetails.myMicroZones.length > 0)">
 									<td class="detailsListTableCXS"></td>
 									<td colspan="3">
 										<table width="100%" ng-repeat="mz in sDetails.myMicroZones"><!-- track by $index -->
@@ -1942,21 +1932,14 @@
 							        <td colspan="3" align="left"><strong>{{ 'street_area_name' | i18n }}</strong></td>
 							        <td class="detailsListTableCXS"></td>
 							    </tr>
-							    <tr ng-show="s_slotNum.visible">
+							    <tr ng-show="sconf.s_slotNum.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_name' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">{{ sDetails.area_name }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-<!-- 								<tr ng-show="s_slotNum.visible"> -->
-<!-- 									<td class="detailsListTableCXS"></td> -->
-<!-- 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td> -->
-<!-- 									<td class="detailsListTableCXS"></td> -->
-<!-- 									<td class="detailsListTableDXS">{{ sDetails.area.timeSlot }}</td> -->
-<!-- 									<td class="detailsListTableCXS"></td> -->
-<!-- 								</tr> -->
-								<tr ng-show="s_slotNum.visible">
+								<tr ng-show="sconf.s_slotNum.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_color' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -2038,7 +2021,7 @@
 									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zone_submacro.visible"> - {{ zDetails.submacro }}</span></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="zone_color.visible">
+								<tr ng-show="zconf0.zone_color.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}</td>
 									<td class="detailsListTableCXS"></td>
@@ -2051,12 +2034,12 @@
 						</td>
 						<td width="34%" valign="top">
 							<table width="100%">
-								<tr ng-show="zone_type.visible">
+								<tr ng-show="zconf0.zone_type.visible">
 									<td class="detailsListTableSX">{{ 'zone_type' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ zDetails.type }}</td>
+									<td class="detailsListTableDX">&nbsp;<span ng-if="zDetails.myType.label">{{ zDetails.myType.label }}</span></td>
 								</tr>
-								<tr ng-show="zone_note.visible">
+								<tr ng-show="zconf0.zone_note.visible">
 									<td class="detailsListTableSX">{{ 'zone_note' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">&nbsp;{{ zDetails.note }}</td>
@@ -2097,7 +2080,7 @@
 									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="microzone_color.visible">
+								<tr ng-show="zconf0.zone_color.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}</td>
 									<td class="detailsListTableCXS"></td>
@@ -2110,12 +2093,12 @@
 						</td>
 						<td width="34%" valign="top">
 							<table width="100%">
-								<tr ng-show="microzone_type.visible">
+								<tr ng-show="zconf0.zone_type.visible">
 									<td class="detailsListTableSX">{{ 'zone_type' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ microZDetails.type }}</td>
+									<td class="detailsListTableDX">&nbsp;<span ng-if="microZDetails.myType.label">{{ microZDetails.myType.label }}</span></td>
 								</tr>
-								<tr ng-show="microzone_note.visible">
+								<tr ng-show="zconf0.zone_note.visible">
 									<td class="detailsListTableSX">{{ 'zone_note' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">&nbsp;{{ microZDetails.note }}</td>
@@ -2181,7 +2164,7 @@
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ aDetails.timeSlot }}</td>
 								</tr>
-								<tr ng-show="a_fee.visible">
+								<tr ng-show="aconf0.a_fee.visible">
 									<td class="detailsListTableSX">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ aDetails.fee | euroVal}} {{ 'euro_hour' | i18n }}</td>
@@ -2222,12 +2205,12 @@
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ pmDetails.code }}</td>
 					</tr>
-					<tr ng-show="pm_note.visible">
+					<tr ng-show="pmconf.pm_note.visible">
 						<td class="detailsTableSX">{{ 'pm_note' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">&nbsp;{{ pmDetails.note }}</td>
 					</tr>
-					<tr ng-show="pm_status.visible">
+					<tr ng-show="pmconf.pm_status.visible">
 						<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
@@ -2235,12 +2218,12 @@
 							<span ng-show="pmDetails.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 						</td>	
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr/>
 						</td>
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							{{ 'pm_area_name' | i18n }}
 						</td>
@@ -2274,7 +2257,7 @@
 									<td class="detailsListTableDXS">{{ psDetails.name }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								 <tr ng-show="ps_address.visible">
+								 <tr ng-show="psconf.ps_address.visible">
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_address' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
@@ -2292,28 +2275,28 @@
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
 								<tr>
-								<tr ng-show="pm_rateArea.visible">
+								<tr ng-show="pmconf.pm_rateArea.visible">
 									<td class="detailsListTableCXS"></td>
 						   			<td colspan="3" class="detailsTableColSpanS">
 						   				<hr/>
 						   			</td>
 						   			<td class="detailsListTableCXS"></td>
 						   		</tr>
-						   		<tr ng-show="pm_rateArea.visible">
+						   		<tr ng-show="pmconf.pm_rateArea.visible">
 						   			<td class="detailsListTableCXS"></td>
 						   			<td colspan="3" class="detailsTableColSpanLeftS">
 										{{ 'ps_slots' | i18n }}
 						  			</td>
 						  			<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="ps_slotNumber.visible">
+								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'ps_totalslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">{{ psDetails.slotNumber }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="ps_unusuableSlot.visible">
+								<tr ng-show="psconf.ps_unusuableSlot.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'ps_unusuable_slot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -2439,7 +2422,7 @@
 						   			</td>
 						   			<td class="detailsListTableCXS"></td>
 						   		</tr>
-								<tr ng-show="s_slotNum.visible">
+								<tr ng-show="sconf.s_slotNum.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'street_totalslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -2482,22 +2465,22 @@
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.freeParkSlotSignFree }}</td>
 								</tr>
-								<tr ng-show="s_paidSlot.visible">
+								<tr ng-show="sconf.s_paidSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_paid_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.paidSlotFree }}</td>
 								</tr>
-								<tr ng-show="s_timedSlot.visible">
+								<tr ng-show="sconf.s_timedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_timedpark_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.timedParkSlotFree }}</td>
 								</tr>
-								<tr ng-show="s_handicappedSlot.visible">
+								<tr ng-show="sconf.s_handicappedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_handicapped_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.handicappedSlotFree }}</td>
 								</tr>
-								<tr ng-show="s_reservedSlot.visible">
+								<tr ng-show="sconf.s_reservedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_reserved_slot_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.reservedSlotFree }}</td>
@@ -2521,22 +2504,22 @@
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.freeParkSlotSignOccupied }}</td>
 								</tr>
-								<tr ng-show="s_paidSlot.visible">
+								<tr ng-show="sconf.s_paidSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_paid_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.paidSlotOccupied }}</td>
 								</tr>
-								<tr ng-show="s_timedSlot.visible">
+								<tr ng-show="sconf.s_timedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_timedpark_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.timedParkSlotOccupied }}</td>
 								</tr>
-								<tr ng-show="s_handicappedSlot.visible">
+								<tr ng-show="sconf.s_handicappedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_handicapped_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.handicappedSlotOccupied }}</td>
 								</tr>
-								<tr ng-show="s_reservedSlot.visible">
+								<tr ng-show="sconf.s_reservedSlot.visible">
 									<td class="detailsListTableSX">{{ 'street_reserved_slot_occupied_db' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ sDetails.reservedSlotOccupied }}</td>
@@ -2859,7 +2842,7 @@
 									<td class="detailsListTableDXS">{{ aDetails.name }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="a_fee.visible">
+								<tr ng-show="aconf.a_fee.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -2987,14 +2970,14 @@
 									<td class="detailsListTableDXS">{{ pmDetails.code }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="pm_note.visible">
+								<tr ng-show="pmconf.pm_note.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'pm_note' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">{{ pmDetails.note }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="pm_status.visible">
+								<tr ng-show="pmconf.pm_status.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'pm_status' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -3008,7 +2991,7 @@
 						</td>
 						<td width="34%" valign="bottom">
 							<table width="100%">
-								<tr ng-show="pm_rateArea.visible">
+								<tr ng-show="pmconf.pm_rateArea.visible">
 									<td colspan="3" class="detailsTableColSpanLeft">
 										{{ 'pm_area_name' | i18n }}
 									</td>
@@ -3145,7 +3128,7 @@
 									<td class="detailsListTableDXS">{{ psDetails.name }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								 <tr ng-show="ps_address.visible">
+								 <tr ng-show="psconf.ps_address.visible">
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_address' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
@@ -3171,7 +3154,7 @@
 										{{ 'ps_slots' | i18n }}
 						  			</td>
 								</tr>
-								<tr ng-show="ps_slotNumber.visible">
+								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsNumberListTableSX">{{ 'ps_totalslot' | i18n }}:</td>
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">{{ psDetails.slotNumber }}</td>
@@ -3190,7 +3173,7 @@
 										{{ 'ps_profit' | i18n }}
 						  			</td>
 								</tr>
-								<tr ng-show="ps_slotNumber.visible">
+								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsNumberListTableSX">{{ 'element_profit' | i18n }}:</td>
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">
@@ -3326,7 +3309,7 @@
 						   				{{ 'street_slots' | i18n }}
 						   			</td>
 						   		</tr>
-								<tr ng-show="s_slotNum.visible">
+								<tr ng-show="sconf.s_slotNum.visible">
 									<td class="detailsNumberListTableSX">{{ 'street_totalslot' | i18n }}:</td>
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">{{ sDetails.slotNumber }}</td>
@@ -3453,14 +3436,14 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zone_submacro.visible"> - {{ zDetails.submacro }}</span></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zconf0.zone_submacro.visible"> - {{ zDetails.submacro }}</span></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="zone_color.visible">
+								<tr ng-show="zconf0.zone_color.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS"><div class="colorBox" ng-show="zone_color.visible" ng-style="{'background-color': correctColor(zDetails.color)}"></div></td>
+									<td class="detailsListTableDXS"><div class="colorBox" ng-show="zconf0.zone_color.visible" ng-style="{'background-color': correctColor(zDetails.color)}"></div></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 						   		
@@ -3601,10 +3584,10 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
+									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="zconf1.zone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="microzone_color.visible">
+								<tr ng-show="zconf1.zone_color.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -3754,7 +3737,7 @@
 									<td class="detailsListTableDXS">{{ aDetails.name }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="a_fee.visible">
+								<tr ng-show="aconf.a_fee.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -3910,7 +3893,7 @@
 									<td class="detailsListTableDXS">{{ psDetails.name }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								 <tr ng-show="ps_address.visible">
+								 <tr ng-show="psconf.ps_address.visible">
 								 	<td class="detailsListTableCXS"></td>
 						        	<td class="detailsListTableSXS">{{ 'ps_address' | i18n }}:</td>
 						        	<td class="detailsListTableCXS"></td>
@@ -3966,7 +3949,7 @@
 						  			</td>
 						  			<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="ps_slotNumber.visible">
+								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'ps_totalslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -4079,7 +4062,7 @@
 						   			</td>
 						   			<td class="detailsListTableCXS"></td>
 						   		</tr>
-								<tr ng-show="s_slotNum.visible">
+								<tr ng-show="sconf.s_slotNum.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'street_totalslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -4125,7 +4108,7 @@
 						</td>
 						<td width="55%" valign="top">
 							<table width="100%">
-								<tr ng-show="pm_rateArea.visible">
+								<tr ng-show="pmconf.pm_rateArea.visible">
 									<td class="detailsListTableCXS"></td>
 						   			<td colspan="3" class="detailsTableColSpanS">
 						   				<div ng-if="isActiveItalian()" google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
@@ -4344,7 +4327,7 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
+									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="zconf1.zone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
@@ -4482,7 +4465,7 @@
 									<td class="detailsListTableDXS">{{ aDetails.name }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="a_fee.visible">
+								<tr ng-show="aconf.a_fee.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>

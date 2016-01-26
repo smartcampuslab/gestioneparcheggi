@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import it.smartcommunitylab.parking.management.web.model.geo.Point;
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
 public class Zone {
@@ -27,6 +28,7 @@ public class Zone {
 	private String note;
 	private String color;
 	private String municipality;
+	private Point centermap;
 	private Polygon geometry;
 	private boolean geometryFromSubelement;
 	private Integer slotNumber;	// used in supply csv creation
@@ -125,6 +127,14 @@ public class Zone {
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
+	}
+
+	public Point getCentermap() {
+		return centermap;
+	}
+
+	public void setCentermap(Point centermap) {
+		this.centermap = centermap;
 	}
 
 }

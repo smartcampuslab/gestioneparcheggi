@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
+import java.util.List;
+
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter.Status;
 
 public class ParkingMeterBean {
@@ -28,6 +30,7 @@ public class ParkingMeterBean {
 	private String color;
 	private double profit;
 	private int tickets;
+	private List<String> zones;
 
 	public String getId() {
 		return id;
@@ -107,6 +110,14 @@ public class ParkingMeterBean {
 
 	public void setTickets(int tickets) {
 		this.tickets = tickets;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 	
 }

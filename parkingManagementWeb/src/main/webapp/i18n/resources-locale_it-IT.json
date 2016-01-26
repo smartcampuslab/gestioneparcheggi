@@ -87,6 +87,10 @@
     "value": "Visualizza",
     "description": "Titolo pannello per impostazione di visualizzazione oggetti sulla mappa"
 }, {
+    "key": "filter_block_title",
+    "value": "Filtra",
+    "description": "Titolo pannello per impostazione di filtro sugli oggetti sulla mappa"
+}, {
     "key": "loading_text",
     "value": "Caricamento in corso",
     "description": "Testo per caricamento dati in corso"
@@ -158,6 +162,18 @@
     "key": "area_color",
     "value": "Colore",
     "description": "Intestazione colonna colore in tabella lista aree"
+}, {
+    "key": "area_zonemicro",
+    "value": "Microzona",
+    "description": "Label per zona in area"
+}, {
+    "key": "area_zonemacro",
+    "value": "Zona",
+    "description": "Label per zona in area"
+}, {
+    "key": "area_zonemunicipality",
+    "value": "Comune",
+    "description": "Label per zona in area"
 }, {
     "key": "no_areas_in_lists",
     "value": "Nessuna area presente nel db",
@@ -627,13 +643,17 @@
     "value": "Sosta con abbonamento",
     "description": "Label campo sosta con abbonamento per oggetto strada"
 }, {
-    "key": "street_zone",
-    "value": "Zona",
+    "key": "street_zonemacro",
+    "value": "Zone",
     "description": "Label campo zona per oggetto strada"
 }, {
-    "key": "street_microzone",
-    "value": "Microzona",
+    "key": "street_zonemicro",
+    "value": "Microzone",
     "description": "Label campo microzona per oggetto strada"
+}, {
+    "key": "street_zonemunicipality",
+    "value": "Comune",
+    "description": "Label campo comune per oggetto strada"
 }, {
     "key": "street_pm",
     "value": "Parcometro",
@@ -690,6 +710,10 @@
     "key": "street_zone_select_err_required",
     "value": "Campo Zona di appartenenza obbligatorio.",
     "description": "Messaggio errore campo zona per strada obbligatorio"
+}, {
+    "key": "zone_select_err_required",
+    "value": "Campo Zona di appartenenza obbligatorio. Selezionare un valore",
+    "description": "Messaggio errore campo zona per oggetto obbligatorio"
 }, {
     "key": "street_microzone_select_err_required",
     "value": "Campo Microzona di appartenenza obbligatorio.",
@@ -1062,6 +1086,30 @@
     "key": "zone_color_placeholder",
     "value": "Scegliere il colore della zona",
     "description": "Testo placeholder campo colore zona"
+}, {
+    "key": "zone_select_placeholder",
+    "value": "Selezionare la zona associata",
+    "description": "Testo placeholder campo zona di relazione"
+}, {
+    "key": "zone_filter_placeholder",
+    "value": "Tutte le zone",
+    "description": "Valore di default per filtro zone in widget"
+}, {
+    "key": "zone_center_pos",
+    "value": "Posizione centrale",
+    "description": "Label per posizione centrale in zona"
+}, {
+    "key": "zone_center_placeholder",
+    "value": "Inserire le coordinate del punto centrale",
+    "description": "Testo placeholder per posizione centrale in zona"
+}, {
+    "key": "zone_center_select_err_pattern",
+    "value": "Valore posizione lat-lng non corretto",
+    "description": "Messaggio errore per posizione centrale in zona non corretta"
+}, {
+    "key": "zone_center_select_err_required",
+    "value": "Campo 'posizione centrale' obbligatorio",
+    "description": "Messaggio errore per posizione centrale in zona obbligatoria"
 }, {
     "key": "bp_name_placeholder",
     "value": "Inserire il nome del punto bici",
@@ -1485,7 +1533,15 @@
 }, {
     "key": "street_unavailableslot_placeholder",
     "value": "Inserire numero posti occupati tra i gratuiti",
-    "description": "Placeholder per posti non disponibili in creazione log via"
+    "description": "Place, {
+    "key": "street_zone",
+    "value": "Zona",
+    "description": "Label campo zona per oggetto strada"
+}, {
+    "key": "street_microzone",
+    "value": "Microzona",
+    "description": "Label campo microzona per oggetto strada"
+}holder per posti non disponibili in creazione log via"
 }, {
     "key": "park_handicappedslotoccupied_placeholder",
     "value": "Inserire numero posti occupati tra i riservati ai disabili",
@@ -1784,7 +1840,7 @@
 	"description": "Messaggio campo posti per disabili troppo grande in creazione log parcheggio"
 }, {
 	"key": "log_street_occupied_free_error_required",
-	"value": "Campo 'posti gratuiti occupati' obbligatorio. Inserire un valore numerico",
+	"value": "Campo 'posti gratuiti occupati' obbligatoSelezionare la zona associatario. Inserire un valore numerico",
 	"description": "Messaggio campo posti gratuiti obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_free_error_min",
@@ -2112,11 +2168,14 @@
     "key": "manage_area_tab",
     "value": "Area"
 }, {
-    "key": "manage_zone_tab",
+    "key": "manage_zonemacro_tab",
     "value": "Macrozona"
 }, {
-    "key": "manage_microzone_tab",
+    "key": "manage_zonemicro_tab",
     "value": "Via"
+}, {
+    "key": "manage_zonemunicipality_tab",
+    "value": "Comune"
 }, {
     "key": "manage_street_tab",
     "value": "Parcheggio"
@@ -2216,4 +2275,13 @@
 }, {
     "key": "street_life_project",
     "value": "Progetto StreetLife"
+}, {
+    "key": "label_zonemacro",
+    "value": "Macrozona"
+}, {
+    "key": "label_zonemicro",
+    "value": "Via"
+}, {
+    "key": "label_zonemunicipality",
+    "value": "Comune"
 }]

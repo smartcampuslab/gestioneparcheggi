@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.List;
+
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 
 public class BikePoint {
@@ -27,6 +29,7 @@ public class BikePoint {
 	private Integer slotNumber;
 	private Point geometry;
 	private Long lastChange;
+	private List<String> zones;
 
 	public String getId() {
 		return id;
@@ -90,6 +93,14 @@ public class BikePoint {
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 	public String toJSON(){

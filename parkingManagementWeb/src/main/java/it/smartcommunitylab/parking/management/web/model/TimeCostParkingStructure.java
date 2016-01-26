@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.List;
+
 public class TimeCostParkingStructure {
 
 	public static enum PaymentMode {
@@ -37,7 +39,7 @@ public class TimeCostParkingStructure {
 	private Integer occupancyRate;
 	private Integer minExtratime;
 	private Integer maxExtratime;
-	
+	private List<String> zones;
 	
 	public String getId_app() {
 		return id_app;
@@ -165,6 +167,14 @@ public class TimeCostParkingStructure {
 
 	public void setManager(String manager) {
 		this.manager = manager;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 	public String toJSON(){

@@ -89,6 +89,7 @@ public class StorageManager {
 			area.getGeometry().add(
 					ModelConverter.convert(polygon, Polygon.class));
 		}
+		if(a.getZones()!= null)area.setZones(a.getZones());
 
 		mongodb.save(area);
 		return a;
@@ -271,6 +272,7 @@ public class StorageManager {
 					temp.setStatus(pb.getStatus());
 					temp.getGeometry().setLat(pb.getGeometry().getLat());
 					temp.getGeometry().setLng(pb.getGeometry().getLng());
+					if(pb.getZones() != null)temp.setZones(pb.getZones());
 					mongodb.save(area);
 					founded = true;
 					break;
@@ -592,6 +594,7 @@ public class StorageManager {
 		bici.setMunicipality(pb.getMunicipality());
 		bici.getGeometry().setLat(pb.getGeometry().getLat());
 		bici.getGeometry().setLng(pb.getGeometry().getLng());
+		if(pb.getZones() != null)bici.setZones(pb.getZones());
 		mongodb.save(bici);
 		return pb;
 	}
@@ -624,7 +627,6 @@ public class StorageManager {
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + bp.getId());
 		dl.setType("bikePoint");
-		//dl.setVersion(new Integer(1));
 		dl.setTime(System.currentTimeMillis());
 		dl.setAuthor("999");
 		//if(bp.getGeometry() != null){
@@ -821,6 +823,7 @@ public class StorageManager {
 		entity.getGeometry().setLat(entityBean.getGeometry().getLat());
 		entity.getGeometry().setLng(entityBean.getGeometry().getLng());
 		entity.setParkAndRide(entityBean.isParkAndRide());
+		if(entityBean.getZones()!=null)entity.setZones(entityBean.getZones());
 		mongodb.save(entity);
 		return entityBean;
 	}
@@ -928,6 +931,17 @@ public class StorageManager {
 		zona.setType(z.getType());
 		zona.setNote(z.getNote());
 		zona.setMunicipality(z.getMunicipality());
+		if(z.getCentermap() != null){
+			if(zona.getCentermap() != null){
+				zona.getCentermap().setLat(z.getCentermap().getLat());
+				zona.getCentermap().setLng(z.getCentermap().getLng());
+			} else {
+				Point p = new Point();
+				p.setLat(z.getCentermap().getLat());
+				p.setLng(z.getCentermap().getLng());
+				zona.setCentermap(p);
+			}
+		}
 		zona.setGeometryFromSubelement(z.isGeometryFromSubelement());
 		if(z.getGeometry()!= null && z.getGeometry().getPoints() != null && z.getGeometry().getPoints().size() > 0){
 			if(zona.getGeometry() != null && zona.getGeometry().getPoints() != null && zona.getGeometry().getPoints().size() > 0){

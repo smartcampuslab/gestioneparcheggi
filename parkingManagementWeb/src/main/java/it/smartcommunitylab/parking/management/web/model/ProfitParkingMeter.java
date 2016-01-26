@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.List;
+
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 
 public class ProfitParkingMeter {
@@ -31,6 +33,7 @@ public class ProfitParkingMeter {
 	private Point geometry;
 	private Integer profit;
 	private Integer tickets;
+	private List<String> zones;
 	
 	public String getId_app() {
 		return id_app;
@@ -102,6 +105,14 @@ public class ProfitParkingMeter {
 
 	public void setAreaId(String areaId) {
 		this.areaId = areaId;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 	@Override

@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.List;
+
 public class OccupancyRateArea {
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
@@ -27,6 +29,7 @@ public class OccupancyRateArea {
 	private Integer occupancy;
 	private Integer slotNumber;
 	private Integer slotOccupied;
+	private List<String> zones;
 
 	public String getId() {
 		return id;
@@ -114,6 +117,14 @@ public class OccupancyRateArea {
 
 	public void setSlotOccupied(Integer slotOccupied) {
 		this.slotOccupied = slotOccupied;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 }

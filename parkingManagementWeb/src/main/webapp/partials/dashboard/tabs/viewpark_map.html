@@ -250,14 +250,14 @@
 				<info-window id="bp" visible-on-marker="{{ bp.id }}">
 			        <div ng-non-bindable="">
 			          	<div id="siteNotice"></div>
-			          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bp_name.visible">{{ bp.data.name }}</span></h4>
+			          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bpconf.bp_name.visible">{{ bp.data.name }}</span></h4>
 				        <div id="bodyContent">
 				        	<table>
-								<tr ng-show="bp_slotNumber.visible">
+								<tr ng-show="bpconf.bp_slotNumber.visible">
 				        			<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
 				        			<td>&nbsp;{{ bp.data.slotNumber }}</td>
 				        		</tr>
-				        		<tr ng-show="bp_bikeNumber.visible">
+				        		<tr ng-show="bpconf.bp_bikeNumber.visible">
 				        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
 				        			<td>&nbsp;{{ bp.data.bikeNumber }}</td>
 				        		</tr>
@@ -367,12 +367,12 @@
 					</tr>
 				</table>
 				<table width="100%">	
-					<tr ng-show="pm_note.visible">
+					<tr ng-show="pmconf.pm_note.visible">
 						<td class="detailsTableSX">{{ 'pm_note' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">&nbsp;{{ pmDetails.data.note }}</td>
 					</tr>
-					<tr ng-show="pm_status.visible">
+					<tr ng-show="pmconf.pm_status.visible">
 						<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
@@ -414,12 +414,12 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
-					<tr ng-show="ps_address.visible">
+					<tr ng-show="psconf.ps_address.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_address' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.streetReference }}</td>
 					</tr>
-					<tr>
+					<tr ng-show="psconf.ps_parkride.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride_det' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">
@@ -427,12 +427,12 @@
 							<span ng-if="isUsedEngLang()">{{ psDetails.data.parkAndRide | boolToStringEng }}</span>
 						</td>
 					</tr>
-					<tr ng-show="ps_manager.visible">
+					<tr ng-show="psconf.ps_manager.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_manager' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.manager }}</td>	
 					</tr>
-					<tr ng-show="ps_fee.visible">
+					<tr ng-show="psconf.ps_fee.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td ng-if="psDetails.data.fee_val != null" class="detailsTitleTableDX">
@@ -442,12 +442,12 @@
 							n.p.
 						</td>
 					</tr>
-					<tr ng-show="ps_fee.visible">
+					<tr ng-show="psconf.ps_fee.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_fee_det_note' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.fee_note }}</td>
 					</tr>
-					<tr ng-show="ps_timeSlot.visible">
+					<tr ng-show="psconf.ps_timeSlot.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_time' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td ng-if="psDetails.data.openingTime != null" class="detailsTitleTableDX">
@@ -477,17 +477,17 @@
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">{{ 'ps_slots' | i18n }}</td>
 					</tr>
-					<tr ng-show="ps_slotNumber.visible">
+					<tr ng-show="psconf.ps_slotNumber.visible">
 						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
 					</tr>
-					<tr ng-show="ps_slotNumber.visible">
+					<tr ng-show="psconf.ps_slotNumber.visible">
 						<td class="detailsTableSX">{{ 'ps_paying_slot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ psDetails.data.payingSlotNumber }}</td>
 					</tr>
-					<tr ng-show="ps_handicappedSlot.visible">
+					<tr ng-show="psconf.ps_handicappedSlot.visible">
 						<td class="detailsTableSX">{{ 'ps_handicapped_slot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ psDetails.data.handicappedSlotNumber }}</td>
@@ -515,22 +515,22 @@
 					</tr>
 				</table>	
 				<table width="100%">	
-					<tr ng-show="s_pms.visible && (sDetails.pms != null && sDetails.pms.length > 0)">
+					<tr ng-show="sconf.s_pms.visible && (sDetails.pms != null && sDetails.pms.length > 0)">
 						<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
 							<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code }};</span>
 						</td>
 					</tr>
-					<tr ng-show="s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
+					<tr ng-show="sconf.s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
-						<td colspan="3" class="detailsTableColSpan">{{ 'street_zone' | i18n }}</td>
+					<tr ng-show="sconf.s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_zonemacro' | i18n }}</td>
 					</tr>
-					<tr ng-show="s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
+					<tr ng-show="sconf.s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
 						<td colspan="3">
 							<table width="100%" ng-repeat="z in sDetails.zones track by z.id">
 								<tr>
@@ -553,15 +553,15 @@
 							</table>
 						<td>
 					</tr>
-					<tr ng-show="s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
+					<tr ng-show="sconf.s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
-						<td colspan="3" class="detailsTableColSpan">{{ 'street_microzone' | i18n }}</td>
+					<tr ng-show="sconf.s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ 'street_zonemicro' | i18n }}</td>
 					</tr>
-					<tr ng-show="s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
+					<tr ng-show="sconf.s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
 						<td colspan="3">
 							<table width="100%" ng-repeat="z in sDetails.microzones track by z.id">
 								<tr>
@@ -574,25 +574,18 @@
 									<td class="detailsTableCX"></td>
 									<td class="detailsTableDX">{{ z.submacro }}</td>
 								</tr>
-<!-- 								<tr> -->
-<!-- 									<td class="detailsTableSX">{{ 'zone_color' | i18n }}:</td> -->
-<!-- 									<td class="detailsTableCX"></td> -->
-<!-- 									<td class="detailsTableDX"> -->
-<!-- 										<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span> -->
-<!-- 									</td> -->
-<!-- 								</tr> -->
 							</table>
 						<td>
 					</tr>
-					<tr ng-show="s_areaId.visible">
+					<tr ng-show="sconf.s_areaId.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="s_areaId.visible">
+					<tr ng-show="sconf.s_areaId.visible">
 						<td colspan="3" class="detailsTableColSpan">{{ 'street_area_name' | i18n }}</td>
 					</tr>
-					<tr ng-show="s_areaId.visible">
+					<tr ng-show="sconf.s_areaId.visible">
 						<td class="detailsTableSX">{{ 'area_name' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.area.name }}</td>
@@ -671,17 +664,17 @@
 					</tr>
 				</table>	
 				<table width="100%">
-					<tr ng-show="zone_type.visible">
+					<tr ng-show="zconf0.zone_type.visible">
 						<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ zDetails.data.type }}</td>
+						<td class="detailsTableDX">&nbsp;<span ng-if="zDetails.data.myType.label">{{ zDetails.data.myType.label }}</span></td>
 					</tr>
-					<tr ng-show="zone_note.visible">
+					<tr ng-show="zconf0.zone_note.visible">
 						<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">&nbsp;{{ zDetails.data.note }}</td>
 					</tr>
-					<tr ng-show="zone_color.visible">
+					<tr ng-show="zconf0.zone_color.visible">
 						<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
@@ -699,17 +692,17 @@
 					</tr>
 				</table>	
 				<table width="100%">
-					<tr ng-show="microzone_type.visible">
+					<tr ng-show="zconf1.zone_type.visible">
 						<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.type }}</td>
+						<td class="detailsTableDX">&nbsp;<span ng-if="microZDetails.data.myType.label">{{ microZDetails.data.myType.label }}</span></td>
 					</tr>
-					<tr ng-show="microzone_note.visible">
+					<tr ng-show="zconf1.zone_note.visible">
 						<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.note }}</td>
 					</tr>
-					<tr ng-show="microzone_color.visible">
+					<tr ng-show="zconf1.zone_color.visible">
 						<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
@@ -727,27 +720,27 @@
 					</tr>
 				</table>	
 				<table width="100%">	
-					<tr ng-show="a_fee.visible">
+					<tr ng-show="aconf.a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ aDetails.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 					</tr>
-					<tr ng-show="a_timeSlot.visible">
+					<tr ng-show="aconf.a_timeSlot.visible">
 						<td class="detailsTableSX">{{ 'area_time' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ aDetails.data.timeSlot }}</td>
 					</tr>
-					<tr ng-show="a_smsCode.visible">
+					<tr ng-show="aconf.a_smsCode.visible">
 						<td class="detailsTableSX">{{ 'area_sms' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ aDetails.data.smsCode }}</td>
 					</tr>
-					<tr ng-show="a_color.visible">
+					<tr ng-show="aconf.a_color.visible">
 						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX"><span class="colorBox" ng-style="{'background-color': correctColor(aDetails.data.color)}"></span></td>
 					</tr>
-					<tr ng-show="a_note.visible">
+					<tr ng-show="aconf.a_note.visible">
 						<td class="detailsTableSX">{{ 'area_note' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ aDetails.data.note }}</td>
@@ -777,12 +770,12 @@
 					</tr>
 				</table>	
 				<table width="100%">	
-					<tr ng-show="pm_note.visible">
+					<tr ng-show="pmconf.pm_note.visible">
 						<td class="detailsTableSX">{{ 'pm_note' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">&nbsp;{{ pmDetails.data.note }}</td>
 					</tr>
-					<tr ng-show="pm_status.visible">
+					<tr ng-show="pmconf.pm_status.visible">
 						<td class="detailsTableSX">{{ 'pm_status' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
@@ -790,12 +783,12 @@
 							<span ng-show="pmDetails.data.status!='ACTIVE'"><strong>{{ 'inactive_pm_state' | i18n }}</strong></span>
 						</td>
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">{{ 'pm_area_name' | i18n }}</td>
 					</tr>
 					<tr>
@@ -822,12 +815,12 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
-					<tr ng-show="ps_address.visible">
+					<tr ng-show="psconf.ps_address.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_address' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.streetReference }}</td>
 					</tr>
-					<tr>
+					<tr ng-show="psconf.ps_parkride.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_park_and_ride_det' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">
@@ -837,20 +830,20 @@
 					</tr>
 				</table>
 				<table width="100%">
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">{{ 'ps_slots' | i18n }}</td>
 					</tr>
-					<tr ng-show="ps_slotNumber.visible">
+					<tr ng-show="psconf.ps_slotNumber.visible">
 						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
 					</tr>
-					<tr ng-show="ps_unusuableSlot.visible">
+					<tr ng-show="psconf.ps_unusuableSlot.visible">
 						<td class="detailsTableSX">{{ 'ps_unusuable_slot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
@@ -896,7 +889,7 @@
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">{{ 'street_slots' | i18n }}</td>
 					</tr>
-					<tr ng-show="s_slotNum.visible">
+					<tr ng-show="sconf.s_slotNum.visible">
 						<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
@@ -948,12 +941,12 @@
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.paidSlotFree }}</td>
 					</tr>
-					<tr ng-show="s_timedSlot.visible">
+					<tr ng-show="sconf.s_timedSlot.visible">
 						<td class="detailsTableSX">{{ 'street_timedpark_slot_db' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{	sDetails.data.timedParkSlotFree }}</td>
 					</tr>
-					<tr ng-show="s_handicappedSlot.visible">
+					<tr ng-show="sconf.s_handicappedSlot.visible">
 						<td class="detailsTableSX">{{ 'street_handicapped_slot_db' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.handicappedSlotFree }}</td>
@@ -992,12 +985,12 @@
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.paidSlotOccupied }}</td>
 					</tr>
-					<tr ng-show="s_timedSlot.visible">
+					<tr ng-show="sconf.s_timedSlot.visible">
 						<td class="detailsTableSX">{{ 'street_timedpark_slot_occupied_db' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.timedParkSlotOccupied }}</td>
 					</tr>
-					<tr ng-show="s_handicappedSlot.visible">
+					<tr ng-show="sconf.s_handicappedSlot.visible">
 						<td class="detailsTableSX">{{ 'street_handicapped_slot_occupied_db' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.handicappedSlotOccupied }}</td>
@@ -1070,7 +1063,7 @@
 					</tr>
 				</table>	
 				<table width="95%">	
-					<tr ng-show="a_fee.visible">
+					<tr ng-show="aconf.a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ aDetails.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
@@ -1113,12 +1106,12 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ pmDetails.data.code }}</td>
 					</tr>	
-					<tr ng-show="pm_note.visible">
+					<tr ng-show="pmconf.pm_note.visible">
 						<td class="detailsTitleTableSX">{{ 'pm_note' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">&nbsp;{{ pmDetails.data.note }}</td>
 					</tr>
-					<tr ng-show="pm_status.visible">
+					<tr ng-show="pmconf.pm_status.visible">
 						<td class="detailsTitleTableSX">{{ 'pm_status' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">
@@ -1128,12 +1121,12 @@
 					</tr>
 				</table>	
 				<table width="100%">	
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">{{ 'pm_area_name' | i18n }}</td>
 					</tr>
 					<tr>
@@ -1153,7 +1146,7 @@
 							<span class="colorBox" ng-style="{'background-color': correctColor(pmDetails.area.color)}"></span>
 						</td>
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
@@ -1183,7 +1176,7 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
-					<tr ng-show="ps_address.visible">
+					<tr ng-show="psconf.ps_address.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_address' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.streetReference }}</td>
@@ -1198,12 +1191,12 @@
 					</tr>
 				</table>	
 				<table width="100%">	
-					<tr ng-show="ps_slotNumber.visible">
+					<tr ng-show="psconf.ps_slotNumber.visible">
 						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
@@ -1236,7 +1229,7 @@
 				</table>
 				<br>	
 				<table width="100%">	
-					<tr ng-show="s_pms.visible">
+					<tr ng-show="sconf.s_pms.visible">
 						<td class="detailsTableSX">{{ 'street_pm' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
@@ -1251,12 +1244,12 @@
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">{{ 'street_slots' | i18n }}</td>
 					</tr>
-					<tr ng-show="s_timedSlot.visible">
+					<tr ng-show="sconf.s_timedSlot.visible">
 						<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
 					</tr>
-					<tr ng-show="s_timedSlot.visible">
+					<tr ng-show="sconf.s_timedSlot.visible">
 						<td class="detailsTableSX">{{ 'street_paid_slot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.paidSlotNumber }}</td>
@@ -1381,7 +1374,7 @@
 					</tr>
 				</table>	
 				<table width="100%">	
-					<tr ng-show="a_fee.visible">
+					<tr ng-show="aconf.a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ aDetails.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
@@ -1440,7 +1433,7 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.name }}</td>
 					</tr>
-					<tr ng-show="ps_address.visible">
+					<tr ng-show="psconf.ps_address.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_address' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.streetReference }}</td>
@@ -1455,15 +1448,15 @@
 					</tr>
 				</table>
 				<table width="99%">			
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="pm_rateArea.visible">
+					<tr ng-show="pmconf.pm_rateArea.visible">
 						<td colspan="3" class="detailsTableColSpan">{{ 'ps_slots' | i18n }}</td>
 					</tr>
-					<tr ng-show="ps_slotNumber.visible">
+					<tr ng-show="psconf.ps_slotNumber.visible">
 						<td class="detailsTableSX">{{ 'ps_totalslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ psDetails.data.slotNumber }}</td>
@@ -1518,7 +1511,7 @@
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">{{ 'street_slots' | i18n }}</td>
 					</tr>
-					<tr ng-show="s_slotNum.visible">
+					<tr ng-show="sconf.s_slotNum.visible">
 						<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ sDetails.data.slotNumber }}</td>
@@ -1658,7 +1651,7 @@
 					</tr>
 				</table>	
 				<table width="99%">	
-					<tr ng-show="a_fee.visible">
+					<tr ng-show="aconf.a_fee.visible">
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ aDetails.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>

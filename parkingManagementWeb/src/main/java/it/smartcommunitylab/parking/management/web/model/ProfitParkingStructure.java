@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.List;
+
 public class ProfitParkingStructure {
 
 	public static enum PaymentMode {
@@ -35,7 +37,7 @@ public class ProfitParkingStructure {
 	private String phoneNumber;
 	private Integer profit;
 	private Integer tickets;
-	
+	private List<String> zones;
 	
 	public String getId_app() {
 		return id_app;
@@ -147,6 +149,14 @@ public class ProfitParkingStructure {
 
 	public void setManager(String manager) {
 		this.manager = manager;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 	public String toJSON(){

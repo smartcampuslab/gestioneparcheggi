@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.List;
+
 public class OccupancyParkingStructure {
 
 	public static enum PaymentMode {
@@ -37,7 +39,7 @@ public class OccupancyParkingStructure {
 	private Integer unusuableSlotNumber;
 	private String phoneNumber;
 	private Integer occupancyRate;
-	
+	private List<String> zones;
 	
 	public String getId_app() {
 		return id_app;
@@ -165,6 +167,14 @@ public class OccupancyParkingStructure {
 
 	public void setPayingSlotOccupied(Integer payingSlotOccupied) {
 		this.payingSlotOccupied = payingSlotOccupied;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 	public String toJSON(){

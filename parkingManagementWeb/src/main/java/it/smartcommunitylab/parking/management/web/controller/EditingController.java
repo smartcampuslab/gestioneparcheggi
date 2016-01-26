@@ -212,7 +212,7 @@ public class EditingController {
 	public @ResponseBody
 	List<ZoneBean> getAllZoneByAppId(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
 		//return storage.getAllZone(appId);
-		logger.info("Zone type " + type);
+		//logger.info("Zone type " + type);
 		if(type == null || type.compareTo("") == 0){
 			return storage.getAllZone("all");
 		} else {
@@ -237,7 +237,7 @@ public class EditingController {
 	ZoneBean editZone(@PathVariable("appId") String appId,
 			@PathVariable("zid") String zid,
 			@RequestBody ZoneBean zone) throws NotFoundException {
-		System.out.println(String.format("Zone to edit id:%s; name:%s; submacro:%s ", zone.getId(), zone.getName(), zone.getSubmacro()));
+		System.out.println(String.format("Zone to edit id:%s; name:%s; submacro:%s", zone.getId(), zone.getName(), zone.getSubmacro()));
 		return storage.editZone(zone, appId);
 	}
 

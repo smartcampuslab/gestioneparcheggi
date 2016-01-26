@@ -34,6 +34,7 @@ public class RateArea {
 
 	private List<Street> streets;
 	private List<ParkingMeter> parkingMeters;
+	private List<String> zones;	// id of the related zones
 
 	public String getId() {
 		return id;
@@ -137,6 +138,14 @@ public class RateArea {
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 }

@@ -1537,6 +1537,7 @@ public class DynamicManager {
 	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		String[][] occMatrix = null;
 		String[][] tmpMatrix = null;
+		String[][] result = null;
 		int[][] usedSlotMatrix = null;
 		int[][] unavailableSlotMatrix = null;
 		int[][] sumSlotMatrix = null;
@@ -1557,7 +1558,11 @@ public class DynamicManager {
 			}
 		}
 		//return cleanAverageMatrix(occMatrix, streets.size());
-		return cleanSumSlotMatrix(sumSlotMatrix, totalSlot, occMatrix);
+		result = cleanSumSlotMatrix(sumSlotMatrix, totalSlot, occMatrix);
+		if(result == null){
+			result = new String[0][0];;
+		}
+		return result;
 	}
 	
 	/**
@@ -1714,25 +1719,28 @@ public class DynamicManager {
 	}
 	
 	public String[][] cleanSumSlotMatrix(int[][] m1, int slots, String[][] m2){
-		String[][] tmp = new String[m1.length][m1[0].length];
-		if(m1 != null && m1.length > 0){
-			for(int i = 1; i < m1.length; i++){
-				for(int j = 1; j < m1[i].length; j++){
-					if(m1[i][j] != -1){
-						if(slots == 0){
-							slots = 1;
+		String[][] tmp = null;
+		if(m1 != null){
+			tmp = new String[m1.length][m1[0].length];
+			if(m1 != null && m1.length > 0){
+				for(int i = 1; i < m1.length; i++){
+					for(int j = 1; j < m1[i].length; j++){
+						if(m1[i][j] != -1){
+							if(slots == 0){
+								slots = 1;
+							}
+							double average = (m1[i][j] * 100) / slots;
+							tmp[i][j] = "" + String.format("%.2f", average);
+						} else {
+							tmp[i][j] = "-1.0";
 						}
-						double average = (m1[i][j] * 100) / slots;
-						tmp[i][j] = "" + String.format("%.2f", average);
-					} else {
-						tmp[i][j] = "-1.0";
 					}
 				}
-			}
-			for(int i = 0; i < m1.length; i++){
-				for(int j = 0; j < m1[i].length; j++){
-					if(i == 0 || j == 0){
-						tmp[i][j] = m2[i][j];
+				for(int i = 0; i < m1.length; i++){
+					for(int j = 0; j < m1[i].length; j++){
+						if(i == 0 || j == 0){
+							tmp[i][j] = m2[i][j];
+						}
 					}
 				}
 			}

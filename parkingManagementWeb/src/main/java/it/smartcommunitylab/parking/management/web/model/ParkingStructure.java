@@ -49,6 +49,8 @@ public class ParkingStructure {
 	private String phoneNumber;
 	private Long lastChange;
 	private boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
+	private List<String> zones;		// list of related zones (id)
+	
 	
 	public String getId_app() {
 		return id_app;
@@ -224,6 +226,14 @@ public class ParkingStructure {
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
+	}
+
+	public List<String> getZones() {
+		return zones;
+	}
+
+	public void setZones(List<String> zones) {
+		this.zones = zones;
 	}
 
 	public String toJSON(){

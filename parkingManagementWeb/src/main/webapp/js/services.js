@@ -31,7 +31,11 @@ pm.service('sharedDataService', function(){
 	this.base64 = '';
 	
 	this.sharedLocalAreas = [];
-	this.sharedLocalZones = [];
+	this.sharedLocalZones0 = [];
+	this.sharedLocalZones1 = [];
+	this.sharedLocalZones2 = [];
+	this.sharedLocalZones3 = [];
+	this.sharedLocalZones4 = [];
 	this.sharedLocalMicroZones = [];
 	this.sharedLocalPms = [];
 	
@@ -645,22 +649,54 @@ pm.service('sharedDataService', function(){
 	};
 	
 	// Zones
-	this.getSharedLocalZones = function(){
-		return this.sharedLocalZones;
+	this.getSharedLocalZones0 = function(){
+		return this.sharedLocalZones0;
 	};
 	
-	this.setSharedLocalZones = function(list){
-		this.sharedLocalZones = list;
+	this.setSharedLocalZones0 = function(list){
+		this.sharedLocalZones0 = list;
 	};
+	
+	this.getSharedLocalZones1 = function(){
+		return this.sharedLocalZones1;
+	};
+	
+	this.setSharedLocalZones1 = function(list){
+		this.sharedLocalZones1 = list;
+	};
+	
+	this.getSharedLocalZones2 = function(){
+		return this.sharedLocalZones2;
+	};
+	
+	this.setSharedLocalZones2 = function(list){
+		this.sharedLocalZones2 = list;
+	};
+	
+	this.getSharedLocalZones3 = function(){
+		return this.sharedLocalZones3;
+	};
+	
+	this.setSharedLocalZones3 = function(list){
+		this.sharedLocalZones3 = list;
+	};
+	
+	this.getSharedLocalZones4 = function(){
+		return this.sharedLocalZones4;
+	};
+	
+	this.setSharedLocalZones4 = function(list){
+		this.sharedLocalZones4 = list;
+	};	
 	
 	// MicroZones
-	this.getSharedLocalMicroZones = function(){
+/*	this.getSharedLocalMicroZones = function(){
 		return this.sharedLocalMicroZones;
 	};
 	
 	this.setSharedLocalMicroZones = function(list){
 		this.sharedLocalMicroZones = list;
-	};
+	};*/
 	
 	this.getSharedLocalPms = function(){
 		return this.sharedLocalPms;

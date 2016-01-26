@@ -3,15 +3,14 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','getMyMessages','$timeout',
-    function($scope, $http, $route, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, getMyMessages, $timeout) {
+pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','getMyMessages','$timeout',
+    function($scope, $http, $route, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, getMyMessages, $timeout) {
     
     $scope.setFrameOpened = function(value){
     	$rootScope.frameOpened = value;
     };
     
     $scope.setViewTabs = function(){
-    	//$scope.setViewIndex(0);
     	$scope.hideHome();
     	$scope.setNextButtonViewLabel("Chiudi");
     	$scope.setFrameOpened(true);
@@ -164,7 +163,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	dashboard = "";	// Used for dashboard
     	parkhome = "";
     	auxhome = "";
-    	
     	homeSubPark = "";
     	editingPark = "";
     	editingBike = "";
@@ -179,9 +177,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	dashboard = "";	// Used for dashboard
     	parkhome = "active";
     	auxhome = "";
-    	
-    	//homeSubPark = "active";
-    	//editingPark = "";
     	homeSubPark = "";
     	editingPark = "active";
     	editingBike = "";
@@ -312,35 +307,68 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     };
     
     sharedDataService.setConfAppId(conf_app_id);
-    //sharedDataService.setConfUrlWs(conf_url_ws);
     sharedDataService.setConfMapCenter(conf_map_center);
+    if(conf_map_recenter && conf_map_recenter != "null"){
+    	sharedDataService.setConfMapRecenter(conf_map_recenter);
+    }
     sharedDataService.setConfMapZoom(conf_map_zoom);
-    var zone_types = [];
-    zone_types.push(conf_macrozone_type);
-    zone_types.push(conf_microzone_type);
-    sharedDataService.setZoneTypeList(zone_types);
-    sharedDataService.setMicroZoneType(conf_microzone_type);
-    sharedDataService.setMacroZoneType(conf_macrozone_type);
+    //var zone_types = [];
+    //zone_types.push(conf_macrozone_type);
+    //zone_types.push(conf_microzone_type);
+    //sharedDataService.setZoneTypeList(zone_types);
+    //sharedDataService.setMicroZoneType(conf_microzone_type);
+    //sharedDataService.setMacroZoneType(conf_macrozone_type);
     var ps_manager_vals = $scope.initPsManagers(conf_ps_managers);
     sharedDataService.setPsManagerVals(ps_manager_vals);
-    var municipalities_vals = $scope.initMunicipalities(conf_municipalities);
-    sharedDataService.setMunicipalityVals(municipalities_vals);
-    
-    $scope.widget_inport_url = conf_widget_url + "/viewall/" + conf_app_id;
+    $scope.widget_filters = initializeService.setWidgetFilters(conf_filters);
+    $scope.widget_show_elements = initializeService.setWidgetElements(conf_elements);
+    initializeService.setConfAppId(conf_app_id);
+    initializeService.setConfWidgetUrl(conf_widget_url);
  
+    $scope.correctStringToJsonString = function(data){
+    	var tmpData = data.replace(new RegExp('=','g'), '\":\"');
+    	tmpData = tmpData.replace(new RegExp(',\u0020','g'), '\",\u0020\"'); // era new RegExp(', ','g'), '\", \"'
+    	tmpData = tmpData.replace(new RegExp('{','g'), '{\"');
+    	tmpData = tmpData.replace(new RegExp('}','g'), '\"}');
+    	tmpData = tmpData.replace(/:\"\[\{/g, ':[{');
+    	tmpData = tmpData.replace(/\}\]",/g, '}],');
+    	tmpData = tmpData.replace(/\}",/g, '},');
+    	tmpData = tmpData.replace(/,\u0020\"\{/g, ',\u0020{');		// era /, \"\{/g, ', {'
+    	tmpData = tmpData.replace(/\]\"\}/g, ']}');
+    	tmpData = tmpData.replace(/\"true\"/g, 'true');
+    	tmpData = tmpData.replace(/\"false\"/g, 'false');
+    	return tmpData;
+    };
+    
     $scope.loadConfObject = function(data){
-    	var visibleObjList = [];
-    	var allObjs = data.split("}]}");
-    	for(var i = 0; i < allObjs.length - 1; i++){
-    		var objFields = allObjs[i].split(", attributes=[{");
-    		var ids = objFields[0].split("=");
-    		var showedObj = {
-    				id : ids[1],
-    				attributes: $scope.correctAtributes(objFields[1])
-    		};
-    		visibleObjList.push(showedObj);
+    	var zoneTypes = [];
+    	var cleanedData = $scope.correctStringToJsonString("{list\":" + data + "}");
+    	var objList = JSON.parse(cleanedData);
+    	var visibleObjList = objList.list;
+    	for(var i = 0; i < visibleObjList.length; i++){
+    		if(visibleObjList[i].id.indexOf("Zone") > -1){
+    			var zone_type = {
+    				value: visibleObjList[i].type,
+    				label: visibleObjList[i].title
+    			};
+    			zoneTypes.push(zone_type);
+    		}
     	}
+    	//var allObjs = data.split("}]}");
+    	//for(var i = 0; i < allObjs.length - 1; i++){
+    	//	var objFields = allObjs[i].split(", attributes=[{");
+    	//	var ids = objFields[0].split("=");
+    	//	var showedObj = {
+    	//			id : ids[1],
+    	//			attributes: $scope.correctAtributes(objFields[1])
+    	//	};
+    	//	visibleObjList.push(showedObj);
+    	//}
+    	sharedDataService.setZoneTypeList(zoneTypes);
     	sharedDataService.setVisibleObjList(visibleObjList);
+    	initializeService.setVisibleObjList(visibleObjList);
+    	initializeService.initComponents();						// new method
+    	initializeService.correctWidgetFiltersAndElements();	// new method
     };
     
     $scope.correctAtributes = function(data){
@@ -453,12 +481,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     
     $scope.initComponents();
     
-    //console.log("Conf data " + object_to_show);
-    //sharedDataService.setBase64(base64);
-    //sharedDataService.setBase64('MIIE6TCCA9GgAwIBAgIDBzMlMA0GCSqGSIb3DQEBBQUAMIGBMQswCQYDVQQGEwJJVDEYMBYGA1UECgwPUG9zdGVjb20gUy5wLkEuMSIwIAYDVQQLDBlTZXJ2aXppIGRpIENlcnRpZmljYXppb25lMTQwMgYDVQQDDCtQcm92aW5jaWEgQXV0b25vbWEgZGkgVHJlbnRvIC0gQ0EgQ2l0dGFkaW5pMB4XDTExMTEyMzAwMjQ0MloXDTE3MTEyMjAwNTk1OVowgY4xCzAJBgNVBAYTAklUMQ8wDQYDVQQKDAZUUy1DTlMxJTAjBgNVBAsMHFByb3ZpbmNpYSBBdXRvbm9tYSBkaSBUcmVudG8xRzBFBgNVBAMMPkJSVE1UVDg1TDAxTDM3OFMvNjA0MjExMDE5NzU3MTAwNy53aTRldjVNeCtFeWJtWnJkTllhMVA3ZUtkY1U9MIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQCsF81BDJjAQat9Lfo/1weA0eePTsEbwTe/0QqlArfOTG3hfLEiSd+mDNsBUJo+cRXZMp677y9a1kYlB+IDY3LGH36Bs1QxM14KA6WB67KX4ZaXENew6Qm7NnkMRboKQiIOUmw1l4OiTETfqKWyFqfAtnyLHd8ZZ6qfjgSsJoSHoQIDAQABo4IB3TCCAdkwge0GA1UdIASB5TCB4jCBrAYFK0wQAgEwgaIwgZ8GCCsGAQUFBwICMIGSDIGPSWRlbnRpZmllcyBYLjUwOSBhdXRoZW50aWNhdGlvbiBjZXJ0aWZpY2F0ZXMgaXNzdWVkIGZvciB0aGUgaXRhbGlhbiBOYXRpb25hbCBTZXJ2aWNlIENhcmQgKENOUykgcHJvamVjdCBpbiBhY2NvcmRpbmcgdG8gdGhlIGl0YWxpYW4gcmVndWxhdGlvbiAwMQYGK0wLAQMBMCcwJQYIKwYBBQUHAgEWGWh0dHA6Ly9wb3N0ZWNlcnQucG9zdGUuaXQwOgYIKwYBBQUHAQEELjAsMCoGCCsGAQUFBzABhh5odHRwOi8vcG9zdGVjZXJ0LnBvc3RlLml0L29jc3AwDgYDVR0PAQH/BAQDAgeAMBMGA1UdJQQMMAoGCCsGAQUFBwMCMB8GA1UdIwQYMBaAFO5h8R6jQnz/4EeFe3FeW6ksaogHMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9wb3N0ZWNlcnQucG9zdGUuaXQvY25zL3Byb3ZpbmNpYXRyZW50by9jcmwuY3JsMB0GA1UdDgQWBBRF3Z13QZAmn85HIYPyIg3QE8WM2DANBgkqhkiG9w0BAQUFAAOCAQEAErn/asyA6AhJAwOBmxu90umMNF9ti9SX5X+3+pcqLbvKOgCNfjhGJZ02ruuTMO9uIi0DIDvR/9z8Usyf1aDktYvyrMeDZER+TyjviA3ntYpFWWIh1DiRnAxuGYf6Pt6HNehodf1lhR7TP+iejH24kS2LkqUyiP4J/45sTK6JNMXPVT3dk/BAGE1cFCO9FI3QyckstPp64SEba2+LTunEEA4CKPbTQe7iG4FKpuU6rqxLQlSXiPVWZkFK57bAUpVL/CLc7unlFzIccjG/MMvjWcym9L3LaU//46AV2hR8pUfZevh440wAP/WYtomffkITrMNYuD1nWxL7rUTUMkvykw==');
-    //sharedDataService.setMail(user_mail);
-    //sharedDataService.setUtente(nome, cognome, sesso, dataNascita, provinciaNascita, luogoNascita, codiceFiscale, cellulare, email, indirizzoRes, capRes, cittaRes, provinciaRes );
-    
     $scope.getUserName = function(){
   	  return sharedDataService.getName();
     };
@@ -474,10 +496,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     $scope.setMail = function(value){
     	sharedDataService.setMail(value);
     };
-    
-//    $scope.isUeCitizen = function(){
-//    	return sharedDataService.getUeCitizen();
-//    };
     
     $scope.translateUserGender = function(value){
     	if(sharedDataService.getUsedLanguage() == 'eng'){
