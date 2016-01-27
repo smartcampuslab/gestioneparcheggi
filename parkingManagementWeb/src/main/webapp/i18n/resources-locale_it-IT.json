@@ -1533,15 +1533,7 @@
 }, {
     "key": "street_unavailableslot_placeholder",
     "value": "Inserire numero posti occupati tra i gratuiti",
-    "description": "Place, {
-    "key": "street_zone",
-    "value": "Zona",
-    "description": "Label campo zona per oggetto strada"
-}, {
-    "key": "street_microzone",
-    "value": "Microzona",
-    "description": "Label campo microzona per oggetto strada"
-}holder per posti non disponibili in creazione log via"
+    "description": "Placeholder per posti non disponibili in creazione log via"
 }, {
     "key": "park_handicappedslotoccupied_placeholder",
     "value": "Inserire numero posti occupati tra i riservati ai disabili",
@@ -1840,7 +1832,7 @@
 	"description": "Messaggio campo posti per disabili troppo grande in creazione log parcheggio"
 }, {
 	"key": "log_street_occupied_free_error_required",
-	"value": "Campo 'posti gratuiti occupati' obbligatoSelezionare la zona associatario. Inserire un valore numerico",
+	"value": "Campo 'posti gratuiti occupati' obbligato Inserire un valore numerico",
 	"description": "Messaggio campo posti gratuiti obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_free_error_min",
