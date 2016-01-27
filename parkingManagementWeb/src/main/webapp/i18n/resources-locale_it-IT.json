@@ -2276,4 +2276,7 @@
 }, {
     "key": "label_zonemunicipality",
     "value": "Comune"
+}, {
+    "key": "vt_app_title",
+    "value": "Scarica l'app"
 }]

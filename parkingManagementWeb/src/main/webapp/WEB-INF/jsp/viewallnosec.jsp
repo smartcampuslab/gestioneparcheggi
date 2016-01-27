@@ -125,6 +125,10 @@ $(document).unbind('keydown').bind('keydown', function (event) {
     	border-color: rgba(0,0,0,.2);
 	}
 	
+	footer {
+		background-color: #1E88E5;
+	}
+	
   </style>
 
 </head>
@@ -132,22 +136,10 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 <body>
 	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()">
 		<div class="container-fluid">
-	<!-- 		<div class="row" style="margin-top:70px;"> -->
 			<div class="row">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
-					<div style="margin:5px 15px;">
-	<!-- 				<div class="row" align="center" style="height: 100px">; margin-top: 20px; -->
-	<!-- 					<div> -->
-	<!-- 						<table> -->
-	<!-- 							<tr> -->
-	<!-- 								<td width="100%" align="center" valign="middle"><h1>Dati Parcheggi</h1></td> -->
-	<!-- 							</tr> -->
-	<!-- 						</table> -->
-							
-	<!-- 					</div> -->
-	<!-- 				</div> -->
-									
+					<div style="margin:5px 15px;">						
 						<div ng-view class="row" >Caricamento in corso...</div>			
 					</div>
 				</div>
@@ -156,8 +148,28 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 			<div class="row">
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
-					<hr>
-					<footer>
+					<footer >
+						<table width="100%">
+							<tr>
+								<td width="45%" align="right">
+									<h4>
+									Monitora la disponibilit&agrave; <br/>dei parcheggi in tempo reale <br/> con l'App <b>Viaggia Trento</b>!
+									</h4>
+								</td>
+								<td width="20%">
+									<img src="imgs/logoVT_banner_widget.png" alt="ViaggiaTrento" title="ViaggiaTrento">
+								</td>
+								<td width="35%">
+									<a href="https://play.google.com/store/apps/details?id=eu.trentorise.smartcampus.viaggiatrento&hl=it">
+										<img src="imgs/googlePlay_banner_widget.png" vspace="7" alt="{{ 'vt_app_title' | i18n }}" title="{{ 'vt_app_title' | i18n }}">
+									</a>
+									<br/>
+									<a href="https://itunes.apple.com/it/app/viaggia-trento/id1068474391?mt=8">
+										<img src="imgs/applePlay_banner_widget.png" alt="{{ 'vt_app_title' | i18n }}" title="{{ 'vt_app_title' | i18n }}">
+									</a>
+								</td>
+							</tr>
+						</table>
 					</footer>
 				</div>
 				<div class="col-md-1"></div>	

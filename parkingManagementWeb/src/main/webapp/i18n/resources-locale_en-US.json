@@ -2276,4 +2276,7 @@
 }, {
     "key": "label_zonemunicipality",
     "value": "Municipality"
+}, {
+    "key": "vt_app_title",
+    "value": "Download app from store"
 }]

@@ -19,16 +19,15 @@
 <!-- <script src="../i18n/angular-locale_it-IT.js"></script> -->
 <!-- <script src="i18n/angular-locale_en-EN.js"></script> -->
 <script src="js/app.js?1001"></script>
-<!-- <script src="js/controllers.js"></script> -->
 <script src="js/controllers/ctrl.js?1001"></script>
 <script src="js/controllers/ctrl_login.js?1000"></script>
 <script src="js/controllers/ctrl_main.js?1000"></script>
-
+<script src="js/services/serv.js"></script>
+<script src="js/services/serv_shared.js"></script>
+<script src="js/services/serv_initialize.js"></script>
 <script src="js/filters.js?1001"></script>
-<script src="js/services.js?1001"></script>
 <script src="js/directives.js"></script>
 <script src="lib/ui-bootstrap-tpls.min.js"></script>
-
 <!-- optional libraries -->
 <script src="lib/angular-resource.min.js"></script>
 <script src="lib/angular-cookies.min.js"></script>
@@ -53,7 +52,6 @@
 				<div ng-class="col-md-8">
 <!-- 					<div class="panel panel-default" > -->
 <!-- 		  				<div class="panel-body"> -->
-		<!-- 				<div class="row" style="height: 800px"> -->
 							<div style="margin: 10px 10px 10px 10px">
 								<!--[if lt IE 9]>
 								<div class="row" style="height: 20px" align="center" ng-init="hideLogin()">
@@ -63,8 +61,6 @@
 								<div class="row" style="font-size: 18px; color: red" align="center" id="cookies">
 								</div>
 								<div style="margin: 10px" align="center">
-		<!-- 							<h2>MyWeb</h2> -->
-<!-- 									<img src="img/myweb4.png" alt="Logo myWeb" title="Logo myWeb" height="130" width="250" /> -->
 								</div>
 								<div class="well" align="center">
 								    <img src="imgs/logo.png" style="margin: 20px" />
@@ -117,14 +113,8 @@
 												</tr>
 											</table>
 										</form>
-<!-- 										<div align="center"> -->
-<!-- 											<a id="btn_login_test" href="login" class="btn btn-default" role="button" ng-click="getOldLogin()" disabled="false">Login TEST</a> -->
-<!-- 										</div> -->
 								</div>
-								
 							</div>
-<!-- 						</div> -->
-<!-- 					</div> -->
 				</div>
 			</div>
 			<div class="row">
