@@ -50,6 +50,10 @@ providers:
           editable: true
           required: false
           visible: false
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -123,6 +127,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -155,6 +163,10 @@ providers:
         - code: geometry
           editable: true
           required: true
+          visible: true
+        - code: edittab
+          editable: false
+          required: false
           visible: true
         - code: viewPage
           editable: false
@@ -213,6 +225,10 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -258,6 +274,10 @@ providers:
           editable: false
           required: false
           visible: false
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -303,6 +323,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -331,6 +355,10 @@ providers:
         - code: geometry
           editable: true
           required: true
+          visible: true
+        - code: edittab
+          editable: false
+          required: false
           visible: true
         - code: viewPage
           editable: false
@@ -424,6 +452,10 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: true
           required: false
@@ -493,6 +525,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -529,6 +565,10 @@ providers:
         - code: zone1
           editable: true
           required: true
+          visible: true
+        - code: edittab
+          editable: false
+          required: false
           visible: true
         - code: viewPage
           editable: false
@@ -599,6 +639,10 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -644,6 +688,10 @@ providers:
           editable: false
           required: false
           visible: false
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -693,6 +741,10 @@ providers:
           editable: false
           required: false
           visible: false
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -729,6 +781,10 @@ providers:
         - code: zone1
           editable: true
           required: true
+          visible: true
+        - code: edittab
+          editable: false
+          required: false
           visible: true
         - code: viewPage
           editable: false
@@ -818,6 +874,10 @@ providers:
           editable: true
           required: false
           visible: false
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -891,6 +951,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -923,6 +987,10 @@ providers:
         - code: geometry
           editable: true
           required: true
+          visible: true
+        - code: edittab
+          editable: false
+          required: false
           visible: true
         - code: viewPage
           editable: false
@@ -981,6 +1049,10 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -1026,6 +1098,10 @@ providers:
           editable: false
           required: false
           visible: false
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -1071,6 +1147,10 @@ providers:
           editable: true
           required: false
           visible: true
+        - code: edittab
+          editable: false
+          required: false
+          visible: true
         - code: viewPage
           editable: false
           required: false
@@ -1099,6 +1179,10 @@ providers:
         - code: geometry
           editable: true
           required: true
+          visible: true
+        - code: edittab
+          editable: false
+          required: false
           visible: true
         - code: viewPage
           editable: false

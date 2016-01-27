@@ -201,6 +201,16 @@ pm.service('initializeService', function(){
 	this.showZone2DB = false;
 	this.showZone3DB = false;
 	this.showZone4DB = false;
+	this.showAreaEdit = false;
+	this.showStreetEdit = false;
+	this.showPsEdit = false;
+	this.showPmEdit = false;
+	this.showBpEdit = false;
+	this.showZone0Edit = false;
+	this.showZone1Edit = false;
+	this.showZone2Edit = false;
+	this.showZone3Edit = false;
+	this.showZone4Edit = false;
 	this.zonePageList = [];
 	
 	this.setConfAppId = function(app_id){
@@ -369,6 +379,46 @@ pm.service('initializeService', function(){
 	
 	this.isShowedZone4 = function(){
 		return this.showZone4;
+	};
+	
+	this.isShowedAreaEdit = function(){
+		return this.showAreaEdit;
+	};
+	
+	this.isShowedStreetEdit = function(){
+		return this.showStreetEdit;
+	};
+	
+	this.isShowedPsEdit = function(){
+		return this.showPsEdit;
+	};
+	
+	this.isShowedPmEdit = function(){
+		return this.showPmEdit;
+	};
+	
+	this.isShowedBpEdit = function(){
+		return this.showBpEdit;
+	};
+	
+	this.isShowedZone0Edit = function(){
+		return this.showZone0Edit;
+	};
+	
+	this.isShowedZone1Edit = function(){
+		return this.showZone1Edit;
+	};
+	
+	this.isShowedZone2Edit = function(){
+		return this.showZone2Edit;
+	};
+	
+	this.isShowedZone3Edit = function(){
+		return this.showZone3Edit;
+	};
+	
+	this.isShowedZone4Edit = function(){
+		return this.showZone4Edit;
 	};
 	
 	this.isShowedAreaDB = function(){
@@ -587,6 +637,11 @@ pm.service('initializeService', function(){
 	    			default: break;
     			}
     		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showAreaEdit = true;
+    			}
+    		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				this.showArea = true;
@@ -664,6 +719,11 @@ pm.service('initializeService', function(){
 	    			default: break;
     			}
     		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showStreetEdit = true;
+    			}
+    		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				this.showStreet = true;
@@ -715,6 +775,11 @@ pm.service('initializeService', function(){
 	    				this.pm_conf.pm_zones4 = attributes[i];
 	    				break;
 	    			default: break;
+    			}
+    		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showPmEdit = true;
     			}
     		}
     		if(attributes[i].code == 'widget'){
@@ -794,6 +859,11 @@ pm.service('initializeService', function(){
 	    			default: break;
     			}
     		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showPsEdit = true;
+    			}
+    		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				this.showPs = true;
@@ -840,6 +910,11 @@ pm.service('initializeService', function(){
     		}
     		if(attributes[i].code == 'geomFromSubelement'){
     			this.zoneatt0.zone_geom_from_subelement = attributes[i];
+    		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showZone0Edit = true;
+    			}
     		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
@@ -893,6 +968,11 @@ pm.service('initializeService', function(){
     		if(attributes[i].code == 'geomFromSubelement'){
     			this.zoneatt1.zone_geom_from_subelement = attributes[i];
     		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showZone1Edit = true;
+    			}
+    		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				this.showZone1 = true;
@@ -944,6 +1024,11 @@ pm.service('initializeService', function(){
     		}
     		if(attributes[i].code == 'geomFromSubelement'){
     			this.zoneatt2.zone_geom_from_subelement = attributes[i];
+    		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showZone2Edit = true;
+    			}
     		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
@@ -997,6 +1082,11 @@ pm.service('initializeService', function(){
     		if(attributes[i].code == 'geomFromSubelement'){
     			this.zoneatt3.zone_geom_from_subelement = attributes[i];
     		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showZone3Edit = true;
+    			}
+    		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				this.showZone3 = true;
@@ -1048,6 +1138,11 @@ pm.service('initializeService', function(){
     		}
     		if(attributes[i].code == 'geomFromSubelement'){
     			this.zoneatt4.zone_geom_from_subelement = attributes[i];
+    		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showZone4Edit = true;
+    			}
     		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
@@ -1104,6 +1199,11 @@ pm.service('initializeService', function(){
 	    			default: break;
     			}
     		}
+    		if(attributes[i].code == 'edittab'){
+    			if(attributes[i].visible){
+    				this.showBpEdit = true;
+    			}
+    		}
     		if(attributes[i].code == 'widget'){
     			if(attributes[i].visible){
     				this.showBp = true;
@@ -1151,7 +1251,7 @@ pm.service('initializeService', function(){
     					var att = this.loadZoneAttributes0(showedObjects[i].attributes);
     					var zonePageData = this.getZonePageData(pageIndex, type, att, tab);
     					this.label0 = label;
-    					if(this.showZone0){
+    					if(this.showZone0Edit){
     						this.zonePageList.push(zonePageData);
     					}
     					break;
@@ -1159,7 +1259,7 @@ pm.service('initializeService', function(){
     					var att = this.loadZoneAttributes1(showedObjects[i].attributes);
     					var zonePageData = this.getZonePageData(pageIndex, type, att, tab);
     					this.label1 = label;
-    					if(this.showZone1){
+    					if(this.showZone1Edit){
     						this.zonePageList.push(zonePageData);
     					}
     					break;
@@ -1167,7 +1267,7 @@ pm.service('initializeService', function(){
     					var att = this.loadZoneAttributes2(showedObjects[i].attributes);
     					var zonePageData = this.getZonePageData(pageIndex, type, att, tab);
     					this.label2 = label;
-    					if(this.showZone2){
+    					if(this.showZone2Edit){
     						this.zonePageList.push(zonePageData);
     					}
     					break;
@@ -1175,7 +1275,7 @@ pm.service('initializeService', function(){
     					var att = this.loadZoneAttributes3(showedObjects[i].attributes);
     					var zonePageData = this.getZonePageData(pageIndex, type, att, tab);
     					this.label3 = label;
-    					if(this.showZone3){
+    					if(this.showZone3Edit){
     						this.zonePageList.push(zonePageData);
     					}
     					break;
@@ -1183,7 +1283,7 @@ pm.service('initializeService', function(){
     					var att = this.loadZoneAttributes4(showedObjects[i].attributes);
     					var zonePageData = this.getZonePageData(pageIndex, type, att, tab);
     					this.label4 = label;
-    					if(this.showZone4){
+    					if(this.showZone4Edit){
     						this.zonePageList.push(zonePageData);
     					}
     					break;

@@ -408,21 +408,25 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
 	
 	$scope.initMapOption = function(zones){
-		var center = $scope.mapOption.center;
-		if(zones != null && zones.length > 0){
-			var recenter = sharedDataService.getConfMapRecenter();
-			if(recenter != null && recenter != "null"){
-				$scope.resizeMap(recenter, 1);
-			} else {
-				center = zones[0];
-				if(center){
-					$scope.resizeMap(center, 0);
-				} else {
-					$scope.resizeMap($scope.mapOption.center, 1);
-				}
-			}
+		var recenter = sharedDataService.getConfMapRecenter();
+		if(recenter != null && recenter != "null"){
+			$scope.resizeMap(recenter, 1);
 		} else {
-			$scope.resizeMap(center, 1);
+			var center = $scope.mapOption.center;
+			if(zones != null && zones.length > 0){
+				if(recenter != null && recenter != "null"){
+					$scope.resizeMap(recenter, 1);
+				} else {
+					center = zones[0];
+					if(center){
+						$scope.resizeMap(center, 0);
+					} else {
+						$scope.resizeMap($scope.mapOption.center, 1);
+					}
+				}
+			} else {
+				$scope.resizeMap(center, 1);
+			}
 		}
 	};
 	
@@ -470,10 +474,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		    	}
 	    	}
 	    	$scope.map.setCenter(corr_center);
-	    	//$scope.mapOption.center = corr_center;
 	        $scope.map.setZoom(parseInt($scope.mapOption.zoom));
+	    } else {
+	    	$scope.mapOption.center = center;
 	    }
-	    
 	    return true;
 	};
 	
@@ -2191,40 +2195,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	    	$scope.zoneMapReady = true;
 	    });
 	};
-	
-/*	$scope.getZonesFromDb = function(z_type){
-		$scope.zoneMapReady = false;
-		var allZones = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/zone/" + z_type, null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			angular.copy(result, allZones);
-			//console.log("Zone retrieved from db: " + JSON.stringify(result)); 
-			if(z_type == macrozoneType){
-	    		$scope.zoneWS = $scope.correctMyZones(allZones);
-		    	//if(showZones)$scope.resizeMap("viewZone");
-		    	$scope.initZonesOnMap($scope.zoneWS, false);
-		    	sharedDataService.setSharedLocalZones0($scope.zoneWS);
-	    	} else {
-	    		//$scope.microzoneWS = $scope.correctMyZones(allZones);
-		    	//if(showZones)$scope.resizeMap("viewMicroZone");
-		    	//$scope.initZonesOnMap($scope.microzoneWS, false);
-		    	//sharedDataService.setSharedLocalMicroZones($scope.microzoneWS);
-	    	}
-			//$scope.zoneWS = $scope.correctMyZones(allZones);
-		 	//sharedDataService.setSharedLocalZones($scope.zoneWS);
-		    //if(showZones){
-		    //	$scope.initZonesOnMap($scope.zoneWS, false);
-		    //}
-		    //if(showMicroZones){
-		    //	$scope.initZonesOnMap($scope.zoneWS, false);
-		    //}
-			if(z_type != microzoneType){
-				$scope.getStreetsFromDb(false);
-			}
-		});
-	};*/
 	
 	$scope.loadStreetsFromZone = function(z_id){
 		var z_streets = [];
