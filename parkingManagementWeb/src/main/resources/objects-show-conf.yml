@@ -700,7 +700,7 @@ providers:
         - code: widget
           editable: false
           required: false
-          visible: true
+          visible: false
         - code: filter
           editable: false
           required: false
