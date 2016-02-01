@@ -773,7 +773,6 @@ pm.factory('invokeWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -787,7 +786,6 @@ pm.factory('invokeWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -801,7 +799,6 @@ pm.factory('invokeWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));

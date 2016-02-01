@@ -282,46 +282,126 @@
      		<shape name="polyline" ng-repeat="sTime in timeCostStreets" id="{{ sTime.id }}" path="{{ sTime.gpath }}" 
          		geodesic="{{ sTime.geodesic }}" stroke-color="{{ sTime.stroke.color }}" stroke-opacity="{{ sTime.stroke.opacity }}" stroke-weight="{{ sTime.stroke.weight }}" on-click="showDetails(event, sTime, 3, 3)"> <!-- on-click="showInfoWindow(event, s.info_windows_cod)" -->
      		</shape>
-			<shape name="polygon" ng-repeat="z in mapZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+			<shape name="{{ z.type }}" ng-repeat="z in mapZones0" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
-         		fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0, 0)">
      		</shape>
-     		<shape name="polygon" ng-repeat="zSel in mapSelectedZones" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
-         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zSel.stroke.weight }}"
-         		fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		<shape name="{{ zSel.type }}" ng-repeat="zSel in mapSelectedZones0" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
+         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="{{ z.stroke.opacity }}" stroke-weight="{{ zSel.stroke.weight }}"
+         		fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4, 0)">
      		</shape>
-     		<shape name="polygon" ng-repeat="zOcc in occupancyZones" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
-         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zOcc.stroke.weight }}"
-         		fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showDetails(event, zOcc, 4, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		<shape name="{{ zOcc.type }}" ng-repeat="zOcc in occupancyZones0" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
+         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="{{ zOcc.stroke.opacity }}" stroke-weight="{{ zOcc.stroke.weight }}"
+         		fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showDetails(event, zOcc, 4, 1, 0)">
      		</shape>
-     		<shape name="polygon" ng-repeat="zProf in profitZones" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
-         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zProf.stroke.weight }}"
-         		fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showDetails(event, zProf, 4, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		<shape name="{{ zProf.type }}" ng-repeat="zProf in profitZones0" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
+         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="{{ zProf.stroke.opacity }}" stroke-weight="{{ zProf.stroke.weight }}"
+         		fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showDetails(event, zProf, 4, 2, 0)">
      		</shape>
-     		<shape name="polygon" ng-repeat="zTime in timeCostZones" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
-         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ zTime.stroke.weight }}"
-         		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+     		<shape name="{{ zTime.type }}" ng-repeat="zTime in timeCostZones0" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
+         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="{{ zTime.stroke.opacity }}" stroke-weight="{{ zTime.stroke.weight }}"
+         		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3, 0)">
      		</shape>
-     		<shape name="polyline" ng-repeat="z in mapMicroZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+     		<shape name="{{ z.type }}" ng-repeat="z in mapZones1" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="{{ z.stroke.opacity }}" stroke-weight="{{ z.stroke.weight }}"
-         		on-click="showDetails(event, z, 6, 0)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0, 1)">
+     		</shape>
+     		<shape name="{{ zSel.type }}" ng-repeat="zSel in mapSelectedZones1" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
+         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="{{ zSel.stroke.opacity }}" stroke-weight="{{ zSel.stroke.weight }}"
+         		fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4, 1)">
+     		</shape>
+     		<shape name="{{ zOcc.type }}" ng-repeat="zOcc in occupancyZones1" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
+         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="{{ zOcc.stroke.opacity }}" stroke-weight="{{ zOcc.stroke.weight }}"
+         		fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showDetails(event, zOcc, 4, 1, 1)">
+     		</shape>
+     		<shape name="{{ zProf.type }}" ng-repeat="zProf in profitZones1" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
+         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="{{ zProf.stroke.opacity }}" stroke-weight="{{ zProf.stroke.weight }}"
+         		fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showDetails(event, zProf, 4, 2, 1)">
+     		</shape>
+     		<shape name="{{ zTime.type }}" ng-repeat="zTime in timeCostZones1" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
+         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="{{ zTime.stroke.opacity }}" stroke-weight="{{ zTime.stroke.weight }}"
+         		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3, 1)">
+     		</shape>
+     		<shape name="{{ z.type }}" ng-repeat="z in mapZones2" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+         		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="{{ z.stroke.opacity }}" stroke-weight="{{ z.stroke.weight }}"
+         		fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0, 2)">
+     		</shape>
+     		<shape name="{{ zSel.type }}" ng-repeat="zSel in mapSelectedZones2" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
+         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="{{ zSel.stroke.opacity }}" stroke-weight="{{ zSel.stroke.weight }}"
+         		fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4, 2)">
+     		</shape>
+     		<shape name="{{ zOcc.type }}" ng-repeat="zOcc in occupancyZones2" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
+         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="{{ zOcc.stroke.opacity }}" stroke-weight="{{ zOcc.stroke.weight }}"
+         		fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showDetails(event, zOcc, 4, 1, 2)">
+     		</shape>
+     		<shape name="{{ zProf.type }}" ng-repeat="zProf in profitZones2" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
+         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="{{ zProf.stroke.opacity }}" stroke-weight="{{ zProf.stroke.weight }}"
+         		fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showDetails(event, zProf, 4, 2, 2)">
+     		</shape>
+     		<shape name="{{ zTime.type }}" ng-repeat="zTime in timeCostZones2" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
+         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="{{ zTime.stroke.opacity }}" stroke-weight="{{ zTime.stroke.weight }}"
+         		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3, 2)">
+     		</shape>
+     		<shape name="{{ z.type }}" ng-repeat="z in mapZones3" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+         		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="{{ z.stroke.opacity }}" stroke-weight="{{ z.stroke.weight }}"
+         		fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0, 3)">
+     		</shape>
+     		<shape name="{{ zSel.type }}" ng-repeat="zSel in mapSelectedZones3" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
+         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="{{ zSel.stroke.opacity }}" stroke-weight="{{ zSel.stroke.weight }}"
+         		fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4, 3)">
+     		</shape>
+     		<shape name="{{ zOcc.type }}" ng-repeat="zOcc in occupancyZones3" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
+         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="{{ zOcc.stroke.opacity }}" stroke-weight="{{ zOcc.stroke.weight }}"
+         		fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showDetails(event, zOcc, 4, 1, 3)">
+     		</shape>
+     		<shape name="{{ zProf.type }}" ng-repeat="zProf in profitZones3" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
+         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="{{ zProf.stroke.opacity }}" stroke-weight="{{ zProf.stroke.weight }}"
+         		fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showDetails(event, zProf, 4, 2, 3)">
+     		</shape>
+     		<shape name="{{ zTime.type }}" ng-repeat="zTime in timeCostZones3" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
+         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="{{ zTime.stroke.opacity }}" stroke-weight="{{ zTime.stroke.weight }}"
+         		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3, 3)">
+     		</shape>
+     		<shape name="{{ z.type }}" ng-repeat="z in mapZones4" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+         		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="{{ z.stroke.opacity }}" stroke-weight="{{ z.stroke.weight }}"
+         		fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showDetails(event, z, 4, 0, 4)">
+     		</shape>
+     		<shape name="{{ zSel.type }}" ng-repeat="zSel in mapSelectedZones4" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
+         		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="{{ zSel.stroke.opacity }}" stroke-weight="{{ zSel.stroke.weight }}"
+         		fill-color="{{ zSel.stroke.color }}" fill-opacity="{{ zSel.fill.opacity }}" on-click="hideDetails(event, zSel, 4, 4)">
+     		</shape>
+     		<shape name="{{ zOcc.type }}" ng-repeat="zOcc in occupancyZones4" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
+         		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="{{ zOcc.stroke.opacity }}" stroke-weight="{{ zOcc.stroke.weight }}"
+         		fill-color="{{ zOcc.stroke.color }}" fill-opacity="{{ zOcc.fill.opacity }}" on-click="showDetails(event, zOcc, 4, 1, 4)">
+     		</shape>
+     		<shape name="{{ zProf.type }}" ng-repeat="zProf in profitZones4" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
+         		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="{{ zProf.stroke.opacity }}" stroke-weight="{{ zProf.stroke.weight }}"
+         		fill-color="{{ zProf.stroke.color }}" fill-opacity="{{ zProf.fill.opacity }}" on-click="showDetails(event, zProf, 4, 2, 4)">
+     		</shape>
+     		<shape name="{{ zTime.type }}" ng-repeat="zTime in timeCostZones4" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
+         		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="{{ zTime.stroke.opacity }}" stroke-weight="{{ zTime.stroke.weight }}"
+         		fill-color="{{ zTime.stroke.color }}" fill-opacity="{{ zTime.fill.opacity }}" on-click="showDetails(event, zTime, 4, 3, 4)">
+     		</shape>
+     		<!-- <shape name="polyline" ng-repeat="z in mapMicroZones" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
+         		geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="{{ z.stroke.opacity }}" stroke-weight="{{ z.stroke.weight }}"
+         		on-click="showDetails(event, z, 6, 0)">on-click="showInfoWindow(event, z.info_windows_cod)"
      		</shape>
      		<shape name="polyline" ng-repeat="zSel in mapSelectedMicroZones" id="{{ zSel.id }}" path="{{ zSel.gpath }}" visible="{{ zSel.visible }}"
          		geodesic="{{ zSel.geodesic }}" stroke-color="{{ zSel.stroke.color }}" stroke-opacity="{{ zSel.stroke.opacity }}" stroke-weight="{{ zSel.stroke.weight }}"
-        		on-click="hideDetails(event, zSel, 6)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+        		on-click="hideDetails(event, zSel, 6)">on-click="showInfoWindow(event, z.info_windows_cod)"
      		</shape>
      		<shape name="polyline" ng-repeat="zOcc in occupancyMicroZones" id="{{ zOcc.id }}" path="{{ zOcc.gpath }}" visible="{{ zOcc.visible }}"
          		geodesic="{{ zOcc.geodesic }}" stroke-color="{{ zOcc.stroke.color }}" stroke-opacity="{{ zOcc.stroke.opacity }}" stroke-weight="{{ zOcc.stroke.weight }}"
-         		on-click="showDetails(event, zOcc, 6, 1)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		on-click="showDetails(event, zOcc, 6, 1)">on-click="showInfoWindow(event, z.info_windows_cod)"
      		</shape>
      		<shape name="polyline" ng-repeat="zProf in profitMicroZones" id="{{ zProf.id }}" path="{{ zProf.gpath }}" visible="{{ zProf.visible }}"
          		geodesic="{{ zProf.geodesic }}" stroke-color="{{ zProf.stroke.color }}" stroke-opacity="{{ zProf.stroke.opacity }}" stroke-weight="{{ zProf.stroke.weight }}"
-         		on-click="showDetails(event, zProf, 6, 2)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
+         		on-click="showDetails(event, zProf, 6, 2)">on-click="showInfoWindow(event, z.info_windows_cod)"
      		</shape>
      		<shape name="polyline" ng-repeat="zTime in timeCostMicroZones" id="{{ zTime.id }}" path="{{ zTime.gpath }}" visible="{{ zTime.visible }}"
          		geodesic="{{ zTime.geodesic }}" stroke-color="{{ zTime.stroke.color }}" stroke-opacity="{{ zTime.stroke.opacity }}" stroke-weight="{{ zTime.stroke.weight }}"
-         		on-click="showDetails(event, zTime, 6, 3)"><!-- on-click="showInfoWindow(event, z.info_windows_cod)" -->
-     		</shape>
+         		on-click="showDetails(event, zTime, 6, 3)">on-click="showInfoWindow(event, z.info_windows_cod)"
+     		</shape> -->
      		<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          		geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="{{ a.stroke.opacity }}" stroke-weight="{{ a.stroke.weight }}"
          		fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showDetails(event, a, 5, 0)"><!-- on-click="showInfoWindow(event, a.info_windows_cod)" -->
@@ -522,17 +602,17 @@
 							<span ng-repeat="p in sDetails.pms track by p.code">{{ p.code }};</span>
 						</td>
 					</tr>
-					<tr ng-show="sconf.s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
+					<tr ng-show="sconf.s_zones0.visible && (sDetails.zones0 != null && sDetails.zones0.length > 0)">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="sconf.s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
-						<td colspan="3" class="detailsTableColSpan">{{ 'street_zonemacro' | i18n }}</td>
+					<tr ng-show="sconf.s_zones0.visible && (sDetails.zones0 != null && sDetails.zones0.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone0_label | i18n }}</td>
 					</tr>
-					<tr ng-show="sconf.s_zones.visible && (sDetails.zones != null && sDetails.zones.length > 0)">
+					<tr ng-show="sconf.s_zones0.visible && (sDetails.zones0 != null && sDetails.zones0.length > 0)">
 						<td colspan="3">
-							<table width="100%" ng-repeat="z in sDetails.zones track by z.id">
+							<table width="100%" ng-repeat="z in sDetails.zones0 track by z.id">
 								<tr>
 									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
 									<td class="detailsTableCX"></td>
@@ -553,17 +633,17 @@
 							</table>
 						<td>
 					</tr>
-					<tr ng-show="sconf.s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
+					<tr ng-show="sconf.s_zones1.visible && (sDetails.zones1 != null && sDetails.zones1.length > 0)">
 						<td colspan="3" class="detailsTableColSpan">
 							<hr />
 						</td>
 					</tr>
-					<tr ng-show="sconf.s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
-						<td colspan="3" class="detailsTableColSpan">{{ 'street_zonemicro' | i18n }}</td>
+					<tr ng-show="sconf.s_zones1.visible && (sDetails.zones1 != null && sDetails.zones1.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone1_label | i18n }}</td>
 					</tr>
-					<tr ng-show="sconf.s_zones.visible && (sDetails.microzones != null && sDetails.microzones.length > 0)">
+					<tr ng-show="sconf.s_zones1.visible && (sDetails.zones1 != null && sDetails.zones1.length > 0)">
 						<td colspan="3">
-							<table width="100%" ng-repeat="z in sDetails.microzones track by z.id">
+							<table width="100%" ng-repeat="z in sDetails.zones1 track by z.id">
 								<tr>
 									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
 									<td class="detailsTableCX"></td>
@@ -572,7 +652,79 @@
 								<tr>
 									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
 									<td class="detailsTableCX"></td>
-									<td class="detailsTableDX">{{ z.submacro }}</td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
+								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="sconf.s_zones2.visible && (sDetails.zones2 != null && sDetails.zones2.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="sconf.s_zones2.visible && (sDetails.zones2 != null && sDetails.zones2.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone1_label | i18n }}</td>
+					</tr>
+					<tr ng-show="sconf.s_zones2.visible && (sDetails.zones2 != null && sDetails.zones2.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in sDetails.zones2 track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
+								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="sconf.s_zones3.visible && (sDetails.zones3 != null && sDetails.zones3.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="sconf.s_zones3.visible && (sDetails.zones3 != null && sDetails.zones3.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone1_label | i18n }}</td>
+					</tr>
+					<tr ng-show="sconf.s_zones3.visible && (sDetails.zones3 != null && sDetails.zones3.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in sDetails.zones3 track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
+								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="sconf.s_zones4.visible && (sDetails.zones4 != null && sDetails.zones4.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="sconf.s_zones4.visible && (sDetails.zones4 != null && sDetails.zones4.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone1_label | i18n }}</td>
+					</tr>
+					<tr ng-show="sconf.s_zones4.visible && (sDetails.zones4 != null && sDetails.zones4.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in sDetails.zones4 track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
 								</tr>
 							</table>
 						<td>
@@ -655,12 +807,12 @@
 <!-- 					</tr> -->
 				</table>
 			</div>
-			<div ng-show="isZoneDetShow()">
+			<div ng-show="isZoneDetShow(0)">
 				<table width="100%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }} - {{ zDetails.data.submacro }}</td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf0.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf0.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
 					</tr>
 				</table>	
 				<table width="100%">
@@ -683,30 +835,114 @@
 					</tr>
 				</table>
 			</div>
-			<div ng-show="isMicroZoneDetShow()">
+			<div ng-show="isZoneDetShow(1)">
 				<table width="100%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ microZDetails.data.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.data.submicro }}</span></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf1.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf1.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
 					</tr>
 				</table>	
 				<table width="100%">
 					<tr ng-show="zconf1.zone_type.visible">
 						<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;<span ng-if="microZDetails.data.myType.label">{{ microZDetails.data.myType.label }}</span></td>
+						<td class="detailsTableDX">&nbsp;<span ng-if="zDetails.data.myType.label">{{ zDetails.data.myType.label }}</span></td>
 					</tr>
 					<tr ng-show="zconf1.zone_note.visible">
 						<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.note }}</td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.note }}</td>
 					</tr>
 					<tr ng-show="zconf1.zone_color.visible">
 						<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span class="colorBox" ng-style="{'background-color': correctColor(microZDetails.data.color)}"></span>
+							<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.data.color)}"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow(2)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf2.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf2.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="100%">
+					<tr ng-show="zconf2.zone_type.visible">
+						<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;<span ng-if="zDetails.data.myType.label">{{ zDetails.data.myType.label }}</span></td>
+					</tr>
+					<tr ng-show="zconf2.zone_note.visible">
+						<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="zconf2.zone_color.visible">
+						<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.data.color)}"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow(3)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf3.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf3.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="100%">
+					<tr ng-show="zconf3.zone_type.visible">
+						<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;<span ng-if="zDetails.data.myType.label">{{ zDetails.data.myType.label }}</span></td>
+					</tr>
+					<tr ng-show="zconf3.zone_note.visible">
+						<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="zconf3.zone_color.visible">
+						<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.data.color)}"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow(4)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf4.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf4.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="100%">
+					<tr ng-show="zconf4.zone_type.visible">
+						<td class="detailsTableSX">{{ 'zone_type' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;<span ng-if="zDetails.data.myType.label">{{ zDetails.data.myType.label }}</span></td>
+					</tr>
+					<tr ng-show="zconf4.zone_note.visible">
+						<td class="detailsTableSX">{{ 'zone_note' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="zconf4.zone_color.visible">
+						<td class="detailsTableSX">{{ 'zone_color' | i18n }}</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.data.color)}"></span>
 						</td>
 					</tr>
 				</table>
@@ -744,6 +980,126 @@
 						<td class="detailsTableSX">{{ 'area_note' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">{{ aDetails.data.note }}</td>
+					</tr>
+					<tr ng-show="aconf.a_zones0.visible && (aDetails.zones0 != null && aDetails.zones0.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="aconf.a_zones0.visible && (aDetails.zones0 != null && aDetails.zones0.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone0_label | i18n }}</td>
+					</tr>
+					<tr ng-show="aconf.a_zones0.visible && (aDetails.zones0 != null && aDetails.zones0.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in aDetails.zones0 track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr ng-if="z.submacro || z.submicro">
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
+								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="aconf.a_zones1.visible && (aDetails.zones1 != null && aDetails.zones1.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="aconf.a_zones1.visible && (aDetails.zones1 != null && aDetails.zones1.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone1_label | i18n }}</td>
+					</tr>
+					<tr ng-show="aconf.a_zones1.visible && (aDetails.zones1 != null && aDetails.zones1.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in aDetails.zones1 track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr ng-if="z.submacro || z.submicro">
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
+								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="aconf.a_zones2.visible && (aDetails.zones2 != null && aDetails.zones2.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="aconf.a_zones2.visible && (aDetails.zones2 != null && aDetails.zones2.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone2_label | i18n }}</td>
+					</tr>
+					<tr ng-show="aconf.a_zones2.visible && (aDetails.zones2 != null && aDetails.zones2.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in aDetails.zones2 track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr ng-if="z.submacro || z.submicro">
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
+								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="aconf.a_zones3.visible && (aDetails.zones3 != null && aDetails.zones3.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="aconf.a_zones3.visible && (aDetails.zones3 != null && aDetails.zones3.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone3_label | i18n }}</td>
+					</tr>
+					<tr ng-show="aconf.a_zones3.visible && (aDetails.zones3 != null && aDetails.zones3.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in aDetails.zones3 track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr ng-if="z.submacro || z.submicro">
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
+								</tr>
+							</table>
+						<td>
+					</tr>
+					<tr ng-show="aconf.a_zones4.visible && (aDetails.zones4 != null && aDetails.zones4.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr ng-show="aconf.a_zones4.visible && (aDetails.zones4 != null && aDetails.zones4.length > 0)">
+						<td colspan="3" class="detailsTableColSpan">{{ zone4_label | i18n }}</td>
+					</tr>
+					<tr ng-show="aconf.a_zones4.visible && (aDetails.zones4 != null && aDetails.zones4.length > 0)">
+						<td colspan="3">
+							<table width="100%" ng-repeat="z in aDetails.zones4 track by z.id">
+								<tr>
+									<td class="detailsTableSX">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX">{{ z.name }}</td>
+								</tr>
+								<tr ng-if="z.submacro || z.submicro">
+									<td class="detailsTableSX">{{ 'zone_submicro' | i18n }}:</td>
+									<td class="detailsTableCX"></td>
+									<td class="detailsTableDX"><span ng-if="z.submacro">{{ z.submacro }}</span><span ng-if="z.submicro">{{ z.submicro }}</span></td>
+								</tr>
+							</table>
+						<td>
 					</tr>
 				</table>
 			</div>
@@ -1002,12 +1358,12 @@
 					</tr>
 				</table>
 			</div>
-			<div ng-show="isZoneDetShow()">
+			<div ng-show="isZoneDetShow(0)">
 				<table width="100%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zone_submacro.visible"> - {{ zDetails.data.submacro }}</span></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf0.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf0.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
 					</tr>
 				</table>	
 				<table width="95%">	
@@ -1028,31 +1384,109 @@
 				<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
 				<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
 			</div>
-			<div ng-show="isMicroZoneDetShow()">
+			<div ng-show="isZoneDetShow(1)">
 				<table width="100%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ microZDetails.data.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.data.submicro }}</span></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf1.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf1.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
 					</tr>
 				</table>	
 				<table width="95%">	
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ microZDetails.data.slotNumber }}</td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-show="isCorrectNumber(microZDetails.data.slotOccupied)">{{ microZDetails.data.slotOccupied }}</span>
-							<span ng-show="!isCorrectNumber(microZDetails.data.slotOccupied)">n.p.</span>
+							<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
 						</td>
 					</tr>
 				</table>
-				<div ng-if="isActiveItalian()" google-chart chart="chartMicroZoneOccupancy" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
-				<div ng-if="isActiveEnglish()" google-chart chart="chartMicroZoneOccupancy_eng" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
+				<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+				<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+			</div>
+			<div ng-show="isZoneDetShow(2)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf2.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf2.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="95%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+				<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+			</div>
+			<div ng-show="isZoneDetShow(3)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf3.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf3.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="95%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+				<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+			</div>
+			<div ng-show="isZoneDetShow(4)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf4.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf4.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="95%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(zDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+				</table>
+				<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+				<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
 			</div>
 			<div ng-show="isAreaDetShow()">
 				<table width="100%">
@@ -1281,12 +1715,12 @@
 
 				</table>
 			</div>
-			<div ng-show="isZoneDetShow()">
+			<div ng-show="isZoneDetShow(0)">
 				<table width="100%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zone_submacro.visible"> - {{ zDetails.data.submacro }}</span></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf0.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf0.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
 					</tr>
 				</table>	
 				<table width="100%">	
@@ -1323,24 +1757,24 @@
 					</tr>
 				</table>
 			</div>
-			<div ng-show="isMicroZoneDetShow()">
+			<div ng-show="isZoneDetShow(1)">
 				<table width="100%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ microZDetails.data.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.data.submicro }}</span></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf1.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf1.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
 					</tr>
 				</table>	
 				<table width="100%">	
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.slotNumber }}</td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotNumber }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">&nbsp;{{ microZDetails.data.slotPaid }}</td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotPaid }}</td>
 					</tr>
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
@@ -1351,20 +1785,146 @@
 						<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-if="microZDetails.data.profit != -1">&nbsp;{{ correctEuroCent(microZDetails.data.profit) | euroVal }}{{ 'euro' | i18n }}</span>
-							<span ng-if="microZDetails.data.profit == -1">&nbsp;n.p.</span>
+							<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) | euroVal }}{{ 'euro' | i18n }}</span>
+							<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
 						</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_tickets' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-if="microZDetails.data.tickets > 0">&nbsp;{{ microZDetails.data.tickets }}</span>
-							<span ng-if="microZDetails.data.tickets <= 0">&nbsp;n.p.</span>
+							<span ng-if="zDetails.data.tickets > 0">&nbsp;{{ zDetails.data.tickets }}</span>
+							<span ng-if="zDetails.data.tickets <= 0">&nbsp;n.p.</span>
 						</td>
 					</tr>
 				</table>
-			</div>			
+			</div>
+			<div ng-show="isZoneDetShow(2)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf2.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf2.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotPaid }}</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) | euroVal }}{{ 'euro' | i18n }}</span>
+							<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="zDetails.data.tickets > 0">&nbsp;{{ zDetails.data.tickets }}</span>
+							<span ng-if="zDetails.data.tickets <= 0">&nbsp;n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow(3)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf3.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf3.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotPaid }}</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) | euroVal }}{{ 'euro' | i18n }}</span>
+							<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="zDetails.data.tickets > 0">&nbsp;{{ zDetails.data.tickets }}</span>
+							<span ng-if="zDetails.data.tickets <= 0">&nbsp;n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow(4)">
+				<table width="100%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf4.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf4.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="100%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">&nbsp;{{ zDetails.data.slotPaid }}</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_profit' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="zDetails.data.profit != -1">&nbsp;{{ correctEuroCent(zDetails.data.profit) | euroVal }}{{ 'euro' | i18n }}</span>
+							<span ng-if="zDetails.data.profit == -1">&nbsp;n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_tickets' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-if="zDetails.data.tickets > 0">&nbsp;{{ zDetails.data.tickets }}</span>
+							<span ng-if="zDetails.data.tickets <= 0">&nbsp;n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
 			<div ng-show="isAreaDetShow()">
 				<table width="100%">
 					<tr>
@@ -1548,12 +2108,12 @@
 					</tr>
 				</table>
 			</div>
-			<div ng-show="isZoneDetShow()">
+			<div ng-show="isZoneDetShow(0)">
 				<table width="99%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="microzone_submacro.visible"> - {{ zDetails.data.submacro }}</span></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf0.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf0.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
 					</tr>
 				</table>	
 				<table width="99%">	
@@ -1595,32 +2155,32 @@
 					</tr>
 				</table>
 			</div>
-			<div ng-show="isMicroZoneDetShow()">
+			<div ng-show="isZoneDetShow(1)">
 				<table width="99%">
 					<tr>
 						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
-						<td class="detailsTitleTableDX">&nbsp;{{ microZDetails.data.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.data.submicro }}</span></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf1.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf1.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
 					</tr>
 				</table>	
 				<table width="99%">	
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ microZDetails.data.slotNumber }}</td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
 					</tr>
 					<tr>
 						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-show="isCorrectNumber(microZDetails.data.slotOccupied)">{{ microZDetails.data.slotOccupied }}</span>
-							<span ng-show="!isCorrectNumber(microZDetails.data.slotOccupied)">n.p.</span>
+							<span ng-show="isCorrectNumber(zZDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
 						</td>
 					</tr>
 					<tr>
 						<td colspan="3" class="detailsTableColSpan">
-							<div ng-if="isActiveItalian()" google-chart chart="chartMicroZoneOccupancy" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
-							<div ng-if="isActiveEnglish()" google-chart chart="chartMicroZoneOccupancy_eng" style="" ng-show="isCorrectNumber(microZDetails.data.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>
@@ -1635,9 +2195,150 @@
 						<td class="detailsTableSX">{{ 'element_waiting_time' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
 						<td class="detailsTableDX">
-							<span ng-show="microZDetails.data.extratime != null && microZDetails.data.extratime.extratime_estimation_min == microZDetails.data.extratime.extratime_estimation_max">{{ microZDetails.data.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
-							<span ng-show="microZDetails.data.extratime != null && microZDetails.data.extratime.extratime_estimation_min != microZDetails.data.extratime.extratime_estimation_max">{{ microZDetails.data.extratime.extratime_estimation_min }} - {{ microZDetails.data.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
-							<span ng-show="microZDetails.data.extratime == null">n.p.</span>
+							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min == zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min != zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} - {{ zDetails.data.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="zDetails.data.extratime == null">n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow(2)">
+				<table width="99%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf2.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf2.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="99%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(zZDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'element_costTime' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'element_waiting_time' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min == zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min != zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} - {{ zDetails.data.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="zDetails.data.extratime == null">n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow(3)">
+				<table width="99%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf3.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf3.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="99%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(zZDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'element_costTime' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'element_waiting_time' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min == zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min != zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} - {{ zDetails.data.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="zDetails.data.extratime == null">n.p.</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-show="isZoneDetShow(4)">
+				<table width="99%">
+					<tr>
+						<td class="detailsTitleTableSX">{{ 'zone_name' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">&nbsp;{{ zDetails.data.name }}<span ng-show="zconf4.zone_submacro.visible"> - {{ zDetails.data.submacro }}</span><span ng-show="zconf4.zone_submicro.visible"> - {{ zDetails.data.submicro }}</span></td>
+					</tr>
+				</table>	
+				<table width="99%">	
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">{{ zDetails.data.slotNumber }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'zone_occupied_slots' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="isCorrectNumber(zZDetails.data.slotOccupied)">{{ zDetails.data.slotOccupied }}</span>
+							<span ng-show="!isCorrectNumber(zDetails.data.slotOccupied)">n.p.</span>
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="" ng-show="isCorrectNumber(zDetails.data.slotOccupied)" />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">
+							<hr />
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3" class="detailsTableColSpan">{{ 'element_costTime' | i18n }}</td>
+					</tr>
+					<tr>
+						<td class="detailsTableSX">{{ 'element_waiting_time' | i18n }}:</td>
+						<td class="detailsTableCX"></td>
+						<td class="detailsTableDX">
+							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min == zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="zDetails.data.extratime != null && zDetails.data.extratime.extratime_estimation_min != zDetails.data.extratime.extratime_estimation_max">{{ zDetails.data.extratime.extratime_estimation_min }} - {{ zDetails.data.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+							<span ng-show="zDetails.data.extratime == null">n.p.</span>
 						</td>
 					</tr>
 				</table>

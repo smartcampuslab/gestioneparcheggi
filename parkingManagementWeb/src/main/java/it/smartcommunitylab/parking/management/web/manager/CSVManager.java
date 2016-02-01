@@ -143,7 +143,10 @@ public class CSVManager {
 			for(Zone z : zones){
 				writer.append(cleanCommaValue(z.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(z.getSubmacro());	// to convert to area name
+				String macro = z.getSubmacro();
+				String micro = z.getSubmicro();
+				if(micro == null)micro = "";
+				writer.append((macro != null) ? macro : micro);	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append(z.getType());
 				writer.append(CSV_SEPARATOR);
@@ -399,7 +402,10 @@ public class CSVManager {
 			for(OccupancyZone z : zones){
 				writer.append(cleanCommaValue(z.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(z.getSubmacro());	// to convert to area name
+				String macro = z.getSubmacro();
+				String micro = z.getSubmicro();
+				if(micro == null)micro = "";
+				writer.append((macro != null) ? macro : micro);	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append((z.getOccupancy() != -1) ? (z.getOccupancy() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
@@ -740,7 +746,10 @@ public class CSVManager {
 			for(ProfitZone z : zones){
 				writer.append(cleanCommaValue(z.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(z.getSubmacro());	// to convert to area name
+				String macro = z.getSubmacro();
+				String micro = z.getSubmicro();
+				if(micro == null)micro = "";
+				writer.append((macro != null) ? macro : micro);	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append((z.getProfit() > -1) ? (z.getProfit() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
@@ -928,7 +937,8 @@ public class CSVManager {
 			for(TimeCostZone z : zones){
 				writer.append(cleanCommaValue(z.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(z.getSubmacro());
+				String macro = z.getSubmacro();
+				writer.append((macro != null) ? macro : "");
 				writer.append(CSV_SEPARATOR);
 				writer.append((z.getMinExtratime() != -1) ? (z.getMinExtratime() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);

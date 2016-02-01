@@ -30,12 +30,24 @@
 					<tr ng-show="isAreaVisible()">
 						<td align="left"><label class="left-filter"><input id="rateArea" type="radio" ng-model="dashboard_space_list" value="rate_area" ng-click="showAreaList(dashboard_topics_list)">&nbsp;{{ 'view_areas' | i18n }}</label></td>
 					</tr>
-					<tr ng-show="isZonesVisible()">
-						<td align="left"><label class="left-filter"><input id="zones" type="radio" ng-model="dashboard_space_list" value="macrozone" ng-click="showZoneList(dashboard_topics_list)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
+					<tr ng-show="isZonesVisible0()">
+						<td align="left"><label class="left-filter"><input id="zones0" type="radio" ng-model="dashboard_space_list" value="zone0" ng-click="showZoneList(dashboard_topics_list, 0)">&nbsp;{{ zone0_label | i18n }}</label></td>
 					</tr>
-					<tr ng-show="isMicrozonesVisible()">
-						<td align="left"><label class="left-filter"><input id="microzones" type="radio" ng-model="dashboard_space_list" value="microzone" ng-click="showMicroZoneList(dashboard_topics_list)">&nbsp;{{ 'view_microzones' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
+					<tr ng-show="isZonesVisible1()">
+						<td align="left"><label class="left-filter"><input id="zones1" type="radio" ng-model="dashboard_space_list" value="zone1" ng-click="showZoneList(dashboard_topics_list, 1)">&nbsp;{{ zone1_label | i18n }}</label></td>
 					</tr>
+					<tr ng-show="isZonesVisible2()">
+						<td align="left"><label class="left-filter"><input id="zones2" type="radio" ng-model="dashboard_space_list" value="zone2" ng-click="showZoneList(dashboard_topics_list, 2)">&nbsp;{{ zone2_label | i18n }}</label></td>
+					</tr>
+					<tr ng-show="isZonesVisible3()">
+						<td align="left"><label class="left-filter"><input id="zones3" type="radio" ng-model="dashboard_space_list" value="zone3" ng-click="showZoneList(dashboard_topics_list, 3)">&nbsp;{{ zone3_label | i18n }}</label></td>
+					</tr>
+					<tr ng-show="isZonesVisible4()">
+						<td align="left"><label class="left-filter"><input id="zones4" type="radio" ng-model="dashboard_space_list" value="zone4" ng-click="showZoneList(dashboard_topics_list, 4)">&nbsp;{{ zone4_label | i18n }}</label></td>
+					</tr>
+					<!-- <tr ng-show="isMicrozonesVisible()">
+						<td align="left"><label class="left-filter"><input id="microzones" type="radio" ng-model="dashboard_space_list" value="microzone" ng-click="showMicroZoneList(dashboard_topics_list)">&nbsp;{{ 'view_microzones' | i18n }}</label></td>ng-click="changeStreetAndPS()"
+					</tr> -->
 					<tr ng-show="isStreetVisible()">
 						<td align="left"><label class="left-filter"><input id="streets" type="radio" ng-model="dashboard_space_list" value="microzone_part" ng-click="showStreetList(dashboard_topics_list)">&nbsp;{{ 'view_streets' | i18n }}</label></td>
 					</tr>
@@ -79,12 +91,24 @@
 						<tr ng-show="isAreaVisible()">
 							<td align="left"><label class="left-filter"><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons(dashboard_topics)">&nbsp;{{ 'view_areas' | i18n }}</label></td>
 						</tr>
-						<tr ng-show="isZonesVisible()">
-							<td align="left"><label class="left-filter"><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons(dashboard_topics)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td>
+						<tr ng-show="isZonesVisible0()">
+							<td align="left"><label class="left-filter"><input id="zones0" type="checkbox" ng-model="dashboard_space.zone0" ng-click="changeZonePolygons(dashboard_topics, 0)">&nbsp;{{ zone0_label | i18n }}</label></td>
 						</tr>
-						<tr ng-show="isMicrozonesVisible()">
-							<td align="left"><label class="left-filter"><input id="microzones" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeMicrozonePolygons(dashboard_topics)">&nbsp;{{ 'view_microzones' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
+						<tr ng-show="isZonesVisible1()">
+							<td align="left"><label class="left-filter"><input id="zones1" type="checkbox" ng-model="dashboard_space.zone1" ng-click="changeZonePolygons(dashboard_topics, 1)">&nbsp;{{ zone1_label | i18n }}</label></td>
 						</tr>
+						<tr ng-show="isZonesVisible2()">
+							<td align="left"><label class="left-filter"><input id="zones2" type="checkbox" ng-model="dashboard_space.zone2" ng-click="changeZonePolygons(dashboard_topics, 2)">&nbsp;{{ zone2_label | i18n }}</label></td>
+						</tr>
+						<tr ng-show="isZonesVisible3()">
+							<td align="left"><label class="left-filter"><input id="zones3" type="checkbox" ng-model="dashboard_space.zone3" ng-click="changeZonePolygons(dashboard_topics, 3)">&nbsp;{{ zone3_label | i18n }}</label></td>
+						</tr>
+						<tr ng-show="isZonesVisible4()">
+							<td align="left"><label class="left-filter"><input id="zones4" type="checkbox" ng-model="dashboard_space.zone4" ng-click="changeZonePolygons(dashboard_topics, 4)">&nbsp;{{ zone4_label | i18n }}</label></td>
+						</tr>
+						<!-- <tr ng-show="isMicrozonesVisible()">
+							<td align="left"><label class="left-filter"><input id="microzones" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeMicrozonePolygons(dashboard_topics)">&nbsp;{{ 'view_microzones' | i18n }}</label></td>ng-click="changeStreetAndPS()"
+						</tr> -->
 						<tr ng-show="isStreetVisible()">
 							<td align="left"><label class="left-filter"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone_part" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td><!-- ng-click="changeStreetAndPS()" -->
 						</tr>

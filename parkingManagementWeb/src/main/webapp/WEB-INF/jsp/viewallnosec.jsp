@@ -149,7 +149,7 @@ $(document).unbind('keydown').bind('keydown', function (event) {
 				<div class="col-md-1"></div>
 				<div class="col-md-10">
 					<footer >
-						<table width="100%">
+						<table width="100%" ng-if="show_vt_footer">
 							<tr>
 								<td width="45%" align="right">
 									<h4>

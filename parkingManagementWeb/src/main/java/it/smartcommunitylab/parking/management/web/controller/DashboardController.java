@@ -491,16 +491,23 @@ public class DashboardController {
 	    	String id = zone.getString("id");
 	    	String id_app = zone.getString("id_app");
 	    	String name = zone.getString("name");
-	    	String macro = zone.getString("submacro");
-	    	String color = zone.getString("color");
+	    	String macro = (!zone.isNull("submacro")) ? zone.getString("submacro") : "";
+	    	String micro = (!zone.isNull("submicro")) ? zone.getString("submicro") : "";
+	    	String color = (!zone.isNull("color")) ? zone.getString("color") : "";
 	    	String type = zone.getString("type");
-	    	String note = zone.getString("note");
+	    	String note = (!zone.isNull("note")) ? zone.getString("note") : "";
 	    	Integer slotNumber = (!zone.isNull("slotNumber")) ? zone.getInt("slotNumber") : 0;
 	    	Zone z = new Zone();
 	    	z.setId(id);
 	    	z.setId_app(id_app);
 	    	z.setName(name);
-	    	z.setSubmacro(macro);
+	    	if(macro != null && macro.compareTo("") != 0){
+	    		z.setSubmacro(macro);
+	    	} else {
+	    		if(micro != null && micro.compareTo("") != 0){
+	    			z.setSubmicro(micro);
+	    		}
+	    	}
 	    	z.setColor(color);
 	    	z.setType(type);
 	    	z.setNote(note);
@@ -769,10 +776,11 @@ public class DashboardController {
 	    	String id = zone.getString("id");
 	    	String id_app = zone.getString("id_app");
 	    	String name = zone.getString("name");
-	    	String macro = zone.getString("submacro");
-	    	String color = zone.getString("color");
+	    	String macro = (!zone.isNull("submacro")) ? zone.getString("submacro") : "";
+	    	String micro = (!zone.isNull("submicro")) ? zone.getString("submicro") : "";
+	    	String color = (!zone.isNull("color")) ? zone.getString("color") : "";
 	    	String type = zone.getString("type");
-	    	String note = zone.getString("note");
+	    	String note = (!zone.isNull("note")) ? zone.getString("note") : "";
 	    	Integer occupancy = (!zone.isNull("occupancy")) ? zone.getInt("occupancy") : 0;
 	    	Integer slotNumber = (!zone.isNull("slotNumber")) ? zone.getInt("slotNumber") : 0;
 	    	Integer slotOccupied = (!zone.isNull("slotOccupied")) ? zone.getInt("slotOccupied") : 0;
@@ -780,7 +788,13 @@ public class DashboardController {
 	    	oz.setId(id);
 	    	oz.setId_app(id_app);
 	    	oz.setName(name);
-	    	oz.setSubmacro(macro);
+	    	if(macro != null && macro.compareTo("") != 0){
+	    		oz.setSubmacro(macro);
+	    	} else {
+	    		if(micro != null && micro.compareTo("") != 0){
+	    			oz.setSubmicro(micro);
+	    		}
+	    	}
 	    	oz.setColor(color);
 	    	oz.setType(type);
 	    	oz.setNote(note);
@@ -1055,10 +1069,11 @@ public class DashboardController {
 	    	String id = zone.getString("id");
 	    	String id_app = zone.getString("id_app");
 	    	String name = zone.getString("name");
-	    	String macro = zone.getString("submacro");
-	    	String color = zone.getString("color");
+	    	String macro = (!zone.isNull("submacro")) ? zone.getString("submacro") : "";
+	    	String micro = (!zone.isNull("submicro")) ? zone.getString("submicro") : "";
+	    	String color = (!zone.isNull("color")) ? zone.getString("color") : "";
 	    	String type = zone.getString("type");
-	    	String note = zone.getString("note");
+	    	String note = (!zone.isNull("note")) ? zone.getString("note") : "";
 	    	Integer profit = (!zone.isNull("profit")) ? zone.getInt("profit") : 0;
 	    	Integer tickets = (!zone.isNull("tickets")) ? zone.getInt("tickets") : 0;
 	    	Integer slotNumber = (!zone.isNull("slotNumber")) ? zone.getInt("slotNumber") : 0;
@@ -1066,7 +1081,13 @@ public class DashboardController {
 	    	pz.setId(id);
 	    	pz.setId_app(id_app);
 	    	pz.setName(name);
-	    	pz.setSubmacro(macro);
+	    	if(macro != null && macro.compareTo("") != 0){
+	    		pz.setSubmacro(macro);
+	    	} else {
+	    		if(micro != null && micro.compareTo("") != 0){
+	    			pz.setSubmicro(micro);
+	    		}
+	    	}
 	    	pz.setColor(color);
 	    	pz.setType(type);
 	    	pz.setNote(note);
@@ -1269,10 +1290,11 @@ public class DashboardController {
 	    	String id = zone.getString("id");
 	    	String id_app = zone.getString("id_app");
 	    	String name = zone.getString("name");
-	    	String macro = zone.getString("submacro");
-	    	String color = zone.getString("color");
+	    	String macro = (!zone.isNull("submacro")) ? zone.getString("submacro") : "";
+	    	String micro = (!zone.isNull("submicro")) ? zone.getString("submicro") : "";
+	    	String color = (!zone.isNull("color")) ? zone.getString("color") : "";
 	    	String type = zone.getString("type");
-	    	String note = zone.getString("note");
+	    	String note = (!zone.isNull("note")) ? zone.getString("note") : "";
 	    	Integer occupancy = (!zone.isNull("occupancy")) ? zone.getInt("occupancy") : 0;
 	    	Integer slotNumber = (!zone.isNull("slotNumber")) ? zone.getInt("slotNumber") : 0;
 	    	Integer slotOccupied = (!zone.isNull("slotOccupied")) ? zone.getInt("slotOccupied") : 0;
@@ -1287,7 +1309,13 @@ public class DashboardController {
 	    	tz.setId(id);
 	    	tz.setId_app(id_app);
 	    	tz.setName(name);
-	    	tz.setSubmacro(macro);
+	    	if(macro != null && macro.compareTo("") != 0){
+	    		tz.setSubmacro(macro);
+	    	} else {
+	    		if(micro != null && micro.compareTo("") != 0){
+	    			tz.setSubmacro(micro);
+	    		}
+	    	}
 	    	tz.setColor(color);
 	    	tz.setType(type);
 	    	tz.setNote(note);

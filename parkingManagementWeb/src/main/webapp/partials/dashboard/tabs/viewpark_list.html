@@ -660,10 +660,10 @@
 			</table>	
 		</div>
 		
-		<div ng-show="showZList && showParkSupplyLists">
+		<div ng-if="showZList0 && showParkSupplyLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="zoneWS.length != 0">
+					<tr ng-show="zoneWS0.length != 0">
 						<th width="25%">
 							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -679,7 +679,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['name'] |  startFrom:currentPageZa*maxZones | limitTo:maxZones">
+						ng-repeat="zone in filtered = (zoneWS0 | filter:nameFilter) | orderBy: ['name'] |  startFrom:currentPageZa*maxZones | limitTo:maxZones">
 						<tr>
 							<td width="25%" align="left"><span ng-show="zconf0.zone_name.visible">{{zone.name}}</span></td>
 							<td width="15%" align="center"><span ng-show="zconf0.zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -687,11 +687,11 @@
 							<td width="15%" align="left"><span ng-show="zone.myType.label">{{zone.myType.label}}</span></td>
 							<td width="20%" align="left">{{zone.slotNumber}}</td>
 							<td width="10%" align="center">
-								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,4,0)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="zoneWS.length == 0">
+					<tr ng-show="zoneWS0.length == 0">
 						<td colspan="6"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -703,21 +703,21 @@
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZa == 0"
 								ng-click="currentPageZa=currentPageZa-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPageZa+1}}/{{numberOfPages(5, filtered)}}
+							{{currentPageZa+1}}/{{numberOfPages(5, filtered, 0)}}
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZa >= filtered.length/maxZones - 1"
 								ng-click="currentPageZa=currentPageZa+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneSupplyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneSupplyCsv(0)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
 		</div>
-		<div ng-show="showZList && showOccupationLists">
+		<div ng-if="showZList0 && showOccupationLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="zoneWS.length != 0">
+					<tr ng-show="zoneWS0.length != 0">
 						<th width="20%">
 							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -734,8 +734,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxZones | limitTo:maxZones">
-				<!--	ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageZo*maxPractices | limitTo:maxPractices"> -->
+						ng-repeat="zone in filtered = (zoneWS0 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxZones | limitTo:maxZones">
 						<tr>
 							<td width="20%" align="left"><span ng-show="zconf0.zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zconf0.zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -748,11 +747,11 @@
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
 							<td width="15%" align="left">{{zone.slotOccupied}}</td>
 							<td width="10%" align="center">
-								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(zone,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(zone,4,0)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="zoneWS.length == 0">
+					<tr ng-show="zoneWS0.length == 0">
 						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -764,22 +763,22 @@
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZo == 0"
 								ng-click="currentPageZo=currentPageZo-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPageZo+1}}/{{numberOfPages(5, filtered)}}
+							{{currentPageZo+1}}/{{numberOfPages(5, filtered, 0)}}
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZo >= filtered.length/maxZones - 1"
 								ng-click="currentPageZo=currentPageZo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv(0)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
 		</div>
-		<div ng-show="showZList && showProfitLists">
+		<div ng-if="showZList0 && showProfitLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="profitZonesList.length != 0">
+					<tr ng-show="profitZonesList0.length != 0">
 						<th width="20%">
 							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -796,7 +795,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (profitZonesList | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxZones | limitTo:maxZones">
+						ng-repeat="zone in filtered = (profitZonesList0 | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxZones | limitTo:maxZones">
 						<tr>
 							<td width="20%" align="left"><span ng-show="zconf0.zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zconf0.zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -812,11 +811,11 @@
 							</td>
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
 							<td width="10%" align="center">
-								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(zone,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(zone,4,0)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="profitZonesList.length == 0">
+					<tr ng-show="profitZonesList0.length == 0">
 						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -828,22 +827,22 @@
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZp == 0"
 								ng-click="currentPageZp=currentPageZp-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPageZp+1}}/{{numberOfPages(9, filtered)}}
+							{{currentPageZp+1}}/{{numberOfPages(9, filtered, 0)}}
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZp >= filtered.length/maxZones - 1"
 								ng-click="currentPageZp=currentPageZp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv(0)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
 		</div>
-		<div ng-show="showZList && showTimeCostLists">
+		<div ng-if="showZList0 && showTimeCostLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="zoneWS.length != 0">
+					<tr ng-show="zoneWS0.length != 0">
 						<th width="20%">
 							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -861,7 +860,7 @@
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (zoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxZones | limitTo:maxZones">
+						ng-repeat="zone in filtered = (zoneWS0 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxZones | limitTo:maxZones">
 						<tr>
 							<td width="20%" align="left"><span ng-show="zconf0.zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zconf0.zone_submacro.visible">{{zone.submacro}}</span></td>
@@ -879,11 +878,11 @@
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
 							<td width="15%" align="left">{{zone.slotOccupied}}</td>
 							<td width="5%" align="center">
-								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(zone,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(zone,4,0)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="zoneWS.length == 0">
+					<tr ng-show="zoneWS0.length == 0">
 						<td colspan="9"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -895,22 +894,22 @@
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZt == 0"
 								ng-click="currentPageZt=currentPageZt-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPageZt+1}}/{{numberOfPages(5, filtered)}}
+							{{currentPageZt+1}}/{{numberOfPages(5, filtered, 0)}}
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZt >= filtered.length/maxZones - 1"
 								ng-click="currentPageZt=currentPageZt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv(0)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
 		</div>
-		<div ng-show="showMicroZList && showParkSupplyLists">
+		<div ng-if="showZList1 && showParkSupplyLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="microzoneWS.length != 0">
+					<tr ng-show="zoneWS1.length != 0">
 						<th width="25%">
 							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -926,7 +925,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (microzoneWS | filter:nameFilter) | orderBy: ['name','submicro'] |  startFrom:currentPageZa*maxMicroZones | limitTo:maxMicroZones">
+						ng-repeat="zone in filtered = (zoneWS1 | filter:nameFilter) | orderBy: ['name','submicro'] |  startFrom:currentPageZa*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
 							<td width="25%" align="left"><span ng-show="zconf1.zone_name.visible">{{zone.name}}</span></td>
 							<td width="15%" align="center"><span ng-show="zconf1.zone_submicro.visible">{{zone.submicro}}</span></td>
@@ -934,11 +933,11 @@
 							<td width="15%" align="left"><span ng-show="zone.myType.label">{{zone.myType.label}}</span></td>
 							<td width="20%" align="left">{{zone.slotNumber}}</td>
 							<td width="10%" align="center">
-								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,6)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,4,1)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="microzoneWS.length == 0">
+					<tr ng-show="zoneWS1.length == 0">
 						<td colspan="6"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -950,21 +949,21 @@
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZa == 0"
 								ng-click="currentPageZa=currentPageZa-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPageZa+1}}/{{numberOfPages(11, filtered)}}
+							{{currentPageZa+1}}/{{numberOfPages(5, filtered,1)}}
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZa >= filtered.length/maxMicroZones - 1"
 								ng-click="currentPageZa=currentPageZa+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneSupplyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneSupplyCsv(1)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
 		</div>
-		<div ng-show="showMicroZList && showOccupationLists">
+		<div ng-if="showZList1 && showOccupationLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="microzoneWS.length != 0">
+					<tr ng-show="zoneWS1.length != 0">
 						<th width="20%">
 							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -981,7 +980,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (microzoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxMicroZones | limitTo:maxMicroZones">
+						ng-repeat="zone in filtered = (zoneWS1 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
 							<td width="20%" align="left"><span ng-show="zconf1.zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zconf1.zone_submicro.visible">{{zone.submicro}}</span></td>
@@ -994,11 +993,11 @@
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
 							<td width="15%" align="left">{{zone.slotOccupied}}</td>
 							<td width="10%" align="center">
-								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(zone,6)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(zone,4,1)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="microzoneWS.length == 0">
+					<tr ng-show="zoneWS1.length == 0">
 						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -1010,22 +1009,22 @@
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZo == 0"
 								ng-click="currentPageZo=currentPageZo-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPageZo+1}}/{{numberOfPages(11, filtered)}}
+							{{currentPageZo+1}}/{{numberOfPages(5, filtered,1)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPageZo >= filtered.length/maxMicroZones - 1"
+								ng-disabled="currentPageZo >= filtered.length/maxZones - 1"
 								ng-click="currentPageZo=currentPageZo+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv(1)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
 		</div>
-		<div ng-show="showMicroZList && showProfitLists">
+		<div ng-if="showZList1 && showProfitLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="profitMicroZonesList.length != 0">
+					<tr ng-show="profitZonesList1.length != 0">
 						<th width="20%">
 							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -1042,7 +1041,7 @@
 						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (profitMicroZonesList | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxMicroZones | limitTo:maxMicroZones">
+						ng-repeat="zone in filtered = (profitZonesList1 | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
 							<td width="20%" align="left"><span ng-show="zconf1.zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zconf1.zone_submicro.visible">{{zone.submicro}}</span></td>
@@ -1058,11 +1057,11 @@
 							</td>
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
 							<td width="10%" align="center">
-								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(zone,6)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(zone,4,1)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="profitMicroZonesList.length == 0">
+					<tr ng-show="profitZonesList1.length == 0">
 						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -1074,22 +1073,22 @@
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZp == 0"
 								ng-click="currentPageZp=currentPageZp-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPageZp+1}}/{{numberOfPages(12, filtered)}}
+							{{currentPageZp+1}}/{{numberOfPages(9, filtered, 1)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPageZp >= filtered.length/maxMicroZones - 1"
+								ng-disabled="currentPageZp >= filtered.length/maxZones - 1"
 								ng-click="currentPageZp=currentPageZp+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv(1)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
 		</div>
-		<div ng-show="showMicroZList && showTimeCostLists">
+		<div ng-if="showZList1 && showTimeCostLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
-					<tr ng-show="microzoneWS.length != 0">
+					<tr ng-show="zoneWS1.length != 0">
 						<th width="20%">
 							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
 							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -1107,7 +1106,7 @@
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tbody class="animate-repeat"
-						ng-repeat="zone in filtered = (microzoneWS | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxMicroZones | limitTo:maxMicroZones">
+						ng-repeat="zone in filtered = (zoneWS1 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxMicroZones | limitTo:maxMicroZones">
 						<tr>
 							<td width="20%" align="left"><span ng-show="zconf1.zone_name.visible">{{zone.name}}</span></td>
 							<td width="10%" align="center"><span ng-show="zconf1.zone_submicro.visible">{{zone.submicro}}</span></td>
@@ -1125,11 +1124,11 @@
 							<td width="15%" align="left">{{zone.slotNumber}}</td>
 							<td width="15%" align="left">{{zone.slotOccupied}}</td>
 							<td width="5%" align="center">
-								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(zone,6)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(zone,4,1)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
 						</tr>
 					</tbody>
-					<tr ng-show="microzoneWS.length == 0">
+					<tr ng-show="zoneWS1.length == 0">
 						<td colspan="9"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
 					</tr>
 				</table>
@@ -1141,18 +1140,756 @@
 						<button class="btn btn-primary"
 								ng-disabled="currentPageZt == 0"
 								ng-click="currentPageZt=currentPageZt-1">{{ 'previous_label' | i18n }}</button>
-							{{currentPageZt+1}}/{{numberOfPages(11, filtered)}}
+							{{currentPageZt+1}}/{{numberOfPages(5, filtered,1)}}
 						<button class="btn btn-primary"
-								ng-disabled="currentPageZt >= filtered.length/maxMicroZones - 1"
+								ng-disabled="currentPageZt >= filtered.length/maxZones - 1"
 								ng-click="currentPageZt=currentPageZt+1">{{ 'next_label' | i18n }}</button>
 					</td>
 					<td width="33%" align="right">
 						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
-						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv(1)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 					</td>
 				</tr>
 			</table>		
-		</div>				
+		</div>
+		<div ng-if="showZList2 && showParkSupplyLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS2.length != 0">
+						<th width="25%">
+							<span ng-show="zconf2.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="15%" class="myCenter"><span ng-show="zconf2.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf2.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" align="left">{{ 'zone_type' | i18n }}</th>
+						<th width="20%" align="left">{{ 'zone_total_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS2 | filter:nameFilter) | orderBy: ['name','submicro'] |  startFrom:currentPageZa*maxMicroZones | limitTo:maxMicroZones">
+						<tr>
+							<td width="25%" align="left"><span ng-show="zconf2.zone_name.visible">{{zone.name}}</span></td>
+							<td width="15%" align="center"><span ng-show="zconf2.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf2.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="zone.myType.label">{{zone.myType.label}}</span></td>
+							<td width="20%" align="left">{{zone.slotNumber}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,4,2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS2.length == 0">
+						<td colspan="6"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZa == 0"
+								ng-click="currentPageZa=currentPageZa-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZa+1}}/{{numberOfPages(5, filtered,2)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZa >= filtered.length/maxZones - 1"
+								ng-click="currentPageZa=currentPageZa+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneSupplyCsv(2)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList2 && showOccupationLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS2.length != 0">
+						<th width="20%">
+							<span ng-show="zconf2.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf2.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf2.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
+						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS2 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxMicroZones | limitTo:maxMicroZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf2.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf2.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf2.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(zone.occupancy)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
+								<span ng-show="zone.occupancy == '-1'">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="15%" align="left">{{zone.slotOccupied}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(zone,4,2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS2.length == 0">
+						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZo == 0"
+								ng-click="currentPageZo=currentPageZo-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZo+1}}/{{numberOfPages(5, filtered,2)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZo >= filtered.length/maxZones - 1"
+								ng-click="currentPageZo=currentPageZo+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv(2)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList2 && showProfitLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="profitZonesList2.length != 0">
+						<th width="20%">
+							<span ng-show="zconf2.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf2.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf2.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
+						<th width="10%">{{ 'element_tickets' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (profitZonesList2 | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxMicroZones | limitTo:maxMicroZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf2.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf2.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf2.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(zone.profit)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) | euroVal }}{{ 'euro' | i18n }}</span>
+								<span ng-show="zone.profit <= -1">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="zone.tickets > -1">{{zone.tickets}}</span>
+								<span ng-show="zone.tickets <= -1">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(zone,4,2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="profitZonesList2.length == 0">
+						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZp == 0"
+								ng-click="currentPageZp=currentPageZp-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZp+1}}/{{numberOfPages(9, filtered, 2)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZp >= filtered.length/maxZones - 1"
+								ng-click="currentPageZp=currentPageZp+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv(2)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList2 && showTimeCostLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS2.length != 0">
+						<th width="20%">
+							<span ng-show="zconf2.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf2.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="10%"><span ng-show="zconf2.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
+						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
+						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
+						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS2 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxMicroZones | limitTo:maxMicroZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf2.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf2.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="10%" align="left"><div class="colorBox" ng-show="zconf2.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(zone.extratime)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min != zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} - {{ zone.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min == zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="zone.extratime == null">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
+								<span ng-show="zone.occupancy == '-1'">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="15%" align="left">{{zone.slotOccupied}}</td>
+							<td width="5%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(zone,4,2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS2.length == 0">
+						<td colspan="9"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZt == 0"
+								ng-click="currentPageZt=currentPageZt-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZt+1}}/{{numberOfPages(5, filtered,2)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZt >= filtered.length/maxZones - 1"
+								ng-click="currentPageZt=currentPageZt+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv(2)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList3 && showParkSupplyLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS3.length != 0">
+						<th width="25%">
+							<span ng-show="zconf3.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="15%" class="myCenter"><span ng-show="zconf3.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf3.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" align="left">{{ 'zone_type' | i18n }}</th>
+						<th width="20%" align="left">{{ 'zone_total_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS3 | filter:nameFilter) | orderBy: ['name','submicro'] |  startFrom:currentPageZa*maxZones | limitTo:maxZones">
+						<tr>
+							<td width="25%" align="left"><span ng-show="zconf3.zone_name.visible">{{zone.name}}</span></td>
+							<td width="15%" align="center"><span ng-show="zconf3.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf3.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="zone.myType.label">{{zone.myType.label}}</span></td>
+							<td width="20%" align="left">{{zone.slotNumber}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,4,3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS3.length == 0">
+						<td colspan="6"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZa == 0"
+								ng-click="currentPageZa=currentPageZa-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZa+1}}/{{numberOfPages(5, filtered,3)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZa >= filtered.length/maxZones - 1"
+								ng-click="currentPageZa=currentPageZa+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneSupplyCsv(3)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList3 && showOccupationLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS3.length != 0">
+						<th width="20%">
+							<span ng-show="zconf3.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf3.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf3.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
+						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS3 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxZones | limitTo:maxZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf3.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf3.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf3.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(zone.occupancy)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
+								<span ng-show="zone.occupancy == '-1'">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="15%" align="left">{{zone.slotOccupied}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(zone,4,3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS3.length == 0">
+						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZo == 0"
+								ng-click="currentPageZo=currentPageZo-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZo+1}}/{{numberOfPages(5, filtered,3)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZo >= filtered.length/maxZones - 1"
+								ng-click="currentPageZo=currentPageZo+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv(3)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList3 && showProfitLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="profitZonesList3.length != 0">
+						<th width="20%">
+							<span ng-show="zconf3.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf3.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf3.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
+						<th width="10%">{{ 'element_tickets' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (profitZonesList3 | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxZones | limitTo:maxZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf3.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf3.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf3.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(zone.profit)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) | euroVal }}{{ 'euro' | i18n }}</span>
+								<span ng-show="zone.profit <= -1">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="zone.tickets > -1">{{zone.tickets}}</span>
+								<span ng-show="zone.tickets <= -1">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(zone,4,3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="profitZonesList3.length == 0">
+						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZp == 0"
+								ng-click="currentPageZp=currentPageZp-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZp+1}}/{{numberOfPages(9, filtered, 3)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZp >= filtered.length/maxZones - 1"
+								ng-click="currentPageZp=currentPageZp+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv(3)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList3 && showTimeCostLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS3.length != 0">
+						<th width="20%">
+							<span ng-show="zconf3.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf3.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="10%"><span ng-show="zconf3.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
+						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
+						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
+						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS3 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxZones | limitTo:maxZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf3.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf3.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="10%" align="left"><div class="colorBox" ng-show="zconf3.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(zone.extratime)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min != zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} - {{ zone.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min == zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="zone.extratime == null">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
+								<span ng-show="zone.occupancy == '-1'">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="15%" align="left">{{zone.slotOccupied}}</td>
+							<td width="5%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(zone,4,3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS3.length == 0">
+						<td colspan="9"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZt == 0"
+								ng-click="currentPageZt=currentPageZt-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZt+1}}/{{numberOfPages(5, filtered,3)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZt >= filtered.length/maxZones - 1"
+								ng-click="currentPageZt=currentPageZt+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv(3)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList4 && showParkSupplyLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS4.length != 0">
+						<th width="25%">
+							<span ng-show="zconf4.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="15%" class="myCenter"><span ng-show="zconf4.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf4.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" align="left">{{ 'zone_type' | i18n }}</th>
+						<th width="20%" align="left">{{ 'zone_total_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS4 | filter:nameFilter) | orderBy: ['name','submicro'] |  startFrom:currentPageZa*maxZones | limitTo:maxZones">
+						<tr>
+							<td width="25%" align="left"><span ng-show="zconf4.zone_name.visible">{{zone.name}}</span></td>
+							<td width="15%" align="center"><span ng-show="zconf4.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf4.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="15%" align="left"><span ng-show="zone.myType.label">{{zone.myType.label}}</span></td>
+							<td width="20%" align="left">{{zone.slotNumber}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(zone,4,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS4.length == 0">
+						<td colspan="6"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZa == 0"
+								ng-click="currentPageZa=currentPageZa-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZa+1}}/{{numberOfPages(5, filtered,4)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZa >= filtered.length/maxZones - 1"
+								ng-click="currentPageZa=currentPageZa+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneSupplyCsv(4)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList4 && showOccupationLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS4.length != 0">
+						<th width="20%">
+							<span ng-show="zconf4.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf4.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf4.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
+						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS4 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZo*maxZones | limitTo:maxZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf4.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf4.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf4.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(zone.occupancy)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
+								<span ng-show="zone.occupancy == '-1'">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="15%" align="left">{{zone.slotOccupied}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(zone,4,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS4.length == 0">
+						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZo == 0"
+								ng-click="currentPageZo=currentPageZo-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZo+1}}/{{numberOfPages(5, filtered,4)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZo >= filtered.length/maxZones - 1"
+								ng-click="currentPageZo=currentPageZo+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneOccupancyCsv(4)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList4 && showProfitLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="profitZonesList4.length != 0">
+						<th width="20%">
+							<span ng-show="zconf4.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf4.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="15%"><span ng-show="zconf4.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
+						<th width="10%">{{ 'element_tickets' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }}</th>
+						<th width="10%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (profitZonesList4 | filter:nameFilter) | orderBy: ['-profit', 'name'] |  startFrom:currentPageZp*maxZones | limitTo:maxZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf4.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf4.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="15%" align="left"><div class="colorBox" ng-show="zconf4.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(zone.profit)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.profit > -1">{{ correctEuroCent(zone.profit) | euroVal }}{{ 'euro' | i18n }}</span>
+								<span ng-show="zone.profit <= -1">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="zone.tickets > -1">{{zone.tickets}}</span>
+								<span ng-show="zone.tickets <= -1">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="10%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showProfitInList(zone,4,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="profitZonesList4.length == 0">
+						<td colspan="8"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZp == 0"
+								ng-click="currentPageZp=currentPageZp-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZp+1}}/{{numberOfPages(9, filtered, 4)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZp >= filtered.length/maxZones - 1"
+								ng-click="currentPageZp=currentPageZp+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneProfitCsv(4)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
+		<div ng-if="showZList4 && showTimeCostLists">
+			<div class="listwrapper">
+				<table class="table table-striped" style="width: 100%">
+					<tr ng-show="zoneWS4.length != 0">
+						<th width="20%">
+							<span ng-show="zconf4.zone_name.visible">{{ 'zone_name' | i18n }}</span>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+							<div ng-show="showZoneFilter">
+						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
+						    </div>
+						</th>
+						<th width="10%" class="myCenter"><span ng-show="zconf4.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
+						<th width="10%"><span ng-show="zconf4.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+						<th width="15%" colspan="2">{{ 'element_costTime' | i18n }}</th>
+						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
+						<th width="15%" align="left">{{ 'zone_total_slots' | i18n }} Tot</th>
+						<th width="15%" align="left">{{ 'zone_occupied_slots' | i18n }}</th>
+						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
+					</tr>
+					<tbody class="animate-repeat"
+						ng-repeat="zone in filtered = (zoneWS4 | filter:nameFilter) | orderBy: ['-occupancy', 'name'] |  startFrom:currentPageZt*maxZones | limitTo:maxZones">
+						<tr>
+							<td width="20%" align="left"><span ng-show="zconf4.zone_name.visible">{{zone.name}}</span></td>
+							<td width="10%" align="center"><span ng-show="zconf4.zone_submicro.visible">{{zone.submicro}}</span></td>
+							<td width="10%" align="left"><div class="colorBox" ng-show="zconf4.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(zone.extratime)}"></div></td>
+							<td width="10%" align="left">
+								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min != zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} - {{ zone.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="zone.extratime != null && zone.extratime.extratime_estimation_min == zone.extratime.extratime_estimation_max">{{ zone.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+								<span ng-show="zone.extratime == null">n.p.</span>
+							</td>
+							<td width="10%" align="left">
+								<span ng-show="zone.occupancy != '-1'">{{zone.occupancy | doubleWithTwoDecimals}}%</span>
+								<span ng-show="zone.occupancy == '-1'">n.p.</span>
+							</td>
+							<td width="15%" align="left">{{zone.slotNumber}}</td>
+							<td width="15%" align="left">{{zone.slotOccupied}}</td>
+							<td width="5%" align="center">
+								<a href type="button" class="btn btn-primary btn-xs" ng-click="showTimeCostInList(zone,4,4)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
+							</td>
+						</tr>
+					</tbody>
+					<tr ng-show="zoneWS4.length == 0">
+						<td colspan="9"><strong>{{ 'no_zones_in_lists' | i18n }}</strong></td>
+					</tr>
+				</table>
+			</div>
+			<table width="100%">
+				<tr>
+					<td width="33%"></td>
+					<td width="34%" align="center">
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZt == 0"
+								ng-click="currentPageZt=currentPageZt-1">{{ 'previous_label' | i18n }}</button>
+							{{currentPageZt+1}}/{{numberOfPages(5, filtered,4)}}
+						<button class="btn btn-primary"
+								ng-disabled="currentPageZt >= filtered.length/maxZones - 1"
+								ng-click="currentPageZt=currentPageZt+1">{{ 'next_label' | i18n }}</button>
+					</td>
+					<td width="33%" align="right">
+						<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport()">{{ 'report_btn_automate' | i18n }}</button>			
+						<a href class="btn btn-success" target="_blank" ng-click="getZoneTimeCostCsv(4)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+					</td>
+				</tr>
+			</table>		
+		</div>
 		<div ng-show="showAList && showParkSupplyLists">
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
@@ -1867,24 +2604,29 @@
 						        	</td>
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
-						        <tr ng-show="sconf.s_zones0.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
+						        <tr ng-show="sconf.s_zones0.visible  && (sDetails.myZones0 != null && sDetails.myZones0.length > 0)">
 						        	<td class="detailsListTableCXS"></td>
-									<td colspan="3" align="left"><strong>{{ 'street_zonemacro' | i18n }}</strong></td>
+									<td colspan="3" align="left"><strong>{{ zone0_label | i18n }}</strong></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="sconf.s_zones0.visible  && (sDetails.myZones != null && sDetails.myZones.length > 0)">
+								<tr ng-show="sconf.s_zones0.visible  && (sDetails.myZones0 != null && sDetails.myZones0.length > 0)">
 									<td class="detailsListTableCXS"></td>
 									<td colspan="3">
-										<table width="100%" ng-repeat="z in sDetails.myZones"><!-- track by z.id -->
+										<table width="100%" ng-repeat="z in sDetails.myZones0"><!-- track by z.id -->
 											<tr>
 												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
 												<td class="detailsListTableDXS">{{ z.name }}</td>
 											</tr>
-											<tr>
+											<tr ng-if="z.submacro">
 												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
 												<td class="detailsListTableDXS">{{ z.submacro }}</td>
+											</tr>
+											<tr ng-if="z.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submicro }}</td>
 											</tr>
 											<tr>
 												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
@@ -1897,26 +2639,136 @@
 									<td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="sconf.s_zones0.visible  && (sDetails.myMicroZones != null && sDetails.myMicroZones.length > 0)">
+								<tr ng-show="sconf.s_zones1.visible  && (sDetails.myZones1 != null && sDetails.myZones1.length > 0)">
 						        	<td class="detailsListTableCXS"></td>
-									<td colspan="3" align="left"><strong>{{ 'street_zonemicro' | i18n }}</strong></td>
+									<td colspan="3" align="left"><strong>{{ zone1_label | i18n }}</strong></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="sconf.s_zones0.visible  && (sDetails.myMicroZones != null && sDetails.myMicroZones.length > 0)">
+								<tr ng-show="sconf.s_zones1.visible  && (sDetails.myZones1 != null && sDetails.myZones1.length > 0)">
 									<td class="detailsListTableCXS"></td>
 									<td colspan="3">
-										<table width="100%" ng-repeat="mz in sDetails.myMicroZones"><!-- track by $index -->
+										<table width="100%" ng-repeat="mz in sDetails.myZones1"><!-- track by $index -->
 											<tr>
 												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
 												<td class="detailsListTableDXS">{{ mz.name }}</td>
 											</tr>
-											<tr>
+											<tr ng-if="mz.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.submacro }}</td>
+											</tr>
+											<tr ng-if="mz.submicro">
 												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
 												<td class="detailsListTableDXS">{{ mz.submicro }}</td>
 											</tr>
+											<tr ng-if="mz.color">
+												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">
+													<span class="colorBox" ng-style="{'background-color': correctColor(mz.color)}"></span>
+												</td>
+											</tr>
+										</table>
+									<td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="sconf.s_zones2.visible  && (sDetails.myZones2 != null && sDetails.myZones2.length > 0)">
+						        	<td class="detailsListTableCXS"></td>
+									<td colspan="3" align="left"><strong>{{ zone2_label | i18n }}</strong></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="sconf.s_zones2.visible  && (sDetails.myZones2 != null && sDetails.myZones2.length > 0)">
+									<td class="detailsListTableCXS"></td>
+									<td colspan="3">
+										<table width="100%" ng-repeat="mz in sDetails.myZones2"><!-- track by $index -->
 											<tr>
+												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.name }}</td>
+											</tr>
+											<tr ng-if="mz.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.submacro }}</td>
+											</tr>
+											<tr ng-if="mz.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.submicro }}</td>
+											</tr>
+											<tr ng-if="mz.color">
+												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">
+													<span class="colorBox" ng-style="{'background-color': correctColor(mz.color)}"></span>
+												</td>
+											</tr>
+										</table>
+									<td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="sconf.s_zones3.visible  && (sDetails.myZones3 != null && sDetails.myZones3.length > 0)">
+						        	<td class="detailsListTableCXS"></td>
+									<td colspan="3" align="left"><strong>{{ zone3_label | i18n }}</strong></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="sconf.s_zones3.visible  && (sDetails.myZones3 != null && sDetails.myZones3.length > 0)">
+									<td class="detailsListTableCXS"></td>
+									<td colspan="3">
+										<table width="100%" ng-repeat="mz in sDetails.myZones3"><!-- track by $index -->
+											<tr>
+												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.name }}</td>
+											</tr>
+											<tr ng-if="mz.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.submacro }}</td>
+											</tr>
+											<tr ng-if="mz.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.submicro }}</td>
+											</tr>
+											<tr ng-if="mz.color">
+												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">
+													<span class="colorBox" ng-style="{'background-color': correctColor(mz.color)}"></span>
+												</td>
+											</tr>
+										</table>
+									<td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="sconf.s_zones4.visible  && (sDetails.myZones4 != null && sDetails.myZones4.length > 0)">
+						        	<td class="detailsListTableCXS"></td>
+									<td colspan="3" align="left"><strong>{{ zone3_label | i18n }}</strong></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="sconf.s_zones4.visible  && (sDetails.myZones4 != null && sDetails.myZones4.length > 0)">
+									<td class="detailsListTableCXS"></td>
+									<td colspan="3">
+										<table width="100%" ng-repeat="mz in sDetails.myZones4"><!-- track by $index -->
+											<tr>
+												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.name }}</td>
+											</tr>
+											<tr ng-if="mz.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.submacro }}</td>
+											</tr>
+											<tr ng-if="mz.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ mz.submicro }}</td>
+											</tr>
+											<tr ng-if="mz.color">
 												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
 												<td class="detailsListTableCXS"></td>
 												<td class="detailsListTableDXS">
@@ -2009,7 +2861,7 @@
 					</tr>
 				</table>										
 			</div>
-			<div ng-if="isZoneDetShow()">
+			<div ng-if="isZoneDetShow(0)">
 				<table width="100%">
 					<tr>
 						<td width="33%" valign="top">
@@ -2066,9 +2918,8 @@
 						</td>
 					</tr>
 				</table>
-					
 			</div>
-			<div ng-if="isMicroZoneDetShow()">
+			<div ng-if="isZoneDetShow(1)">
 				<table width="100%">
 					<tr>
 						<td width="33%" valign="top">
@@ -2077,15 +2928,15 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zconf1.zone_submacro.visible"> - {{ zDetails.submacro }}</span><span ng-show="zconf1.zone_submicro.visible"> - {{ zDetails.submicro }}</span></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="zconf0.zone_color.visible">
+								<tr ng-show="zconf1.zone_color.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">
-										<span class="colorBox" ng-style="{'background-color': correctColor(microZDetails.color)}"></span>
+										<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.color)}"></span>
 									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
@@ -2093,15 +2944,15 @@
 						</td>
 						<td width="34%" valign="top">
 							<table width="100%">
-								<tr ng-show="zconf0.zone_type.visible">
+								<tr ng-show="zconf1.zone_type.visible">
 									<td class="detailsListTableSX">{{ 'zone_type' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;<span ng-if="microZDetails.myType.label">{{ microZDetails.myType.label }}</span></td>
+									<td class="detailsListTableDX">&nbsp;<span ng-if="zDetails.myType.label">{{ zDetails.myType.label }}</span></td>
 								</tr>
-								<tr ng-show="zconf0.zone_note.visible">
+								<tr ng-show="zconf1.zone_note.visible">
 									<td class="detailsListTableSX">{{ 'zone_note' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">&nbsp;{{ microZDetails.note }}</td>
+									<td class="detailsListTableDX">&nbsp;{{ zDetails.note }}</td>
 								</tr>
 							</table>
 						</td>
@@ -2118,14 +2969,187 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.slotNumber }}</td>
+									<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>	
+			</div>
+			<div ng-if="isZoneDetShow(2)">
+				<table width="100%">
+					<tr>
+						<td width="33%" valign="top">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zconf2.zone_submacro.visible"> - {{ zDetails.submacro }}</span><span ng-show="zconf2.zone_submicro.visible"> - {{ zDetails.submicro }}</span></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="zconf2.zone_color.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.color)}"></span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+						<td width="34%" valign="top">
+							<table width="100%">
+								<tr ng-show="zconf2.zone_type.visible">
+									<td class="detailsListTableSX">{{ 'zone_type' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">&nbsp;<span ng-if="zDetails.myType.label">{{ zDetails.myType.label }}</span></td>
+								</tr>
+								<tr ng-show="zconf2.zone_note.visible">
+									<td class="detailsListTableSX">{{ 'zone_note' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">&nbsp;{{ zDetails.note }}</td>
+								</tr>
+							</table>
+						</td>
+						<td width="33%" valign="top">
+							<table width="100%">
+								<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 							</table>
 						</td>
 					</tr>
 				</table>
-					
+			</div>
+			<div ng-if="isZoneDetShow(3)">
+				<table width="100%">
+					<tr>
+						<td width="33%" valign="top">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zconf3.zone_submacro.visible"> - {{ zDetails.submacro }}</span><span ng-show="zconf3.zone_submicro.visible"> - {{ zDetails.submicro }}</span></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="zconf3.zone_color.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.color)}"></span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+						<td width="34%" valign="top">
+							<table width="100%">
+								<tr ng-show="zconf3.zone_type.visible">
+									<td class="detailsListTableSX">{{ 'zone_type' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">&nbsp;<span ng-if="zDetails.myType.label">{{ zDetails.myType.label }}</span></td>
+								</tr>
+								<tr ng-show="zconf3.zone_note.visible">
+									<td class="detailsListTableSX">{{ 'zone_note' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">&nbsp;{{ zDetails.note }}</td>
+								</tr>
+							</table>
+						</td>
+						<td width="33%" valign="top">
+							<table width="100%">
+								<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div ng-if="isZoneDetShow(4)">
+				<table width="100%">
+					<tr>
+						<td width="33%" valign="top">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zconf4.zone_submacro.visible"> - {{ zDetails.submacro }}</span><span ng-show="zconf4.zone_submicro.visible"> - {{ zDetails.submicro }}</span></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="zconf4.zone_color.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">
+										<span class="colorBox" ng-style="{'background-color': correctColor(zDetails.color)}"></span>
+									</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+						<td width="34%" valign="top">
+							<table width="100%">
+								<tr ng-show="zconf4.zone_type.visible">
+									<td class="detailsListTableSX">{{ 'zone_type' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">&nbsp;<span ng-if="zDetails.myType.label">{{ zDetails.myType.label }}</span></td>
+								</tr>
+								<tr ng-show="zconf4.zone_note.visible">
+									<td class="detailsListTableSX">{{ 'zone_note' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">&nbsp;{{ zDetails.note }}</td>
+								</tr>
+							</table>
+						</td>
+						<td width="33%" valign="top">
+							<table width="100%">
+								<tr>
+						   			<td class="detailsListTableCXS"></td>
+						   			<td colspan="3" class="detailsTableColSpanLeftS">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   			<td class="detailsListTableCXS"></td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+							</table>
+						</td>
+					</tr>
+				</table>
 			</div>
 			<div ng-if="isAreaDetShow()">
 				<table width="100%">
@@ -2148,13 +3172,181 @@
 									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-<!-- 								<tr> -->
-<!-- 									<td class="detailsListTableCXS"></td> -->
-<!-- 									<td class="detailsListTableSXS">{{ 'area_note' | i18n }}:</td> -->
-<!-- 									<td class="detailsListTableCXS"></td> -->
-<!-- 									<td class="detailsListTableDXS">{{ aDetails.note }}</td> -->
-<!-- 									<td class="detailsListTableCXS"></td> -->
-<!-- 								</tr> -->
+								<tr ng-show="aconf.a_zones0.visible  && (aDetails.myZones0 != null && aDetails.myZones0.length > 0)">
+						        	<td class="detailsListTableCXS"></td>
+									<td colspan="3" align="left"><strong>{{ zone0_label | i18n }}</strong></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones0.visible  && (aDetails.myZones0 != null && aDetails.myZones0.length > 0)">
+									<td class="detailsListTableCXS"></td>
+									<td colspan="3">
+										<table width="100%" ng-repeat="z in aDetails.myZones0"><!-- track by $index -->
+											<tr>
+												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.name }}</td>
+											</tr>
+											<tr ng-if="z.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submacro }}</td>
+											</tr>
+											<tr ng-if="z.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submicro }}</td>
+											</tr>
+											<tr ng-if="z.color">
+												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">
+													<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span>
+												</td>
+											</tr>
+										</table>
+									<td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones1.visible  && (aDetails.myZones1 != null && aDetails.myZones1.length > 0)">
+						        	<td class="detailsListTableCXS"></td>
+									<td colspan="3" align="left"><strong>{{ zone1_label | i18n }}</strong></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones1.visible  && (aDetails.myZones1 != null && aDetails.myZones1.length > 0)">
+									<td class="detailsListTableCXS"></td>
+									<td colspan="3">
+										<table width="100%" ng-repeat="z in aDetails.myZones1"><!-- track by $index -->
+											<tr>
+												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.name }}</td>
+											</tr>
+											<tr ng-if="z.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submacro }}</td>
+											</tr>
+											<tr ng-if="z.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submicro }}</td>
+											</tr>
+											<tr ng-if="z.color">
+												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">
+													<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span>
+												</td>
+											</tr>
+										</table>
+									<td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones2.visible  && (aDetails.myZones2 != null && aDetails.myZones2.length > 0)">
+						        	<td class="detailsListTableCXS"></td>
+									<td colspan="3" align="left"><strong>{{ zone2_label | i18n }}</strong></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones2.visible  && (aDetails.myZones2 != null && aDetails.myZones2.length > 0)">
+									<td class="detailsListTableCXS"></td>
+									<td colspan="3">
+										<table width="100%" ng-repeat="z in aDetails.myZones2"><!-- track by $index -->
+											<tr>
+												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.name }}</td>
+											</tr>
+											<tr ng-if="z.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submacro }}</td>
+											</tr>
+											<tr ng-if="z.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submicro }}</td>
+											</tr>
+											<tr ng-if="z.color">
+												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">
+													<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span>
+												</td>
+											</tr>
+										</table>
+									<td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones3.visible  && (aDetails.myZones3 != null && aDetails.myZones3.length > 0)">
+						        	<td class="detailsListTableCXS"></td>
+									<td colspan="3" align="left"><strong>{{ zone3_label | i18n }}</strong></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones3.visible  && (aDetails.myZones3 != null && aDetails.myZones3.length > 0)">
+									<td class="detailsListTableCXS"></td>
+									<td colspan="3">
+										<table width="100%" ng-repeat="z in aDetails.myZones3"><!-- track by $index -->
+											<tr>
+												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.name }}</td>
+											</tr>
+											<tr ng-if="z.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submacro }}</td>
+											</tr>
+											<tr ng-if="z.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submicro }}</td>
+											</tr>
+											<tr ng-if="z.color">
+												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">
+													<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span>
+												</td>
+											</tr>
+										</table>
+									<td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones4.visible  && (aDetails.myZones4 != null && aDetails.myZones4.length > 0)">
+						        	<td class="detailsListTableCXS"></td>
+									<td colspan="3" align="left"><strong>{{ zone4_label | i18n }}</strong></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="aconf.a_zones4.visible  && (aDetails.myZones4 != null && aDetails.myZones4.length > 0)">
+									<td class="detailsListTableCXS"></td>
+									<td colspan="3">
+										<table width="100%" ng-repeat="z in aDetails.myZones4"><!-- track by $index -->
+											<tr>
+												<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.name }}</td>
+											</tr>
+											<tr ng-if="z.submacro">
+												<td class="detailsListTableSXS">{{ 'zone_submacro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submacro }}</td>
+											</tr>
+											<tr ng-if="z.submicro">
+												<td class="detailsListTableSXS">{{ 'zone_submicro' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">{{ z.submicro }}</td>
+											</tr>
+											<tr ng-if="z.color">
+												<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+												<td class="detailsListTableCXS"></td>
+												<td class="detailsListTableDXS">
+													<span class="colorBox" ng-style="{'background-color': correctColor(z.color)}"></span>
+												</td>
+											</tr>
+										</table>
+									<td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
 							</table>
 						</td>
 						<td width="34%">
@@ -2609,7 +3801,7 @@
 					</tr>
 				</table>
 			</div>
-			<div ng-show="isZoneDetShow()">
+			<div ng-show="isZoneDetShow(0)">
 				<table width="100%">
 					<tr>
 						<td width="40%" valign="top">
@@ -2720,7 +3912,7 @@
 					</tr>
 				</table>	
 			</div>
-			<div ng-show="isMicroZoneDetShow()">
+			<div ng-show="isZoneDetShow(1)">
 				<table width="100%">
 					<tr>
 						<td width="40%" valign="top">
@@ -2729,7 +3921,7 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="microzone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zconf1.zone_submacro.visible"> - {{ zDetails.submacro }}</span><span ng-show="zconf1.zone_submicro.visible"> - {{ zDetails.submicro }}</span></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
@@ -2750,7 +3942,7 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.slotNumber }}</td>
+									<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
@@ -2758,15 +3950,16 @@
 								   	<td class="detailsListTableSXS">{{ 'zone_occupied_slots' | i18n }}:</td>
 								   	<td class="detailsListTableCXS"></td>
 								   	<td class="detailsListTableDXS">
-								   		<span ng-show="isCorrectNumber(microZDetails.slotOccupied)">{{ microZDetails.slotOccupied }}</span>
-								   		<span ng-show="!isCorrectNumber(microZDetails.slotOccupied)">n.p.</span>
+								   		<span ng-show="isCorrectNumber(zDetails.slotOccupied)">{{ zDetails.slotOccupied }}</span>
+								   		<span ng-show="!isCorrectNumber(zDetails.slotOccupied)">n.p.</span>
 								   	</td>
 								   	<td class="detailsListTableCXS"></td>
 								</tr>
 							</table>
 						</td>
 						<td width="60%" valign="top">
-							<div google-chart chart="chartMicroZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(microZDetails.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>
@@ -2781,9 +3974,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
 									</select>
-									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)">
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2792,9 +3985,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
-									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 1)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -2804,7 +3997,7 @@
 				</form>
 				<div class="detailstablewrapper">
 					<table width="100%" class="table table-bordered">
-						<tbody class="animate-repeat" ng-repeat="rows in matrixMicroZoneOcc track by $index">
+						<tbody class="animate-repeat" ng-repeat="rows in matrixZoneOcc track by $index">
 						<tr ng-if="$index == 0">
 							<th ng-repeat="col in rows track by $index">
 								<span>{{ col }}</span>
@@ -2825,7 +4018,7 @@
 						<td width="34%"></td>
 						<td width="33%" align="right">
 							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
-							<a href class="btn btn-success" target="_blank" ng-click="getOccupancyMicroZoneHistoryCsv(microZDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+							<a href class="btn btn-success" target="_blank" ng-click="getOccupancyZoneHistoryCsv(zDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
 				</table>	
@@ -3427,7 +4620,7 @@
 					</tr>
 				</table>										
 			</div>
-			<div ng-show="isZoneDetShow()">
+			<div ng-show="isZoneDetShow(0)">
 				<table width="100%">
 					<tr>
 						<td width="33%" valign="bottom">
@@ -3501,164 +4694,16 @@
 						</td>
 					</tr>
 				</table>
-				<form role="form" name="form">
-					<table width="100%">
-						<tr>
-						    <td width="47%">
-						    	<div class="form-group">
-									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
-									</select>
-									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
-									</select>
-								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
-								</div>
-						    </td>
-						    <td width="5%"></td>
-						    <td width="48%">
-						    	<div class="form-group">
-									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
-									</select>
-									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
-									</select>
-									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
-								</div>
-						    </td>
-						</tr>
-					</table>
-				</form>
-				<div class="detailstablewrapper">
-					<label>{{ 'profit_history_table_label' | i18n }}</label>
-					<table width="100%" class="table table-bordered">
-						<tbody class="animate-repeat" ng-repeat="rows in matrixZoneProf track by $index">
-						<tr ng-if="$index == 0">
-							<th ng-repeat="col in rows track by $index">
-								<span>{{ col }}</span>
-							</th>
-						</tr>
-						<tr ng-if="$index != 0">
-							<td ng-repeat="col in rows track by $index">
-								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
-								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
-								<span ng-if="$index != 0 && col==-1">/</span>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<div class="detailstablewrapper">
-					<label>{{ 'tickets_history_table_label' | i18n }}</label>
-					<table width="100%" class="table table-bordered">
-						<tbody class="animate-repeat" ng-repeat="rows in matrixZoneTick track by $index">
-						<tr ng-if="$index == 0">
-							<th ng-repeat="col in rows track by $index">
-								<span>{{ col }}</span>
-							</th>
-						</tr>
-						<tr ng-if="$index != 0">
-							<td ng-repeat="col in rows track by $index">
-								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
-								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
-								<span ng-if="$index != 0 && col==-1">/</span>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<table width="100%">
-					<tr>
-						<td width="33%"></td>
-						<td width="34%"></td>
-						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
-							<a href class="btn btn-success" target="_blank" ng-click="getProfitZoneHistoryCsv(zDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-						</td>
-					</tr>
-				</table>	
-			</div>
-			<div ng-show="isMicroZoneDetShow()">
-				<table width="100%">
-					<tr>
-						<td width="33%" valign="bottom">
-							<table width="100%">
-								<tr>
-									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
-									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="zconf1.zone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
-									<td class="detailsListTableCXS"></td>
-								</tr>
-								<tr ng-show="zconf1.zone_color.visible">
-									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
-									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS"><div class="colorBox" ng-style="{'background-color': correctColor(microZDetails.color)}"></div></td>
-									<td class="detailsListTableCXS"></td>
-								</tr>
-						   		
-									
-							</table>
-						</td>
-						<td width="34%" valign="bottom">
-							<table width="100%">
-								<tr>
-						   			<td colspan="3" class="detailsTableColSpanLeft">
-						   				{{ 'street_slots' | i18n }}
-						   			</td>
-						   		</tr>
-								<tr>
-									<td class="detailsNumberListTableSX">{{ 'zone_total_slots' | i18n }}:</td>
-									<td class="detailsNumberListTableCX"></td>
-									<td class="detailsNumberListTableDX">{{ microZDetails.slotNumber }}</td>
-								</tr>
-								<tr>
-								   	<td class="detailsNumberListTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
-								   	<td class="detailsNumberListTableCX"></td>
-								   	<td class="detailsNumberListTableDX">{{ microZDetails.slotPaid }}</td>
-								</tr>
-							</table>
-						</td>
-						<td width="33%" valign="bottom">
-							<table width="100%">
-								<tr>
-						   			<td colspan="3" class="detailsTableColSpanLeft">
-						   				{{ 'zone_profit' | i18n }}
-						   			</td>
-						   		</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'zone_profit' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">
-										<span ng-if="microZDetails.profit > 0">&nbsp;{{ correctEuroCent(microZDetails.profit) | euroVal }}{{ 'euro' | i18n }}</span>
-										<span ng-if="microZDetails.profit <= 0">&nbsp;n.p.</span>
-									</td>
-								</tr>
-								<tr>
-								   	<td class="detailsListTableSX">{{ 'zone_tickets' | i18n }}:</td>
-								   	<td class="detailsListTableCX"></td>
-								   	<td class="detailsListTableDX">
-										<span ng-if="microZDetails.tickets > 0">&nbsp;{{ microZDetails.tickets }}</span>
-										<span ng-if="microZDetails.tickets <= 0">&nbsp;n.p.</span>
-									</td>
-								</tr>
-							</table>
-						</td>		
-					</tr>
-					<tr>
-						<td colspan="3">
-							<hr/>
-						</td>
-					</tr>
-				</table>
-				<div ng-show="showMicroZProfMatrix">
+				<div ng-show="showZoneProfMatrix">
 					<form role="form" name="form">
 						<table width="100%">
 							<tr>
 							    <td width="47%">
 							    	<div class="form-group">
 										<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-										<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)">
+										<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
 										</select>
-										<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)">
+										<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
 										</select>
 									   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 									</div>
@@ -3667,9 +4712,9 @@
 							    <td width="48%">
 							    	<div class="form-group">
 										<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-										<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)"><!--  ng-disabled="lockOrizontalValSelect" -->
+										<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 										</select>
-										<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 2)"><!--  ng-disabled="lockOrizontalValSelect" -->
+										<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
 										</select>
 										<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 									</div>
@@ -3680,7 +4725,7 @@
 					<div class="detailstablewrapper">
 						<label>{{ 'profit_history_table_label' | i18n }}</label>
 						<table width="100%" class="table table-bordered">
-							<tbody class="animate-repeat" ng-repeat="rows in matrixMicroZoneProf track by $index">
+							<tbody class="animate-repeat" ng-repeat="rows in matrixZoneProf track by $index">
 							<tr ng-if="$index == 0">
 								<th ng-repeat="col in rows track by $index">
 									<span>{{ col }}</span>
@@ -3698,7 +4743,157 @@
 					<div class="detailstablewrapper">
 						<label>{{ 'tickets_history_table_label' | i18n }}</label>
 						<table width="100%" class="table table-bordered">
-							<tbody class="animate-repeat" ng-repeat="rows in matrixMicroZoneTick track by $index">
+							<tbody class="animate-repeat" ng-repeat="rows in matrixZoneTick track by $index">
+							<tr ng-if="$index == 0">
+								<th ng-repeat="col in rows track by $index">
+									<span>{{ col }}</span>
+								</th>
+							</tr>
+							<tr ng-if="$index != 0">
+								<td ng-repeat="col in rows track by $index">
+									<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
+									<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+									<span ng-if="$index != 0 && col==-1">/</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<table width="100%">
+						<tr>
+							<td width="33%"></td>
+							<td width="34%"></td>
+							<td width="33%" align="right">
+								<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+								<a href class="btn btn-success" target="_blank" ng-click="getProfitZoneHistoryCsv(zDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+							</td>
+						</tr>
+					</table>
+				</div>
+			</div>
+			<div ng-show="isZoneDetShow(1)">
+				<table width="100%">
+					<tr>
+						<td width="33%" valign="bottom">
+							<table width="100%">
+								<tr>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zconf1.zone_submacro.visible"> - {{ zDetails.submacro }}</span><span ng-show="zconf1.zone_submicro.visible"> - {{ zDetails.submicro }}</span></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+								<tr ng-show="zconf1.zone_color.visible">
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableSXS">{{ 'zone_color' | i18n }}:</td>
+									<td class="detailsListTableCXS"></td>
+									<td class="detailsListTableDXS"><div class="colorBox" ng-style="{'background-color': correctColor(zDetails.color)}"></div></td>
+									<td class="detailsListTableCXS"></td>
+								</tr>
+						   		
+									
+							</table>
+						</td>
+						<td width="34%" valign="bottom">
+							<table width="100%">
+								<tr>
+						   			<td colspan="3" class="detailsTableColSpanLeft">
+						   				{{ 'street_slots' | i18n }}
+						   			</td>
+						   		</tr>
+								<tr>
+									<td class="detailsNumberListTableSX">{{ 'zone_total_slots' | i18n }}:</td>
+									<td class="detailsNumberListTableCX"></td>
+									<td class="detailsNumberListTableDX">{{ zDetails.slotNumber }}</td>
+								</tr>
+								<tr>
+								   	<td class="detailsNumberListTableSX">{{ 'zone_paid_slots' | i18n }}:</td>
+								   	<td class="detailsNumberListTableCX"></td>
+								   	<td class="detailsNumberListTableDX">{{ zDetails.slotPaid }}</td>
+								</tr>
+							</table>
+						</td>
+						<td width="33%" valign="bottom">
+							<table width="100%">
+								<tr>
+						   			<td colspan="3" class="detailsTableColSpanLeft">
+						   				{{ 'zone_profit' | i18n }}
+						   			</td>
+						   		</tr>
+								<tr>
+									<td class="detailsListTableSX">{{ 'zone_profit' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">
+										<span ng-if="zDetails.profit > 0">&nbsp;{{ correctEuroCent(zDetails.profit) | euroVal }}{{ 'euro' | i18n }}</span>
+										<span ng-if="zDetails.profit <= 0">&nbsp;n.p.</span>
+									</td>
+								</tr>
+								<tr>
+								   	<td class="detailsListTableSX">{{ 'zone_tickets' | i18n }}:</td>
+								   	<td class="detailsListTableCX"></td>
+								   	<td class="detailsListTableDX">
+										<span ng-if="zDetails.tickets > 0">&nbsp;{{ zDetails.tickets }}</span>
+										<span ng-if="zDetails.tickets <= 0">&nbsp;n.p.</span>
+									</td>
+								</tr>
+							</table>
+						</td>		
+					</tr>
+					<tr>
+						<td colspan="3">
+							<hr/>
+						</td>
+					</tr>
+				</table>
+				<div ng-show="showZoneProfMatrix">
+					<form role="form" name="form">
+						<table width="100%">
+							<tr>
+							    <td width="47%">
+							    	<div class="form-group">
+										<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
+										<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
+										</select>
+										<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)">
+										</select>
+									   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
+									</div>
+							    </td>
+							    <td width="5%"></td>
+							    <td width="48%">
+							    	<div class="form-group">
+										<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
+										<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"><!--  ng-disabled="lockOrizontalValSelect" -->
+										</select>
+										<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 2)"><!--  ng-disabled="lockOrizontalValSelect" -->
+										</select>
+										<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
+									</div>
+							    </td>
+							</tr>
+						</table>
+					</form>
+					<div class="detailstablewrapper">
+						<label>{{ 'profit_history_table_label' | i18n }}</label>
+						<table width="100%" class="table table-bordered">
+							<tbody class="animate-repeat" ng-repeat="rows in matrixZoneProf track by $index">
+							<tr ng-if="$index == 0">
+								<th ng-repeat="col in rows track by $index">
+									<span>{{ col }}</span>
+								</th>
+							</tr>
+							<tr ng-if="$index != 0">
+								<td ng-repeat="col in rows track by $index">
+									<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
+									<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+									<span ng-if="$index != 0 && col==-1">/</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="detailstablewrapper">
+						<label>{{ 'tickets_history_table_label' | i18n }}</label>
+						<table width="100%" class="table table-bordered">
+							<tbody class="animate-repeat" ng-repeat="rows in matrixZoneTick track by $index">
 							<tr ng-if="$index == 0">
 								<th ng-repeat="col in rows track by $index">
 									<span>{{ col }}</span>
@@ -3719,7 +4914,7 @@
 							<td width="34%"></td>
 							<td width="33%" align="right">
 								<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
-								<a href class="btn btn-success" target="_blank" ng-click="getProfitMicroZoneHistoryCsv(microZDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+								<a href class="btn btn-success" target="_blank" ng-click="getProfitZoneHistoryCsv(zDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 							</td>
 						</tr>
 					</table>
@@ -4182,7 +5377,7 @@
 					</tr>
 				</table>											
 			</div>
-			<div ng-show="isZoneDetShow()">
+			<div ng-show="isZoneDetShow(0)">
 				<table width="100%">
 					<tr>
 						<td width="40%" valign="top">
@@ -4318,7 +5513,7 @@
 					</tr>
 				</table>				
 			</div>
-			<div ng-show="isMicroZoneDetShow()">
+			<div ng-show="isZoneDetShow(1)">
 				<table width="100%">
 					<tr>
 						<td width="40%" valign="top">
@@ -4327,7 +5522,7 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_name' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.name }}<span ng-show="zconf1.zone_submicro.visible"> - {{ microZDetails.submicro }}</span></td>
+									<td class="detailsListTableDXS">{{ zDetails.name }}<span ng-show="zconf1.zone_submacro.visible"> - {{ zDetails.submacro }}</span><span ng-show="zconf1.zone_submicro.visible"> - {{ zDetails.submicro }}</span></td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
@@ -4349,9 +5544,9 @@
 									<td class="detailsListTableSXS">{{ 'element_waiting_time' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">
-										<span ng-show="microZDetails.extratime != null && microZDetails.extratime.extratime_estimation_min != microZDetails.extratime.extratime_estimation_max">{{ microZDetails.extratime.extratime_estimation_min }} - {{ microZDetails.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
-										<span ng-show="microZDetails.extratime != null && microZDetails.extratime.extratime_estimation_min == microZDetails.extratime.extratime_estimation_max">{{ microZDetails.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
-										<span ng-show="microZDetails.extratime == null">n.p.</span>
+										<span ng-show="zDetails.extratime != null && zDetails.extratime.extratime_estimation_min != zDetails.extratime.extratime_estimation_max">{{ zDetails.extratime.extratime_estimation_min }} - {{ zDetails.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="zDetails.extratime != null && zDetails.extratime.extratime_estimation_min == zDetails.extratime.extratime_estimation_max">{{ zDetails.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
+										<span ng-show="zDetails.extratime == null">n.p.</span>
 									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
@@ -4373,7 +5568,7 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'zone_total_slots' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ microZDetails.slotNumber }}</td>
+									<td class="detailsListTableDXS">{{ zDetails.slotNumber }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
@@ -4381,15 +5576,16 @@
 								   	<td class="detailsListTableSXS">{{ 'zone_occupied_slots' | i18n }}:</td>
 								   	<td class="detailsListTableCXS"></td>
 								   	<td class="detailsListTableDXS">
-								   		<span ng-show="isCorrectNumber(microZDetails.slotOccupied)">{{ microZDetails.slotOccupied }}</span>
-								   		<span ng-show="!isCorrectNumber(microZDetails.slotOccupied)">n.p.</span>
+								   		<span ng-show="isCorrectNumber(zDetails.slotOccupied)">{{ zDetails.slotOccupied }}</span>
+								   		<span ng-show="!isCorrectNumber(zDetails.slotOccupied)">n.p.</span>
 								   	</td>
 								   	<td class="detailsListTableCXS"></td>
 								</tr>
 							</table>
 						</td>
 						<td width="60%" valign="top">
-							<div google-chart chart="chartMicroZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(microZDetails.slotOccupied)" />
+							<div ng-if="isActiveItalian()" google-chart chart="chartZoneOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
+							<div ng-if="isActiveEnglish()" google-chart chart="chartZoneOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(zDetails.slotOccupied)" />
 						</td>
 					</tr>
 					<tr>
@@ -4404,9 +5600,9 @@
 						    <td width="47%">
 						    	<div class="form-group">
 									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
+									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
 									</select>
-									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
+									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
 									</select>
 								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4415,9 +5611,9 @@
 						    <td width="48%">
 						    	<div class="form-group">
 									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
+									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
 									</select>
-									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 6, 3)">
+									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 5, 3)">
 									</select>
 									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
 								</div>
@@ -4427,7 +5623,7 @@
 				</form>
 				<div class="detailstablewrapper">
 					<table width="100%" class="table table-bordered">
-						<tbody class="animate-repeat" ng-repeat="rows in matrixMicroZoneTimeCost track by $index">
+						<tbody class="animate-repeat" ng-repeat="rows in matrixZoneTimeCost track by $index">
 						<tr ng-if="$index == 0">
 							<th ng-repeat="col in rows track by $index">
 								<span>{{ col }}</span>
@@ -4448,7 +5644,7 @@
 						<td width="34%"></td>
 						<td width="33%" align="right">
 							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
-							<a href class="btn btn-success" target="_blank" ng-click="getTimeCostMicroZoneHistoryCsv(microZDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
+							<a href class="btn btn-success" target="_blank" ng-click="getTimeCostZoneHistoryCsv(zDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 						</td>
 					</tr>
 				</table>				

@@ -707,7 +707,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					if(type == 1){
 						corrZone = myZones[i];
 					} else {
-						var sub = (myZones[i].submacro) ? myZones[i].submacro : (myZones[i].submacro) ? myZones[i].submicro : null;
+						var sub = (myZones[i].submacro) ? myZones[i].submacro : ((myZones[i].submicro) ? myZones[i].submicro : null);
+						var lbl = (sub) ? (myZones[i].name + "_" + sub) : myZones[i].name;
 						corrZone = {
 							id: myZones[i].id,
 							id_app: myZones[i].id_app,
@@ -718,7 +719,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 							type: myZones[i].type,
 							note: myZones[i].note,
 							geometry: $scope.correctMyGeometryPolygon(myZones[i].geometry),
-							label: (sub) ? myZones[i].name + "_" + sub : myZones[i].name
+							label: lbl
 						};
 					}			
 				}
@@ -1100,8 +1101,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.correctMyZones = function(zones){
 		var correctedZones = [];
 		for(var i = 0; i < zones.length; i++){
-			var sub = (zones[i].submacro) ? zones[i].submacro : (zones[i].submicro) ? zones[i].submicro : null;
+			var sub = (zones[i].submacro) ? zones[i].submacro : ((zones[i].submicro) ? zones[i].submicro : null);
 			var corrType = $scope.getCorrectZoneType(zones[i].type);
+			var lbl = (sub) ? (zones[i].name + "_" + sub) : zones[i].name;
 			var correctZone = {
 				id: zones[i].id,
 				id_app: zones[i].id_app,
@@ -1116,7 +1118,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				centermap: zones[i].centermap,
 				geometryFromSubelement: zones[i].geometryFromSubelement,
 				subelements: $scope.loadStreetsFromZone(zones[i].id),
-				label: (sub) ? zones[i].name + "_" + sub : zones[i].name
+				label: lbl
 			};
 			correctedZones.push(correctZone);
 		}
@@ -4913,7 +4915,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
     
     $scope.addLabelToZoneObject = function(zone){
-    	var sub = (zone.submacro) ? zone.submacro : (zone.submicro) ? zone.submicro : null;
+    	var sub = (zone.submacro) ? zone.submacro : ((zone.submicro) ? zone.submicro : null);
+    	var lbl = (sub) ? (zone.name + "_" + sub) : zone.name;
     	var corrected_zone = {
     		id: zone.id,
     		id_app: zone.id_app,
@@ -4926,7 +4929,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		geometry: zone.geometry,
     		geometryFromSubelement: zone.geometryFromSubelement,
     		subelements: zone.subelements,
-    		label: (sub) ? zone.name + "_" + sub : zone.name
+    		label: lbl
     	};
     	return corrected_zone;
     };
