@@ -630,7 +630,7 @@ providers:
         - code: zone1
           editable: true
           required: true
-          visible: true          
+          visible: true
         - code: geometry
           editable: true
           required: true
@@ -756,7 +756,7 @@ providers:
         - code: filter
           editable: false
           required: false
-          visible: true
+          visible: true         
      - id: Bp
        type: bp
        label: bp

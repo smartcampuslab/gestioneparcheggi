@@ -444,7 +444,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.setIndex = function($index, tab){
     	var localArea = sharedDataService.getSharedLocalAreas();
     	$scope.tabIndex = $index;
-    	if(tab.index < 2 && tab.index > 6){
+    	if(tab.index < 2 || tab.index > 6){
     		// check for shared zones only if not in zones tabs
 	    	for(var i = 0; i < zoneTabList.length; i++){
 	    		var type = zoneTabList[i].type;
@@ -3159,7 +3159,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		} else {
 			$scope.isInit=true;
 			$scope.showUpdatingAErrorMessage = false;
-			
 			var editCorrectedPath = [];
 			var editPaths = [];
 			if($scope.editGAreas != null &&  $scope.editGAreas.length > 0){
@@ -3179,7 +3178,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 							}
 							editPaths.push(editCorrectedPath);
 						}
-						//updatedAreaPol.setMap(null);	//Here I delete the area in edit map
 					}
 				}
 				if($scope.aEditAddingPolygon){
@@ -3230,9 +3228,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var id = area.id;
 			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
-			
 			var decimalFee = $scope.correctDecimal(area.fee, 1);
-			
 			var data = {
 				id: area.id,
 				id_app: area.id_app,
@@ -3244,13 +3240,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				note: area.note,
 				zones: $scope.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 				geometry: $scope.correctMyGeometryPolygonForArea(editPaths)
-				//geometry: $scope.correctMyGeometryPolygonForArea(polygon.path)
 			};
 			
 		    var value = JSON.stringify(data);
 		    if($scope.showLog) console.log("Area data : " + value);
-			
-		   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + id, null, $scope.authHeaders, value);
 		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + id, null, $scope.authHeaders, value);
 		    myDataPromise.then(function(result){
 		    	console.log("Updated street: " + result);
@@ -3263,6 +3256,34 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    	}
 		    });
 		}
+	};
+	
+	// Used to reload the area relations with zones
+	$scope.updateAreaZoneRelations = function(area){
+		var id = area.id;
+		var appId = sharedDataService.getConfAppId();
+		var method = 'PUT';
+		var data = {
+			id: area.id,
+			id_app: area.id_app,
+			name: area.name,
+			fee: area.fee,
+			timeSlot: area.timeSlot,
+			smsCode: area.smsCode,
+			color: area.color,
+			note: area.note,
+			zones: area.zones,
+			geometry: area.geometry
+		};
+			
+		var value = JSON.stringify(data);
+		if($scope.showLog) console.log("Area data : " + value);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + id, null, $scope.authHeaders, value);
+		myDataPromise.then(function(result){
+		   	if(result != null){ // == "OK"){
+		    	$scope.getAreasFromDb();
+		    }
+		});
 	};
 	
 	// Street
@@ -3333,6 +3354,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	// Used to update street relations with zones/parkingmeters
 	$scope.updateStreetPM = function(street){
 		var id = street.id;
 		var appId = sharedDataService.getConfAppId();
@@ -3356,13 +3378,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			zones: street.zones,
 			parkingMeters: street.parkingMeters,
 			geometry: street.geometry
-			//geometry: $scope.correctMyGeometryPolyline(polyline.path)
 		};
 		
 	    var value = JSON.stringify(data);
 	    if($scope.showLog) console.log("Street data : " + value);
-		
-	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street/" + id, null, $scope.authHeaders, value);
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated street: " + result);
@@ -3475,6 +3494,32 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    	
 		    });
 		}
+	};
+	
+	// Method updatePmZoneRelations: used to update the zone relation of a pm object
+	$scope.updatePmZoneRelations = function(pm){
+		var id = pm.id;
+		var appId = sharedDataService.getConfAppId();
+		var method = 'PUT';
+		var data = {
+			id: pm.id,
+			id_app: pm.id_app,
+			code: pm.code,
+			note: pm.note,
+			status: pm.status,
+			areaId: pm.areaId,
+			zones: pm.zones,
+			geometry: pm.geometry
+		};
+		
+	    var value = JSON.stringify(data);
+	    if($scope.showLog) console.log("Parkingmeter data : " + value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter/" + id, null, $scope.authHeaders, value);
+		myDataPromise.then(function(result){
+		    if(result != null){ // == "OK"){
+		    	$scope.getParkingMetersFromDb();
+		    }    	
+		});
 	};
 	
 	$scope.addOpeningPeriod = function(start, end){
@@ -3654,6 +3699,42 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}	
 	};
 	
+	// Method updatePsZoneRelations: used to update the ps object if the relation with zone change
+	$scope.updatePsZoneRelations = function(ps){
+		var id = ps.id;
+		var appId = sharedDataService.getConfAppId();
+		var method = 'PUT';
+				
+		var data = {
+			id: ps.id,
+			id_app: ps.id_app,
+			name: ps.name,
+			streetReference: ps.streetReference,
+			fee_val: ps.fee_val,
+			fee_note: ps.fee_note,
+			timeSlot: ps.timeSlot,
+			openingTime: ps.openingTime,
+			manager: ps.manager,
+			managementMode: ps.managementMode,
+			phoneNumber: ps.phoneNumber,
+			paymentMode: ps.paymentMode,
+			slotNumber: ps.slotNumber,
+			payingSlotNumber: ps.payingSlotNumber,
+			handicappedSlotNumber: ps.handicappedSlotNumber,
+			unusuableSlotNumber: ps.unusuableSlotNumber,
+			geometry: ps.geometry,
+			zones: ps.zones,
+			parkAndRide: ps.parkAndRide
+		};	
+		var value = JSON.stringify(data);
+		if($scope.showLog) console.log("Parkingmeter data : " + value);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + id, null, $scope.authHeaders, value);
+		myDataPromise.then(function(result){
+			if(result != null){ // == "OK"){
+				$scope.getParkingStructuresFromDb();
+			}
+		});
+	};
 	
 	// Update Zone Object
 	$scope.updateZone = function(form, zone, myColor, center, type){	//, polygon
@@ -3760,6 +3841,31 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	// Method updateBpZoneRelations: used to update the zone relations from a bp object
+	$scope.updateBpZoneRelations = function(bp){
+		var id = $scope.bikePoint.id;
+		var appId = sharedDataService.getConfAppId();
+		var method = 'PUT';
+		var bp = $scope.bikePoint;
+		var data = {
+			id: bp.id,
+			id_app: bp.id_app,
+			name: bp.name,
+			slotNumber: bp.slotNumber,
+			bikeNumber: bp.bikeNumber,
+			zones: bp.zones,
+			geometry: bp.geometry
+		};
+	    var value = JSON.stringify(data);
+	    if($scope.showLog) console.log("Bikepoint data : " + value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + id, null, $scope.authHeaders, value);
+	    myDataPromise.then(function(result){
+	    	if(result != null){//== "OK"){
+	    		$scope.getBikePointsFromDb();
+	    	}
+	    });		
+	};
+	
 	// Prepare Delete Methods
 	// Area
 	$scope.setARemove = function(area){
@@ -3815,12 +3921,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Zone
 	$scope.setZRemove = function(zone){
-		var sub = (zone.submacro != null) ? zone.submacro : zone.submicro;
-		var delZone = $dialogs.confirm("Attenzione", "Vuoi cancellare la zona '" + zone.name + "-" + sub + "'?");
+		var sub = (zone.submacro != null) ? zone.submacro : ((zone.submicro != null) ? zone.submicro : null);
+		var lbl = (sub) ? zone.name + "-" + sub : zone.name;
+		var delZone = $dialogs.confirm("Attenzione", "Vuoi cancellare la zona '" + lbl + "'?");
 			delZone.result.then(function(btn){
 				// yes case
 				$scope.deleteZone(zone);
-				
 				// Call the delete method
 			},function(btn){
 				// no case
@@ -3962,15 +4068,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		// zone removing from gmap
 		var zindex = $scope.tabIndex - 1;
 		var toDelZone = $scope.getCorrectMapZone(zindex);
-		//var toDelZone = $scope.vZoneMap.shapes;
-		//var toDelMicroZone = $scope.vMicroZoneMap.shapes;
     	if(toDelZone[zone.id] != null){
     		toDelZone[zone.id].setMap(null);
-    	} //else {
-    	//	if(toDelMicroZone[zone.id] != null){
-    	//		toDelMicroZone[zone.id].setMap(null);
-    	//	}
-    	//}
+    	}
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + zone.id, null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted zone: " + JSON.stringify(result));
@@ -3986,6 +4086,50 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    		}
 			    	}
 			    }
+	    		// Here I have to check and remove the zone id from the areas
+	    		for(var i = 0; i < $scope.areaWS.length; i++){
+	    			if($scope.areaWS[i].zones != null && $scope.areaWS[i].zones.length != null && $scope.areaWS[i].zones.length > 0){
+	    				for(var z = 0; z < $scope.areaWS[i].zones.length; z++){
+	    					if($scope.areaWS[i].zones[z] == zone.id){
+			    				$scope.areaWS[i].zones.splice(z,1);
+			    				$scope.updateAreaZoneRelations($scope.areaWS[i]);
+			    			}
+	    				}
+	    			}
+	    		}
+	    		// Here I have to check and remove the zone id from the pss
+	    		for(var i = 0; i < $scope.pstructWS.length; i++){
+	    			if($scope.pstructWS[i].zones != null && $scope.pstructWS[i].zones.length != null && $scope.pstructWS[i].zones.length > 0){
+	    				for(var z = 0; z < $scope.pstructWS[i].zones.length; z++){
+	    					if($scope.pstructWS[i].zones[z] == zone.id){
+			    				$scope.pstructWS[i].zones.splice(z,1);
+			    				$scope.updatePsZoneRelations($scope.pstructWS[i]);
+			    			}
+	    				}
+	    			}
+	    		}
+	    		// Here I have to check and remove the zone id from the pms
+	    		for(var i = 0; i < $scope.pmeterWS.length; i++){
+	    			if($scope.pmeterWS[i].zones != null && $scope.pmeterWS[i].zones.length != null && $scope.pmeterWS[i].zones.length > 0){
+	    				for(var z = 0; z < $scope.pmeterWS[i].zones.length; z++){
+	    					if($scope.pmeterWS[i].zones[z] == zone.id){
+			    				$scope.pmeterWS[i].zones.splice(z,1);
+			    				$scope.updatePmZoneRelations($scope.pmeterWS[i]);
+			    			}
+	    				}
+	    			}
+	    		}
+	    		// Here I have to check and remove the zone id from the bps
+	    		for(var i = 0; i < $scope.bpointWS.length; i++){
+	    			if($scope.bpointWS[i].zones != null && $scope.bpointWS[i].zones.length != null && $scope.bpointWS[i].zones.length > 0){
+	    				for(var z = 0; z < $scope.bpointWS[i].zones.length; z++){
+	    					if($scope.bpointWS[i].zones[z] == zone.id){
+			    				$scope.bpointWS[i].zones.splice(z,1);
+			    				$scope.updateBpZoneRelations($scope.bpointWS[i]);
+			    			}
+	    				}
+	    			}
+	    		}
 	    		$scope.getZonesFromDb(zone.type, zindex);
 	    	} else {
 	    		//$scope.editModeA = true;

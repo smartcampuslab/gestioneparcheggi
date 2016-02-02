@@ -1779,7 +1779,9 @@ public class DynamicManager {
 			for(int i = 0; i < zones.size() && !found; i++){
 				if(zones.get(i).compareTo(objectId) == 0){
 					found = true;
-					pmCodes.addAll(s.getParkingMeters());
+					if(s.getParkingMeters() != null){
+						pmCodes.addAll(s.getParkingMeters());
+					}
 				}
 			}
 		}
