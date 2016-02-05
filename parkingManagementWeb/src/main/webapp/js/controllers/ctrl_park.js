@@ -2517,6 +2517,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.myPmZone2 = null;
 		$scope.myPmZone3 = null;
 		$scope.myPmZone4 = null;
+		$scope.myPmStatus = null;
 		$scope.pmZones0 = sharedDataService.getSharedLocalZones0();
 		$scope.pmZones1 = sharedDataService.getSharedLocalZones1();
 		$scope.pmZones2 = sharedDataService.getSharedLocalZones2();
@@ -2558,9 +2559,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			pmEditCode = parkingMeter.code;	// Here I temporary store the value of the actual code
 			angular.copy(parkingMeter, $scope.parckingMeter);
 			if(parkingMeter.status == "ACTIVE"){
-				$scope.myStatus = $scope.listaStati[0];
+				$scope.myPmStatus = $scope.listaStati[0];
 			} else {
-				$scope.myStatus = $scope.listaStati[1];
+				$scope.myPmStatus = $scope.listaStati[1];
 			}
 			for(var i = 0; i < $scope.allArea.length; i++){
 				if(parkingMeter.areaId == $scope.allArea[i].id){
@@ -3438,13 +3439,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(!form.$valid){
 			$scope.isInit=false;
 		} else {
+			if(form.pStatus.$dirty){	// if pm status value is dirty
+				status = form.pStatus.$modelValue;	// force to use form value;
+			}
 			$scope.isInit=true;
 			$scope.showUpdatingErrorMessage = false;
-			
 			var id = pm.id;
 			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
-			
 			var data = {
 				id: pm.id,
 				id_app: pm.id_app,

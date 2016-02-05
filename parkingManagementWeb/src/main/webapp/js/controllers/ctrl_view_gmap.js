@@ -35,6 +35,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	$scope.checkZones3 = false;
 	$scope.checkZones4 = false;
 	var widget_url_filters = "";
+	var SHOW_ONLY_ACTIVE = true;
 	
 	// DB type for zone. I have to implement a good solution for types
 	var firstStreetCall = true;
@@ -651,7 +652,19 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		};
 		
 		if(pmMarkers!= null){
-			$scope.mapParkingMetersMarkers = pmMarkers;
+			if(SHOW_ONLY_ACTIVE){
+			$scope.mapParkingMetersMarkers = [];
+			for(var i = 0; i < pmMarkers.length; i++){
+				if(pmMarkers[i].data.status == "ACTIVE"){
+					pmMarkers[i].options.visible = true;
+					$scope.mapParkingMetersMarkers.push(pmMarkers[i]);
+				} else {
+					pmMarkers[i].options.visible = false;
+				}
+			}
+			} else {
+				$scope.mapParkingMetersMarkers = pmMarkers;
+			}
 		} else {
 			$scope.mapParkingMetersMarkers = [];
 		}
@@ -1054,7 +1067,15 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     
     $scope.setAllMarkersMap = function(markers, map, visible){
     	for(var i = 0; i < markers.length; i++){
-    		markers[i].options.visible = visible;
+    		var visible_state = true;
+    		if(SHOW_ONLY_ACTIVE){
+    			if(markers[i].data.status == "ACTIVE"){
+    				visible_state = true
+    			} else {
+    				visible_state = false;
+    			}
+    		}
+    		markers[i].options.visible = visible && visible_state;
     		markers[i].options.map = map;
     	}
     	return markers;

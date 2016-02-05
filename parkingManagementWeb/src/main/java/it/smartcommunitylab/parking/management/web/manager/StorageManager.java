@@ -484,8 +484,9 @@ public class StorageManager {
 					temp.setUnusuableSlotNumber(sb.getUnusuableSlotNumber());
 					temp.setHandicappedSlotNumber(sb.getHandicappedSlotNumber());
 					temp.setReservedSlotNumber(sb.getReservedSlotNumber());
-					temp.setStreetReference(sb.getStreetReference());
+					temp.setPaidSlotNumber(sb.getPaidSlotNumber());
 					temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());
+					temp.setStreetReference(sb.getStreetReference());
 					temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());
 					if(temp.getGeometry() != null && temp.getGeometry().getPoints() != null && temp.getGeometry().getPoints().size() > 0){
 						temp.getGeometry().getPoints().clear();
