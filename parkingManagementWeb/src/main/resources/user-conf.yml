@@ -6,6 +6,13 @@ users:
     name: Comune
     surname: Rovereto
     mail: info@comune.rovereto.tn.it
+  - id: ComuneRovereto2
+    username: rovereto
+    password: rovereto
+    appId: rv
+    name: Comune
+    surname: Rovereto
+    mail: info@comune.rovereto.tn.it
   - id: ComuneTrento
     username: trento1
     password: metroTN$15
