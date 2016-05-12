@@ -441,7 +441,7 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) String type, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.info("started file uplodad flux");
 			String datas = data.get("logData").toString();
@@ -451,17 +451,31 @@ public class ObjectController  {
 				if(parking != null){
 					List<String> tickets = p.getTickets();
 					List<String> profits = p.getProfitVals();
+					int p_type = (type != null) ? Integer.parseInt(type) : 1;	// 1 year value, 2 month value
 					for(int i = 0; i < profits.size(); i++){
 						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
 							int profit = (int)(Double.parseDouble(profits.get(i)) * 100);
-							int ticket = Integer.parseInt(tickets.get(i));
 							parking.setProfit(profit);
-							parking.setTickets(ticket);
+							if(tickets.size() > 0){
+								int ticket = Integer.parseInt(tickets.get(i));
+								parking.setTickets(ticket);
+							}
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							//period = dataService.getPeriodFromYearAndMonth(year, i);
-							parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
+							switch(p_type){
+								case 1: 
+									parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+									dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
+									break;
+								case 2: 
+									int month = Integer.parseInt(p.getPeriod().getMonth()[0]);
+									parking.setUpdateTime(dataService.getTimeStampFromYearMonthDay(year, month, i+1));
+									dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, DOW_PERIOD);
+									break;
+								default: break;	
+							}
+							
 						}
 					}
 				} else {

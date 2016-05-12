@@ -781,8 +781,8 @@ pm.factory('invokeWSService', function($http, $q) {
 		} else if(method == 'GET' && params != null){
 			$http({
 				method : method,
-				url : url + funcName,
-				params : params + '&noCache=' + new Date().getTime(),
+				url : url + funcName, // + '&noCache=' + new Date().getTime()
+				params : params,
 				headers : headers,
 				data : data
 			}).success(function(data) {

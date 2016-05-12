@@ -98,11 +98,13 @@ pm.service('initializeService', function(){
     	ps_unusuableSlot: null,
     	ps_phoneNumber: null,
     	ps_geometry: null,
+    	ps_streetlife: null,
     	ps_zones0: null,
     	ps_zones1: null,
     	ps_zones2: null,
     	ps_zones3: null,
-    	ps_zones4: null
+    	ps_zones4: null,
+    	ps_show_widget: null
     }
 	this.zoneatt0 = {
     	zone_name: null,
@@ -169,7 +171,15 @@ pm.service('initializeService', function(){
     	bp_zones2: null,
     	bp_zones3: null,
     	bp_zones4: null
-    }	
+    }
+	this.flux_conf = {
+		f_link: null,
+		f_occStreet: null,
+		f_occStruct: null,
+		f_profParkingMeter: null,
+		f_profStruct: null,
+		f_allLogs: null
+	}
 	
 	this.showArea = false;
 	this.showStreet = false;
@@ -212,6 +222,7 @@ pm.service('initializeService', function(){
 	this.showZone3Edit = false;
 	this.showZone4Edit = false;
 	this.zonePageList = [];
+	this.showOnlyActivePm = false;
 	
 	this.setConfAppId = function(app_id){
 		this.app_id = app_id;
@@ -589,6 +600,14 @@ pm.service('initializeService', function(){
 		return this.zvalues;
 	};
 	
+	this.getFluxConfData = function(){
+		return this.flux_conf;
+	};
+	
+	this.isOnlyActivePmShowed = function(){
+		return this.showOnlyActivePm;
+	};
+	
     //Area Component settings
     this.loadAreaAttributes = function(attributes){
     	for(var i = 0; i < attributes.length; i++){
@@ -792,6 +811,11 @@ pm.service('initializeService', function(){
     				this.showPmDB = true;
     			}
     		}
+    		if(attributes[i].code == 'onlyactive'){
+    			if(attributes[i].visible){
+    				this.showOnlyActivePm = true;
+    			}
+    		}
     	}
     	return this.pm_conf;
     };
@@ -835,8 +859,14 @@ pm.service('initializeService', function(){
     		if(attributes[i].code == 'parkride'){
     			this.ps_conf.ps_parkride = attributes[i];
     		}
+    		if(attributes[i].code == 'viewInWidget'){
+    			this.ps_conf.ps_show_widget = attributes[i];
+    		}
     		if(attributes[i].code == 'geometry'){
     			this.ps_conf.ps_geometry = attributes[i];
+    		}
+    		if(attributes[i].code == 'streetlife'){
+    			this.ps_conf.ps_streetlife = attributes[i];
     		}
     		if(attributes[i].code.indexOf('zone') > -1){
     			var index = parseInt(attributes[i].code.charAt(4));
@@ -1218,6 +1248,30 @@ pm.service('initializeService', function(){
     	return this.bp_conf;
     };
     
+    //Flux content settings
+    this.loadFluxAttribute = function(attributes){
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'link'){
+    			this.flux_conf.f_link = attributes[i];
+    		}
+    		if(attributes[i].code == 'occupancyStreet'){
+    			this.flux_conf.f_occStreet = attributes[i];
+    		}
+    		if(attributes[i].code == 'occupancyStruct'){
+    			this.flux_conf.f_occStruct = attributes[i];
+    		}
+    		if(attributes[i].code == 'profitParkingMeter'){
+    			this.flux_conf.f_profParkingMeter = attributes[i];
+    		}
+    		if(attributes[i].code == 'profitStruct'){
+    			this.flux_conf.f_profStruct = attributes[i];
+    		}
+    		if(attributes[i].code == 'allLogs'){
+    			this.flux_conf.f_allLogs = attributes[i];
+    		}
+    	}
+    };
+    
     this.initComponents = function(){
     	this.zonePageList = [];
 		var showedObjects = this.getVisibleObjList();
@@ -1236,6 +1290,9 @@ pm.service('initializeService', function(){
 	   		}
 	   		if(showedObjects[i].id == 'Bp'){
 	    		this.loadBikeAttributes(showedObjects[i].attributes);
+	    	}
+	   		if(showedObjects[i].id == 'Flux'){
+	    		this.loadFluxAttribute(showedObjects[i].attributes);
 	    	}
 	   		if(showedObjects[i].id.indexOf('Zone') > -1){
 	   			var zid = showedObjects[i].id.charAt(4);

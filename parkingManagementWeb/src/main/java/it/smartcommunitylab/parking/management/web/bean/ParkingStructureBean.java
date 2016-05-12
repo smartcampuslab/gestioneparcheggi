@@ -16,6 +16,7 @@
 package it.smartcommunitylab.parking.management.web.bean;
 
 import it.smartcommunitylab.parking.management.web.model.OpeningTime;
+import it.smartcommunitylab.parking.management.web.streetlife.model.AlgoritmData;
 
 import java.util.List;
 
@@ -47,6 +48,8 @@ public class ParkingStructureBean {
 	private int tickets;			// number of tickets
 	private boolean parkAndRide;
 	private List<String> zones;		// list of related zones (id)
+	private boolean showInWidget;
+	private AlgoritmData algoritmData;
 	
 	public String getId_app() {
 		return id_app;
@@ -256,6 +259,22 @@ public class ParkingStructureBean {
 		this.zones = zones;
 	}
 
+	public boolean isShowInWidget() {
+		return showInWidget;
+	}
+
+	public void setShowInWidget(boolean showInWidget) {
+		this.showInWidget = showInWidget;
+	}
+	
+	public AlgoritmData getAlgoritmData() {
+		return algoritmData;
+	}
+
+	public void setAlgoritmData(AlgoritmData algoritmData) {
+		this.algoritmData = algoritmData;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -276,6 +295,7 @@ public class ParkingStructureBean {
 		json += "\"parkAndRide\":\"" + isParkAndRide() + "\",";
 		json += "\"manager\":\"" + getManager() + "\",";
 		json += "\"municipality\":\"" + getMunicipality() + "\"";
+		json += "\"showInWidget\":\"" + isShowInWidget() + "\"";
 		json += "}";
 		return json;
 	}

@@ -16,6 +16,7 @@
 package it.smartcommunitylab.parking.management.web.model;
 
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
+import it.smartcommunitylab.parking.management.web.streetlife.model.AlgoritmData;
 
 import java.util.List;
 
@@ -50,7 +51,8 @@ public class ParkingStructure {
 	private Long lastChange;
 	private boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
 	private List<String> zones;		// list of related zones (id)
-	
+	private boolean showInWidget;	// used to specify if a park is visible or not in the widget
+	private AlgoritmData algoritmData;
 	
 	public String getId_app() {
 		return id_app;
@@ -236,6 +238,22 @@ public class ParkingStructure {
 		this.zones = zones;
 	}
 
+	public boolean isShowInWidget() {
+		return showInWidget;
+	}
+
+	public void setShowInWidget(boolean showInWidget) {
+		this.showInWidget = showInWidget;
+	}
+
+	public AlgoritmData getAlgoritmData() {
+		return algoritmData;
+	}
+
+	public void setAlgoritmData(AlgoritmData algoritmData) {
+		this.algoritmData = algoritmData;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -255,6 +273,7 @@ public class ParkingStructure {
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"parkAndRide\":\"" + isParkAndRide() + "\"";
+		json += "\"showInWidget\":\"" + isShowInWidget() + "\"";
 		json += "}";
 		return json;
 	}

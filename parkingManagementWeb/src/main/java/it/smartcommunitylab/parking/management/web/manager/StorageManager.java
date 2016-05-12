@@ -820,6 +820,7 @@ public class StorageManager {
 		entity.setStreetReference(entityBean.getStreetReference());
 		entity.setTimeSlot(entityBean.getTimeSlot());
 		entity.setOpeningTime(entityBean.getOpeningTime());
+		entity.setShowInWidget(entityBean.isShowInWidget());
 
 		entity.getGeometry().setLat(entityBean.getGeometry().getLat());
 		entity.getGeometry().setLng(entityBean.getGeometry().getLng());

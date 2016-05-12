@@ -695,7 +695,9 @@ public class GeoObjectManager {
     	
     	String[] allRecords = data.split("\n");
     	String year = "";
+    	String month = "";
     	FilterPeriod period = new FilterPeriod();
+    	int lastProfVal = 14;	// default month table last value
     	
     	for(int i = 0; i < allRecords.length; i++){
     		String[] att_and_vals = allRecords[i].split(",");
@@ -704,16 +706,24 @@ public class GeoObjectManager {
 	    			if(att_and_vals[0].compareTo("Anno") == 0){
 	        			year = att_and_vals[1];
 	        	    	period.setYear(year);
+	        		} else if(att_and_vals[0].compareTo("Mese") == 0){
+	        			month = att_and_vals[1];
+	        			String[] months = new String[1];
+	        			months[0] = month;
+	        	    	period.setMonth(months);	// I store the month value in the first array position
 	        		} else {
 	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
 	        				PMProfitData tmpPProfit = new PMProfitData();
-	        				tmpPProfit.setpCode(cleanField(att_and_vals[0]));
+	        				tmpPProfit.setpCode(cleanCodeField(att_and_vals[0]));
 	        				tmpPProfit.setpNote(cleanField(att_and_vals[1]));
 	        				tmpPProfit.setPeriod(period);
 	    			
 	        				// here I load the vals
-	        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
-	        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+	        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, lastProfVal);				// 14 are tot values
+	        				String[] tickets = new String[0];
+	        				if(att_and_vals.length > lastProfVal + 1){
+	        					tickets = Arrays.copyOfRange(att_and_vals, lastProfVal + 1, att_and_vals.length - 1);	// 27 are tot values
+	        				}
 	        				tmpPProfit.setProfitVals(cleanStringArray(vals));
 	        				tmpPProfit.setTickets(cleanStringArray(tickets));
 	        				
@@ -721,10 +731,22 @@ public class GeoObjectManager {
 	        				correctData.add(tmpPProfit);
 	        			}
 	        		}
+	    		} else {
+	    			lastProfVal = calculateLastProfValue(att_and_vals);
 	    		}
     		}
     	}
     	return correctData;
+    }
+    
+    private int calculateLastProfValue(String[] allrow){
+    	int lastval = 0;
+    	for(int i = 0; i < allrow.length; i++){
+    		if(allrow[i].toUpperCase().contains("TOT")){
+    			lastval = i;
+    		}
+    	}
+    	return lastval;
     }
     
     public ArrayList<PSProfitData> classStringToPPSObjArray(String data) throws Exception{
@@ -775,6 +797,18 @@ public class GeoObjectManager {
     	return cleaned;
     }
     
+    private String cleanCodeField(String value){
+    	String cleaned = value.replace('"', ' ').trim();
+    	if(cleaned.contains(" ")){
+    		cleaned = cleaned.split(" ")[1];	// I keep the number part es: 'park 124' -> '124'
+    	}
+    	cleaned = cleaned.replace('\n', ' ').trim();
+    	if(cleaned.compareTo("0.00") == 0){
+    		cleaned = "0";
+    	}
+    	return cleaned;
+    }
+    
     private List<String> cleanStringArray(String[] arr){
     	List<String> correctedVal= new ArrayList<String>();
     	for(String s : arr){
@@ -816,6 +850,19 @@ public class GeoObjectManager {
 		c.set(Calendar.YEAR, year);
 		c.set(Calendar.MONTH, month);
 		c.set(Calendar.DAY_OF_MONTH, 1);
+		c.set(Calendar.HOUR, 0);
+		c.set(Calendar.AM_PM, Calendar.AM);
+		c.set(Calendar.MINUTE, 0);
+		c.set(Calendar.SECOND, 0);
+    	long tstamp = c.getTimeInMillis();
+    	return tstamp;
+    };
+    
+    public long getTimeStampFromYearMonthDay(int year, int month, int day){
+    	Calendar c = Calendar.getInstance();
+		c.set(Calendar.YEAR, year);
+		c.set(Calendar.MONTH, month-1);		// I have JAN = 1 and Calendar use JAN = 0
+		c.set(Calendar.DAY_OF_MONTH, day);
 		c.set(Calendar.HOUR, 0);
 		c.set(Calendar.AM_PM, Calendar.AM);
 		c.set(Calendar.MINUTE, 0);

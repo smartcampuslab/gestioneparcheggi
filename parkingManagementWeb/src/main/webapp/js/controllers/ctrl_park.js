@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokePdfServiceProxy', 'initializeService','getMyMessages','$timeout',
-                               function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, getMyMessages, $timeout) { 
+pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokePdfServiceProxy', 'initializeService', 'invokeDashboardWSService','getMyMessages','$timeout',
+                               function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, invokeDashboardWSService, getMyMessages, $timeout) { 
 	this.$scope = $scope;
     $scope.params = $routeParams;
     $scope.showLog = true;
@@ -18,6 +18,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.maxZones = 8;
     $scope.maxMicroZones = 8;
     $scope.maxBPoints = 11;
+    $scope.MY_DEFAULT_MANAGER = "Comune";
+    //$scope.myManager = false;
     
     // DB type for zone
     var zoneTabList = [];
@@ -44,6 +46,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.gpsPos = /^(\-?\d+(\.\d+)?),\s*(\-?\d+(\.\d+)?)$/;
     $scope.onlyNumbers = /^\d+$/;
     $scope.decimalNumbers = /^([0-9]+)[\,]{0,1}[0-9]{0,2}$/;
+    $scope.kmDistance = /^([0-9]+)[\.]{0,1}[0-9]{0,3}$/;
     $scope.datePatternIt=/^\d{1,2}\/\d{1,2}\/\d{4}$/;
     $scope.datePattern=/^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/i;
     $scope.datePattern2=/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/i;
@@ -277,125 +280,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	angular.copy(parktabs, $scope.editparktabs);
     	}
     };
-    
-    /*$scope.initComponents = function(){
-    	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
-	    	$scope.editparktabs = [];
-	    	$scope.zonesPg = [];
-	    	var parktabs = [];
-	    	var area_tab_obj = {};
-	    	var zone_tab_obj = {};
-	    	var zone_tab_list = [];
-	    	var microzone_tab_obj = {};
-	    	var street_tab_obj = {};
-	    	var ps_tab_obj = {};
-	    	var pm_tab_obj = {};
-	    	var bp_tab_obj = {};
-	    	// initial value for zones label
-	    	$scope.zone0_label = "label_zonemacro";
-	    	$scope.zone1_label = "label_zonemacro";
-	    	$scope.zone2_label = "label_zonemacro";
-	    	$scope.zone3_label = "label_zonemacro";
-	    	$scope.zone4_label = "label_zonemacro";
-	    	var indx = 2;	// value from 2 to 6 for zone tabs (stimated max 5 zones tab)
-	    	$scope.showedObjects = sharedDataService.getVisibleObjList();
-	    	for(var i = 0; i < $scope.showedObjects.length; i++){
-	    		if($scope.showedObjects[i].id == 'Area'){
-	    			$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
-	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
-	    				showArea = true;
-	    				area_tab_obj = { title:'manage_area_tab', index: 1, content:"partials/edit/tabs/edit_area.html" };
-	    			}
-	    		}
-	    		if($scope.showedObjects[i].id == 'Street'){
-	    			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
-	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
-	    				showStreets = true;
-	    				street_tab_obj = { title:'manage_street_tab', index: 7, content:"partials/edit/tabs/edit_street.html" };
-	    			}
-	    		}	
-	    		if($scope.showedObjects[i].id == 'Ps'){
-	    			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
-	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
-	    				showPs = true;
-	    				ps_tab_obj = { title:'manage_structure_tab', index: 8, content:"partials/edit/tabs/edit_parkingstructure.html" };
-	    			}
-	    		}
-	    		if($scope.showedObjects[i].id == 'Pm'){
-	    			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
-	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
-	    				showPm = true;
-	    				pm_tab_obj = { title:'manage_parkingmeter_tab', index: 9, content:"partials/edit/tabs/edit_parkingmeter.html" };
-	    			}
-	    		}
-	    		if($scope.showedObjects[i].id == 'Bp'){
-	    			$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
-	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
-	    				showBp = true;
-	    				bp_tab_obj = { title:'manage_bikepoint_tab', index: 10, content:"partials/edit/tabs/edit_bike.html" };
-	    			}
-	    		}
-	    		if($scope.showedObjects[i].id.indexOf('Zone') > -1){
-	    			// Here I have to manage all the cases
-	    			var zone = $scope.loadZoneAttributes($scope.showedObjects[i].attributes);
-	    			var type = $scope.showedObjects[i].type;
-	    			var title = 'manage_' + type + '_tab';
-	    			var label = $scope.showedObjects[i].label;
-	    			var zone_details = {
-	    				type: type,
-	    				id: indx,
-	    				att: zone
-	    			}
-	    			var zid = $scope.showedObjects[i].id.charAt(4);
-	    			var pageIndex = parseInt(zid);
-	    			switch(pageIndex){
-	    			case 0: $scope.zone0_label = label;
-	    				break;
-	    			case 1: $scope.zone1_label = label;
-	    				break;
-	    			case 2: $scope.zone2_label = label;
-	    				break;
-	    			case 3: $scope.zone3_label = label;
-	    				break;
-	    			case 4: $scope.zone4_label = label;
-	    				break;
-	    			default: break;
-	    			}
-	    			if($scope.checkIfObjectOnViewPage($scope.showedObjects[i])){
-	    				showZones = true;
-	    				zone_tab_obj = { title: title, index: indx, content:"partials/edit/tabs/zones/edit_zone" + pageIndex + ".html" };
-	    				zone_tab_list.push(zone_tab_obj);
-	    			}
-	    			$scope.zonesPg.push(zone_details);
-	    			indx++;
-	    		}
-	    	}
-	    	if(showArea){
-	    		parktabs.push(area_tab_obj);
-	    	}
-	    	if(showZones){
-	    		for(var z = 0; z < zone_tab_list.length; z++){
-	    			parktabs.push(zone_tab_list[z]);
-	    		}
-	    	}
-	    	if(showMicroZones){
-	    		parktabs.push(microzone_tab_obj);
-	    	}
-	    	if(showStreets){
-	    		parktabs.push(street_tab_obj);
-	    	}
-	    	if(showPs){
-	    		parktabs.push(ps_tab_obj);
-	    	}
-	    	if(showPm){
-	    		parktabs.push(pm_tab_obj);
-	    	}
-	    	if(showBp){
-	    		parktabs.push(bp_tab_obj);
-	    	}
-	    	angular.copy(parktabs, $scope.editparktabs);
-    	}
-    };*/
     
     $scope.checkIfObjectOnViewPage = function(object){
     	var showOnPages = false;
@@ -666,7 +550,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allAreas);
-	    	//console.log("rateAreas retrieved from db: " + JSON.stringify(result));
 	    	$scope.areaWS = $scope.initAreasObjects(allAreas);
 	    	if(showArea)$scope.resizeMap("viewArea");
 	    	$scope.initAreasOnMap($scope.areaWS);
@@ -2617,6 +2500,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		d.setMinutes(0);
 		$scope.startTime = d;
 		$scope.endTime = d;
+		//$scope.myManager = false;
 		// zones management
 		$scope.myPsZone0 = null;
 		$scope.myPsZone1 = null;
@@ -2651,6 +2535,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(parkingStruct != null){
 			$scope.isEditing = true;
 			$scope.isInit = false;
+			$scope.myManager = (parkingStruct.manager != null && parkingStruct.manager != $scope.MY_DEFAULT_MANAGER) ? true : false;
 			if(parkingStruct.zones){
 				for(var i = 0; i < parkingStruct.zones.length; i++){
 					var z0 = $scope.getLocalZoneById(parkingStruct.zones[i], 1, 0);
@@ -2674,6 +2559,29 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			if(parkingStruct.openingTime != null){
 				$scope.openingPeriods = parkingStruct.openingTime.period;
+			}
+			
+			if(parkingStruct.algoritmData){
+				parkingStruct.centerAverateOccupancyRate = parkingStruct.algoritmData.centerAverateOccupancyRate;
+				parkingStruct.cityCenterDistance = parkingStruct.algoritmData.cityCenterDistance;
+				parkingStruct.co2Coefficient = parkingStruct.algoritmData.co2Coefficient;
+				parkingStruct.co2Saved = parkingStruct.algoritmData.co2Saved;
+				parkingStruct.flow = parkingStruct.algoritmData.flow;
+				parkingStruct.maximumDemand = parkingStruct.algoritmData.maximumDemand;
+				parkingStruct.newAverateOccupancyRate = parkingStruct.algoritmData.newAverateOccupancyRate;
+				parkingStruct.newParkingUsers = parkingStruct.algoritmData.newParkingUsers;
+				parkingStruct.notTraveledKm = parkingStruct.algoritmData.notTraveledKm;
+				parkingStruct.peakHourRate = parkingStruct.algoritmData.peakHourRate;
+				parkingStruct.percentageDemand = parkingStruct.algoritmData.percentageDemand;
+				parkingStruct.rideServices = parkingStruct.algoritmData.rideServices;
+				if(parkingStruct.rideServices){
+					var rideServices = $scope.initRideservicesFromAlgoritmData(parkingStruct.rideServices);
+					parkingStruct.rideservice1 = rideServices.rideservice1;
+					parkingStruct.rideservice2 = rideServices.rideservice2;
+					parkingStruct.rideservice3 = rideServices.rideservice3;
+					parkingStruct.metropresent = rideServices.metropresent;
+					parkingStruct.taxipresent = rideServices.taxipresent;
+				}
 			}
 			
 			angular.copy(parkingStruct, $scope.parkingStructure);
@@ -2719,7 +2627,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				icon: $scope.psMarkerIcon
 			};
 			$scope.editPsMarkers.push($scope.myPs);
-			
 		} else {
 			$scope.setMyGeometry(null);
 			$scope.parkingStructure = {
@@ -2737,9 +2644,71 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				geometry: null
 			};
 		}
+		$scope.initPSCityCenter();
 		$scope.viewModePS = false;
 		$scope.editModePS = true;
 		$scope.resizeMapTimed("editPs", false);
+	};
+	
+	$scope.initRideservicesFromAlgoritmData = function(rideServices){
+		var rideValues = rideServices.split(",");
+		var correctedRideServices = {
+			rideservice1: null,
+			rideservice2: null,
+			rideservice3: null,
+			metropresent: false,
+			taxipresent: false
+		}
+		for(var i = 0; i < rideValues.length; i++){
+			switch(rideValues[i]){
+				case "1":
+					correctedRideServices.rideservice1 = $scope.rideservices[0];
+					break;
+				case "2":
+					correctedRideServices.rideservice1 = $scope.rideservices[1];
+					break;
+				case "3":
+					correctedRideServices.rideservice1 = $scope.rideservices[2];
+					break;
+				case "4":
+					correctedRideServices.rideservice1 = $scope.rideservices[3];
+					break;
+				case "5":
+					correctedRideServices.rideservice1 = $scope.rideservices[4];
+					break;
+				case "6":
+					correctedRideServices.rideservice2 = $scope.rideservices[5];
+					break;
+				case "7":
+					correctedRideServices.rideservice2 = $scope.rideservices[6];
+					break;
+				case "8":
+					correctedRideServices.rideservice2 = $scope.rideservices[7];
+					break;
+				case "9":
+					correctedRideServices.rideservice2 = $scope.rideservices[8];
+					break;
+				case "10":
+					correctedRideServices.rideservice3 = $scope.rideservices[9];
+					break;
+				case "11":
+					correctedRideServices.rideservice3 = $scope.rideservices[10];
+					break;
+				case "12":
+					correctedRideServices.rideservice3 = $scope.rideservices[11];
+					break;
+				case "13":
+					correctedRideServices.rideservice3 = $scope.rideservices[12];
+					break;
+				case "14":
+					correctedRideServices.metropresent = true;
+					break;
+				case "15":
+					correctedRideServices.taxipresent = true;
+					break;	
+			}
+		}
+		return correctedRideServices;
 	};
 	
 	$scope.getCorrectZoneType = function(type){
@@ -2869,45 +2838,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				centermap: null,
 				geometryFromSubelement: false
 			};
-			/*$scope.zCreateMap = {
-				control: {},
-				center: $scope.mapCenter,
-				zoom: 15,
-				bounds: {},
-				options: {
-					scrollwheel: true
-				},
-				events: {
-					click: function(map, eventName, args){
-						var e = args[0];
-		            	console.log("I am in click event function" + e.latLng);
-		            	var latLngString = "" + e.latLng;
-		            	var pos = latLngString.split(",");
-		            	var lat = pos[0].substring(1, pos[0].length);
-		            	var lng = pos[1].substring(1, pos[1].length-1);
-		            	var tmppos = {
-		            			latitude: lat,
-		            			longitude: lng
-		            	};
-		            	tmppath.push(tmppos);
-		            	$scope.newZone = $scope.updateMyNewZone(tmppath);
-		            	$scope.refreshMap($scope.zCreateMap);
-		            	
-		            	var tmpLine = "";
-						for(var i = 0; i < tmppath.length; i++){
-							var tmpPoint = tmppath[i].latitude + "," + tmppath[i].longitude;
-							tmpLine = tmpLine + tmpPoint + ",";
-						}
-						tmpLine = tmpLine.substring(0, tmpLine.length-1);
-						$scope.setMyNewLineGeometry(tmpLine);
-				    	console.log('New street route: ' + tmpLine);
-					},
-					dblclick: function(map, eventName, args){
-						var e = args[0];
-		            	console.log("I am in double click event function" + e.latLng);
-					}
-				}
-			};*/
 		}
 		$scope.viewModeZ = false;
 		$scope.editModeZ = true;
@@ -3086,7 +3016,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
     };
     
-    $scope.addNewPsMarker = function(event) {
+    $scope.addNewCentresMarker = function(event) {
 		if(!$scope.isEditing){
 			$scope.newCentres = []; 	// I permit only one marker a time
 	        var pos = event.latLng;
@@ -3134,6 +3064,44 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	var pos = event.latLng;
     	$scope.myGeometry = pos.lat() + "," + pos.lng();
     	$scope.getStructAddress(event);
+    };
+    
+    $scope.updatePsCenterPos = function(event){
+    	var pos = event.latLng;
+    	$scope.parkingStructure.cityCenter = pos.lat() + "," + pos.lng();
+    	var lat1 = pos.lat();
+    	var lon1 = pos.lng();
+    	$scope.calculateDistanceBetweenCenterAndPS(lat1, lon1);
+    };
+    
+    $scope.calculateDistanceBetweenCenterAndPS = function(centerLat, centerLng){
+    	if($scope.myGeometry){
+    		var pos2 = $scope.myGeometry.split(",");
+    		var lat2 = pos2[0];
+    		var lon2 = pos2[1];
+    		var distance = $scope.getDistanceFromLatLonInKm(centerLat, centerLng, lat2, lon2) + "";
+    		if(distance.indexOf(".") > -1){
+    			var distValuesAfterDot = distance.length - distance.indexOf(".");
+    			$scope.parkingStructure.cityCenterDistance = (distValuesAfterDot > 4)?distance.substring(0, distance.indexOf(".") + 4):distance.substring(0, distance.indexOf(".") + distValuesAfterDot);
+    		} else {
+    			$scope.parkingStructure.cityCenterDistance = distance;
+    		}
+    	}
+    }
+    
+    // Method getDistanceFromLatLonInKm: used to calculate the distance between 2 lat lon coordinates (return value in km) 
+    $scope.getDistanceFromLatLonInKm = function(lat1,lon1,lat2,lon2) {
+    	var R = 6371; // Radius of the earth in km
+    	var dLat = $scope.deg2rad(lat2-lat1);  // deg2rad below
+    	var dLon = $scope.deg2rad(lon2-lon1); 
+    	var a = Math.sin(dLat/2) * Math.sin(dLat/2) + Math.cos($scope.deg2rad(lat1)) * Math.cos($scope.deg2rad(lat2)) * Math.sin(dLon/2) * Math.sin(dLon/2); 
+    	var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+    	var d = R * c; // Distance in km
+    	return d;
+    };
+
+    $scope.deg2rad = function(deg) {
+    	return deg * (Math.PI/180);
     };
     
     $scope.updateCenterPos = function(event){
@@ -3609,6 +3577,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	$scope.updateTotalSlots = function(paid, handicapped){
+		$scope.parkingStructure.slotNumber = $scope.initIfNull(paid) + $scope.initIfNull(handicapped);
+	}
+	
 	// Update ParkingStructure Object
 	$scope.updatePstruct = function(form, ps, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
 		if(!form.$valid){
@@ -3626,6 +3598,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.isInit=true;
 				$scope.showUpdatingPSErrorMessage = false;
 				$scope.setMyPaymentoErrMode(false);
+				
+				var ps_manager = ps.manager;
+				if($scope.myManager){
+					ps_manager = $scope.MY_DEFAULT_MANAGER;
+				}
 				
 				var fee_eurocent = 0;
 				if(ps.fee_val != null){
@@ -3654,6 +3631,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var appId = sharedDataService.getConfAppId();
 				var method = 'PUT';
 				
+				var algoritmData = {
+					rideServices: $scope.correctRideServices(ps.rideservice1, ps.rideservice2, ps.rideservice3, ps.metropresent, ps.taxipresent),
+					flow: (ps.flow)?parseInt(ps.flow):0,
+					percentageDemand: (ps.percentageDemand)?parseInt(ps.percentageDemand):0,
+					maximumDemand: (ps.maximumDemand)?parseInt(ps.maximumDemand):0,
+					newParkingUsers: (ps.newParkingUsers)?parseInt(ps.newParkingUsers):0,
+					peakHourRate: (ps.peakHourRate)?ps.peakHourRate + "":"",
+					co2Coefficient: (ps.co2Coefficient)?parseFloat(ps.co2Coefficient):179.91,
+					cityCenterDistance: (ps.cityCenterDistance)?parseFloat(ps.cityCenterDistance):0,
+					notTraveledKm: (ps.notTraveledKm)?parseFloat(ps.notTraveledKm):0,
+					co2Saved: (ps.co2Saved)?parseInt(ps.co2Saved):0,
+					centerAverateOccupancyRate: (ps.centerAverateOccupancyRate)?parseInt(ps.centerAverateOccupancyRate):0,
+					newAverateOccupancyRate: (ps.newAverateOccupancyRate)?parseInt(ps.newAverateOccupancyRate):0
+				};
+				
 				var data = {
 					id: ps.id,
 					id_app: ps.id_app,
@@ -3663,7 +3655,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					fee_note: ps.fee_note,
 					timeSlot: ps.timeSlot,
 					openingTime: openingPeriod,
-					manager: ps.manager,
+					manager: ps_manager,
 					managementMode: ps.managementMode,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: $scope.correctMyPaymentMode(paymode),
@@ -3673,7 +3665,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					unusuableSlotNumber: ps.unusuableSlotNumber,
 					geometry: $scope.correctMyGeometry(geo),
 					zones: $scope.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-					parkAndRide: ps.parkAndRide
+					parkAndRide: ps.parkAndRide,
+					showInWidget: ps.showInWidget,
+					algoritmData: algoritmData
 				};
 				
 			    var value = JSON.stringify(data);
@@ -3692,6 +3686,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    		$scope.myPsZone3 = null;
 			    		$scope.myPsZone4 = null;
 						$scope.mySpecialPSMarkers = [];
+						//$scope.parkc.form.$setPristine();	// I reset the state of the form
+						form.$setPristine();
 			    	} else {
 			    		$scope.editModePS = true;
 			    		$scope.showUpdatingPSErrorMessage = true;
@@ -3699,6 +3695,248 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    });
 			}
 		}	
+	};
+	
+	// Method initPSCityCenter; used to integrate the citycenter marker in the edit ps map and to calculate the distance between the center and the struct position
+	$scope.initPSCityCenter = function(){
+		$scope.cityCenter = [];
+		var pos = $scope.mapOption.center.split(",");
+		$scope.myPsCityCenter = {
+			id: 0,
+			coords: {
+				latitude: pos[0],
+				longitude: pos[1]
+			},
+			pos:$scope.mapOption.center,
+			options: { 
+				draggable: true,
+				title: "City center"
+			},
+			icon: $scope.psMarkerIcon
+		};
+		$scope.cityCenter.push($scope.myPsCityCenter);
+		$scope.calculateDistanceBetweenCenterAndPS(pos[0],pos[1]);	// calculate distance between center and structure
+	}
+	
+	// Method used to get demand data using ws form streetlife project
+	$scope.getParkDemand = function(demandData, position_geo){
+		var method = 'GET';
+		var params = {
+			name: demandData.name,
+			position: position_geo,
+			cap: demandData.slotNumber,
+			rideservices: $scope.correctRideServices(demandData.rideservice1, demandData.rideservice2, demandData.rideservice3, demandData.metropresent, demandData.taxipresent),
+			flow: parseInt(demandData.flow)
+		};
+		var myDataPromise = invokeWSService.getProxy(method, "streetlife/calcdemand", params, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	console.log("Invoked streetlife calcdemand: " + result);
+	    	if(result != null){ // == "OK"){
+	    		$scope.parkingStructure.percentageDemand = result.percentageDemand;
+	    		$scope.parkingStructure.maximumDemand = result.maximumDemand;
+	    		$scope.parkingStructure.newParkingUsers = result.newParkingUsers;
+	    		var tmpRate = $scope.parkingStructure.newParkingUsers / demandData.slotNumber;
+	    		$scope.parkingStructure.peakHourRate = $scope.calculatePeakHourRate(tmpRate);
+	    		$scope.parkingStructure.co2Coefficient = "179,91";
+	    	} else {
+	    		
+	    	}
+	    });
+	};
+	
+	// Method calculateImpactEvaluation: used to update the ps data with the impact evaluation from the slot occupancy
+	$scope.calculateImpactEvaluation = function(alg1Data){
+		$scope.parkingStructure.notTraveledKm = parseInt(alg1Data.newParkingUsers) * parseFloat(alg1Data.cityCenterDistance) * 2;
+		$scope.parkingStructure.co2Saved = Math.floor(parseFloat(alg1Data.co2Coefficient) * $scope.parkingStructure.notTraveledKm);
+		$scope.getOccupancyStreetsFromDb();
+	}
+	
+	// Method getRideServices: used to retrieve from the server the list of ride-services available
+	$scope.getRideServices = function(){
+		var method = 'GET';
+		var myDataPromise = invokeWSService.getProxy(method, "streetlife/rideservices", null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	if(result != null){ // == "OK"){
+	    		$scope.rideservices = result;
+	    		$scope.rideservices1 = $scope.rideservices.slice(0, 5);
+	    		$scope.rideservices2 = $scope.rideservices.slice(5, 9);
+	    		$scope.rideservices3 = $scope.rideservices.slice(9, 13);
+	    	} else {
+	    		console.log("No rideservices found");
+	    	}
+	    });
+	};
+	
+	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
+	$scope.getOccupancyStreetsFromDb = function(){
+		var allStreet = [];
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			year: "",
+			month: "",
+			weekday: "",
+			dayType: "custom",
+			hour: "10,12",
+			valueType: 2,
+			noCache: new Date().getTime()
+		};
+		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streets", params, $scope.authHeaders, null);
+		myDataPromise.then(function(result){
+		    angular.copy(result, allStreet);
+		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
+		    $scope.streetWS = allStreet;//$scope.initStreetsObjects(allStreet);
+		    var Manzoni_A = $scope.getZoneFromName("MANZONI","A");
+		    var Manzoni_B = $scope.getZoneFromName("MANZONI","B");
+		    var Centro_A = $scope.getZoneFromName("CENTRO","A");
+		    var SCaterina_A = $scope.getZoneFromName("S. CATERINA", "A");
+		    var SCaterina_B = $scope.getZoneFromName("S. CATERINA", "B");
+		    var SMaria_A = $scope.getZoneFromName("S. MARIA", "A");
+		    var SMaria_B = $scope.getZoneFromName("S. MARIA", "B");
+		    var averageOccManzoniA = $scope.getStreetsInZoneOccupancy(Manzoni_A.id, 1);
+		    var averageOccManzoniB = $scope.getStreetsInZoneOccupancy(Manzoni_B.id, 1);
+		    var averageOccCentroA = $scope.getStreetsInZoneOccupancy(Centro_A.id, 1);
+		    var averageOccSCaterinaA = $scope.getStreetsInZoneOccupancy(SCaterina_A.id, 1);
+		    var averageOccSCaterinaB = $scope.getStreetsInZoneOccupancy(SCaterina_B.id, 1);
+		    var averageOccSMariaA = $scope.getStreetsInZoneOccupancy(SMaria_A.id, 1);
+		    var averageOccSMariaB = $scope.getStreetsInZoneOccupancy(SMaria_B.id, 1);
+		    var totalSlotsROVCenter = Manzoni_A.slotNumber + Manzoni_B.slotNumber + Centro_A.slotNumber + SCaterina_A.slotNumber + SCaterina_B.slotNumber + SMaria_A.slotNumber + SMaria_B.slotNumber;
+		    var totalOccupiedROVCenter = averageOccManzoniA + averageOccManzoniB + averageOccCentroA + averageOccSCaterinaA + averageOccSCaterinaB + averageOccSMariaA + averageOccSMariaB;
+		    var averageOccROVCenter = totalOccupiedROVCenter / totalSlotsROVCenter;
+		    var newTotalOccupiedROVCenter = totalOccupiedROVCenter - $scope.parkingStructure.newParkingUsers;
+		    var newAveraceOccROVCenter = newTotalOccupiedROVCenter / totalSlotsROVCenter;
+		    $scope.parkingStructure.centerAverateOccupancyRate = Math.round(averageOccROVCenter * 100);
+		    $scope.parkingStructure.newAverateOccupancyRate = Math.round(newAveraceOccROVCenter * 100);
+		});
+		return myDataPromise;
+	};
+	
+	$scope.getZoneFromName = function(name, sub){
+		var zones = $scope.getSharedLocalZones(0);	//0 is for macrozones
+		for(var i = 0; i < zones.length; i++){
+			if(zones[i].name == name && zones[i].submacro == sub){
+				return zones[i];
+			}
+		}
+		return null;
+	};
+	
+	$scope.getTotalOccupiedSlots = function(s_object){
+		return (s_object.freeParkOccupied +
+				s_object.freeParkSlotSignOccupied + 
+				s_object.paidSlotOccupied + 
+				s_object.timedParkSlotOccupied + 
+				s_object.handicappedSlotOccupied + 
+				s_object.reservedSlotOccupied);
+	};
+	
+	// Method cleanStreetNullValue: used to init to 0 the null value in the slotNumber data
+	$scope.cleanStreetNullValue = function(s_object){
+		var street = s_object;
+		street.freeParkSlotNumber = (s_object.freeParkSlotNumber != null && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotNumber : 0;
+		street.freeParkSlotSignNumber = (s_object.freeParkSlotSignNumber != null && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignNumber : 0;
+		street.paidSlotNumber = (s_object.paidSlotNumber != null && s_object.paidSlotNumber > 0) ? s_object.paidSlotNumber : 0;
+		street.timedParkSlotNumber = (s_object.timedParkSlotNumber != null && s_object.timedParkSlotNumber > 0) ? s_object.timedParkSlotNumber : 0;
+		street.handicappedSlotNumber = (s_object.handicappedSlotNumber != null && s_object.handicappedSlotNumber > 0) ? s_object.handicappedSlotNumber : 0;
+		street.reservedSlotNumber = (s_object.reservedSlotNumber != null && s_object.reservedSlotNumber > 0) ? s_object.reservedSlotNumber : 0;
+		street.freeParkOccupied = (s_object.freeParkSlotOccupied != null && s_object.freeParkSlotOccupied > 0 && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotOccupied : 0;
+		street.freeParkSlotSignOccupied = (s_object.freeParkSlotSignOccupied != null && s_object.freeParkSlotSignOccupied > 0 && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignOccupied : 0;
+		street.paidSlotOccupied = (s_object.paidSlotOccupied != null && s_object.paidSlotOccupied > 0) ? s_object.paidSlotOccupied : 0;
+		street.timedParkSlotOccupied = (s_object.timedParkSlotOccupied != null && s_object.timedParkSlotOccupied > 0) ? s_object.timedParkSlotOccupied : 0;
+		street.handicappedSlotOccupied = (s_object.handicappedSlotOccupied != null && s_object.handicappedSlotOccupied > 0) ? s_object.handicappedSlotOccupied : 0;
+		street.reservedSlotOccupied = (s_object.reservedSlotOccupied != null && s_object.reservedSlotOccupied > 0) ? s_object.reservedSlotOccupied : 0;
+		street.unusuableSlotNumber = (s_object.unusuableSlotNumber != null && s_object.unusuableSlotNumber > 0) ? s_object.unusuableSlotNumber : 0;
+		return street;
+	};
+	
+	// Method getStreetsInZoneOccupancy: used to get the occupancy of the streets in a specific zone
+	$scope.getStreetsInZoneOccupancy = function(z_id, type){
+		var totalOccupancy = 0;
+		var totalOccupiedSlot = 0;
+		var streetsInZone = 0;
+		var noData = true;
+		if($scope.streetWS != null && $scope.streetWS.length > 0){
+			for(var i = 0; i < $scope.streetWS.length; i++){
+				var found = false;
+				for(var j = 0; (j < $scope.streetWS[i].zones.length) && !found; j++){
+					if($scope.streetWS[i].zones[j] == z_id){
+						found = true;
+						streetsInZone += 1;
+						if($scope.streetWS[i].occupancyRate > -1){
+							var street = $scope.cleanStreetNullValue($scope.streetWS[i]);
+							if(type == 0){
+								totalOccupancy += $scope.street.occupancyRate;
+							} else {
+								totalOccupiedSlot += $scope.getTotalOccupiedSlots(street);
+							}
+							noData = false;
+						}
+					}
+				}
+			}
+		}
+		if(streetsInZone != 0 && !noData){
+			if(type == 0){
+				return totalOccupancy / streetsInZone;
+			} else {
+				return  totalOccupiedSlot;
+			}
+		} else {
+			if(type == 0){
+				return -1;
+			} else {
+				return 0;
+			}
+		}
+	};
+	
+	$scope.calculatePeakHourRate = function(rate){
+		if(rate < 0.1){
+			return "5,20";
+		} else if(rate < 0.2){
+			return "4,80";
+		} else if(rate < 0.3){
+			return "4,40";
+		} else if(rate < 0.4){
+			return "4";
+		} else if(rate < 0.5){
+			return "3,60";
+		} else if(rate < 0.6){
+			return "3,20";
+		} else if(rate < 0.7){
+			return "2,80";
+		} else if(rate < 0.8){
+			return "2,40";
+		} else if(rate < 0.9){
+			return "2";
+		} else if(rate < 1){
+			return "1,60";
+		}
+	};
+	
+	// Method calculatePercentageAndMaximumDemand: used to 
+	$scope.calculatePercentageAndMaximumDemand = function(rs1, rs2, rs3, rs4, rs5){
+		var capacity = ($scope.parkingStructure.slotNumber)?$scope.parkingStructure.slotNumber:0;
+		var rs1Val = (rs1) ? rs1.percentage : 0;
+		var rs2Val = (rs2) ? rs2.percentage : 0;
+		var rs3Val = (rs3) ? rs3.percentage : 0;
+		var rs4Val = (rs4) ? 75 : 0;
+		var rs5Val = (rs5) ? 10 : 0;
+		$scope.calcPercentage = rs1Val + rs2Val + rs3Val + rs4Val + rs5Val;
+		$scope.parkingStructure.percentageDemand = ($scope.calcPercentage > 100) ? 100 : $scope.calcPercentage;
+		$scope.parkingStructure.maximumDemand = Math.ceil($scope.parkingStructure.percentageDemand * capacity / 100);
+	};
+	
+	$scope.correctRideServices = function(rs1, rs2, rs3, rs4, rs5){
+		var correctedRSList = "";
+		if(rs1)correctedRSList+=rs1.code + ",";
+		if(rs2)correctedRSList+=rs2.code + ",";
+		if(rs3)correctedRSList+=rs3.code + ",";
+		if(rs4)correctedRSList+="14,";
+		if(rs5)correctedRSList+="15,";
+		correctedRSList = correctedRSList.slice(0, correctedRSList.length-1);
+		return correctedRSList;
 	};
 	
 	// Method updatePsZoneRelations: used to update the ps object if the relation with zone change
@@ -4386,6 +4624,22 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber);// + $scope.initIfNull(ps.unusuableSlotNumber);
 				var method = 'POST';
 				var appId = sharedDataService.getConfAppId();
+				
+				var algoritmData = {
+					rideServices: $scope.correctRideServices(ps.rideservice1, ps.rideservice2, ps.rideservice3, ps.metropresent, ps.taxipresent),
+					flow: (ps.flow)?parseInt(ps.flow):0,
+					percentageDemand: (ps.percentageDemand)?parseInt(ps.percentageDemand):0,
+					maximumDemand: (ps.maximumDemand)?parseInt(ps.maximumDemand):0,
+					newParkingUsers: (ps.newParkingUsers)?parseInt(ps.newParkingUsers):0,
+					peakHourRate: (ps.peakHourRate)?ps.peakHourRate + "":"",
+					co2Coefficient: (ps.co2Coefficient)?parseFloat(ps.co2Coefficient):179.91,
+					cityCenterDistance: (ps.cityCenterDistance)?parseFloat(ps.cityCenterDistance):0,
+					notTraveledKm: (ps.notTraveledKm)?parseFloat(ps.notTraveledKm):0,
+					co2Saved: (ps.co2Saved)?parseInt(ps.co2Saved):0,
+					centerAverateOccupancyRate: (ps.centerAverateOccupancyRate)?parseInt(ps.centerAverateOccupancyRate):0,
+					newAverateOccupancyRate: (ps.newAverateOccupancyRate)?parseInt(ps.newAverateOccupancyRate):0
+				};
+				
 				var data = {
 					id_app: $scope.myAppId,
 					name: ps.name,
@@ -4404,7 +4658,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					unusuableSlotNumber: ps.unusuableSlotNumber,
 					geometry: $scope.correctMyGeometry(geo),
 					zones: $scope.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-					parkAndRide: ps.parkAndRide
+					parkAndRide: ps.parkAndRide,
+					algoritmData: algoritmData
 				};
 				
 			    var value = JSON.stringify(data);
@@ -5878,6 +6133,209 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
    		return difference;
     };
     
-    // ------------------------------ End of block for Methods to manage and cast dates -----------------------------      
-          
+    // ------------------------------ End of block for Methods to manage and cast dates -----------------------------     
+    
+    // ---------------------------------- New opening time and fee period for areaRate -------------------------------
+    // ------------------ Start datetimepicker section -----------------------
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        //$scope.dt = null;
+    };
+
+    // Disable weekend selection
+    $scope.disabled = function(date, mode) {
+         return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
+
+    $scope.toggleMin = function() {
+         $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.dateOptions = {
+    	//datepickerMode: "'year'",	// value setted in file lib/ui-bootstrap-tpls.min.js
+        formatYear: 'yyyy',
+        startingDay: 1,
+        showWeeks: 'false'
+    };
+
+    $scope.initDate = new Date();
+    $scope.formats = ['shortDate', 'dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy'];
+    $scope.format = $scope.formats[0];
+    
+    $scope.getPlaceHolder = function(){
+	    var local_placeholder = '';
+    	if(sharedDataService.getUsedLanguage() == 'ita'){
+	    	local_placeholder = "gg/MM/aaaa";
+	    } else if(sharedDataService.getUsedLanguage() == 'eng'){
+	    	local_placeholder = "dd/MM/yyyy";
+	    }
+    	return local_placeholder;
+    };
+              
+    //---------------- End datetimepicker section------------
+    
+    
+    $scope.isFeeEditing = false;
+    
+    $scope.updateAreaFee = function(openingPeriod){
+    	$scope.isFeeEditing = true;
+    };
+    
+    $scope.closeOPView = function(){
+    	$scope.isFeeEditing = false;
+    };
+    
+    $scope.updateOp = function(form, op){
+    	$scope.isFeeEditing = false;
+    };
+    
+    $scope.openingPeriods = [
+        {
+	    	fee: 0.5,
+	    	period: {
+	    		start: 1460671200000,
+	    		end: 1473890400000
+	    	},
+	    	weekdays: "1111100",
+	    	dailytime: "8:00 - 12:00 / 14:00 - 19:00"
+        },
+        {
+	    	fee: 1.2,
+	    	period: {
+	    		start: 1460671200000,
+	    		end: 1473890400000
+	    	},
+	    	weekdays: "0000011",
+	    	dailytime: "8:00 - 19:00"
+        }	
+    ];
+    
+    $scope.correctOpeningStartTime = function(week_string){
+    	var composeWeekString = "";
+    	var partialnum = 0;
+    	var isLun = false;
+    	var isMar = false;
+    	var isMer = false;
+    	var isGio = false;
+    	var isVen = false;
+    	var isSab = false;
+    	var isDom = false;
+    	
+    	if(week_string != null && week_string.length > 0){
+	    	if(week_string.charAt(0) == "1"){
+	    		partialnum += 1;
+	    		isLun = true;
+	    	}
+	    	if(week_string.charAt(1) == "1"){
+	    		partialnum += 2;
+	    		isMar = true;
+	    	}
+	    	if(week_string.charAt(2) == "1"){
+	    		partialnum += 4;
+	    		isMer = true;
+	    	}
+	    	if(week_string.charAt(3) == "1"){
+	    		partialnum += 8;
+	    		isGio = true;
+	    	}
+	    	if(week_string.charAt(4) == "1"){
+	    		partialnum += 16;
+	    		isVen = true;
+	    	}
+	    	if(week_string.charAt(5) == "1"){
+	    		partialnum += 32;
+	    		isSab = true;
+	    	}
+	    	if(week_string.charAt(6) == "1"){
+	    		partialnum += 64;
+	    		isDom = true;
+	    	}
+	    	switch(partialnum){
+	    		case 1: composeWeekString = "Lun";
+	    		break;
+	    		case 2: composeWeekString = "Mar";
+	    		break;
+	    		case 3: composeWeekString = "Lun-Mar";
+	    		break;
+	    		case 4: composeWeekString = "Mer";
+	    		break;
+	    		case 5: composeWeekString = "Lun,Mer";
+	    		break;
+	    		case 6: composeWeekString = "Mar-Mer";
+	    		break;
+	    		case 7: composeWeekString = "Lun-Mer";
+	    		break;
+	    		case 8: composeWeekString = "Gio";
+	    		break;
+	    		case 9: composeWeekString = "Lun,Gio";
+	    		break;
+	    		case 10: composeWeekString = "Mar,Gio";
+	    		break;
+	    		case 11: composeWeekString = "Lun,Mar,Gio";
+	    		break;
+	    		case 12: composeWeekString = "Mer-Gio";
+	    		break;
+	    		case 13: composeWeekString = "Lun,Mer,Gio";
+	    		break;
+	    		case 14: composeWeekString = "Mar-Gio";
+	    		break;
+	    		case 15: composeWeekString = "Lun-Gio";
+	    		break;
+	    		case 16: composeWeekString = "Ven";
+	    		break;
+	    		case 17: composeWeekString = "Lun,Ven";
+	    		break;
+	    		case 18: composeWeekString = "Mar,Ven";
+	    		break;
+	    		case 19: composeWeekString = "Lun,Mar,Ven";
+	    		break;
+	    		case 20: composeWeekString = "Mer,Ven";
+	    		break;
+	    		case 21: composeWeekString = "Lun,Mer,Ven";
+	    		break;
+	    		case 22: composeWeekString = "Mar,Mer,Ven";
+	    		break;
+	    		case 23: composeWeekString = "Lun-Mer,Ven";
+	    		break;
+	    		case 24: composeWeekString = "Gio-Ven";
+	    		break;
+	    		case 25: composeWeekString = "Lun,Gio,Ven";
+	    		break;
+	    		case 26: composeWeekString = "Mar,Gio,Ven";
+	    		break;
+	    		case 27: composeWeekString = "Lun,Mar,Gio,Ven";
+	    		break;
+	    		case 28: composeWeekString = "Mer-Ven";
+	    		break;
+	    		case 29: composeWeekString = "Lun,Mer-Ven";
+	    		break;
+	    		case 30: composeWeekString = "Mar-Ven";
+	    		break;
+	    		case 31: composeWeekString = "Lun-Ven";
+	    		break;
+	    		case 32: composeWeekString = "Sab";
+	    		break;
+	    		case 63: composeWeekString = "Lun-Sab";
+	    		break;
+	    		case 64: composeWeekString = "Dom";
+	    		break;
+	    		case 96: composeWeekString = "Sab,Dom";
+	    		break;
+	    		case 127: composeWeekString = "Lun-Dom";
+	    		break;
+	    		default: break;
+	    	}
+    	}
+    	
+    	return composeWeekString;
+    };
+    
+    
+    
+    // ---------------------------------------------------------------------------------------------------------------
 }]);

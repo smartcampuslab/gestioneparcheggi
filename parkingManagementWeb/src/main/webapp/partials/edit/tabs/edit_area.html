@@ -486,6 +486,125 @@
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.aZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
+						<!-- < div class="form-group" ng-show="aconf.a_fee.visible && !isFeeEditing">
+							<label for="fee">{{ 'area_rate' | i18n }}</label>
+							<a href type="button" class="btn btn-primary btn-xs" ng-click="updateAreaFee()"  alt="{{ 'link_create_title' | i18n }}" title="{{ 'link_create_title' | i18n }}"><i class="glyphicon glyphicon-plus"></i></a>
+							<div class="subpanel panel panel-default" width="95%">
+								<div class="row" ng-repeat="op in openingPeriods">
+									<div class="col-md-1"></div>
+									<div class="col-md-2">{{ op.fee | euroVal}} {{ 'euro_hour' | i18n }}</div>
+									<div class="col-md-3">{{ op.period.start | date }} - {{ op.period.end | date }}</div>
+									<div class="col-md-2">{{ correctOpeningStartTime(op.weekdays) }}</div>
+									<div class="col-md-3">{{ op.dailytime }}</div>
+									<div class="col-md-1">
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="updateAreaFee(op)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="removeAreaFee(op)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+									</div>
+								</div>
+							</div>
+						</div>
+						<div ng-show="aconf.a_fee.visible && isFeeEditing">
+							<label for="fee">{{ 'area_rate' | i18n }}</label>
+							<div class="subpanel panel panel-default" width="95%">
+								<div class="form-group">
+							    	<label for="fee">{{ 'area_rate' | i18n }}</label>
+							    	<input id="fee" type="text" class="form-control" name="aFee" ng-model="areaperiod.fee" ng-required="aconf.a_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
+							   		<div class="field-error" ng-show="!isInit && form.aFee.$error.required">{{ 'area_fee_err_required' | i18n }}</div>
+							   		<div class="field-error" ng-show="!isInit && form.aFee.$error.pattern">{{ 'area_fee_err_pattern' | i18n }}</div>
+							   	</div>
+							   	<div class="row inputform">
+							    	<div class="col-md-2"><label for="period_from">Periodo validita': inizio</label></div>
+							    	<div class="col-md-2">
+							    		<input id="fromDate" name="pFromDate" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="areaperiod.dataDa" is-open="rStoricoResFromDate.open" ng-click="rStoricoResFromDate.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+										<div class="alert alert-danger" ng-show="(initFamForm()!=true) && form.pFromDate.$error.pattern">{{ 'startdate_error_pattern' | i18n }}</div>
+										<div class="alert alert-danger" ng-show="(initFamForm()!=true) && form.pFromDate.$error.required">{{ 'startdate_error_required' | i18n }}</div>
+									</div>
+							    	<div class="col-md-1"><label for="period_from">periodo a</label></div>
+							    	<div class="col-md-2">
+							    		<input id="toDate" name="pToDate" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="areaperiod.dataA" is-open="rStoricoResToDate.open" ng-click="rStoricoResToDate.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+										<div class="alert alert-danger" ng-show="(initFamForm()!=true) && form.pToDate.$error.pattern">{{ 'enddate_error_pattern' | i18n }}</div>
+										<div class="alert alert-danger" ng-show="(initFamForm()!=true) && form.pToDate.$error.required">{{ 'enddate_error_required' | i18n }}</div>
+									</div>
+							   	</div>
+							   	<div class="row inputform">
+							    	<label for="wd" class="col-md-2 control-label">Giorni di validita'</label>
+							    	<div id="wd" class="col-md-5">
+							    		<label><input id="dayval_mo" type="checkbox" ng-model="areaperiod.dow_val.mo">{{'mon_vis'|i18n}}</label>
+							    		<label><input id="dayval_tu" type="checkbox" ng-model="areaperiod.dow_val.tu">{{'tue_vis'|i18n}}</label>
+							    		<label><input id="dayval_we" type="checkbox" ng-model="areaperiod.dow_val.we">{{'wed_vis'|i18n}}</label>
+							    		<label><input id="dayval_th" type="checkbox" ng-model="areaperiod.dow_val.th">{{'thu_vis'|i18n}}</label>
+							    		<label><input id="dayval_fr" type="checkbox" ng-model="areaperiod.dow_val.fr">{{'fri_vis'|i18n}}</label>
+							    		<label><input id="dayval_sa" type="checkbox" ng-model="areaperiod.dow_val.sa">{{'sat_vis'|i18n}}</label>
+							    		<label><input id="dayval_su" type="checkbox" ng-model="areaperiod.dow_val.su">{{'sun_vis'|i18n}}</label>
+							    	</div>
+							   	</div>
+							   	<div class="form-group">
+								   	<label for="time">{{ 'ps_time' | i18n }}</label>
+			                        <div class="panel panel-default subpanel" width="95%">
+								   	<div class="form-group" ng-show="aconf.a_timeSlot.visible">
+								    	<table width="80%" ng-show="openingTimes != null && openingTimes.length > 0">
+								    		<tbody class="animate-repeat" ng-repeat="p in openingTimes">
+								    			<tr>
+								    				<td width="6%"><strong>{{ 'ps_opening_from' | i18n }}: </strong></td>
+								    				<td width="39%">{{ p.from }}</td>
+								    				<td width="5%" align="center"><strong>{{ 'ps_opening_to' | i18n }}: </strong></td>
+								    				<td width="40%">{{ p.to }}</td>
+								    				<td width="10%" align="right">
+								    					<button type="button" class="btn btn-default" ng-click="deleteOpeningPeriod(p)">{{ 'ps_time_period_delete' | i18n }}</button>
+								    				</td>
+								    			</tr>
+								    		</tbody>
+								    		<tr>
+								    			<td colspan="5"><hr /></td>
+								    		</tr>
+								    		<tr ng-show="isErrorsPeriodTimeOverlap()">
+								    			<td colspan="5">
+								    				<div class="field-error">{{ 'ps_period_overlap_error' | i18n }}</div>
+								    			</td>
+								    		</tr>
+								    		<tr ng-show="isErrorsPeriodTimeFromTo()">
+								    			<td colspan="5">
+								    				<div class="field-error">{{ 'ps_period_from_to_error' | i18n }}</div>
+								    			</td>
+								    		</tr>
+								    	</table>
+								    	<table width="80%">
+								    		<tr>
+								    			<td width="6%">
+								    				<strong>{{ 'ps_opening_from' | i18n }}: </strong>
+								    			</td>
+								    			<td width="39%">
+								    				<timepicker ng-model="op_startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+								    			</td>
+								    			<td width="5%" align="center">
+								    				<strong>{{ 'ps_opening_to' | i18n }}: </strong>
+								    			</td>
+								    			<td width="40%">
+								    				<timepicker ng-model="op_endTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
+								    			</td>
+								    			<td width="10%" align="right">
+								    				<button type="button" class="btn btn-success" ng-click="addOpeningPeriod(op_startTime, op_endTime)" alt="{{ 'add_time_period' | i18n }}" title="{{ 'add_time_period' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button>
+								    			</td>
+								    		</tr>
+								    	</table>
+								   	</div>
+								   	<table width="97%">			
+									   	<tr>
+									   		<td width="85%"></td>
+									   		<td width="8%" align="right">
+												<button type="button" class="btn btn-default btn-sm" ng-click="closeOPView()">{{ 'text_btn_close' | i18n  }}</button>	
+											</td>
+									   		<td width="7%" align="right">
+									   			<button type="button" class="btn btn-primary btn-sm" ng-click="updateOp(form, areaperiod)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>, editArea
+									   		</td>
+										</tr>
+										<tr>
+											<td colspan="3">&nbsp;</td>
+										</tr>
+									</table>
+								</div>
+							</div>
+						</div> -->
 					</div>
 					<div class="field-error" ng-show="showUpdatingAErrorMessage">{{ 'err_in_update_area' | i18n }}</div>
 			   		<table width="97%">			

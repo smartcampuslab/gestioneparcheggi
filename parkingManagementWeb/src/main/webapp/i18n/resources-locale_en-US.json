@@ -259,6 +259,10 @@
     "value": "Comp.",
     "description": "Intestazione colonna composizione posti in tabella lista strutture"
 }, {
+    "key": "img_view_in_widget_title",
+    "value": "Showed in widget",
+    "description": "Testo title icona widget in ps"
+}, {
     "key": "no_ps_in_lists",
     "value": "No structures found",
     "description": "Messaggio nessuna struttura in db"
@@ -403,6 +407,10 @@
     "value": "Owner",
     "description": "Label proprietario struttura"
 }, {
+    "key": "ps_manager_in_edit",
+    "value": "Third party owner",
+    "description": "Label gestore privato struttura"
+}, {
     "key": "ps_fee",
     "value": "Stop rate",
     "description": "Label tariffa sosta in struttura"
@@ -426,6 +434,10 @@
     "key": "ps_park_and_ride",
     "value": "Park&Ride",
     "description": "Label checkbox park and ride in parcheggio struttura"
+}, {
+    "key": "ps_show_in_widget",
+    "value": "Show in Widget",
+    "description": "Label checkbox mostra o nascondi oggetto in widget in parcheggio struttura"
 }, {
     "key": "ps_park_and_ride_det",
     "value": "Park&Ride",
@@ -1028,7 +1040,7 @@
     "description": "Testo placeholder campo telefono struttura"
 }, { 
     "key": "ps_manager_placeholder",
-    "value": "Insert the structure owner",
+    "value": "Insert the structure third party owner",
     "description": "Testo placeholder campo proprietario struttura"
 }, {
     "key": "ps_mmode_placeholder",
@@ -2279,4 +2291,19 @@
 }, {
     "key": "vt_app_title",
     "value": "Download app from store"
+}, {
+	"key": "startdate_error_pattern",
+	"value": "Incorrect date format for 'starting date'"
+}, {
+	"key": "startdate_error_required",
+	"value": "Field 'starting date' is mandatory"
+}, {
+	"key": "enddate_error_pattern",
+	"value": "Incorrect date format for 'ending date'"
+}, {
+	"key": "enddate_error_required",
+	"value": "Field 'ending date' is mandatory"
+}, {
+	"key": "link_create_title",
+	"value": "New fee"
 }]
