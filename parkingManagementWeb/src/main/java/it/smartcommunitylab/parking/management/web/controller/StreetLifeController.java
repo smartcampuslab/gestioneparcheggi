@@ -3,12 +3,8 @@ package it.smartcommunitylab.parking.management.web.controller;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpEntity;
@@ -17,8 +13,6 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.codec.Base64;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -46,6 +40,7 @@ public class StreetLifeController {
 	private List<RideService> serviceList;
 	private List<StructureRegulation> regulationList;
 	
+	@SuppressWarnings("serial")
 	HttpHeaders createHeaders( ){
 		return new HttpHeaders(){
 			{
@@ -66,8 +61,8 @@ public class StreetLifeController {
 		RestTemplate restTemplate = new RestTemplate();
 		ResponseEntity<String> tmp_res = null;
 		String urlWithParams="?name="+name+"&address="+position+"&cap="+cap+"&rideservices="+rideservices+"&flow="+flow+"&alg=1&regulation=1";
-		logger.info("WS-GET. Method " + streetLifeWSUrl);
-		logger.info("WS-GET. params " + urlWithParams);
+		logger.debug("WS-GET. Method " + streetLifeWSUrl);
+		logger.debug("WS-GET. params " + urlWithParams);
 		try {
 			tmp_res = restTemplate.exchange(streetLifeWSUrl + urlWithParams, HttpMethod.GET, new HttpEntity<Object>(createHeaders()),String.class);
 			result = tmp_res.getBody();
@@ -85,31 +80,6 @@ public class StreetLifeController {
 		}
 		return serviceList;
 	}
-	
-	/*
-	 * BIKE SHARING (n° bikes ≤ 5% of parking spots)	10%
-	BIKE SHARING (5% < n° bikes ≤ 10% of parking spots)	15%
-	BIKE SHARING (10 n° bikes ≤ 15% of parking spots)	20%
-	BIKE SHARING (15% n° bikes ≤ 20% of parking spots)	25%
-	BIKE SHARING (20% of parking spots < n° bikes)	30%
-	SHUTTLE BUS (frequency ≤ 10 min)	80%
-	SHUTTLE BUS (10 min < frequency ≤ 20 min)	70%
-	SHUTTLE BUS (20 min < frequency ≤ 30 min)	50%
-	SHUTTLE BUS (30 min < frequency)	30%
-	URBAN PUBLIC TRANSPORT (frequency ≤ 10 min)	75%
-	URBAN PUBLIC TRANSPORT (10 min < frequency ≤ 20 min)	65%
-	URBAN PUBLIC TRANSPORT (20 min < frequency ≤ 30 min)	45%
-	URBAN PUBLIC TRANSPORT (30 min < frequency)	25%
-	METRO	75%
-	TAXI	10%
-	 */
-	
-	/*
-	1	FREE	1.00
-	2	PAY PARKING (P&R fee ≤ 25% of central areas fee)	0.95
-	3	PAY PARKING (25% < P&R fee ≤ 50% of central areas fee)	0.90
-	4	PAY PARKING (50% of central areas fee < P&R fee)	0.85
-	 */
 	
 	private void initLists(){
 		serviceList = new ArrayList<RideService>();
@@ -134,15 +104,6 @@ public class StreetLifeController {
 		regulationList.add(new StructureRegulation("2", "PAY PARKING (P&R fee ≤ 25% of central areas fee)", 0.95F));
 		regulationList.add(new StructureRegulation("3", "PAY PARKING (25% < P&R fee ≤ 50% of central areas fee)", 0.90F));
 		regulationList.add(new StructureRegulation("4", "PAY PARKING (50% of central areas fee < P&R fee)", 0.85F));
-	}
-	
-	private String convertListToString(ArrayList list){
-		String composedList = "";
-		for(int i = 0; i < list.size(); i++){
-			composedList += list.get(i) + ",";
-		}
-		composedList = composedList.substring(0, composedList.length() - 1);
-		return composedList;
 	}
 
 }
