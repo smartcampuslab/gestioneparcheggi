@@ -731,19 +731,19 @@
 					   					<div class="subpanel panel panel-default" width="95%">
 					   						<div class="form-group">
 							   					<label for="rideservices_bikesharing">Bike sharing</label>
-										    	<select id="rideservices_bikesharing" name="rs_bikesharing" class="form-control" ng-options="rs1.description for rs1 in rideservices1" ng-model="parkingStructure.rideservice1" ng-required="psconf.ps_streetlife.required" ng-change="calculatePercentageAndMaximumDemand(parkingStructure.rideservice1, parkingStructure.rideservice2, parkingStructure.rideservice3, parkingStructure.metropresent, parkingStructure.taxipresent)">
+										    	<select id="rideservices_bikesharing" name="rs_bikesharing" class="form-control" ng-options="rs1 as rs1.description for rs1 in rideservices1" ng-model="parkingStructure.rideservice1" ng-required="psconf.ps_streetlife.required" ng-change="calculatePercentageAndMaximumDemand(parkingStructure.rideservice1, parkingStructure.rideservice2, parkingStructure.rideservice3, parkingStructure.metropresent, parkingStructure.taxipresent)">
 										    		<option value="">Bike sharing</option>
 										    	</select>
 									    	</div>
 									    	<div class="form-group">
 						   						<label for="rideservices_shuttlebus">Bus navetta</label>
-										    	<select id="rideservices_shuttlebus" name="rs_shuttlebus" class="form-control" ng-options="rs2.description for rs2 in rideservices2" ng-model="parkingStructure.rideservice2" ng-required="psconf.ps_streetlife.required" ng-change="calculatePercentageAndMaximumDemand(parkingStructure.rideservice1, parkingStructure.rideservice2, parkingStructure.rideservice3, parkingStructure.metropresent, parkingStructure.taxipresent)">
+										    	<select id="rideservices_shuttlebus" name="rs_shuttlebus" class="form-control" ng-options="rs2 as rs2.description for rs2 in rideservices2" ng-model="parkingStructure.rideservice2" ng-required="psconf.ps_streetlife.required" ng-change="calculatePercentageAndMaximumDemand(parkingStructure.rideservice1, parkingStructure.rideservice2, parkingStructure.rideservice3, parkingStructure.metropresent, parkingStructure.taxipresent)">
 										    		<option value="">Bus navetta</option>
 										    	</select>
 									    	</div>
 									    	<div class="form-group">
 										    	<label for="rideservices_urbantransport">Autobus urbani</label>
-										    	<select id="rideservices_urbantransport" name="rs_urbantransport" class="form-control" ng-options="rs3.description for rs3 in rideservices3" ng-model="parkingStructure.rideservice3" ng-required="psconf.ps_streetlife.required" ng-change="calculatePercentageAndMaximumDemand(parkingStructure.rideservice1, parkingStructure.rideservice2, parkingStructure.rideservice3, parkingStructure.metropresent, parkingStructure.taxipresent)">
+										    	<select id="rideservices_urbantransport" name="rs_urbantransport" class="form-control" ng-options="rs3 as rs3.description for rs3 in rideservices3" ng-model="parkingStructure.rideservice3" ng-required="psconf.ps_streetlife.required" ng-change="calculatePercentageAndMaximumDemand(parkingStructure.rideservice1, parkingStructure.rideservice2, parkingStructure.rideservice3, parkingStructure.metropresent, parkingStructure.taxipresent)">
 										    		<option value="">Autobus urbani</option>
 										    	</select>
 									    	</div>

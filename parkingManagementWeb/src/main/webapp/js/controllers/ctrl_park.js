@@ -2574,17 +2574,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				parkingStruct.peakHourRate = parkingStruct.algoritmData.peakHourRate;
 				parkingStruct.percentageDemand = parkingStruct.algoritmData.percentageDemand;
 				parkingStruct.rideServices = parkingStruct.algoritmData.rideServices;
-				if(parkingStruct.rideServices){
-					var rideServices = $scope.initRideservicesFromAlgoritmData(parkingStruct.rideServices);
-					parkingStruct.rideservice1 = rideServices.rideservice1;
-					parkingStruct.rideservice2 = rideServices.rideservice2;
-					parkingStruct.rideservice3 = rideServices.rideservice3;
-					parkingStruct.metropresent = rideServices.metropresent;
-					parkingStruct.taxipresent = rideServices.taxipresent;
-				}
 			}
 			
 			angular.copy(parkingStruct, $scope.parkingStructure);
+			if(parkingStruct.rideServices){	// this block works only after angular.copy
+				var rideServices = $scope.initRideservicesFromAlgoritmData(parkingStruct.rideServices);
+				$scope.parkingStructure.rideservice1 = rideServices.rideservice1;
+				$scope.parkingStructure.rideservice2 = rideServices.rideservice2;
+				$scope.parkingStructure.rideservice3 = rideServices.rideservice3;
+				$scope.parkingStructure.metropresent = rideServices.metropresent;
+				$scope.parkingStructure.taxipresent = rideServices.taxipresent;
+			}
+			
 			for(var i = 0; i < parkingStruct.paymentMode.length; i++){
 				switch(parkingStruct.paymentMode[i]){
 					case $scope.cash_mode:
