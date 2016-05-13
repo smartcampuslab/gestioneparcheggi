@@ -1065,6 +1065,14 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: parkride
+          editable: true
+          required: true
+          visible: true
+        - code: streetlife
+          editable: true
+          required: false
+          visible: true
         - code: edittab
           editable: false
           required: false
