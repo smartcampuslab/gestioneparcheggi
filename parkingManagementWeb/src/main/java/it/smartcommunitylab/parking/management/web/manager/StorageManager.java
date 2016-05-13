@@ -825,6 +825,7 @@ public class StorageManager {
 		entity.getGeometry().setLat(entityBean.getGeometry().getLat());
 		entity.getGeometry().setLng(entityBean.getGeometry().getLng());
 		entity.setParkAndRide(entityBean.isParkAndRide());
+		if(entityBean.getAlgoritmData()!=null)entity.setAlgoritmData(entityBean.getAlgoritmData());
 		if(entityBean.getZones()!=null)entity.setZones(entityBean.getZones());
 		mongodb.save(entity);
 		return entityBean;
