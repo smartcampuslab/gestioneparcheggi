@@ -3711,6 +3711,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			pos:$scope.mapOption.center,
 			options: { 
 				draggable: true,
+				visible: ($scope.psconf.ps_streetlife)?$scope.psconf.ps_streetlife.visible:false,
 				title: "City center"
 			},
 			icon: $scope.psMarkerIcon

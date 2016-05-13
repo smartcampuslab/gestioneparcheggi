@@ -526,7 +526,7 @@
 								</marker>
 								<marker ng-repeat="ps in editPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->
 								</marker>
-								<marker ng-repeat="c in cityCenter" id="{{ c.id }}" title="{{ c.options.title }}" position="{{ c.pos }}" visible="{{ psconf.ps_streetlife.visible }}" draggable="{{ c.options.draggable }}" on-dragend="updatePsCenterPos()" ><!-- on-drag="updatePos()" -->
+								<marker ng-repeat="c in cityCenter" id="{{ c.id }}" title="{{ c.options.title }}" position="{{ c.pos }}" visible="{{ c.options.visible }}" draggable="{{ c.options.draggable }}" on-dragend="updatePsCenterPos()" ><!-- on-drag="updatePos()" -->
 								</marker>
 							</map>
 						</div>
