@@ -759,13 +759,18 @@
 								   	</div>
 								   	<div class="form-group">
 								    	<label for="sl_flow">Flusso traffico intercettato (auto/ora)</label>
-								    	<input id="sl_flow" type="text" class="form-control" name="pSLFlow" ng-model="parkingStructure.flow" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Flusso di traffico intercettato (auto/ora)" ng-blur="getParkDemand(parkingStructure, myGeometry)" >
+								    	<input id="sl_flow" type="text" class="form-control" name="pSLFlow" ng-model="parkingStructure.flow" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Flusso di traffico intercettato (auto/ora)" ng-change="getParkDemand(parkingStructure, myGeometry)" ng-blur="getParkDemand(parkingStructure, myGeometry)" >
 								    	<div class="field-error" ng-show="!isInit && form.pSLFlow.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
 								    	<div class="field-error" ng-show="!isInit && form.pSLFlow.$error.required">Campo 'flusso traffico' obbligatorio</div>
 								   	</div>
 								   	<!-- <div class="row" align="right">
 								   		<button type="button" class="btn btn-primary" ng-click="getParkDemand(parkingStructure, myGeometry)">Calcola1</button>
 								   	</div> -->
+								   	
+								   	<div class="field-error" ng-show="showMissingFields">Campi mancanti per il calcolo dell'impatto: {{ missingFields }}</div>
+								   	<div class="row" align="right">
+								   		<button type="button" class="btn btn-primary" ng-click="getParkDemand(parkingStructure, myGeometry);calculateImpactEvaluation(parkingStructure)">Calcola</button>
+								   	</div>
 								   	<div class="form-group">
 								    	<label for="sl_percentageDemand">Richiesta utilizzo (%)</label>
 								    	<input id="sl_percentageDemand" type="text" class="form-control" name="pSLPercentageDemand" ng-model="parkingStructure.percentageDemand" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Richiesta utilizzo (valore percentuale)" >
@@ -812,9 +817,6 @@
 								    	<input id="sl_cityCenterDistance" type="text" class="form-control" name="pSLCityCenterDistance" ng-model="parkingStructure.cityCenterDistance" ng-pattern="kmDistance" ng-required="psconf.ps_streetlife.required" placeholder="Distanza tra struttura e centro citta' (km)" >
 								    	<div class="field-error" ng-show="!isInit && form.pSLCityCenterDistance.$error.pattern">Valore non corretto. Inserire un valore decimale (es 1.234)</div>
 								    	<div class="field-error" ng-show="!isInit && form.pSLCityCenterDistance.$error.required">Campo 'distanza con centro citt&agrave;' obbligatorio</div>
-								   	</div>
-								   	<div class="row" align="right">
-								   		<button type="button" class="btn btn-primary" ng-click="getParkDemand(parkingStructure, myGeometry);calculateImpactEvaluation(parkingStructure)">Calcola</button>
 								   	</div>
 								   	<div class="form-group">
 								    	<label for="sl_notTraveledKm">Km risparmiati</label>

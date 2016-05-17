@@ -3722,28 +3722,44 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Method used to get demand data using ws form streetlife project
 	$scope.getParkDemand = function(demandData, position_geo){
-		var method = 'GET';
-		var params = {
-			name: demandData.name,
-			position: position_geo,
-			cap: demandData.slotNumber,
-			rideservices: $scope.correctRideServices(demandData.rideservice1, demandData.rideservice2, demandData.rideservice3, demandData.metropresent, demandData.taxipresent),
-			flow: parseInt(demandData.flow)
-		};
-		var myDataPromise = invokeWSService.getProxy(method, "streetlife/calcdemand", params, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	console.log("Invoked streetlife calcdemand: " + result);
-	    	if(result != null){ // == "OK"){
-	    		$scope.parkingStructure.percentageDemand = result.percentageDemand;
-	    		$scope.parkingStructure.maximumDemand = result.maximumDemand;
-	    		$scope.parkingStructure.newParkingUsers = result.newParkingUsers;
-	    		var tmpRate = $scope.parkingStructure.newParkingUsers / demandData.slotNumber;
-	    		$scope.parkingStructure.peakHourRate = $scope.calculatePeakHourRate(tmpRate);
-	    		$scope.parkingStructure.co2Coefficient = "179,91";
-	    	} else {
-	    		
-	    	}
-	    });
+		$scope.showMissingFields = false;
+		if(!demandData.name || !position_geo || !demandData.slotNumber){
+			$scope.showMissingFields = true;
+			$scope.missingFields = "";
+			if(!demandData.name){
+				$scope.missingFields += "nome struttura, ";
+			}
+			if(!demandData.slotNumber){
+				$scope.missingFields += "posti in struttura, ";
+			}
+			if(!position_geo){
+				$scope.missingFields += "posizione struttura, ";
+			}
+			$scope.missingFields = $scope.missingFields.substring(0, $scope.missingFields.length-2);
+		} else {
+			var method = 'GET';
+			var params = {
+				name: demandData.name,
+				position: position_geo,
+				cap: demandData.slotNumber,
+				rideservices: $scope.correctRideServices(demandData.rideservice1, demandData.rideservice2, demandData.rideservice3, demandData.metropresent, demandData.taxipresent),
+				flow: parseInt(demandData.flow)
+			};
+			var myDataPromise = invokeWSService.getProxy(method, "streetlife/calcdemand", params, $scope.authHeaders, null);
+		    myDataPromise.then(function(result){
+		    	console.log("Invoked streetlife calcdemand: " + result);
+		    	if(result != null){ // == "OK"){
+		    		$scope.parkingStructure.percentageDemand = result.percentageDemand;
+		    		$scope.parkingStructure.maximumDemand = result.maximumDemand;
+		    		$scope.parkingStructure.newParkingUsers = result.newParkingUsers;
+		    		var tmpRate = $scope.parkingStructure.newParkingUsers / demandData.slotNumber;
+		    		$scope.parkingStructure.peakHourRate = $scope.calculatePeakHourRate(tmpRate);
+		    		$scope.parkingStructure.co2Coefficient = "179,91";
+		    	} else {
+		    		
+		    	}
+		    });
+		}
 	};
 	
 	// Method calculateImpactEvaluation: used to update the ps data with the impact evaluation from the slot occupancy
