@@ -3755,6 +3755,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    		var tmpRate = $scope.parkingStructure.newParkingUsers / demandData.slotNumber;
 		    		$scope.parkingStructure.peakHourRate = $scope.calculatePeakHourRate(tmpRate);
 		    		$scope.parkingStructure.co2Coefficient = "179,91";
+		    		// Moved here to be preloaded in the impact calculation form
+		    		$scope.parkingStructure.notTraveledKm = $scope.toFloatWithThreeDecimals(parseInt(result.newParkingUsers) * parseFloat($scope.parkingStructure.cityCenterDistance) * 2);
+		    		$scope.parkingStructure.co2Saved = Math.floor(parseFloat($scope.parkingStructure.co2Coefficient) * $scope.parkingStructure.notTraveledKm);
 		    	} else {
 		    		
 		    	}
@@ -3762,10 +3765,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
 	};
 	
+	$scope.toFloatWithThreeDecimals = function(num){
+		var stringVal = num.toFixed(3);
+		return parseFloat(stringVal);
+	}
+	
 	// Method calculateImpactEvaluation: used to update the ps data with the impact evaluation from the slot occupancy
 	$scope.calculateImpactEvaluation = function(alg1Data){
-		$scope.parkingStructure.notTraveledKm = parseInt(alg1Data.newParkingUsers) * parseFloat(alg1Data.cityCenterDistance) * 2;
-		$scope.parkingStructure.co2Saved = Math.floor(parseFloat(alg1Data.co2Coefficient) * $scope.parkingStructure.notTraveledKm);
 		$scope.getOccupancyStreetsFromDb();
 	}
 	
