@@ -727,3 +727,7 @@ label.group-label {
     box-shadow: none;
     -webkit-box-shadow: none;
 }
+
+.row.inputform {
+	margin: 0 0 15px 0;
+}

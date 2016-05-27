@@ -235,7 +235,6 @@
 				</tr>
 				<tbody class="animate-repeat"
 					ng-repeat="log in getLogData()">
-				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
 				<tr>
 					<td width="3%"><i class="glyphicon glyphicon-import" ng-show="log.isSystemLog" title="{{ 'system_log_alt_title' | i18n }}" alt="{{ 'system_log_alt_title' | i18n }}"></i></td>
 					<td width="20%" align="left">{{log.objId}}</td>

@@ -3772,6 +3772,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Method calculateImpactEvaluation: used to update the ps data with the impact evaluation from the slot occupancy
 	$scope.calculateImpactEvaluation = function(alg1Data){
+		//$scope.parkingStructure.notTraveledKm = $scope.toFloatWithThreeDecimals(parseInt(alg1Data.newParkingUsers) * parseFloat($scope.parkingStructure.cityCenterDistance) * 2);
+		//$scope.parkingStructure.co2Saved = Math.floor(parseFloat(alg1Data.co2Coefficient) * $scope.parkingStructure.notTraveledKm);
 		$scope.getOccupancyStreetsFromDb();
 	}
 	

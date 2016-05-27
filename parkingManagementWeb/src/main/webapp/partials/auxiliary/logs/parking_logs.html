@@ -41,30 +41,28 @@
 			</tr>
 			<tr>
 				<td colspan="2">
-<!-- 					<div class="well"> -->
-						<table width="100%">
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_standard' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsPaying}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_occupied_on_standard' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsOccupiedOnPaying}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsHandicapped}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_occupied_on_handicapped' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsOccupiedOnHandicapped}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsUnavailable}}</td>
-							</tr>
-						</table>
-<!-- 					</div> -->
+					<table width="100%">
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_standard' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsPaying}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_occupied_on_standard' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsOccupiedOnPaying}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsHandicapped}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_occupied_on_handicapped' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsOccupiedOnHandicapped}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsUnavailable}}</td>
+						</tr>
+					</table>
 				</td>
 			</tr>
 <!-- 			<tr> -->
@@ -87,7 +85,6 @@
 			<table width="100%">
 	   			<tr>
 	   				<td width="50%" align="left">
-<!-- 	   					<h3 class="panel-title"><strong>{{ 'new_log_parking' | i18n }}</strong></h3> -->
 	   				</td>
 	   				<td width="40%" align="right">
 						<a href ng-click="showLogManualCreation()" class="btn btn-success" type="button">{{ 'btn_load_log_text' | i18n }}</a>
@@ -109,9 +106,7 @@
 					<th width="23%">{{ 'log_object_name' | i18n }}</th>
 					<th width="5%"></th>
 				</tr>
-				<tbody class="animate-repeat"
-					ng-repeat="log in getLogData()">
-				<!-- ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPage*maxPractices | limitTo:maxPractices"> -->
+				<tbody class="animate-repeat" ng-repeat="log in getLogData()">
 				<tr>
 					<td width="3%"><i class="glyphicon glyphicon-import" ng-show="log.isSystemLog" title="{{ 'system_log_alt_title' | i18n }}" alt="{{ 'system_log_alt_title' | i18n }}"></i></td>
 					<td width="24%" align="left">{{log.objId}}</td>

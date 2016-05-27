@@ -121,7 +121,7 @@
 						        </div>
 						    </info-window>
 						</marker>
-						<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ psMarkerIcon }}" on-click="showInfoWindow(event, 'ps')" >
+						<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" visible="{{ ps.options.visible }}" position="{{ ps.position }}" icon="{{ psMarkerIcon }}" on-click="showInfoWindow(event, 'ps')" >
 							<info-window id="ps" visible-on-marker="{{ ps.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>

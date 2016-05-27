@@ -36,6 +36,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	$scope.checkZones4 = false;
 	var widget_url_filters = "";
 	var SHOW_ONLY_ACTIVE = true;
+	var SHOW_ONLY_CHECKED = false;
 	
 	// DB type for zone. I have to implement a good solution for types
 	var firstStreetCall = true;
@@ -196,6 +197,8 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		$scope.checkZones4 = initializeService.isWidgetZone4Checked();
 		$scope.widget_inport_url = initializeService.getConfWidgetUrl() + "/viewall/" + initializeService.getConfAppId();
 		$scope.widget_url_params = $scope.setWidgetUrlParameters();
+		SHOW_ONLY_CHECKED = ($scope.psconf.ps_show_widget) ? $scope.psconf.ps_show_widget.visible : false;
+		SHOW_ONLY_ACTIVE = (initializeService.isOnlyActivePmShowed()) ? true : false;
     };
     
     $scope.setWidgetUrlParameters = function(){
@@ -270,7 +273,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     			parameters += "zona4:0,";
     		}
     	}
-/*    	if($scope.filterForZone0 || $scope.filterForZone1 || $scope.filterForZone2 || $scope.filterForZone3 || $scope.filterForZone4){
+    	/*if($scope.filterForZone0 || $scope.filterForZone1 || $scope.filterForZone2 || $scope.filterForZone3 || $scope.filterForZone4){
     		parameters += "&filters=";
     		var zIndexs = initializeService.getZFilterIndexes();
     		var zVals = initializeService.getZValues();
@@ -653,15 +656,15 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		
 		if(pmMarkers!= null){
 			if(SHOW_ONLY_ACTIVE){
-			$scope.mapParkingMetersMarkers = [];
-			for(var i = 0; i < pmMarkers.length; i++){
-				if(pmMarkers[i].data.status == "ACTIVE"){
-					pmMarkers[i].options.visible = true;
-					$scope.mapParkingMetersMarkers.push(pmMarkers[i]);
-				} else {
-					pmMarkers[i].options.visible = false;
+				$scope.mapParkingMetersMarkers = [];
+				for(var i = 0; i < pmMarkers.length; i++){
+					if(pmMarkers[i].data.status == "ACTIVE"){
+						pmMarkers[i].options.visible = true;
+						$scope.mapParkingMetersMarkers.push(pmMarkers[i]);
+					} else {
+						pmMarkers[i].options.visible = false;
+					}
 				}
-			}
 			} else {
 				$scope.mapParkingMetersMarkers = pmMarkers;
 			}
@@ -669,7 +672,19 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			$scope.mapParkingMetersMarkers = [];
 		}
 		if(psMarkers != null){
-			$scope.mapParkingStructureMarkers = psMarkers;
+			if(SHOW_ONLY_CHECKED){
+				$scope.mapParkingStructureMarkers = [];
+				for(var i = 0; i < psMarkers.length; i++){
+					if(psMarkers[i].data.showInWidget){
+						psMarkers[i].options.visible = true;
+						$scope.mapParkingStructureMarkers.push(psMarkers[i]);
+					} else {
+						psMarkers[i].options.visible = false;
+					}
+				}
+			} else {
+				$scope.mapParkingStructureMarkers = psMarkers;
+			}
 		} else {
 			$scope.mapParkingStructureMarkers = [];
 		}
@@ -713,7 +728,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
 
 	$scope.showParkingMetersMarkers = function() {
-        $scope.mapParkingMetersMarkers = $scope.setAllMarkersMap($scope.parkingMetersMarkers, $scope.map, true);
+        $scope.mapParkingMetersMarkers = $scope.setAllMarkersMap($scope.parkingMetersMarkers, $scope.map, true, 0);
         //$scope.refreshMap();
     };
     
@@ -735,7 +750,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
     
     $scope.showParkingStructuresMarkers = function() {
-        $scope.mapParkingStructureMarkers = $scope.setAllMarkersMap($scope.parkingStructureMarkers, $scope.map, true);
+        $scope.mapParkingStructureMarkers = $scope.setAllMarkersMap($scope.parkingStructureMarkers, $scope.map, true, 1);
         //$scope.refreshMap();
     };
     
@@ -757,7 +772,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
     
     $scope.showBikePointsMarkers = function() {
-        $scope.mapBikePointMarkers = $scope.setAllMarkersMap($scope.bikePointMarkers, $scope.map, true);
+        $scope.mapBikePointMarkers = $scope.setAllMarkersMap($scope.bikePointMarkers, $scope.map, true, 2);
         //$scope.refreshMap();
     };
     
@@ -1065,15 +1080,26 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     	}
     };
     
-    $scope.setAllMarkersMap = function(markers, map, visible){
+    $scope.setAllMarkersMap = function(markers, map, visible, type){
     	for(var i = 0; i < markers.length; i++){
     		var visible_state = true;
-    		if(SHOW_ONLY_ACTIVE){
-    			if(markers[i].data.status == "ACTIVE"){
-    				visible_state = true
-    			} else {
-    				visible_state = false;
-    			}
+    		if(type == 0){	// case pm
+	    		if(SHOW_ONLY_ACTIVE){
+	    			if(markers[i].data.status && markers[i].data.status == "ACTIVE"){
+	    				visible_state = true
+	    			} else {
+	    				visible_state = false;
+	    			}
+	    		}
+    		}
+    		if(type == 1){	// case ps
+	    		if(SHOW_ONLY_CHECKED){
+					if(markers[i].data.showInWidget){
+						visible_state = true;
+					} else {
+						visible_state = false;
+					}
+				}
     		}
     		markers[i].options.visible = visible && visible_state;
     		markers[i].options.map = map;
@@ -2018,7 +2044,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var appId = sharedDataService.getConfAppId();
 		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
-		    //angular.copy(result, allParkingStructures);
 		    allParkingStructures = $scope.filterPss(result, fzones);
 		    if($scope.isPsVisible()){
 		    	for (var i = 0; i <  allParkingStructures.length; i++) {

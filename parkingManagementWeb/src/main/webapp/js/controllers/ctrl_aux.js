@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokePdfServiceProxy', 'invokeAuxWSService', 'getMyMessages', '$timeout','FileUploader',
-                               function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, invokeAuxWSService, getMyMessages, $timeout, FileUploader) { 
+pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', 'initializeService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokePdfServiceProxy', 'invokeAuxWSService', 'getMyMessages', '$timeout','FileUploader',
+                               function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, initializeService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, invokeAuxWSService, getMyMessages, $timeout, FileUploader) { 
 	this.$scope = $scope;
     $scope.params = $routeParams;
     $scope.systemUserNumber = 999;
@@ -303,6 +303,67 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     };
     
     $scope.initComponents = function(){
+    	if($scope.logtabs == null || $scope.logtabs.length == 0){
+    		var logAuxTabs = [];
+	    	var street_occ_tab_obj = {};
+	    	var struct_occ_tab_obj = {};
+	    	var pm_profit_tab_obj = {};
+	    	var struct_profit_tab_obj = {};
+	    	var all_logs_tab_obj = {};
+    		$scope.sconf = initializeService.getStreetConfData();
+	    	$scope.pmconf = initializeService.getPmConfData();
+	    	$scope.psconf = initializeService.getPsConfData();
+	    	$scope.fconf = initializeService.getFluxConfData();
+   			if($scope.fconf.f_occStreet.visible){
+   				street_occ_tab_obj =  { title:'parking_occupation_logs_tab', index: 1, content:"partials/auxiliary/logs/street_logs.html", active: false, path: "/tplog/streets" };
+   			}
+   			if($scope.fconf.f_occStruct.visible){
+   				struct_occ_tab_obj = { title:'structure_occupation_logs_tab', index: 2, content:"partials/auxiliary/logs/parking_logs.html", active: false, path: "/tplog/parkings" };
+   			}
+   			if($scope.fconf.f_profParkingMeter.visible){
+   				pm_profit_tab_obj =  { title:'parkingmeter_profit_logs_tab', index: 3, content:"partials/auxiliary/logs/pm_profit_logs.html", active: false, path: "/tplog/parkmeters" };
+   			}
+   			if($scope.fconf.f_profStruct.visible){
+   				struct_profit_tab_obj =  { title:'structure_profit_logs_tab', index: 4, content:"partials/auxiliary/logs/parking_profit_logs.html", active: false, path: "/tplog/parkstructs" };
+   			}
+   			if($scope.fconf.f_allLogs.visible){
+   				all_logs_tab_obj =  { title:'history_log_tab', index: 5, content:"partials/auxiliary/logs/global_logs.html", active: true, path: "/tplog/all"};
+   			}
+   			// Here I check if I have to show/hide the log add buttons
+			if($scope.fconf.f_occStreet.editable){
+				sharedDataService.setOccStreetLogEdit(true);
+		   	}
+		   	if($scope.fconf.f_occStruct.editable){
+		   		sharedDataService.setOccStructLogEdit(true);
+		   	}
+		   	if($scope.fconf.f_profParkingMeter.editable){
+		   		sharedDataService.setProfPmLogEdit(true);
+		   	}
+		   	if($scope.fconf.f_profStruct.editable){
+		   		sharedDataService.setProfStructLogEdit(true);
+		   	}
+		   	// Here I load the tabs for logs
+		   	if($scope.fconf.f_occStreet.visible){
+		   		logAuxTabs.push(street_occ_tab_obj);
+		   	}
+		   	if($scope.fconf.f_occStruct.visible){
+		   		logAuxTabs.push(struct_occ_tab_obj);
+		   	}
+		   	if($scope.fconf.f_profParkingMeter.visible){
+		   		logAuxTabs.push(pm_profit_tab_obj);
+		   	}
+		   	if($scope.fconf.f_profStruct.visible){
+		   		logAuxTabs.push(struct_profit_tab_obj);
+		   	}
+		   	if($scope.fconf.f_allLogs.visible){
+		   		logAuxTabs.push(all_logs_tab_obj);
+		   	}
+		   	angular.copy(logAuxTabs, $scope.logtabs);
+		   	sharedDataService.setFluxViewTabs($scope.logtabs);
+    	}
+    }
+    
+    /*$scope.initComponents = function(){
 	    if($scope.logtabs == null || $scope.logtabs.length == 0){
 	    	var logAuxTabs = [];
 	    	var street_occ_tab_obj = {};
@@ -312,9 +373,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	var all_logs_tab_obj = {};
 		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
 		   	for(var i = 0; i < $scope.showedObjects.length; i++){
-		   		//if($scope.showedObjects[i].id == 'Area'){
-		   		//	$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
-		   		//}
 		   		if($scope.showedObjects[i].id == 'Street'){
 		   			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
 		   		}
@@ -324,15 +382,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   		if($scope.showedObjects[i].id == 'Ps'){
 		   			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
 		   		}
-		   		//if($scope.showedObjects[i].id == 'Bp'){
-		    	//	$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
-		    	//}
-		   		//if($scope.showedObjects[i].id == 'Zone'){
-		   		//	$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
-		   		//}
 		   		if($scope.showedObjects[i].id == 'Flux'){
 		   			var flux_obj = $scope.showedObjects[i].attributes;
-		   			$scope.loadFluxAttributes(flux_obj);	
+		   			$scope.loadFluxAttributes(flux_obj);
 		   			for(var j = 0; j < flux_obj.length; j++){
 		   				if(flux_obj[j].code == "occupancyStreet"){
 		   					street_occ_tab_obj =  { title:'parking_occupation_logs_tab', index: 1, content:"partials/auxiliary/logs/street_logs.html", active: false, path: "/tplog/streets" };
@@ -383,92 +435,11 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   	}
 		   	angular.copy(logAuxTabs, $scope.logtabs);
 		   	sharedDataService.setFluxViewTabs($scope.logtabs);
-	    }
-//	    if($scope.addtabs == null || $scope.addtabs.length == 0){
-//	    	var logAuxTabs = [];
-//	    	var street_occ_tab_obj = {};
-//	    	var struct_occ_tab_obj = {};
-//	    	var pm_profit_tab_obj = {};
-//	    	var struct_profit_tab_obj = {};
-//		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
-//		   	for(var i = 0; i < $scope.showedObjects.length; i++){
-//		   		if($scope.showedObjects[i].id == 'Street'){
-//		   			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
-//		   		}
-//		   		if($scope.showedObjects[i].id == 'Pm'){
-//		   			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
-//		   		}
-//		   		if($scope.showedObjects[i].id == 'Ps'){
-//		   			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
-//		   		}
-//		   		if($scope.showedObjects[i].id == 'Flux'){
-//		   			var flux_obj = $scope.showedObjects[i].attributes;
-//		   			$scope.loadFluxAttributes(flux_obj);	
-//		   			for(var j = 0; j < flux_obj.length; j++){
-//		   				if(flux_obj[j].code == "occupancyStreet"){
-//		   					street_occ_tab_obj =  { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false };
-//		   				}
-//		   				if(flux_obj[j].code == "occupancyStruct"){
-//		   					struct_occ_tab_obj = { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false };
-//		   				}
-//		   				if(flux_obj[j].code == "profitParkingMeter"){
-//		   					pm_profit_tab_obj =  { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false };
-//		   				}
-//		   				if(flux_obj[j].code == "profitStruct"){
-//		   					struct_profit_tab_obj = { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false };
-//		   				}
-//		   			}
-//		   		}
-//		   	}
-//		   	// Here I load the tabs for logs
-//		   	if($scope.f_occStreet.editable){
-//		   		logAuxTabs.push(street_occ_tab_obj);
-//		   	}
-//		   	if($scope.f_occStruct.editable){
-//		   		logAuxTabs.push(struct_occ_tab_obj);
-//		   	}
-//		   	if($scope.f_profParkingMeter.editable){
-//		   		logAuxTabs.push(pm_profit_tab_obj);
-//		   	}
-//		   	if($scope.f_profStruct.editable){
-//		   		logAuxTabs.push(struct_profit_tab_obj);
-//		   	}
-//		   	angular.copy(logAuxTabs, $scope.addtabs);
-//		   	sharedDataService.setFluxAddTabs($scope.addtabs);
-//	    }	    
-    };
-    
-    //Area Component settings
-    $scope.loadAreaAttributes = function(attributes){
-    	for(var i = 0; i < attributes.length; i++){
-    		if(attributes[i].code == 'name'){
-    			$scope.a_name = attributes[i];
-    		}
-    		if(attributes[i].code == 'fee'){
-    			$scope.a_fee = attributes[i];
-    		}
-    		if(attributes[i].code == 'timeSlot'){
-    			$scope.a_timeSlot = attributes[i];
-    		}
-    		if(attributes[i].code == 'smsCode'){
-    			$scope.a_smsCode = attributes[i];
-    		}
-    		if(attributes[i].code == 'color'){
-    			$scope.a_color = attributes[i];
-    		}
-    		if(attributes[i].code == 'geometry'){
-    			$scope.a_geometry = attributes[i];
-    		}
-    		if(attributes[i].code == 'viewPage'){
-    			if(attributes[i].visible){
-    				showArea = true;
-    			}
-    		}
-    	}
-    };
+	    }    
+    };*/
     
     //Street Component settings
-    $scope.loadStreetAttributes = function(attributes){
+    /*$scope.loadStreetAttributes = function(attributes){
     	for(var i = 0; i < attributes.length; i++){
     		if(attributes[i].code == 'streetReference'){
     			$scope.s_streetRef = attributes[i];
@@ -509,10 +480,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     			}
     		}
     	}
-    };
+    };*/
     
     //Pm Component settings
-    $scope.loadPmAttributes = function(attributes){
+    /*$scope.loadPmAttributes = function(attributes){
     	for(var i = 0; i < attributes.length; i++){
     		if(attributes[i].code == 'code'){
     			$scope.pm_code = attributes[i];
@@ -535,10 +506,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     			}
     		}
     	}
-    };
+    };*/
     
     //Ps Component settings
-    $scope.loadPsAttributes = function(attributes){
+    /*$scope.loadPsAttributes = function(attributes){
     	for(var i = 0; i < attributes.length; i++){
     		if(attributes[i].code == 'name'){
     			$scope.ps_name = attributes[i];
@@ -582,65 +553,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     			}
     		}
     	}
-    };
-    
-    //BikePoint Component settings
-    $scope.loadBikeAttributes = function(attributes){
-    	for(var i = 0; i < attributes.length; i++){
-    		if(attributes[i].code == 'name'){
-    			$scope.bp_name = attributes[i];
-    		}
-    		if(attributes[i].code == 'bikeNumber'){
-    			$scope.bp_bikeNumber = attributes[i];
-    		}
-    		if(attributes[i].code == 'slotNumber'){
-    			$scope.bp_slotNumber = attributes[i];
-    		}
-    		if(attributes[i].code == 'geometry'){
-    			$scope.bp_geometry = attributes[i];
-    		}
-    		if(attributes[i].code == 'viewPage'){
-    			if(attributes[i].visible){
-    				showBp = true;
-    			}
-    		}
-    	}
-    };
-    
-    //Zones Component settings
-    $scope.loadZoneAttributes = function(attributes){
-    	for(var i = 0; i < attributes.length; i++){
-    		if(attributes[i].code == 'name'){
-    			$scope.zone_name = attributes[i];
-    		}
-    		if(attributes[i].code == 'submacro'){
-    			$scope.zone_submacro = attributes[i];
-    		}
-    		if(attributes[i].code == 'note'){
-    			$scope.zone_note = attributes[i];
-    		}
-    		if(attributes[i].code == 'status'){
-    			$scope.zone_status = attributes[i];
-    		}
-    		if(attributes[i].code == 'type'){
-    			$scope.zone_type = attributes[i];
-    		}
-    		if(attributes[i].code == 'color'){
-    			$scope.zone_color = attributes[i];
-    		}
-    		if(attributes[i].code == 'geometry'){
-    			$scope.zone_geometry = attributes[i];
-    		}
-    		if(attributes[i].code == 'viewPage'){
-    			if(attributes[i].visible){
-    				showZones = true;
-    			}
-    		}
-    	}
-    };
+    };*/
     
     //Flux Component settings
-    $scope.loadFluxAttributes = function(attributes){
+    /*$scope.loadFluxAttributes = function(attributes){
     	for(var i = 0; i < attributes.length; i++){
     		if(attributes[i].code == 'occupancyStreet'){
     			$scope.f_occStreet = attributes[i];
@@ -658,7 +574,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     			$scope.f_allLogs = attributes[i];
     		}
     	}
-    };    
+    };*/    
     // ---------------------- End Block to read conf params and show/hide elements ---------------------       
     
     $scope.showDetails = false;
@@ -1772,7 +1688,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    		case 1:
 	    			// Case months value
 	    			var out_obj = angular.element(out);
-	    	    	
 	    			var method = 'POST';
 	    	    	var fileVal = {	
 	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
@@ -1808,14 +1723,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    		case 1:
 	    			// Case months value
 	    			var out_obj = angular.element(out);
-	    	    	
 	    			var method = 'POST';
 	    	    	var fileVal = {	
 	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
 	    	        };
 	    	    	var params = {
 	    				isSysLog: true,
-	    				period : null
+	    				period : null,
+	    				type: type + ""
 	    			};
 	    	                	
 	    	        var value = JSON.stringify(fileVal);
@@ -1834,7 +1749,35 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
 	    	           }
 	    	        });
-	    			break;	    			
+	    			break;
+	    		case 2:
+	    			// Case months value
+	    			var out_obj = angular.element(out);
+	    	    	
+	    			var method = 'POST';
+	    	    	var fileVal = {	
+	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+	    	        };
+	    	    	var params = {
+	    				isSysLog: true,
+	    				period : null,
+	    				type: type + ""
+	    			};
+	    	                	
+	    	        var value = JSON.stringify(fileVal);
+	    	        if($scope.showLog) console.log("Json value " + value);
+	    	                	
+	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters/fileupload/" + user, params, $scope.authHeaders, value);	
+	    	        $scope.progress += 25;
+	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
+	    	        myDataPromise.then(function(result){
+	    	           if(result != null && result != ""){	// I have to check if it is correct
+	    	        	   console.log("Profit pm file upload result: " + result);
+	    	        	   $scope.progress = 100;
+	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
+	    	           }
+	    	        });
+	    			break;	   	
 	    		default: break;	
 	    	}	    	
     	}	
