@@ -18,6 +18,8 @@ package it.smartcommunitylab.parking.management.web.bean;
 import java.io.Serializable;
 import java.util.List;
 
+import it.smartcommunitylab.parking.management.web.model.RatePeriod;
+
 public class RateAreaBean implements Serializable {
 	private static final long serialVersionUID = -3932473344785941029L;
 	private String id;
@@ -25,6 +27,7 @@ public class RateAreaBean implements Serializable {
 	private String name;
 	private Float fee;
 	private String timeSlot;
+	private List<RatePeriod> validityPeriod;
 	private String smsCode;
 	private String color;
 	private String note;
@@ -118,6 +121,14 @@ public class RateAreaBean implements Serializable {
 
 	public void setZones(List<String> zones) {
 		this.zones = zones;
+	}
+
+	public List<RatePeriod> getValidityPeriod() {
+		return validityPeriod;
+	}
+
+	public void setValidityPeriod(List<RatePeriod> validityPeriod) {
+		this.validityPeriod = validityPeriod;
 	}
 
 }

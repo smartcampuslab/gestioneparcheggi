@@ -8,7 +8,8 @@
      				<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
 				        <div ng-non-bindable="">
 				          	<div id="siteNotice"></div>
-				          	<h4 id="firstHeading" class="firstHeading"><span ng-show="aconf.a_name.visible">{{ a.data.name }}</span></h4>
+				          	<h4 id="firstHeading" class="firstHeading"><span ng-show="aconf.a_name.visible">{{ a.data.name }}</span>&nbsp;&nbsp;&nbsp;
+				          	</h4>
 					        <div id="bodyContent">
 					        	<table>
 									<tr ng-show="aconf.a_fee.visible">	
@@ -98,6 +99,17 @@
 													<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 												</tr>
 											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" align="right">
+											<hr/>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" class="info_window_buttons">
+											<a href type="button" class="btn btn-primary" ng-click="setAEdit(a.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a href type="button" class="btn btn-danger" ng-click="setARemove(a.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 										</td>
 									</tr>
 					        	</table>
@@ -201,6 +213,17 @@
 													<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 												</tr>
 											</table>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" align="right">
+											<hr/>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" class="info_window_buttons">
+											<a href type="button" class="btn btn-primary" ng-click="setAEdit(a.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a href type="button" class="btn btn-danger" ng-click="setARemove(a.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 										</td>
 									</tr>
 					        	</table>
@@ -417,7 +440,148 @@
 					    	<input id="name" type="text" class="form-control" name="aName" ng-model="area.name" ng-required="aconf.a_name.required" placeholder="{{ 'area_name_placeholder' | i18n }}" >
 					   		<div class="field-error" ng-show="!isInit && form.aName.$error.required">{{ 'area_name_err_required' | i18n }}</div>
 					   	</div>
-					   	<div class="form-group" ng-show="aconf.a_fee.visible">
+					   	
+					   	<div class="form-group" ng-show="aconf.a_name.visible">
+					   		<label for="name">{{ 'area_period_label' | i18n }}</label>
+					   		<div class="panel-body">			
+				  				<div ng-show="isPeriodFormVisible">
+							  		<table  width="100%">
+										<tr valign="bottom">
+											<th width="15%">{{ 'area_rate_period_startdate' | i18n }}</th>
+											<th width="15%">{{ 'area_rate_period_enddate' | i18n }}</th>
+											<th width="15%">{{ 'area_rate_period_weekdays' | i18n }}</th>
+											<th width="15%">{{ 'area_rate_period_hours' | i18n }}</th>
+											<th width="10%">{{ 'area_rate_value' | i18n }}</th>
+											<th width="10%">{{ 'area_rate_note' | i18n }}</th>
+											<th width="10%">{{ 'area_rate_is_holidays' | i18n }}</th>
+											<th width="10%"></th>
+										</tr>
+										<tr>
+											<td>
+							  					<input id="fromDate" name="pFromDate" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="pr.from" is-open="rStoricoResFromDate.open" ng-click="rStoricoResFromDate.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+												<div class="field-error" ng-show="(initFamForm()!=true) && form.pFromDate.$error.pattern">{{ 'area_rate_period_startdate_error_pattern' | i18n }}</div>
+												<div class="field-error" ng-show="(initFamForm()!=true) && form.pFromDate.$error.required">{{ 'area_rate_period_startdate_error_required' | i18n }}</div>
+								    		</td>
+								    		<td>
+												<input id="toDate" name="pToDate" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="pr.to" is-open="rStoricoResToDate.open" ng-click="rStoricoResToDate.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" />
+												<div class="field-error" ng-show="(initFamForm()!=true) && form.pToDate.$error.pattern">{{ 'area_rate_period_enddate_error_pattern' | i18n }}</div>
+												<div class="field-error" ng-show="(initFamForm()!=true) && form.pToDate.$error.required">{{ 'area_rate_period_enddate_error_required' | i18n }}</div>
+											</td>
+											<td align="center">
+												<label>{{ 'period_monday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[0]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_tuesday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[1]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_wednesday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[2]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_thursday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[3]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<br/>
+												<label>{{ 'period_friday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[4]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_saturday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[5]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_sunday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[6]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												
+					   							<div class="field-error" ng-show="(initFamForm()!=true) && form.pWeekDays.$error.required">{{ 'area_weekdays_err_required' | i18n }}</div>
+								    		</td>
+								    		<td>
+												<input id="time" type="text" class="form-control" name="pTime" ng-model="pr.timeSlot" ng-required="aconf.a_timeSlot.required" ng-pattern="periodPattern" placeholder="{{ 'area_time_placeholder' | i18n }}" >
+					   							<div class="field-error" ng-show="(initFamForm()!=true) && form.pTime.$error.required">{{ 'area_openingtime_err_required' | i18n }}</div>
+					   							<div class="field-error" ng-show="(initFamForm()!=true) && form.pTime.$error.pattern">{{ 'area_openingtime_err_pattern' | i18n }}</div>
+								    		</td>
+								    		<td>
+												<input id="fee" type="text" class="form-control" name="pFee" ng-model="pr.ratevalue" ng-required="aconf.a_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
+					   							<div class="field-error" ng-show="(initFamForm()!=true) && form.pFee.$error.required">{{ 'area_fee_err_required' | i18n }}</div>
+					   							<div class="field-error" ng-show="(initFamForm()!=true) && form.pFee.$error.pattern">{{ 'area_fee_err_pattern' | i18n }}</div>
+								    		</td>
+								    		<td>
+												<input id="note" type="text" class="form-control" name="pNote" ng-model="pr.note" ng-required="false" placeholder="{{ 'area_rate_period_note_placeholder' | i18n }}" >
+					   							<div class="field-error" ng-show="(initFamForm()!=true) && form.pNote.$error.required">{{ 'area_fee_err_required' | i18n }}</div>
+					   							<div class="field-error" ng-show="(initFamForm()!=true) && form.pNote.$error.pattern">{{ 'area_fee_err_pattern' | i18n }}</div>
+								    		</td>
+								    		<td align="center">
+												<input type="checkbox" id="is_holiday" ng-model="pr.isHoliday" name="pIsHoliday" class="form-control">
+								    		</td>
+											<td width="3%">
+												&nbsp;
+											</td>
+											<td width="10%" align="right"><button type="button" class="btn btn-success" ng-click="addRatePeriod(pr)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button></td>
+										</tr>
+										<tr ng-show="(isErrorRatePeriod==true)">
+											<td colspan="8"><div class="alert alert-danger">{{ errorsMessageRatePeriod }}</div></td>
+										</tr>
+										<tr ng-show="(isErrorRatePeriodOverlap==true)">
+											<td colspan="8"><div class="alert alert-danger">{{ 'error_overlap_rate_period' | i18n }}</div></td>
+										</tr>
+									</table>
+									&nbsp;
+									<hr>
+								</div>
+						  		<table width="100%" ng-show="area.validityPeriod.length > 0">
+									<tr>
+										<th width="15%">{{ 'area_rate_period_startdate' | i18n }}</th>
+										<th width="15%">{{ 'area_rate_period_enddate' | i18n }}</th>
+										<th width="15%">{{ 'area_rate_period_weekdays' | i18n }}</th>
+										<th width="15%">{{ 'area_rate_period_hours' | i18n }}</th>
+										<th width="10%">{{ 'area_fee' | i18n }}</th>
+										<th width="10%">{{ 'area_rate_note' | i18n }}</th>
+										<th width="10%">{{ 'area_rate_is_holidays' | i18n }}</th>
+										<th width="10%"></th>
+									</tr>
+						  			<tbody class="animate-repeat" ng-repeat="r in area.validityPeriod">
+									<tr>
+										<td>
+								   			{{ (r.from | date:'shortDate') }}
+								   		</td>
+								   		<td>
+											{{ (r.to | date:'shortDate') }}
+										</td>
+										<td>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays)">{{ d | i18n }};&nbsp</span>
+											<!-- {{ r.weekDays }} -->
+										</td>
+										<td>
+											{{ r.timeSlot }}
+										</td>
+										<td>
+											{{ r.ratevalue }}
+										</td>
+										<td>
+											{{ r.note }}
+										</td>
+										<td>
+											<span ng-show="r.isHoliday">{{ 'yes_val_select' | i18n }}</span>
+											<span ng-show="!r.isHoliday">{{ 'no_val_select' | i18n }}</span>
+										</td>
+										<td align="center">
+											<button type="button" class="btn btn-default btn-xs" ng-click="editRatePeriod(r)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_edit' | i18n }}" title="{{ 'area_rate_edit' | i18n }}" ><i class="glyphicon glyphicon-pencil"></i></button>
+											<button type="button" class="btn btn-default btn-xs" ng-click="deleteRatePeriod(r)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_canc' | i18n }}" title="{{ 'area_rate_canc' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
+										</td>
+									</tr>
+									</tbody>
+									<tr ng-show="area.validityPeriod.length > 0"><td colspan="8"><hr></td></tr>
+									<tr ng-show="area.validityPeriod.length > 0">
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td align="right">
+											<button type="button" class="btn btn-default" ng-click="showPForm(area)" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
+											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm(area)" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+										</td>
+									</tr>
+								</table>
+								<table width="100%" ng-show="area.validityPeriod.length == 0 || area.validityPeriod == null">
+									<tr>
+										<td colspan="7">{{ 'no_value_inserted_period' | i18n }}</td>
+										<td align="right">
+											<button type="button" class="btn btn-default" ng-click="showPForm(area)" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
+											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm(area)" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+										</td>
+									</tr>
+								</table>
+							</div>
+					   	</div>
+					   	
+					   	<!-- <div class="form-group" ng-show="aconf.a_fee.visible">
 					    	<label for="fee">{{ 'area_rate' | i18n }}</label>
 					    	<input id="fee" type="text" class="form-control" name="aFee" ng-model="area.fee" ng-required="aconf.a_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
 					   		<div class="field-error" ng-show="!isInit && form.aFee.$error.required">{{ 'area_fee_err_required' | i18n }}</div>
@@ -428,7 +592,7 @@
 					    	<input id="time" type="text" class="form-control" name="aTime" ng-model="area.timeSlot" ng-required="aconf.a_timeSlot.required" ng-pattern="periodPattern" placeholder="{{ 'area_time_placeholder' | i18n }}" >
 					   		<div class="field-error" ng-show="!isInit && form.aTime.$error.required">{{ 'area_openingtime_err_required' | i18n }}</div>
 					   		<div class="field-error" ng-show="!isInit && form.aTime.$error.pattern">{{ 'area_openingtime_err_pattern' | i18n }}</div>
-					   	</div>
+					   	</div> -->
 					   	<div class="form-group" ng-show="aconf.a_smsCode.visible">
 					    	<label for="sms">{{ 'area_sms' | i18n }}</label>
 					    	<input id="sms" type="text" class="form-control" name="aSms" ng-model="area.smsCode" ng-required="aconf.a_smsCode.required"  placeholder="{{ 'area_sms_placeholder' | i18n }}" >

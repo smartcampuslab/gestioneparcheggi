@@ -22,7 +22,9 @@
 							<info-window id="bp" visible-on-marker="{{ bp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bp_name.visible">{{ bp.data.name }}</span></h4>
+						          	<h4 id="firstHeading" class="firstHeading">
+						          		<span ng-show="bp_name.visible">{{ bp.data.name }}</span>
+						          	</h4>
 							        <div id="bodyContent">
 							        	<table>
 											<tr ng-show="bp_slotNumber.visible">
@@ -33,6 +35,17 @@
 							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ bp.data.bikeNumber }}</td>
 							        		</tr>
+							        		<tr>
+												<td colspan="2" align="right">
+													<hr/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="info_window_buttons">
+													<a href type="button" class="btn btn-primary" ng-click="setBpEdit(bp.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+													<a href type="button" class="btn btn-danger" ng-click="setBpRemove(bp.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+												</td>
+											</tr>
 							        	</table>
 							        </div>
 						        </div>
@@ -42,7 +55,9 @@
 							<info-window id="sbp" visible-on-marker="{{ sbp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bp_name.visible">{{ sbp.data.name }}</span></h4>
+						          	<h4 id="firstHeading" class="firstHeading">
+						          		<span ng-show="bp_name.visible">{{ sbp.data.name }}</span>
+						          	</h4>
 							        <div id="bodyContent">
 							        	<table>
 											<tr ng-show="bp_slotNumber.visible">
@@ -53,6 +68,17 @@
 							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ sbp.data.bikeNumber }}</td>
 							        		</tr>
+							        		<tr>
+												<td colspan="2" align="right">
+													<hr/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="info_window_buttons">
+													<a href type="button" class="btn btn-primary" ng-click="setBpEdit(sbp.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+													<a href type="button" class="btn btn-danger" ng-click="setBpRemove(sbp.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+												</td>
+											</tr>
 							        	</table>
 							        </div>
 						        </div>

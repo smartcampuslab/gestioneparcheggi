@@ -6,7 +6,9 @@
 							<info-window id="bp" visible-on-marker="{{ bp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bpconf.bp_name.visible">{{ bp.data.name }}</span></h4>
+						          	<h4 id="firstHeading" class="firstHeading">
+						          		<span ng-show="bpconf.bp_name.visible">{{ bp.data.name }}</span>
+						          	</h4>
 							        <div id="bodyContent">
 							        	<table>
 											<tr ng-show="bpconf.bp_slotNumber.visible">
@@ -82,6 +84,17 @@
 													</table>
 												</td>
 											</tr>
+											<tr>
+												<td colspan="2" align="right">
+													<hr/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="info_window_buttons">
+													<a href type="button" class="btn btn-primary" ng-click="setBpEdit(bp.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+													<a href type="button" class="btn btn-danger" ng-click="setBpRemove(bp.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+												</td>
+											</tr>
 							        	</table>
 							        </div>
 						        </div>
@@ -91,7 +104,9 @@
 							<info-window id="sbp" visible-on-marker="{{ sbp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bpconf.bp_name.visible">{{ sbp.data.name }}</span></h4>
+						          	<h4 id="firstHeading" class="firstHeading">
+						          		<span ng-show="bpconf.bp_name.visible">{{ sbp.data.name }}</span>
+						          	</h4>
 							        <div id="bodyContent">
 							        	<table>
 											<tr ng-show="bpconf.bp_slotNumber.visible">
@@ -165,6 +180,17 @@
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
 													</table>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" align="right">
+													<hr/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="info_window_buttons">
+													<a href type="button" class="btn btn-primary" ng-click="setBpEdit(sbp.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+													<a href type="button" class="btn btn-danger" ng-click="setBpRemove(sbp.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 												</td>
 											</tr>
 							        	</table>

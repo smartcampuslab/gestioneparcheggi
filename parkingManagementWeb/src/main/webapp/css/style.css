@@ -727,3 +727,7 @@ label.group-label {
     box-shadow: none;
     -webkit-box-shadow: none;
 }
+
+.info_window_buttons {
+	align: left;
+}

@@ -77,6 +77,7 @@ public class StorageManager {
 		area.setFee(a.getFee());
 		area.setSmsCode(a.getSmsCode());
 		area.setTimeSlot(a.getTimeSlot());
+		area.setValidityPeriod(a.getValidityPeriod());
 		if(a.getMunicipality() != null){
 			area.setMunicipality(a.getMunicipality());
 		}

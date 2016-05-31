@@ -26,6 +26,7 @@ public class RateArea {
 	private Float fee;
 	private String timeSlot;
 	private String smsCode;
+	private List<RatePeriod> validityPeriod;
 	private String color;
 	private String note;
 	private String municipality;
@@ -146,6 +147,14 @@ public class RateArea {
 
 	public void setZones(List<String> zones) {
 		this.zones = zones;
+	}
+
+	public List<RatePeriod> getValidityPeriod() {
+		return validityPeriod;
+	}
+
+	public void setValidityPeriod(List<RatePeriod> validityPeriod) {
+		this.validityPeriod = validityPeriod;
 	}
 
 }

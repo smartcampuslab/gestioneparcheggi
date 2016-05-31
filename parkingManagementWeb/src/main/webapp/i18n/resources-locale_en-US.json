@@ -172,8 +172,136 @@
     "description": "Label per zona in area"
 }, {
     "key": "area_zonemunicipality",
-    "value": "Comune",
+    "value": "Municipality",
     "description": "Label per zona in area"
+}, {
+    "key": "area_fee",
+    "value": "Tariffa oraria",
+    "description": "Label per tariffa oraria in periodo validità area"
+}, {
+    "key": "area_period_label",
+    "value": "PERIOD AND RATE",
+    "description": "Label per periodo tariffa area"
+}, {
+    "key": "area_rate_period_startdate",
+    "value": "From",
+    "description": "Label per inizio validità periodo tariffa area"
+}, {
+    "key": "area_rate_period_enddate",
+    "value": "To",
+    "description": "Label per fine validità periodo tariffa area"
+}, {
+    "key": "area_rate_period_weekdays",
+    "value": "Day",
+    "description": "Label per giorno della settimana di validità tariffa area"
+}, {
+    "key": "area_rate_period_hours",
+    "value": "Hours",
+    "description": "Label per orario validità tariffa area"
+}, {
+    "key": "area_rate_value",
+    "value": "Hourly rate",
+    "description": "Label per tariffa oraria area"
+}, {
+    "key": "area_rate_note",
+    "value": "Note",
+    "description": "Label per note tariffa e periodo area"
+}, {
+    "key": "area_rate_is_holidays",
+    "value": "Holiday",
+    "description": "Label per note tariffa e periodo area"
+}, {
+    "key": "datepicker_button_today",
+    "value": "Today",
+    "description": "Testo pulsante oggi in datepicker"
+}, {
+    "key": "datepicker_button_canc",
+    "value": "Canc",
+    "description": "Testo pulsante annulla in datepicker"
+}, {
+    "key": "datepicker_button_close",
+    "value": "Close",
+    "description": "Testo pulsante chiudi in datepicker"
+}, {
+    "key": "ok_button",
+    "value": "OK",
+    "description": "Testo pulsante ok"
+}, {
+    "key": "area_weekdays_err_required",
+    "value": "Weekdays are required. Select at least one day",
+    "description": "Testo messaggio errore giorni della settimana obbligatori"
+}, {
+    "key": "period_monday",
+    "value": "MO",
+    "description": "Sigla giorno settimana - lunedi"
+}, {
+    "key": "period_tuesday",
+    "value": "TU",
+    "description": "Sigla giorno settimana - martedi"
+}, {
+    "key": "period_wednesday",
+    "value": "WE",
+    "description": "Sigla giorno settimana - mercoledi"
+}, {
+    "key": "period_thursday",
+    "value": "TH",
+    "description": "Sigla giorno settimana - giovedi"
+}, {
+    "key": "period_friday",
+    "value": "FR",
+    "description": "Sigla giorno settimana - venerdi"
+}, {
+    "key": "period_saturday",
+    "value": "SA",
+    "description": "Sigla giorno settimana - sabato"
+}, {
+    "key": "period_sunday",
+    "value": "SU",
+    "description": "Sigla giorno settimana - domenica"
+}, {
+    "key": "area_rate_canc",
+    "value": "Delete",
+    "description": "Testo pulsante cancella periodo tariffa area"
+}, {
+    "key": "area_rate_edit",
+    "value": "Edit",
+    "description": "Testo pulsante modifica periodo tariffa area"
+}, {
+    "key": "area_rate_period_note_placeholder",
+    "value": "Insert note",
+    "description": "Testo placeholder note periodo tariffario"
+}, {
+    "key": "area_add_period_rate_text",
+    "value": "Add period",
+    "description": "Testo alt btn aggiungi periodo"
+}, {
+    "key": "error_overlap_rate_period",
+    "value": "Overlapped periods. Insert sequenced periods",
+    "description": "Testo errore periodi sovrapposti"
+}, {
+    "key": "no_value_inserted_period",
+    "value": "No period inserted",
+    "description": "Testo nessun periodo inserito in area rate"
+}, {
+    "key": "area_rate_period_insert_edit",
+    "value": "Insert/edit period",
+    "description": "Testo inserisci modifica periodo"
+}, {
+    "key": "area_rate_period_startdate_error_required",
+    "value": "Period starting date is required",
+    "description": "Testo errore data inizio periodo obbligatoria"
+}, {
+    "key": "area_rate_period_startdate_error_pattern",
+    "value": "Period starting date is incorrect. Insert it in dd/MM format",
+    "description": "Testo errore data inizio periodo non corretta"
+}, {
+    "key": "area_rate_period_enddate_error_required",
+    "value": "Period ending date is required",
+    "description": "Testo errore data fine periodo obbligatoria"
+}, {
+    "key": "area_rate_period_enddate_error_pattern",
+    "value": "Period ending date is incorrect. Insert it in dd/MM format",
+    "description": "Testo errore data fine periodo non corretta"
 }, {
     "key": "no_areas_in_lists",
     "value": "No area found",
@@ -2279,4 +2407,10 @@
 }, {
     "key": "vt_app_title",
     "value": "Download app from store"
+}, {
+    "key": "btn_delete_text",
+    "value": "Delete"
+}, {
+    "key": "btn_edit_text",
+    "value": "Edit"
 }]

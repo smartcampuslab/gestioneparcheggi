@@ -8,7 +8,9 @@
      				<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
 						<div ng-non-bindable="">
 						   	<div id="siteNotice"></div>
-						   	<h4 id="firstHeading" class="firstHeading"><span ng-show="zpc.att.zone_name.visible">{{ z.data.name }}</span></h4>
+						   	<h4 id="firstHeading" class="firstHeading">
+						   		<span ng-show="zpc.att.zone_name.visible">{{ z.data.name }}</span>
+						   	</h4>
 					        <div id="bodyContent">
 					        	<table>
 					        		<tr ng-show="zpc.att.zone_submacro.visible">
@@ -38,6 +40,17 @@
 											<span ng-if="isUsedEngLang()">{{ z.data.geometryFromSubelement | boolToStringEng }}</span>
 										</td>
 									</tr>
+									<tr>
+										<td colspan="2" align="right">
+											<hr/>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" class="info_window_buttons">
+											<a href type="button" class="btn btn-primary" ng-click="setZEdit(z.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a href type="button" class="btn btn-danger" ng-click="setZRemove(z.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+										</td>
+									</tr>
 					        	</table>
 					        </div>
 				        </div>
@@ -49,7 +62,9 @@
      				<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
 						<div ng-non-bindable="">
 						   	<div id="siteNotice"></div>
-						   	<h4 id="firstHeading" class="firstHeading"><span ng-show="zpc.att.zone_name.visible">{{ z.data.name }}</span></h4>
+						   	<h4 id="firstHeading" class="firstHeading">
+						   		<span ng-show="zpc.att.zone_name.visible">{{ z.data.name }}</span>
+						   	</h4>
 					        <div id="bodyContent">
 					        	<table>
 					        		<tr ng-show="zpc.att.zone_submacro.visible">
@@ -77,6 +92,17 @@
 										<td>&nbsp;
 											<span ng-if="isUsedItaLang()">{{ z.data.geometryFromSubelement | boolToString }}</span>
 											<span ng-if="isUsedEngLang()">{{ z.data.geometryFromSubelement | boolToStringEng }}</span>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" align="right">
+											<hr/>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" class="info_window_buttons">
+											<a href type="button" class="btn btn-primary" ng-click="setZEdit(z.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a href type="button" class="btn btn-danger" ng-click="setZRemove(z.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 										</td>
 									</tr>
 					        	</table>

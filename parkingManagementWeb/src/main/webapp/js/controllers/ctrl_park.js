@@ -278,6 +278,147 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
     };
     
+    // ------------------ Start datetimepicker section -----------------------
+    $scope.today = function() {
+        $scope.dt = new Date();
+    };
+    $scope.today();
+
+    $scope.clear = function () {
+        //$scope.dt = null;
+    };
+
+    // Disable weekend selection
+    $scope.disabled = function(date, mode) {
+         return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    };
+
+    $scope.toggleMin = function() {
+         $scope.minDate = $scope.minDate ? null : new Date();
+    };
+    $scope.toggleMin();
+
+    $scope.dateOptions = {
+        startingDay: 1,
+        showWeeks: 'false',
+        maxMode: "month"
+        //datepickerMode:"'month'"
+    };
+
+    $scope.initDate = new Date();
+    $scope.formats = ['shortDate', 'dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM'];
+    $scope.format = $scope.formats[5];
+    
+    $scope.getPlaceHolder = function(){
+	    var local_placeholder = '';
+    	if(sharedDataService.getUsedLanguage() == 'ita'){
+	    	local_placeholder = "gg/MM";
+	    } else if(sharedDataService.getUsedLanguage() == 'eng'){
+	    	local_placeholder = "dd/MM";
+	    }
+    	return local_placeholder;
+    };
+              
+    //---------------- End datetimepicker section------------
+    
+    // -------------------------------- New part for periods and rate ----------------------------------
+    $scope.isPeriodFormVisible = false;
+    //$scope.area.validityPeriod = (!$scope.area.validityPeriod) ? [] :  $scope.area.validityPeriod;
+    
+    $scope.pr = {
+    	from: null,
+    	to: null,
+    	weekDays: [false, false, false, false, false, false, false],
+    	timeSlot: null,
+    	fee: 0.0,
+    	isHoliday: false,
+    	note: null
+    };
+    
+    $scope.showPForm = function(area){
+    	$scope.isPeriodFormVisible = true;
+    };
+    
+    $scope.saveAndClosePForm = function(area){
+    	$scope.isPeriodFormVisible = false;
+    };
+    
+    $scope.someSelectedDay = function(weekdays){
+    	var somes = false;
+		if(weekdays){
+			for(var i = 0; i < weekdays.length; i++){
+				if(weekdays[i]){
+					somes = true;
+				}
+			}
+		}
+		return somes;
+    };
+    
+    $scope.addRatePeriod = function(period){
+    	if($scope.area.validityPeriod == null){
+    		$scope.area.validityPeriod = [];
+    	}
+    	$scope.area.validityPeriod.push(period);
+    };
+    
+    $scope.deleteRatePeriod = function(period){
+    	var index = $scope.area.validityPeriod.indexOf(period);
+    	if(index > -1) {
+    		$scope.area.validityPeriod.splice(index, 1);
+    	}
+    };
+    
+    $scope.getWeekDaysFromArray = function(weekDaysBool){
+    	var weekDaysString = [];
+    	if(weekDaysBool){
+    		for(var i = 0; i < weekDaysBool.length; i++){
+    			switch(i){
+    				case 0:
+    					if(weekDaysBool[i]){
+    						weekDaysString.push('period_monday'); 
+    					}
+    					break;
+    				case 1: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push('period_tuesday'); 
+    					}
+    					break;
+    				case 2: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push('period_wednesday'); 
+    					}
+    					break;
+    				case 3: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push('period_thursday'); 
+    					}
+    					break;
+    				case 4: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push('period_friday'); 
+    					}
+    					break;
+    				case 5: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push('period_saturday'); 
+    					}
+    					break;
+    				case 6: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push('period_sunday'); 
+    					}
+    					break;
+    				default: break;
+    			}
+    		}
+    	}
+    	return weekDaysString;
+    };
+    
+    // -------------------------------------------------------------------------------------------------
+    
+    
     /*$scope.initComponents = function(){
     	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
 	    	$scope.editparktabs = [];
