@@ -698,6 +698,7 @@ public class GeoObjectManager {
     	FilterPeriod period = new FilterPeriod();
     	
     	for(int i = 0; i < allRecords.length; i++){
+    		//TODO: here I have to check the data list and understand if the value are in horizontal mode or in vertical mode
     		String[] att_and_vals = allRecords[i].split(",");
     		if(att_and_vals != null && att_and_vals.length > 0){
 	    		if(att_and_vals[0].compareTo("Parcom") != 0){	// to skip header records
@@ -705,21 +706,26 @@ public class GeoObjectManager {
 	        			year = att_and_vals[1];
 	        	    	period.setYear(year);
 	        		} else {
-	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
-	        				PMProfitData tmpPProfit = new PMProfitData();
-	        				tmpPProfit.setpCode(cleanField(att_and_vals[0]));
-	        				tmpPProfit.setpNote(cleanField(att_and_vals[1]));
-	        				tmpPProfit.setPeriod(period);
-	    			
-	        				// here I load the vals
-	        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
-	        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
-	        				tmpPProfit.setProfitVals(cleanStringArray(vals));
-	        				tmpPProfit.setTickets(cleanStringArray(tickets));
-	        				
-	        				logger.error(String.format("Corrected Object: %s", tmpPProfit.toString()));
-	        				correctData.add(tmpPProfit);
-	        			}
+	        			//if(att_and_vals[0].contains("park")){
+	        				// vertical mode
+	        			//} else {
+	        				// horizontal mode
+		        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+		        				PMProfitData tmpPProfit = new PMProfitData();
+		        				tmpPProfit.setpCode(cleanField(att_and_vals[0]));
+		        				tmpPProfit.setpNote(cleanField(att_and_vals[1]));
+		        				tmpPProfit.setPeriod(period);
+		    			
+		        				// here I load the vals
+		        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
+		        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+		        				tmpPProfit.setProfitVals(cleanStringArray(vals));
+		        				tmpPProfit.setTickets(cleanStringArray(tickets));
+		        				
+		        				logger.error(String.format("Corrected Object: %s", tmpPProfit.toString()));
+		        				correctData.add(tmpPProfit);
+		        			}
+	        			//}
 	        		}
 	    		}
     		}

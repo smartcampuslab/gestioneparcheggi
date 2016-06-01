@@ -976,7 +976,7 @@
     "description": "Errore Campo tariffa area non corretto"
 }, {
     "key": "area_openingtime_err_pattern",
-    "value": "'Area hours' field is not correct. Insert a time period in 'hh:mm - hh:mm' format",
+    "value": "'Area hours' field is not correct. Insert a time period in 'hh:mm - hh:mm' format. For more periods use '/' separator",
     "description": "Errore Campo orario area non corretto"
 }, {
     "key": "area_openingtime_err_required",
@@ -1024,11 +1024,11 @@
     "description": "Testo placeholder campo nome area"
 }, {
     "key": "area_fee_placeholder",
-    "value": "Insert the area hour fee value (euro/hour) in the decimal format (es: 0,50)",
+    "value": "euro/hour (es: 0,50)",
     "description": "Testo placeholder campo tariffa oraria area"
 }, {
     "key": "area_time_placeholder",
-    "value": "Insert the area period value (from - to) in the 'hh:mm' format",
+    "value": "hh:mm - hh:mm/hh:mm - hh:mm",
     "description": "Testo placeholder campo orario area"
 }, {
     "key": "area_sms_placeholder",

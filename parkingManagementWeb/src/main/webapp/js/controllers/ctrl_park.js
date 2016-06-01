@@ -63,6 +63,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
     
     // ------------------ Start datetimepicker section -----------------------
+    
     $scope.today = function() {
         $scope.dt = new Date();
     };
@@ -83,15 +84,25 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.toggleMin();
 
     $scope.dateOptions = {
-    	//datepickerMode: "'year'",	// value setted in file lib/ui-bootstrap-tpls.min.js
-        formatYear: 'yyyy',
-        startingDay: 1,
-        showWeeks: 'false'
+    	startingDay: 1,
+        showWeeks: 'false',
+        maxMode: 'month',
+        datepickerMode:'month'
     };
 
     $scope.initDate = new Date();
-    $scope.formats = ['shortDate', 'dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy'];
-    $scope.format = $scope.formats[0];
+    $scope.formats = ['shortDate', 'dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM'];
+    $scope.format = $scope.formats[5];
+    
+    $scope.getPlaceHolder = function(){
+	    var local_placeholder = '';
+    	if(sharedDataService.getUsedLanguage() == 'ita'){
+	    	local_placeholder = "gg/MM";
+	    } else if(sharedDataService.getUsedLanguage() == 'eng'){
+	    	local_placeholder = "dd/MM";
+	    }
+    	return local_placeholder;
+    };
             
     $scope.tabIndex = 0;
     // ----------------------- Start timepicker section ---------------------------
@@ -278,69 +289,37 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
     };
     
-    // ------------------ Start datetimepicker section -----------------------
-    $scope.today = function() {
-        $scope.dt = new Date();
-    };
-    $scope.today();
-
-    $scope.clear = function () {
-        //$scope.dt = null;
-    };
-
-    // Disable weekend selection
-    $scope.disabled = function(date, mode) {
-         return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
-    };
-
-    $scope.toggleMin = function() {
-         $scope.minDate = $scope.minDate ? null : new Date();
-    };
-    $scope.toggleMin();
-
-    $scope.dateOptions = {
-        startingDay: 1,
-        showWeeks: 'false',
-        maxMode: "month"
-        //datepickerMode:"'month'"
-    };
-
-    $scope.initDate = new Date();
-    $scope.formats = ['shortDate', 'dd/MM/yyyy','dd-MMMM-yyyy', 'yyyy/MM/dd', 'dd.MM.yyyy', 'dd/MM'];
-    $scope.format = $scope.formats[5];
-    
-    $scope.getPlaceHolder = function(){
-	    var local_placeholder = '';
-    	if(sharedDataService.getUsedLanguage() == 'ita'){
-	    	local_placeholder = "gg/MM";
-	    } else if(sharedDataService.getUsedLanguage() == 'eng'){
-	    	local_placeholder = "dd/MM";
-	    }
-    	return local_placeholder;
-    };
-              
-    //---------------- End datetimepicker section------------
-    
     // -------------------------------- New part for periods and rate ----------------------------------
     $scope.isPeriodFormVisible = false;
     //$scope.area.validityPeriod = (!$scope.area.validityPeriod) ? [] :  $scope.area.validityPeriod;
     
-    $scope.pr = {
-    	from: null,
-    	to: null,
-    	weekDays: [false, false, false, false, false, false, false],
-    	timeSlot: null,
-    	fee: 0.0,
-    	isHoliday: false,
-    	note: null
+    $scope.isInitPeriod = true;
+    
+    $scope.clearPr = function(){
+	    $scope.pr = {
+	    	from: null,
+	    	to: null,
+	    	weekDays: [false, false, false, false, false, false, false],
+	    	timeSlot: null,
+	    	fee: 0.0,
+	    	isHoliday: false,
+	    	note: null
+	    };
     };
+    $scope.clearPr();
     
     $scope.showPForm = function(area){
     	$scope.isPeriodFormVisible = true;
     };
     
     $scope.saveAndClosePForm = function(area){
-    	$scope.isPeriodFormVisible = false;
+    	//$scope.isInitPeriod = false;
+    	//if(form.valid){
+    		$scope.isPeriodFormVisible = false;
+    	//} else {
+    		// show error messages
+    	//}
+    	
     };
     
     $scope.someSelectedDay = function(weekdays){
@@ -355,11 +334,25 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return somes;
     };
     
-    $scope.addRatePeriod = function(period){
+    $scope.addRatePeriod = function(period, form){
+    	$scope.isInitPeriod = false;
     	if($scope.area.validityPeriod == null){
     		$scope.area.validityPeriod = [];
     	}
-    	$scope.area.validityPeriod.push(period);
+    	if((form.pFromDate.$error.required || form.pFromDate.$error.pattern) || 
+    			(form.pToDate.$error.required || form.pToDate.$error.pattern) || 
+    			form.pWeekDays.$error.required ||
+    			(form.pTime.$error.required || form.pTime.$error.pattern) || 
+    			(form.pFee.$error.required || form.pFee.$error.pattern) ||
+    			form.pNote.$error.required){
+    		// show error messages
+    	} else {
+    		var periodData = {};
+    		angular.copy(period, periodData);
+    		$scope.area.validityPeriod.push(periodData);
+    		$scope.clearPr();
+    		$scope.isInitPeriod = true;
+    	}
     };
     
     $scope.deleteRatePeriod = function(period){
@@ -369,44 +362,72 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
     };
     
-    $scope.getWeekDaysFromArray = function(weekDaysBool){
+    $scope.getWeekDaysFromArray = function(weekDaysBool, type){
     	var weekDaysString = [];
     	if(weekDaysBool){
     		for(var i = 0; i < weekDaysBool.length; i++){
     			switch(i){
     				case 0:
     					if(weekDaysBool[i]){
-    						weekDaysString.push('period_monday'); 
+    						if(type == 0){
+    							weekDaysString.push('period_monday');
+    						} else {
+    							weekDaysString.push('MO');
+    						}
     					}
     					break;
     				case 1: 
     					if(weekDaysBool[i]){
-    						weekDaysString.push('period_tuesday'); 
+    						if(type == 0){
+    							weekDaysString.push('period_tuesday');
+    						} else {
+    							weekDaysString.push('TU');
+    						}
     					}
     					break;
     				case 2: 
     					if(weekDaysBool[i]){
-    						weekDaysString.push('period_wednesday'); 
+    						if(type == 0){
+    							weekDaysString.push('period_wednesday');
+    						} else {
+    							weekDaysString.push('WE');
+    						}
     					}
     					break;
     				case 3: 
     					if(weekDaysBool[i]){
-    						weekDaysString.push('period_thursday'); 
+    						if(type == 0){
+    							weekDaysString.push('period_thursday');
+    						} else {
+    							weekDaysString.push('TH');
+    						}
     					}
     					break;
     				case 4: 
     					if(weekDaysBool[i]){
-    						weekDaysString.push('period_friday'); 
+    						if(type == 0){
+    							weekDaysString.push('period_friday');
+    						} else {
+    							weekDaysString.push('FR');
+    						}
     					}
     					break;
     				case 5: 
     					if(weekDaysBool[i]){
-    						weekDaysString.push('period_saturday'); 
+    						if(type == 0){
+    							weekDaysString.push('period_saturday');
+    						} else {
+    							weekDaysString.push('SA');
+    						}
     					}
     					break;
     				case 6: 
     					if(weekDaysBool[i]){
-    						weekDaysString.push('period_sunday'); 
+    						if(type == 0){
+    							weekDaysString.push('period_sunday');
+    						} else {
+    							weekDaysString.push('SU');
+    						}
     					}
     					break;
     				default: break;
@@ -414,6 +435,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     	}
     	return weekDaysString;
+    };
+    
+    $scope.getHourSlotsFromArray = function(hourStrings){
+    	var hoursArray = [];
+    	var values = hourStrings.split("/");
+    	for(var i = 0; i < values.length; i++){
+    		hoursArray.push(values[i]);
+    	}
+    	return hoursArray;
     };
     
     // -------------------------------------------------------------------------------------------------
@@ -3367,6 +3397,20 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 			
+			var validityPeriod = [];
+			for(var i = 0; i < area.validityPeriod.length; i++){
+				var corrPeriod = {
+					from: area.validityPeriod[i].from.getTime(),
+					to: area.validityPeriod[i].to.getTime(),
+					weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
+					timeSlot: area.validityPeriod[i].timeSlot,
+					rateValue: parseFloat(area.validityPeriod[i].ratevalue.replace(",",".")),
+					isHoliday: area.validityPeriod[i].isHoliday,
+					note: area.validityPeriod[i].note
+				};
+				validityPeriod.push(corrPeriod);
+			}
+			
 			var id = area.id;
 			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
@@ -3377,6 +3421,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				name: area.name,
 				fee: parseFloat(decimalFee),
 				timeSlot: area.timeSlot,
+				validityPeriod: validityPeriod,
 				smsCode: area.smsCode,
 				color: color.substring(1, color.length),
 				note: area.note,

@@ -27,6 +27,7 @@
 <script src="js/bootstrap.min.js"></script>
 <script src="lib/bootstrap-colorpicker-module.js"></script>
 <script src="lib/ui-bootstrap-tpls.min.js"></script>
+<!-- <script src="lib/ui-bootstrap-tpls-1.3.3.js"></script> -->
 <script src="lib/angular-spinkit.min.js"></script>
 <script src="js/localize.js" type="text/javascript"></script>
 <script src="js/dialogs.min.js" type="text/javascript"></script>

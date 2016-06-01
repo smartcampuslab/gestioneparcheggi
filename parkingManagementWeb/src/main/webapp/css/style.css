@@ -731,3 +731,8 @@ label.group-label {
 .info_window_buttons {
 	align: left;
 }
+
+.no-margin {
+	margin-top: 0;
+	margin-bottom: 0;
+}
