@@ -19,6 +19,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.maxMicroZones = 8;
     $scope.maxBPoints = 11;
     
+    $scope.dayMON = "MO";
+    $scope.dayTUE = "TU";
+    $scope.dayWED = "WE";
+    $scope.dayTHU = "TH";
+    $scope.dayFRI = "FR";
+    $scope.daySAT = "SA";
+    $scope.daySUN = "SU";
+    
     // DB type for zone
     var zoneTabList = [];
     
@@ -45,6 +53,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.onlyNumbers = /^\d+$/;
     $scope.decimalNumbers = /^([0-9]+)[\,]{0,1}[0-9]{0,2}$/;
     $scope.datePatternIt=/^\d{1,2}\/\d{1,2}\/\d{4}$/;
+    $scope.dateDDMMPatternIt=/^\d{1,2}\/\d{1,2}$/;
     $scope.datePattern=/^[0-9]{2}\-[0-9]{2}\-[0-9]{4}$/i;
     $scope.datePattern2=/^[0-9]{2}\/[0-9]{2}\/[0-9]{4}$/i;
     $scope.datePattern3=/^[0-9]{4}\/[0-9]{2}\/[0-9]{2}$/i;
@@ -294,32 +303,33 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     //$scope.area.validityPeriod = (!$scope.area.validityPeriod) ? [] :  $scope.area.validityPeriod;
     
     $scope.isInitPeriod = true;
+    $scope.notValidDateFrom = false;
+    $scope.notValidDateTo = false;
+    $scope.tmpPr = {};
+    $scope.pr = {};
     
     $scope.clearPr = function(){
-	    $scope.pr = {
+    	angular.copy($scope.pr, $scope.tmpPr);	// here I copy the pr object to use in edit and create form validation (object has to be != null)
+	    $scope.pr  = {
 	    	from: null,
 	    	to: null,
 	    	weekDays: [false, false, false, false, false, false, false],
 	    	timeSlot: null,
-	    	fee: 0.0,
-	    	isHoliday: false,
+	    	rateValue: 0.0,
+	    	holiday: false,
 	    	note: null
 	    };
     };
     $scope.clearPr();
     
     $scope.showPForm = function(area){
+    	$scope.clearPr();	// To clean the form input data
     	$scope.isPeriodFormVisible = true;
     };
     
     $scope.saveAndClosePForm = function(area){
-    	//$scope.isInitPeriod = false;
-    	//if(form.valid){
-    		$scope.isPeriodFormVisible = false;
-    	//} else {
-    		// show error messages
-    	//}
-    	
+    	$scope.isPeriodFormVisible = false;
+    	angular.copy($scope.tmpPr, $scope.pr);
     };
     
     $scope.someSelectedDay = function(weekdays){
@@ -336,6 +346,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     $scope.addRatePeriod = function(period, form){
     	$scope.isInitPeriod = false;
+    	$scope.notValidDateFrom = false;
+    	$scope.notValidDateTo = false;
+    	
     	if($scope.area.validityPeriod == null){
     		$scope.area.validityPeriod = [];
     	}
@@ -346,13 +359,105 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			(form.pFee.$error.required || form.pFee.$error.pattern) ||
     			form.pNote.$error.required){
     		// show error messages
+    		if(!$scope.checkExistingDate(period.from)){
+    			$scope.notValidDateFrom = true;
+    		}
+    		if(!$scope.checkExistingDate(period.to)){
+    			$scope.notValidDateTo = true;
+    		}
     	} else {
-    		var periodData = {};
-    		angular.copy(period, periodData);
-    		$scope.area.validityPeriod.push(periodData);
-    		$scope.clearPr();
-    		$scope.isInitPeriod = true;
+    		if(!$scope.checkExistingDate(period.from)){
+    			$scope.notValidDateFrom = true;
+    		}
+    		if(!$scope.checkExistingDate(period.to)){
+    			$scope.notValidDateTo = true;
+    		}
+    		if(!$scope.notValidDateFrom && !$scope.notValidDateTo){
+	    		var periodData = {};
+	    		angular.copy(period, periodData);
+	    		$scope.area.validityPeriod.push(periodData);
+	    		$scope.clearPr();
+	    		$scope.isInitPeriod = true;
+    		}
     	}
+    };
+    
+    $scope.checkExistingDate = function(date){
+    	var corr = false;
+    	if(date){
+    		var allDate = date.split("/");
+    		if(allDate.length == 2){
+    			var dd = parseInt(allDate[0]);
+    			var mm = parseInt(allDate[1]);
+    			if(mm < 13){
+    				switch(mm){
+    					case 1:
+    						if(dd <= 31){
+    							corr = true;
+    						}
+    						break;
+    					case 2:
+    						if(dd <= 29){
+    							corr = true;
+    						}
+    						break;
+    					case 3:
+    						if(dd <= 31){
+    							corr = true;
+    						}
+    						break;
+    					case 4:
+    						if(dd <= 30){
+    							corr = true;
+    						}
+    						break;
+    					case 5:
+    						if(dd <= 31){
+    							corr = true;
+    						}
+    						break;
+    					case 6:
+    						if(dd <= 30){
+    							corr = true;
+    						}
+    						break;
+    					case 7:
+    						if(dd <= 31){
+    							corr = true;
+    						}
+    						break;
+    					case 8:
+    						if(dd <= 31){
+    							corr = true;
+    						}
+    						break;
+    					case 9:
+    						if(dd <= 30){
+    							corr = true;
+    						}
+    						break;
+    					case 10:
+    						if(dd <= 31){
+    							corr = true;
+    						}
+    						break;
+    					case 11:
+    						if(dd <= 30){
+    							corr = true;
+    						}
+    						break;
+    					case 12:
+    						if(dd <= 31){
+    							corr = true;
+    						}
+    						break;
+    					default: 
+    						break;
+    				}
+    			}
+    		}
+    	}
+    	return corr;
     };
     
     $scope.deleteRatePeriod = function(period){
@@ -364,75 +469,105 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     $scope.getWeekDaysFromArray = function(weekDaysBool, type){
     	var weekDaysString = [];
+    	if(type == 0){
+    		for(var i = 0; i < weekDaysBool.length; i++){
+    			// case type 0: I have a string of vals 'MO', 'TU' ecc.... and i have to get the relative i18n value
+        		switch(weekDaysBool[i]){
+        			case $scope.dayMON: 
+        				weekDaysString.push('period_monday');
+        				break;
+        			case $scope.dayTUE: 
+        				weekDaysString.push('period_tuesday');
+        				break;
+        			case $scope.dayWED: 
+        				weekDaysString.push('period_wednesday');
+        				break;
+        			case $scope.dayTHU: 
+        				weekDaysString.push('period_thursday');
+        				break;
+        			case $scope.dayFRI: 
+        				weekDaysString.push('period_friday');
+        				break;
+        			case $scope.daySAT: 
+        				weekDaysString.push('period_saturday');
+        				break;
+        			case $scope.daySUN: 
+        				weekDaysString.push('period_sunday');
+        				break;	
+        			default: break;
+        		}
+    		}
+    	} else {
     	if(weekDaysBool){
     		for(var i = 0; i < weekDaysBool.length; i++){
     			switch(i){
     				case 0:
     					if(weekDaysBool[i]){
-    						if(type == 0){
-    							weekDaysString.push('period_monday');
+    						if(type == 1){
+    							weekDaysString.push($scope.dayMON);
     						} else {
-    							weekDaysString.push('MO');
+    							weekDaysString.push('period_monday');
     						}
     					}
     					break;
     				case 1: 
     					if(weekDaysBool[i]){
-    						if(type == 0){
-    							weekDaysString.push('period_tuesday');
+    						if(type == 1){
+    							weekDaysString.push($scope.dayTUE);
     						} else {
-    							weekDaysString.push('TU');
+    							weekDaysString.push('period_tuesday');
     						}
     					}
     					break;
     				case 2: 
     					if(weekDaysBool[i]){
-    						if(type == 0){
-    							weekDaysString.push('period_wednesday');
+    						if(type == 1){
+    							weekDaysString.push($scope.dayWED);
     						} else {
-    							weekDaysString.push('WE');
+    							weekDaysString.push('period_wednesday');
     						}
     					}
     					break;
     				case 3: 
     					if(weekDaysBool[i]){
-    						if(type == 0){
-    							weekDaysString.push('period_thursday');
+    						if(type == 1){
+    							weekDaysString.push($scope.dayTHU);
     						} else {
-    							weekDaysString.push('TH');
+    							weekDaysString.push('period_thursday');
     						}
     					}
     					break;
     				case 4: 
     					if(weekDaysBool[i]){
-    						if(type == 0){
-    							weekDaysString.push('period_friday');
+    						if(type == 1){
+    							weekDaysString.push($scope.dayFRI);
     						} else {
-    							weekDaysString.push('FR');
+    							weekDaysString.push('period_friday');
     						}
     					}
     					break;
     				case 5: 
     					if(weekDaysBool[i]){
-    						if(type == 0){
-    							weekDaysString.push('period_saturday');
+    						if(type == 1){
+    							weekDaysString.push($scope.daySAT);
     						} else {
-    							weekDaysString.push('SA');
+    							weekDaysString.push('period_saturday');
     						}
     					}
     					break;
     				case 6: 
     					if(weekDaysBool[i]){
-    						if(type == 0){
-    							weekDaysString.push('period_sunday');
+    						if(type == 1){
+    							weekDaysString.push($scope.daySUN);
     						} else {
-    							weekDaysString.push('SU');
+    							weekDaysString.push('period_sunday');
     						}
     					}
     					break;
     				default: break;
     			}
     		}
+    	}
     	}
     	return weekDaysString;
     };
@@ -3400,12 +3535,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var validityPeriod = [];
 			for(var i = 0; i < area.validityPeriod.length; i++){
 				var corrPeriod = {
-					from: area.validityPeriod[i].from.getTime(),
-					to: area.validityPeriod[i].to.getTime(),
+					//from: area.validityPeriod[i].from.getTime(),
+					//to: area.validityPeriod[i].to.getTime(),
+					from: area.validityPeriod[i].from,
+					to: area.validityPeriod[i].to,
 					weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
 					timeSlot: area.validityPeriod[i].timeSlot,
-					rateValue: parseFloat(area.validityPeriod[i].ratevalue.replace(",",".")),
-					isHoliday: area.validityPeriod[i].isHoliday,
+					rateValue: parseFloat($scope.correctDecimal(area.validityPeriod[i].rateValue, 1)) * 100,
+					holiday: area.validityPeriod[i].holiday,
 					note: area.validityPeriod[i].note
 				};
 				validityPeriod.push(corrPeriod);
@@ -3414,13 +3551,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var id = area.id;
 			var appId = sharedDataService.getConfAppId();
 			var method = 'PUT';
-			var decimalFee = $scope.correctDecimal(area.fee, 1);
+			//var decimalFee = $scope.correctDecimal(area.fee, 1);
 			var data = {
 				id: area.id,
 				id_app: area.id_app,
 				name: area.name,
-				fee: parseFloat(decimalFee),
-				timeSlot: area.timeSlot,
+				//fee: parseFloat(decimalFee),
+				//timeSlot: area.timeSlot,
 				validityPeriod: validityPeriod,
 				smsCode: area.smsCode,
 				color: color.substring(1, color.length),
@@ -4380,18 +4517,32 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var method = 'POST';
 			var appId = sharedDataService.getConfAppId();
 			
-			var decimalFee = $scope.correctDecimal(area.fee, 1);
+			var validityPeriod = [];
+			for(var i = 0; i < area.validityPeriod.length; i++){
+				var corrPeriod = {
+					from: area.validityPeriod[i].from.getTime(),
+					to: area.validityPeriod[i].to.getTime(),
+					weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
+					timeSlot: area.validityPeriod[i].timeSlot,
+					rateValue: parseFloat($scope.correctDecimal(area.validityPeriod[i].rateValue, 1)) * 100,
+					holiday: area.validityPeriod[i].holiday,
+					note: area.validityPeriod[i].note
+				};
+				validityPeriod.push(corrPeriod);
+			}
+			
+			//var decimalFee = $scope.correctDecimal(area.fee, 1);
 			var data = {
 				id_app: $scope.myAppId,
 				name: area.name,
-				fee: parseFloat(decimalFee),
-				timeSlot: area.timeSlot,
+				//fee: parseFloat(decimalFee),
+				//timeSlot: area.timeSlot,
+				validityPeriod: validityPeriod,
 				smsCode: area.smsCode,
 				color: myColor.substring(1, myColor.length),	// I have to remove '#' char
 				note: area.note,
 				zones: $scope.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 				geometry: $scope.correctMyGeometryPolygonForArea(createdPaths)
-				//geometry: $scope.correctMyGeometryPolygonForArea(polygon.path)
 			};
 			
 		    var value = JSON.stringify(data);

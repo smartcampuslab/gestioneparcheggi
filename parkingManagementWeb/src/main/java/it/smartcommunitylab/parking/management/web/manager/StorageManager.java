@@ -17,6 +17,7 @@ package it.smartcommunitylab.parking.management.web.manager;
 
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
+import it.smartcommunitylab.parking.management.web.bean.RatePeriodBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
@@ -29,6 +30,7 @@ import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
+import it.smartcommunitylab.parking.management.web.model.RatePeriod;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
@@ -77,7 +79,20 @@ public class StorageManager {
 		area.setFee(a.getFee());
 		area.setSmsCode(a.getSmsCode());
 		area.setTimeSlot(a.getTimeSlot());
-		area.setValidityPeriod(a.getValidityPeriod());
+		//area.setValidityPeriod(a.getValidityPeriod());
+		if(a.getValidityPeriod() != null){
+			if(area.getValidityPeriod() != null){
+				area.getValidityPeriod().clear();
+			} else {
+				area.setValidityPeriod(new ArrayList<RatePeriod>());
+			}
+		} else {
+			area.setValidityPeriod(new ArrayList<RatePeriod>());
+		}
+		for (RatePeriodBean ratePeriod : a.getValidityPeriod()) {
+			area.getValidityPeriod().add(
+					ModelConverter.convert(ratePeriod, RatePeriod.class));
+		}
 		if(a.getMunicipality() != null){
 			area.setMunicipality(a.getMunicipality());
 		}

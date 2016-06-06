@@ -458,10 +458,12 @@
 										</tr>
 										<tr>
 											<td>
-							  					<input id="fromDate" name="pFromDate" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="pr.from" is-open="rStoricoResFromDate.open" ng-click="rStoricoResFromDate.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required />
+							  					<!-- <input id="fromDate" name="pFromDate" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="pr.from" is-open="rStoricoResFromDate.open" ng-click="rStoricoResFromDate.open = true" datepicker-options="dateOptions" datepicker-mode="dateOptions.datepickerMode" max-mode="dateOptions.maxMode" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required /> -->
+							  					<input id="fromDate" name="pFromDate" type="text" class="form-control" placeholder="{{getPlaceHolder()}}" ng-model="pr.from" ng-pattern="dateDDMMPatternIt" required />
 								    		</td>
 								    		<td>
-												<input id="toDate" name="pToDate" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="pr.to" is-open="rStoricoResToDate.open" ng-click="rStoricoResToDate.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required />
+												<!-- <input id="toDate" name="pToDate" type="text" class="form-control" datepicker-popup="{{format}}" placeholder="{{getPlaceHolder()}}" ng-model="pr.to" is-open="rStoricoResToDate.open" ng-click="rStoricoResToDate.open = true" datepicker-options="dateOptions" current-text="{{ 'datepicker_button_today' | i18n }}" clear-text="{{ 'datepicker_button_canc' | i18n }}" close-text="{{ 'datepicker_button_close' | i18n }}" show-weeks="false" required /> -->
+												<input id="toDate" name="pToDate" type="text" class="form-control" placeholder="{{getPlaceHolder()}}" ng-model="pr.to" ng-pattern="dateDDMMPatternIt" required />
 											</td>
 											<td align="center">
 												<label>{{ 'period_monday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[0]" ng-required="!someSelectedDay(pr.weekDays)"></label>
@@ -477,10 +479,10 @@
 												<input id="time" type="text" class="form-control" name="pTime" ng-model="pr.timeSlot" ng-required="aconf.a_timeSlot.required" ng-pattern="periodPattern" placeholder="{{ 'area_time_placeholder' | i18n }}" >
 								    		</td>
 								    		<td>
-												<input id="fee" type="text" class="form-control" name="pFee" ng-model="pr.ratevalue" ng-required="aconf.a_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
+												<input id="fee" type="text" class="form-control" name="pFee" ng-model="pr.rateValue" ng-required="aconf.a_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
 								    		</td>
 								    		<td align="center">
-												<input type="checkbox" id="is_holiday" ng-model="pr.isHoliday" name="pIsHoliday" class="form-control">
+												<input type="checkbox" id="is_holiday" ng-model="pr.holiday" name="pIsHoliday" class="form-control">
 								    		</td>
 								    		<td>
 												<input id="note" type="text" class="form-control" name="pNote" ng-model="pr.note" ng-required="false" placeholder="{{ 'area_rate_period_note_placeholder' | i18n }}" >
@@ -498,9 +500,9 @@
 										</tr>
 										<tr>
 											<td colspan="8">
-												<div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.pattern">{{ 'area_rate_period_startdate_error_pattern' | i18n }}</div>
+												<div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.pattern || notValidDateFrom">{{ 'area_rate_period_startdate_error_pattern' | i18n }}</div>
 												<div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.required">{{ 'area_rate_period_startdate_error_required' | i18n }}</div>
-												<div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.pattern">{{ 'area_rate_period_enddate_error_pattern' | i18n }}</div>
+												<div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.pattern || notValidDateTo">{{ 'area_rate_period_enddate_error_pattern' | i18n }}</div>
 												<div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.required">{{ 'area_rate_period_enddate_error_required' | i18n }}</div>
 												<div class="field-error" ng-show="!isInitPeriod && form.pWeekDays.$error.required">{{ 'area_weekdays_err_required' | i18n }}</div>
 												<div class="field-error" ng-show="!isInitPeriod && form.pTime.$error.required">{{ 'area_openingtime_err_required' | i18n }}</div>
@@ -534,7 +536,7 @@
 											{{ (r.to | date:'dd/MM') }}
 										</td>
 										<td>
-											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 2)">{{ d | i18n }};&nbsp</span>
 										</td>
 										<td>
 											<ul class="no-margin" ng-repeat="t in getHourSlotsFromArray(r.timeSlot)">
@@ -542,11 +544,11 @@
 											</ul>
 										</td>
 										<td>
-											{{ r.ratevalue }}
+											{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}
 										</td>
 										<td>
-											<span ng-show="r.isHoliday">{{ 'yes_val_select' | i18n }}</span>
-											<span ng-show="!r.isHoliday">{{ 'no_val_select' | i18n }}</span>
+											<span ng-show="r.holiday">{{ 'yes_val_select' | i18n }}</span>
+											<span ng-show="!r.holiday">{{ 'no_val_select' | i18n }}</span>
 										</td>
 										<td>
 											{{ r.note }}
