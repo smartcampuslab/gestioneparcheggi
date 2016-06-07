@@ -177,8 +177,8 @@ public class CSVManager {
 			writer.append("Nome");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Tariffa");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Orario");
+			//writer.append(CSV_SEPARATOR);
+			//writer.append("Orario");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Servizio telepark");
 			writer.append(CSV_SEPARATOR);
@@ -187,11 +187,12 @@ public class CSVManager {
 			
 			// Add the list of data in a table
 			for(RateArea a : areas){
-				writer.append(cleanCommaValue(a.getName()));
+				writer.append(cleanCommaValue(a.getName()));	// to convert to area name
 				writer.append(CSV_SEPARATOR);
-				writer.append(a.getFee() + "");	// to convert to area name
-				writer.append(CSV_SEPARATOR);
-				writer.append(a.getTimeSlot());
+				//writer.append(a.getFee() + "");
+				//writer.append(CSV_SEPARATOR);
+				//writer.append(a.getTimeSlot());
+				writer.append(a.feePeriodsSummary());		// used to get a string that is the summary of the fee period data
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getSmsCode());
 				writer.append(CSV_SEPARATOR);

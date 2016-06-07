@@ -374,6 +374,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     		if(!$scope.notValidDateFrom && !$scope.notValidDateTo){
 	    		var periodData = {};
+	    		period.rateValue = parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100;	// here I force the cast to int
+	    		period.weekDays = $scope.getWeekDaysFromArray(period.weekDays, 1),
 	    		angular.copy(period, periodData);
 	    		$scope.area.validityPeriod.push(periodData);
 	    		$scope.clearPr();
@@ -503,65 +505,37 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			switch(i){
     				case 0:
     					if(weekDaysBool[i]){
-    						if(type == 1){
-    							weekDaysString.push($scope.dayMON);
-    						} else {
-    							weekDaysString.push('period_monday');
-    						}
+    						weekDaysString.push($scope.dayMON);
     					}
     					break;
     				case 1: 
     					if(weekDaysBool[i]){
-    						if(type == 1){
-    							weekDaysString.push($scope.dayTUE);
-    						} else {
-    							weekDaysString.push('period_tuesday');
-    						}
+    						weekDaysString.push($scope.dayTUE);
     					}
     					break;
     				case 2: 
     					if(weekDaysBool[i]){
-    						if(type == 1){
-    							weekDaysString.push($scope.dayWED);
-    						} else {
-    							weekDaysString.push('period_wednesday');
-    						}
+    						weekDaysString.push($scope.dayWED);
     					}
     					break;
     				case 3: 
     					if(weekDaysBool[i]){
-    						if(type == 1){
-    							weekDaysString.push($scope.dayTHU);
-    						} else {
-    							weekDaysString.push('period_thursday');
-    						}
+    						weekDaysString.push($scope.dayTHU);
     					}
     					break;
     				case 4: 
     					if(weekDaysBool[i]){
-    						if(type == 1){
-    							weekDaysString.push($scope.dayFRI);
-    						} else {
-    							weekDaysString.push('period_friday');
-    						}
+    						weekDaysString.push($scope.dayFRI);
     					}
     					break;
     				case 5: 
     					if(weekDaysBool[i]){
-    						if(type == 1){
-    							weekDaysString.push($scope.daySAT);
-    						} else {
-    							weekDaysString.push('period_saturday');
-    						}
+    						weekDaysString.push($scope.daySAT);
     					}
     					break;
     				case 6: 
     					if(weekDaysBool[i]){
-    						if(type == 1){
-    							weekDaysString.push($scope.daySUN);
-    						} else {
-    							weekDaysString.push('period_sunday');
-    						}
+    						weekDaysString.push($scope.daySUN);
     					}
     					break;
     				default: break;
@@ -3539,9 +3513,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					//to: area.validityPeriod[i].to.getTime(),
 					from: area.validityPeriod[i].from,
 					to: area.validityPeriod[i].to,
-					weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
+					//weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
+					weekDays: area.validityPeriod[i].weekDays,
 					timeSlot: area.validityPeriod[i].timeSlot,
-					rateValue: parseFloat($scope.correctDecimal(area.validityPeriod[i].rateValue, 1)) * 100,
+					//rateValue: parseFloat($scope.correctDecimal(area.validityPeriod[i].rateValue, 1)) * 100,
+					rateValue: area.validityPeriod[i].rateValue,
 					holiday: area.validityPeriod[i].holiday,
 					note: area.validityPeriod[i].note
 				};
@@ -4520,11 +4496,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var validityPeriod = [];
 			for(var i = 0; i < area.validityPeriod.length; i++){
 				var corrPeriod = {
-					from: area.validityPeriod[i].from.getTime(),
-					to: area.validityPeriod[i].to.getTime(),
-					weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
+					//from: area.validityPeriod[i].from.getTime(),
+					from: area.validityPeriod[i].from,
+					//to: area.validityPeriod[i].to.getTime(),
+					to: area.validityPeriod[i].to,
+					//weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
+					weekDays: area.validityPeriod[i].weekDays,
 					timeSlot: area.validityPeriod[i].timeSlot,
-					rateValue: parseFloat($scope.correctDecimal(area.validityPeriod[i].rateValue, 1)) * 100,
+					//rateValue: parseFloat($scope.correctDecimal(area.validityPeriod[i].rateValue, 1)) * 100,
+					rateValue: area.validityPeriod[i].rateValue,
 					holiday: area.validityPeriod[i].holiday,
 					note: area.validityPeriod[i].note
 				};

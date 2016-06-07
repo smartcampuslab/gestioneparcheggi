@@ -549,6 +549,91 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.bpMarkerIcon = "imgs/markerIcons/puntobici.png";				// icon for bikePoint object
 	$scope.streetMarkerIcon = "imgs/street_marker.png";					// icon for street marker
 	
+	$scope.dayMON = "MO";
+    $scope.dayTUE = "TU";
+    $scope.dayWED = "WE";
+    $scope.dayTHU = "TH";
+    $scope.dayFRI = "FR";
+    $scope.daySAT = "SA";
+    $scope.daySUN = "SU";
+	
+	$scope.getWeekDaysFromArray = function(weekDaysBool, type){
+    	var weekDaysString = [];
+    	if(type == 0){
+    		for(var i = 0; i < weekDaysBool.length; i++){
+    			// case type 0: I have a string of vals 'MO', 'TU' ecc.... and i have to get the relative i18n value
+        		switch(weekDaysBool[i]){
+        			case $scope.dayMON: 
+        				weekDaysString.push('period_monday');
+        				break;
+        			case $scope.dayTUE: 
+        				weekDaysString.push('period_tuesday');
+        				break;
+        			case $scope.dayWED: 
+        				weekDaysString.push('period_wednesday');
+        				break;
+        			case $scope.dayTHU: 
+        				weekDaysString.push('period_thursday');
+        				break;
+        			case $scope.dayFRI: 
+        				weekDaysString.push('period_friday');
+        				break;
+        			case $scope.daySAT: 
+        				weekDaysString.push('period_saturday');
+        				break;
+        			case $scope.daySUN: 
+        				weekDaysString.push('period_sunday');
+        				break;	
+        			default: break;
+        		}
+    		}
+    	} else {
+    	if(weekDaysBool){
+    		for(var i = 0; i < weekDaysBool.length; i++){
+    			switch(i){
+    				case 0:
+    					if(weekDaysBool[i]){
+    						weekDaysString.push($scope.dayMON);
+    					}
+    					break;
+    				case 1: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push($scope.dayTUE);
+    					}
+    					break;
+    				case 2: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push($scope.dayWED);
+    					}
+    					break;
+    				case 3: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push($scope.dayTHU);
+    					}
+    					break;
+    				case 4: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push($scope.dayFRI);
+    					}
+    					break;
+    				case 5: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push($scope.daySAT);
+    					}
+    					break;
+    				case 6: 
+    					if(weekDaysBool[i]){
+    						weekDaysString.push($scope.daySUN);
+    					}
+    					break;
+    				default: break;
+    			}
+    		}
+    	}
+    	}
+    	return weekDaysString;
+    };
+	
 	$scope.authHeaders = {
 	    'Accept': 'application/json;charset=UTF-8'
 	};

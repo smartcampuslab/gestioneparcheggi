@@ -1903,8 +1903,8 @@
 						    </div>
 						</th>
 						<th width="10%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
-						<th width="15%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-						<th width="30%">{{ 'area_sms' | i18n }}</th>
+						<th width="28%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="17%">{{ 'area_sms' | i18n }}</th>
 						<th width="15%" align="left">{{ 'area_total_slots' | i18n }}</th>
 						<th class="myCenter" width="10%">{{ 'operations' | i18n }}</th>
 					</tr>
@@ -1913,8 +1913,15 @@
 						<tr>
 							<td width="20%" align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
 							<td width="10%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
-							<td width="15%" align="left"><span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
-							<td width="30%" align="left">{{area.smsCode}}</td>
+							<td width="28%" align="left">
+								<!-- <span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span> -->
+								<div ng-show="aconf.a_fee.visible" ng-repeat="r in area.validityPeriod">
+									<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+									<span>{{ r.timeSlot }}</span>
+									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+								</div>
+							</td>
+							<td width="17%" align="left">{{area.smsCode}}</td>
 							<td width="15%" align="left">{{area.slotNumber}}</td>
 							<td width="10%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(area,5)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
@@ -1956,8 +1963,8 @@
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-						<th width="20%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
+						<th width="20%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="10%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="15%" align="left">{{ 'area_total_slots' | i18n }} Tot</th>
 						<th width="15%" align="left">{{ 'area_occupied_slots' | i18n }}</th>
@@ -1968,8 +1975,15 @@
 			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAo*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="15%" align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
-							<td width="20%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
+							<td width="20%" align="left">
+								<!-- <span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span> -->
+								<div ng-show="aconf.a_fee.visible" ng-repeat="r in area.validityPeriod">
+									<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+									<span>{{ r.timeSlot }}</span>
+									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+								</div>
+							</td>
+							<td width="10%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(area.occupancy)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="area.occupancy != '-1'">{{area.occupancy | doubleWithTwoDecimals}}%</span>
@@ -2018,8 +2032,8 @@
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="10%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-						<th width="20%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
+						<th width="20%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="10%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
 						<th width="15%" colspan="2">{{ 'element_profit' | i18n }}</th>
 						<th width="10%">{{ 'element_tickets' | i18n }}</th>
 						<th width="15%" align="left">{{ 'area_total_slots' | i18n }}</th>
@@ -2030,8 +2044,15 @@
 			<!-- 		ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageAp*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="15%" align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span></td>
-							<td width="20%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
+							<td width="20%" align="left">
+								<!-- <span ng-show="aconf.a_fee.visible">{{ area.fee | euroVal }} {{ 'euro_hour' | i18n }}</span> -->
+								<div ng-show="aconf.a_fee.visible" ng-repeat="r in area.validityPeriod">
+									<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+									<span>{{ r.timeSlot }}</span>
+									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+								</div>
+							</td>
+							<td width="10%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getProfitColor(area.profit)}"></div></td>
 							<td width="10%" align="left">
 								<span ng-show="area.profit > -1">{{ correctEuroCent(area.profit) | euroVal }}{{ 'euro' | i18n }}</span>
@@ -2232,9 +2253,9 @@
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}">
 						    </div>
 						</th>
-						<th width="10%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-						<th width="15%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
-						<th width="20%" colspan="2">{{ 'element_costTime' | i18n }}</th>
+						<th width="17%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+						<th width="10%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
+						<th width="18%" colspan="2">{{ 'element_costTime' | i18n }}</th>
 						<th width="10%">{{ 'element_occupancy' | i18n }}</th>
 						<th width="10%" align="left">{{ 'area_total_slots' | i18n }} Tot</th>
 						<th width="10%" align="left">{{ 'area_occupied_slots' | i18n }}</th>
@@ -2243,10 +2264,17 @@
 					<tbody class="animate-repeat" ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:['-occupancy', 'name'] | startFrom:currentPageAt*maxAreas | limitTo:maxAreas">
 						<tr>
 							<td width="15%" align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
-							<td width="10%" align="left"><span ng-show="aconf.a_fee.visible">{{area.fee | euroVal}} {{ 'euro_hour' | i18n }}</span></td>
-							<td width="15%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
+							<td width="17%" align="left">
+								<!-- <span ng-show="aconf.a_fee.visible">{{area.fee | euroVal}} {{ 'euro_hour' | i18n }}</span> -->
+								<div ng-show="aconf.a_fee.visible" ng-repeat="r in area.validityPeriod">
+									<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+									<span>{{ r.timeSlot }}</span>
+									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+								</div>
+							</td>
+							<td width="10%" align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getTimeCostColor(area.extratime)}"></div></td>
-							<td width="15%" align="left">
+							<td width="13%" align="left">
 								<span ng-show="area.extratime != null &amp;&amp; area.extratime.extratime_estimation_min != area.extratime.extratime_estimation_max">{{ area.extratime.extratime_estimation_min }} - {{ area.extratime.extratime_estimation_max }} {{ 'element_waiting_min' | i18n }}</span>
 								<span ng-show="area.extratime != null &amp;&amp; area.extratime.extratime_estimation_min == area.extratime.extratime_estimation_max">{{ area.extratime.extratime_estimation_min }} {{ 'element_waiting_min' | i18n }}</span>
 								<span ng-show="area.extratime == null">n.p.</span>
@@ -2646,7 +2674,16 @@
 								<tr>	
 									<td class="detailsListTableSX">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro' | i18n }}</td>
+									<!-- <td class="detailsListTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro' | i18n }}</td> -->
+									<td class="detailsListTableDX">
+										<div ng-repeat="r in pmDetails.area.validityPeriod">
+											<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+											<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+											<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+											<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+										</div>
+									</td>
 								</tr>
 								<tr>	
 									<td class="detailsListTableSX">{{ 'area_color' | i18n }}</td>
@@ -3691,15 +3728,24 @@
 						</td>
 						<td width="34%">
 							<table width="100%">	
-						        <tr>
+						        <!-- <tr>
 									<td class="detailsListTableSX">{{ 'area_time' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">{{ aDetails.timeSlot }}</td>
-								</tr>
-								<tr ng-show="aconf0.a_fee.visible">
+								</tr> -->
+								<tr ng-show="aconf.a_fee.visible">
 									<td class="detailsListTableSX">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ aDetails.fee | euroVal}} {{ 'euro_hour' | i18n }}</td>
+									<!-- <td class="detailsListTableDX">{{ aDetails.fee | euroVal}} {{ 'euro_hour' | i18n }}</td> -->
+									<td class="detailsListTableDX">
+										<div ng-repeat="r in aDetails.validityPeriod">
+											<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+											<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+											<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+											<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+										</div>
+									</td>
 								</tr>
 							</table>
 						</td>
@@ -3768,7 +3814,16 @@
 					<tr>	
 						<td class="detailsTableSX">{{ 'area_rate' | i18n }}:</td>
 						<td class="detailsTableCX"></td>
-						<td class="detailsTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+						<!-- <td class="detailsTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+						<td class="detailsTableDX">
+							<div ng-repeat="r in pmDetails.area.validityPeriod">
+								<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+								<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+								<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+								<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+								<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+							</div>
+						</td>
 					</tr>
 					<tr>	
 						<td class="detailsTableSX">{{ 'area_color' | i18n }}</td>
@@ -4712,7 +4767,16 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ aDetails.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+									<!-- <td class="detailsListTableDXS">{{ aDetails.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+									<td class="detailsListTableDXS">
+										<div ng-repeat="r in aDetails.validityPeriod">
+											<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+											<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+											<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+											<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+										</div>
+									</td>	
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>
@@ -4870,7 +4934,16 @@
 								<tr>	
 									<td class="detailsListTableSX">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+									<!-- <td class="detailsListTableDX">{{ pmDetails.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+									<td class="detailsListTableDX">
+										<div ng-repeat="r in pmDetails.area.validityPeriod">
+											<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+											<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+											<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+											<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+										</div>
+									</td>
 								</tr>
 							</table>
 						</td>
@@ -6059,7 +6132,16 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ aDetails.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+									<!-- <td class="detailsListTableDXS">{{ aDetails.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+									<td class="detailsListTableDXS">
+										<div ng-repeat="r in aDetails.validityPeriod">
+											<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+											<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+											<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+											<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+										</div>
+									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 							</table>
@@ -7196,7 +7278,16 @@
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'area_rate' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
-									<td class="detailsListTableDXS">{{ aDetails.fee | euroVal}} {{ 'euro_hour' | i18n }}</td>
+									<!-- <td class="detailsListTableDXS">{{ aDetails.fee | euroVal}} {{ 'euro_hour' | i18n }}</td> -->
+									<td class="detailsListTableDXS">
+										<div ng-repeat="r in aDetails.validityPeriod">
+											<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+											<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+											<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+											<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+										</div>
+									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
 								<tr>

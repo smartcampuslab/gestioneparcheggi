@@ -76,9 +76,9 @@ public class StorageManager {
 		RateArea area = findById(a.getId(), RateArea.class);
 		area.setName(a.getName());
 		area.setColor(a.getColor());
-		area.setFee(a.getFee());
+		//area.setFee(a.getFee());
 		area.setSmsCode(a.getSmsCode());
-		area.setTimeSlot(a.getTimeSlot());
+		//area.setTimeSlot(a.getTimeSlot());
 		//area.setValidityPeriod(a.getValidityPeriod());
 		if(a.getValidityPeriod() != null){
 			if(area.getValidityPeriod() != null){

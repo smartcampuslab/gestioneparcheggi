@@ -23,8 +23,8 @@ public class RateAreaBean implements Serializable {
 	private String id;
 	private String id_app;
 	private String name;
-	private Float fee;
-	private String timeSlot;
+	//private Float fee;
+	//private String timeSlot;
 	private List<RatePeriodBean> validityPeriod;
 	private String smsCode;
 	private String color;
@@ -57,7 +57,7 @@ public class RateAreaBean implements Serializable {
 		this.color = color;
 	}
 
-	public Float getFee() {
+	/*public Float getFee() {
 		return fee;
 	}
 
@@ -71,7 +71,7 @@ public class RateAreaBean implements Serializable {
 
 	public void setTimeSlot(String timeSlot) {
 		this.timeSlot = timeSlot;
-	}
+	}*/
 
 	public String getSmsCode() {
 		return smsCode;

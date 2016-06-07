@@ -53,7 +53,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 @ContextConfiguration(locations = { "/spring/filterContext.xml" })
 public class DynamicManagerTest {
 	
-	private static final String appId="rvtest";
+	private static final String appId="rv";
 	private static final String appIdTn="tn";
 	private static final int min = 0;
 	private static final int max = 5;
@@ -469,7 +469,7 @@ public class DynamicManagerTest {
 					if(unavailableSlot > free){
 						unavailableSlot = free;
 					}
-					long updateTime = myOldStreets.get(i).getTime() + MILLISINYEAR;	//2013 + 1 anno
+					long updateTime = myOldStreets.get(i).getTime();// + MILLISINYEAR;	//2013 + 1 anno
 					
 					//s.setSlotsFree(freeSlots);
 					s.setSlotsOccupiedOnFree(occupiedOnFree);
@@ -484,8 +484,10 @@ public class DynamicManagerTest {
 					s.setUpdateTime(updateTime);
 					s.setUser(999);
 					try {
-						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "999", true, null, -1);
-						System.out.println("Street updated " + s.toJSON());
+						if(updateTime >= 1446505200000L){	// to load only the recent updates
+							dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "999", true, null, -1);
+							System.out.println("Street updated " + s.toJSON());
+						}
 					} catch (DatabaseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -497,45 +499,45 @@ public class DynamicManagerTest {
 		
 		Assert.assertTrue(myOldStreets.size() > 0);
 		
-	}	
+	}
 	
 	
-//	@Test
-//	public void loadOldLogParkRv() throws Exception {
-//	
-//		List<ParkingLog> myOldParks = dynManager.getOldParkLogs();
-//		List<Parking> myParkings = geoManager.searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", "rv"));
-//		for(int i = 0; i < myOldParks.size(); i++){
-//			//System.err.println(myOldStreets.get(i).getValue());
-//			JSONObject park = new JSONObject(myOldParks.get(i).getValue());
-//			
-//			manager.setAppId(appId);
-//			boolean found = false;
-//			for(int j = 0; (j < myParkings.size()) && !found; j++){
-//				//if(myParkings.get(j).getName().compareTo(street.getString("name")) == 0){
-//				if(myParkings.get(j).getName().compareTo("park 'P.zza della P* _ 01") == 0){
-//					found = true;
-//					Parking p = myParkings.get(j);
-//					System.out.println("Park founded " + p.toJSON());
-//					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
-//					//s.setId(sId);
-//					p.setSlotsTotal(park.getInt("slotsTotal"));
-//					p.setSlotsOccupiedOnTotal(park.getInt("slotsOccupiedOnTotal"));
-//					p.setUpdateTime(myOldParks.get(i).getTime());
-//					p.setUser(999);
-//					try {
-//						dynManager.editParkingStructureAux(p, myOldParks.get(i).getTime(), "rv", "999");
-//						System.out.println("Parking updated " + p.toJSON());
-//					} catch (Exception e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//		}
-//		Assert.assertTrue(myOldParks.size() > 0);
-//		
-//	}
+	/*@Test
+	public void loadOldLogParkRv() throws Exception {
+		List<ParkingLog> myOldParks = dynManager.getOldParkLogs();
+		List<Parking> myParkings = geoManager.searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", "rv"));
+		for(int i = 0; i < myOldParks.size(); i++){
+			//System.err.println(myOldStreets.get(i).getValue());
+			JSONObject park = new JSONObject(myOldParks.get(i).getValue());
+			//manager.setAppId(appId);
+			boolean found = false;
+			for(int j = 0; (j < myParkings.size()) && !found; j++){
+				//if(myParkings.get(j).getName().compareTo(park.getString("name")) == 0){
+				if(myParkings.get(j).getName().compareTo("park 'P.zza della P* _ 01") == 0){
+					found = true;
+					Parking p = myParkings.get(j);
+					System.out.println("Park founded " + p.toJSON());
+					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
+					//s.setId(sId);
+					p.setSlotsTotal(park.getInt("slotsTotal"));
+					//p.setSlotsOccupiedOnTotal(park.getInt("slotsOccupiedOnTotal"));
+					p.setSlotsOccupiedOnPaying(park.getInt("slotsOccupiedOnTotal"));
+					p.setSlotsUnavailable(park.getInt("slotsUnavailable"));
+					p.setUpdateTime(myOldParks.get(i).getTime());
+					p.setUser(999);
+					try {
+						dynManager.editParkingStructureAux(p, myOldParks.get(i).getTime(), "rv", "999",true, null, -1);
+						System.out.println("Parking updated " + p.toJSON());
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+		}
+		Assert.assertTrue(myOldParks.size() > 0);
+		
+	}*/
 	
 	
 }

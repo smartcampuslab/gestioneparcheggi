@@ -202,8 +202,8 @@ public class ZipCsvExporter implements Exporter {
 		String result = "NOME,COSTO,FASCIE,CODICE_SMS,COLORE\n";
 		for (RateArea area : areaList) {
 			result += "\"" + area.getName() + "\"" + CSV_SEPARATOR
-					+ new DecimalFormat("#0.00").format(area.getFee())
-					+ CSV_SEPARATOR + "\"" + area.getTimeSlot() + "\""
+					/*+ new DecimalFormat("#0.00").format(area.getFee())
+					+ CSV_SEPARATOR + "\"" + area.getTimeSlot() + "\""*/
 					+ CSV_SEPARATOR + "\"" + area.getSmsCode() + "\""
 					+ CSV_SEPARATOR + "\"" + "#" + area.getColor() + "\""
 					+ "\n";

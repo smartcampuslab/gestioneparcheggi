@@ -542,8 +542,8 @@ public class DashboardController {
 	    	String id = area.getString("id");
 	    	String id_app = area.getString("id_app");
 	    	String name = area.getString("name");
-	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
-	    	String timeSlot = area.getString("timeSlot");
+	    	//Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
+	    	//String timeSlot = area.getString("timeSlot");
 	    	String smsCode = area.getString("smsCode");
 	    	String color = area.getString("color");
 	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
@@ -552,8 +552,8 @@ public class DashboardController {
 		   	a.setId(id);
 		   	a.setId_app(id_app);
 		   	a.setName(name);
-		   	a.setFee(fee);
-		   	a.setTimeSlot(timeSlot);
+		   	//a.setFee(fee);
+		   	//a.setTimeSlot(timeSlot);
 		   	a.setSmsCode(smsCode);
 		   	a.setColor(color);
 		   	a.setNote(note);

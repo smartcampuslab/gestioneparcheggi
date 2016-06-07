@@ -127,8 +127,8 @@ public class StorageManagerTest {
 		area.setId_app(appId);
 		area.setName("Pasubio");
 		area.setColor("29ea30");
-		area.setFee(new Float(0.50));
-		area.setTimeSlot("08:00 - 18:00");
+		//area.setFee(new Float(0.50));
+		//area.setTimeSlot("08:00 - 18:00");
 		area.setSmsCode("567");
 		area.setGeometry(areaGeo);
 		area = manager.save(area,appId);
@@ -137,8 +137,8 @@ public class StorageManagerTest {
 		area2.setId_app(appId);
 		area2.setName("Vittoria");
 		area2.setColor("2b46ab");
-		area2.setFee(new Float(1.00));
-		area2.setTimeSlot("10:00 - 14:00");
+		//area2.setFee(new Float(1.00));
+		//area2.setTimeSlot("10:00 - 14:00");
 		area2.setSmsCode("1234");
 		area2.setGeometry(areaGeo2);
 		area2 = manager.save(area2,appId);
@@ -147,8 +147,8 @@ public class StorageManagerTest {
 		area3.setId_app(appId);
 		area3.setName("ZTL");
 		area3.setColor("e52f70");
-		area3.setFee(new Float(1.50));
-		area3.setTimeSlot("08:00 - 20:00");
+		//area3.setFee(new Float(1.50));
+		//area3.setTimeSlot("08:00 - 20:00");
 		area3.setSmsCode("1235");
 		area3 = manager.save(area3,appId);
 		
@@ -636,8 +636,8 @@ public class StorageManagerTest {
 		area.setId_app(appIdTn);
 		area.setName("Area di 2a corona - zona blu");
 		area.setColor("2032e4");
-		area.setFee(new Float(1.00));
-		area.setTimeSlot("08:00 - 19:30");
+		//area.setFee(new Float(1.00));
+		//area.setTimeSlot("08:00 - 19:30");
 		area.setSmsCode("726");
 		area.setGeometry(areaGeo);
 		area = manager.save(area, appIdTn);

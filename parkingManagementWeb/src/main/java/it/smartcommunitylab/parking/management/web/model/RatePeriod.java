@@ -3,19 +3,19 @@ package it.smartcommunitylab.parking.management.web.model;
 import java.util.List;
 
 public class RatePeriod {
-	private Long from;
-	private Long to;
+	private String from;
+	private String to;
 	private List<String> weekDays;
 	private String timeSlot;
 	private Integer rateValue;
 	private String note;
 	private boolean holiday;
 
-	public Long getFrom() {
+	public String getFrom() {
 		return from;
 	}
 
-	public Long getTo() {
+	public String getTo() {
 		return to;
 	}
 
@@ -39,11 +39,11 @@ public class RatePeriod {
 		return holiday;
 	}
 
-	public void setFrom(Long from) {
+	public void setFrom(String from) {
 		this.from = from;
 	}
 
-	public void setTo(Long to) {
+	public void setTo(String to) {
 		this.to = to;
 	}
 

@@ -99,12 +99,21 @@
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ pm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+																	<!-- <td>{{ pm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+																	<td>
+																		<div ng-repeat="r in pm.area.validityPeriod">
+																			<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+																			<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+																			<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+																			<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+																			<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+																		</div>
+																	</td>
 																</tr>
-																<tr>	
+																<!-- <tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 																	<td>{{ pm.area.timeSlot }}</td>
-																</tr>
+																</tr> -->
 																<tr>	
 																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 																	<td>{{ pm.area.smsCode }}</td>
@@ -231,12 +240,21 @@
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ spm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+																	<!-- <td>{{ spm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+																	<td>
+																		<div ng-repeat="r in spm.area.validityPeriod">
+																			<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+																			<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+																			<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+																			<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+																			<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+																		</div>
+																	</td>
 																</tr>
-																<tr>	
+																<!-- <tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 																	<td>{{ spm.area.timeSlot }}</td>
-																</tr>
+																</tr> -->
 																<tr>	
 																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 																	<td>{{ spm.area.smsCode }}</td>
@@ -397,12 +415,21 @@
 							</tr>
 							<tr ng-show="pmconf.pm_rateArea.visible">	
 								<td class="detailsViewParkmeterSX">{{ 'area_rate' | i18n }}:</td>
-								<td class="detailsViewParkmeterDX">{{ myArea.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+								<!-- <td class="detailsViewParkmeterDX">{{ myArea.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+								<td class="detailsViewParkmeterDX">
+									<div ng-repeat="r in myArea.validityPeriod">
+										<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+										<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+										<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+										<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+										<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+									</div>
+								</td>
 							</tr>
-							<tr ng-show="pmconf.pm_rateArea.visible">	
+							<!-- <tr ng-show="pmconf.pm_rateArea.visible">	
 								<td class="detailsViewParkmeterSX">{{ 'area_time' | i18n }}:</td>
 								<td class="detailsViewParkmeterDX">{{ myArea.timeSlot }}</td>
-							</tr>
+							</tr> -->
 							<tr ng-show="pmconf.pm_rateArea.visible">	
 								<td class="detailsViewParkmeterSX">{{ 'area_sms' | i18n }}:</td>
 								<td class="detailsViewParkmeterDX">{{ myArea.smsCode }}</td>

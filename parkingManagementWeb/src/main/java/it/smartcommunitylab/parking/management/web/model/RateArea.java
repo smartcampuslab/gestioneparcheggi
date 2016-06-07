@@ -23,8 +23,8 @@ public class RateArea {
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String name;
-	private Float fee;
-	private String timeSlot;
+	//private Float fee;
+	//private String timeSlot;
 	private String smsCode;
 	private List<RatePeriod> validityPeriod;
 	private String color;
@@ -36,6 +36,9 @@ public class RateArea {
 	private List<Street> streets;
 	private List<ParkingMeter> parkingMeters;
 	private List<String> zones;	// id of the related zones
+	
+	private final String DATA_SEPARATOR = " / ";
+	private final String PERIOD_SEPARATOR = " ; ";
 
 	public String getId() {
 		return id;
@@ -53,7 +56,7 @@ public class RateArea {
 		this.id_app = id_app;
 	}
 
-	public Float getFee() {
+	/*public Float getFee() {
 		return fee;
 	}
 
@@ -67,7 +70,7 @@ public class RateArea {
 
 	public void setTimeSlot(String timeSlot) {
 		this.timeSlot = timeSlot;
-	}
+	}*/
 
 	public String getSmsCode() {
 		return smsCode;
@@ -155,6 +158,48 @@ public class RateArea {
 
 	public void setValidityPeriod(List<RatePeriod> validityPeriod) {
 		this.validityPeriod = validityPeriod;
+	}
+	
+	public String feePeriodsSummary(){
+		String pSumm = "";
+		for(int i = 0; i < this.validityPeriod.size(); i++){
+			pSumm = validityPeriod.get(i).getRateValue() + "€/h"
+					+ DATA_SEPARATOR + validityPeriod.get(i).getFrom() 
+					+ "-" + validityPeriod.get(i).getTo()
+					+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
+					+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
+					+ PERIOD_SEPARATOR;
+		}
+		return pSumm.substring(0, pSumm.length() - 1);
+	}
+	
+	public String correctDaysValues(List<String> weekDays){
+		String stringValues = "";
+		for(String wd : weekDays){
+			if(wd.compareTo("MO") == 0){
+				stringValues += "LU;";
+			}
+			if(wd.compareTo("TU") == 0){
+				stringValues += "MA;";
+			}
+			if(wd.compareTo("WE") == 0){
+				stringValues += "ME;";
+			}
+			if(wd.compareTo("TH") == 0){
+				stringValues += "GI;";
+			}
+			if(wd.compareTo("FR") == 0){
+				stringValues += "VE;";
+			}
+			if(wd.compareTo("SA") == 0){
+				stringValues += "SA;";
+			}
+			if(wd.compareTo("SU") == 0){
+				stringValues += "DO;";
+			}
+		}
+		stringValues.substring(0, stringValues.length()-1);
+		return stringValues;
 	}
 
 }
