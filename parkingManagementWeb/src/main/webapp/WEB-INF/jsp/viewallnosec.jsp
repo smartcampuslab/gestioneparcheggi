@@ -45,6 +45,7 @@
 <script src="../js/services/serv.js"></script>
 <script src="../js/services/serv_shared.js"></script>
 <script src="../js/services/serv_initialize.js"></script>
+<script src="../js/services/serv_utils.js"></script>
 <script src="../js/directives.js"></script>
 
 <script src="../lib/lodash.js"></script>

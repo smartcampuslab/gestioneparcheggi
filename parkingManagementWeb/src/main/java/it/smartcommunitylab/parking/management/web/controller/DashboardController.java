@@ -45,6 +45,7 @@ import it.smartcommunitylab.parking.management.web.model.ProfitRateArea;
 import it.smartcommunitylab.parking.management.web.model.ProfitStreet;
 import it.smartcommunitylab.parking.management.web.model.ProfitZone;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
+import it.smartcommunitylab.parking.management.web.model.RatePeriod;
 import it.smartcommunitylab.parking.management.web.model.TimeCostParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.TimeCostRateArea;
 import it.smartcommunitylab.parking.management.web.model.TimeCostStreet;
@@ -413,7 +414,7 @@ public class DashboardController {
 	// --------------------------------------- Supply CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/supply/street/csv")
 	public @ResponseBody
-	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody List<Street> data) { //@RequestBody String data
 		logger.info("I am in street csv creation.");
 		ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
@@ -526,44 +527,79 @@ public class DashboardController {
 		
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/supply/area/csv")
 	public @ResponseBody
-	String createAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+	String createAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<RateArea> data) { //@RequestBody String data
 		logger.info("I am in area csv creation.");
 		ArrayList<RateArea> areaData = new ArrayList<RateArea>();
 		String createdFile = "";
 		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 		
-		JSONArray areaList = new JSONArray(data);
-		logger.info("Area list size: " + areaList.length());
+//		JSONArray areaList = new JSONArray(data);
+//		logger.info("Area list size: " + areaList.length());
 	   	
-	    for(int i = 0; i < areaList.length(); i++){
-	    	JSONObject area = areaList.getJSONObject(i);
-	    	//logger.error(String.format("Street Data: %s", street.toString()));
-	    	String id = area.getString("id");
-	    	String id_app = area.getString("id_app");
-	    	String name = area.getString("name");
-	    	//Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
-	    	//String timeSlot = area.getString("timeSlot");
-	    	String smsCode = area.getString("smsCode");
-	    	String color = area.getString("color");
-	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
-		   	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
-		   	RateArea a = new RateArea();
-		   	a.setId(id);
-		   	a.setId_app(id_app);
-		   	a.setName(name);
-		   	//a.setFee(fee);
-		   	//a.setTimeSlot(timeSlot);
-		   	a.setSmsCode(smsCode);
-		   	a.setColor(color);
-		   	a.setNote(note);
-		   	a.setSlotNumber(slotNumber);
-		   	areaData.add(a);
-	    }	
+//	    for(int i = 0; i < areaList.length(); i++){
+//	    	JSONObject area = areaList.getJSONObject(i);
+//	    	//logger.error(String.format("Street Data: %s", street.toString()));
+//	    	String id = area.getString("id");
+//	    	String id_app = area.getString("id_app");
+//	    	String name = area.getString("name");
+//	    	//Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
+//	    	//String timeSlot = area.getString("timeSlot");
+//	    	List<RatePeriod> validityPeriodsList = new ArrayList<RatePeriod>();
+//	    	JSONArray periods = (!area.isNull("validityPeriod")) ? area.getJSONArray("validityPeriod") : null;
+//	    	if(periods!= null){
+//		    	for(int j = 0; j < periods.length(); j++){
+//		    		RatePeriod rp = new RatePeriod();
+//		    		JSONObject period = periods.getJSONObject(j);
+//		    		String sFrom = period.getString("from");
+//		    		String sTo = period.getString("to");
+//		    		JSONArray wDays = (!period.isNull("weekDays")) ? period.getJSONArray("weekDays") : null;
+//		    		List<String> wStringDays = new ArrayList<String>();
+//		    		if(wDays != null){
+//		    			for (int x = 0; x < wDays.length(); x++){
+//		    				String dd = wDays.getString(x);
+//		    				wStringDays.add(dd);
+//		    			}
+//		    		}
+//		    		String sTimeSlot = period.getString("timeSlot");
+//		    		int iRateValue = period.getInt("rateValue");
+//		    		boolean sHoliday = period.getBoolean("holiday");
+//		    		String sNote = (!period.isNull("note")) ? period.getString("note") : "";
+//		    		rp.setFrom(sFrom);
+//		    		rp.setTo(sTo);
+//		    		rp.setTimeSlot(sTimeSlot);
+//		    		rp.setRateValue(iRateValue);
+//		    		if(wStringDays != null && wStringDays.size() > 0){
+//		    			rp.setWeekDays(wStringDays);
+//		    		}
+//		    		if(sNote != null && sNote.compareTo("") != 0)rp.setNote(sNote);
+//		    		rp.setHoliday(sHoliday);
+//		    		// TODO: end this conversion to manage correctly the periodData
+//		    		validityPeriodsList.add(rp);
+//		    	}
+//	    	}
+//	    	
+//	    	String smsCode = area.getString("smsCode");
+//	    	String color = area.getString("color");
+//	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
+//		   	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
+//		   	RateArea a = new RateArea();
+//		   	a.setId(id);
+//		   	a.setId_app(id_app);
+//		   	a.setName(name);
+//		   	//a.setFee(fee);
+//		   	//a.setTimeSlot(timeSlot);
+//		   	a.setValidityPeriod(validityPeriodsList);
+//		   	a.setSmsCode(smsCode);
+//		   	a.setColor(color);
+//		   	a.setNote(note);
+//		   	a.setSlotNumber(slotNumber);
+//		   	areaData.add(a);
+//	    }	
 			
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_supply_file_areas(areaData, path);
+			createdFile = csvManager.create_supply_file_areas(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
 		}
@@ -655,13 +691,15 @@ public class DashboardController {
 	    	String id = pm.getString("id");
 	    	String id_app = pm.getString("id_app");
 	    	Integer code = pm.getInt("code");
-	    	String note = pm.getString("note");
+	    	String note = (!pm.isNull("note")) ? pm.getString("note") : null;
 	    	String status = pm.getString("status");
 	    	ParkingMeter spm = new ParkingMeter();
 	    	spm.setId(id);
 	    	spm.setId_app(id_app);
 	    	spm.setCode(code);
-	    	spm.setNote(note);
+	    	if(note != null){
+	    		spm.setNote(note);
+	    	}
 	    	if(status.compareTo("ACTIVE") == 0){
 	    		spm.setStatus(ParkingMeter.Status.ACTIVE);
 	    	} else {
@@ -815,48 +853,45 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/area/csv")
 	public @ResponseBody
-	String createOccupancyAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		logger.info("I am in area csv creation.");
-		ArrayList<OccupancyRateArea> areaData = new ArrayList<OccupancyRateArea>();
+	String createOccupancyAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<OccupancyRateArea> data) {	//@RequestBody String data
+		logger.debug("I am in area csv creation.");
 		String createdFile = "";
-		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 		
-		JSONArray areaList = new JSONArray(data);
-		logger.info("Area list size: " + areaList.length());
-    	
-	    for(int i = 0; i < areaList.length(); i++){
-	    	JSONObject area = areaList.getJSONObject(i);
-	    	//logger.error(String.format("Street Data: %s", street.toString()));
-	    	String id = area.getString("id");
-	    	String id_app = area.getString("id_app");
-	    	String name = area.getString("name");
-	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
-	    	String timeSlot = area.getString("timeSlot");
-	    	String smsCode = area.getString("smsCode");
-	    	String color = area.getString("color");
-	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
-	    	Integer occupancy = (!area.isNull("occupancy")) ? area.getInt("occupancy") : 0;
-	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
-	    	Integer slotOccupied = (!area.isNull("slotOccupied")) ? area.getInt("slotOccupied") : 0;
-	    	OccupancyRateArea oa = new OccupancyRateArea();
-	    	oa.setId(id);
-	    	oa.setId_app(id_app);
-	    	oa.setName(name);
-	    	oa.setFee(fee);
-	    	oa.setTimeSlot(timeSlot);
-	    	oa.setSmsCode(smsCode);
-	    	oa.setColor(color);
-	    	oa.setNote(note);
-	    	oa.setOccupancy(occupancy);
-	    	oa.setSlotNumber(slotNumber);
-	    	oa.setSlotOccupied(slotOccupied);
-	    	areaData.add(oa);
-	    }	
+//		JSONArray areaList = new JSONArray(data);
+//		logger.info("Area list size: " + areaList.length());
+//    	
+//	    for(int i = 0; i < areaList.length(); i++){
+//	    	JSONObject area = areaList.getJSONObject(i);
+//	    	//logger.error(String.format("Street Data: %s", street.toString()));
+//	    	String id = area.getString("id");
+//	    	String id_app = area.getString("id_app");
+//	    	String name = area.getString("name");
+//	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
+//	    	String timeSlot = area.getString("timeSlot");
+//	    	String smsCode = area.getString("smsCode");
+//	    	String color = area.getString("color");
+//	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
+//	    	Integer occupancy = (!area.isNull("occupancy")) ? area.getInt("occupancy") : 0;
+//	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
+//	    	Integer slotOccupied = (!area.isNull("slotOccupied")) ? area.getInt("slotOccupied") : 0;
+//	    	OccupancyRateArea oa = new OccupancyRateArea();
+//	    	oa.setId(id);
+//	    	oa.setId_app(id_app);
+//	    	oa.setName(name);
+//	    	oa.setFee(fee);
+//	    	oa.setTimeSlot(timeSlot);
+//	    	oa.setSmsCode(smsCode);
+//	    	oa.setColor(color);
+//	    	oa.setNote(note);
+//	    	oa.setOccupancy(occupancy);
+//	    	oa.setSlotNumber(slotNumber);
+//	    	oa.setSlotOccupied(slotOccupied);
+//	    	areaData.add(oa);
+//	    }	
 		
 		try {
-			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_areas(areaData, path);
+			createdFile = csvManager.create_occupancy_file_areas(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
 		}
@@ -1108,46 +1143,46 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/area/csv")
 	public @ResponseBody
-	String createProfitAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		logger.info("I am in profit area csv creation.");
-		ArrayList<ProfitRateArea> areaData = new ArrayList<ProfitRateArea>();
+	String createProfitAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<ProfitRateArea> data) { //@RequestBody String data
+		logger.debug("I am in profit area csv creation.");
+//		ArrayList<ProfitRateArea> areaData = new ArrayList<ProfitRateArea>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 		
-		JSONArray areaList = new JSONArray(data);
-		logger.info("Area list size: " + areaList.length());
+//		JSONArray areaList = new JSONArray(data);
+//		logger.info("Area list size: " + areaList.length());
     	
-	    for(int i = 0; i < areaList.length(); i++){
-	    	JSONObject area = areaList.getJSONObject(i);
-	    	String id = area.getString("id");
-	    	String id_app = area.getString("id_app");
-	    	String name = area.getString("name");
-	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
-	    	String timeSlot = area.getString("timeSlot");
-	    	String smsCode = area.getString("smsCode");
-	    	String color = area.getString("color");
-	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
-	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
-	    	Integer profit = (!area.isNull("profit")) ? area.getInt("profit") : 0;
-	    	Integer tickets = (!area.isNull("tickets")) ? area.getInt("tickets") : 0;
-	    	ProfitRateArea pa = new ProfitRateArea();
-	    	pa.setId(id);
-	    	pa.setId_app(id_app);
-	    	pa.setName(name);
-	    	pa.setFee(fee);
-	    	pa.setTimeSlot(timeSlot);
-	    	pa.setSmsCode(smsCode);
-	    	pa.setColor(color);
-	    	pa.setNote(note);
-	    	pa.setSlotNumber(slotNumber);
-	    	pa.setProfit(profit);
-	    	pa.setTickets(tickets);
-	    	areaData.add(pa);
-	    }	
+//	    for(int i = 0; i < areaList.length(); i++){
+//	    	JSONObject area = areaList.getJSONObject(i);
+//	    	String id = area.getString("id");
+//	    	String id_app = area.getString("id_app");
+//	    	String name = area.getString("name");
+//	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
+//	    	String timeSlot = area.getString("timeSlot");
+//	    	String smsCode = area.getString("smsCode");
+//	    	String color = area.getString("color");
+//	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
+//	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
+//	    	Integer profit = (!area.isNull("profit")) ? area.getInt("profit") : 0;
+//	    	Integer tickets = (!area.isNull("tickets")) ? area.getInt("tickets") : 0;
+//	    	ProfitRateArea pa = new ProfitRateArea();
+//	    	pa.setId(id);
+//	    	pa.setId_app(id_app);
+//	    	pa.setName(name);
+//	    	pa.setFee(fee);
+//	    	pa.setTimeSlot(timeSlot);
+//	    	pa.setSmsCode(smsCode);
+//	    	pa.setColor(color);
+//	    	pa.setNote(note);
+//	    	pa.setSlotNumber(slotNumber);
+//	    	pa.setProfit(profit);
+//	    	pa.setTickets(tickets);
+//	    	areaData.add(pa);
+//	    }	
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_profit_file_areas(areaData, path);
+			createdFile = csvManager.create_profit_file_areas(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
 		}
@@ -1338,54 +1373,54 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timeCost/area/csv")
 	public @ResponseBody
-	String createTimeCostAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		logger.info("I am in timeCost area csv creation.");
-		ArrayList<TimeCostRateArea> areaData = new ArrayList<TimeCostRateArea>();
+	String createTimeCostAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<TimeCostRateArea> data) { //@RequestBody String data
+		logger.debug("I am in timeCost area csv creation.");
+//		ArrayList<TimeCostRateArea> areaData = new ArrayList<TimeCostRateArea>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
-		JSONArray areaList = new JSONArray(data);
-		logger.info("Area list size: " + areaList.length());
+//		JSONArray areaList = new JSONArray(data);
+//		logger.info("Area list size: " + areaList.length());
     	
-	    for(int i = 0; i < areaList.length(); i++){
-	    	JSONObject area = areaList.getJSONObject(i);
-	    	String id = area.getString("id");
-	    	String id_app = area.getString("id_app");
-	    	String name = area.getString("name");
-	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
-	    	String timeSlot = area.getString("timeSlot");
-	    	String smsCode = area.getString("smsCode");
-	    	String color = area.getString("color");
-	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
-	    	Integer occupancy = (!area.isNull("occupancy")) ? area.getInt("occupancy") : 0;
-	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
-	    	Integer slotOccupied = (!area.isNull("slotOccupied")) ? area.getInt("slotOccupied") : 0;
-	    	JSONObject extratime = (!area.isNull("extratime")) ? area.getJSONObject("extratime") : null;
-	    	Integer minExtratime, maxExtratime;
-	    	minExtratime = maxExtratime = -1;
-	    	if(extratime != null) {
-	    		minExtratime = (!extratime.isNull("extratime_estimation_min")) ? extratime.getInt("extratime_estimation_min") : -1;
-		    	maxExtratime = (!extratime.isNull("extratime_estimation_max")) ? extratime.getInt("extratime_estimation_max") : -1;
-	    	}
-	    	TimeCostRateArea ta = new TimeCostRateArea();
-	    	ta.setId(id);
-	    	ta.setId_app(id_app);
-	    	ta.setName(name);
-	    	ta.setFee(fee);
-	    	ta.setTimeSlot(timeSlot);
-	    	ta.setSmsCode(smsCode);
-	    	ta.setColor(color);
-	    	ta.setNote(note);
-	    	ta.setOccupancy(occupancy);
-	    	ta.setSlotNumber(slotNumber);
-	    	ta.setSlotOccupied(slotOccupied);
-	    	ta.setMinExtratime(minExtratime);
-	    	ta.setMaxExtratime(maxExtratime);
-	    	areaData.add(ta);
-	    }	
+//	    for(int i = 0; i < areaList.length(); i++){
+//	    	JSONObject area = areaList.getJSONObject(i);
+//	    	String id = area.getString("id");
+//	    	String id_app = area.getString("id_app");
+//	    	String name = area.getString("name");
+//	    	Float fee = (!area.isNull("fee")) ? Float.valueOf(Double.toString(area.getDouble("fee"))) : 0F;
+//	    	String timeSlot = area.getString("timeSlot");
+//	    	String smsCode = area.getString("smsCode");
+//	    	String color = area.getString("color");
+//	    	String note = (!area.isNull("note")) ? area.getString("note") : "";
+//	    	Integer occupancy = (!area.isNull("occupancy")) ? area.getInt("occupancy") : 0;
+//	    	Integer slotNumber = (!area.isNull("slotNumber")) ? area.getInt("slotNumber") : 0;
+//	    	Integer slotOccupied = (!area.isNull("slotOccupied")) ? area.getInt("slotOccupied") : 0;
+//	    	JSONObject extratime = (!area.isNull("extratime")) ? area.getJSONObject("extratime") : null;
+//	    	Integer minExtratime, maxExtratime;
+//	    	minExtratime = maxExtratime = -1;
+//	    	if(extratime != null) {
+//	    		minExtratime = (!extratime.isNull("extratime_estimation_min")) ? extratime.getInt("extratime_estimation_min") : -1;
+//		    	maxExtratime = (!extratime.isNull("extratime_estimation_max")) ? extratime.getInt("extratime_estimation_max") : -1;
+//	    	}
+//	    	TimeCostRateArea ta = new TimeCostRateArea();
+//	    	ta.setId(id);
+//	    	ta.setId_app(id_app);
+//	    	ta.setName(name);
+//	    	ta.setFee(fee);
+//	    	ta.setTimeSlot(timeSlot);
+//	    	ta.setSmsCode(smsCode);
+//	    	ta.setColor(color);
+//	    	ta.setNote(note);
+//	    	ta.setOccupancy(occupancy);
+//	    	ta.setSlotNumber(slotNumber);
+//	    	ta.setSlotOccupied(slotOccupied);
+//	    	ta.setMinExtratime(minExtratime);
+//	    	ta.setMaxExtratime(maxExtratime);
+//	    	areaData.add(ta);
+//	    }	
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_timeCost_file_areas(areaData, path);
+			createdFile = csvManager.create_timeCost_file_areas(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
 		}
@@ -1509,14 +1544,18 @@ public class DashboardController {
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String valPeriods = "";
 	    	
 	    it.smartcommunitylab.parking.management.web.model.OccupancyRateArea a = new it.smartcommunitylab.parking.management.web.model.OccupancyRateArea();
 	    a.setName(darea_name);
-	    a.setFee(Float.valueOf(darea_fee));
+	    //a.setFee(Float.valueOf(darea_fee));
+	    if(darea_fee != null && darea_fee.compareTo("") != 0){
+	    	valPeriods = darea_fee;
+	    }
 	    a.setSlotNumber(Integer.parseInt(darea_totalslot));
 			
 		try {
-			createdFile = csvManager.create_occupancy_file_history_area(a, matrix, path); //occ_matrix
+			createdFile = csvManager.create_occupancy_file_history_area(a, matrix, path, valPeriods); //occ_matrix
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV occupazione storico per aree: " + e.getMessage());
 		}
@@ -1593,14 +1632,18 @@ public class DashboardController {
 	String createProfitAreaHistoryCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot,  @RequestBody String[][] matrix) {
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String valPeriods = "";
 			    	
 		it.smartcommunitylab.parking.management.web.model.ProfitRateArea a = new it.smartcommunitylab.parking.management.web.model.ProfitRateArea();
 	    a.setName(darea_name);
-	    a.setFee(Float.valueOf(darea_fee));
+	    //a.setFee(Float.valueOf(darea_fee));
+	    if(darea_fee != null && darea_fee.compareTo("") != 0){
+	    	valPeriods = darea_fee;
+	    }
 	    a.setSlotNumber(Integer.parseInt(darea_totalslot));
 				
 		try {
-			createdFile = csvManager.create_profit_file_history_area(a, matrix, path);
+			createdFile = csvManager.create_profit_file_history_area(a, matrix, path, valPeriods);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV incassi storico per aree: " + e.getMessage());
 		}
@@ -1659,14 +1702,18 @@ public class DashboardController {
 	String createTimeCostAreaHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot, @RequestBody String[][] matrix) {
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
-	    	
+	    String valPeriods = "";
+		
 		it.smartcommunitylab.parking.management.web.model.OccupancyRateArea a = new it.smartcommunitylab.parking.management.web.model.OccupancyRateArea();
 	    a.setName(darea_name);
-	    a.setFee(Float.valueOf(darea_fee));
+	    //a.setFee(Float.valueOf(darea_fee));
+	    if(darea_fee != null && darea_fee.compareTo("") != 0){
+	    	valPeriods = darea_fee;
+	    }
 	    a.setSlotNumber(Integer.parseInt(darea_totalslot));
 			
 		try {
-			createdFile = csvManager.create_timecost_file_history_area(a, matrix, path);
+			createdFile = csvManager.create_timecost_file_history_area(a, matrix, path, valPeriods);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV costo accesso storico per zone: " + e.getMessage());
 		}

@@ -39,7 +39,6 @@ public class StreetBean {
 	private String rateAreaId;
 	private LineBean geometry;
 	private String color;
-	//private List<ZoneBean> zones;	//List with the id of the associated zone
 	private List<String> zones;	//List with the id of the associated zone
 	private List<String> parkingMeters;	//List with the id of the associated pms (optional)
 	private Long lastChange;
@@ -219,10 +218,6 @@ public class StreetBean {
 	public void setPaidSlotOccupied(Integer paidSlotOccupied) {
 		this.paidSlotOccupied = paidSlotOccupied;
 	}
-
-	//public void setZoneBeans(List<ZoneBean> zones) {
-	//	this.zones = zones;
-	//}
 	
 	public void setZones(List<String> zones) {
 		this.zones = zones;
@@ -251,24 +246,6 @@ public class StreetBean {
 	public void setOccupancyRate(double occupancyRate) {
 		this.occupancyRate = occupancyRate;
 	}
-
-//	public List<Zone> getZoneBeanToZone(){
-//		List<Zone> zons = new ArrayList<Zone>();
-//		if(this.zones != null){
-//			for(int i = 0; i < this.zones.size(); i++){
-//				Zone z = new Zone();
-//				z.setId(this.zones.get(i).getId());
-//				z.setId_app(this.zones.get(i).getId_app());
-//				z.setName(this.zones.get(i).getName());
-//				z.setNote(this.zones.get(i).getNote());
-//				z.setColor(this.zones.get(i).getColor());
-//				z.setSubmacro(this.zones.get(i).getSubmacro());
-//				z.setGeometry(this.zones.get(i).getGeometryObj());
-//				zons.add(z);
-//			}
-//		}
-//		return zons;
-//	}
 
 	@Override
 	public String toString() {

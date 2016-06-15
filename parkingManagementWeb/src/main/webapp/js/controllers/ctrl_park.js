@@ -308,6 +308,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.tmpPr = {};
     $scope.pr = {};
     
+    $scope.all_mode = "all mode";
+    $scope.day_mode = "day mode";
+    $scope.night_mode = "night mode";
+    
     $scope.clearPr = function(){
     	angular.copy($scope.pr, $scope.tmpPr);	// here I copy the pr object to use in edit and create form validation (object has to be != null)
 	    $scope.pr  = {
@@ -316,6 +320,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	weekDays: [false, false, false, false, false, false, false],
 	    	timeSlot: null,
 	    	rateValue: 0.0,
+	    	dayOrNight: $scope.all_mode,
 	    	holiday: false,
 	    	note: null
 	    };
@@ -344,43 +349,55 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return somes;
     };
     
-    $scope.addRatePeriod = function(period, form){
+    $scope.addRatePeriod = function(period, form, type){
     	$scope.isInitPeriod = false;
     	$scope.notValidDateFrom = false;
     	$scope.notValidDateTo = false;
     	
-    	if($scope.area.validityPeriod == null){
-    		$scope.area.validityPeriod = [];
-    	}
-    	if((form.pFromDate.$error.required || form.pFromDate.$error.pattern) || 
-    			(form.pToDate.$error.required || form.pToDate.$error.pattern) || 
-    			form.pWeekDays.$error.required ||
-    			(form.pTime.$error.required || form.pTime.$error.pattern) || 
-    			(form.pFee.$error.required || form.pFee.$error.pattern) ||
-    			form.pNote.$error.required){
-    		// show error messages
-    		if(!$scope.checkExistingDate(period.from)){
-    			$scope.notValidDateFrom = true;
-    		}
-    		if(!$scope.checkExistingDate(period.to)){
-    			$scope.notValidDateTo = true;
-    		}
+    	if(type == 0){
+	    	if($scope.area.validityPeriod == null){
+	    		$scope.area.validityPeriod = [];
+	    	}
     	} else {
-    		if(!$scope.checkExistingDate(period.from)){
-    			$scope.notValidDateFrom = true;
-    		}
-    		if(!$scope.checkExistingDate(period.to)){
-    			$scope.notValidDateTo = true;
-    		}
-    		if(!$scope.notValidDateFrom && !$scope.notValidDateTo){
-	    		var periodData = {};
-	    		period.rateValue = parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100;	// here I force the cast to int
-	    		period.weekDays = $scope.getWeekDaysFromArray(period.weekDays, 1),
-	    		angular.copy(period, periodData);
-	    		$scope.area.validityPeriod.push(periodData);
-	    		$scope.clearPr();
-	    		$scope.isInitPeriod = true;
-    		}
+    		if($scope.parkingStructure.validityPeriod == null){
+	    		$scope.parkingStructure.validityPeriod = [];
+	    	}
+    	}	
+	    if((type == 0 && (form.pFromDate.$error.required || form.pFromDate.$error.pattern)) || 
+	    		(type == 0 && (form.pToDate.$error.required || form.pToDate.$error.pattern)) || 
+	    		form.pWeekDays.$error.required ||
+	    		(form.pTime.$error.required || form.pTime.$error.pattern) || 
+	    		(form.pFee.$error.required || form.pFee.$error.pattern) ||
+	    		form.pNote.$error.required){
+	    	// show error messages
+	    	if(!$scope.checkExistingDate(period.from)){
+	    		$scope.notValidDateFrom = true;
+	    	}
+	    	if(!$scope.checkExistingDate(period.to)){
+	    		$scope.notValidDateTo = true;
+	    	}
+	    } else {
+	    	if(type == 0){
+		    	if(!$scope.checkExistingDate(period.from)){
+		    		$scope.notValidDateFrom = true;
+		    	}
+		    	if(!$scope.checkExistingDate(period.to)){
+		    		$scope.notValidDateTo = true;
+		    	}
+	    	}
+	    	if(!$scope.notValidDateFrom && !$scope.notValidDateTo){
+		   		var periodData = {};
+		   		period.rateValue = parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100;	// here I force the cast to int
+		   		period.weekDays = $scope.getWeekDaysFromArray(period.weekDays, 1),
+		   		angular.copy(period, periodData);
+		   		if(type == 0){
+		   			$scope.area.validityPeriod.push(periodData);
+		   		} else {
+		   			$scope.parkingStructure.validityPeriod.push(periodData);
+		   		}
+		   		$scope.clearPr();
+		   		$scope.isInitPeriod = true;
+	    	}
     	}
     };
     
@@ -3513,10 +3530,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					//to: area.validityPeriod[i].to.getTime(),
 					from: area.validityPeriod[i].from,
 					to: area.validityPeriod[i].to,
-					//weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
 					weekDays: area.validityPeriod[i].weekDays,
 					timeSlot: area.validityPeriod[i].timeSlot,
-					//rateValue: parseFloat($scope.correctDecimal(area.validityPeriod[i].rateValue, 1)) * 100,
 					rateValue: area.validityPeriod[i].rateValue,
 					holiday: area.validityPeriod[i].holiday,
 					note: area.validityPeriod[i].note

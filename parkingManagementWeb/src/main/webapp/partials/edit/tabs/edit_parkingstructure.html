@@ -569,77 +569,234 @@
 					   	<div class="form-group" ng-show="psconf.ps_parkride.visible">
 					    	<label for="ps_parkRide">{{ 'ps_park_and_ride' | i18n }}</label> <input id="ps_parkRide" type="checkbox" ng-model="parkingStructure.parkAndRide">
 					   	</div>
+					   	
 					   	<div class="form-group" ng-show="psconf.ps_fee.visible">
-					    	<label for="fee">{{ 'ps_fee' | i18n }}</label>
-					    	<table width="100%">
-					    		<tr>
-					    			<td width="6%"><strong>{{ 'ps_fee_det_val' | i18n }}: </strong></td>
-					    			<td width="39%">
-					    				<input id="feeVal" type="text" class="form-control" name="pFeeVal" ng-model="parkingStructure.fee_val" ng-required="psconf.ps_fee.required && parkingStructure.fee_note == null" placeholder="{{ 'ps_fee_placeholder' | i18n }}" ng-pattern="decimalNumbers" >
-					   					<div class="field-error" ng-show="!isInit && form.pFeeVal.$error.pattern">{{ 'parkingstructure_fee_err_pattern' | i18n }}</div>
-					    			</td>
-					    			<td width="5%" align="center"><strong>{{ 'ps_fee_det_note' | i18n }}: </strong></td>
-					    			<td width="50%">
-					    				<input id="feeNote" type="text" class="form-control" name="pFeeNote" ng-model="parkingStructure.fee_note" ng-required="psconf.ps_fee.required && parkingStructure.fee_val == null" placeholder="{{ 'ps_fee_note_placeholder' | i18n }}" >
-					    			</td>
-					    		</tr>
-					    		<tr ng-show="(!isInit && form.pFeeVal.$error.required) || (!isInit && form.pFeeNote.$error.required)">
-					    			<td colspan="4">
-					    				<div class="field-error">{{ 'parkingstructure_fee_err_required' | i18n }}</div>
-					    			</td>
-					    		</tr>
-					    	</table>
+					   		<label for="name">{{ 'area_period_label' | i18n }}</label>
+					   		<div class="panel-body">			
+				  				<div ng-show="isPeriodFormVisible">
+							  		<table  width="100%">
+										<tr valign="bottom">
+											<!-- <th width="7%">{{ 'area_rate_period_startdate' | i18n }}</th>
+											<th width="7%">{{ 'area_rate_period_enddate' | i18n }}</th> -->
+											<th width="30%">{{ 'area_rate_period_weekdays' | i18n }}</th>
+											<th width="20%">{{ 'area_rate_period_hours' | i18n }}</th>
+											<th width="10%">{{ 'area_rate_value' | i18n }}</th>
+											<th width="10%">{{ 'area_rate_is_day_or_night' | i18n }}</th>
+											<th width="5%">{{ 'area_rate_is_holidays' | i18n }}</th>
+											<th width="20%">{{ 'area_rate_note' | i18n }}</th>
+											<th width="5%"></th>
+										</tr>
+										<tr>
+<!-- 											<td> -->
+<!-- 							  					<input id="fromDate" name="pFromDate" type="text" class="form-control" placeholder="{{getPlaceHolder()}}" ng-model="pr.from" ng-pattern="dateDDMMPatternIt" required /> -->
+<!-- 								    		</td> -->
+<!-- 								    		<td> -->
+<!-- 												<input id="toDate" name="pToDate" type="text" class="form-control" placeholder="{{getPlaceHolder()}}" ng-model="pr.to" ng-pattern="dateDDMMPatternIt" required /> -->
+<!-- 											</td> -->
+											<td align="center">
+												<label>{{ 'period_monday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[0]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_tuesday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[1]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_wednesday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[2]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_thursday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[3]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<!-- <br/> -->
+												<label>{{ 'period_friday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[4]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_saturday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[5]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+												<label>{{ 'period_sunday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[6]" ng-required="!someSelectedDay(pr.weekDays)"></label>
+								    		</td>
+								    		<td>
+												<input id="time" type="text" class="form-control" name="pTime" ng-model="pr.timeSlot" ng-required="psconf.ps_timeSlot.required" ng-pattern="periodPattern" placeholder="{{ 'area_time_placeholder' | i18n }}" >
+								    		</td>
+								    		<td>
+												<input id="fee" type="text" class="form-control" name="pFee" ng-model="pr.rateValue" ng-required="psconf.ps_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
+								    		</td>
+								    		<td>
+												<select id="day_night" type="text" class="form-control" name="pDayNight" ng-model="pr.dayOrNight">
+													<option ng-value="all_mode">Entrambi</option>
+													<option ng-value="day_mode">Giorno</option>
+													<option ng-value="night_mode">Notte</option>
+												</select>
+								    		</td>
+								    		<td align="center">
+												<input type="checkbox" id="is_holiday" ng-model="pr.holiday" name="pIsHoliday" class="form-control">
+								    		</td>
+								    		<td>
+												<input id="note" type="text" class="form-control" name="pNote" ng-model="pr.note" ng-required="false" placeholder="{{ 'area_rate_period_note_placeholder' | i18n }}" >
+								    		</td>
+											<td width="3%">
+												&nbsp;
+											</td>
+											<td width="10%" align="right"><button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 1)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button></td>
+										</tr>
+										<tr ng-show="(isErrorRatePeriod==true)">
+											<td colspan="8"><div class="alert alert-danger">{{ errorsMessageRatePeriod }}</div></td>
+										</tr>
+										<tr ng-show="(isErrorRatePeriodOverlap==true)">
+											<td colspan="8"><div class="alert alert-danger">{{ 'error_overlap_rate_period' | i18n }}</div></td>
+										</tr>
+										<tr>
+											<td colspan="8">
+												<!-- <div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.pattern || notValidDateFrom">{{ 'area_rate_period_startdate_error_pattern' | i18n }}</div>
+												<div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.required">{{ 'area_rate_period_startdate_error_required' | i18n }}</div> -->
+												<!-- <div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.pattern || notValidDateTo">{{ 'area_rate_period_enddate_error_pattern' | i18n }}</div>
+												<div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.required">{{ 'area_rate_period_enddate_error_required' | i18n }}</div> -->
+												<div class="field-error" ng-show="!isInitPeriod && form.pWeekDays.$error.required">{{ 'area_weekdays_err_required' | i18n }}</div>
+												<div class="field-error" ng-show="!isInitPeriod && form.pTime.$error.required">{{ 'area_openingtime_err_required' | i18n }}</div>
+					   							<div class="field-error" ng-show="!isInitPeriod && form.pTime.$error.pattern">{{ 'area_openingtime_err_pattern' | i18n }}</div>
+					   							<div class="field-error" ng-show="!isInitPeriod && form.pFee.$error.required">{{ 'area_fee_err_required' | i18n }}</div>
+					   							<div class="field-error" ng-show="!isInitPeriod && form.pFee.$error.pattern">{{ 'area_fee_err_pattern' | i18n }}</div>
+					   							<div class="field-error" ng-show="!isInitPeriod && form.pNote.$error.required">{{ 'area_note_err_required' | i18n }}</div>
+											</td>
+										</tr>
+									</table>
+									&nbsp;
+									<hr>
+								</div>
+						  		<table width="100%" ng-show="parkingStructure.validityPeriod.length > 0">
+									<tr>
+										<!-- <th width="7%">{{ 'area_rate_period_startdate' | i18n }}</th>
+										<th width="7%">{{ 'area_rate_period_enddate' | i18n }}</th> -->
+										<th width="20%">{{ 'area_rate_period_weekdays' | i18n }}</th>
+										<th width="20%">{{ 'area_rate_period_hours' | i18n }}</th>
+										<th width="10%">{{ 'area_fee' | i18n }}</th>
+										<th width="10%">{{ 'area_rate_is_day_or_night' | i18n }}</th>
+										<th width="5%">{{ 'area_rate_is_holidays' | i18n }}</th>
+										<th width="25%">{{ 'area_rate_note' | i18n }}</th>
+										<th width="10%"></th>
+									</tr>
+						  			<tbody class="animate-repeat" ng-repeat="r in parkingStructure.validityPeriod">
+									<tr>
+										<!-- <td>
+								   			{{ (r.from | date:'dd/MM') }}
+								   		</td>
+								   		<td>
+											{{ (r.to | date:'dd/MM') }}
+										</td> -->
+										<td>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+										</td>
+										<td>
+											<ul class="no-margin" ng-repeat="t in getHourSlotsFromArray(r.timeSlot)">
+												<li>{{ t }}</li>
+											</ul>
+										</td>
+										<td>
+											{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}
+										</td>
+										<td>
+											{{ r.dayOrNight }}
+										</td>
+										<td>
+											<span ng-show="r.holiday">{{ 'yes_val_select' | i18n }}</span>
+											<span ng-show="!r.holiday">{{ 'no_val_select' | i18n }}</span>
+										</td>
+										<td>
+											{{ r.note }}
+										</td>
+										<td align="center">
+											<!-- <button type="button" class="btn btn-default btn-xs" ng-click="editRatePeriod(r)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_edit' | i18n }}" title="{{ 'area_rate_edit' | i18n }}" ><i class="glyphicon glyphicon-pencil"></i></button> -->
+											<button type="button" class="btn btn-default btn-xs" ng-click="deleteRatePeriod(r)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_canc' | i18n }}" title="{{ 'area_rate_canc' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
+										</td>
+									</tr>
+									</tbody>
+									<tr ng-show="parkingStructure.validityPeriod.length > 0"><td colspan="8"><hr></td></tr>
+									<tr ng-show="parkingStructure.validityPeriod.length > 0">
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td align="right">
+											<button type="button" class="btn btn-default" ng-click="showPForm(area)" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
+											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm(area)" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+										</td>
+									</tr>
+								</table>
+								<table width="100%" ng-show="parkingStructure.validityPeriod.length == 0 || parkingStructure.validityPeriod == null">
+									<tr>
+										<td colspan="7">{{ 'no_value_inserted_period' | i18n }}</td>
+										<td align="right">
+											<button type="button" class="btn btn-default" ng-click="showPForm(parkingStructure)" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
+											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm(parkingStructure)" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+										</td>
+									</tr>
+								</table>
+							</div>
 					   	</div>
-                        <label for="time">{{ 'ps_time' | i18n }}</label>
-                        <div class="panel panel-default subpanel" width="95%">
-					   	<div class="form-group" ng-show="psconf.ps_timeSlot.visible">
-					    	<table width="100%" ng-show="openingPeriods != null && openingPeriods.length > 0">
-					    		<tbody class="animate-repeat" ng-repeat="p in openingPeriods">
-					    			<tr>
-					    				<td width="6%"><strong>{{ 'ps_opening_from' | i18n }}: </strong></td>
-					    				<td width="39%">{{ p.from }}</td>
-					    				<td width="5%" align="center"><strong>{{ 'ps_opening_to' | i18n }}: </strong></td>
-					    				<td width="40%">{{ p.to }}</td>
-					    				<td width="10%" align="right">
-					    					<button type="button" class="btn btn-default" ng-click="deleteOpeningPeriod(p)">{{ 'ps_time_period_delete' | i18n }}</button>
-					    				</td>
-					    			</tr>
-					    		</tbody>
-					    		<tr>
-					    			<td colspan="5"><hr /></td>
-					    		</tr>
-					    		<tr ng-show="isErrorsPeriodTimeOverlap()">
-					    			<td colspan="5">
-					    				<div class="field-error">{{ 'ps_period_overlap_error' | i18n }}</div>
-					    			</td>
-					    		</tr>
-					    		<tr ng-show="isErrorsPeriodTimeFromTo()">
-					    			<td colspan="5">
-					    				<div class="field-error">{{ 'ps_period_from_to_error' | i18n }}</div>
-					    			</td>
-					    		</tr>
-					    	</table>
-					    	<table width="100%">
-					    		<tr>
-					    			<td width="6%">
-					    				<strong>{{ 'ps_opening_from' | i18n }}: </strong>
-					    			</td>
-					    			<td width="39%">
-					    				<timepicker ng-model="startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
-					    			</td>
-					    			<td width="5%" align="center">
-					    				<strong>{{ 'ps_opening_to' | i18n }}: </strong>
-					    			</td>
-					    			<td width="40%">
-					    				<timepicker ng-model="endTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker>
-					    			</td>
-					    			<td width="10%" align="right">
-					    				<button type="button" class="btn btn-success" ng-click="addOpeningPeriod(startTime, endTime)" alt="{{ 'add_time_period' | i18n }}" title="{{ 'add_time_period' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button>
-					    			</td>
-					    		</tr>
-					    	</table>
-					   	</div>
-					   	</div>
+					   	
+					   	
+<!-- 					   	<div class="form-group" ng-show="psconf.ps_fee.visible"> -->
+<!-- 					    	<label for="fee">{{ 'ps_fee' | i18n }}</label> -->
+<!-- 					    	<table width="100%"> -->
+<!-- 					    		<tr> -->
+<!-- 					    			<td width="6%"><strong>{{ 'ps_fee_det_val' | i18n }}: </strong></td> -->
+<!-- 					    			<td width="39%"> -->
+<!-- 					    				<input id="feeVal" type="text" class="form-control" name="pFeeVal" ng-model="parkingStructure.fee_val" ng-required="psconf.ps_fee.required && parkingStructure.fee_note == null" placeholder="{{ 'ps_fee_placeholder' | i18n }}" ng-pattern="decimalNumbers" > -->
+<!-- 					   					<div class="field-error" ng-show="!isInit && form.pFeeVal.$error.pattern">{{ 'parkingstructure_fee_err_pattern' | i18n }}</div> -->
+<!-- 					    			</td> -->
+<!-- 					    			<td width="5%" align="center"><strong>{{ 'ps_fee_det_note' | i18n }}: </strong></td> -->
+<!-- 					    			<td width="50%"> -->
+<!-- 					    				<input id="feeNote" type="text" class="form-control" name="pFeeNote" ng-model="parkingStructure.fee_note" ng-required="psconf.ps_fee.required && parkingStructure.fee_val == null" placeholder="{{ 'ps_fee_note_placeholder' | i18n }}" > -->
+<!-- 					    			</td> -->
+<!-- 					    		</tr> -->
+<!-- 					    		<tr ng-show="(!isInit && form.pFeeVal.$error.required) || (!isInit && form.pFeeNote.$error.required)"> -->
+<!-- 					    			<td colspan="4"> -->
+<!-- 					    				<div class="field-error">{{ 'parkingstructure_fee_err_required' | i18n }}</div> -->
+<!-- 					    			</td> -->
+<!-- 					    		</tr> -->
+<!-- 					    	</table> -->
+<!-- 					   	</div> -->
+<!--                         <label for="time">{{ 'ps_time' | i18n }}</label> -->
+<!--                         <div class="panel panel-default subpanel" width="95%"> -->
+<!-- 					   	<div class="form-group" ng-show="psconf.ps_timeSlot.visible"> -->
+<!-- 					    	<table width="100%" ng-show="openingPeriods != null && openingPeriods.length > 0"> -->
+<!-- 					    		<tbody class="animate-repeat" ng-repeat="p in openingPeriods"> -->
+<!-- 					    			<tr> -->
+<!-- 					    				<td width="6%"><strong>{{ 'ps_opening_from' | i18n }}: </strong></td> -->
+<!-- 					    				<td width="39%">{{ p.from }}</td> -->
+<!-- 					    				<td width="5%" align="center"><strong>{{ 'ps_opening_to' | i18n }}: </strong></td> -->
+<!-- 					    				<td width="40%">{{ p.to }}</td> -->
+<!-- 					    				<td width="10%" align="right"> -->
+<!-- 					    					<button type="button" class="btn btn-default" ng-click="deleteOpeningPeriod(p)">{{ 'ps_time_period_delete' | i18n }}</button> -->
+<!-- 					    				</td> -->
+<!-- 					    			</tr> -->
+<!-- 					    		</tbody> -->
+<!-- 					    		<tr> -->
+<!-- 					    			<td colspan="5"><hr /></td> -->
+<!-- 					    		</tr> -->
+<!-- 					    		<tr ng-show="isErrorsPeriodTimeOverlap()"> -->
+<!-- 					    			<td colspan="5"> -->
+<!-- 					    				<div class="field-error">{{ 'ps_period_overlap_error' | i18n }}</div> -->
+<!-- 					    			</td> -->
+<!-- 					    		</tr> -->
+<!-- 					    		<tr ng-show="isErrorsPeriodTimeFromTo()"> -->
+<!-- 					    			<td colspan="5"> -->
+<!-- 					    				<div class="field-error">{{ 'ps_period_from_to_error' | i18n }}</div> -->
+<!-- 					    			</td> -->
+<!-- 					    		</tr> -->
+<!-- 					    	</table> -->
+<!-- 					    	<table width="100%"> -->
+<!-- 					    		<tr> -->
+<!-- 					    			<td width="6%"> -->
+<!-- 					    				<strong>{{ 'ps_opening_from' | i18n }}: </strong> -->
+<!-- 					    			</td> -->
+<!-- 					    			<td width="39%"> -->
+<!-- 					    				<timepicker ng-model="startTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker> -->
+<!-- 					    			</td> -->
+<!-- 					    			<td width="5%" align="center"> -->
+<!-- 					    				<strong>{{ 'ps_opening_to' | i18n }}: </strong> -->
+<!-- 					    			</td> -->
+<!-- 					    			<td width="40%"> -->
+<!-- 					    				<timepicker ng-model="endTime" hour-step="hstep" minute-step="mstep" show-meridian="ismeridian"></timepicker> -->
+<!-- 					    			</td> -->
+<!-- 					    			<td width="10%" align="right"> -->
+<!-- 					    				<button type="button" class="btn btn-success" ng-click="addOpeningPeriod(startTime, endTime)" alt="{{ 'add_time_period' | i18n }}" title="{{ 'add_time_period' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button> -->
+<!-- 					    			</td> -->
+<!-- 					    		</tr> -->
+<!-- 					    	</table> -->
+<!-- 					   	</div> -->
+<!-- 					   	</div> -->
 					   	<div class="form-group" ng-show="psconf.ps_phoneNumber.visible">
 					    	<label for="phone">{{ 'ps_phone' | i18n }}</label>
 					    	<input id="phone" type="text" class="form-control" name="pPhone" ng-model="parkingStructure.phoneNumber" ng-pattern="onlyNumbers" ng-required="psconf.ps_phoneNumber.required" placeholder="{{ 'ps_phone_placeholder' | i18n }}" ><!-- phonePattern -->

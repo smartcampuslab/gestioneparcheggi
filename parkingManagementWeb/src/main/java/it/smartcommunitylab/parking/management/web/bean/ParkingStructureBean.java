@@ -27,10 +27,11 @@ public class ParkingStructureBean {
 	private String streetReference;
 	private String managementMode;
 	private String manager;
-	private String municipality;
+	//private String municipality;
 	private Integer fee_val;
 	private String fee_note;
 	private String timeSlot;
+	private List<RatePeriodBean> validityPeriod;
 	private OpeningTime openingTime;
 	private PointBean geometry;
 	private Integer slotNumber;
@@ -240,16 +241,24 @@ public class ParkingStructureBean {
 		this.manager = manager;
 	}
 
-	public String getMunicipality() {
+	/*public String getMunicipality() {
 		return municipality;
 	}
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
-	}
+	}*/
 
 	public List<String> getZones() {
 		return zones;
+	}
+
+	public List<RatePeriodBean> getValidityPeriod() {
+		return validityPeriod;
+	}
+
+	public void setValidityPeriod(List<RatePeriodBean> validityPeriod) {
+		this.validityPeriod = validityPeriod;
 	}
 
 	public void setZones(List<String> zones) {
@@ -274,8 +283,8 @@ public class ParkingStructureBean {
 		json += "\"profit\":\"" + getProfit() + "\",";
 		json += "\"tickets\":\"" + getTickets() + "\",";
 		json += "\"parkAndRide\":\"" + isParkAndRide() + "\",";
-		json += "\"manager\":\"" + getManager() + "\",";
-		json += "\"municipality\":\"" + getMunicipality() + "\"";
+		json += "\"manager\":\"" + getManager() + "\"";
+		//json += "\"municipality\":\"" + getMunicipality() + "\"";
 		json += "}";
 		return json;
 	}

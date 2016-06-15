@@ -350,19 +350,7 @@ public class DynamicManager {
 		if (area.getStreets() != null) {
 			for (Street temp : area.getStreets()) {
 				if (temp.getId().equals(vb.getId())) {
-//					temp.setSlotNumber(vb.getSlotNumber());
-//					temp.setFreeParkSlotNumber(vb.getFreeParkSlotNumber());
-//					temp.setFreeParkSlotSignNumber(vb.getFreeParkSlotSignNumber());
-//					temp.setUnusuableSlotNumber(vb.getUnusuableSlotNumber());
-//					temp.setHandicappedSlotNumber(vb.getHandicappedSlotNumber());
-//					temp.setStreetReference(vb.getStreetReference());
-//					temp.setTimedParkSlotNumber(vb.getTimedParkSlotNumber());
 //					temp.setSubscritionAllowedPark(vb.isSubscritionAllowedPark());
-//					temp.getGeometry().getPoints().clear();
-//					for (PointBean pb : vb.getGeometry().getPoints()) {
-//						temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
-//					}
-//					temp.setZones(vb.getZoneBeanToZone());
 					// Dynamic data
 					temp.setFreeParkSlotOccupied(vb.getFreeParkSlotOccupied());
 					temp.setFreeParkSlotSignOccupied(vb.getFreeParkSlotSignOccupied());

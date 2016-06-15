@@ -20,7 +20,7 @@ import java.util.List;
 public class BikePointBean {
 	private String id;
 	private String id_app;
-	private String municipality;
+	//private String municipality;
 	private String name;
 	private Integer bikeNumber;
 	private Integer slotNumber;
@@ -84,13 +84,13 @@ public class BikePointBean {
 		this.lastChange = lastChange;
 	}
 	
-	public String getMunicipality() {
+	/*public String getMunicipality() {
 		return municipality;
 	}
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
-	}
+	}*/
 
 	public List<String> getZones() {
 		return zones;
@@ -104,7 +104,7 @@ public class BikePointBean {
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"id_app\":\"" + getId_app() + "\",";
-		json += "\"municipality\":\"" + getMunicipality() + "\",";
+		//json += "\"municipality\":\"" + getMunicipality() + "\",";
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";

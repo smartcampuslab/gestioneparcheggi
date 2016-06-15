@@ -27,7 +27,7 @@ public class Zone {
 	private String type; 		//type of division(geo, green, history, etc)
 	private String note;
 	private String color;
-	private String municipality;
+	//private String municipality;
 	private Point centermap;
 	private Polygon geometry;
 	private boolean geometryFromSubelement;
@@ -121,13 +121,13 @@ public class Zone {
 		this.geometryFromSubelement = geometryFromSubelement;
 	}
 
-	public String getMunicipality() {
+	/*public String getMunicipality() {
 		return municipality;
 	}
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
-	}
+	}*/
 
 	public Point getCentermap() {
 		return centermap;

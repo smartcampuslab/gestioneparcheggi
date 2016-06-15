@@ -211,6 +211,10 @@
     "value": "Holiday",
     "description": "Label per note tariffa e periodo area"
 }, {
+    "key": "area_rate_is_day_or_night",
+    "value": "Day/Night",
+    "description": "Label per giorno notte tariffa e periodo area"
+}, {
     "key": "datepicker_button_today",
     "value": "Today",
     "description": "Testo pulsante oggi in datepicker"

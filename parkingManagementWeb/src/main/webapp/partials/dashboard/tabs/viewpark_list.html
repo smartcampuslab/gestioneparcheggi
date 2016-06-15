@@ -6197,79 +6197,87 @@
 						</td>
 					</tr>
 				</table>
-				<form role="form" name="form">
+				<div class="row" style="height: 200px" ng-show="loadingMatrix">
+					<div style="text-align: center">
+						<img src="imgs/ajax-loader.gif" width="70" height="70" /><br>
+						<h3>{{ 'loading_text' | i18n }}...</h3>
+					</div>
+				</div>
+				<div ng-if="!loadingMatrix">
+					<form role="form" name="form" ng-if="matrixAreaAll.length > 0">
+						<table width="100%">
+							<tr>
+							    <td width="47%">
+							    	<div class="form-group">
+										<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
+										<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)">
+										</select>
+										<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)">
+										</select>
+									   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
+									</div>
+							    </td>
+							    <td width="5%"></td>
+							    <td width="48%">
+							    	<div class="form-group">
+										<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
+										<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+										</select>
+										<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
+										</select>
+										<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
+									</div>
+							    </td>
+							</tr>
+						</table>
+					</form>
+					<div class="detailstablewrapper" ng-if="matrixAreaProf.length > 0">
+						<label>{{ 'profit_history_table_label' | i18n }}</label>
+						<table width="100%" class="table table-bordered">
+							<tbody class="animate-repeat" ng-repeat="rows in matrixAreaProf track by $index">
+							<tr ng-if="$index == 0">
+								<th ng-repeat="col in rows track by $index">
+									<span>{{ col }}</span>
+								</th>
+							</tr>
+							<tr ng-if="$index != 0">
+								<td ng-repeat="col in rows track by $index">
+									<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
+									<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+									<span ng-if="$index != 0 && col==-1">/</span>
+								</td>
+							</tr>
+						</table>
+					</div>
+					<div class="detailstablewrapper" ng-if="matrixAreaTick.length > 0">
+						<label>{{ 'tickets_history_table_label' | i18n }}</label>
+						<table width="100%" class="table table-bordered">
+							<tbody class="animate-repeat" ng-repeat="rows in matrixAreaTick track by $index">
+							<tr ng-if="$index == 0">
+								<th ng-repeat="col in rows track by $index">
+									<span>{{ col }}</span>
+								</th>
+							</tr>
+							<tr ng-if="$index != 0">
+								<td ng-repeat="col in rows track by $index">
+									<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
+									<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
+									<span ng-if="$index != 0 && col==-1">/</span>
+								</td>
+							</tr>
+						</table>
+					</div>
 					<table width="100%">
 						<tr>
-						    <td width="47%">
-						    	<div class="form-group">
-									<label for="vertical_comp">{{ 'vertical_compare_values' | i18n }}</label>
-									<select ng-if="isActiveItalian()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)">
-									</select>
-									<select ng-if="isActiveEnglish()" id="vertical_comp" name="verticalCompVal" class="form-control" ng-options="a.cod as a.eng_val for a in filteredVCmpVal" ng-model="verticalCompData" required ng-change="updateOrizzSelect(verticalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)">
-									</select>
-								   	<div class="alert alert-danger" ng-show="!isCompInit && form.verticalCompVal.$error.required">{{ 'vertical_data_select_err_required' | i18n }}</div>
-								</div>
-						    </td>
-						    <td width="5%"></td>
-						    <td width="48%">
-						    	<div class="form-group">
-									<label for="orizontal_comp">{{ 'orizontal_compare_values' | i18n }}</label>
-									<select ng-if="isActiveItalian()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
-									</select>
-									<select ng-if="isActiveEnglish()" id="orizontal_comp" name="orizontalCompVal" class="form-control" ng-options="f.cod as f.eng_val for f in filteredOCmpVal" ng-model="orizontalCompData" required ng-change="updateVerticalSelect(orizontalCompData);updateReportCompare(form, verticalCompData, orizontalCompData, 4, 2)"> <!-- ng-disabled="lockOrizontalValSelect" -->
-									</select>
-									<div class="alert alert-danger" ng-show="!isCompInit && form.orizontalCompVal.$error.required">{{ 'orizontal_data_select_err_required' | i18n }}</div>
-								</div>
-						    </td>
-						</tr>
-					</table>
-				</form>
-				<div class="detailstablewrapper">
-					<label>{{ 'profit_history_table_label' | i18n }}</label>
-					<table width="100%" class="table table-bordered">
-						<tbody class="animate-repeat" ng-repeat="rows in matrixAreaProf track by $index">
-						<tr ng-if="$index == 0">
-							<th ng-repeat="col in rows track by $index">
-								<span>{{ col }}</span>
-							</th>
-						</tr>
-						<tr ng-if="$index != 0">
-							<td ng-repeat="col in rows track by $index">
-								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
-								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
-								<span ng-if="$index != 0 && col==-1">/</span>
+							<td width="33%"></td>
+							<td width="34%"></td>
+							<td width="33%" align="right">
+								<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
+								<a href class="btn btn-success" target="_blank" ng-click="getProfitAreaHistoryCsv(aDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 							</td>
 						</tr>
 					</table>
 				</div>
-				<div class="detailstablewrapper">
-					<label>{{ 'tickets_history_table_label' | i18n }}</label>
-					<table width="100%" class="table table-bordered">
-						<tbody class="animate-repeat" ng-repeat="rows in matrixAreaTick track by $index">
-						<tr ng-if="$index == 0">
-							<th ng-repeat="col in rows track by $index">
-								<span>{{ col }}</span>
-							</th>
-						</tr>
-						<tr ng-if="$index != 0">
-							<td ng-repeat="col in rows track by $index">
-								<span ng-if="$index == 0"><strong>{{ col }}</strong></span>
-								<span ng-if="$index != 0 && col!=-1">{{ col }}</span>
-								<span ng-if="$index != 0 && col==-1">/</span>
-							</td>
-						</tr>
-					</table>
-				</div>
-				<table width="100%">
-					<tr>
-						<td width="33%"></td>
-						<td width="34%"></td>
-						<td width="33%" align="right">
-							<button type="button" class="btn btn-primary btn" ng-show="addReportFunctions" ng-click="launchReport('history')">{{ 'report_btn_automate' | i18n }}</button>
-							<a href class="btn btn-success" target="_blank" ng-click="getProfitAreaHistoryCsv(aDetails)"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
-						</td>
-					</tr>
-				</table>
 			</div>        
 		</div>
 		<div ng-if="timeCostOpened">

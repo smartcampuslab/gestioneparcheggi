@@ -32,18 +32,20 @@ public class ParkingStructure {
 	private String managementMode;
 	private String fee_note;
 	private String manager;		// used to specify if the park is a municipality park or a private manager park
-	private String municipality;
+	//private String municipality;
 	private Integer fee_val;	// in eurocent / hour
 	private String timeSlot;	// used in csv creation for openingTime string value
 	private OpeningTime openingTime;
+	private List<RatePeriod> validityPeriod;
 	private Point geometry;
 	
 	private Integer slotNumber;		
 	private Integer payingSlotNumber;
-	private Integer payingSlotOccupied;		// on Paying
 	private Integer handicappedSlotNumber;
-	private Integer handicappedSlotOccupied;
 	private Integer unusuableSlotNumber;
+	// dynamic data
+	private Integer payingSlotOccupied;		// on Paying
+	private Integer handicappedSlotOccupied;
 	
 	private List<PaymentMode> paymentMode;
 	private String phoneNumber;
@@ -220,12 +222,20 @@ public class ParkingStructure {
 		this.openingTime = openingTime;
 	}
 
-	public String getMunicipality() {
-		return municipality;
+//	public String getMunicipality() {
+//		return municipality;
+//	}
+//
+//	public void setMunicipality(String municipality) {
+//		this.municipality = municipality;
+//	}
+
+	public List<RatePeriod> getValidityPeriod() {
+		return validityPeriod;
 	}
 
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
+	public void setValidityPeriod(List<RatePeriod> validityPeriod) {
+		this.validityPeriod = validityPeriod;
 	}
 
 	public List<String> getZones() {
@@ -244,7 +254,7 @@ public class ParkingStructure {
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"fee_note\":\"" + getFee_note() + "\",";
 		json += "\"manager\":\"" + getManager() + "\",";
-		json += "\"municipality\":\"" + getMunicipality() + "\",";
+//		json += "\"municipality\":\"" + getMunicipality() + "\",";
 		json += "\"fee_val\":" + getFee_val() + ",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";

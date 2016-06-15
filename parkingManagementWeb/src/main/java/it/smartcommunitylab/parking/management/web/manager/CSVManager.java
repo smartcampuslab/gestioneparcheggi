@@ -192,7 +192,7 @@ public class CSVManager {
 				//writer.append(a.getFee() + "");
 				//writer.append(CSV_SEPARATOR);
 				//writer.append(a.getTimeSlot());
-				writer.append(a.feePeriodsSummary());		// used to get a string that is the summary of the fee period data
+				writer.append((a.getValidityPeriod()!= null && !a.getValidityPeriod().isEmpty()) ? a.feePeriodsSummary() : "");		// used to get a string that is the summary of the fee period data
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getSmsCode());
 				writer.append(CSV_SEPARATOR);
@@ -294,7 +294,7 @@ public class CSVManager {
 			for (ParkingMeter p : parkingmeters) {
 				writer.append(p.getCode() + "");
 				writer.append(CSV_SEPARATOR);
-				writer.append(cleanNewLineValue(p.getNote()));
+				writer.append((p.getNote() != null) ? cleanNewLineValue(p.getNote()) : "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(p.getStatus() + "");
 				writer.append(CSV_NEWLINE);
@@ -452,7 +452,7 @@ public class CSVManager {
 			for(OccupancyRateArea a : areas){
 				writer.append(cleanCommaValue(a.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(a.getFee() + "");	// to convert to area name
+				writer.append((a.getValidityPeriod()!= null && !a.getValidityPeriod().isEmpty()) ? a.feePeriodsSummary() : "");		// used to get a string that is the summary of the fee period data
 				writer.append(CSV_SEPARATOR);
 				writer.append((a.getOccupancy() != -1) ? (a.getOccupancy() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
@@ -795,7 +795,8 @@ public class CSVManager {
 			for(ProfitRateArea a : areas){
 				writer.append(cleanCommaValue(a.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(a.getFee() + "");	// to convert to area name
+				//writer.append(a.getFee() + "");	// to convert to area name
+				writer.append((a.getValidityPeriod()!= null && !a.getValidityPeriod().isEmpty()) ? a.feePeriodsSummary() : "");		// used to get a string that is the summary of the fee period data
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -990,13 +991,14 @@ public class CSVManager {
 			for(TimeCostRateArea a : areas){
 				writer.append(cleanCommaValue(a.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(a.getFee() + "");	// to convert to area name
+				//writer.append(a.getFee() + "");	// to convert to area name
+				writer.append((a.getValidityPeriod()!= null && !a.getValidityPeriod().isEmpty()) ? a.feePeriodsSummary() : "");		// used to get a string that is the summary of the fee period data
 				writer.append(CSV_SEPARATOR);
-				writer.append((a.getMinExtratime() != -1) ? (a.getMinExtratime() + "") : "n.p.");
+				writer.append((a.getMinExtratime() != null && a.getMinExtratime() != -1) ? (a.getMinExtratime() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
-				writer.append((a.getMaxExtratime() != -1) ? (a.getMaxExtratime() + "") : "n.p.");
+				writer.append((a.getMaxExtratime() != null && a.getMaxExtratime() != -1) ? (a.getMaxExtratime() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
-				writer.append((a.getOccupancy() != -1) ? (a.getOccupancy() + "") : "n.p.");
+				writer.append((a.getOccupancy() != null && a.getOccupancy() != -1) ? (a.getOccupancy() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -1164,7 +1166,7 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the area occupation
-	public String create_occupancy_file_history_area(OccupancyRateArea area, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+	public String create_occupancy_file_history_area(OccupancyRateArea area, String[][]matrix, String path, String ratePeriods) throws FileNotFoundException, UnsupportedEncodingException{
 		String name = FILE_NAME + "HistorycalOccupancyArea.csv";
 		String long_name = path + "/" + name;
 		try {
@@ -1180,7 +1182,8 @@ public class CSVManager {
 							
 			writer.append(cleanCommaValue(area.getName()));
 			writer.append(CSV_SEPARATOR);
-			writer.append(area.getFee() + " euro/ora");
+			//writer.append(area.getFee() + " euro/ora");
+			writer.append(ratePeriods);		// used to get a string that is the summary of the fee period data
 			writer.append(CSV_SEPARATOR);
 			writer.append(area.getSlotNumber() + "");
 			writer.append(CSV_NEWLINE);
@@ -1572,7 +1575,7 @@ public class CSVManager {
 	}	
 	
 	// Method used to create the csv file for the zone profit
-	public String create_profit_file_history_area(ProfitRateArea area, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+	public String create_profit_file_history_area(ProfitRateArea area, String[][]matrix, String path, String ratePeriods) throws FileNotFoundException, UnsupportedEncodingException{
 		String name = FILE_NAME + "HistorycalProfitArea.csv";
 		String long_name = path + "/" + name;
 		String[][] matrixProfit = null;
@@ -1593,7 +1596,8 @@ public class CSVManager {
 								
 				writer.append(cleanCommaValue(area.getName()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(area.getFee() + " euro/ora");
+				//writer.append(area.getFee() + " euro/ora");
+				writer.append(ratePeriods);
 				writer.append(CSV_SEPARATOR);
 				writer.append(area.getSlotNumber() + "");
 				writer.append(CSV_NEWLINE);
@@ -1878,7 +1882,7 @@ public class CSVManager {
 	}	
 	
 	// Method used to create the csv file for the street occupation
-	public String create_timecost_file_history_area(OccupancyRateArea area, String[][]matrix, String path) throws FileNotFoundException, UnsupportedEncodingException{
+	public String create_timecost_file_history_area(OccupancyRateArea area, String[][]matrix, String path, String ratePeriods) throws FileNotFoundException, UnsupportedEncodingException{
 		String name = FILE_NAME + "HistorycalTimeCostArea.csv";
 		String long_name = path + "/" + name;
 		try {
@@ -1894,7 +1898,8 @@ public class CSVManager {
 										
 			writer.append(cleanCommaValue(area.getName()));
 			writer.append(CSV_SEPARATOR);
-			writer.append(area.getFee() + " euro/ora");
+			//writer.append(area.getFee() + " euro/ora");
+			writer.append(ratePeriods);
 			writer.append(CSV_SEPARATOR);
 			writer.append(area.getSlotNumber() + "");
 			writer.append(CSV_NEWLINE);

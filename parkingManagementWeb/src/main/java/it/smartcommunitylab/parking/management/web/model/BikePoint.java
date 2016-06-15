@@ -23,7 +23,7 @@ public class BikePoint {
 
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
-	private String municipality;
+	//private String municipality;
 	private String name;
 	private Integer bikeNumber;
 	private Integer slotNumber;
@@ -87,13 +87,13 @@ public class BikePoint {
 		this.lastChange = lastChange;
 	}
 	
-	public String getMunicipality() {
+	/*public String getMunicipality() {
 		return municipality;
 	}
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
-	}
+	}*/
 
 	public List<String> getZones() {
 		return zones;
@@ -111,7 +111,7 @@ public class BikePoint {
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
 		json += "\"bikeNumber\":\"" + getBikeNumber() + "\",";
-		json += "\"municipality\":\"" + getMunicipality() + "\",";
+		//json += "\"municipality\":\"" + getMunicipality() + "\",";
 		json += "\"lastChange\":\"" + getLastChange() + "\"";
 		json += "}";
 		return json;

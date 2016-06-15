@@ -93,9 +93,9 @@ public class StorageManager {
 			area.getValidityPeriod().add(
 					ModelConverter.convert(ratePeriod, RatePeriod.class));
 		}
-		if(a.getMunicipality() != null){
+		/*if(a.getMunicipality() != null){
 			area.setMunicipality(a.getMunicipality());
-		}
+		}*/
 		if (area.getGeometry() != null) {
 			area.getGeometry().clear();
 		} else {
@@ -124,7 +124,7 @@ public class StorageManager {
 		return result;
 	}
 	
-	public List<RateAreaBean> getAllArea(String appId, String municipality) {
+	/*public List<RateAreaBean> getAllArea(String appId, String municipality) {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
 		//logger.error(String.format("Area app id: %s", appId));
 		for (RateArea a : mongodb.findAll(RateArea.class)) {
@@ -143,7 +143,7 @@ public class StorageManager {
 			}
 		}
 		return result;
-	}	
+	}	*/
 	
 	public RateAreaBean getAreaById(String areaId, String appId) {
 		RateArea a = mongodb.findById(areaId, RateArea.class);
@@ -208,7 +208,8 @@ public class StorageManager {
 	public List<ParkingMeterBean> getAllParkingMeters(String appId, String municipality) {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 
-		for (RateAreaBean temp : getAllArea(appId, municipality)) {
+		//for (RateAreaBean temp : getAllArea(appId, municipality)) {
+		for (RateAreaBean temp : getAllArea(appId)) {
 			if(temp != null && temp.getId_app().compareTo(appId) == 0){
 				result.addAll(getAllParkingMeters(temp, appId));
 			}
@@ -344,7 +345,8 @@ public class StorageManager {
 	public List<StreetBean> getAllStreets(String appId, String municipality) {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		//logger.error("I am in GET ALL STREETS");
-		for (RateAreaBean temp : getAllArea(appId, municipality)) {
+		//for (RateAreaBean temp : getAllArea(appId, municipality)) {
+		for (RateAreaBean temp : getAllArea(appId)) {	
 			if(temp != null && appId.compareTo("all") == 0){
 				result.addAll(getAllStreets(temp, "all"));
 			} else if(temp != null && temp.getId_app().compareTo(appId) == 0){
@@ -608,7 +610,7 @@ public class StorageManager {
 		bici.setName(pb.getName());
 		bici.setSlotNumber(pb.getSlotNumber());
 		bici.setBikeNumber(pb.getBikeNumber());
-		bici.setMunicipality(pb.getMunicipality());
+		//bici.setMunicipality(pb.getMunicipality());
 		bici.getGeometry().setLat(pb.getGeometry().getLat());
 		bici.getGeometry().setLng(pb.getGeometry().getLng());
 		if(pb.getZones() != null)bici.setZones(pb.getZones());
@@ -674,7 +676,7 @@ public class StorageManager {
 		return result;
 	}
 	
-	public List<BikePointBean> getAllBikePoints(String appId, String municipality) {
+	/*public List<BikePointBean> getAllBikePoints(String appId, String municipality) {
 		List<BikePointBean> result = new ArrayList<BikePointBean>();
 		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
 			if(bp != null && appId.compareTo("all") == 0){
@@ -693,7 +695,7 @@ public class StorageManager {
 			}
 		}
 		return result;
-	}	
+	}*/	
 	
 	/**
 	 * Method getBikePointsByName: return a list of BikePointBean having a specific name
@@ -772,7 +774,7 @@ public class StorageManager {
 		return result;
 	}
 	
-	public List<ParkingStructureBean> getAllParkingStructure(String appId, String municipality) {
+	/*public List<ParkingStructureBean> getAllParkingStructure(String appId, String municipality) {
 		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
 		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
 			if(entity != null && appId.compareTo("all") == 0){
@@ -790,7 +792,7 @@ public class StorageManager {
 			}
 		}
 		return result;
-	}
+	}*/
 	
 	public ParkingStructureBean findParkingStructure(String id) throws NotFoundException {
 		ParkingStructure entity = findById(id,ParkingStructure.class);
@@ -827,7 +829,7 @@ public class StorageManager {
 		entity.setName(entityBean.getName());
 		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean.getPaymentMode()));
 		entity.setManager(entityBean.getManager());
-		entity.setMunicipality(entityBean.getMunicipality());
+		//entity.setMunicipality(entityBean.getMunicipality());
 		entity.setPhoneNumber(entityBean.getPhoneNumber());
 		entity.setSlotNumber(entityBean.getSlotNumber());
 		entity.setPayingSlotNumber(entityBean.getPayingSlotNumber());
@@ -836,6 +838,19 @@ public class StorageManager {
 		entity.setStreetReference(entityBean.getStreetReference());
 		entity.setTimeSlot(entityBean.getTimeSlot());
 		entity.setOpeningTime(entityBean.getOpeningTime());
+		if(entityBean.getValidityPeriod() != null){
+			if(entity.getValidityPeriod() != null){
+				entity.getValidityPeriod().clear();
+			} else {
+				entity.setValidityPeriod(new ArrayList<RatePeriod>());
+			}
+		} else {
+			entity.setValidityPeriod(new ArrayList<RatePeriod>());
+		}
+		for (RatePeriodBean ratePeriod : entityBean.getValidityPeriod()) {
+			entity.getValidityPeriod().add(
+					ModelConverter.convert(ratePeriod, RatePeriod.class));
+		}
 
 		entity.getGeometry().setLat(entityBean.getGeometry().getLat());
 		entity.getGeometry().setLng(entityBean.getGeometry().getLng());
@@ -867,7 +882,7 @@ public class StorageManager {
 		return result;
 	}
 	
-	public List<ZoneBean> getAllZone(String appId, String municipality) {
+	/*public List<ZoneBean> getAllZone(String appId, String municipality) {
 		List<ZoneBean> result = new ArrayList<ZoneBean>();
 		for (Zone z : mongodb.findAll(Zone.class)) {
 			if(z != null && appId.compareTo("all") == 0){
@@ -885,7 +900,7 @@ public class StorageManager {
 			}
 		}
 		return result;
-	}
+	}*/
 	
 	/**
 	 * Method getZoneByName: get a list of zone having a specific name
@@ -947,7 +962,7 @@ public class StorageManager {
 		zona.setColor(z.getColor());
 		zona.setType(z.getType());
 		zona.setNote(z.getNote());
-		zona.setMunicipality(z.getMunicipality());
+		//zona.setMunicipality(z.getMunicipality());
 		if(z.getCentermap() != null){
 			if(zona.getCentermap() != null){
 				zona.getCentermap().setLat(z.getCentermap().getLat());

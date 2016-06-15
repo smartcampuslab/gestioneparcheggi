@@ -270,8 +270,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 
 }]);
 
-pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', 'initializeService', '$timeout', '$q', 
-                          function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, initializeService, $timeout, $q, $location, $filter) {
+pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', 'initializeService', 'utilsService', '$timeout', '$q', 
+                          function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, initializeService, utilsService, $timeout, $q, $location, $filter) {
 
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection
 	$scope.showLogs = false;
@@ -9370,9 +9370,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    });	
 	};
 	
+	// Method getAreaSupplyCsv: used to crate a report csv file from the areaWS list (supply data)
 	$scope.getAreaSupplyCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.areaWS);
+		//var value = JSON.stringify($scope.areaWS);	// TODO: use the list of object instead of string data
+		var value = utilsService.correctAreaObjectForWS($scope.areaWS);
 		
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/area/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
@@ -9436,9 +9438,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    });	
 	};
 	
+	// Method getAreaOccupancyCsv: used to crate a report csv file from the areaWS list (occupancy data)
 	$scope.getAreaOccupancyCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.areaWS);
+		//var value = JSON.stringify($scope.areaWS);
+		var value = utilsService.correctAreaOccObjectForWS($scope.areaWS);
+		
 	    console.log("Area list data : " + value);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/area/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
@@ -9514,9 +9519,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    });	
 	};
 	
+	// Method getAreaProfitCsv: used to get the csv file of the report of area profit
 	$scope.getAreaProfitCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.profitAreaList);
+		//var value = JSON.stringify($scope.profitAreaList);
+		var value = utilsService.correctAreaProfitObjectForWS($scope.profitAreaList);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/area/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
@@ -9577,9 +9584,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    });	
 	};
 	
+	// Method getAreaTimeCostCsv: used to get the csv file of the report of area time cost
 	$scope.getAreaTimeCostCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.areaWS);
+		//var value = JSON.stringify($scope.areaWS);
+		var value = utilsService.correctAreaTimeCostObjectForWS($scope.areaWS);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/area/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
@@ -9911,7 +9920,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		//var appId = sharedDataService.getConfAppId();
 		var params = {
 				darea_name: dArea.name,
-				darea_fee: dArea.fee,
+				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
 				darea_totalslot: dArea.slotNumber
 		};
 		var value = JSON.stringify($scope.matrixAreaOcc);
@@ -10116,6 +10125,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getHistorycalProfitAreaFromDb: used to retrieve the historycal area profit data from the db
 	$scope.getHistorycalProfitAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
 		// period params
+		$scope.loadingMatrix = true;
 		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = $scope.chekIfAllRange(month, 1);
 		var weekRange = $scope.chekIfAllRange(weekday, 2);
@@ -10157,6 +10167,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					}
 				}
 			}
+			$scope.loadingMatrix = false;
 			if($scope.showLogs)console.log("area profit history retrieved from db: " + JSON.stringify(result));
 		});
 	};
@@ -10166,7 +10177,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'POST';
 		var params = {
 				darea_name: dArea.name,
-				darea_fee: dArea.fee,
+				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
 				darea_totalslot: dArea.slotNumber
 		};
 		var value = JSON.stringify($scope.matrixPAreaAll);
@@ -10566,7 +10577,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var method = 'POST';
 		var params = {
 				darea_name: dArea.name,
-				darea_fee: dArea.fee,
+				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
 				darea_totalslot: dArea.slotNumber
 		};
 		var value = JSON.stringify($scope.matrixAreaTimeCost);

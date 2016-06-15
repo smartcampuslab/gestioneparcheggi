@@ -2,13 +2,17 @@ package it.smartcommunitylab.parking.management.web.model;
 
 import java.util.List;
 
+
+
 public class RatePeriod {
+	
 	private String from;
 	private String to;
 	private List<String> weekDays;
 	private String timeSlot;
 	private Integer rateValue;
 	private String note;
+	private String dayOrNight;
 	private boolean holiday;
 
 	public String getFrom() {
@@ -65,6 +69,14 @@ public class RatePeriod {
 
 	public void setHoliday(boolean holiday) {
 		this.holiday = holiday;
+	}
+
+	public String getDayOrNight() {
+		return dayOrNight;
+	}
+
+	public void setDayOrNight(String dayOrNight) {
+		this.dayOrNight = dayOrNight;
 	}
 
 }

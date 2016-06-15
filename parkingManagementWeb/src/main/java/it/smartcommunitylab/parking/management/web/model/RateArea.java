@@ -25,20 +25,17 @@ public class RateArea {
 	private String name;
 	//private Float fee;
 	//private String timeSlot;
-	private String smsCode;
 	private List<RatePeriod> validityPeriod;
+	private String smsCode;
 	private String color;
 	private String note;
-	private String municipality;
+	//private String municipality;
 	private List<Polygon> geometry;
 	private Integer slotNumber;	// used in supply csv creation
 
 	private List<Street> streets;
 	private List<ParkingMeter> parkingMeters;
 	private List<String> zones;	// id of the related zones
-	
-	private final String DATA_SEPARATOR = " / ";
-	private final String PERIOD_SEPARATOR = " ; ";
 
 	public String getId() {
 		return id;
@@ -136,13 +133,13 @@ public class RateArea {
 		this.slotNumber = slotNumber;
 	}
 
-	public String getMunicipality() {
-		return municipality;
-	}
-
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
-	}
+//	public String getMunicipality() {
+//		return municipality;
+//	}
+//
+//	public void setMunicipality(String municipality) {
+//		this.municipality = municipality;
+//	}
 
 	public List<String> getZones() {
 		return zones;
@@ -161,14 +158,27 @@ public class RateArea {
 	}
 	
 	public String feePeriodsSummary(){
+		String DATA_SEPARATOR = " / ";
+		String PERIOD_SEPARATOR = " // ";
 		String pSumm = "";
 		for(int i = 0; i < this.validityPeriod.size(); i++){
-			pSumm = validityPeriod.get(i).getRateValue() + "€/h"
-					+ DATA_SEPARATOR + validityPeriod.get(i).getFrom() 
-					+ "-" + validityPeriod.get(i).getTo()
-					+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
-					+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
-					+ PERIOD_SEPARATOR;
+			float euro_val = validityPeriod.get(i).getRateValue() / 100F;
+			if(validityPeriod.get(i).isHoliday()) {
+				pSumm += String.format("%.2f", euro_val) + " euro/h"
+						+ DATA_SEPARATOR + validityPeriod.get(i).getFrom() 
+						+ "-" + validityPeriod.get(i).getTo()
+						+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
+						+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
+						+ DATA_SEPARATOR + "Festivo"
+						+ PERIOD_SEPARATOR;
+			} else {
+				pSumm += String.format("%.2f", euro_val) + " euro/h"
+						+ DATA_SEPARATOR + validityPeriod.get(i).getFrom() 
+						+ "-" + validityPeriod.get(i).getTo()
+						+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
+						+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
+						+ PERIOD_SEPARATOR;
+			}
 		}
 		return pSumm.substring(0, pSumm.length() - 1);
 	}
@@ -177,25 +187,25 @@ public class RateArea {
 		String stringValues = "";
 		for(String wd : weekDays){
 			if(wd.compareTo("MO") == 0){
-				stringValues += "LU;";
+				stringValues += "LU ";
 			}
 			if(wd.compareTo("TU") == 0){
-				stringValues += "MA;";
+				stringValues += "MA ";
 			}
 			if(wd.compareTo("WE") == 0){
-				stringValues += "ME;";
+				stringValues += "ME ";
 			}
 			if(wd.compareTo("TH") == 0){
-				stringValues += "GI;";
+				stringValues += "GI ";
 			}
 			if(wd.compareTo("FR") == 0){
-				stringValues += "VE;";
+				stringValues += "VE ";
 			}
 			if(wd.compareTo("SA") == 0){
-				stringValues += "SA;";
+				stringValues += "SA ";
 			}
 			if(wd.compareTo("SU") == 0){
-				stringValues += "DO;";
+				stringValues += "DO ";
 			}
 		}
 		stringValues.substring(0, stringValues.length()-1);

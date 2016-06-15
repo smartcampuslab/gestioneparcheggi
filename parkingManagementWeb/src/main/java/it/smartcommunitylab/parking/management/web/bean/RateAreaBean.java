@@ -29,7 +29,7 @@ public class RateAreaBean implements Serializable {
 	private String smsCode;
 	private String color;
 	private String note;
-	private String municipality;
+	//private String municipality;
 	private List<PolygonBean> geometry;
 	private List<String> zones;	//List with the id of the associated zone
 
@@ -105,13 +105,13 @@ public class RateAreaBean implements Serializable {
 		this.note = note;
 	}
 
-	public String getMunicipality() {
+	/*public String getMunicipality() {
 		return municipality;
 	}
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
-	}
+	}*/
 
 	public List<String> getZones() {
 		return zones;

@@ -25,22 +25,23 @@ public class Street {
 	private String streetReference;
 	private Integer slotNumber;
 	private Integer handicappedSlotNumber;	// off_h
-	private Integer handicappedSlotOccupied;
 	private Integer reservedSlotNumber;	// off_rs
-	private Integer reservedSlotOccupied;
 	private Integer timedParkSlotNumber;	// off_do
-	private Integer timedParkSlotOccupied;
 	private Integer freeParkSlotNumber;		// off_ls
-	private Integer freeParkSlotOccupied;
 	private Integer freeParkSlotSignNumber;	// off_lc
-	private Integer freeParkSlotSignOccupied;
 	private Integer paidSlotNumber;			// off_p
-	private Integer paidSlotOccupied;
 	private Integer unusuableSlotNumber;	// off_in
+	// Dynamic data (for occupancy report only - used in DynamicManager)
+	private Integer handicappedSlotOccupied;
+	private Integer reservedSlotOccupied;
+	private Integer timedParkSlotOccupied;
+	private Integer freeParkSlotOccupied;
+	private Integer freeParkSlotSignOccupied;
+	private Integer paidSlotOccupied;
+	
 	private boolean subscritionAllowedPark;
 	private String rateAreaId;				// I need this field in data log
 	private Line geometry;
-	//private List<Zone> zones;
 	private List<String> zones;
 	private List<String> parkingMeters;
 	private Long lastChange;
@@ -217,18 +218,10 @@ public class Street {
 	public void setRateAreaId(String rateAreaId) {
 		this.rateAreaId = rateAreaId;
 	}
-
-//	public List<Zone> getZones() {
-//		return zones;
-//	}
 	
 	public List<String> getZones() {
 		return zones;
 	}
-
-//	public void setZones(List<Zone> zones) {
-//		this.zones = zones;
-//	}
 	
 	public void setZones(List<String> zones) {
 		this.zones = zones;
