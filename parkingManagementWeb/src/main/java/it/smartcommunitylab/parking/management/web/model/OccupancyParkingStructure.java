@@ -15,128 +15,31 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
-import java.util.List;
-
-public class OccupancyParkingStructure {
+public class OccupancyParkingStructure extends ParkingStructure{
 
 	public static enum PaymentMode {
 		CASH, AUTOMATED_TELLER, PREPAID_CARD, PARCOMETRO
 	}
 
-	private String id;
-	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
-	private String name;	
-	private String streetReference;
-	private String managementMode;
-	private String manager;
-	private String fee;
-	private String timeSlot;
-	private Integer slotNumber;
-	private Integer payingSlotNumber;	
-	private Integer payingSlotOccupied;
-	private Integer handicappedSlotNumber;
-	private Integer handicappedSlotOccupied;
-	private Integer unusuableSlotNumber;
-	private String phoneNumber;
-	private Integer occupancyRate;
-	private List<String> zones;
+//	private String id;
+//	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
+//	private String name;	
+//	private String streetReference;
+//	private String managementMode;
+//	private String manager;
+//	private String fee;
+//	private String timeSlot;
+//	private Integer slotNumber;
+//	private Integer payingSlotNumber;	
+//	private Integer handicappedSlotNumber;
+//	private Integer unusuableSlotNumber;
+//	private String phoneNumber;
+//	private List<String> zones;
 	
-	public String getId_app() {
-		return id_app;
-	}
-
-	public void setId_app(String id_app) {
-		this.id_app = id_app;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getStreetReference() {
-		return streetReference;
-	}
-
-	public void setStreetReference(String streetReference) {
-		this.streetReference = streetReference;
-	}
-
-	public String getManagementMode() {
-		return managementMode;
-	}
-
-	public void setManagementMode(String modality) {
-		this.managementMode = modality;
-	}
-
-	public Integer getSlotNumber() {
-		return slotNumber;
-	}
-
-	public void setSlotNumber(Integer slotNumber) {
-		this.slotNumber = slotNumber;
-	}
-
-	public String getTimeSlot() {
-		return timeSlot;
-	}
-
-	public void setTimeSlot(String timeSlot) {
-		this.timeSlot = timeSlot;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getFee() {
-		return fee;
-	}
-
-	public void setFee(String fee) {
-		this.fee = fee;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public Integer getHandicappedSlotNumber() {
-		return handicappedSlotNumber;
-	}
-
-	public Integer getHandicappedSlotOccupied() {
-		return handicappedSlotOccupied;
-	}
-
-	public Integer getUnusuableSlotNumber() {
-		return unusuableSlotNumber;
-	}
-
-	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
-		this.handicappedSlotNumber = handicappedSlotNumber;
-	}
-
-	public void setHandicappedSlotOccupied(Integer handicappedSlotOccupied) {
-		this.handicappedSlotOccupied = handicappedSlotOccupied;
-	}
-
-	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
-		this.unusuableSlotNumber = unusuableSlotNumber;
-	}
-
+	private Integer occupancyRate;
+	private Integer payingSlotOccupied;
+	private Integer handicappedSlotOccupied;	
+	
 	public Integer getOccupancyRate() {
 		return occupancyRate;
 	}
@@ -145,53 +48,20 @@ public class OccupancyParkingStructure {
 		this.occupancyRate = occupancyRate;
 	}
 
-	public String getManager() {
-		return manager;
-	}
-
-	public void setManager(String manager) {
-		this.manager = manager;
-	}
-	
-	public Integer getPayingSlotNumber() {
-		return payingSlotNumber;
-	}
-
 	public Integer getPayingSlotOccupied() {
 		return payingSlotOccupied;
-	}
-
-	public void setPayingSlotNumber(Integer payingSlotNumber) {
-		this.payingSlotNumber = payingSlotNumber;
 	}
 
 	public void setPayingSlotOccupied(Integer payingSlotOccupied) {
 		this.payingSlotOccupied = payingSlotOccupied;
 	}
-
-	public List<String> getZones() {
-		return zones;
+	
+	public Integer getHandicappedSlotOccupied() {
+		return handicappedSlotOccupied;
 	}
 
-	public void setZones(List<String> zones) {
-		this.zones = zones;
-	}
-
-	public String toJSON(){
-		String json = "{";
-		json += "\"id\":\"" + getId() + "\",";
-		json += "\"id_app\":\"" + getId_app() + "\",";
-		json += "\"name\":\"" + getName() + "\",";
-		json += "\"streetReference\":\"" + getStreetReference() + "\",";
-		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
-		json += "\"payingSlotOccupied\":\"" + getPayingSlotOccupied() + "\",";
-		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
-		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
-		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\"";
-		json += "}";
-		return json;
+	public void setHandicappedSlotOccupied(Integer handicappedSlotOccupied) {
+		this.handicappedSlotOccupied = handicappedSlotOccupied;
 	}
 
 }

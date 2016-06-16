@@ -15,7 +15,21 @@
 						      			<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ ps.data.streetReference }}</td>
 						       		</tr>
-									<tr ng-show="psconf.ps_fee.visible">
+						       		<tr ng-show="psconf.ps_fee.visible">	
+										<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
+										<td width="55%">
+											<div ng-repeat="r in ps.data.validityPeriod">
+												<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }} :</span>
+												<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }} :</span>
+												<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
+												<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
+												<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+												<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+												<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+											</div>
+										</td>
+									</tr>
+									<!-- <tr ng-show="psconf.ps_fee.visible">
 						       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
 						       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</td>
 						       			<td ng-if="ps.data.fee_val == null">&nbsp;n.p.</td>
@@ -28,7 +42,7 @@
 						       			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
 						       			<td ng-if="ps.data.openingTime != null"><span ng-repeat="ops in ps.data.openingTime.period">{{ ops.from }} - {{ ops.to }};</span></td>
 						       			<td ng-if="ps.data.openingTime == null">&nbsp;n.p.</td>
-						       		</tr>
+						       		</tr> -->
 						       		<tr ng-show="psconf.ps_phoneNumber.visible">
 						       			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
@@ -173,7 +187,21 @@
 						      			<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ sps.data.streetReference }}</td>
 						       		</tr>
-									<tr ng-show="psconf.ps_fee.visible">
+						       		<tr ng-show="psconf.ps_fee.visible">	
+										<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
+										<td width="55%">
+											<div ng-repeat="r in sps.data.validityPeriod">
+												<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }} :</span>
+												<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }} :</span>
+												<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
+												<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
+												<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+												<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+												<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+											</div>
+										</td>
+									</tr>
+									<!-- <tr ng-show="psconf.ps_fee.visible">
 						       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
 						       			<td ng-if="sps.data.fee_val != null">&nbsp;{{ sps.data.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</td>
 						       			<td ng-if="sps.data.fee_val == null">&nbsp;n.p.</td>
@@ -186,7 +214,7 @@
 						       			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
 						       			<td ng-if="sps.data.openingTime != null"><span ng-repeat="ops in sps.data.openingTime.period">&nbsp;{{ ops.from }} - {{ ops.to }};</span></td>
 						       			<td ng-if="sps.data.openingTime == null">&nbsp;n.p.</td>
-						       		</tr>
+						       		</tr> -->
 						       		<tr ng-show="psconf.ps_phoneNumber.visible">
 						       			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 						       			<td>&nbsp;{{ sps.data.phoneNumber }}</td>
@@ -395,7 +423,21 @@
 							<td class="detailsViewStructSX">{{ 'ps_address' | i18n }}:</td>
 							<td class="detailsViewStructDX">{{ viewParkingStructure.streetReference }}</td>
 						</tr>
-						<tr ng-show="psconf.ps_fee.visible">
+						<tr ng-show="psconf.ps_fee.visible">	
+							<td class="detailsViewStructSX">{{ 'ps_fee_val' | i18n }}:</td>
+							<td class="detailsViewStructDX">
+								<div ng-repeat="r in viewParkingStructure.validityPeriod">
+									<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }}: </span>
+									<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }}: </span>
+									<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
+									<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
+									<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+									<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+								</div>
+							</td>
+						</tr>
+						<!-- <tr ng-show="psconf.ps_fee.visible">
 							<td class="detailsViewStructSX">{{ 'ps_fee_val' | i18n }}:</td>
 							<td ng-if="viewParkingStructure.fee_val != null" class="detailsViewStructDX">{{ viewParkingStructure.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</td>
 							<td ng-if="viewParkingStructure.fee_val == null" class="detailsViewStructDX">n.p.</td>
@@ -407,10 +449,9 @@
 						<tr ng-show="psconf.ps_timeSlot.visible">	
 							<td class="detailsViewStructSX">{{ 'ps_time' | i18n }}:</td>
 							<td class="detailsViewStructDX">
-<!-- 								{{ viewParkingStructure.timeSlot }} -->
 								<span ng-repeat="op in openingPeriods ">{{ op.from }} - {{ op.to }};</span>
 							</td>
-						</tr>
+						</tr> -->
 						<tr ng-show="psconf.ps_phoneNumber.visible">	
 							<td class="detailsViewStructSX">{{ 'ps_phone' | i18n }}:</td>
 							<td class="detailsViewStructDX">{{ viewParkingStructure.phoneNumber }}</td>
@@ -611,9 +652,9 @@
 								    		</td>
 								    		<td>
 												<select id="day_night" type="text" class="form-control" name="pDayNight" ng-model="pr.dayOrNight">
-													<option ng-value="all_mode">Entrambi</option>
-													<option ng-value="day_mode">Giorno</option>
-													<option ng-value="night_mode">Notte</option>
+													<option value="{{ all_mode }}">{{ 'all_day_night_mode' | i18n }}</option>
+													<option value="{{ day_mode }}">{{ 'day_mode' | i18n }}</option>
+													<option value="{{ night_mode }}">{{ 'night_mode' | i18n }}</option>
 												</select>
 								    		</td>
 								    		<td align="center">
@@ -683,7 +724,9 @@
 											{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}
 										</td>
 										<td>
-											{{ r.dayOrNight }}
+											<span ng-show="r.dayOrNight == all_mode">{{ 'all_day_night_mode' | i18n }}</span>
+											<span ng-show="r.dayOrNight == day_mode">{{ 'day_mode' | i18n }}</span>
+											<span ng-show="r.dayOrNight == night_mode">{{ 'night_mode' | i18n }}</span>
 										</td>
 										<td>
 											<span ng-show="r.holiday">{{ 'yes_val_select' | i18n }}</span>
@@ -694,7 +737,7 @@
 										</td>
 										<td align="center">
 											<!-- <button type="button" class="btn btn-default btn-xs" ng-click="editRatePeriod(r)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_edit' | i18n }}" title="{{ 'area_rate_edit' | i18n }}" ><i class="glyphicon glyphicon-pencil"></i></button> -->
-											<button type="button" class="btn btn-default btn-xs" ng-click="deleteRatePeriod(r)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_canc' | i18n }}" title="{{ 'area_rate_canc' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
+											<button type="button" class="btn btn-default btn-xs" ng-click="deleteRatePeriod(r, 1)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_canc' | i18n }}" title="{{ 'area_rate_canc' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
 										</td>
 									</tr>
 									</tbody>
@@ -708,8 +751,8 @@
 										<td></td>
 										<td></td>
 										<td align="right">
-											<button type="button" class="btn btn-default" ng-click="showPForm(area)" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
-											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm(area)" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+											<button type="button" class="btn btn-default" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
+											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
 										</td>
 									</tr>
 								</table>
@@ -717,8 +760,8 @@
 									<tr>
 										<td colspan="7">{{ 'no_value_inserted_period' | i18n }}</td>
 										<td align="right">
-											<button type="button" class="btn btn-default" ng-click="showPForm(parkingStructure)" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
-											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm(parkingStructure)" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+											<button type="button" class="btn btn-default" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
+											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
 										</td>
 									</tr>
 								</table>

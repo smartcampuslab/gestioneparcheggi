@@ -2107,10 +2107,10 @@
 						</th>
 						<th width="30%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 						<th width="5%">{{ 'ps_park_and_ride_title' | i18n }}</th>
-						<th width="10%">{{ 'ps_fee_det_val' | i18n }}</th>
-						<th width="10%">{{ 'ps_time' | i18n }}</th>
-						<th width="10%" class="myCenter" >{{ 'ps_slots' | i18n }}</th>
-						<th width="10%" colspan="2">{{ 'ps_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
+						<th width="18%">{{ 'ps_fee' | i18n }}</th>
+						<!-- <th width="10%">{{ 'ps_time' | i18n }}</th> -->
+						<th width="8%" class="myCenter" >{{ 'ps_slots' | i18n }}</th>
+						<th width="14%" colspan="2">{{ 'ps_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_3==true">
@@ -2125,17 +2125,24 @@
 								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
 								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
 							</td>
-							<td width="10%" align="left">
+							<td width="18%" align="left">
+								<div ng-repeat="r in pstruct.validityPeriod">
+									<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
+									<span>{{ r.timeSlot }}</span>
+									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+								</div>
+							</td>
+							<!-- <td width="10%" align="left">
 								<span ng-if="pstruct.fee_val != null">{{ pstruct.fee_val | euroVal}} {{ 'euro_hour' | i18n }}</span>
 								<span ng-if="pstruct.fee_val == null">n.p.</span>
 							</td>
 							<td width="10%" align="left">
 								<span ng-if="pstruct.openingTime != null" ng-repeat="ops in pstruct.openingTime.period">{{ ops.from }} - {{ ops.to }};</span>
 								<span ng-if="pstruct.openingTime == null">n.p.</span>
-							</td>
-							<td width="10%" align="center">{{pstruct.slotNumber}}</td>
-							<td width="5%" align="left">S: {{pstruct.payingSlotNumber}}</td>
-							<td width="5%" align="left">H: {{pstruct.handicappedSlotNumber}}</td>
+							</td> -->
+							<td width="8%" align="center">{{pstruct.slotNumber}}</td>
+							<td width="7%" align="left">S: {{pstruct.payingSlotNumber}}</td>
+							<td width="7%" align="left">H: {{pstruct.handicappedSlotNumber}}</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 							</td>
@@ -2914,6 +2921,22 @@
 									<td class="detailsListTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
 									<td class="detailsListTableCX"></td>
 									<td class="detailsListTableDX">
+										<div ng-repeat="r in  psDetails.validityPeriod">
+											<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }}: </span>
+											<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }}: </span>
+											<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span></br>
+											<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
+											<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp;</span>
+											<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+										</div>
+									</td>
+								</tr>
+								
+								<!-- <tr ng-show="psconf.ps_slotNumber.visible">
+									<td class="detailsListTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
+									<td class="detailsListTableCX"></td>
+									<td class="detailsListTableDX">
 										<span ng-if="psDetails.fee_val != null">{{ psDetails.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</span>
 										<span ng-if="psDetails.fee_val == null">n.p.</span>
 									</td>
@@ -2930,7 +2953,7 @@
 										<span ng-if="psDetails.openingTime != null" ng-repeat="ops in psDetails.openingTime.period">{{ ops.from }} - {{ ops.to }};</span>
 										<span ng-if="psDetails.openingTime == null">n.p.</span>
 									</td>
-								</tr>
+								</tr> -->
 							</table>
 						</td>
 						<td width="33%" valign="middle">

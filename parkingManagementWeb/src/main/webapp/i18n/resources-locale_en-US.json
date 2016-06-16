@@ -199,6 +199,14 @@
     "value": "Hours",
     "description": "Label per orario validità tariffa area"
 }, {
+    "key": "period_rate_day_title",
+    "value": "Day rate",
+    "description": "Label per modalita tariffa (giorno o notte)"
+}, {
+    "key": "period_rate_night_title",
+    "value": "Night rate",
+    "description": "Label per modalita tariffa (giorno o notte)"
+}, {
     "key": "area_rate_value",
     "value": "Hourly rate",
     "description": "Label per tariffa oraria area"
@@ -214,6 +222,18 @@
     "key": "area_rate_is_day_or_night",
     "value": "Day/Night",
     "description": "Label per giorno notte tariffa e periodo area"
+}, {
+    "key": "all_day_night_mode",
+    "value": "Day and night",
+    "description": "Testo per valore entrambi in modalita tariffa"
+}, {
+    "key": "day_mode",
+    "value": "Day",
+    "description": "Testo per valore giorno in modalita tariffa"
+}, {
+    "key": "night_mode",
+    "value": "Night",
+    "description": "Testo per valore notte in modalita tariffa"
 }, {
     "key": "datepicker_button_today",
     "value": "Today",

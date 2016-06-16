@@ -306,7 +306,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.notValidDateFrom = false;
     $scope.notValidDateTo = false;
     $scope.tmpPr = {};
-    $scope.pr = {};
+    $scope.pr  = {
+	    from: null,
+	    to: null,
+	    weekDays: [false, false, false, false, false, false, false],
+	    timeSlot: null,
+	    rateValue: 0.0,
+	    dayOrNight: $scope.all_mode,
+	    holiday: false,
+	    note: null
+	};
     
     $scope.all_mode = "all mode";
     $scope.day_mode = "day mode";
@@ -315,9 +324,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.clearPr = function(){
     	angular.copy($scope.pr, $scope.tmpPr);	// here I copy the pr object to use in edit and create form validation (object has to be != null)
 	    $scope.pr  = {
-	    	from: null,
-	    	to: null,
-	    	weekDays: [false, false, false, false, false, false, false],
+	    	from: "01/01",
+	    	to: "31/12",
+	    	weekDays: [true, true, true, true, true, true, true],
 	    	timeSlot: null,
 	    	rateValue: 0.0,
 	    	dayOrNight: $scope.all_mode,
@@ -327,12 +336,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
     $scope.clearPr();
     
-    $scope.showPForm = function(area){
+    $scope.showPForm = function(){
     	$scope.clearPr();	// To clean the form input data
     	$scope.isPeriodFormVisible = true;
     };
     
-    $scope.saveAndClosePForm = function(area){
+    $scope.saveAndClosePForm = function(){
     	$scope.isPeriodFormVisible = false;
     	angular.copy($scope.tmpPr, $scope.pr);
     };
@@ -479,10 +488,17 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	return corr;
     };
     
-    $scope.deleteRatePeriod = function(period){
-    	var index = $scope.area.validityPeriod.indexOf(period);
-    	if(index > -1) {
-    		$scope.area.validityPeriod.splice(index, 1);
+    $scope.deleteRatePeriod = function(period, type){
+    	if(type == 0){
+	    	var index = $scope.area.validityPeriod.indexOf(period);
+	    	if(index > -1) {
+	    		$scope.area.validityPeriod.splice(index, 1);
+	    	}
+    	} else {
+    		var index = $scope.parkingStructure.validityPeriod.indexOf(period);
+	    	if(index > -1) {
+	    		$scope.parkingStructure.validityPeriod.splice(index, 1);
+	    	}
     	}
     };
     
@@ -1141,7 +1157,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, allPstructs);
-	    	console.log("ParkingStructures retrieved from db: " + JSON.stringify(result));
+	    	if($scope.showLogDates)console.log("ParkingStructures retrieved from db: " + JSON.stringify(result));
 	    	
 	    	for (var i = 0; i <  allPstructs.length; i++) {
 	    		markers.push(createMarkers(i, allPstructs[i], 2));
@@ -3383,7 +3399,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		}
     };
     
-    $scope.addNewPsMarker = function(event) {
+    $scope.addNewCentresMarker = function(event) {
 		if(!$scope.isEditing){
 			$scope.newCentres = []; 	// I permit only one marker a time
 	        var pos = event.latLng;
@@ -3951,7 +3967,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				fee_eurocent = Math.round(fee_eurocent);
 				
 				// openingPeriod
-				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
+				/*var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
 				if($scope.openingPeriods != null && $scope.openingPeriods.length > 0){
 					var cleanedPeriods = [];
 					for(var i = 0; i < $scope.openingPeriods.length; i++){
@@ -3961,6 +3977,20 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					openingPeriod = { 
 						period: cleanedPeriods	
 					};
+				}*/
+				var validityPeriod = [];
+				for(var i = 0; i < ps.validityPeriod.length; i++){
+					var corrPeriod = {
+						//from: ps.validityPeriod[i].from,
+						//to: ps.validityPeriod[i].to,
+						weekDays: ps.validityPeriod[i].weekDays,
+						timeSlot: ps.validityPeriod[i].timeSlot,
+						rateValue: ps.validityPeriod[i].rateValue,
+						dayOrNight: ps.validityPeriod[i].dayOrNight,
+						holiday: ps.validityPeriod[i].holiday,
+						note: ps.validityPeriod[i].note
+					};
+					validityPeriod.push(corrPeriod);
 				}
 				
 				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber); // + $scope.initIfNull(ps.unusuableSlotNumber);
@@ -3973,10 +4003,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					id_app: ps.id_app,
 					name: ps.name,
 					streetReference: ps.streetReference,
-					fee_val: fee_eurocent,
-					fee_note: ps.fee_note,
-					timeSlot: ps.timeSlot,
-					openingTime: openingPeriod,
+					//fee_val: fee_eurocent,
+					//fee_note: ps.fee_note,
+					//timeSlot: ps.timeSlot,
+					//openingTime: openingPeriod,
+					validityPeriod: validityPeriod,
 					manager: ps.manager,
 					managementMode: ps.managementMode,
 					phoneNumber: ps.phoneNumber,
@@ -4515,10 +4546,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					from: area.validityPeriod[i].from,
 					//to: area.validityPeriod[i].to.getTime(),
 					to: area.validityPeriod[i].to,
-					//weekDays: $scope.getWeekDaysFromArray(area.validityPeriod[i].weekDays, 1),
 					weekDays: area.validityPeriod[i].weekDays,
 					timeSlot: area.validityPeriod[i].timeSlot,
-					//rateValue: parseFloat($scope.correctDecimal(area.validityPeriod[i].rateValue, 1)) * 100,
 					rateValue: area.validityPeriod[i].rateValue,
 					holiday: area.validityPeriod[i].holiday,
 					note: area.validityPeriod[i].note
@@ -4703,7 +4732,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				fee_eurocent = Math.round(fee_eurocent);
 				
 				// openingPeriod
-				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
+				/*var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
 				if($scope.openingPeriods != null && $scope.openingPeriods.length > 0){
 					var cleanedPeriods = [];
 					for(var i = 0; i < $scope.openingPeriods.length; i++){
@@ -4713,6 +4742,18 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					openingPeriod = { 
 						period: cleanedPeriods	
 					};
+				}*/
+				var validityPeriod = [];
+				for(var i = 0; i < ps.validityPeriod.length; i++){
+					var corrPeriod = {
+						weekDays: ps.validityPeriod[i].weekDays,
+						timeSlot: ps.validityPeriod[i].timeSlot,
+						rateValue: ps.validityPeriod[i].rateValue,
+						dayOrNight: ps.validityPeriod[i].dayOrNight,
+						holiday: ps.validityPeriod[i].holiday,
+						note: ps.validityPeriod[i].note
+					};
+					validityPeriod.push(corrPeriod);
 				}
 				
 				var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber);// + $scope.initIfNull(ps.unusuableSlotNumber);
@@ -4722,10 +4763,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					id_app: $scope.myAppId,
 					name: ps.name,
 					streetReference: ps.streetReference,
-					fee_val: fee_eurocent,
-					fee_note: ps.fee_note,
-					timeSlot : ps.timeSlot,
-					openingTime: openingPeriod,
+					//fee_val: fee_eurocent,
+					//fee_note: ps.fee_note,
+					//timeSlot : ps.timeSlot,
+					//openingTime: openingPeriod,
+					validityPeriod: validityPeriod,
 					managementMode: ps.managementMode,
 					manager: ps.manager,
 					phoneNumber: ps.phoneNumber,
@@ -4740,10 +4782,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				};
 				
 			    var value = JSON.stringify(data);
-			    if($scope.showLog) console.log("Parkingmeter data : " + value);
+			    if($scope.showLogDates) console.log("Parkingmeter data : " + value);
 			   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, value);
 			    myDataPromise.then(function(result){
-			    	console.log("Created parkingStructure: " + JSON.stringify(result));
+			    	if($scope.showLogDates)console.log("Created parkingStructure: " + JSON.stringify(result));
 			    	if(result != null && result != ""){
 			    		$scope.getParkingStructuresFromDb();
 						$scope.editModePS = false;

@@ -8,6 +8,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 
 	$scope.params = $routeParams;
 	
+    $scope.all_mode = "all mode";
+    $scope.day_mode = "day mode";
+    $scope.night_mode = "night mode";
+	
 	$scope.parkingMetersMarkers = [];
 	$scope.parkingStructureMarkers = [];
 	$scope.bikePointMarkers = [];

@@ -224,12 +224,12 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Park&Ride");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Tariffa euro/ora");
+			writer.append("Tariffa");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Note tariffa");
+			/*writer.append("Note tariffa");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Orario");
-			writer.append(CSV_SEPARATOR);
+			writer.append(CSV_SEPARATOR);*/
 			writer.append("Posti Totali");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Standard");
@@ -243,9 +243,9 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(cleanCommaValue(ps.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
-				writer.append((ps.isParkAndRide()) ? "Sì" : "No");
+				writer.append((ps.isParkAndRide()) ? "Si" : "No");
 				writer.append(CSV_SEPARATOR);
-				double fee = 0.0;
+				/*double fee = 0.0;
 				if(ps.getFee_val() >= 0){
 					fee = ps.getFee_val() / 100.0;
 				}
@@ -254,7 +254,8 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(cleanCommaValue(ps.getFee_note()));
 				writer.append(CSV_SEPARATOR);
-				writer.append(ps.getTimeSlot());
+				writer.append(ps.getTimeSlot());*/
+				writer.append((ps.getValidityPeriod()!= null && !ps.getValidityPeriod().isEmpty()) ? ps.feePeriodsSummary() : "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);

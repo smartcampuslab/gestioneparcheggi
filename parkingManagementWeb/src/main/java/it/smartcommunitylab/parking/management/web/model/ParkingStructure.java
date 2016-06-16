@@ -30,15 +30,13 @@ public class ParkingStructure {
 	private String name;	
 	private String streetReference;
 	private String managementMode;
-	private String fee_note;
 	private String manager;		// used to specify if the park is a municipality park or a private manager park
 	//private String municipality;
-	private Integer fee_val;	// in eurocent / hour
-	private String timeSlot;	// used in csv creation for openingTime string value
-	private OpeningTime openingTime;
+//	private Integer fee_val;	// in eurocent / hour
+//	private String timeSlot;	// used in csv creation for openingTime string value
+//	private OpeningTime openingTime;
 	private List<RatePeriod> validityPeriod;
 	private Point geometry;
-	
 	private Integer slotNumber;		
 	private Integer payingSlotNumber;
 	private Integer handicappedSlotNumber;
@@ -94,36 +92,12 @@ public class ParkingStructure {
 		this.slotNumber = slotNumber;
 	}
 
-	public String getTimeSlot() {
-		return timeSlot;
-	}
-
-	public void setTimeSlot(String timeSlot) {
-		this.timeSlot = timeSlot;
-	}
-
 	public String getPhoneNumber() {
 		return phoneNumber;
 	}
 
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
-	}
-
-	public String getFee_note() {
-		return fee_note;
-	}
-
-	public Integer getFee_val() {
-		return fee_val;
-	}
-
-	public void setFee_note(String fee_note) {
-		this.fee_note = fee_note;
-	}
-
-	public void setFee_val(Integer fee_val) {
-		this.fee_val = fee_val;
 	}
 
 	public Point getGeometry() {
@@ -206,20 +180,12 @@ public class ParkingStructure {
 		this.parkAndRide = parkAndRide;
 	}
 
-	public OpeningTime getOpeningTime() {
-		return openingTime;
-	}
-
 	public String getManager() {
 		return manager;
 	}
 
 	public void setManager(String manager) {
 		this.manager = manager;
-	}
-
-	public void setOpeningTime(OpeningTime openingTime) {
-		this.openingTime = openingTime;
 	}
 
 //	public String getMunicipality() {
@@ -245,6 +211,67 @@ public class ParkingStructure {
 	public void setZones(List<String> zones) {
 		this.zones = zones;
 	}
+	
+	public String feePeriodsSummary(){
+		String DATA_SEPARATOR = " / ";
+		String PERIOD_SEPARATOR = " // ";
+		String DAY_MODE = "day mode";
+		String NIGHT_MODE = "night mode";
+		String pSumm = "";
+		for(int i = 0; i < this.validityPeriod.size(); i++){
+			float euro_val = validityPeriod.get(i).getRateValue() / 100F;
+			String dayNightMode = "";
+			if(validityPeriod.get(i).getDayOrNight().compareTo(DAY_MODE) == 0){
+				dayNightMode = "Tariffa diurna: ";
+			} else if(validityPeriod.get(i).getDayOrNight().compareTo(NIGHT_MODE) == 0){
+				dayNightMode = "Tariffa notturna: ";
+			}
+			if(validityPeriod.get(i).isHoliday()) {
+				pSumm += dayNightMode
+						+ String.format("%.2f", euro_val) + " euro/h"
+						+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
+						+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
+						+ DATA_SEPARATOR + "Festivo"
+						+ PERIOD_SEPARATOR;
+			} else {
+				pSumm += dayNightMode
+						+ String.format("%.2f", euro_val) + " euro/h"
+						+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
+						+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
+						+ PERIOD_SEPARATOR;
+			}
+		}
+		return pSumm.substring(0, pSumm.length() - 1);
+	}
+	
+	public String correctDaysValues(List<String> weekDays){
+		String stringValues = "";
+		for(String wd : weekDays){
+			if(wd.compareTo("MO") == 0){
+				stringValues += "LU ";
+			}
+			if(wd.compareTo("TU") == 0){
+				stringValues += "MA ";
+			}
+			if(wd.compareTo("WE") == 0){
+				stringValues += "ME ";
+			}
+			if(wd.compareTo("TH") == 0){
+				stringValues += "GI ";
+			}
+			if(wd.compareTo("FR") == 0){
+				stringValues += "VE ";
+			}
+			if(wd.compareTo("SA") == 0){
+				stringValues += "SA ";
+			}
+			if(wd.compareTo("SU") == 0){
+				stringValues += "DO ";
+			}
+		}
+		stringValues.substring(0, stringValues.length()-1);
+		return stringValues;
+	}
 
 	public String toJSON(){
 		String json = "{";
@@ -252,10 +279,9 @@ public class ParkingStructure {
 		json += "\"id_app\":\"" + getId_app() + "\",";
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
-		json += "\"fee_note\":\"" + getFee_note() + "\",";
 		json += "\"manager\":\"" + getManager() + "\",";
 //		json += "\"municipality\":\"" + getMunicipality() + "\",";
-		json += "\"fee_val\":" + getFee_val() + ",";
+//		json += "\"fee_val\":" + getFee_val() + ",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
 		json += "\"slotPaying\":\"" + getPayingSlotNumber() + "\",";

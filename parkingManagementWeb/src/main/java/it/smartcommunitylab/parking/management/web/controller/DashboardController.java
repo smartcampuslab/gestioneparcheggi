@@ -608,65 +608,64 @@ public class DashboardController {
 		
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/supply/parkingstructures/csv")
 	public @ResponseBody
-	String createStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		logger.info("I am in parkingstructures csv creation.");
-		ArrayList<ParkingStructure> structData = new ArrayList<ParkingStructure>();
+	String createStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<ParkingStructure> data) { //@RequestBody String data
+		logger.debug("I am in parkingstructures csv creation.");
+//		ArrayList<ParkingStructure> structData = new ArrayList<ParkingStructure>();
 		String createdFile = "";
-		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 			
-		JSONArray structList = new JSONArray(data);
-		logger.info("Structs list size: " + structList.length());
+//		JSONArray structList = new JSONArray(data);
+//		logger.info("Structs list size: " + structList.length());
 	    	
-		for(int i = 0; i < structList.length(); i++){
-		   	JSONObject struct = structList.getJSONObject(i);
-		    //logger.error(String.format("Struct Data: %s", struct.toString()));
-		    String id = struct.getString("id");
-		    String id_app = struct.getString("id_app");
-		    String name = struct.getString("name");
-		    String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
-	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
-	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
-	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
-		    Integer fee_val = (!struct.isNull("fee_val")) ? struct.getInt("fee_val") : 0;
-		    String fee_note = (!struct.isNull("fee_note")) ? struct.getString("fee_note") : "n.p.";
-		    String opening = "n.p.";
-		    JSONObject openingTime = (!struct.isNull("openingTime")) ? struct.getJSONObject("openingTime") : null;
-		    if(openingTime != null){
-		    	opening = "";
-		    	JSONArray periods = openingTime.getJSONArray("period");
-		    	for(int j = 0; j < periods.length(); j++){
-		    		JSONObject fromTo = periods.getJSONObject(j);
-		    		opening += fromTo.getString("from") + " - " + fromTo.getString("to") + " / ";
-		    	}
-		    	if(opening.length() > 0){
-		    		opening = opening.substring(0, opening.length() - 3);
-		    	}
-		    }
-		    Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
-		    Integer payingSlotNumber = (!struct.isNull("payingSlotNumber")) ? struct.getInt("payingSlotNumber") : 0;
-		    Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
-		    Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
-		    ParkingStructure ps = new ParkingStructure();
-		    ps.setId(id);
-		    ps.setId_app(id_app);
-		    ps.setName(name);
-		    ps.setStreetReference(streetReference);
-		    ps.setManagementMode(managementMode);
-		    ps.setManager(manager);
-		    ps.setPhoneNumber(phoneNumber);
-		    ps.setFee_val(fee_val);
-		    ps.setFee_note(fee_note);
-		    ps.setTimeSlot(opening);	// String value
-		    ps.setSlotNumber(slotNumber);
-		    ps.setPayingSlotNumber(payingSlotNumber);
-		    ps.setHandicappedSlotNumber(handicappedSlotNumber);
-		    ps.setUnusuableSlotNumber(unusuableSlotNumber);
-		    structData.add(ps);
-		}	
+//		for(int i = 0; i < structList.length(); i++){
+//		   	JSONObject struct = structList.getJSONObject(i);
+//		    //logger.error(String.format("Struct Data: %s", struct.toString()));
+//		    String id = struct.getString("id");
+//		    String id_app = struct.getString("id_app");
+//		    String name = struct.getString("name");
+//		    String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
+//	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
+//	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
+//	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
+//		    Integer fee_val = (!struct.isNull("fee_val")) ? struct.getInt("fee_val") : 0;
+//		    String fee_note = (!struct.isNull("fee_note")) ? struct.getString("fee_note") : "n.p.";
+//		    String opening = "n.p.";
+//		    JSONObject openingTime = (!struct.isNull("openingTime")) ? struct.getJSONObject("openingTime") : null;
+//		    if(openingTime != null){
+//		    	opening = "";
+//		    	JSONArray periods = openingTime.getJSONArray("period");
+//		    	for(int j = 0; j < periods.length(); j++){
+//		    		JSONObject fromTo = periods.getJSONObject(j);
+//		    		opening += fromTo.getString("from") + " - " + fromTo.getString("to") + " / ";
+//		    	}
+//		    	if(opening.length() > 0){
+//		    		opening = opening.substring(0, opening.length() - 3);
+//		    	}
+//		    }
+//		    Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
+//		    Integer payingSlotNumber = (!struct.isNull("payingSlotNumber")) ? struct.getInt("payingSlotNumber") : 0;
+//		    Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
+//		    Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
+//		    ParkingStructure ps = new ParkingStructure();
+//		    ps.setId(id);
+//		    ps.setId_app(id_app);
+//		    ps.setName(name);
+//		    ps.setStreetReference(streetReference);
+//		    ps.setManagementMode(managementMode);
+//		    ps.setManager(manager);
+//		    ps.setPhoneNumber(phoneNumber);
+//		    ps.setFee_val(fee_val);
+//		    ps.setFee_note(fee_note);
+//		    ps.setTimeSlot(opening);	// String value
+//		    ps.setSlotNumber(slotNumber);
+//		    ps.setPayingSlotNumber(payingSlotNumber);
+//		    ps.setHandicappedSlotNumber(handicappedSlotNumber);
+//		    ps.setUnusuableSlotNumber(unusuableSlotNumber);
+//		    structData.add(ps);
+//		}	
 			
 		try {
-			createdFile = csvManager.create_supply_file_structs(structData, path);
+			createdFile = csvManager.create_supply_file_structs(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
@@ -900,58 +899,58 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/parkingstructures/csv")
 	public @ResponseBody
-	String createOccupancyStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		logger.info("I am in parkingstructures csv creation.");
-		ArrayList<OccupancyParkingStructure> structData = new ArrayList<OccupancyParkingStructure>();
+	String createOccupancyStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<OccupancyParkingStructure> data) {	//@RequestBody String data
+		logger.debug("I am in parkingstructures csv creation.");
+//		ArrayList<OccupancyParkingStructure> structData = new ArrayList<OccupancyParkingStructure>();
 		String createdFile = "";
 		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 		
-		JSONArray structList = new JSONArray(data);
-		logger.info("Structs list size: " + structList.length());
-    	
-	    for(int i = 0; i < structList.length(); i++){
-	    	JSONObject struct = structList.getJSONObject(i);
-	    	logger.error(String.format("Struct Data: %s", struct.toString()));
-	    	String id = struct.getString("id");
-	    	String id_app = struct.getString("id_app");
-	    	String name = struct.getString("name");
-	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
-	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
-	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
-	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
-	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
-	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
-	    	Integer occupancyRate = (!struct.isNull("occupancyRate")) ? struct.getInt("occupancyRate") : 0;
-	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
-	    	Integer payingSlotNumber = (!struct.isNull("payingSlotNumber")) ? struct.getInt("payingSlotNumber") : 0;
-	    	Integer payingSlotOccupied = (!struct.isNull("payingSlotOccupied")) ? struct.getInt("payingSlotOccupied") : 0;
-	    	Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
-	    	Integer handicappedSlotOccupied = (!struct.isNull("handicappedSlotOccupied")) ? struct.getInt("handicappedSlotOccupied") : 0;
-	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
-	    	OccupancyParkingStructure ops = new OccupancyParkingStructure();
-	    	ops.setId(id);
-	    	ops.setId_app(id_app);
-	    	ops.setName(name);
-	    	ops.setStreetReference(streetReference);
-	    	ops.setManagementMode(managementMode);
-	    	ops.setManager(manager);
-	    	ops.setPhoneNumber(phoneNumber);
-	    	ops.setFee(fee);
-	    	ops.setTimeSlot(timeSlot);
-	    	ops.setOccupancyRate(occupancyRate);
-	    	ops.setSlotNumber(slotNumber);
-	    	ops.setPayingSlotNumber(payingSlotNumber);
-	    	ops.setPayingSlotOccupied(payingSlotOccupied);
-	    	ops.setHandicappedSlotNumber(handicappedSlotNumber);
-	    	ops.setHandicappedSlotOccupied(handicappedSlotOccupied);
-	    	ops.setUnusuableSlotNumber(unusuableSlotNumber);
-	    	structData.add(ops);
-	    }	
+//		JSONArray structList = new JSONArray(data);
+//		logger.info("Structs list size: " + structList.length());
+//    	
+//	    for(int i = 0; i < structList.length(); i++){
+//	    	JSONObject struct = structList.getJSONObject(i);
+//	    	logger.error(String.format("Struct Data: %s", struct.toString()));
+//	    	String id = struct.getString("id");
+//	    	String id_app = struct.getString("id_app");
+//	    	String name = struct.getString("name");
+//	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
+//	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
+//	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
+//	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
+//	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
+//	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
+//	    	Integer occupancyRate = (!struct.isNull("occupancyRate")) ? struct.getInt("occupancyRate") : 0;
+//	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
+//	    	Integer payingSlotNumber = (!struct.isNull("payingSlotNumber")) ? struct.getInt("payingSlotNumber") : 0;
+//	    	Integer payingSlotOccupied = (!struct.isNull("payingSlotOccupied")) ? struct.getInt("payingSlotOccupied") : 0;
+//	    	Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
+//	    	Integer handicappedSlotOccupied = (!struct.isNull("handicappedSlotOccupied")) ? struct.getInt("handicappedSlotOccupied") : 0;
+//	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
+//	    	OccupancyParkingStructure ops = new OccupancyParkingStructure();
+//	    	ops.setId(id);
+//	    	ops.setId_app(id_app);
+//	    	ops.setName(name);
+//	    	ops.setStreetReference(streetReference);
+//	    	ops.setManagementMode(managementMode);
+//	    	ops.setManager(manager);
+//	    	ops.setPhoneNumber(phoneNumber);
+//	    	ops.setFee(fee);
+//	    	ops.setTimeSlot(timeSlot);
+//	    	ops.setOccupancyRate(occupancyRate);
+//	    	ops.setSlotNumber(slotNumber);
+//	    	ops.setPayingSlotNumber(payingSlotNumber);
+//	    	ops.setPayingSlotOccupied(payingSlotOccupied);
+//	    	ops.setHandicappedSlotNumber(handicappedSlotNumber);
+//	    	ops.setHandicappedSlotOccupied(handicappedSlotOccupied);
+//	    	ops.setUnusuableSlotNumber(unusuableSlotNumber);
+//	    	structData.add(ops);
+//	    }	
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_structs(structData, path);
+			createdFile = csvManager.create_occupancy_file_structs(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
@@ -1191,53 +1190,52 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/profit/parkingstructures/csv")
 	public @ResponseBody
-	String createProfitStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		logger.info("I am in profit parkingstructures csv creation.");
-		ArrayList<ProfitParkingStructure> structData = new ArrayList<ProfitParkingStructure>();
+	String createProfitStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<ProfitParkingStructure> data) { //@RequestBody String data
+		logger.debug("I am in profit parkingstructures csv creation.");
+//		ArrayList<ProfitParkingStructure> structData = new ArrayList<ProfitParkingStructure>();
 		String createdFile = "";
-		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 		
-		JSONArray structList = new JSONArray(data);
-		logger.info("Profit structs list size: " + structList.length());
-    	
-	    for(int i = 0; i < structList.length(); i++){
-	    	JSONObject struct = structList.getJSONObject(i);
-	    	//logger.error(String.format("Street Data: %s", street.toString()));
-	    	String id = struct.getString("id");
-	    	String id_app = struct.getString("id_app");
-	    	String name = struct.getString("name");
-	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
-	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
-	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
-	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
-	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
-	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
-	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
-	    	Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
-	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
-	    	Integer profit = (!struct.isNull("profit")) ? struct.getInt("profit") : 0;
-	    	Integer tickets = (!struct.isNull("tickets")) ? struct.getInt("tickets") : 0;
-	    	ProfitParkingStructure pps = new ProfitParkingStructure();
-	    	pps.setId(id);
-	    	pps.setId_app(id_app);
-	    	pps.setName(name);
-	    	pps.setStreetReference(streetReference);
-	    	pps.setManagementMode(managementMode);
-	    	pps.setManager(manager);
-	    	pps.setPhoneNumber(phoneNumber);
-	    	pps.setFee(fee);
-	    	pps.setTimeSlot(timeSlot);
-	    	pps.setSlotNumber(slotNumber);
-	    	pps.setHandicappedSlotNumber(handicappedSlotNumber);
-	    	pps.setUnusuableSlotNumber(unusuableSlotNumber);
-	    	pps.setProfit(profit);
-	    	pps.setTickets(tickets);
-	    	structData.add(pps);
-	    }	
+//		JSONArray structList = new JSONArray(data);
+//		logger.info("Profit structs list size: " + structList.length());
+//    	
+//	    for(int i = 0; i < structList.length(); i++){
+//	    	JSONObject struct = structList.getJSONObject(i);
+//	    	//logger.error(String.format("Street Data: %s", street.toString()));
+//	    	String id = struct.getString("id");
+//	    	String id_app = struct.getString("id_app");
+//	    	String name = struct.getString("name");
+//	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
+//	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
+//	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
+//	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
+//	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
+//	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
+//	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
+//	    	Integer handicappedSlotNumber = (!struct.isNull("handicappedSlotNumber")) ? struct.getInt("handicappedSlotNumber") : 0;
+//	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
+//	    	Integer profit = (!struct.isNull("profit")) ? struct.getInt("profit") : 0;
+//	    	Integer tickets = (!struct.isNull("tickets")) ? struct.getInt("tickets") : 0;
+//	    	ProfitParkingStructure pps = new ProfitParkingStructure();
+//	    	pps.setId(id);
+//	    	pps.setId_app(id_app);
+//	    	pps.setName(name);
+//	    	pps.setStreetReference(streetReference);
+//	    	pps.setManagementMode(managementMode);
+//	    	pps.setManager(manager);
+//	    	pps.setPhoneNumber(phoneNumber);
+//	    	pps.setFee(fee);
+//	    	pps.setTimeSlot(timeSlot);
+//	    	pps.setSlotNumber(slotNumber);
+//	    	pps.setHandicappedSlotNumber(handicappedSlotNumber);
+//	    	pps.setUnusuableSlotNumber(unusuableSlotNumber);
+//	    	pps.setProfit(profit);
+//	    	pps.setTickets(tickets);
+//	    	structData.add(pps);
+//	    }	
 		
 		try {
-			createdFile = csvManager.create_profit_file_structs(structData, path);
+			createdFile = csvManager.create_profit_file_structs(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
@@ -1429,60 +1427,60 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/timeCost/parkingstructures/csv")
 	public @ResponseBody
-	String createTimeCostStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		logger.info("I am in timeCost parkingstructures csv creation.");
-		ArrayList<TimeCostParkingStructure> structData = new ArrayList<TimeCostParkingStructure>();
+	String createTimeCostStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<TimeCostParkingStructure> data) { //@RequestBody String data
+		logger.debug("I am in timeCost parkingstructures csv creation.");
+//		ArrayList<TimeCostParkingStructure> structData = new ArrayList<TimeCostParkingStructure>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 		
-		JSONArray structList = new JSONArray(data);
-		logger.info("Structs list size: " + structList.length());
-    	
-	    for(int i = 0; i < structList.length(); i++){
-	    	JSONObject struct = structList.getJSONObject(i);
-	    	//logger.error(String.format("Struct Data: %s", struct.toString()));
-	    	String id = struct.getString("id");
-	    	String id_app = struct.getString("id_app");
-	    	String name = struct.getString("name");
-	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
-	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
-	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
-	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
-	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
-	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
-	    	Integer occupancyRate = (!struct.isNull("occupancyRate")) ? struct.getInt("occupancyRate") : 0;
-	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
-	    	Integer slotOccupied = (!struct.isNull("slotOccupied")) ? struct.getInt("slotOccupied") : 0;
-	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
-	    	JSONObject extratime = (!struct.isNull("extratime")) ? struct.getJSONObject("extratime") : null;
-	    	Integer minExtratime, maxExtratime;
-	    	minExtratime = maxExtratime = -1;
-	    	if(extratime != null) {
-	    		minExtratime = (!extratime.isNull("extratime_estimation_min")) ? extratime.getInt("extratime_estimation_min") : -1;
-		    	maxExtratime = (!extratime.isNull("extratime_estimation_max")) ? extratime.getInt("extratime_estimation_max") : -1;
-	    	}
-	    	TimeCostParkingStructure tps = new TimeCostParkingStructure();
-	    	tps.setId(id);
-	    	tps.setId_app(id_app);
-	    	tps.setName(name);
-	    	tps.setStreetReference(streetReference);
-	    	tps.setManagementMode(managementMode);
-	    	tps.setManager(manager);
-	    	tps.setPhoneNumber(phoneNumber);
-	    	tps.setFee(fee);
-	    	tps.setTimeSlot(timeSlot);
-	    	tps.setOccupancyRate(occupancyRate);
-	    	tps.setSlotNumber(slotNumber);
-	    	tps.setSlotOccupied(slotOccupied);
-	    	tps.setUnusuableSlotNumber(unusuableSlotNumber);
-	    	tps.setMinExtratime(minExtratime);
-	    	tps.setMaxExtratime(maxExtratime);
-	    	structData.add(tps);
-	    }	
+//		JSONArray structList = new JSONArray(data);
+//		logger.info("Structs list size: " + structList.length());
+//    	
+//	    for(int i = 0; i < structList.length(); i++){
+//	    	JSONObject struct = structList.getJSONObject(i);
+//	    	//logger.error(String.format("Struct Data: %s", struct.toString()));
+//	    	String id = struct.getString("id");
+//	    	String id_app = struct.getString("id_app");
+//	    	String name = struct.getString("name");
+//	    	String streetReference = (!struct.isNull("streetReference")) ? struct.getString("streetReference") : "";
+//	    	String managementMode = (!struct.isNull("managementMode")) ? struct.getString("managementMode") : "";
+//	    	String manager = (!struct.isNull("manager")) ? struct.getString("manager") : "";
+//	    	String phoneNumber = (!struct.isNull("phoneNumber")) ? struct.getString("phoneNumber") : "";
+//	    	String fee = (!struct.isNull("fee")) ? struct.getString("fee") : "0.0";
+//	    	String timeSlot = (!struct.isNull("timeSlot")) ? struct.getString("timeSlot") : "";
+//	    	Integer occupancyRate = (!struct.isNull("occupancyRate")) ? struct.getInt("occupancyRate") : 0;
+//	    	Integer slotNumber = (!struct.isNull("slotNumber")) ? struct.getInt("slotNumber") : 0;
+//	    	Integer slotOccupied = (!struct.isNull("slotOccupied")) ? struct.getInt("slotOccupied") : 0;
+//	    	Integer unusuableSlotNumber = (!struct.isNull("unusuableSlotNumber")) ? struct.getInt("unusuableSlotNumber") : 0;
+//	    	JSONObject extratime = (!struct.isNull("extratime")) ? struct.getJSONObject("extratime") : null;
+//	    	Integer minExtratime, maxExtratime;
+//	    	minExtratime = maxExtratime = -1;
+//	    	if(extratime != null) {
+//	    		minExtratime = (!extratime.isNull("extratime_estimation_min")) ? extratime.getInt("extratime_estimation_min") : -1;
+//		    	maxExtratime = (!extratime.isNull("extratime_estimation_max")) ? extratime.getInt("extratime_estimation_max") : -1;
+//	    	}
+//	    	TimeCostParkingStructure tps = new TimeCostParkingStructure();
+//	    	tps.setId(id);
+//	    	tps.setId_app(id_app);
+//	    	tps.setName(name);
+//	    	tps.setStreetReference(streetReference);
+//	    	tps.setManagementMode(managementMode);
+//	    	tps.setManager(manager);
+//	    	tps.setPhoneNumber(phoneNumber);
+//	    	tps.setFee(fee);
+//	    	tps.setTimeSlot(timeSlot);
+//	    	tps.setOccupancyRate(occupancyRate);
+//	    	tps.setSlotNumber(slotNumber);
+//	    	tps.setSlotOccupied(slotOccupied);
+//	    	tps.setUnusuableSlotNumber(unusuableSlotNumber);
+//	    	tps.setMinExtratime(minExtratime);
+//	    	tps.setMaxExtratime(maxExtratime);
+//	    	structData.add(tps);
+//	    }	
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_timeCost_file_structs(structData, path);
+			createdFile = csvManager.create_timeCost_file_structs(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}

@@ -276,6 +276,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection
 	$scope.showLogs = false;
 	
+    $scope.all_mode = "all mode";
+    $scope.day_mode = "day mode";
+    $scope.night_mode = "night mode";
+	
 	$scope.wait_dialog_text_string_it = "Aggiornamento dati in corso...";
 	$scope.wait_dialog_text_string_en = "Loading elements...";
 	$scope.wait_dialog_title_string_it = "Attendere Prego";
@@ -5043,10 +5047,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						streetReference: occupancyStructs[i].streetReference,
 						managementMode: occupancyStructs[i].managementMode,
 						manager: occupancyStructs[i].manager,
-						fee_val: $scope.correctFeeData(occupancyStructs[i].fee_val),
+						/*fee_val: $scope.correctFeeData(occupancyStructs[i].fee_val),
 						fee_note: occupancyStructs[i].fee_note,
 						timeSlot: occupancyStructs[i].timeSlot,
-						openingTime: occupancyStructs[i].openingTime,
+						openingTime: occupancyStructs[i].openingTime,*/
+						validityPeriod: occupancyStructs[i].validityPeriod,
 						slotNumber: occupancyStructs[i].slotNumber,
 						slotOccupied: parseInt(occupancyStructs[i].payingSlotOccupied) + parseInt(occupancyStructs[i].handicappedSlotOccupied), 
 						payingSlotNumber: occupancyStructs[i].payingSlotNumber,
@@ -9386,7 +9391,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.getStructureSupplyCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.pstructWS);
+		//var value = JSON.stringify($scope.pstructWS);
+		var value = utilsService.correctStructObjectForWS($scope.pstructWS);
 		
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/parkingstructures/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
@@ -9455,7 +9461,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.getStructureOccupancyCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.pstructWS);
+		//var value = JSON.stringify($scope.pstructWS);
+		var value = utilsService.correctOccStructObjectForWS($scope.pstructWS);
 	    console.log("Structure list data : " + value);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/parkingstructures/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
@@ -9534,7 +9541,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.getStructureProfitCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.profitStructWS);
+		//var value = JSON.stringify($scope.profitStructWS);
+		var value = utilsService.correctStructProfitObjectForWS($scope.profitStructWS);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingstructures/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
@@ -9599,7 +9607,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.getStructureTimeCostCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.allDataStructWS);
+		//var value = JSON.stringify($scope.allDataStructWS);
+		var value = utilsService.correctStructTimeCostObjectForWS($scope.allDataStructWS);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/parkingstructures/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));

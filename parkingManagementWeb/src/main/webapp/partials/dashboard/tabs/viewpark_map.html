@@ -641,7 +641,7 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">{{ psDetails.data.manager }}</td>	
 					</tr>
-					<tr ng-show="psconf.ps_fee.visible">
+					<!-- <tr ng-show="psconf.ps_fee.visible">
 						<td class="detailsTitleTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
 						<td class="detailsTitleTableCX"></td>
 						<td ng-if="psDetails.data.fee_val != null" class="detailsTitleTableDX">
@@ -663,6 +663,20 @@
 							<span ng-repeat="ops in psDetails.data.openingTime.period">{{ ops.from }} - {{ ops.to }};</span>
 						</td>
 						<td ng-if="psDetails.data.openingTime == null" class="detailsTitleTableDX">n.p.</td>
+					</tr> -->
+					<tr ng-show="psconf.ps_fee.visible">
+						<td class="detailsTitleTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
+						<td class="detailsTitleTableCX"></td>
+						<td class="detailsTitleTableDX">
+							<div ng-repeat="r in psDetails.data.validityPeriod">
+								<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }}: </span>
+								<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }}: </span>
+								<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
+								<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+								<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+								<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+							</div>
+						</td>
 					</tr>
 				</table>
 				<table width="100%">	

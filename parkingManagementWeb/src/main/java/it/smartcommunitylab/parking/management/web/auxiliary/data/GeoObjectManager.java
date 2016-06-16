@@ -566,7 +566,8 @@ public class GeoObjectManager {
 		if(park.getGeometry()!= null){
 			p.setPosition(new double[]{park.getGeometry().getLat(), park.getGeometry().getLng()});
 		}
-		p.setDescription(park.getFee_val() + ", " + park.getManagementMode());
+		String desc = (park.getValidityPeriod() != null && !park.getValidityPeriod().isEmpty()) ? park.feePeriodsSummary() : "Nessuna tariffa";
+		p.setDescription(desc + ", " + park.getManagementMode());
 		return p;
 	}
 	

@@ -130,15 +130,15 @@ public class ZipCsvExporter implements Exporter {
 			result += "\"" + element.getName() + "\"" + CSV_SEPARATOR + "\""
 					+ element.getStreetReference() + "\"" + CSV_SEPARATOR
 					+ "\"" + element.getManagementMode() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getSlotNumber() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getTimeSlot() + "\"" + CSV_SEPARATOR;
+					+ "\"" + element.getSlotNumber() + "\"" + CSV_SEPARATOR;
+					//+ "\"" + element.getTimeSlot() + "\"" + CSV_SEPARATOR;
 			result += "\"";
 			for (PaymentMode p : element.getPaymentMode()) {
 				result += p + " ";
 			}
 			result += "\"" + CSV_SEPARATOR;
 			result += "\"" + element.getPhoneNumber() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getFee_val() + "\"" + CSV_SEPARATOR
+					//+ "\"" + element.getFee_val() + "\"" + CSV_SEPARATOR
 					+ geoToCsv(element.getGeometry()) + "\n";
 		}
 		return result;

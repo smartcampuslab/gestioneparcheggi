@@ -15,126 +15,36 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
-import java.util.List;
-
-public class TimeCostParkingStructure {
+public class TimeCostParkingStructure extends ParkingStructure {
 
 	public static enum PaymentMode {
 		CASH, AUTOMATED_TELLER, PREPAID_CARD, PARCOMETRO
 	}
 
-	private String id;
-	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
-	private String name;	
-	private String streetReference;
-	private String managementMode;
-	private String manager;
-	private String fee;
-	private String timeSlot;
-	private Integer slotNumber;
+//	private String id;
+//	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
+//	private String name;	
+//	private String streetReference;
+//	private String managementMode;
+//	private String manager;
+//	private String fee;
+//	private String timeSlot;
+//	private Integer slotNumber;
+//	private Integer handicappedSlotNumber;
+//	private Integer unusuableSlotNumber;
+//	private String phoneNumber;
+//	private List<String> zones;
 	private Integer slotOccupied;
-	private Integer handicappedSlotNumber;
-	private Integer unusuableSlotNumber;
-	private String phoneNumber;
 	private Integer occupancyRate;
 	private Integer minExtratime;
 	private Integer maxExtratime;
-	private List<String> zones;
 	
-	public String getId_app() {
-		return id_app;
-	}
-
-	public void setId_app(String id_app) {
-		this.id_app = id_app;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public String getStreetReference() {
-		return streetReference;
-	}
-
-	public void setStreetReference(String streetReference) {
-		this.streetReference = streetReference;
-	}
-
-	public String getManagementMode() {
-		return managementMode;
-	}
-
-	public void setManagementMode(String modality) {
-		this.managementMode = modality;
-	}
-
-	public Integer getSlotNumber() {
-		return slotNumber;
-	}
-
-	public void setSlotNumber(Integer slotNumber) {
-		this.slotNumber = slotNumber;
-	}
-
-	public String getTimeSlot() {
-		return timeSlot;
-	}
-
-	public void setTimeSlot(String timeSlot) {
-		this.timeSlot = timeSlot;
-	}
-
-	public String getPhoneNumber() {
-		return phoneNumber;
-	}
-
-	public void setPhoneNumber(String phoneNumber) {
-		this.phoneNumber = phoneNumber;
-	}
-
-	public String getFee() {
-		return fee;
-	}
-
-	public void setFee(String fee) {
-		this.fee = fee;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
 	public Integer getSlotOccupied() {
 		return slotOccupied;
 	}
 
-	public Integer getHandicappedSlotNumber() {
-		return handicappedSlotNumber;
-	}
-
-	public Integer getUnusuableSlotNumber() {
-		return unusuableSlotNumber;
-	}
-
 	public void setSlotOccupied(Integer slotOccupied) {
 		this.slotOccupied = slotOccupied;
-	}
-
-	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
-		this.handicappedSlotNumber = handicappedSlotNumber;
-	}
-
-	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
-		this.unusuableSlotNumber = unusuableSlotNumber;
 	}
 
 	public Integer getOccupancyRate() {
@@ -159,39 +69,6 @@ public class TimeCostParkingStructure {
 
 	public void setMaxExtratime(Integer maxExtratime) {
 		this.maxExtratime = maxExtratime;
-	}
-
-	public String getManager() {
-		return manager;
-	}
-
-	public void setManager(String manager) {
-		this.manager = manager;
-	}
-
-	public List<String> getZones() {
-		return zones;
-	}
-
-	public void setZones(List<String> zones) {
-		this.zones = zones;
-	}
-
-	public String toJSON(){
-		String json = "{";
-		json += "\"id\":\"" + getId() + "\",";
-		json += "\"id_app\":\"" + getId_app() + "\",";
-		json += "\"name\":\"" + getName() + "\",";
-		json += "\"streetReference\":\"" + getStreetReference() + "\",";
-		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"slotOccupied\":\"" + getSlotOccupied() + "\",";
-		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
-		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
-		json += "\"minExtratime\":\"" + getMinExtratime() + "\",";
-		json += "\"maxExtratime\":\"" + getMaxExtratime() + "\"";
-		json += "}";
-		return json;
 	}
 
 }

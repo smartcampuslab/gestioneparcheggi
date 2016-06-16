@@ -95,13 +95,25 @@
 																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
 																	<td width="55%">{{ pm.area.name }}</td>
 																</tr>
-																<tr>	
+																<!-- <tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
 																	<td>{{ pm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 																	<td>{{ pm.area.timeSlot }}</td>
+																</tr> -->
+																<tr>
+																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+																	<td>
+																		<div ng-repeat="r in pm.area.validityPeriod">
+																			<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+																			<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+																			<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+																			<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+																			<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+																		</div>
+																	</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
@@ -132,7 +144,20 @@
 							        			<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.streetReference }}</td>
 							        		</tr>
-											<tr ng-show="psconf.ps_fee.visible">
+							        		<tr ng-show="psconf.ps_fee.visible">	
+												<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
+												<td>
+													<div ng-repeat="r in ps.data.validityPeriod">
+														<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }} :</span>
+														<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }} :</span>
+														<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
+														<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+														<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+														<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+													</div>
+												</td>
+											</tr>
+											<!-- <tr ng-show="psconf.ps_fee.visible">
 								       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
 								       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val | centToeuroVal }} {{ 'euro_hour' | i18n }}</td>
 								       			<td ng-if="ps.data.fee_val == null">&nbsp;n.p.</td>
@@ -145,7 +170,7 @@
 								       			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
 								       			<td ng-if="ps.data.openingTime != null"><span ng-repeat="ops in ps.data.openingTime.period">&nbsp;{{ ops.from }} - {{ ops.to }};</span></td>
 								       			<td ng-if="ps.data.openingTime == null">&nbsp;n.p.</td>
-								       		</tr>
+								       		</tr> -->
 							        		<tr ng-show="psconf.ps_phoneNumber.visible">
 							        			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
@@ -478,14 +503,26 @@
 																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
 																	<td width="55%">{{ s.area.name }}</td>
 																</tr>
-																<tr>	
+																<tr>
+																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+																	<td>
+																		<div ng-repeat="r in s.area.validityPeriod">
+																			<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+																			<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+																			<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+																			<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+																			<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+																		</div>
+																	</td>
+																</tr>
+																<!-- <tr>	
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
 																	<td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 																	<td>{{ s.area.timeSlot }}</td>
-																</tr>
+																</tr> -->
 																<tr>	
 																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 																	<td>{{ s.area.smsCode }}</td>
@@ -643,14 +680,26 @@
 						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="aconf.a_name.visible">{{ a.data.name }}</span></h4>
 							        <div id="bodyContent">
 							        	<table>
-											<tr ng-show="aconf.a_fee.visible">	
+											<tr>
+												<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+												<td>
+													<div ng-repeat="r in a.data.validityPeriod">
+														<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+														<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+														<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+														<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+														<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+													</div>
+												</td>
+											</tr>
+											<!-- <tr ng-show="aconf.a_fee.visible">	
 												<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
 												<td width="55%">{{ a.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
 											</tr>
 											<tr ng-show="aconf.a_timeSlot.visible">	
 												<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 												<td>{{ a.data.timeSlot }}</td>
-											</tr>
+											</tr> -->
 											<tr ng-show="aconf.a_smsCode.visible">	
 												<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 												<td>{{ a.data.smsCode }}</td>

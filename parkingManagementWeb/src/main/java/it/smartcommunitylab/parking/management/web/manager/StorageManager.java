@@ -823,8 +823,8 @@ public class StorageManager {
 	public ParkingStructureBean editParkingStructure(ParkingStructureBean entityBean, String appId) throws NotFoundException {
 		ParkingStructure entity = findById(entityBean.getId(),
 				ParkingStructure.class);
-		entity.setFee_val(entityBean.getFee_val());
-		entity.setFee_note(entityBean.getFee_note());
+//		entity.setFee_val(entityBean.getFee_val());
+//		entity.setFee_note(entityBean.getFee_note());
 		entity.setManagementMode(entityBean.getManagementMode());
 		entity.setName(entityBean.getName());
 		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean.getPaymentMode()));
@@ -836,8 +836,8 @@ public class StorageManager {
 		entity.setHandicappedSlotNumber(entityBean.getHandicappedSlotNumber());
 		entity.setUnusuableSlotNumber(entityBean.getUnusuableSlotNumber());
 		entity.setStreetReference(entityBean.getStreetReference());
-		entity.setTimeSlot(entityBean.getTimeSlot());
-		entity.setOpeningTime(entityBean.getOpeningTime());
+//		entity.setTimeSlot(entityBean.getTimeSlot());
+//		entity.setOpeningTime(entityBean.getOpeningTime());
 		if(entityBean.getValidityPeriod() != null){
 			if(entity.getValidityPeriod() != null){
 				entity.getValidityPeriod().clear();
