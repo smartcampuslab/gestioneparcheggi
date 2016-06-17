@@ -236,7 +236,39 @@ pm.service('utilsService', function(){
 			}
 		}
 		return corrList;
-	};	
+	};
+	
+	// Method correctStreetObjectForWS: used to convert the streetWS list in a list of Street objects to invoke the specific WS
+	this.correctStreetObjectForWS = function(list){
+		var corrList = [];
+		if(list){
+			for(var i = 0; i < list.length; i++){
+				var s = {
+					id: list[i].id,
+					id_app: list[i].id_app,
+					streetReference: list[i].streetReference,
+					slotNumber: list[i].slotNumber,
+					handicappedSlotNumber: list[i].handicappedSlotNumber,
+					reservedSlotNumber: list[i].reservedSlotNumber,
+					timedParkSlotNumber: list[i].timedParkSlotNumber,
+					freeParkSlotNumber: list[i].freeParkSlotNumber,
+					freeParkSlotSignNumber: list[i].freeParkSlotSignNumber,
+					paidSlotNumber: list[i].paidSlotNumber,
+					unusuableSlotNumber: list[i].unusuableSlotNumber,
+					subscritionAllowedPark : list[i].subscritionAllowedPark,
+					rateAreaId: list[i].rateAreaId,
+					geometry:  (list[i].geometry) ? list[i].geometry : null,
+					zones: (list[i].zones) ? list[i].zones : null,
+					parkingMeters: (list[i].parkingMeters) ? list[i].parkingMeters : null,
+					color: list[i].color,
+					area_name: list[i].area_name,
+					area_color: list[i].area_color
+				};
+				corrList.push(s);
+			}
+		}
+		return corrList;
+	}
 	
 	// Method correctGeometryForWS: used to convert the geometry polygon array in the correct object to invoke WS
 	this.correctGeometryForWS = function(geom){

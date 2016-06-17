@@ -414,59 +414,58 @@ public class DashboardController {
 	// --------------------------------------- Supply CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/supply/street/csv")
 	public @ResponseBody
-	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody List<Street> data) { //@RequestBody String data
-		logger.info("I am in street csv creation.");
-		ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
+	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<it.smartcommunitylab.parking.management.web.model.Street> data) { //@RequestBody String data
+		logger.debug("I am in street csv creation.");
+//		ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
-		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
-		logger.info("Current path: " + path);
+		logger.debug("Current path: " + path);
 		
-		JSONArray streetList = new JSONArray(data);
-		logger.info("Street list size: " + streetList.length());
-    	
-	    for(int i = 0; i < streetList.length(); i++){
-	    	JSONObject street = streetList.getJSONObject(i);
-	    	//logger.error(String.format("Street Data: %s", street.toString()));
-	    	String id = street.getString("id");
-	    	String id_app = street.getString("id_app");
-	    	String streetReference = street.getString("streetReference");
-	    	Integer slotNumber = (!street.isNull("slotNumber")) ? street.getInt("slotNumber") : 0;
-	    	Integer handicappedSlotNumber = (!street.isNull("handicappedSlotNumber")) ? street.getInt("handicappedSlotNumber") : 0;
-	    	Integer reservedSlotNumber = (!street.isNull("reservedSlotNumber")) ? street.getInt("reservedSlotNumber") : 0;
-	    	Integer timedParkSlotNumber = (!street.isNull("timedParkSlotNumber")) ? street.getInt("timedParkSlotNumber") : 0;
-	    	Integer freeParkSlotNumber = (!street.isNull("freeParkSlotNumber")) ? street.getInt("freeParkSlotNumber") : 0;
-	    	Integer freeParkSlotSignNumber = (!street.isNull("freeParkSlotSignNumber")) ? street.getInt("freeParkSlotSignNumber") : 0;
-	    	Integer paidSlotNumber = (!street.isNull("paidSlotNumber")) ? street.getInt("paidSlotNumber") : 0;
-	    	Integer unusuableSlotNumber = (!street.isNull("unusuableSlotNumber")) ? street.getInt("unusuableSlotNumber") : 0;
-	    	Boolean subscritionAllowedPark = (!street.isNull("subscritionAllowedPark")) ? street.getBoolean("subscritionAllowedPark") : false;
-	    	String rateAreaId = street.getString("rateAreaId");
-	    	String color = street.getString("color");
-	    	String area_name = street.getString("area_name");
-	    	String area_color = street.getString("area_color");
-	    	it.smartcommunitylab.parking.management.web.model.Street s = new it.smartcommunitylab.parking.management.web.model.Street();
-	    	s.setId(id);
-	    	s.setId_app(id_app);
-	    	s.setStreetReference(streetReference);
-	    	s.setSlotNumber(slotNumber);
-	    	s.setHandicappedSlotNumber(handicappedSlotNumber);
-	    	s.setReservedSlotNumber(reservedSlotNumber);
-	    	s.setTimedParkSlotNumber(timedParkSlotNumber);
-	    	s.setFreeParkSlotNumber(freeParkSlotNumber);
-	    	s.setFreeParkSlotSignNumber(freeParkSlotSignNumber);
-	    	s.setPaidSlotNumber(paidSlotNumber);
-	    	s.setUnusuableSlotNumber(unusuableSlotNumber);
-	    	s.setSubscritionAllowedPark(subscritionAllowedPark);
-	    	s.setRateAreaId(rateAreaId);
-	    	s.setColor(color);
-	    	s.setArea_name(area_name);
-	    	s.setArea_color(area_color);
-	    	streetData.add(s);
-	    }	
+//		JSONArray streetList = new JSONArray(data);
+//		logger.info("Street list size: " + streetList.length());
+//    	
+//	    for(int i = 0; i < streetList.length(); i++){
+//	    	JSONObject street = streetList.getJSONObject(i);
+//	    	//logger.error(String.format("Street Data: %s", street.toString()));
+//	    	String id = street.getString("id");
+//	    	String id_app = street.getString("id_app");
+//	    	String streetReference = street.getString("streetReference");
+//	    	Integer slotNumber = (!street.isNull("slotNumber")) ? street.getInt("slotNumber") : 0;
+//	    	Integer handicappedSlotNumber = (!street.isNull("handicappedSlotNumber")) ? street.getInt("handicappedSlotNumber") : 0;
+//	    	Integer reservedSlotNumber = (!street.isNull("reservedSlotNumber")) ? street.getInt("reservedSlotNumber") : 0;
+//	    	Integer timedParkSlotNumber = (!street.isNull("timedParkSlotNumber")) ? street.getInt("timedParkSlotNumber") : 0;
+//	    	Integer freeParkSlotNumber = (!street.isNull("freeParkSlotNumber")) ? street.getInt("freeParkSlotNumber") : 0;
+//	    	Integer freeParkSlotSignNumber = (!street.isNull("freeParkSlotSignNumber")) ? street.getInt("freeParkSlotSignNumber") : 0;
+//	    	Integer paidSlotNumber = (!street.isNull("paidSlotNumber")) ? street.getInt("paidSlotNumber") : 0;
+//	    	Integer unusuableSlotNumber = (!street.isNull("unusuableSlotNumber")) ? street.getInt("unusuableSlotNumber") : 0;
+//	    	Boolean subscritionAllowedPark = (!street.isNull("subscritionAllowedPark")) ? street.getBoolean("subscritionAllowedPark") : false;
+//	    	String rateAreaId = street.getString("rateAreaId");
+//	    	String color = street.getString("color");
+//	    	String area_name = street.getString("area_name");
+//	    	String area_color = street.getString("area_color");
+//	    	it.smartcommunitylab.parking.management.web.model.Street s = new it.smartcommunitylab.parking.management.web.model.Street();
+//	    	s.setId(id);
+//	    	s.setId_app(id_app);
+//	    	s.setStreetReference(streetReference);
+//	    	s.setSlotNumber(slotNumber);
+//	    	s.setHandicappedSlotNumber(handicappedSlotNumber);
+//	    	s.setReservedSlotNumber(reservedSlotNumber);
+//	    	s.setTimedParkSlotNumber(timedParkSlotNumber);
+//	    	s.setFreeParkSlotNumber(freeParkSlotNumber);
+//	    	s.setFreeParkSlotSignNumber(freeParkSlotSignNumber);
+//	    	s.setPaidSlotNumber(paidSlotNumber);
+//	    	s.setUnusuableSlotNumber(unusuableSlotNumber);
+//	    	s.setSubscritionAllowedPark(subscritionAllowedPark);
+//	    	s.setRateAreaId(rateAreaId);
+//	    	s.setColor(color);
+//	    	s.setArea_name(area_name);
+//	    	s.setArea_color(area_color);
+//	    	streetData.add(s);
+//	    }	
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_supply_file_streets(streetData, path);
+			createdFile = csvManager.create_supply_file_streets(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per vie: " + e.getMessage());
 		}

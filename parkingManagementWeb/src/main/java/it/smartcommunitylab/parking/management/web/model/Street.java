@@ -20,7 +20,7 @@ import java.util.List;
 import it.smartcommunitylab.parking.management.web.model.geo.Line;
 
 public class Street {
-	private String id;
+	protected String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String streetReference;
 	private Integer slotNumber;

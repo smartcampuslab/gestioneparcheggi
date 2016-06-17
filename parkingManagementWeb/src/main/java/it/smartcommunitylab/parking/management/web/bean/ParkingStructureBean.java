@@ -15,8 +15,6 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
-import it.smartcommunitylab.parking.management.web.model.OpeningTime;
-
 import java.util.List;
 
 public class ParkingStructureBean {

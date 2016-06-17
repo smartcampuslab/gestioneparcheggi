@@ -9325,8 +9325,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     // -------------------------------------------------- Block for supply CSV creation ---------------------------------------------
 	$scope.getStreetSupplyCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.streetWS);
-		
+		//var value = JSON.stringify($scope.streetWS);
+		var value = utilsService.correctStreetObjectForWS($scope.streetWS);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/street/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
@@ -9378,7 +9378,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getAreaSupplyCsv: used to crate a report csv file from the areaWS list (supply data)
 	$scope.getAreaSupplyCsv = function(){
 		var method = 'POST';
-		//var value = JSON.stringify($scope.areaWS);	// TODO: use the list of object instead of string data
+		//var value = JSON.stringify($scope.areaWS);
 		var value = utilsService.correctAreaObjectForWS($scope.areaWS);
 		
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/area/csv", null, $scope.authHeaders, value);
