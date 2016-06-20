@@ -669,8 +669,8 @@
 						<td class="detailsTitleTableCX"></td>
 						<td class="detailsTitleTableDX">
 							<div ng-repeat="r in psDetails.data.validityPeriod">
-								<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }}: </span>
-								<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }}: </span>
+								<!-- <span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }}: </span>
+								<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }}: </span> -->
 								<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
 								<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
 								<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>

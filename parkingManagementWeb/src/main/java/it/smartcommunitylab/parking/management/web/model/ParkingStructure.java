@@ -215,27 +215,25 @@ public class ParkingStructure {
 	public String feePeriodsSummary(){
 		String DATA_SEPARATOR = " / ";
 		String PERIOD_SEPARATOR = " // ";
-		String DAY_MODE = "day mode";
-		String NIGHT_MODE = "night mode";
+		//String DAY_MODE = "day mode";
+		//String NIGHT_MODE = "night mode";
 		String pSumm = "";
 		for(int i = 0; i < this.validityPeriod.size(); i++){
 			float euro_val = validityPeriod.get(i).getRateValue() / 100F;
-			String dayNightMode = "";
-			if(validityPeriod.get(i).getDayOrNight().compareTo(DAY_MODE) == 0){
-				dayNightMode = "Tariffa diurna: ";
-			} else if(validityPeriod.get(i).getDayOrNight().compareTo(NIGHT_MODE) == 0){
-				dayNightMode = "Tariffa notturna: ";
-			}
-			if(validityPeriod.get(i).isHoliday()) {
-				pSumm += dayNightMode
-						+ String.format("%.2f", euro_val) + " euro/h"
+			//String dayNightMode = "";
+			//if(validityPeriod.get(i).getDayOrNight().compareTo(DAY_MODE) == 0){
+			//	dayNightMode = "Tariffa diurna: ";
+			//} else if(validityPeriod.get(i).getDayOrNight().compareTo(NIGHT_MODE) == 0){
+			//	dayNightMode = "Tariffa notturna: ";
+			//}
+			if(validityPeriod.get(i).isHoliday()) {	// dayNightMode + 
+				pSumm += String.format("%.2f", euro_val) + " euro/h"
 						+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
 						+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
 						+ DATA_SEPARATOR + "Festivo"
 						+ PERIOD_SEPARATOR;
-			} else {
-				pSumm += dayNightMode
-						+ String.format("%.2f", euro_val) + " euro/h"
+			} else { // dayNightMode + 
+				pSumm += String.format("%.2f", euro_val) + " euro/h"
 						+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
 						+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
 						+ PERIOD_SEPARATOR;

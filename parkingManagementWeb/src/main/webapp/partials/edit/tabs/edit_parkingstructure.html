@@ -19,10 +19,10 @@
 										<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
 										<td width="55%">
 											<div ng-repeat="r in ps.data.validityPeriod">
-												<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }} :</span>
-												<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }} :</span>
+<!-- 												<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }} :</span> -->
+<!-- 												<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }} :</span> -->
 												<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
-												<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
+												<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
 												<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
 												<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
 												<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
@@ -191,10 +191,10 @@
 										<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
 										<td width="55%">
 											<div ng-repeat="r in sps.data.validityPeriod">
-												<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }} :</span>
-												<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }} :</span>
+<!-- 												<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }} :</span> -->
+<!-- 												<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }} :</span> -->
 												<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
-												<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
+												<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
 												<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
 												<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
 												<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
@@ -427,10 +427,10 @@
 							<td class="detailsViewStructSX">{{ 'ps_fee_val' | i18n }}:</td>
 							<td class="detailsViewStructDX">
 								<div ng-repeat="r in viewParkingStructure.validityPeriod">
-									<span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }}: </span>
-									<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }}: </span>
+									<!-- <span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }}: </span>
+									<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }}: </span> -->
 									<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
-									<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
+									<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
 									<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
 									<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
 									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
@@ -617,23 +617,23 @@
 				  				<div ng-show="isPeriodFormVisible">
 							  		<table  width="100%">
 										<tr valign="bottom">
-											<!-- <th width="7%">{{ 'area_rate_period_startdate' | i18n }}</th>
-											<th width="7%">{{ 'area_rate_period_enddate' | i18n }}</th> -->
+											<th width="7%">{{ 'area_rate_period_startdate' | i18n }}</th>
+											<th width="7%">{{ 'area_rate_period_enddate' | i18n }}</th>
 											<th width="30%">{{ 'area_rate_period_weekdays' | i18n }}</th>
 											<th width="20%">{{ 'area_rate_period_hours' | i18n }}</th>
 											<th width="10%">{{ 'area_rate_value' | i18n }}</th>
-											<th width="10%">{{ 'area_rate_is_day_or_night' | i18n }}</th>
+<!-- 											<th width="10%">{{ 'area_rate_is_day_or_night' | i18n }}</th> -->
 											<th width="5%">{{ 'area_rate_is_holidays' | i18n }}</th>
 											<th width="20%">{{ 'area_rate_note' | i18n }}</th>
 											<th width="5%"></th>
 										</tr>
 										<tr>
-<!-- 											<td> -->
-<!-- 							  					<input id="fromDate" name="pFromDate" type="text" class="form-control" placeholder="{{getPlaceHolder()}}" ng-model="pr.from" ng-pattern="dateDDMMPatternIt" required /> -->
-<!-- 								    		</td> -->
-<!-- 								    		<td> -->
-<!-- 												<input id="toDate" name="pToDate" type="text" class="form-control" placeholder="{{getPlaceHolder()}}" ng-model="pr.to" ng-pattern="dateDDMMPatternIt" required /> -->
-<!-- 											</td> -->
+											<td>
+							  					<input id="fromDate" name="pFromDate" type="text" class="form-control" placeholder="{{getPlaceHolder()}}" ng-model="pr.from" ng-pattern="dateDDMMPatternIt" required />
+								    		</td>
+								    		<td>
+												<input id="toDate" name="pToDate" type="text" class="form-control" placeholder="{{getPlaceHolder()}}" ng-model="pr.to" ng-pattern="dateDDMMPatternIt" required />
+											</td>
 											<td align="center">
 												<label>{{ 'period_monday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[0]" ng-required="!someSelectedDay(pr.weekDays)"></label>
 												<label>{{ 'period_tuesday' | i18n }}:<input type="checkbox" name="pWeekDays" ng-model="pr.weekDays[1]" ng-required="!someSelectedDay(pr.weekDays)"></label>
@@ -650,18 +650,18 @@
 								    		<td>
 												<input id="fee" type="text" class="form-control" name="pFee" ng-model="pr.rateValue" ng-required="psconf.ps_fee.required" ng-pattern="decimalNumbers" placeholder="{{ 'area_fee_placeholder' | i18n }}" >
 								    		</td>
-								    		<td>
-												<select id="day_night" type="text" class="form-control" name="pDayNight" ng-model="pr.dayOrNight">
-													<option value="{{ all_mode }}">{{ 'all_day_night_mode' | i18n }}</option>
-													<option value="{{ day_mode }}">{{ 'day_mode' | i18n }}</option>
-													<option value="{{ night_mode }}">{{ 'night_mode' | i18n }}</option>
-												</select>
-								    		</td>
+<!-- 								    		<td> -->
+<!-- 												<select id="day_night" type="text" class="form-control" name="pDayNight" ng-model="pr.dayOrNight"> -->
+<!-- 													<option value="{{ all_mode }}">{{ 'all_day_night_mode' | i18n }}</option> -->
+<!-- 													<option value="{{ day_mode }}">{{ 'day_mode' | i18n }}</option> -->
+<!-- 													<option value="{{ night_mode }}">{{ 'night_mode' | i18n }}</option> -->
+<!-- 												</select> -->
+<!-- 								    		</td> -->
 								    		<td align="center">
 												<input type="checkbox" id="is_holiday" ng-model="pr.holiday" name="pIsHoliday" class="form-control">
 								    		</td>
 								    		<td>
-												<input id="note" type="text" class="form-control" name="pNote" ng-model="pr.note" ng-required="false" placeholder="{{ 'area_rate_period_note_placeholder' | i18n }}" >
+												<input id="note" type="text" class="form-control" name="pNote" ng-model="pr.note" placeholder="{{ 'area_rate_period_note_placeholder' | i18n }}" >
 								    		</td>
 											<td width="3%">
 												&nbsp;
@@ -676,16 +676,16 @@
 										</tr>
 										<tr>
 											<td colspan="8">
-												<!-- <div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.pattern || notValidDateFrom">{{ 'area_rate_period_startdate_error_pattern' | i18n }}</div>
-												<div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.required">{{ 'area_rate_period_startdate_error_required' | i18n }}</div> -->
-												<!-- <div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.pattern || notValidDateTo">{{ 'area_rate_period_enddate_error_pattern' | i18n }}</div>
-												<div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.required">{{ 'area_rate_period_enddate_error_required' | i18n }}</div> -->
+												<div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.pattern || notValidDateFrom">{{ 'area_rate_period_startdate_error_pattern' | i18n }}</div>
+												<div class="field-error" ng-show="!isInitPeriod && form.pFromDate.$error.required">{{ 'area_rate_period_startdate_error_required' | i18n }}</div>
+												<div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.pattern || notValidDateTo">{{ 'area_rate_period_enddate_error_pattern' | i18n }}</div>
+												<div class="field-error" ng-show="!isInitPeriod && form.pToDate.$error.required">{{ 'area_rate_period_enddate_error_required' | i18n }}</div>
 												<div class="field-error" ng-show="!isInitPeriod && form.pWeekDays.$error.required">{{ 'area_weekdays_err_required' | i18n }}</div>
 												<div class="field-error" ng-show="!isInitPeriod && form.pTime.$error.required">{{ 'area_openingtime_err_required' | i18n }}</div>
 					   							<div class="field-error" ng-show="!isInitPeriod && form.pTime.$error.pattern">{{ 'area_openingtime_err_pattern' | i18n }}</div>
 					   							<div class="field-error" ng-show="!isInitPeriod && form.pFee.$error.required">{{ 'area_fee_err_required' | i18n }}</div>
 					   							<div class="field-error" ng-show="!isInitPeriod && form.pFee.$error.pattern">{{ 'area_fee_err_pattern' | i18n }}</div>
-					   							<div class="field-error" ng-show="!isInitPeriod && form.pNote.$error.required">{{ 'area_note_err_required' | i18n }}</div>
+					   							<!-- <div class="field-error" ng-show="!isInitPeriod && form.pNote.$error.required">{{ 'area_note_err_required' | i18n }}</div> -->
 											</td>
 										</tr>
 									</table>
@@ -694,24 +694,24 @@
 								</div>
 						  		<table width="100%" ng-show="parkingStructure.validityPeriod.length > 0">
 									<tr>
-										<!-- <th width="7%">{{ 'area_rate_period_startdate' | i18n }}</th>
-										<th width="7%">{{ 'area_rate_period_enddate' | i18n }}</th> -->
+										<th width="7%">{{ 'area_rate_period_startdate' | i18n }}</th>
+										<th width="7%">{{ 'area_rate_period_enddate' | i18n }}</th>
 										<th width="20%">{{ 'area_rate_period_weekdays' | i18n }}</th>
 										<th width="20%">{{ 'area_rate_period_hours' | i18n }}</th>
 										<th width="10%">{{ 'area_fee' | i18n }}</th>
-										<th width="10%">{{ 'area_rate_is_day_or_night' | i18n }}</th>
+<!-- 										<th width="10%">{{ 'area_rate_is_day_or_night' | i18n }}</th> -->
 										<th width="5%">{{ 'area_rate_is_holidays' | i18n }}</th>
 										<th width="25%">{{ 'area_rate_note' | i18n }}</th>
 										<th width="10%"></th>
 									</tr>
 						  			<tbody class="animate-repeat" ng-repeat="r in parkingStructure.validityPeriod">
 									<tr>
-										<!-- <td>
+										<td>
 								   			{{ (r.from | date:'dd/MM') }}
 								   		</td>
 								   		<td>
 											{{ (r.to | date:'dd/MM') }}
-										</td> -->
+										</td>
 										<td>
 											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
 										</td>
@@ -723,11 +723,11 @@
 										<td>
 											{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}
 										</td>
-										<td>
-											<span ng-show="r.dayOrNight == all_mode">{{ 'all_day_night_mode' | i18n }}</span>
-											<span ng-show="r.dayOrNight == day_mode">{{ 'day_mode' | i18n }}</span>
-											<span ng-show="r.dayOrNight == night_mode">{{ 'night_mode' | i18n }}</span>
-										</td>
+<!-- 										<td> -->
+<!-- 											<span ng-show="r.dayOrNight == all_mode">{{ 'all_day_night_mode' | i18n }}</span> -->
+<!-- 											<span ng-show="r.dayOrNight == day_mode">{{ 'day_mode' | i18n }}</span> -->
+<!-- 											<span ng-show="r.dayOrNight == night_mode">{{ 'night_mode' | i18n }}</span> -->
+<!-- 										</td> -->
 										<td>
 											<span ng-show="r.holiday">{{ 'yes_val_select' | i18n }}</span>
 											<span ng-show="!r.holiday">{{ 'no_val_select' | i18n }}</span>

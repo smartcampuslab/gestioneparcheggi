@@ -54,7 +54,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class DynamicManagerTest {
 	
 	private static final String appId="rv";
-	private static final String appIdTn="tn";
+	private static final String appIdTn="comune_tn";
 	private static final int min = 0;
 	private static final int max = 5;
 	private static final long MILLISINYEAR = 31556952000L;
@@ -349,88 +349,11 @@ public class DynamicManagerTest {
 //		
 //	}
 	
-//	@Test
-//	public void loadOldLogTn() throws Exception {
-//	
-//		List<StreetLog> myOldStreets = dynManager.getOldLogs();
-//		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appIdTn));
-//		for(int i = 0; i < myOldStreets.size(); i++){
-//			//System.err.println(myOldStreets.get(i).getValue());
-//			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
-//			
-//			//manager.setAppId(appId);
-//			boolean found = false;
-//			for(int j = 0; (j < myStreets.size()) && !found; j++){
-//				if(myStreets.get(j).getName().compareTo(street.getString("name")) == 0){
-//					found = true;
-//					Street s = myStreets.get(j);
-//					System.out.println("Street founded " + s.toJSON());
-//					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
-//					//s.setId(sId);
-//					Random random = new Random();
-//					//int offset = random.nextInt(max - min + 1) + min; // NB: use offset to create test data
-//					int offset = 0;
-//					int freeSlots = street.getInt("slotsFree");
-//					int slotsPaying = street.getInt("slotsPaying");
-//					int slotsTimed = street.getInt("slotsTimed");
-//					int total = freeSlots + slotsPaying + slotsTimed;
-//					int occupiedOnFree = street.getInt("slotsOccupiedOnFree") + offset;
-//					if(occupiedOnFree >= freeSlots){
-//						occupiedOnFree = freeSlots;
-//					}
-//					int occupiedOnPaying = street.getInt("slotsOccupiedOnPaying") + offset;
-//					if(occupiedOnPaying >= slotsPaying){
-//						occupiedOnPaying = slotsPaying;
-//					}
-//					int occupiedOnTimed = street.getInt("slotsOccupiedOnTimed") + offset;
-//					if(occupiedOnTimed >= slotsTimed){
-//						occupiedOnTimed = slotsTimed;
-//					}
-//					int unavailableSlot = street.getInt("slotsUnavailable") + offset;
-//					int occTot = occupiedOnFree + occupiedOnPaying + occupiedOnTimed;
-//					int free = total - occTot;
-//					if(unavailableSlot > free){
-//						unavailableSlot = free;
-//					}
-//					long updateTime = myOldStreets.get(i).getTime() + MILLISINYEAR;	//2013 + 1 anno
-//					
-//					//s.setSlotsFree(freeSlots);
-//					if(s.getSlotsFree() > 0){
-//						s.setSlotsOccupiedOnFree(occupiedOnFree);
-//					} else {
-//						s.setSlotsOccupiedOnFreeSigned(occupiedOnFree);
-//					}
-//					//s.setSlotsPaying(slotsPaying);
-//					s.setSlotsOccupiedOnPaying(occupiedOnPaying);
-//					//s.setSlotsTimed(slotsTimed);
-//					s.setSlotsOccupiedOnTimed(occupiedOnTimed);
-//					if(unavailableSlot > 0){
-//						System.out.println("unavailableSlots " + unavailableSlot);
-//					}
-//					s.setSlotsUnavailable(unavailableSlot);
-//					s.setUpdateTime(updateTime);
-//					s.setUser(999);
-//					try {
-//						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, "999", true, null, -1);
-//						System.out.println("Street updated " + s.toJSON());
-//					} catch (DatabaseException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//			
-//		}
-//		
-//		Assert.assertTrue(myOldStreets.size() > 0);
-//		
-//	}
-	
 	@Test
-	public void loadOldLogRv() throws Exception {
+	public void loadOldLogTn() throws Exception {
 	
 		List<StreetLog> myOldStreets = dynManager.getOldLogs();
-		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appIdTn));
 		for(int i = 0; i < myOldStreets.size(); i++){
 			//System.err.println(myOldStreets.get(i).getValue());
 			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
@@ -445,7 +368,7 @@ public class DynamicManagerTest {
 					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
 					//s.setId(sId);
 					Random random = new Random();
-					//int offset = random.nextInt(max - min + 1) + min; valori di test
+					//int offset = random.nextInt(max - min + 1) + min; // NB: use offset to create test data
 					int offset = 0;
 					int freeSlots = street.getInt("slotsFree");
 					int slotsPaying = street.getInt("slotsPaying");
@@ -472,7 +395,11 @@ public class DynamicManagerTest {
 					long updateTime = myOldStreets.get(i).getTime();// + MILLISINYEAR;	//2013 + 1 anno
 					
 					//s.setSlotsFree(freeSlots);
-					s.setSlotsOccupiedOnFree(occupiedOnFree);
+					if(s.getSlotsFree() > 0){
+						s.setSlotsOccupiedOnFree(occupiedOnFree);
+					} else {
+						s.setSlotsOccupiedOnFreeSigned(occupiedOnFree);
+					}
 					//s.setSlotsPaying(slotsPaying);
 					s.setSlotsOccupiedOnPaying(occupiedOnPaying);
 					//s.setSlotsTimed(slotsTimed);
@@ -484,10 +411,8 @@ public class DynamicManagerTest {
 					s.setUpdateTime(updateTime);
 					s.setUser(999);
 					try {
-						if(updateTime >= 1446505200000L){	// to load only the recent updates
-							dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "999", true, null, -1);
-							System.out.println("Street updated " + s.toJSON());
-						}
+						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, "999", true, null, -1);
+						System.out.println("Street updated " + s.toJSON());
 					} catch (DatabaseException e) {
 						// TODO Auto-generated catch block
 						e.printStackTrace();
@@ -501,6 +426,81 @@ public class DynamicManagerTest {
 		
 	}
 	
+//	@Test
+//	public void loadOldLogRv() throws Exception {
+//	
+//		List<StreetLog> myOldStreets = dynManager.getOldLogs();
+//		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+//		for(int i = 0; i < myOldStreets.size(); i++){
+//			//System.err.println(myOldStreets.get(i).getValue());
+//			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
+//			
+//			//manager.setAppId(appId);
+//			boolean found = false;
+//			for(int j = 0; (j < myStreets.size()) && !found; j++){
+//				if(myStreets.get(j).getName().compareTo(street.getString("name")) == 0){
+//					found = true;
+//					Street s = myStreets.get(j);
+//					System.out.println("Street founded " + s.toJSON());
+//					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
+//					//s.setId(sId);
+//					Random random = new Random();
+//					//int offset = random.nextInt(max - min + 1) + min; valori di test
+//					int offset = 0;
+//					int freeSlots = street.getInt("slotsFree");
+//					int slotsPaying = street.getInt("slotsPaying");
+//					int slotsTimed = street.getInt("slotsTimed");
+//					int total = freeSlots + slotsPaying + slotsTimed;
+//					int occupiedOnFree = street.getInt("slotsOccupiedOnFree") + offset;
+//					if(occupiedOnFree >= freeSlots){
+//						occupiedOnFree = freeSlots;
+//					}
+//					int occupiedOnPaying = street.getInt("slotsOccupiedOnPaying") + offset;
+//					if(occupiedOnPaying >= slotsPaying){
+//						occupiedOnPaying = slotsPaying;
+//					}
+//					int occupiedOnTimed = street.getInt("slotsOccupiedOnTimed") + offset;
+//					if(occupiedOnTimed >= slotsTimed){
+//						occupiedOnTimed = slotsTimed;
+//					}
+//					int unavailableSlot = street.getInt("slotsUnavailable") + offset;
+//					int occTot = occupiedOnFree + occupiedOnPaying + occupiedOnTimed;
+//					int free = total - occTot;
+//					if(unavailableSlot > free){
+//						unavailableSlot = free;
+//					}
+//					long updateTime = myOldStreets.get(i).getTime();// + MILLISINYEAR;	//2013 + 1 anno
+//					
+//					//s.setSlotsFree(freeSlots);
+//					s.setSlotsOccupiedOnFree(occupiedOnFree);
+//					//s.setSlotsPaying(slotsPaying);
+//					s.setSlotsOccupiedOnPaying(occupiedOnPaying);
+//					//s.setSlotsTimed(slotsTimed);
+//					s.setSlotsOccupiedOnTimed(occupiedOnTimed);
+//					if(unavailableSlot > 0){
+//						System.out.println("unavailableSlots " + unavailableSlot);
+//					}
+//					s.setSlotsUnavailable(unavailableSlot);
+//					s.setUpdateTime(updateTime);
+//					s.setUser(999);
+//					try {
+//						if(updateTime >= 1446505200000L){	// to load only the recent updates
+//							dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "999", true, null, -1);
+//							System.out.println("Street updated " + s.toJSON());
+//						}
+//					} catch (DatabaseException e) {
+//						// TODO Auto-generated catch block
+//						e.printStackTrace();
+//					}
+//				}
+//			}
+//			
+//		}
+//		
+//		Assert.assertTrue(myOldStreets.size() > 0);
+//		
+//	}
+//	
 	
 	/*@Test
 	public void loadOldLogParkRv() throws Exception {

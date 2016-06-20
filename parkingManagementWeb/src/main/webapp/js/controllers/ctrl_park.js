@@ -396,7 +396,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	}
 	    	if(!$scope.notValidDateFrom && !$scope.notValidDateTo){
 		   		var periodData = {};
-		   		period.rateValue = parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100;	// here I force the cast to int
+		   		period.rateValue = Math.ceil(parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100);	// here I force the cast to int
 		   		period.weekDays = $scope.getWeekDaysFromArray(period.weekDays, 1),
 		   		angular.copy(period, periodData);
 		   		if(type == 0){
@@ -3981,12 +3981,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var validityPeriod = [];
 				for(var i = 0; i < ps.validityPeriod.length; i++){
 					var corrPeriod = {
-						//from: ps.validityPeriod[i].from,
-						//to: ps.validityPeriod[i].to,
+						from: ps.validityPeriod[i].from,
+						to: ps.validityPeriod[i].to,
 						weekDays: ps.validityPeriod[i].weekDays,
 						timeSlot: ps.validityPeriod[i].timeSlot,
 						rateValue: ps.validityPeriod[i].rateValue,
-						dayOrNight: ps.validityPeriod[i].dayOrNight,
+						//dayOrNight: ps.validityPeriod[i].dayOrNight,
 						holiday: ps.validityPeriod[i].holiday,
 						note: ps.validityPeriod[i].note
 					};
@@ -4746,10 +4746,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var validityPeriod = [];
 				for(var i = 0; i < ps.validityPeriod.length; i++){
 					var corrPeriod = {
+						from: ps.validityPeriod[i].from,
+						to: ps.validityPeriod[i].to,
 						weekDays: ps.validityPeriod[i].weekDays,
 						timeSlot: ps.validityPeriod[i].timeSlot,
 						rateValue: ps.validityPeriod[i].rateValue,
-						dayOrNight: ps.validityPeriod[i].dayOrNight,
+						//dayOrNight: ps.validityPeriod[i].dayOrNight,
 						holiday: ps.validityPeriod[i].holiday,
 						note: ps.validityPeriod[i].note
 					};
