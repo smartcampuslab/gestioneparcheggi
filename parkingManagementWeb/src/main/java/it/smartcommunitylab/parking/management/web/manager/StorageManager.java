@@ -77,9 +77,14 @@ public class StorageManager {
 		area.setName(a.getName());
 		area.setColor(a.getColor());
 		//area.setFee(a.getFee());
-		area.setSmsCode(a.getSmsCode());
 		//area.setTimeSlot(a.getTimeSlot());
 		//area.setValidityPeriod(a.getValidityPeriod());
+		if(a.getNote() != null){
+			area.setNote(a.getNote());
+		}
+		if(a.getSmsCode() != null){
+			area.setSmsCode(a.getSmsCode());
+		}
 		if(a.getValidityPeriod() != null){
 			if(area.getValidityPeriod() != null){
 				area.getValidityPeriod().clear();

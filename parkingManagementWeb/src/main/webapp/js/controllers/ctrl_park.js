@@ -307,12 +307,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.notValidDateTo = false;
     $scope.tmpPr = {};
     $scope.pr  = {
-	    from: null,
-	    to: null,
-	    weekDays: [false, false, false, false, false, false, false],
-	    timeSlot: null,
+	    from: "01/01",
+	    to: "31/12",
+	    weekDays: [true, true, true, true, true, true, true],
+	    timeSlot: "00:00 - 23:59",
 	    rateValue: 0.0,
-	    dayOrNight: $scope.all_mode,
+	    //dayOrNight: $scope.all_mode,
 	    holiday: false,
 	    note: null
 	};
@@ -329,12 +329,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	weekDays: [true, true, true, true, true, true, true],
 	    	timeSlot: null,
 	    	rateValue: 0.0,
-	    	dayOrNight: $scope.all_mode,
+	    	//dayOrNight: $scope.all_mode,
 	    	holiday: false,
 	    	note: null
 	    };
     };
-    $scope.clearPr();
+    //$scope.clearPr();
     
     $scope.showPForm = function(){
     	$scope.clearPr();	// To clean the form input data
@@ -2988,6 +2988,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			if(parkingStruct.openingTime != null){
 				$scope.openingPeriods = parkingStruct.openingTime.period;
 			}
+			
+			
 			
 			angular.copy(parkingStruct, $scope.parkingStructure);
 			for(var i = 0; i < parkingStruct.paymentMode.length; i++){

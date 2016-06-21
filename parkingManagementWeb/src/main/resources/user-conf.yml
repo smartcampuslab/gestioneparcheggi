@@ -21,8 +21,8 @@ users:
     surname: Mobilita
     mail: info@trentinomobilita.it
   - id: ComuneTrento
-    username: comunetrento
-    password: metroCT$16
+    username: comunetrentotest
+    password: metroCTT$16
     appId: comune_tn
     name: Comune
     surname: Trento
