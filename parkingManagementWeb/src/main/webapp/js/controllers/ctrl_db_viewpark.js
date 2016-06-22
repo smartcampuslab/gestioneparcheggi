@@ -9337,8 +9337,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.getPMSupplyCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.parkingMeterWS);
-		
+		//var value = JSON.stringify($scope.parkingMeterWS);
+		var value = utilsService.correctPMObjectForWS($scope.parkingMeterWS);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/parkingmeter/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
@@ -9352,19 +9352,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var value = "";
 		switch(z_index){
 			case 0:
-				value = JSON.stringify($scope.zoneWS0);
+				//value = JSON.stringify($scope.zoneWS0);
+				value = utilsService.correctZoneObjectForWS($scope.zoneWS0);
 				break;
 			case 1:
-				value = JSON.stringify($scope.zoneWS1);
+				//value = JSON.stringify($scope.zoneWS1);
+				value = utilsService.correctZoneObjectForWS($scope.zoneWS1);
 				break;
 			case 2:
-				value = JSON.stringify($scope.zoneWS2);
+				//value = JSON.stringify($scope.zoneWS2);
+				value = utilsService.correctZoneObjectForWS($scope.zoneWS2);
 				break;
 			case 3:
-				value = JSON.stringify($scope.zoneWS3);
+				//value = JSON.stringify($scope.zoneWS3);
+				value = utilsService.correctZoneObjectForWS($scope.zoneWS3);
 				break;
 			case 4:
-				value = JSON.stringify($scope.zoneWS4);
+				//value = JSON.stringify($scope.zoneWS4);
+				value = utilsService.correctZoneObjectForWS($scope.zoneWS4);
 				break;
 		}
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/zone/csv", null, $scope.authHeaders, value);
@@ -9406,8 +9411,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     // ------------------------------------------- Block for occupancy CSV creation --------------------------------------
     $scope.getStreetOccupancyCsv = function(){
 		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var value = JSON.stringify($scope.streetWS);
+		//var value = JSON.stringify($scope.streetWS);
+		var value = utilsService.correctOccStreetObjectForWS($scope.streetWS);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/street/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
@@ -9421,19 +9426,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var value = "";
 		switch(z_index){
 			case 0:
-				value = JSON.stringify($scope.zoneWS0);
+				//value = JSON.stringify($scope.zoneWS0);
+				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS0);
 				break;
 			case 1:
-				value = JSON.stringify($scope.zoneWS1);
+				//value = JSON.stringify($scope.zoneWS1);
+				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS1);
 				break;
 			case 2:
-				value = JSON.stringify($scope.zoneWS2);
+				//value = JSON.stringify($scope.zoneWS2);
+				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS2);
 				break;
 			case 3:
-				value = JSON.stringify($scope.zoneWS3);
+				//value = JSON.stringify($scope.zoneWS3);
+				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS3);
 				break;
 			case 4:
-				value = JSON.stringify($scope.zoneWS4);
+				//value = JSON.stringify($scope.zoneWS4);
+				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS4);
 				break;
 		}
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/zone/csv", null, $scope.authHeaders, value);
@@ -9476,9 +9486,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// -------------------------------------------------- Block for profit CSV creation ---------------------------------------------
 	$scope.getStreetProfitCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.profitStreetsList);
-		
-	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
+		//var value = JSON.stringify($scope.profitStreetsList);
+		var value = utilsService.correctProfitStreetObjectForWS($scope.profitStreetsList);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/street/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
@@ -9489,7 +9498,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	$scope.getPMProfitCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.parkingMeterWS);
+		//var value = JSON.stringify($scope.parkingMeterWS);
+		var value = utilsService.correctProfitPMObjectForWS($scope.parkingMeterWS);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingmeter/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
@@ -9503,19 +9513,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var value = "";
 		switch(z_index){
 			case 0:
-				value = JSON.stringify($scope.profitZonesList0);
+				//value = JSON.stringify($scope.profitZonesList0);
+				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList0);
 				break;
 			case 1:
-				value = JSON.stringify($scope.profitZonesList1);
+				//value = JSON.stringify($scope.profitZonesList1);
+				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList1);
 				break;
 			case 2:
-				value = JSON.stringify($scope.profitZonesList2);
+				//value = JSON.stringify($scope.profitZonesList2);
+				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList2);
 				break;
 			case 3:
-				value = JSON.stringify($scope.profitZonesList3);
+				//value = JSON.stringify($scope.profitZonesList3);
+				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList3);
 				break;
 			case 4:
-				value = JSON.stringify($scope.profitZonesList4);
+				//value = JSON.stringify($scope.profitZonesList4);
+				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList4);
 				break;
 		}
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/zone/csv", null, $scope.authHeaders, value);
@@ -9555,7 +9570,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// ------------------------------------------------ Block for time cost CSV creation ---------------------------------------------
 	$scope.getStreetTimeCostCsv = function(){
 		var method = 'POST';
-		var value = JSON.stringify($scope.streetWS);
+		//var value = JSON.stringify($scope.streetWS);
+		var value = utilsService.correctTimeCostStreetObjectForWS($scope.streetWS);
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/street/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
@@ -9569,19 +9585,24 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var value = "";
 		switch(z_index){
 			case 0:
-				value = JSON.stringify($scope.zoneWS0);
+				//value = JSON.stringify($scope.zoneWS0);
+				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS0);
 				break;
 			case 1:
-				value = JSON.stringify($scope.zoneWS1);
+				//value = JSON.stringify($scope.zoneWS1);
+				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS1);
 				break;
 			case 2:
-				value = JSON.stringify($scope.zoneWS2);
+				//value = JSON.stringify($scope.zoneWS2);
+				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS2);
 				break;
 			case 3:
-				value = JSON.stringify($scope.zoneWS3);
+				//value = JSON.stringify($scope.zoneWS3);
+				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS3);
 				break;
 			case 4:
-				value = JSON.stringify($scope.zoneWS4);
+				//value = JSON.stringify($scope.zoneWS4);
+				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS4);
 				break;
 		}
 	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/zone/csv", null, $scope.authHeaders, value);

@@ -77,32 +77,5 @@ public class OccupancyStreet extends Street{
 		OccupancyStreet v = (OccupancyStreet) obj;
 		return v != null && this.id != null && v.getId().equals(this.id);
 	}
-
-//	public String toJSON(){
-//		String json = "{";
-//		json += "\"id\":\"" + getId() + "\",";
-//		json += "\"id_app\":\"" + getId_app() + "\",";
-//		json += "\"streetReference\":\"" + getStreetReference() + "\",";
-//		json += "\"area_name\":\"" + getArea_name() + "\",";
-//		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
-//		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-//		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
-//		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";
-//		json += "\"freeParkSlotSignNumber\":\"" + getFreeParkSlotSignNumber() + "\",";
-//		json += "\"freeParkSlotSignOccupied\":\"" + getFreeParkSlotSignOccupied() + "\",";
-//		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
-//		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
-//		json += "\"reservedSlotNumber\":\"" + getReservedSlotNumber() + "\",";
-//		json += "\"reservedSlotOccupied\":\"" + getReservedSlotOccupied() + "\",";
-//		json += "\"timedParkSlotNumber\":\"" + getTimedParkSlotNumber() + "\",";
-//		json += "\"timedParkSlotOccupied\":\"" + getTimedParkSlotOccupied() + "\",";
-//		json += "\"paidSlotNumber\":\"" + getPaidSlotNumber() + "\",";
-//		json += "\"paidSlotOccupied\":\"" + getPaidSlotOccupied() + "\",";
-//		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
-//		json += "\"zones\":\"" + getZones() + "\",";
-//		json += "\"parkingMeters\":\"" + getParkingMeters() + "\"";
-//		json += "}";
-//		return json;
-//	}
 	
 }

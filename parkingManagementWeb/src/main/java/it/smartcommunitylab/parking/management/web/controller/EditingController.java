@@ -36,13 +36,11 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -224,6 +222,7 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/{zType}")
 	public @ResponseBody
 	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
+		logger.debug("passed params: " + appId + ", " + type);
 		//return storage.getAllZone(appId);
 		if(type == null || type.compareTo("") == 0){
 			return storage.getAllZone("all");

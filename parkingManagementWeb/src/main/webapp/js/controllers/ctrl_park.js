@@ -300,7 +300,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     // -------------------------------- New part for periods and rate ----------------------------------
     $scope.isPeriodFormVisible = false;
-    //$scope.area.validityPeriod = (!$scope.area.validityPeriod) ? [] :  $scope.area.validityPeriod;
     
     $scope.isInitPeriod = true;
     $scope.notValidDateFrom = false;

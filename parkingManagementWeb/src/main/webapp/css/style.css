@@ -167,9 +167,8 @@ div.listwrapper {
 }
 
 div.tablewrapper {
-    height: 490px; 
+    height: 400px; 
     overflow-y: auto;
-    margin-bottom: 10px;
 }
 
 div.detailstablewrapper {
@@ -194,7 +193,7 @@ div.logwrapper {
 }
 
 .angular-google-map-container {
-    height: 700px; 
+    height: 400px;
 }
 
 div.map_margins {
@@ -561,7 +560,7 @@ div #panelMap {
 
 .footer div{
 	align: center;
-}    
+}   
 
 .navbar-brand > img {
 	height: 70px;
@@ -736,3 +735,43 @@ label.group-label {
 	margin-top: 0;
 	margin-bottom: 0;
 }
+
+	/* default I show the small objects */
+	#my-small-login { display: block; }   /* hide it elsewhere */
+  	#my-big-login { display: none; }   /* show it elsewhere */
+	#my-small-menu { display: block; }
+  	#my-big-menu { display: none; }
+  	#my-small-body { display: block; }
+  	#my-big-body { display: none; }
+  	
+
+	/* if width bigger than 768px I show the big objects */
+	@media (min-width:769px) {
+		.nav-tabs.nav-justified > li { float: none; }
+		.angular-google-map-container { height: 700px; }
+		.panel-body { padding: 5px; }
+		#my-small-login { display: block; }   /* hide it elsewhere */
+  		#my-big-login { display: none; }   /* show it elsewhere */
+		#my-small-menu { display: block; }
+  		#my-big-menu { display: none; }
+  		#my-small-body { display: block; }
+  		#my-big-body { display: none; }
+	}
+	
+	/* if width bigger than 1170px I show the big objects */
+	@media (min-width:1170px) {
+		.nav-tabs.nav-justified > li { float: none; }
+		.angular-google-map-container { height: 700px; }
+		.tablewrapper { 
+			margin-bottom: 10px;
+			height: 490px; 
+		}
+		#my-small-login { display: none; }   /* hide it elsewhere */
+  		#my-big-login { display: block; }   /* show it elsewhere */
+		#my-small-menu { display: none; }
+  		#my-big-menu { display: block; }
+  		#my-small-body { display: none; }
+  		#my-big-body { display: block; }
+	}
+
+

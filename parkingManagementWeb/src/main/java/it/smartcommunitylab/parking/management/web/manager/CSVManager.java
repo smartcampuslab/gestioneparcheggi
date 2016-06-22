@@ -40,7 +40,6 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.text.DateFormat;
-import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -146,7 +145,7 @@ public class CSVManager {
 				String macro = z.getSubmacro();
 				String micro = z.getSubmicro();
 				if(micro == null)micro = "";
-				writer.append((macro != null) ? macro : micro);	// to convert to area name
+				writer.append((macro != null && macro.compareTo("") != 0) ? macro : micro);	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append(z.getType());
 				writer.append(CSV_SEPARATOR);

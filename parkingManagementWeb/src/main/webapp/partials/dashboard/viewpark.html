@@ -1,6 +1,7 @@
-<div class="row" ng-controller="ViewDashboardCtrlPark"> <!-- ng-init="initWsView(1)" -->
+<div class="row" ng-controller="ViewDashboardCtrlPark">
 	<div>
-		<div class="col-md-2 left-filter"><!-- style="margin-top:10px" -->
+<!-- 		<div class="col-md-2 left-filter"> -->
+		<div ng-class="{'col-md-2':!tabletWiew, 'col-sm-2':tabletWiew}" class="left-filter">	
 			<h4><strong>{{ 'left_filter_title' | i18n }}</strong></h4>
 			<div ng-show="isInListTab()">
 				<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
@@ -192,7 +193,6 @@
 	                </tr>
 					<tr ng-if="hourOptions.value=='custom'" ng-show="dashboard_filter.hours">
 						<td align="left">
-<!-- 							<br/><br/> -->
 	                        <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateHour(hourSliderValue)" />
 	                    </td>
 					</tr>
@@ -226,142 +226,9 @@
 			</div>	
 		</div>
 	</div>
-<!-- 	<div ng-show="!isInListTab()"> -->
-<!-- 		<div class="col-md-2 left-filter" >style="margin-top:10px" -->
-<!-- 					<h4><strong>{{ 'left_filter_title' | i18n }}</strong></h4> -->
-<!-- 					<div> -->
-<!-- 						<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5> -->
-<!-- 						<table width="100%"> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="slotSupply" type="radio" ng-model="dashboard_topics" value="parkSupply" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_parkSupply' | i18n }}</label></td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="occupancy" type="radio" ng-model="dashboard_topics" value="occupation" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_occupation' | i18n }}</label></td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="receipt" type="radio" ng-model="dashboard_topics" value="receipts" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_receipts' | i18n }}</label></td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="time" type="radio" ng-model="dashboard_topics" value="timeCost" ng-change="changeDashboardView(1)" ng-disabled="disableThemes">&nbsp;{{ 'park_timeCost' | i18n }}</label></td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="park&ride" type="radio" ng-model="dashboard_topics" value="pr" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_pr' | i18n }}</span></label></td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="balance" type="radio" ng-model="dashboard_topics" value="budget" ng-change="changeDashboardView(1)" ng-disabled="true">&nbsp;<span style="color:gray">{{ 'park_budget' | i18n }}</span></label></td> -->
-<!-- 							</tr> -->
-<!-- 						</table> -->
-<!-- 						<p style="font-size:3px">&nbsp;</p> -->
-<!-- 					</div> -->
-<!-- 					<div> -->
-<!-- 						<h5><strong>{{ 'space_filter_title' | i18n }}</strong></h5> -->
-<!-- 						<table width="100%"> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="rateArea" type="checkbox" ng-model="dashboard_space.rate_area" ng-click="changeAreaPolygons(dashboard_topics)">&nbsp;{{ 'view_areas' | i18n }}</label></td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="zones" type="checkbox" ng-model="dashboard_space.macrozone" ng-click="changeZonePolygons(dashboard_topics)">&nbsp;{{ 'view_macrozones' | i18n }}</label></td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="streets" type="checkbox" ng-model="dashboard_space.microzone" ng-click="changeStreetPolylines(dashboard_topics)">&nbsp;{{ 'view_streets' | i18n }}</label></td>ng-click="changeStreetAndPS()" -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="streets_part" type="checkbox" ng-model="dashboard_space.microzone_part" ng-click="changeStreetPolylines(dashboard_topics)" disabled >&nbsp;<span style="color:gray">{{ 'view_streets_part' | i18n }}</span></label></td>ng-click="changeStreetAndPS()" -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="pStruct" type="checkbox" ng-model="dashboard_space.parkingstructs" ng-click="changeParkingStructuresMarkers(dashboard_topics)">&nbsp;{{ 'view_parkingstructs' | i18n }}</label></td> -->
-<!-- 							</tr> -->
-<!-- 							<tr> -->
-<!-- 								<td align="left"><label class="left-filter"><input id="pMeters" type="checkbox" ng-model="dashboard_space.parkingmeter" ng-click="changeParkingMetersMarkers(dashboard_topics)" ng-disabled="dashboard_topics=='occupation' || dashboard_topics=='timeCost'">&nbsp;<span ng-if="dashboard_topics=='occupation' || dashboard_topics=='timeCost'" style="color:gray">{{ 'view_parkingmeters' | i18n }}</span><span ng-if="dashboard_topics!='occupation' && dashboard_topics!='timeCost'" style="color:#333">{{ 'view_parkingmeters' | i18n }}</span></label></td> -->
-<!-- 							</tr> -->
-<!-- 						</table> -->
-<!-- 						<p style="font-size:3px">&nbsp;</p> -->
-<!-- 					</div> -->
-<!-- 					<div ng-show="dashboard_topics=='occupation' || dashboard_topics=='receipts' || dashboard_topics=='timeCost'"> -->
-<!-- 							<h5><strong>{{ 'occupation_filter_title' | i18n }}</strong></h5> -->
-<!-- 							<table width="100%" ng-controller="TimeFilterCtrl"> -->
-<!--                                 <tr> -->
-<!--                                     <td align="left"> -->
-<!--                                         <select class="form-control input-sm" ng-model="vis" ng-change="updateSearch(1)"> -->
-<!--                                             <option ng-repeat="v in visOptions" value="{{v}}">{{ v | i18n}}</option> -->
-<!--                                         </select> -->
-<!--                                     </td> -->
-<!--                                 </tr> -->
-<!--                                 <tr ng-if="vis=='vis_medium' || vis=='vis_last_value'"> -->
-<!--                                     <td align="left"> -->
-<!--                                         <label class="left-filter">{{'year_vis'|i18n}}</label>ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound"  -->
-<!--                                         <select class="form-control input-sm" ng-model="year" ng-change="updateYear(year, 1)"> -->
-<!--                                             <option value="">{{'all_years_vis'|i18n}}</option> -->
-<!--                                             <option ng-repeat="y in years" value="{{y}}">{{y}}</option> -->
-<!--                                         </select> -->
-<!--                                     </td> -->
-<!--                                 </tr> -->
-<!-- 								<tr ng-if="vis=='vis_medium' || vis=='vis_medium_year' || vis=='vis_last_value'"> -->
-<!-- 									<td align="left"> -->
-<!-- 										<br/> -->
-<!-- 										<label class="left-filter"><input id="monthFilter" type="checkbox" ng-model="dashboard_filter.months" ng-click="updateFilterObject(dashboard_filter, 1, 1)">&nbsp;{{'month_vis'| i18n}}</label>ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound"  -->
-<!--                                         <div ng-show="dashboard_filter.months"> -->
-<!-- 											<input ng-model="monthSliderValue" type="text" id="monthSlider" slider options="monthSliderOptions" ng-change="updateMonth(monthSliderValue, 1)" /> -->
-<!-- 										</div> -->
-<!-- 									</td> -->
-<!-- 								</tr> -->
-<!--                                 <tr ng-if="vis !='vis_medium_day'"> -->
-<!-- 									<td align="left"> -->
-<!-- 										<br/> -->
-<!--                                         <label class="left-filter"><input id="dayFilter" type="checkbox" ng-model="dashboard_filter.dows" ng-click="updateFilterObject(dashboard_filter, 2, 1)">&nbsp;{{'day_vis'|i18n}}</label> -->
-<!--                                         <div ng-show="dashboard_filter.dows"> -->
-<!-- 	                                        <div> -->
-<!-- 	                                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="wd" ng-change="updateSearch(1)">{{'wd_vis'|i18n}}</label> -->
-<!-- 	                                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="we" ng-change="updateSearch(1)">{{'we_vis'|i18n}}</label> -->
-<!-- 	                                        </div> -->
-<!-- 	                                        <div><label class="left-filter"><input class="panel-radio" type="radio" ng-model="dayOptions.value" value="custom">{{'custom_vis'|i18n}}</label></div> -->
-<!--                                     	</div> -->
-<!--                                     </td> -->
-<!--                                 </tr> -->
-<!--                                 <tr ng-if="vis !='vis_medium_day' && dayOptions.value=='custom'" ng-show="dashboard_filter.dows"> -->
-<!--                                     <td align="left"> -->
-<!--                                         <input ng-model="daySliderValue" type="text" id="daySlider" slider options="daySliderOptions" ng-change="updateDay(daySliderValue, 1)" /> -->
-<!--                                     </td> -->
-<!--                                 </tr> -->
-<!--                                	<tr> -->
-<!-- 									<td align="left"> -->
-<!-- 										<br/> -->
-<!--                                         <label class="left-filter"><input id="hourFilter" type="checkbox" ng-model="dashboard_filter.hours" ng-click="updateFilterObject(dashboard_filter, 3, 1)">&nbsp;{{'hour_vis'|i18n}}</label> -->
-<!--                                         <div ng-show="dashboard_filter.hours"> -->
-<!-- 	                                        <div> -->
-<!-- 	                                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="morning" ng-change="updateSearch(1)">{{'morning_vis'|i18n}}</label> -->
-<!-- 	                                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="afternoon" ng-change="updateSearch(1)">{{'afternoon_vis'|i18n}}</label> -->
-<!-- 	                                            <label class="left-filter"><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="night" ng-change="updateSearch(1)">{{'night_vis'|i18n}}</label> -->
-<!-- 	                                        </div> -->
-<!-- 	                                        <div><label class="left-filter"><input class="panel-radio" type="radio" ng-model="hourOptions.value" value="custom">{{'custom_vis'|i18n}}</label></div> -->
-<!--                                     	</div> -->
-<!--                                     </td> -->
-<!--                                 </tr> -->
-<!-- 								<tr ng-if="hourOptions.value=='custom'" ng-show="dashboard_filter.hours"> -->
-<!-- 									<td align="left"> -->
-<!--                                         <input ng-model="hourSliderValue" type="text" id="hourSlider" slider options="hourSliderOptions" ng-change="updateHour(hourSliderValue, 1)" /> -->
-<!--                                     </td> -->
-<!-- 								</tr> -->
-<!-- 								<tr ng-if="dashboard_topics=='occupation'"> -->
-<!-- 									<td> -->
-<!--                                         <h5><strong>{{'other_settings'|i18n}}</strong></h5> -->
-<!-- 				                         <table width="100%" > -->
-<!-- 											<tr> -->
-<!-- 												<td align="left"> -->
-<!-- 												<label class="left-filter"> -->
-<!-- 												<input id="averageZoneOcc" type="checkbox" ng-model="useAverageZoneOccupation" ng-change="setAverageZoneValue(useAverageZoneOccupation);updateSearch(1)">&nbsp;{{ 'use_average_zone_occ' | i18n }} -->
-<!-- 												</label> -->
-<!-- 												</td> -->
-<!-- 											</tr> -->
-<!-- 										</table> -->
-<!-- 									</td> -->
-<!-- 								</tr> -->
-<!-- 							</table> -->
-<!-- 					</div>	 -->
-<!-- 			</div> -->
-<!-- 	</div> -->
-	<div class="col-md-10">
-		<tabset>	<!-- ng-controller="ViewDashboardCtrlPark" -->
+<!-- 	<div class="col-md-10"> -->
+	<div ng-class="{'col-md-10':!tabletWiew, 'col-sm-10':tabletWiew}">	
+		<tabset>
 			<tab  ng-repeat="tab in viewparktabs" heading="{{ tab.title | i18n }}" active="tab.active" disabled="tab.disabled"  select="setIndex($index, tab)">
 				<br>
 				<div ng-include="tab.content"></div>

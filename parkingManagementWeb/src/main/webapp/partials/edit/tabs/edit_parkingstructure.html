@@ -362,8 +362,8 @@
 					<div class="field-error" ng-show="showDeletingPSErrorMessage">{{ 'err_in_delete_parkingstructure' | i18n }}</div>
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
-							<tr ng-show="pstructWS.length != 0">
-								<th width="32%">
+							<tr ng-show="pstructWS.length != 0 && !tabletWiew">
+								<th width="30%">
 									<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>&nbsp;
 									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -371,22 +371,48 @@
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPagePs = 0" />
 						    		</div>
 								</th>
-								<th width="35%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
-								<th width="8%" ng-show="psconf.ps_parkride.visible">{{ 'ps_park_and_ride_title' | i18n }}</th>
+								<th width="30%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+								<th width="5%" ng-show="psconf.ps_parkride.visible">{{ 'ps_park_and_ride_title' | i18n }}</th>
 								<th width="5%"><span ng-show="psconf.ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
-								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
+								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
-							<tbody class="animate-repeat"
+							<tr ng-show="pstructWS.length != 0 && tabletWiew">
+								<th width="30%">
+									<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>&nbsp;
+									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+									<div ng-show="showPsFilter">
+						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPagePs = 0" />
+						    		</div>
+								</th>
+								<th width="30%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+								<th width="10%"><span ng-show="psconf.ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
+								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
+							</tr>
+							<tbody ng-if="!tabletWiew" class="animate-repeat"
 								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
 								<tr>
-									<td width="32%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
-									<td width="35%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
-									<td width="8%" align="center" ng-show="psconf.ps_parkride.visible">
+									<td align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
+									<td align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
+									<td align="center" ng-show="psconf.ps_parkride.visible">
 										<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
 										<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
 									</td>
-									<td width="5%" align="center"><span ng-show="psconf.ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
-									<td width="20%" align="center">
+									<td align="center"><span ng-show="psconf.ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
+									<td align="center">
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+									</td>
+								</tr>
+							</tbody>
+							<tbody ng-if="tabletWiew" class="animate-repeat"
+								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
+								<tr>
+									<td align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
+									<td align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
+									<td align="center"><span ng-show="psconf.ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
+									<td align="center">
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>

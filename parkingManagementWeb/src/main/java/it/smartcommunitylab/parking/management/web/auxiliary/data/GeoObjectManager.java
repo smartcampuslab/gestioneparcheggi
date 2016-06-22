@@ -641,7 +641,7 @@ public class GeoObjectManager {
     }	
 	
 	public ArrayList<SOccupancyData> classStringToOSObjArray(String data) throws Exception{
-    	logger.info(String.format("Map Object data: %s", data));
+    	logger.debug(String.format("Map Object data: %s", data));
     	
     	ArrayList<SOccupancyData> correctData = new ArrayList<SOccupancyData>();
     	

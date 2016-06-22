@@ -326,7 +326,7 @@
 						    					<option ng-repeat="a in allPmAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
 						    				</select>
 										</th>
-										<th width="25%" class="myCenter"><span>{{ 'operations' | i18n }}</span></th>
+										<th width="30%" class="myCenter"><span>{{ 'operations' | i18n }}</span></th>
 									</tr>
 									<tbody class="animate-repeat"
 										ng-repeat="pmeter in filtered = (pmeterWS | filter:noteFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:'code' | startFrom:currentPagePm*maxPmeters | limitTo:maxPmeters">
@@ -359,7 +359,7 @@
 	<!-- 									</tr> -->
 									</tbody>
 									<tr ng-show="pmeterWS.length == 0">
-										<td colspan="5"><strong>{{ 'no_pm_in_lists' | i18n }}</strong></td>
+										<td colspan="6"><strong>{{ 'no_pm_in_lists' | i18n }}</strong></td>
 									</tr>
 								</table>
 							</div>

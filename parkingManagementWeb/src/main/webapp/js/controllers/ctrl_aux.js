@@ -11,8 +11,11 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     
     // ---------------------------------- START Code for file upload ------------------------------------
 	var uploader = $scope.uploader = new FileUploader({
-		url: 'js/controllers/upload.php'
-		//url: 'upload/upload.php'   
+		//queueLimit: 1,	// MB21062016: tested with correct call of uploader file methods
+		//alias: "tData",
+		//removeAfterUpload: true,
+		//url: "auxiliary/rest/rv/streets/fileupload2/999"
+		url: 'js/controllers/upload.php'   
     });
 	
 	// FILTERS
@@ -924,7 +927,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var method = 'POST';
 		//var appId = sharedDataService.getConfAppId();
 		var value = JSON.stringify($scope.globalLogs);
-	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
 	   	var myDataPromise = invokeAuxWSService.getProxy(method, "globallogs/csv", null, $scope.authHeaders, value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
@@ -1734,6 +1736,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     		// Case street occupancy log
 	    	switch(type){
 	    		case 1:
+	    			// MB21062016: tested with correct call of uploader file methods
+	    			//$scope.uploader.uploadAll();
+	    			
 	    			// Case months value
 	    			var out_obj = angular.element(out);
 	    	    	

@@ -106,14 +106,6 @@ public class ModelConverter {
 		//sb.setRateAreaId(area.getId());
 		sb.setColor(area.getColor());
 		sb.setGeometry(convert(s.getGeometry(), LineBean.class));
-		//sb.setSubscritionAllowedPark(s.isSubscritionAllowedPark());
-		//List<Zone> zones = s.getZones();
-		//List<ZoneBean> zoneBeans = new ArrayList<ZoneBean>();
-		//for(Zone z : zones){
-		//	ZoneBean zon = convert(z, ZoneBean.class);
-		//	zoneBeans.add(zon);
-		//}
-		//sb.setZoneBeans(zoneBeans);
 		sb.setZones(s.getZones());
 		sb.setParkingMeters(s.getParkingMeters());
 		return sb;

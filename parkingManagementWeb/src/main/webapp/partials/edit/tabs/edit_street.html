@@ -382,14 +382,14 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="streetWS.length != 0">
-								<th width="35%" ng-show="sconf.s_streetRef.visible">{{ 'street_name' | i18n }}&nbsp;
+								<th width="30%" ng-show="sconf.s_streetRef.visible">{{ 'street_name' | i18n }}&nbsp;
 									<a href ng-click="showStreetNameFilter();currentPageS = 0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showStreetFilter">
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageS = 0" />
 						    		</div>
 								</th>
-								<th width="15%" ng-show="sconf.s_slotNum.visible">{{ 'street_slots' | i18n }}</th>
+								<th width="10%" ng-show="sconf.s_slotNum.visible">{{ 'street_slots' | i18n }}</th>
 								<th width="30%" colspan="2" ng-show="sconf.s_areaId.visible">
 									{{ 'street_area_name' | i18n }}&nbsp;
 									<a href ng-click="showAreaFilter();currentPageS=0" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -398,19 +398,18 @@
 						    			<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
 						    				<option ng-repeat="a in allAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
 						    			</select>
-						    		</div>	
+						    		</div>
 						    	</th>
-								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
+								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
 								ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['name', 'area_name'] | startFrom:currentPageS*maxStreets | limitTo:maxStreets">
-					<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageS*maxPractices | limitTo:maxPractices"> -->
 								<tr>
-									<td width="35%" align="left" ng-show="sconf.s_streetRef.visible">{{street.streetReference}}</td>
-									<td width="15%" align="left" ng-show="sconf.s_slotNum.visible">{{street.slotNumber}}</td>
-									<td width="5%" align="center" ng-show="sconf.s_areaId.visible"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
-									<td width="25%" align="center" ng-show="sconf.s_areaId.visible">{{street.area_name}}</td>
-									<td width="20%" align="center">
+									<td align="left" ng-show="sconf.s_streetRef.visible">{{street.streetReference}}</td>
+									<td align="left" ng-show="sconf.s_slotNum.visible">{{street.slotNumber}}</td>
+									<td align="center" ng-show="sconf.s_areaId.visible"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
+									<td align="center" ng-show="sconf.s_areaId.visible">{{street.area_name}}</td>
+									<td align="center">
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>

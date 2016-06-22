@@ -128,7 +128,7 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="zoneWS.length != 0">
-								<th width="45%">
+								<th width="40%">
 									<span ng-show="zpc.att.zone_name.visible">{{ 'zone_name' | i18n }}</span>&nbsp;
 									<a href ng-click="showZoneNameFilter();currentPageZ=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -137,16 +137,16 @@
 						    		</div>
 								</th>
 								<th width="20%" class="myCenter"><span ng-show="zpc.att.zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
-								<th width="15%"><span ng-show="zpc.att.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
-								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
+								<th width="10%"><span ng-show="zpc.att.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
 								ng-repeat="zone in zoneWS | filter:nameFilter | orderBy: ['name', 'submacro'] |  startFrom:currentPageZ*maxZones | limitTo:maxZones">
 								<tr>
-									<td width="45%" align="left"><span ng-show="zpc.att.zone_name.visible">{{zone.name}}</span></td>
-									<td width="20%" align="center"><span ng-show="zpc.att.zone_submacro.visible">{{zone.submacro}}</span></td>
-									<td width="15%" align="center"><div class="colorBox" ng-show="zpc.att.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
-									<td width="20%" align="center">
+									<td align="left"><span ng-show="zpc.att.zone_name.visible">{{zone.name}}</span></td>
+									<td align="center"><span ng-show="zpc.att.zone_submacro.visible">{{zone.submacro}}</span></td>
+									<td align="center"><div class="colorBox" ng-show="zpc.att.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
+									<td align="center">
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setZDetails(zone, 0)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setZEdit(zone)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
 										<a href type="button" class="btn btn-primary btn-xs" ng-click="setZRemove(zone)"  alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>

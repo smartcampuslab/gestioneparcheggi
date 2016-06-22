@@ -15,8 +15,11 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
@@ -49,6 +53,11 @@ import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.CSVManager;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
+
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 @Controller
 public class ObjectController  {
@@ -339,6 +348,149 @@ public class ObjectController  {
 			logger.info("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas);
+			for(SOccupancyData s : allData){
+				Street street = dataService.getStreetByName(s.getsName(),agency);
+				if (street != null){
+					List<String> slotsLC = s.getOccLC();
+					List<String> slotsLS = s.getOccLS();
+					List<String> slotsP = s.getOccP();
+					List<String> slotsDO = s.getOccDO();
+					List<String> slotsH = s.getOccH();
+					List<String> slotsR = s.getOccR();
+					List<String> slotsND = s.getSlotsND();
+					
+					for(int i = 0; i < slotsLC.size(); i++){
+						boolean skipUpdate = true;
+						int slotOccLc = -1;
+						int slotOccLs = -1;
+						int slotOccP = -1;
+						int slotOccDO = -1;
+						int slotOccH = -1;
+						int slotOccR = -1;
+						int slotNumND = -1;
+						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("-1") != 0){
+							slotOccLc = Integer.parseInt(slotsLC.get(i));
+						}
+						if(slotsLS.get(i).compareTo("") != 0 && slotsLS.get(i).compareTo("-1") != 0){
+							slotOccLs = Integer.parseInt(slotsLS.get(i));
+						}
+						if(slotsP.get(i).compareTo("") != 0 && slotsP.get(i).compareTo("-1") != 0){
+							slotOccP = Integer.parseInt(slotsP.get(i));
+						}
+						if(slotsDO.get(i).compareTo("") != 0 && slotsDO.get(i).compareTo("-1") != 0){
+							slotOccDO = Integer.parseInt(slotsDO.get(i));
+						}
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
+							slotOccH = Integer.parseInt(slotsH.get(i));
+						}
+						if(slotsR.get(i).compareTo("") != 0 && slotsR.get(i).compareTo("-1") != 0){
+							slotOccR = Integer.parseInt(slotsR.get(i));
+						}
+						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
+							slotNumND = Integer.parseInt(slotsND.get(i));
+						}
+						if(slotOccLc != -1){
+							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnFreeSigned(0);
+						}
+						if(slotOccLs != -1){
+							street.setSlotsOccupiedOnFree(slotOccLs);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnFree(0);
+						}
+						if(slotOccP != -1){
+							street.setSlotsOccupiedOnPaying(slotOccP);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnPaying(0);
+						}
+						if(slotOccDO != -1){
+							street.setSlotsOccupiedOnTimed(slotOccDO);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnTimed(0);
+						}
+						if(slotOccH != -1){
+							street.setSlotsOccupiedOnHandicapped(slotOccH);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnHandicapped(0);
+						}
+						if(slotOccR != -1){
+							street.setSlotsOccupiedOnReserved(slotOccR);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnReserved(0);
+						}
+						if(slotNumND != -1){
+							street.setSlotsUnavailable(slotNumND);
+							skipUpdate = false;
+						} else {
+							street.setSlotsUnavailable(-1);
+						}
+						int year = Integer.parseInt(s.getPeriod().getYear());
+						period = null;
+						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+						if(!skipUpdate){
+							dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, MONTH_PERIOD);
+						}
+					}	
+				}
+			}
+			logger.info("ended file uplodad flux");
+			return "OK";
+		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "KO";
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload2/{userId:.*}") 
+	public @ResponseBody String updateStreetListWithFile(@RequestParam("tData") MultipartFile data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+		try {
+			
+			File convFile = new File(data.getOriginalFilename());
+			data.transferTo(convFile);
+			
+			FileInputStream file = new FileInputStream(convFile);
+			HSSFWorkbook workbook = new HSSFWorkbook(file);
+			HSSFSheet sheet = workbook.getSheetAt(0);
+			
+			//Iterate through each rows one by one
+            Iterator<Row> rowIterator = sheet.iterator();
+            while (rowIterator.hasNext())
+            {
+                Row row = rowIterator.next();
+                //For each row, iterate through all the columns
+                Iterator<Cell> cellIterator = row.cellIterator();
+
+                while (cellIterator.hasNext())
+                {
+                    Cell cell = cellIterator.next();
+                    //Check the cell type and format accordingly
+                    switch (cell.getCellType())
+                    {
+                        case Cell.CELL_TYPE_NUMERIC:
+                            System.out.print(cell.getNumericCellValue() + "t");
+                            break;
+                        case Cell.CELL_TYPE_STRING:
+                            System.out.print(cell.getStringCellValue() + "t");
+                            break;
+                    }
+                }
+                System.out.println("");
+            }
+            file.close();
+
+			
+			logger.info("started file uplodad flux");
+			String datas = null; //data.get("logData").toString();
+			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas);
+			
 			for(SOccupancyData s : allData){
 				Street street = dataService.getStreetByName(s.getsName(),agency);
 				if (street != null){

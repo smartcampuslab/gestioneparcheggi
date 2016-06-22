@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','utilsService','getMyMessages','$timeout',
-    function($scope, $http, $route, $routeParams, $rootScope, localize, $locale,  $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, utilsService, getMyMessages, $timeout) {
+pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','utilsService','getMyMessages','$timeout',
+    function($scope, $http, $route, $window, $routeParams, $rootScope, localize, $locale,  $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, utilsService, getMyMessages, $timeout) {
     
     $scope.setFrameOpened = function(value){
     	$rootScope.frameOpened = value;
@@ -19,6 +19,21 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     $scope.setNextButtonViewLabel = function(value){
     	$rootScope.buttonNextViewLabel = value;
     };
+    
+    $window.onresize = function() {
+        changeTemplate();
+        $scope.$apply();
+    };
+    changeTemplate();
+
+    function changeTemplate() {
+        var screenWidth = $window.innerWidth;
+        if (screenWidth >= 1170) {
+        	$scope.tabletWiew = false;
+        } else {
+        	$scope.tabletWiew = true;
+        }	
+    }
 
     $scope.$route = $route;
     //$scope.$location = $location;
@@ -31,7 +46,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
                   			
     //$scope.citizenId = userId;
     $scope.user_token = token;
-    //$scope.user_token = "";
                   			
     // new elements for view
     $scope.currentView;
@@ -55,10 +69,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	//$locale.id = "en-US";
     	localize.setLanguage('en-US');
     	sharedDataService.setUsedLanguage('eng');
-    	//var myDataMsg = getMyMessages.promiseToHaveData('eng');
-    	//myDataMsg.then(function(result){
-    	//	sharedDataService.inithializeAllMessages(result);
-    	//});
     };
     
     $scope.setItalianLanguage = function(){
@@ -69,10 +79,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	//$locale.id = "it-IT";
     	localize.setLanguage('it-IT');
     	sharedDataService.setUsedLanguage('ita');
-    	//var myDataMsg = getMyMessages.promiseToHaveData('ita');
-    	//myDataMsg.then(function(result){
-    	//    sharedDataService.inithializeAllMessages(result);
-    	//});
     };
     
     if(sharedDataService.getUsedLanguage() == 'ita'){
@@ -87,10 +93,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	} else if (lan == "en-US"){
     		lan_uri = 'i18n/angular-locale_en-EN.js';
     	}
-//    	$http.get(lan_uri).then(function(results){
-//    		console.log("Risultato get locale " + results);
-//    		angular.copy(results.data, $locale);
-//    	});
     	$http.get(lan_uri)
     		.success(function(results){
     			console.log("Success get locale " + results);
