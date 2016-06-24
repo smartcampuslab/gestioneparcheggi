@@ -1279,6 +1279,10 @@
     "value": "Scegliere la posizione del punto bici (click sulla mappa)",
     "description": "Testo placeholder campo posizione punto bici"
 }, {
+    "key": "btn_add_new_polygon",
+    "value": "Nuovo poligono",
+    "description": "Label pulsante aggiungi nuovo poligono in area edit"
+}, {
     "key": "btn_remove_all_polygons",
     "value": "Cancella poligoni",
     "description": "Label pulsante cancella poligoni in area edit"

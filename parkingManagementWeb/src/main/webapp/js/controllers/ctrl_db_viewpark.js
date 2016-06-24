@@ -3997,6 +3997,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myStreets;
 	};
 	
+	$scope.initStreetsObjectsLight = function(streets){
+		var myStreets = [];
+		for(var i = 0; i < streets.length; i++){
+			var area = $scope.getLocalAreaById(streets[i].rateAreaId);
+			var mystreet = $scope.cleanStreetNullValue(streets[i]);
+			mystreet.slotOccupied = $scope.getTotalOccupiedSlots(mystreet);
+			mystreet.extratime = $scope.getExtratimeFromOccupancy(mystreet.occupancyRate);
+			mystreet.area_name = area.name;
+			mystreet.area_color= area.color;
+			myStreets.push(mystreet);
+		}
+		return myStreets;
+	};
+	
 /*	$scope.initPMObjects = function(parkMeters){
 		var myPMs = [];
 		for(var i = 0; i < parkMeters.length; i++){

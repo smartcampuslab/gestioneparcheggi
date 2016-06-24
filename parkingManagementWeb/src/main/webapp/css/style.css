@@ -196,6 +196,10 @@ div.logwrapper {
     height: 400px;
 }
 
+.angular-google-map-container-dash {
+	height: 700px;
+}
+
 div.map_margins {
 	margin-bottom: 10px;
     margin-top: 10px;
@@ -500,7 +504,7 @@ label.left-filter {
 div #panelMap {
   position: absolute;
   top: 5px;
-  left: 50%;
+  left: 43%;
   margin-left: -90px;
   z-index: 5;
   background-color: #fff;
@@ -745,10 +749,10 @@ label.group-label {
   	#my-big-body { display: none; }
   	
 
-	/* if width bigger than 768px I show the big objects */
+	/* if width bigger than 769px I show the big objects */
 	@media (min-width:769px) {
 		.nav-tabs.nav-justified > li { float: none; }
-		.angular-google-map-container { height: 700px; }
+		.angular-google-map-container { height: 550px; }
 		.panel-body { padding: 5px; }
 		#my-small-login { display: block; }   /* hide it elsewhere */
   		#my-big-login { display: none; }   /* show it elsewhere */

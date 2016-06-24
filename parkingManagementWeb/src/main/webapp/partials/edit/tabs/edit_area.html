@@ -445,6 +445,7 @@
 			  		<div class="panel-body">
 			  			<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing" -->
 			  				<div id="panelMap" align ="center" ng-show="!isEditing">
+			  					<button ng-click="addNewAreaPath()" type="button" class="btn btn-default" >{{ 'btn_add_new_polygon' | i18n }}</button>
 								<button ng-click="removeAllNewPolygons()" type="button" class="btn btn-default" >{{ 'btn_remove_all_polygons' | i18n }}</button>
 	        					<button ng-click="removeLastNewPolygon()" type="button" class="btn btn-default" >{{ 'btn_remove_last_polygons' | i18n }}</button>
 							</div>
@@ -722,7 +723,7 @@
 										</tr>
 									</table>
 								</div>	
-								<table>	
+								<table width="100%">	
 									<tr ng-show="area.validityPeriod.length > 0"><td colspan="4"><hr></td></tr>
 									<tr ng-show="area.validityPeriod.length > 0">
 										<td></td>
@@ -736,7 +737,7 @@
 								</table>
 								<table width="100%" ng-show="area.validityPeriod.length == 0 || area.validityPeriod == null">
 									<tr>
-										<td colspan="7">{{ 'no_value_inserted_period' | i18n }}</td>
+										<td colspan="3">{{ 'no_value_inserted_period' | i18n }}</td>
 										<td align="right">
 											<button type="button" class="btn btn-default" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
 											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>

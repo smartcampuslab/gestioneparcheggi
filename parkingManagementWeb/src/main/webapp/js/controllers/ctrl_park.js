@@ -5244,9 +5244,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    //$scope.getStreetAddress(event);	// Retrieve the address from the map
 		    $scope.myAreaPath = [];
 	    }
-	    path.push(event.latLng);
-	    var myPoint = $scope.getPointFromLatLng(event.latLng, 1);
-	    $scope.myAreaPath.push(myPoint);
+	    if(event){
+	    	path.push(event.latLng);
+	    	var myPoint = $scope.getPointFromLatLng(event.latLng, 1);
+	    	$scope.myAreaPath.push(myPoint);
+	    }
 	    $scope.setMyPolGeometry($scope.myAreaPath);
 	    garea.setMap($scope.map);
 	};
