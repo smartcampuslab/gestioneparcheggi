@@ -724,7 +724,418 @@ pm.service('sharedDataService', function(){
 		return this.userId;
 	};
 	
+	// ----- List of functions shared between controllers  -------------------------------------------- 
+	//       (for objects data extensions like occupancy, slots number, profit data...)
 	
+	// Method getTotalSlotsInZone: used to count the total slots of a zone from the slots in streets
+	this.getTotalSlotsInZone = function(z_id, occStreetList){
+		var totalSlots = 0;
+		var occupiedSlots = 0;
+		if(occStreetList != null && occStreetList.length > 0){
+			for(var i = 0; i < occStreetList.length; i++){
+				var found = false;
+				for(var j = 0; (j < occStreetList[i].zones.length) && !found; j++){
+					//var zone = $scope.getLocalZoneById(streets[i].zones[j]);
+					//myZones.push(zone);
+					if(occStreetList[i].zones[j] == z_id){
+						found = true;
+						var mystreet = this.cleanStreetNullValue(occStreetList[i]);// NB: I have to use the average occupancy value and not the data stored in db
+						var tmp_occ = this.getTotalOccupiedSlots(mystreet);
+						totalSlots += (mystreet.slotNumber - mystreet.unusuableSlotNumber);
+						occupiedSlots += tmp_occ;
+					}
+				}
+			}
+		}
+		var occupation = (occupiedSlots == 0) ? -1 : Math.round((100 * occupiedSlots) / totalSlots);
+		return [totalSlots, occupiedSlots, occupation];
+	};
+	
+	// Method getTotalSlotsInArea: used to count the total slots of an area from the slots in streets
+	this.getTotalSlotsInArea = function(a_id, occStreetList){
+		var totalSlots = 0;
+		var occupiedSlots = 0;
+		if(occStreetList != null && occStreetList.length > 0){
+			for(var i = 0; i < occStreetList.length; i++){
+				if(occStreetList[i].rateAreaId == a_id){
+					var mystreet = this.cleanStreetNullValue(occStreetList[i]);// NB: I have to use the average occupancy value and not the data stored in db
+					var tmp_occ = this.getTotalOccupiedSlots(mystreet);
+					totalSlots += (mystreet.slotNumber - mystreet.unusuableSlotNumber);
+					occupiedSlots += tmp_occ;
+				}
+			}
+		}
+		var occupation = (occupiedSlots == 0) ? -1 : Math.round((100 * occupiedSlots) / totalSlots);
+		return [totalSlots, occupiedSlots, occupation];
+	};
+	
+	// Method used to get the total slots occupied in a street object
+	this.getTotalOccupiedSlots = function(s_object){
+		return (s_object.freeParkOccupied +
+				s_object.freeParkSlotSignOccupied + 
+				s_object.paidSlotOccupied + 
+				s_object.timedParkSlotOccupied + 
+				s_object.handicappedSlotOccupied + 
+				s_object.reservedSlotOccupied);
+	};
+	
+	// Method cleanStreetNullValue: used to init to 0 the null value in the slotNumber data and to init to the correct value the valorize slots
+	this.cleanStreetNullValue = function(s_object){
+		var street = s_object;
+		street.freeParkSlotNumber = (s_object.freeParkSlotNumber != null && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotNumber : 0;
+		street.freeParkSlotSignNumber = (s_object.freeParkSlotSignNumber != null && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignNumber : 0;
+		street.paidSlotNumber = (s_object.paidSlotNumber != null && s_object.paidSlotNumber > 0) ? s_object.paidSlotNumber : 0;
+		street.timedParkSlotNumber = (s_object.timedParkSlotNumber != null && s_object.timedParkSlotNumber > 0) ? s_object.timedParkSlotNumber : 0;
+		street.handicappedSlotNumber = (s_object.handicappedSlotNumber != null && s_object.handicappedSlotNumber > 0) ? s_object.handicappedSlotNumber : 0;
+		street.reservedSlotNumber = (s_object.reservedSlotNumber != null && s_object.reservedSlotNumber > 0) ? s_object.reservedSlotNumber : 0;
+		street.freeParkOccupied = (s_object.freeParkSlotOccupied != null && s_object.freeParkSlotOccupied > 0 && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotOccupied : 0;
+		street.freeParkSlotSignOccupied = (s_object.freeParkSlotSignOccupied != null && s_object.freeParkSlotSignOccupied > 0 && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignOccupied : 0;
+		street.paidSlotOccupied = (s_object.paidSlotOccupied != null && s_object.paidSlotOccupied > 0) ? s_object.paidSlotOccupied : 0;
+		street.timedParkSlotOccupied = (s_object.timedParkSlotOccupied != null && s_object.timedParkSlotOccupied > 0) ? s_object.timedParkSlotOccupied : 0;
+		street.handicappedSlotOccupied = (s_object.handicappedSlotOccupied != null && s_object.handicappedSlotOccupied > 0) ? s_object.handicappedSlotOccupied : 0;
+		street.reservedSlotOccupied = (s_object.reservedSlotOccupied != null && s_object.reservedSlotOccupied > 0) ? s_object.reservedSlotOccupied : 0;
+		street.unusuableSlotNumber = (s_object.unusuableSlotNumber != null && s_object.unusuableSlotNumber > 0) ? s_object.unusuableSlotNumber : 0;
+		return street;
+	};
+	
+	// Method getStreetInZoneOccupancy: used to get the occupancy if all the streets in a specific zone
+	this.getStreetsInZoneOccupancy = function(z_id, occStreetList){
+		var totalOccupancy = 0;
+		var streetsInZone = 0;
+		var noData = true;
+		if(occStreetList != null && occStreetList.length > 0){
+			for(var i = 0; i < occStreetList.length; i++){
+				var found = false;
+				for(var j = 0; (j < occStreetList[i].zones.length) && !found; j++){
+					//var zone = $scope.getLocalZoneById(streets[i].zones[j]);
+					//myZones.push(zone);
+					if(occStreetList[i].zones[j] == z_id){
+						found = true;
+						streetsInZone += 1;
+						if(occStreetList[i].occupancyRate > -1){
+							totalOccupancy += occStreetList[i].occupancyRate;
+							noData = false;
+						}
+					}
+				}
+			}
+		}
+		if(streetsInZone != 0 && !noData){
+			return totalOccupancy / streetsInZone;
+		} else {
+			return -1;
+		}
+	};
+	
+	// Method getStreetsInAreaOccupancy: used to get the occupancy of the streets in a specific area
+	this.getStreetsInAreaOccupancy = function(a_id, occStreetList){
+		var totalOccupancy = 0;
+		var streetsInArea = 0;
+		var noData = true;
+		if(occStreetList != null && occStreetList.length > 0){
+			//var found = false;
+			for(var i = 0; i < occStreetList.length; i++){// && !found
+				if(occStreetList[i].rateAreaId == a_id){
+					//found = true;
+					streetsInArea += 1;
+					if(occStreetList[i].occupancyRate > 0){
+						totalOccupancy += occStreetList[i].occupancyRate;
+						noData = false;
+					}
+				}
+			}
+		}
+		if(streetsInArea != 0 && !noData){
+			return totalOccupancy / streetsInArea;
+		} else {
+			return -1;
+		}
+	};
+	
+	// Method getPmsInZoneProfit: used to get the parking meter profit data from a specific zone
+	this.getPmsInZoneProfit = function(z_id, profitPmList){
+		var totalProfit = 0;
+		var totalTickets = 0;
+		var pmsInZone = 0;
+		var myPms = [];
+		if(profitPmList != null && profitPmList.length > 0){			// map page case
+			for(var i = 0; i < profitPmList.length; i++){
+				var found = false;
+				// all zone case
+				for(var j = 0; (j < profitPmList[i].zones.length && !found); j++){ 
+					if(profitPmList[i].zones[j] == z_id){
+						found = true;
+						pmsInZone += 1;
+						if(!this.checkIfAlreadyPresentInList(myPms, profitPmList[i].id)){
+							myPms.push(profitPmList[i].id);
+						}
+					}
+				}
+			}
+		}
+		if(myPms.length > 0){
+			var totalProfitData = this.getTotalProfitFromPmList(myPms, profitPmList);
+			totalProfit = totalProfitData[0];
+			totalTickets = totalProfitData[1];
+		}
+		if(totalProfit > 0){
+			return [totalProfit, totalTickets, pmsInZone]; // / streetsInZone;
+		} else {
+			return [-1, -1, pmsInZone];
+		}
+	};
+	
+	// Method loadStreetsFromZone: used to load all streets contained in a zone
+    this.loadStreetsFromZone = function(z_id, streetList){
+		var z_streets = [];
+		if(streetList != null && streetList.length > 0){
+			for(var i = 0; i < streetList.length; i++){
+				var found = false;
+				for(var j = 0; (j < streetList[i].zones.length) && !found; j++){
+					if(streetList[i].zones[j] == z_id){
+						found = true;
+						z_streets.push(streetList[i]);
+					}
+				}
+			}
+		}
+		return z_streets;
+	};
+	
+	// Method getPaidSlotsInZone: used to count the total slots of a zone from the slots in streets
+	this.getPaidSlotsInZone = function(z_id, streetList){
+		var totalSlots = 0;
+		if(streetList != null && streetList.length > 0){
+			for(var i = 0; i < streetList.length; i++){
+				var found = false;
+				for(var j = 0; (j < streetList[i].zones.length) && !found; j++){
+					if(streetList[i].zones[j] == z_id){
+						found = true;
+						var mystreet = this.cleanStreetNullValue(streetList[i]);// NB: I have to use the average occupancy value and not the data stored in db
+						totalSlots += mystreet.paidSlotNumber;
+						
+					}
+				}
+			}
+		}
+		return totalSlots;
+	};	
+	
+	// Method checkIfAlreadyPresentInList: used to check if an element is already present in a list
+	this.checkIfAlreadyPresentInList = function(list, element){
+		var found = false;
+		for(var i = 0; ((i < list.lenght) && !found); i++){
+			if(list[i] == element){
+				found = true;
+			}
+		}
+		return found;
+	};
+	
+	// Method cleanAreaId : used to get the correct areaId from a composed areaMap object id ( with "_")
+	this.cleanAreaId = function(id){
+		var indexUnderScore = id.indexOf("_");
+		if( indexUnderScore > -1){
+			return (id.substring(0, indexUnderScore));
+		}
+		return id;
+	};
+	
+	// Method getStreetsInZoneProfit: used to retrieve the profit data from the streets that compose a zone
+//	this.getStreetsInZoneProfit = function(z_id, profitStreetList){
+//		var totalProfit = 0;
+//		var totalTickets = 0;
+//		var streetsInZone = 0;
+//		var myPms = [];
+//		if(this.profitStreets != null && $scope.profitStreets.length > 0){			// map page case
+//			for(var i = 0; i < $scope.profitStreets.length; i++){
+//				var found = false;
+//				// zone0 case
+//				for(var j = 0; (j < $scope.profitStreets[i].zones0.length && !found); j++){ 
+//					if($scope.profitStreets[i].zones0[j].id == z_id){
+//						found = true;
+//						streetsInZone += 1;
+//						if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
+//							for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
+//								if($scope.profitStreets[i].pms[x] != null){
+//									if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
+//										myPms.push($scope.profitStreets[i].pms[x].id);
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//				// zone1 case
+//				if(!found && $scope.profitStreets[i].zones1 != null){
+//					for(var j = 0; (j < $scope.profitStreets[i].zones1.length && !found); j++){ 
+//						if($scope.profitStreets[i].zones1[j].id == z_id){
+//							found = true;
+//							streetsInZone += 1;
+//							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
+//								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
+//									if($scope.profitStreets[i].pms[x] != null){
+//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
+//											myPms.push($scope.profitStreets[i].pms[x].id);
+//										}
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//				// zone2 case
+//				if(!found && $scope.profitStreets[i].zones2 != null){
+//					for(var j = 0; (j < $scope.profitStreets[i].zones2.length && !found); j++){ 
+//						if($scope.profitStreets[i].zones2[j].id == z_id){
+//							found = true;
+//							streetsInZone += 1;
+//							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
+//								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
+//									if($scope.profitStreets[i].pms[x] != null){
+//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
+//											myPms.push($scope.profitStreets[i].pms[x].id);
+//										}
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//				// zone3 case
+//				if(!found && $scope.profitStreets[i].zones3 != null){
+//					for(var j = 0; (j < $scope.profitStreets[i].zones3.length && !found); j++){ 
+//						if($scope.profitStreets[i].zones3[j].id == z_id){
+//							found = true;
+//							streetsInZone += 1;
+//							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
+//								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
+//									if($scope.profitStreets[i].pms[x] != null){
+//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
+//											myPms.push($scope.profitStreets[i].pms[x].id);
+//										}
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//				// zone4 case
+//				if(!found && $scope.profitStreets[i].zones4 != null){
+//					for(var j = 0; (j < $scope.profitStreets[i].zones4.length && !found); j++){ 
+//						if($scope.profitStreets[i].zones4[j].id == z_id){
+//							found = true;
+//							streetsInZone += 1;
+//							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
+//								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
+//									if($scope.profitStreets[i].pms[x] != null){
+//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
+//											myPms.push($scope.profitStreets[i].pms[x].id);
+//										}
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		} else if($scope.profitStreetsList != null && $scope.profitStreetsList.length > 0){	// list page case
+//			for(var i = 0; i < $scope.profitStreetsList.length; i++){
+//				var found = false;
+//				if($scope.profitStreetsList[i].zones != null){
+//					for(var j = 0; (j < $scope.profitStreetsList[i].zones.length && !found); j++){ 
+//						if($scope.profitStreetsList[i].zones[j] == z_id){
+//							found = true;
+//							streetsInZone += 1;
+//							if($scope.profitStreetsList[i].myPms != null && $scope.profitStreetsList[i].myPms.length > 0){
+//								for(var x = 0; x < $scope.profitStreetsList[i].myPms.length; x++){
+//									if($scope.profitStreetsList[i].myPms[x] != null){
+//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreetsList[i].myPms[x].id)){
+//											myPms.push($scope.profitStreetsList[i].myPms[x].id);
+//										}
+//									}
+//								}
+//							}
+//						}
+//					}
+//				}
+//			}
+//		}
+//		if(myPms.length > 0){
+//			var totalProfitData = this.getTotalProfitFromPmList(myPms);
+//			totalProfit = totalProfitData[0];
+//			totalTickets = totalProfitData[1];
+//		}
+//		if(totalProfit > 0){
+//			return [totalProfit, totalTickets, streetsInZone]; // / streetsInZone;
+//		} else {
+//			return [-1, -1, streetsInZone];
+//		}
+//	};
+	
+	// Method getPMsInAreaProfit: used to get the profit data of the parking meters of a specific area
+	this.getPMsInAreaProfit = function(a_id, profitPmList){
+		var totalProfit = 0;
+		var totalTickets = 0;
+		var pmsInArea = 0;
+		var noData = true;
+		if(profitPmList != null && profitPmList.length > 0){
+			//var found = false;
+			for(var i = 0; i < profitPmList.length; i++){// && !found
+				if(profitPmList[i].areaId == a_id){
+					//found = true;
+					pmsInArea += 1;
+					if(profitPmList[i].profit > 0){
+						totalProfit += profitPmList[i].profit;
+						noData = false;
+					}
+					if(profitPmList[i].tickets > 0){
+						totalTickets += profitPmList[i].tickets;
+					}
+				}
+			}
+		}
+		if(pmsInArea != 0 && !noData){
+			return [totalProfit, totalTickets, pmsInArea]; // / pmsInArea;
+		} else {
+			return [-1, -1, pmsInArea];
+		}
+	};
+	
+	// Method getTotalProfitFromPmList: used to retrieve the pms objects from the pm ids
+	this.getTotalProfitFromPmList = function(list, profitPmList){
+		var totalProfit = 0;
+		var totalTickets = 0;
+		for(var i = 0; i < list.length; i++){
+			for(var j = 0; j < profitPmList.length; j++){
+				if(list[i] == profitPmList[j].id){
+					if(profitPmList[j].profit > 0){
+						totalProfit += profitPmList[j].profit;
+					}
+					if(profitPmList[j].tickets > 0){
+						totalTickets += profitPmList[j].tickets;
+					}
+				}
+			}
+		}
+		return [totalProfit, totalTickets];
+	};
+	
+	// Method getLocarAreaById: used to get LocalArea data from areaId
+	this.getLocalAreaById = function(id){
+		var find = false;
+		var myAreas = this.getSharedLocalAreas();
+		for(var i = 0; i < myAreas.length && !find; i++){
+			if(myAreas[i].id == id){
+				find = true;
+				return myAreas[i];
+			}
+		}
+	};
+	
+	
+	
+	// ----- End of part for functions shared between controllers  -------------------------------------
 });
 
 //Message retriever method
