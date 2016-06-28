@@ -333,6 +333,35 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		}
 	};
 	
+	// Method getExtratimeFromOccupancyForHistorycalTable: used to get the correct value from historical occupancy data table
+	this.getExtratimeFromOccupancyForHistorycalTable = function(occupancy){
+		if(occupancy < 0){
+			return "-1.0";
+		} else if(occupancy < 10){
+			return sharedDataService.getExtratimeWait()[0].extratime_estimation_min;
+		} else if(occupancy < 20){
+			return sharedDataService.getExtratimeWait()[1].extratime_estimation_min;
+		} else if(occupancy < 30){
+			return sharedDataService.getExtratimeWait()[2].extratime_estimation_min;
+		} else if(occupancy < 40){
+			return sharedDataService.getExtratimeWait()[3].extratime_estimation_min;
+		} else if(occupancy < 50){
+			return sharedDataService.getExtratimeWait()[4].extratime_estimation_min;
+		} else if(occupancy < 60){
+			return sharedDataService.getExtratimeWait()[5].extratime_estimation_min;
+		} else if(occupancy < 70){
+			return sharedDataService.getExtratimeWait()[6].extratime_estimation_min;
+		} else if(occupancy < 80){
+			return sharedDataService.getExtratimeWait()[7].extratime_estimation_min + " - " + sharedDataService.getExtratimeWait()[7].extratime_estimation_max;
+		} else if(occupancy < 90){
+			return sharedDataService.getExtratimeWait()[8].extratime_estimation_min + " - " + sharedDataService.getExtratimeWait()[8].extratime_estimation_max;
+		} else if(occupancy < 100){
+			return sharedDataService.getExtratimeWait()[9].extratime_estimation_min + " - " + sharedDataService.getExtratimeWait()[9].extratime_estimation_max;
+		} else {
+			return sharedDataService.getExtratimeWait()[10].extratime_estimation_min + " - " + sharedDataService.getExtratimeWait()[10].extratime_estimation_max;
+		}
+	};
+	
 	this.getActualPmProfit = function(pmId){
 		var pmdata = null;
 		var found = false;
@@ -738,6 +767,33 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		return [tmpZones, zones];
 	};
 	
+	// correctMyZones: used to correct the zone object with all the necessary data
+	this.correctMyZones = function(zones){
+		var correctedZones = [];
+		for(var i = 0; i < zones.length; i++){
+			var corrType = sharedDataService.getCorrectZoneType(zones[i].type);
+			var sub = (zones[i].submacro) ? zones[i].submacro : ((zones[i].submicro) ? zones[i].submicro : null);
+			var lbl = (sub) ? (zones[i].name + "_" + sub) : zones[i].name;
+			var correctZone = {
+				id: zones[i].id,
+				id_app: zones[i].id_app,
+				color: zones[i].color,
+				name: zones[i].name,
+				submacro: zones[i].submacro,
+				submicro: zones[i].submicro,
+				type: zones[i].type,
+				myType: corrType,
+				note: zones[i].note,
+				geometry: this.correctMyGeometryPolygon(zones[i].geometry),
+				geometryFromSubelement: zones[i].geometryFromSubelement,
+				subelements: sharedDataService.loadStreetsFromZone(zones[i].id, this.occupancyStreetsWS),
+				label: lbl
+			};
+			correctedZones.push(correctZone);
+		}
+		return correctedZones;
+	};	
+	
 //	this.initZonesOnMapComplete = function(zones, visible, type, firstInit, firstTime){
 //		var zone = {};
 //		var poligons = {};
@@ -885,9 +941,9 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 					sColor = this.correctColor(streets[i].color);
 				} else if(type == 2){
 					sColor = this.getOccupancyColor(streets[i].occupancyRate);
-				} /*else if(type == 3){
+				} else if(type == 3){
 					sColor = this.getProfitColor(streets[i].profit);
-				} */else if(type == 4){
+				} else if(type == 4){
 					timeCost = this.getExtratimeFromOccupancy(streets[i].occupancyRate);
 					streets[i].extratime = timeCost;
 					sColor = this.getTimeCostColor(timeCost);
@@ -918,6 +974,39 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		}
 		this.closeLoadingMap();
 		return [tmpStreets, streets];
+	};
+	
+	// Method to calculate the profit value for streets
+	this.calculateProfitForStreets = function(streets){
+		for(var i = 0; i < streets.length; i++){
+			var parkingMeters = streets[i].parkingMeters;
+			var totalProfit = 0;
+			var totalTickets = 0;
+			if(parkingMeters != null){
+				for(var j = 0; j < parkingMeters.length; j++){
+					if(parkingMeters[j] != null){
+						var composedProfit = this.getActualPmProfit(parkingMeters[j]);
+						var profit = composedProfit[0];
+						var tickets = composedProfit[1];
+						if(profit != -1){
+							totalProfit += profit;
+							totalTickets += tickets;
+						}
+					}
+				}
+			}
+			if(totalProfit == 0){
+				streets[i].profit = -1;
+			} else {
+				streets[i].profit = totalProfit;
+			}
+			if(totalTickets == 0){
+				streets[i].tickets = -1;
+			} else {
+				streets[i].tickets = totalTickets;
+			}
+		}
+		return streets;
 	};
 	
 	this.initStreetsOnMapComplete = function(streets, visible, type, onlyData){
@@ -998,7 +1087,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 				}
 			}
 		}
-		$scope.closeLoadingMap();
+		this.closeLoadingMap();
 		return [tmpStreets, streets];
 	}
 	
@@ -1050,6 +1139,176 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
     	this.closeLoadingMap();
     	return markers;
     };
+    
+    // Method initPMObject: used to init a pm object with all the related object data
+	this.initPMObject = function(pmeter){
+		var area = sharedDataService.getLocalAreaById(pmeter.areaId);
+		var zones0 = [];
+		var zones1 = [];
+		var zones2 = [];
+		var zones3 = [];
+		var zones4 = [];
+		// zone init
+		if(pmeter.zones){
+			for(var j = 0; j < pmeter.zones.length; j++){
+				var z0 = this.getLocalZoneById(pmeter.zones[j], 2, 0);
+				var z1 = this.getLocalZoneById(pmeter.zones[j], 2, 1);
+				var z2 = this.getLocalZoneById(pmeter.zones[j], 2, 2);
+				var z3 = this.getLocalZoneById(pmeter.zones[j], 2, 3);
+				var z4 = this.getLocalZoneById(pmeter.zones[j], 2, 4);
+				if(z0 != null){
+					zones0.push(this.addLabelToZoneObject(z0));
+				} else if(z1 != null){
+					zones1.push(this.addLabelToZoneObject(z1));
+				} else if(z2 != null){
+					zones2.push(this.addLabelToZoneObject(z2));
+				} else if(z3 != null){
+					zones3.push(this.addLabelToZoneObject(z3));
+				} else if(z4 != null){
+					zones4.push(this.addLabelToZoneObject(z4));
+				}
+			}
+		}
+		pmeter.myStatus = (pmeters[i].status == 'ACTIVE')?"ON-ACTIVE":"OFF-INACTIVE";
+		pmeter.area = area;
+		pmeter.area_name = area.name,
+		pmeter.area_color= area.color;
+		pmeter.myZones0 = zones0;
+		pmeter.myZones1 = zones1;
+		pmeter.myZones2 = zones2;
+		pmeter.myZones3 = zones3;
+		pmeter.myZones4 = zones4;
+		return pmeter;
+	};
+	
+	// Method initPSObject: used to init a ps object with all the related object data
+	this.initPSObject = function(ps){
+		var zones0 = [];
+		var zones1 = [];
+		var zones2 = [];
+		var zones3 = [];
+		var zones4 = [];
+		// zone init
+		if(ps.zones){
+			for(var j = 0; j < ps.zones.length; j++){
+				var z0 = this.getLocalZoneById(ps.zones[j], 2, 0);
+				var z1 = this.getLocalZoneById(ps.zones[j], 2, 1);
+				var z2 = this.getLocalZoneById(ps.zones[j], 2, 2);
+				var z3 = this.getLocalZoneById(ps.zones[j], 2, 3);
+				var z4 = this.getLocalZoneById(ps.zones[j], 2, 4);
+				if(z0 != null){
+					zones0.push(this.addLabelToZoneObject(z0));
+				} else if(z1 != null){
+					zones1.push(this.addLabelToZoneObject(z1));
+				} else if(z2 != null){
+					zones2.push(this.addLabelToZoneObject(z2));
+				} else if(z3 != null){
+					zones3.push(this.addLabelToZoneObject(z3));
+				} else if(z4 != null){
+					zones4.push(this.addLabelToZoneObject(z4));
+				}
+			}
+		}
+		ps.myZones0 = zones0;
+		ps.myZones1 = zones1;
+		ps.myZones2 = zones2;
+		ps.myZones3 = zones3;
+		ps.myZones4 = zones4;
+		return ps;
+	};
+	
+	this.initStreetObject = function(street){
+		var zones0 = [];
+		var zones1 = [];
+		var zones2 = [];
+		var zones3 = [];
+		var zones4 = [];
+		// zone init
+		for(var j = 0; j < street.data.zones.length; j++){
+			var z0 = this.getLocalZoneById(street.data.zones[j], 2, 0);
+			var z1 = this.getLocalZoneById(street.data.zones[j], 2, 1);
+			var z2 = this.getLocalZoneById(street.data.zones[j], 2, 2);
+			var z3 = this.getLocalZoneById(street.data.zones[j], 2, 3);
+			var z4 = this.getLocalZoneById(street.data.zones[j], 2, 4);
+			if(z0 != null){
+				zones0.push(this.addLabelToZoneObject(z0));
+			} else if(z1 != null){
+				zones1.push(this.addLabelToZoneObject(z1));
+			} else if(z2 != null){
+				zones2.push(this.addLabelToZoneObject(z2));
+			} else if(z3 != null){
+				zones3.push(this.addLabelToZoneObject(z3));
+			} else if(z4 != null){
+				zones4.push(this.addLabelToZoneObject(z4));
+			}
+		}
+		var pms = [];
+		if(street.data.parkingMeters != null){
+			for(var x = 0; x < street.data.parkingMeters.length; x++){
+				var pm = sharedDataService.getLocalPmById(street.data.parkingMeters[x]);
+				if(pm != null){
+					pms.push(pm);
+				}
+			}
+		}
+		var area = sharedDataService.getLocalAreaById(street.data.rateAreaId);
+		street.data = sharedDataService.cleanStreetNullValue(street.data);
+		street.data.slotOccupied = sharedDataService.getTotalOccupiedSlots(street.data);
+		street.data.extratime = this.getExtratimeFromOccupancy(street.data.occupancyRate);
+		street.data.area_name = area.name;
+		street.data.area_color= area.color;
+		street.data.area = area;
+		street.data.myZones0 = zones0;
+		street.data.myZones1 = zones1;
+		street.data.myZones2 = zones2;
+		street.data.myZones3 = zones3;
+		street.data.myZones4 = zones4;
+		street.data.myPms = pms;
+		// To align with old management
+		street.area = area;
+		street.zones0 = zones0;
+		street.zones1 = zones1;
+		street.zones2 = zones2;
+		street.zones3 = zones3;
+		street.zones4 = zones4;
+		street.pms = pms;
+		return street;
+	};
+	
+	this.initAreaObject = function(area){
+		var zones0 = [];
+		var zones1 = [];
+		var zones2 = [];
+		var zones3 = [];
+		var zones4 = [];
+		// zone init
+		if(area.zones){
+			for(var j = 0; j < area.zones.length; j++){
+				var z0 = this.getLocalZoneById(areas[i].zones[j], 2, 0);
+				var z1 = this.getLocalZoneById(areas[i].zones[j], 2, 1);
+				var z2 = this.getLocalZoneById(areas[i].zones[j], 2, 2);
+				var z3 = this.getLocalZoneById(areas[i].zones[j], 2, 3);
+				var z4 = this.getLocalZoneById(areas[i].zones[j], 2, 4);
+				if(z0 != null){
+					zones0.push(this.addLabelToZoneObject(z0));
+				} else if(z1 != null){
+					zones1.push(this.addLabelToZoneObject(z1));
+				} else if(z2 != null){
+					zones2.push(this.addLabelToZoneObject(z2));
+				} else if(z3 != null){
+					zones3.push(this.addLabelToZoneObject(z3));
+				} else if(z4 != null){
+					zones4.push(this.addLabelToZoneObject(z4));
+				}
+			}
+		}
+		area.myZones0 = zones0;
+		area.myZones1 = zones1;
+		area.myZones2 = zones2;
+		area.myZones3 = zones3;
+		area.myZones4 = zones4;
+		return area;
+	};
 	
 	// Method createMarkers: used to create a graphic parker object to be show in google map
 	this.createMarkers = function(i, marker, type) {
@@ -1159,6 +1418,802 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		}
 		return ret;
 	};
+	
+	
+	// ---------------------------------------------- Start block Utilization diagrams --------------------------------------
+	this.initAllDiagrams = function(){
+    	this.chartPsOccupancy.data = [["Posti", "num"]];
+    	this.chartStreetParkAvailability.data = [["Posti", "number"]];
+    	this.chartStreetOccupancy.data = [["Posti", "number"]];
+      	this.chartStreetFreeParkAvailability.data = [["Posti liberi", "number"]];
+      	this.chartStreetOccupiedParkComposition.data = [["Posti occupati", "number"]];
+      	this.chartZoneOccupancy.data = [["Posti", "num"]];
+      	this.chartAreaOccupancy.data = [["Posti", "num"]];
+      	this.chartPsOccupancy_eng.data = [["Slots", "num"]];
+      	this.chartStreetParkAvailability_eng.data = [["Slots", "number"]];
+    	this.chartStreetOccupancy_eng.data = [["Slots", "number"]];
+      	this.chartStreetFreeParkAvailability_eng.data = [["Free slots", "number"]];
+      	this.chartStreetOccupiedParkComposition_eng.data = [["Occupied slots", "number"]];
+      	this.chartZoneOccupancy_eng.data = [["Slots", "num"]];
+      	this.chartAreaOccupancy_eng.data = [["Slots", "num"]];
+    };
+    
+    this.chartPsOccupancy = this.chart = {
+  		  "type": "PieChart",
+  		  "data": [],
+  		  "options": {
+  		    "displayExactValues": true,
+  		    "width": "100%",
+  		    "height": "100%",
+  		    "is3D": true,
+  		    "legend": {
+  		    	"position": 'top',
+  		    	"textStyle": {"color": 'black', "fontSize" : 10}
+      	    },
+  		    "chartArea": {
+  		      "left": 5,
+  		      "top": 50,
+  		      "bottom": 0,
+  		      "width": "100%",
+  		      "height": "100%"
+  		    }
+  		  },
+  		  "formatters": {
+  		    "number": [
+  		      {
+  		        "columnNum": 1,
+  		        "pattern": "#0 posti"
+  		      }
+  		    ]
+  		  },
+  		  "displayed": true
+    };
+    
+    this.chartPsOccupancy_eng = this.chart = {
+    		  "type": "PieChart",
+    		  "data": [],
+    		  "options": {
+    		    "displayExactValues": true,
+    		    "width": "100%",
+    		    "height": "100%",
+    		    "is3D": true,
+    		    "legend": {
+    		    	"position": 'top',
+    		    	"textStyle": {"color": 'black', "fontSize" : 10}
+        	    },
+    		    "chartArea": {
+    		      "left": 5,
+    		      "top": 50,
+    		      "bottom": 0,
+    		      "width": "100%",
+    		      "height": "100%"
+    		    }
+    		  },
+    		  "formatters": {
+    		    "number": [
+    		      {
+    		        "columnNum": 1,
+    		        "pattern": "#0 slots"
+    		      }
+    		    ]
+    		  },
+    		  "displayed": true
+      };
+    
+    this.getChartPsOccupancy = function(lang){
+    	if(lang=="ita"){
+    		return this.chartPsOccupancy;
+    	} else {
+    		return this.chartPsOccupancy_eng;
+    	}
+    };
+  
+    this.initPsOccupancyDiagram = function(structure, type){
+    	this.chartPsOccupancy.data = [["Posti", "num"]];
+    	this.chartPsOccupancy_eng.data = [["Slots", "num"]];
+  		var object;
+  		if(type == 1){
+  			object = structure.data;
+  		} else {
+  			object = structure;
+  		}
+  		var available = object.slotNumber;
+  		var occ = parseInt(object.payingSlotOccupied) + parseInt(object.handicappedSlotOccupied);
+  		if(object.unusuableSlotNumber != -1){
+  			available -= object.unusuableSlotNumber;
+  		}
+  		// Ita
+  		var dataTot = [ "Liberi", available - occ ];
+  		var dataOcc = [ "Occupati", occ ];
+  		this.chartPsOccupancy.data.push(dataTot);
+  		this.chartPsOccupancy.data.push(dataOcc);
+  		this.chartPsOccupancy.options.title = "Posti occupati in struttura";
+  		// Eng
+  		var dataTot_eng = [ "Free", available - occ ];
+  		var dataOcc_eng = [ "Occupied", occ ];
+  		this.chartPsOccupancy_eng.data.push(dataTot_eng);
+  		this.chartPsOccupancy_eng.data.push(dataOcc_eng);
+  		this.chartPsOccupancy_eng.options.title = "Occupied slots in structure";
+    };
+    
+    this.chartStreetParkAvailability = this.chart = {
+        "type": "PieChart",
+        "data": [],
+        "options": {
+            "displayExactValues": true,
+            "width": "100%",
+            "height": "100%",
+            "is3D": true,
+            "legend": {
+            	"position": 'top',
+            	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+       	    "chartArea": {
+       	      "left": 5,
+       	      "top": 50,
+       	      "bottom": 0,
+       	      "width": "100%",
+       	      "height": "100%"
+       	    }
+       	},
+       	"formatters": {
+       	    "number": [
+       	        {
+       	        	"columnNum": 1,
+       	        	"pattern": "#0 posti"
+       	        }
+       	    ]
+       	},
+       	"displayed": true
+    };
+    
+    this.chartStreetParkAvailability_eng = this.chart = {
+            "type": "PieChart",
+            "data": [],
+            "options": {
+                "displayExactValues": true,
+                "width": "100%",
+                "height": "100%",
+                "is3D": true,
+                "legend": {
+                	"position": 'top',
+                	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+           	    "chartArea": {
+           	      "left": 5,
+           	      "top": 50,
+           	      "bottom": 0,
+           	      "width": "100%",
+           	      "height": "100%"
+           	    }
+           	},
+           	"formatters": {
+           	    "number": [
+           	        {
+           	        	"columnNum": 1,
+           	        	"pattern": "#0 slots"
+           	        }
+           	    ]
+           	},
+           	"displayed": true
+        };
+    
+    this.getChartStreetParkAvailability = function(lang){
+    	if(lang=="ita"){
+    		return this.chartStreetParkAvailability;
+    	} else {
+    		return this.chartStreetParkAvailability_eng;
+    	}
+    };
+    
+    this.initStreetParkSupplyDiagram = function(street, type){
+      	this.chartStreetParkAvailability.data = [["Posti", "number"]];
+      	this.chartStreetParkAvailability_eng.data = [["Slots", "number"]];
+      	var object = null;
+      	if(type == 1){
+      		object = street.data;
+      	} else {
+      		object = street;
+      	}
+    	// for slot composition ita
+    	var freeFree = [ "Gratuiti", object.freeParkSlotNumber ];
+    	var freeFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignNumber ];
+    	var freePaid = [ "A pagamento", object.paidSlotNumber ];
+    	var freeTimed = [ "Disco Orario", object.timedParkSlotNumber ];
+    	var freeHandicapped = [ "Per disabili", object.handicappedSlotNumber ];
+    	var freeReserved = [ "Riservati", object.reservedSlotNumber ];
+    	this.chartStreetParkAvailability.data.push(freeFree);
+    	this.chartStreetParkAvailability.data.push(freeFreeSigned);
+    	this.chartStreetParkAvailability.data.push(freePaid);
+    	this.chartStreetParkAvailability.data.push(freeTimed);
+    	this.chartStreetParkAvailability.data.push(freeHandicapped);
+    	this.chartStreetParkAvailability.data.push(freeReserved);
+    	this.chartStreetParkAvailability.options.title = "Composizione posti";
+    	// eng
+    	var freeFree_eng = [ "Free", object.freeParkSlotNumber ];
+    	var freeFreeSigned_eng = [ "Free (signed)", object.freeParkSlotSignNumber ];
+    	var freePaid_eng = [ "Paid", object.paidSlotNumber ];
+    	var freeTimed_eng = [ "Timed", object.timedParkSlotNumber ];
+    	var freeHandicapped_eng = [ "Handicapped", object.handicappedSlotNumber ];
+    	var freeReserved_eng = [ "Reserved", object.reservedSlotNumber ];
+    	this.chartStreetParkAvailability_eng.data.push(freeFree_eng);
+    	this.chartStreetParkAvailability_eng.data.push(freeFreeSigned_eng);
+    	this.chartStreetParkAvailability_eng.data.push(freePaid_eng);
+    	this.chartStreetParkAvailability_eng.data.push(freeTimed_eng);
+    	this.chartStreetParkAvailability_eng.data.push(freeHandicapped_eng);
+    	this.chartStreetParkAvailability_eng.data.push(freeReserved_eng);
+    	this.chartStreetParkAvailability_eng.options.title = "Slots composition";
+    };
+    
+    this.chartStreetOccupancy = this.chart = {
+    	"type": "PieChart",
+    	"data": [],
+    	"options": {
+    	    "displayExactValues": true,
+    	    "width": "100%",
+    	    "height": "100%",
+    	    "is3D": true,
+    	    "legend": {
+    	    	"position": 'top',
+    	    	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+    	    "chartArea": {
+    	      "left": 5,
+    	      "top": 50,
+    	      "bottom": 0,
+    	      "width": "100%",
+    	      "height": "100%"
+    	    }
+    	},
+    	"formatters": {
+    	    "number": [
+    	        {
+    	        	"columnNum": 1,
+    	        	"pattern": "#0 posti"
+    	        }
+    	    ]
+    	},
+    	"displayed": true
+    };
+    
+    this.chartStreetFreeParkAvailability = this.chart = {
+        "type": "PieChart",
+        "data": [],
+        "options": {
+            "displayExactValues": true,
+            "width": "100%",
+            "height": "100%",
+            "is3D": true,
+            "legend": {
+            	"position": 'top',
+       	    	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+       	    "chartArea": {
+       	      "left": 5,
+       	      "top": 50,
+       	      "bottom": 0,
+       	      "width": "100%",
+       	      "height": "100%"
+       	    }
+       	},
+      	"formatters": {
+       	    "number": [
+      	        {
+       	        	"columnNum": 1,
+       	        	"pattern": "#0 posti"
+       	        }
+       	    ]
+       	},
+      	"displayed": true
+    };
+    
+    this.chartStreetOccupiedParkComposition = this.chart = {
+        "type": "PieChart",
+        "data": [],
+        "options": {
+            "displayExactValues": true,
+            "width": "100%",
+            "height": "100%",
+            "is3D": true,
+            "legend": {
+              	"position": 'top',
+       	    	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+       	    "chartArea": {
+       	      "left": 5,
+       	      "top": 50,
+       	      "bottom": 0,
+       	      "width": "100%",
+       	      "height": "100%"
+       	    }
+       	},
+      	"formatters": {
+       	    "number": [
+      	        {
+       	        	"columnNum": 1,
+       	        	"pattern": "#0 posti"
+       	        }
+       	    ]
+       	},
+      	"displayed": true
+    };
+    
+    this.chartStreetOccupancy_eng = this.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 slots"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+        
+        this.chartStreetFreeParkAvailability_eng = this.chart = {
+            "type": "PieChart",
+            "data": [],
+            "options": {
+                "displayExactValues": true,
+                "width": "100%",
+                "height": "100%",
+                "is3D": true,
+                "legend": {
+                	"position": 'top',
+           	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+           	    "chartArea": {
+           	      "left": 5,
+           	      "top": 50,
+           	      "bottom": 0,
+           	      "width": "100%",
+           	      "height": "100%"
+           	    }
+           	},
+          	"formatters": {
+           	    "number": [
+          	        {
+           	        	"columnNum": 1,
+           	        	"pattern": "#0 slots"
+           	        }
+           	    ]
+           	},
+          	"displayed": true
+        };
+        
+        this.chartStreetOccupiedParkComposition_eng = this.chart = {
+            "type": "PieChart",
+            "data": [],
+            "options": {
+                "displayExactValues": true,
+                "width": "100%",
+                "height": "100%",
+                "is3D": true,
+                "legend": {
+                  	"position": 'top',
+           	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+           	    "chartArea": {
+           	      "left": 5,
+           	      "top": 50,
+           	      "bottom": 0,
+           	      "width": "100%",
+           	      "height": "100%"
+           	    }
+           	},
+          	"formatters": {
+           	    "number": [
+          	        {
+           	        	"columnNum": 1,
+           	        	"pattern": "#0 slots"
+           	        }
+           	    ]
+           	},
+          	"displayed": true
+        };
+        
+    this.getChartStreetOccupancy = function(lang){
+    	if(lang=="ita"){
+    		return this.chartStreetOccupancy;
+    	} else {
+    		return this.chartStreetOccupancy_eng;
+    	}
+    }; 
+    
+    this.getChartStreetFreeParkAvailability = function(lang){
+    	if(lang=="ita"){
+    		return this.chartStreetFreeParkAvailability;
+    	} else {
+    		return this.chartStreetFreeParkAvailability_eng;
+    	}
+    }; 
+    
+    this.getChartStreetOccupiedParkComposition = function(lang){
+    	if(lang=="ita"){
+    		return this.chartStreetOccupiedParkComposition;
+    	} else {
+    		return this.chartStreetOccupiedParkComposition_eng;
+    	}
+    }; 
+    
+    this.initStreetOccupancyDiagram = function(street, type){
+      	this.chartStreetOccupancy.data = [["Posti", "number"]];
+      	this.chartStreetFreeParkAvailability.data = [["Posti liberi", "number"]];
+      	this.chartStreetOccupiedParkComposition.data = [["Posti occupati", "number"]];
+      	this.chartStreetOccupancy_eng.data = [["Slots", "number"]];
+      	this.chartStreetFreeParkAvailability_eng.data = [["Free slots", "number"]];
+      	this.chartStreetOccupiedParkComposition_eng.data = [["Occupied slots", "number"]];
+      	var object = null;
+      	if(type == 1){
+      		object = street.data;
+      	} else {
+      		object = street;
+      	}
+      	// for Total slot
+    	var dataTot = [ "Liberi", object.slotNumber - object.unusuableSlotNumber - object.slotOccupied ];
+    	var dataOcc = [ "Occupati", object.slotOccupied ];
+    	var dataTot_eng = [ "Free", object.slotNumber - object.unusuableSlotNumber - object.slotOccupied ];
+    	var dataOcc_eng = [ "Occupied", object.slotOccupied ];
+    	this.chartStreetOccupancy.data.push(dataTot);
+    	this.chartStreetOccupancy.data.push(dataOcc);
+    	this.chartStreetOccupancy.options.title = "Posti in strada";
+    	this.chartStreetOccupancy_eng.data.push(dataTot_eng);
+    	this.chartStreetOccupancy_eng.data.push(dataOcc_eng);
+    	this.chartStreetOccupancy_eng.options.title = "Slots in street";
+    	// for Free slot
+    	var freeFree = [ "Gratuiti", object.freeParkSlotNumber - object.freeParkSlotOccupied ];
+    	var freeFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied ];
+    	var freePaid = [ "A pagamento", object.paidSlotNumber - object.paidSlotOccupied ];
+    	var freeTimed = [ "Disco Orario", object.timedParkSlotNumber - object.timedParkSlotOccupied ];
+    	var freeHandicapped = [ "Per disabili", object.handicappedSlotNumber - object.handicappedSlotOccupied ];
+    	var freeReserved = [ "Riservati", object.reservedSlotNumber - object.reservedSlotOccupied ];
+    	var freeFree_eng = [ "Free", object.freeParkSlotNumber - object.freeParkSlotOccupied ];
+    	var freeFreeSigned_eng = [ "Free (signed)", object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied ];
+    	var freePaid_eng = [ "Paid", object.paidSlotNumber - object.paidSlotOccupied ];
+    	var freeTimed_eng = [ "Timed", object.timedParkSlotNumber - object.timedParkSlotOccupied ];
+    	var freeHandicapped_eng = [ "Handicapped", object.handicappedSlotNumber - object.handicappedSlotOccupied ];
+    	var freeReserved_eng = [ "Reserved", object.reservedSlotNumber - object.reservedSlotOccupied ];
+    	this.chartStreetFreeParkAvailability.data.push(freeFree);
+    	this.chartStreetFreeParkAvailability.data.push(freeFreeSigned);
+    	this.chartStreetFreeParkAvailability.data.push(freePaid);
+    	this.chartStreetFreeParkAvailability.data.push(freeTimed);
+    	this.chartStreetFreeParkAvailability.data.push(freeHandicapped);
+    	this.chartStreetFreeParkAvailability.data.push(freeReserved);
+    	this.chartStreetFreeParkAvailability.options.title = "Posti liberi in strada";
+    	this.chartStreetFreeParkAvailability_eng.data.push(freeFree_eng);
+    	this.chartStreetFreeParkAvailability_eng.data.push(freeFreeSigned_eng);
+    	this.chartStreetFreeParkAvailability_eng.data.push(freePaid_eng);
+    	this.chartStreetFreeParkAvailability_eng.data.push(freeTimed_eng);
+    	this.chartStreetFreeParkAvailability_eng.data.push(freeHandicapped_eng);
+    	this.chartStreetFreeParkAvailability_eng.data.push(freeReserved_eng);
+    	this.chartStreetFreeParkAvailability_eng.options.title = "Free slots in street";
+    	// for Occupied slot
+    	var occupiedFree = [ "Gratuiti", object.freeParkSlotOccupied ];
+    	var occupiedFreeSigned = [ "Gratuiti (segnalati)", object.freeParkSlotSignOccupied ];
+    	var occupiedPaid = [ "A pagamento", object.paidSlotOccupied ];
+    	var occupiedTimed = [ "Disco Orario", object.timedParkSlotOccupied ];
+    	var occupiedHandicapped = [ "Per disabili", object.handicappedSlotOccupied ];
+    	var occupiedReserved = [ "Riservati", object.reservedSlotOccupied ];
+    	var occupiedFree_eng = [ "Free", object.freeParkSlotOccupied ];
+    	var occupiedFreeSigned_eng = [ "Free (signed)", object.freeParkSlotSignOccupied ];
+    	var occupiedPaid_eng = [ "Paid", object.paidSlotOccupied ];
+    	var occupiedTimed_eng = [ "Timed", object.timedParkSlotOccupied ];
+    	var occupiedHandicapped_eng = [ "Handicapped", object.handicappedSlotOccupied ];
+    	var occupiedReserved_eng = [ "Reserved", object.reservedSlotOccupied ];
+    	this.chartStreetOccupiedParkComposition.data.push(occupiedFree);
+    	this.chartStreetOccupiedParkComposition.data.push(occupiedFreeSigned);
+    	this.chartStreetOccupiedParkComposition.data.push(occupiedPaid);
+    	this.chartStreetOccupiedParkComposition.data.push(occupiedTimed);
+    	this.chartStreetOccupiedParkComposition.data.push(occupiedHandicapped);
+    	this.chartStreetOccupiedParkComposition.data.push(occupiedReserved);
+    	this.chartStreetOccupiedParkComposition.options.title = "Posti occupati in sottovia";
+    	this.chartStreetOccupiedParkComposition_eng.data.push(occupiedFree_eng);
+    	this.chartStreetOccupiedParkComposition_eng.data.push(occupiedFreeSigned_eng);
+    	this.chartStreetOccupiedParkComposition_eng.data.push(occupiedPaid_eng);
+    	this.chartStreetOccupiedParkComposition_eng.data.push(occupiedTimed_eng);
+    	this.chartStreetOccupiedParkComposition_eng.data.push(occupiedHandicapped_eng);
+    	this.chartStreetOccupiedParkComposition_eng.data.push(occupiedReserved_eng);
+    	this.chartStreetOccupiedParkComposition_eng.options.title = "Occupied slots in park";
+    };
+    
+    this.chartZoneOccupancy = this.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 posti"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+    
+    this.chartZoneOccupancy_eng = this.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 slots"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+    
+    this.getChartZoneOccupancy = function(lang){
+    	if(lang=="ita"){
+    		return this.chartZoneOccupancy;
+    	} else {
+    		return this.chartZoneOccupancy_eng;
+    	}
+    }; 
+    
+    this.initZoneOccupancyDiagram = function(zone, type){
+    	this.chartZoneOccupancy.data = [["Posti", "num"]];
+    	this.chartZoneOccupancy_eng.data = [["Slots", "num"]];
+    	var object;
+    	if(type == 1){
+    		object = zone.data;
+    	} else {
+    		object = zone;
+    	}
+  		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+  		var dataOcc = [ "Occupati", object.slotOccupied ];
+  		this.chartZoneOccupancy.data.push(dataTot);
+  		this.chartZoneOccupancy.data.push(dataOcc);
+  		var dataTot_eng = [ "Free", object.slotNumber - object.slotOccupied ];
+  		var dataOcc_eng = [ "Occupated", object.slotOccupied ];
+  		this.chartZoneOccupancy_eng.data.push(dataTot_eng);
+  		this.chartZoneOccupancy_eng.data.push(dataOcc_eng);
+  		this.chartZoneOccupancy.options.title = "Posti occupati in zona";
+  		this.chartZoneOccupancy_eng.options.title = "Occupied slots in zone";
+    };
+    
+    this.chartMicroZoneOccupancy = this.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 posti"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+    
+    this.chartMicroZoneOccupancy_eng = this.chart = {
+        	"type": "PieChart",
+        	"data": [],
+        	"options": {
+        	    "displayExactValues": true,
+        	    "width": "100%",
+        	    "height": "100%",
+        	    "is3D": true,
+        	    "legend": {
+        	    	"position": 'top',
+        	    	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+        	    "chartArea": {
+        	      "left": 5,
+        	      "top": 50,
+        	      "bottom": 0,
+        	      "width": "100%",
+        	      "height": "100%"
+        	    }
+        	},
+        	"formatters": {
+        	    "number": [
+        	        {
+        	        	"columnNum": 1,
+        	        	"pattern": "#0 slots"
+        	        }
+        	    ]
+        	},
+        	"displayed": true
+        };
+    
+    this.getChartMicroZoneOccupancy = function(lang){
+    	if(lang=="ita"){
+    		return this.chartMicroZoneOccupancy;
+    	} else {
+    		return this.chartMicroZoneOccupancy_eng;
+    	}
+    }; 
+    
+    this.initMicroZoneOccupancyDiagram = function(zone, type){
+    	this.chartMicroZoneOccupancy.data = [["Posti", "num"]];
+    	this.chartMicroZoneOccupancy_eng.data = [["Slots", "num"]];
+    	var object;
+    	if(type == 1){
+    		object = zone.data;
+    	} else {
+    		object = zone;
+    	}
+    	// ita
+  		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+  		var dataOcc = [ "Occupati", object.slotOccupied ];
+  		this.chartMicroZoneOccupancy.data.push(dataTot);
+  		this.chartMicroZoneOccupancy.data.push(dataOcc);
+  		// eng
+  		var dataTot_eng = [ "Free", object.slotNumber - object.slotOccupied ];
+  		var dataOcc_eng = [ "Occupied", object.slotOccupied ];
+  		this.chartMicroZoneOccupancy_eng.data.push(dataTot_eng);
+  		this.chartMicroZoneOccupancy_eng.data.push(dataOcc_eng);
+  		this.chartMicroZoneOccupancy.options.title = "Posti occupati in via";
+  		this.chartMicroZoneOccupancy_eng.options.title = "Occupied slots in street";
+    };    
+    
+    this.chartAreaOccupancy = this.chart = {
+        "type": "PieChart",
+        "data": [],
+        "options": {
+            "displayExactValues": true,
+            "width": "100%",
+            "height": "100%",
+            "is3D": true,
+            "legend": {
+            	"position": 'top',
+            	"textStyle": {"color": 'black', "fontSize" : 10}
+            },
+            "chartArea": {
+              "left": 5,
+              "top": 50,
+              "bottom": 0,
+              "width": "100%",
+              "height": "100%"
+            }
+        },
+        "formatters": {
+            "number": [
+                {
+                	"columnNum": 1,
+                	"pattern": "#0 posti"
+                }
+            ]
+        },
+      	"displayed": true
+    };
+    
+    this.chartAreaOccupancy_eng = this.chart = {
+            "type": "PieChart",
+            "data": [],
+            "options": {
+                "displayExactValues": true,
+                "width": "100%",
+                "height": "100%",
+                "is3D": true,
+                "legend": {
+                	"position": 'top',
+                	"textStyle": {"color": 'black', "fontSize" : 10}
+                },
+                "chartArea": {
+                  "left": 5,
+                  "top": 50,
+                  "bottom": 0,
+                  "width": "100%",
+                  "height": "100%"
+                }
+            },
+            "formatters": {
+                "number": [
+                    {
+                    	"columnNum": 1,
+                    	"pattern": "#0 slots"
+                    }
+                ]
+            },
+          	"displayed": true
+        };
+    
+    this.getChartAreaOccupancy = function(lang){
+    	if(lang=="ita"){
+    		return this.chartAreaOccupancy;
+    	} else {
+    		return this.chartAreaOccupancy_eng;
+    	}
+    };     
+    
+    this.initAreaOccupancyDiagram = function(area, type){
+    	this.chartAreaOccupancy.data = [["Posti", "num"]];
+    	this.chartAreaOccupancy_eng.data = [["Slots", "num"]];
+    	var object;
+    	if(type == 1){
+    		object = area.data;
+    	} else {
+    		object = area;
+    	}
+    	// ita
+  		var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];
+  		var dataOcc = [ "Occupati", object.slotOccupied ];
+  		this.chartAreaOccupancy.data.push(dataTot);
+  		this.chartAreaOccupancy.data.push(dataOcc);
+  		this.chartAreaOccupancy.options.title = "Posti occupati in area";
+  		// eng
+  		var dataTot_eng = [ "Free", object.slotNumber - object.slotOccupied ];
+  		var dataOcc_eng = [ "Occupied", object.slotOccupied ];
+  		this.chartAreaOccupancy_eng.data.push(dataTot_eng);
+  		this.chartAreaOccupancy_eng.data.push(dataOcc_eng);
+  		this.chartAreaOccupancy_eng.options.title = "Street occupied in area";
+    };
+	
+    // ---------------------------------------------- End block Utilization diagrams --------------------------------------
+	
 
 
 }]);

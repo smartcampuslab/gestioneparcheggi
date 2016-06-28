@@ -862,12 +862,14 @@ pm.service('sharedDataService', function(){
 			for(var i = 0; i < profitPmList.length; i++){
 				var found = false;
 				// all zone case
-				for(var j = 0; (j < profitPmList[i].zones.length && !found); j++){ 
-					if(profitPmList[i].zones[j] == z_id){
-						found = true;
-						pmsInZone += 1;
-						if(!this.checkIfAlreadyPresentInList(myPms, profitPmList[i].id)){
-							myPms.push(profitPmList[i].id);
+				if(profitPmList[i].zones){
+					for(var j = 0; (j < profitPmList[i].zones.length && !found); j++){ 
+						if(profitPmList[i].zones[j] == z_id){
+							found = true;
+							pmsInZone += 1;
+							if(!this.checkIfAlreadyPresentInList(myPms, profitPmList[i].id)){
+								myPms.push(profitPmList[i].id);
+							}
 						}
 					}
 				}
@@ -941,137 +943,180 @@ pm.service('sharedDataService', function(){
 		return id;
 	};
 	
+	// Method getCorrectZoneType: used to get the correct type from a zone
+	this.getCorrectZoneType = function(type){
+		var corrType = null;
+		var types = this.getZoneTypeList();
+		if(types){
+			var found = false;
+			for(var i = 0; (i < types.length && !found); i++){
+				if(types[i].value == type){
+					corrType = types[i];
+					found = true;
+				}
+			}
+		}
+		return corrType;
+	};
+	
+	// Method getLocalPmByCode: used to retrieve the parking meter data from the code
+	this.getLocalPmByCode = function(code){
+		var find = false;
+		var myPms = this.getSharedLocalPms();
+		for(var i = 0; i < myPms.length && !find; i++){
+			var pmCodeString = String(myPms[i].code);
+			if(pmCodeString.localeCompare(code) == 0){
+				find = true;
+				return myPms[i];
+			}
+		}
+	};
+	
+	// Method getLocalPmById: used to retrieve the parking meter data from the id
+	this.getLocalPmById = function(objId){
+		var find = false;
+		var myPms = this.getSharedLocalPms();
+		for(var i = 0; i < myPms.length && !find; i++){
+			var pmIdString = String(myPms[i].id);
+			if(pmIdString.localeCompare(objId) == 0){
+				find = true;
+				return myPms[i];
+			}
+		}
+		return null;
+	};
+	
 	// Method getStreetsInZoneProfit: used to retrieve the profit data from the streets that compose a zone
-//	this.getStreetsInZoneProfit = function(z_id, profitStreetList){
-//		var totalProfit = 0;
-//		var totalTickets = 0;
-//		var streetsInZone = 0;
-//		var myPms = [];
-//		if(this.profitStreets != null && $scope.profitStreets.length > 0){			// map page case
-//			for(var i = 0; i < $scope.profitStreets.length; i++){
-//				var found = false;
-//				// zone0 case
-//				for(var j = 0; (j < $scope.profitStreets[i].zones0.length && !found); j++){ 
-//					if($scope.profitStreets[i].zones0[j].id == z_id){
-//						found = true;
-//						streetsInZone += 1;
-//						if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
-//							for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
-//								if($scope.profitStreets[i].pms[x] != null){
-//									if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
-//										myPms.push($scope.profitStreets[i].pms[x].id);
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//				// zone1 case
-//				if(!found && $scope.profitStreets[i].zones1 != null){
-//					for(var j = 0; (j < $scope.profitStreets[i].zones1.length && !found); j++){ 
-//						if($scope.profitStreets[i].zones1[j].id == z_id){
-//							found = true;
-//							streetsInZone += 1;
-//							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
-//								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
-//									if($scope.profitStreets[i].pms[x] != null){
-//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
-//											myPms.push($scope.profitStreets[i].pms[x].id);
-//										}
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//				// zone2 case
-//				if(!found && $scope.profitStreets[i].zones2 != null){
-//					for(var j = 0; (j < $scope.profitStreets[i].zones2.length && !found); j++){ 
-//						if($scope.profitStreets[i].zones2[j].id == z_id){
-//							found = true;
-//							streetsInZone += 1;
-//							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
-//								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
-//									if($scope.profitStreets[i].pms[x] != null){
-//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
-//											myPms.push($scope.profitStreets[i].pms[x].id);
-//										}
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//				// zone3 case
-//				if(!found && $scope.profitStreets[i].zones3 != null){
-//					for(var j = 0; (j < $scope.profitStreets[i].zones3.length && !found); j++){ 
-//						if($scope.profitStreets[i].zones3[j].id == z_id){
-//							found = true;
-//							streetsInZone += 1;
-//							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
-//								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
-//									if($scope.profitStreets[i].pms[x] != null){
-//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
-//											myPms.push($scope.profitStreets[i].pms[x].id);
-//										}
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//				// zone4 case
-//				if(!found && $scope.profitStreets[i].zones4 != null){
-//					for(var j = 0; (j < $scope.profitStreets[i].zones4.length && !found); j++){ 
-//						if($scope.profitStreets[i].zones4[j].id == z_id){
-//							found = true;
-//							streetsInZone += 1;
-//							if($scope.profitStreets[i].pms != null && $scope.profitStreets[i].pms.length > 0){
-//								for(var x = 0; x < $scope.profitStreets[i].pms.length; x++){
-//									if($scope.profitStreets[i].pms[x] != null){
-//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreets[i].pms[x].id)){
-//											myPms.push($scope.profitStreets[i].pms[x].id);
-//										}
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//		} else if($scope.profitStreetsList != null && $scope.profitStreetsList.length > 0){	// list page case
-//			for(var i = 0; i < $scope.profitStreetsList.length; i++){
-//				var found = false;
-//				if($scope.profitStreetsList[i].zones != null){
-//					for(var j = 0; (j < $scope.profitStreetsList[i].zones.length && !found); j++){ 
-//						if($scope.profitStreetsList[i].zones[j] == z_id){
-//							found = true;
-//							streetsInZone += 1;
-//							if($scope.profitStreetsList[i].myPms != null && $scope.profitStreetsList[i].myPms.length > 0){
-//								for(var x = 0; x < $scope.profitStreetsList[i].myPms.length; x++){
-//									if($scope.profitStreetsList[i].myPms[x] != null){
-//										if(!$scope.checkIfAlreadyPresentInList(myPms, $scope.profitStreetsList[i].myPms[x].id)){
-//											myPms.push($scope.profitStreetsList[i].myPms[x].id);
-//										}
-//									}
-//								}
-//							}
-//						}
-//					}
-//				}
-//			}
-//		}
-//		if(myPms.length > 0){
-//			var totalProfitData = this.getTotalProfitFromPmList(myPms);
-//			totalProfit = totalProfitData[0];
-//			totalTickets = totalProfitData[1];
-//		}
-//		if(totalProfit > 0){
-//			return [totalProfit, totalTickets, streetsInZone]; // / streetsInZone;
-//		} else {
-//			return [-1, -1, streetsInZone];
-//		}
-//	};
+	this.getStreetsInZoneProfit = function(z_id, profitStreetList, profitStreetDataList){
+		var totalProfit = 0;
+		var totalTickets = 0;
+		var streetsInZone = 0;
+		var myPms = [];
+		if(profitStreetList != null && profitStreetList.length > 0){			// map page case
+			for(var i = 0; i < profitStreetList.length; i++){
+				var found = false;
+				// zone0 case
+				for(var j = 0; (j < profitStreetList[i].zones0.length && !found); j++){ 
+					if(profitStreetList[i].zones0[j].id == z_id){
+						found = true;
+						streetsInZone += 1;
+						if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
+							for(var x = 0; x < profitStreetList[i].pms.length; x++){
+								if(profitStreetList[i].pms[x] != null){
+									if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
+										myPms.push(profitStreetList[i].pms[x].id);
+									}
+								}
+							}
+						}
+					}
+				}
+				// zone1 case
+				if(!found && profitStreetList[i].zones1 != null){
+					for(var j = 0; (j < profitStreetList[i].zones1.length && !found); j++){ 
+						if(profitStreetList[i].zones1[j].id == z_id){
+							found = true;
+							streetsInZone += 1;
+							if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
+								for(var x = 0; x < profitStreetList[i].pms.length; x++){
+									if(profitStreetList[i].pms[x] != null){
+										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
+											myPms.push(profitStreetList[i].pms[x].id);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				// zone2 case
+				if(!found && profitStreetList[i].zones2 != null){
+					for(var j = 0; (j < profitStreetList[i].zones2.length && !found); j++){ 
+						if(profitStreetList[i].zones2[j].id == z_id){
+							found = true;
+							streetsInZone += 1;
+							if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
+								for(var x = 0; x < profitStreetList[i].pms.length; x++){
+									if(profitStreetList[i].pms[x] != null){
+										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
+											myPms.push(profitStreetList[i].pms[x].id);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				// zone3 case
+				if(!found && profitStreetList[i].zones3 != null){
+					for(var j = 0; (j < profitStreetList[i].zones3.length && !found); j++){ 
+						if(profitStreetList[i].zones3[j].id == z_id){
+							found = true;
+							streetsInZone += 1;
+							if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
+								for(var x = 0; x < profitStreetList[i].pms.length; x++){
+									if(profitStreetList[i].pms[x] != null){
+										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
+											myPms.push(profitStreetList[i].pms[x].id);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+				// zone4 case
+				if(!found && profitStreetList[i].zones4 != null){
+					for(var j = 0; (j < profitStreetList[i].zones4.length && !found); j++){ 
+						if(profitStreetList[i].zones4[j].id == z_id){
+							found = true;
+							streetsInZone += 1;
+							if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
+								for(var x = 0; x < profitStreetList[i].pms.length; x++){
+									if(profitStreetList[i].pms[x] != null){
+										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
+											myPms.push(profitStreetList[i].pms[x].id);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		} else if(profitStreetDataList != null && profitStreetDataList.length > 0){	// list page case
+			for(var i = 0; i < profitStreetDataList.length; i++){
+				var found = false;
+				if(profitStreetDataList[i].zones != null){
+					for(var j = 0; (j < profitStreetDataList[i].zones.length && !found); j++){ 
+						if(profitStreetDataList[i].zones[j] == z_id){
+							found = true;
+							streetsInZone += 1;
+							if(profitStreetDataList[i].myPms != null && profitStreetDataList[i].myPms.length > 0){
+								for(var x = 0; x < profitStreetDataList[i].myPms.length; x++){
+									if(profitStreetDataList[i].myPms[x] != null){
+										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetDataList[i].myPms[x].id)){
+											myPms.push(profitStreetDataList[i].myPms[x].id);
+										}
+									}
+								}
+							}
+						}
+					}
+				}
+			}
+		}
+		if(myPms.length > 0){
+			var totalProfitData = this.getTotalProfitFromPmList(myPms);
+			totalProfit = totalProfitData[0];
+			totalTickets = totalProfitData[1];
+		}
+		if(totalProfit > 0){
+			return [totalProfit, totalTickets, streetsInZone]; // / streetsInZone;
+		} else {
+			return [-1, -1, streetsInZone];
+		}
+	};
 	
 	// Method getPMsInAreaProfit: used to get the profit data of the parking meters of a specific area
 	this.getPMsInAreaProfit = function(a_id, profitPmList){

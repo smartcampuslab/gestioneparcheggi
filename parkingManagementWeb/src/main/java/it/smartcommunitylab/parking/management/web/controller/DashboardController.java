@@ -335,6 +335,13 @@ public class DashboardController {
 		return dynamic.getProfitFromAllParkStructs(appId, type, null, year, month, dayType, weekday, hour, valueType);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profitchanged/{appId}/parkstructs")
+	public @ResponseBody
+	List<CompactParkingStructureBean> getAllParkStructsChangedProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+		String type = ParkStruct.class.getCanonicalName();
+		return dynamic.getProfitChangeFromAllParkStructs(appId, type, null, year, month, dayType, weekday, hour, valueType);
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkstruct/{id}")
 	public @ResponseBody
 	ParkingStructureBean getParkStructsProfit(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
