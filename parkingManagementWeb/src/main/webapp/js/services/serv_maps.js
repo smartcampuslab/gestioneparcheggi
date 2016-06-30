@@ -472,26 +472,29 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 			var areaProfit = [];
 			if(type == 1){
 				aColor = this.correctColor(areas[i].color);
-			} /*else if(type == 2){
-				var slotsInArea = $scope.getTotalSlotsInArea(areas[i].id);
-				areaOccupancy = $scope.getStreetsInAreaOccupancy(areas[i].id);
+			} else if(type == 2){
+				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+				areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
 				if(areaOccupancy != -1){
 					areaOccupancy = slotsInArea[2];
 				}
 				aColor = this.getOccupancyColor(areaOccupancy);
 			} else if(type == 3){
-				areaProfit = $scope.getPMsInAreaProfit(areas[i].id);
+				areaProfit = sharedDataService.getPMsInAreaProfit(areas[i].id, this.profitParkingMeterWS);
 				aColor = this.getProfitColor(areaProfit[0]);
 			} else if(type == 4){
-				var slotsInArea = $scope.getTotalSlotsInArea(areas[i].id);
-				areaOccupancy = $scope.getStreetsInAreaOccupancy(areas[i].id);
+				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+				areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
 				if(areaOccupancy != -1){
 					areaOccupancy = slotsInArea[2];
 				}
-				timeCost = $scope.getExtratimeFromOccupancy(areaOccupancy);
+				timeCost = this.getExtratimeFromOccupancy(areaOccupancy);
 				areas[i].extratime = timeCost;
 				aColor = this.getTimeCostColor(timeCost);
-			}*/
+			}
+			areas[i].profit = areaProfit[0];
+			areas[i].tickets = areaProfit[1];
+			areas[i].pmsInArea = areaProfit[2];
 			
 			if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
 				for(var j = 0; j < areas[i].geometry.length; j++){
@@ -527,112 +530,112 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		return [tmpAreas, areas];
 	};
 	
-	this.initAreasOnMapComplete = function(areas, visible, type, firstInit, firstTime){
-		var area = {};
-		var poligons = {};
-		var tmpAreas = [];
-		var aColor = "";
-		var timeCost = {};
-		
-		for(var i = 0; i < areas.length; i++){
-			var areaOccupancy = 0;
-			var areaProfit = [];
-			if(type == 1){
-				aColor = this.correctColor(areas[i].color);
-			} else if(type == 2){
-				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
-				areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
-				if(areaOccupancy != -1){
-					areaOccupancy = slotsInArea[2];
-				}
-				aColor = this.getOccupancyColor(areaOccupancy);
-			} else if(type == 3){
-				areaProfit = sharedDataService.getPMsInAreaProfit(areas[i].id, this.profitParkingMeterWS);
-				aColor = this.getProfitColor(areaProfit[0]);
-			} else if(type == 4){
-				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
-				areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
-				if(areaOccupancy != -1){
-					areaOccupancy = slotsInArea[2];
-				}
-				timeCost = this.getExtratimeFromOccupancy(areaOccupancy);
-				areas[i].extratime = timeCost;
-				aColor = this.getTimeCostColor(timeCost);
-			} 
-			
-			if(firstInit){	// I use this code only the first time I show the zone occupancy data
-				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
-				areas[i].slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(areas[i].id);
-				areas[i].slotOccupied = slotsInArea[1]; //Math.round(area.data.slotNumber * areaOccupancy / 100);
-			}
-			areas[i].profit = areaProfit[0];
-			areas[i].tickets = areaProfit[1];
-			areas[i].pmsInArea = areaProfit[2];
-			
-			if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
-				var zones0 = [];
-				var zones1 = [];
-				var zones2 = [];
-				var zones3 = [];
-				var zones4 = [];
-				// zone init
-				if(areas[i].zones){
-					for(var j = 0; j < areas[i].zones.length; j++){
-						var z0 = this.getLocalZoneById(areas[i].zones[j], 1, 0);
-						var z1 = this.getLocalZoneById(areas[i].zones[j], 1, 1);
-						var z2 = this.getLocalZoneById(areas[i].zones[j], 1, 2);
-						var z3 = this.getLocalZoneById(areas[i].zones[j], 1, 3);
-						var z4 = this.getLocalZoneById(areas[i].zones[j], 1, 4);
-						if(z0 != null){
-							zones0.push(this.addLabelToZoneObject(z0));
-						} else if(z1 != null){
-							zones1.push(this.addLabelToZoneObject(z1));
-						} else if(z2 != null){
-							zones2.push(this.addLabelToZoneObject(z2));
-						} else if(z3 != null){
-							zones3.push(this.addLabelToZoneObject(z3));
-						} else if(z4 != null){
-							zones4.push(this.addLabelToZoneObject(z4));
-						}
-					}
-				}
-				for(var j = 0; j < areas[i].geometry.length; j++){
-					poligons = areas[i].geometry;
-					area = {
-						id: this.correctAreaId(areas[i].id, j),
-						path: this.correctPoints(poligons[j].points),
-						gpath: this.correctPointsGoogle(poligons[j].points),
-						stroke: {
-						    color: aColor, //$scope.correctColor(areas[i].color),
-						    weight: 3,
-						    opacity: 0.7
-						},
-						data: areas[i],
-						zones0: zones0,
-						zones1: zones1,
-						zones2: zones2,
-						zones3: zones3,
-						zones4: zones4,
-						info_windows_pos: this.correctPointGoogle(poligons[j].points[1]),
-						info_windows_cod: "a" + areas[i].id,
-						editable: false,
-						draggable: false,
-						geodesic: false,
-						visible: visible,
-						fill: {
-						    color: aColor, //$scope.correctColor(areas[i].color),
-						    opacity: 0.5
-						}
-					};
-					tmpAreas.push(area);
-				}
-			}
-		}
-		if(!firstTime){
-			this.closeLoadingMap();
-		}
-		return [tmpAreas, areas];
-	};
+//	this.initAreasOnMapComplete = function(areas, visible, type, firstInit, firstTime){
+//		var area = {};
+//		var poligons = {};
+//		var tmpAreas = [];
+//		var aColor = "";
+//		var timeCost = {};
+//		
+//		for(var i = 0; i < areas.length; i++){
+//			var areaOccupancy = 0;
+//			var areaProfit = [];
+//			if(type == 1){
+//				aColor = this.correctColor(areas[i].color);
+//			} else if(type == 2){
+//				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+//				areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
+//				if(areaOccupancy != -1){
+//					areaOccupancy = slotsInArea[2];
+//				}
+//				aColor = this.getOccupancyColor(areaOccupancy);
+//			} else if(type == 3){
+//				areaProfit = sharedDataService.getPMsInAreaProfit(areas[i].id, this.profitParkingMeterWS);
+//				aColor = this.getProfitColor(areaProfit[0]);
+//			} else if(type == 4){
+//				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+//				areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
+//				if(areaOccupancy != -1){
+//					areaOccupancy = slotsInArea[2];
+//				}
+//				timeCost = this.getExtratimeFromOccupancy(areaOccupancy);
+//				areas[i].extratime = timeCost;
+//				aColor = this.getTimeCostColor(timeCost);
+//			} 
+//			
+//			if(firstInit){	// I use this code only the first time I show the zone occupancy data
+//				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+//				areas[i].slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(areas[i].id);
+//				areas[i].slotOccupied = slotsInArea[1]; //Math.round(area.data.slotNumber * areaOccupancy / 100);
+//			}
+//			areas[i].profit = areaProfit[0];
+//			areas[i].tickets = areaProfit[1];
+//			areas[i].pmsInArea = areaProfit[2];
+//			
+//			if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
+//				var zones0 = [];
+//				var zones1 = [];
+//				var zones2 = [];
+//				var zones3 = [];
+//				var zones4 = [];
+//				// zone init
+//				if(areas[i].zones){
+//					for(var j = 0; j < areas[i].zones.length; j++){
+//						var z0 = this.getLocalZoneById(areas[i].zones[j], 1, 0);
+//						var z1 = this.getLocalZoneById(areas[i].zones[j], 1, 1);
+//						var z2 = this.getLocalZoneById(areas[i].zones[j], 1, 2);
+//						var z3 = this.getLocalZoneById(areas[i].zones[j], 1, 3);
+//						var z4 = this.getLocalZoneById(areas[i].zones[j], 1, 4);
+//						if(z0 != null){
+//							zones0.push(this.addLabelToZoneObject(z0));
+//						} else if(z1 != null){
+//							zones1.push(this.addLabelToZoneObject(z1));
+//						} else if(z2 != null){
+//							zones2.push(this.addLabelToZoneObject(z2));
+//						} else if(z3 != null){
+//							zones3.push(this.addLabelToZoneObject(z3));
+//						} else if(z4 != null){
+//							zones4.push(this.addLabelToZoneObject(z4));
+//						}
+//					}
+//				}
+//				for(var j = 0; j < areas[i].geometry.length; j++){
+//					poligons = areas[i].geometry;
+//					area = {
+//						id: this.correctAreaId(areas[i].id, j),
+//						path: this.correctPoints(poligons[j].points),
+//						gpath: this.correctPointsGoogle(poligons[j].points),
+//						stroke: {
+//						    color: aColor, //$scope.correctColor(areas[i].color),
+//						    weight: 3,
+//						    opacity: 0.7
+//						},
+//						data: areas[i],
+//						zones0: zones0,
+//						zones1: zones1,
+//						zones2: zones2,
+//						zones3: zones3,
+//						zones4: zones4,
+//						info_windows_pos: this.correctPointGoogle(poligons[j].points[1]),
+//						info_windows_cod: "a" + areas[i].id,
+//						editable: false,
+//						draggable: false,
+//						geodesic: false,
+//						visible: visible,
+//						fill: {
+//						    color: aColor, //$scope.correctColor(areas[i].color),
+//						    opacity: 0.5
+//						}
+//					};
+//					tmpAreas.push(area);
+//				}
+//			}
+//		}
+//		if(!firstTime){
+//			this.closeLoadingMap();
+//		}
+//		return [tmpAreas, areas];
+//	};
 	
 	this.initZonesOnMap = function(zones, visible, type, firstInit, firstTime){
 		var zone = {};
@@ -1009,140 +1012,152 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		return streets;
 	};
 	
-	this.initStreetsOnMapComplete = function(streets, visible, type, onlyData){
-		var street = {};
-		var poligons = {};
-		var tmpStreets = [];
-		var sColor = "";
-		var timeCost = {};
-		
-		for(var i = 0; i < streets.length; i++){
-			var myAreaS = $scope.getLocalAreaById(streets[i].rateAreaId);
-			var parkingMeters = streets[i].parkingMeters;
-			var totalProfit = 0;
-			var totalTickets = 0;
-			if(parkingMeters != null){
-				for(var j = 0; j < parkingMeters.length; j++){
-					if(parkingMeters[j] != null){
-						var composedProfit = this.getActualPmProfit(parkingMeters[j]);
-						var profit = composedProfit[0];
-						var tickets = composedProfit[1];
-						if(profit != -1){
-							totalProfit += profit;
-							totalTickets += tickets;
-						}
-					}
-				}
-			}
-			if(totalProfit == 0){
-				streets[i].profit = -1;
-			} else {
-				streets[i].profit = totalProfit;
-			}
-			if(totalTickets == 0){
-				streets[i].tickets = -1;
-			} else {
-				streets[i].tickets = totalTickets;
-			}	
-			if(!onlyData){
-				if(type == 1){
-					sColor = this.correctColor(streets[i].color);
-				} else if(type == 2){
-					sColor = this.getOccupancyColor(streets[i].occupancyRate);
-				} else if(type == 3){
-					sColor = this.getProfitColor(streets[i].profit);
-				} else if(type == 4){
-					timeCost = this.getExtratimeFromOccupancy(streets[i].occupancyRate);
-					streets[i].extratime = timeCost;
-					sColor = this.getTimeCostColor(timeCost);
-				}
-			
-				if(streets[i].geometry != null){
-					poligons = streets[i].geometry;
-					street = {
-						id: streets[i].id,
-						path: this.correctPoints(poligons.points),
-						gpath: this.correctPointsGoogle(poligons.points),
-						stroke: {
-						    color: sColor,
-						    weight: (visible) ? 3 : 0,
-						    opacity: 0.7
-						},
-						data: streets[i],
-						area: myAreaS,
-//						zones0: streets[i].myZones0,
-//						zones1: streets[i].myZones1,
-//						zones2: streets[i].myZones2,
-//						zones3: streets[i].myZones3,
-//						zones4: streets[i].myZones4,
-//						pms: streets[i].myPms,
-						info_windows_pos: this.correctPointGoogle(poligons.points[1]),
-						info_windows_cod: "s" + streets[i].id,
-						editable: false,
-						draggable: false,
-						geodesic: false,
-						visible: visible
-					};
-					tmpStreets.push(street);
-				}
-			}
-		}
-		this.closeLoadingMap();
-		return [tmpStreets, streets];
-	}
+//	this.initStreetsOnMapComplete = function(streets, visible, type, onlyData){
+//		var street = {};
+//		var poligons = {};
+//		var tmpStreets = [];
+//		var sColor = "";
+//		var timeCost = {};
+//		
+//		for(var i = 0; i < streets.length; i++){
+//			var myAreaS = sharedDataService.getLocalAreaById(streets[i].rateAreaId);
+//			var parkingMeters = streets[i].parkingMeters;
+//			var totalProfit = 0;
+//			var totalTickets = 0;
+//			if(parkingMeters != null){
+//				for(var j = 0; j < parkingMeters.length; j++){
+//					if(parkingMeters[j] != null){
+//						var composedProfit = this.getActualPmProfit(parkingMeters[j]);
+//						var profit = composedProfit[0];
+//						var tickets = composedProfit[1];
+//						if(profit != -1){
+//							totalProfit += profit;
+//							totalTickets += tickets;
+//						}
+//					}
+//				}
+//			}
+//			if(totalProfit == 0){
+//				streets[i].profit = -1;
+//			} else {
+//				streets[i].profit = totalProfit;
+//			}
+//			if(totalTickets == 0){
+//				streets[i].tickets = -1;
+//			} else {
+//				streets[i].tickets = totalTickets;
+//			}	
+//			if(!onlyData){
+//				if(type == 1){
+//					sColor = this.correctColor(streets[i].color);
+//				} else if(type == 2){
+//					sColor = this.getOccupancyColor(streets[i].occupancyRate);
+//				} else if(type == 3){
+//					sColor = this.getProfitColor(streets[i].profit);
+//				} else if(type == 4){
+//					timeCost = this.getExtratimeFromOccupancy(streets[i].occupancyRate);
+//					streets[i].extratime = timeCost;
+//					sColor = this.getTimeCostColor(timeCost);
+//				}
+//			
+//				if(streets[i].geometry != null){
+//					poligons = streets[i].geometry;
+//					street = {
+//						id: streets[i].id,
+//						path: this.correctPoints(poligons.points),
+//						gpath: this.correctPointsGoogle(poligons.points),
+//						stroke: {
+//						    color: sColor,
+//						    weight: (visible) ? 3 : 0,
+//						    opacity: 0.7
+//						},
+//						data: streets[i],
+//						area: myAreaS,
+////						zones0: streets[i].myZones0,
+////						zones1: streets[i].myZones1,
+////						zones2: streets[i].myZones2,
+////						zones3: streets[i].myZones3,
+////						zones4: streets[i].myZones4,
+////						pms: streets[i].myPms,
+//						info_windows_pos: this.correctPointGoogle(poligons.points[1]),
+//						info_windows_cod: "s" + streets[i].id,
+//						editable: false,
+//						draggable: false,
+//						geodesic: false,
+//						visible: visible
+//					};
+//					tmpStreets.push(street);
+//				}
+//			}
+//		}
+//		this.closeLoadingMap();
+//		return [tmpStreets, streets];
+//	}
 	
     this.setAllMarkersMap = function(markers, map, visible, type){
     	//------ To be configured in external conf file!!!!!------
-		var company = "";
-		var appId = sharedDataService.getConfAppId();
+		var company = "tm";
+		/*var appId = sharedDataService.getConfAppId();
 		if(appId == 'rv'){ 
 			company = "amr";
 		} else {
 			company = "tm";
-		}
+		}*/
 		var baseUrl = "rest/nosec";
 		var defaultMarkerColor = "FF0000";
+		var myMarkers = [];	//Important: here I create a copy so the input list remain intact
 		//--------------------------------------------------------
 		var myAreaPm = {};
 		for(var i = 0; i < markers.length; i++){
-    		markers[i].options.visible = visible;
-    		markers[i].options.map = map;
+			var myMarker = markers[i];
+			myMarker.options.visible = visible;
+			myMarker.options.map = map;
     		switch(type){
 	    		case 0:
 					myAreaPm = sharedDataService.getLocalAreaById(markers[i].data.areaId);
-					markers[i].icon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+					myMarker.icon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 	    			break;
 	    		case 1:
-	    			markers[i].icon = this.psMarkerIcon;
+	    			myMarker.icon = this.psMarkerIcon;
 	    			break;
 	    		case 2:
 	    			var myIcon = this.getOccupancyIcon(markers[i].data.occupancyRate, 2);
-	        		markers[i].icon = myIcon;
+	    			myMarker.icon = myIcon;
 	    			break;
 	    		case 3:
 	    			var myIcon = this.getProfitIcon(markers[i].data.profit, 2);
-	        		markers[i].icon = myIcon;
+	    			myMarker.icon = myIcon;
 	    			break;
 	    		case 4:
 	    			var occupancy = markers[i].data.occupancyRate;
 	    			var timeCost = this.getExtratimeFromOccupancy(occupancy);
 	    			var myIcon = this.getTimeCostIcon(timeCost, 2);
-	        		markers[i].icon = myIcon;
-	        		markers[i].data.extratime = timeCost;
+	    			myMarker.icon = myIcon;
+	    			myMarker.data.extratime = timeCost;
 	    			break;
 	    		case 5:		// profit icon for parking meter
 	    			var myIcon = this.getProfitIcon(markers[i].data.profit, 1);
-	        		markers[i].icon = myIcon;
-	    			break;	
+	    			myMarker.icon = myIcon;
+	    			break;
+	    		default:
+	    			break;
     		}
+    		myMarkers.push(myMarker);
     	}
     	this.closeLoadingMap();
-    	return markers;
+    	return myMarkers;
     };
+    
+    // --------------------------------- Block for map object repainting -----------------------------------------
+    
+    
+    
+    
+    // -----------------------------------------------------------------------------------------------------------
     
     // Method initPMObject: used to init a pm object with all the related object data
 	this.initPMObject = function(pmeter){
-		var area = sharedDataService.getLocalAreaById(pmeter.areaId);
+		var area = sharedDataService.getLocalAreaById(pmeter.data.areaId);
 		var zones0 = [];
 		var zones1 = [];
 		var zones2 = [];
@@ -1150,12 +1165,12 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		var zones4 = [];
 		// zone init
 		if(pmeter.zones){
-			for(var j = 0; j < pmeter.zones.length; j++){
-				var z0 = this.getLocalZoneById(pmeter.zones[j], 2, 0);
-				var z1 = this.getLocalZoneById(pmeter.zones[j], 2, 1);
-				var z2 = this.getLocalZoneById(pmeter.zones[j], 2, 2);
-				var z3 = this.getLocalZoneById(pmeter.zones[j], 2, 3);
-				var z4 = this.getLocalZoneById(pmeter.zones[j], 2, 4);
+			for(var j = 0; j < pmeter.data.zones.length; j++){
+				var z0 = this.getLocalZoneById(pmeter.data.zones[j], 2, 0);
+				var z1 = this.getLocalZoneById(pmeter.data.zones[j], 2, 1);
+				var z2 = this.getLocalZoneById(pmeter.data.zones[j], 2, 2);
+				var z3 = this.getLocalZoneById(pmeter.data.zones[j], 2, 3);
+				var z4 = this.getLocalZoneById(pmeter.data.zones[j], 2, 4);
 				if(z0 != null){
 					zones0.push(this.addLabelToZoneObject(z0));
 				} else if(z1 != null){
@@ -1169,15 +1184,21 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 				}
 			}
 		}
-		pmeter.myStatus = (pmeters[i].status == 'ACTIVE')?"ON-ACTIVE":"OFF-INACTIVE";
+		pmeter.myStatus = (pmeter.data.status == 'ACTIVE')?"ON-ACTIVE":"OFF-INACTIVE";
+		pmeter.data.area_name = area.name,
+		pmeter.data.area_color= area.color;
+		pmeter.data.myZones0 = zones0;
+		pmeter.data.myZones1 = zones1;
+		pmeter.data.myZones2 = zones2;
+		pmeter.data.myZones3 = zones3;
+		pmeter.data.myZones4 = zones4;
+		// To align with old management
 		pmeter.area = area;
-		pmeter.area_name = area.name,
-		pmeter.area_color= area.color;
-		pmeter.myZones0 = zones0;
-		pmeter.myZones1 = zones1;
-		pmeter.myZones2 = zones2;
-		pmeter.myZones3 = zones3;
-		pmeter.myZones4 = zones4;
+		pmeter.zones0 = zones0;
+		pmeter.zones1 = zones1;
+		pmeter.zones2 = zones2;
+		pmeter.zones3 = zones3;
+		pmeter.zones4 = zones4;
 		return pmeter;
 	};
 	
@@ -1282,13 +1303,13 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		var zones3 = [];
 		var zones4 = [];
 		// zone init
-		if(area.zones){
-			for(var j = 0; j < area.zones.length; j++){
-				var z0 = this.getLocalZoneById(areas[i].zones[j], 2, 0);
-				var z1 = this.getLocalZoneById(areas[i].zones[j], 2, 1);
-				var z2 = this.getLocalZoneById(areas[i].zones[j], 2, 2);
-				var z3 = this.getLocalZoneById(areas[i].zones[j], 2, 3);
-				var z4 = this.getLocalZoneById(areas[i].zones[j], 2, 4);
+		if(area.data.zones){
+			for(var j = 0; j < area.data.zones.length; j++){
+				var z0 = this.getLocalZoneById(area.data.zones[j], 2, 0);
+				var z1 = this.getLocalZoneById(area.data.zones[j], 2, 1);
+				var z2 = this.getLocalZoneById(area.data.zones[j], 2, 2);
+				var z3 = this.getLocalZoneById(area.data.zones[j], 2, 3);
+				var z4 = this.getLocalZoneById(area.data.zones[j], 2, 4);
 				if(z0 != null){
 					zones0.push(this.addLabelToZoneObject(z0));
 				} else if(z1 != null){
@@ -1302,28 +1323,36 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 				}
 			}
 		}
-		area.myZones0 = zones0;
-		area.myZones1 = zones1;
-		area.myZones2 = zones2;
-		area.myZones3 = zones3;
-		area.myZones4 = zones4;
+		//var areaProfit = sharedDataService.getPMsInAreaProfit(area.id, this.profitParkingMeterWS);
+		// for profit
+		/*if(firstInit){	// I use this code only the first time I show the zone occupancy data
+			var slotsInArea = sharedDataService.getTotalSlotsInArea(area.id, this.occupancyStreetsWS);
+			area.slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(areas[i].id);
+			area.slotOccupied = slotsInArea[1]; //Math.round(area.data.slotNumber * areaOccupancy / 100);
+		}*/
+		/*area.data.profit = areaProfit[0];
+		area.data.tickets = areaProfit[1];
+		area.data.pmsInArea = areaProfit[2];*/
+		area.data.myZones0 = zones0;
+		area.data.myZones1 = zones1;
+		area.data.myZones2 = zones2;
+		area.data.myZones3 = zones3;
+		area.data.myZones4 = zones4;
+		area.zones0 = zones0;
+		area.zones1 = zones1;
+		area.zones2 = zones2;
+		area.zones3 = zones3;
+		area.zones4 = zones4;
 		return area;
 	};
 	
 	// Method createMarkers: used to create a graphic parker object to be show in google map
 	this.createMarkers = function(i, marker, type) {
 		//------ To be configured in external conf file!!!!!------
-		var company = "";
-		var appId = sharedDataService.getConfAppId();
-		if(appId == 'rv'){ 
-			company = "amr";
-		} else {
-			company = "tm";
-		}
+		var company = "amr";
 		var baseUrl = "rest/nosec";
 		var defaultMarkerColor = "FF0000";
 		//--------------------------------------------------------
-		
 		var myIcon = "";
 		var myAreaPm = {};
 		var color = "";

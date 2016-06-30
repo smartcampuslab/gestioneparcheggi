@@ -2900,7 +2900,7 @@ public class DynamicManager {
 				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
 			}
-			cp.setId(pId);
+			cp.setId(p.getId());
 			cp.setProfit(profitVal);
 			cp.setTickets(ticketsNum);
 			correctedParkings.add(cp);
