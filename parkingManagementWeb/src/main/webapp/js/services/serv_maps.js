@@ -191,13 +191,13 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
     // Method getProfitIcon: retrieve the correct profit icon with the color of the profit value passed in input (for type pm and ps)
     this.getProfitIcon = function(value, type){
     	//------ To be configured in external conf file!!!!!------
-		var company = "";
-		var appId = sharedDataService.getConfAppId();
+		var company = "tm";
+		/*var appId = sharedDataService.getConfAppId();
 		if(appId == 'rv'){ 
 			company = "amr";
 		} else {
 			company = "tm";
-		}
+		}*/
 		var baseUrl = "rest/nosec";
 		//--------------------------------------------------------
     	var image_url = "";
@@ -206,16 +206,19 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
     		color = this.getProfitColor(value);
 			image_url = baseUrl+'/marker/'+company+'/parcometro/' + this.plainColor(color);
     	} else if(type == 2){ 	// corrected profit icon for parkingstructures
-	    	if(value == -1){
+    		if(value > 0){
+    			value = value/100
+    		}
+    		if(value == -1){
 	    		image_url = "imgs/structIcons/parking_structures_gray_outline.png";
-	    	} else if(value < 100){
-	    		image_url = "imgs/structIcons/parking_structures_green_outline.png";
-	    	} else if(value < 500){
-	    		image_url = "imgs/structIcons/parking_structures_yellow_outline.png";
 	    	} else if(value < 1000){
+	    		image_url = "imgs/structIcons/parking_structures_green_outline.png";
+	    	} else if(value < 2000){
+	    		image_url = "imgs/structIcons/parking_structures_yellow_outline.png";
+	    	} else if(value < 5000){
 				image_url = "imgs/structIcons/parking_structures_violet_outline.png";
 	    	} else {
-				image_url = "imgs/structIcons/parking_structures_general_outline.png";
+				image_url = "imgs/structIcons/parking_structures_blue_outline.png";
 	    	}
     	}
     	return image_url;

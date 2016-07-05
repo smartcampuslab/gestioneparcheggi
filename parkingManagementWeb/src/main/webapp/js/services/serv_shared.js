@@ -1231,7 +1231,13 @@ pm.factory('invokeWSService', function($http, $q) {
 			}).success(function(data) {
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
+				var status = data.status;
+			    if (status == 401) {
+			      //AuthFactory.clearUser();
+			      window.location = "/login";
+			      return;
+			    }
+				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else if(method == 'GET' && params != null){
@@ -1244,7 +1250,13 @@ pm.factory('invokeWSService', function($http, $q) {
 			}).success(function(data) {
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
+				var status = data.status;
+			    if (status == 401) {
+			      //AuthFactory.clearUser();
+			      window.location = "/login";
+			      return;
+			    }
+				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else {
@@ -1280,7 +1292,7 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
+				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else if(method == 'GET' && params != null){
@@ -1294,7 +1306,7 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
+				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else {
@@ -1308,7 +1320,7 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
+				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		}
@@ -1328,10 +1340,8 @@ pm.factory('invokeDashboardWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else if(method == 'GET' && params != null){
@@ -1342,10 +1352,8 @@ pm.factory('invokeDashboardWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else {
@@ -1356,10 +1364,8 @@ pm.factory('invokeDashboardWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		}
@@ -1382,7 +1388,7 @@ pm.factory('invokeAuxWSService', function($http, $q) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
+				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else if(method == 'GET' && params != null){
@@ -1396,7 +1402,7 @@ pm.factory('invokeAuxWSService', function($http, $q) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
+				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else {
@@ -1410,7 +1416,7 @@ pm.factory('invokeAuxWSService', function($http, $q) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				console.log("Returned data FAIL: " + JSON.stringify(data));
+				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		}
