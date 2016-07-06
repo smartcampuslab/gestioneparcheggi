@@ -662,6 +662,9 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 					zColor = this.getOccupancyColor(zoneOccupancy);
 				} else if(type == 3){
 					zoneProfit = sharedDataService.getPmsInZoneProfit(zones[i].id, this.profitParkingMeterWS);
+					if(zoneProfit && zoneProfit[1] == -1 && zoneProfit[2] == 0){
+						zoneProfit = sharedDataService.getStreetsInZoneProfit(zones[i].id, this.occupancyStreetsWS, null, this.profitParkingMeterWS);
+					}
 					zColor = this.getProfitColor(zoneProfit[0]);
 				} else if(type == 4){
 					var slotsInZone = sharedDataService.getTotalSlotsInZone(zones[i].id, this.occupancyStreetsWS);
@@ -680,6 +683,9 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 					zones[i].slotOccupied = slotsInZone[1]; //Math.round(zone.data.slotNumber * zoneOccupancy / 100);
 					// profit data
 					zoneProfit = sharedDataService.getPmsInZoneProfit(zones[i].id, this.profitParkingMeterWS);
+					if(zoneProfit && zoneProfit[1] == -1 && zoneProfit[2] == 0){
+						zoneProfit = sharedDataService.getStreetsInZoneProfit(zones[i].id, this.occupancyStreetsWS, null, this.profitParkingMeterWS);
+					}
 					zones[i].profit = zoneProfit[0];	// sum of profit from pms in zone
 					zones[i].tickets = zoneProfit[1];	// sum of tickets from pms in zone
 					zones[i].pmsInZone = zoneProfit[2];
@@ -1151,13 +1157,6 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
     	return myMarkers;
     };
     
-    // --------------------------------- Block for map object repainting -----------------------------------------
-    
-    
-    
-    
-    // -----------------------------------------------------------------------------------------------------------
-    
     // Method initPMObject: used to init a pm object with all the related object data
 	this.initPMObject = function(pmeter){
 		var area = sharedDataService.getLocalAreaById(pmeter.data.areaId);
@@ -1190,6 +1189,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		pmeter.myStatus = (pmeter.data.status == 'ACTIVE')?"ON-ACTIVE":"OFF-INACTIVE";
 		pmeter.data.area_name = area.name,
 		pmeter.data.area_color= area.color;
+		pmeter.data.area = area;
 		pmeter.data.myZones0 = zones0;
 		pmeter.data.myZones1 = zones1;
 		pmeter.data.myZones2 = zones2;

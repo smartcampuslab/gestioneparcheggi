@@ -987,7 +987,7 @@ pm.service('sharedDataService', function(){
 	};
 	
 	// Method getStreetsInZoneProfit: used to retrieve the profit data from the streets that compose a zone
-	this.getStreetsInZoneProfit = function(z_id, profitStreetList, profitStreetDataList){
+	this.getStreetsInZoneProfit = function(z_id, profitStreetList, profitStreetDataList, profitPMs){
 		var totalProfit = 0;
 		var totalTickets = 0;
 		var streetsInZone = 0;
@@ -995,88 +995,16 @@ pm.service('sharedDataService', function(){
 		if(profitStreetList != null && profitStreetList.length > 0){			// map page case
 			for(var i = 0; i < profitStreetList.length; i++){
 				var found = false;
-				// zone0 case
-				for(var j = 0; (j < profitStreetList[i].zones0.length && !found); j++){ 
-					if(profitStreetList[i].zones0[j].id == z_id){
+				// all zones case
+				for(var j = 0; (j < profitStreetList[i].zones.length && !found); j++){ 
+					if(profitStreetList[i].zones[j] == z_id){
 						found = true;
 						streetsInZone += 1;
-						if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
-							for(var x = 0; x < profitStreetList[i].pms.length; x++){
-								if(profitStreetList[i].pms[x] != null){
-									if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
-										myPms.push(profitStreetList[i].pms[x].id);
-									}
-								}
-							}
-						}
-					}
-				}
-				// zone1 case
-				if(!found && profitStreetList[i].zones1 != null){
-					for(var j = 0; (j < profitStreetList[i].zones1.length && !found); j++){ 
-						if(profitStreetList[i].zones1[j].id == z_id){
-							found = true;
-							streetsInZone += 1;
-							if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
-								for(var x = 0; x < profitStreetList[i].pms.length; x++){
-									if(profitStreetList[i].pms[x] != null){
-										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
-											myPms.push(profitStreetList[i].pms[x].id);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				// zone2 case
-				if(!found && profitStreetList[i].zones2 != null){
-					for(var j = 0; (j < profitStreetList[i].zones2.length && !found); j++){ 
-						if(profitStreetList[i].zones2[j].id == z_id){
-							found = true;
-							streetsInZone += 1;
-							if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
-								for(var x = 0; x < profitStreetList[i].pms.length; x++){
-									if(profitStreetList[i].pms[x] != null){
-										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
-											myPms.push(profitStreetList[i].pms[x].id);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				// zone3 case
-				if(!found && profitStreetList[i].zones3 != null){
-					for(var j = 0; (j < profitStreetList[i].zones3.length && !found); j++){ 
-						if(profitStreetList[i].zones3[j].id == z_id){
-							found = true;
-							streetsInZone += 1;
-							if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
-								for(var x = 0; x < profitStreetList[i].pms.length; x++){
-									if(profitStreetList[i].pms[x] != null){
-										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
-											myPms.push(profitStreetList[i].pms[x].id);
-										}
-									}
-								}
-							}
-						}
-					}
-				}
-				// zone4 case
-				if(!found && profitStreetList[i].zones4 != null){
-					for(var j = 0; (j < profitStreetList[i].zones4.length && !found); j++){ 
-						if(profitStreetList[i].zones4[j].id == z_id){
-							found = true;
-							streetsInZone += 1;
-							if(profitStreetList[i].pms != null && profitStreetList[i].pms.length > 0){
-								for(var x = 0; x < profitStreetList[i].pms.length; x++){
-									if(profitStreetList[i].pms[x] != null){
-										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].pms[x].id)){
-											myPms.push(profitStreetList[i].pms[x].id);
-										}
+						if(profitStreetList[i].parkingMeters != null && profitStreetList[i].parkingMeters.length > 0){
+							for(var x = 0; x < profitStreetList[i].parkingMeters.length; x++){
+								if(profitStreetList[i].parkingMeters[x] != null){
+									if(!this.checkIfAlreadyPresentInList(myPms, profitStreetList[i].parkingMeters[x])){
+										myPms.push(profitStreetList[i].parkingMeters[x]);
 									}
 								}
 							}
@@ -1092,11 +1020,11 @@ pm.service('sharedDataService', function(){
 						if(profitStreetDataList[i].zones[j] == z_id){
 							found = true;
 							streetsInZone += 1;
-							if(profitStreetDataList[i].myPms != null && profitStreetDataList[i].myPms.length > 0){
-								for(var x = 0; x < profitStreetDataList[i].myPms.length; x++){
-									if(profitStreetDataList[i].myPms[x] != null){
-										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetDataList[i].myPms[x].id)){
-											myPms.push(profitStreetDataList[i].myPms[x].id);
+							if(profitStreetDataList[i].parkingMeters != null && profitStreetDataList[i].parkingMeters.length > 0){
+								for(var x = 0; x < profitStreetDataList[i].parkingMeters.length; x++){
+									if(profitStreetDataList[i].parkingMeters[x] != null){
+										if(!this.checkIfAlreadyPresentInList(myPms, profitStreetDataList[i].parkingMeters[x])){
+											myPms.push(profitStreetDataList[i].parkingMeters[x]);
 										}
 									}
 								}
@@ -1107,14 +1035,14 @@ pm.service('sharedDataService', function(){
 			}
 		}
 		if(myPms.length > 0){
-			var totalProfitData = this.getTotalProfitFromPmList(myPms);
+			var totalProfitData = this.getTotalProfitFromPmList(myPms, profitPMs);
 			totalProfit = totalProfitData[0];
 			totalTickets = totalProfitData[1];
 		}
 		if(totalProfit > 0){
-			return [totalProfit, totalTickets, streetsInZone]; // / streetsInZone;
+			return [totalProfit, totalTickets, myPms.length]; //streetsInZone
 		} else {
-			return [-1, -1, streetsInZone];
+			return [-1, -1, myPms.length];	//streetsInZone
 		}
 	};
 	

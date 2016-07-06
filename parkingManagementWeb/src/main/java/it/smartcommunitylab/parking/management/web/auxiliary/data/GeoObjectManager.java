@@ -327,10 +327,10 @@ public class GeoObjectManager {
 			Street s = castPMStreetBeanToStreet(myStreets.get(i));
 			if(circle != null){
 				// here I have to create a specific filter for position distances from circle center and distances < radius
-				logger.error(String.format("Circle params: lat:%s, lng:%s, radius:%s", circle.getCenter().getX(), circle.getCenter().getY(), circle.getRadius()));
-				logger.error(String.format("Streets: lat:%s, lng:%s", s.getPosition()[0], s.getPosition()[1]));
+				logger.debug(String.format("Circle params: lat:%s, lng:%s, radius:%s", circle.getCenter().getX(), circle.getCenter().getY(), circle.getRadius()));
+				logger.debug(String.format("Streets: lat:%s, lng:%s", s.getPosition()[0], s.getPosition()[1]));
 				double dist = distance(circle.getCenter().getX(), circle.getCenter().getY(), s.getPosition()[0], s.getPosition()[1],'K');
-				logger.error(String.format("distance: %s", dist));
+				logger.debug(String.format("distance: %s", dist));
 				if(dist  <= circle.getRadius()){
 					listaObj.add(s);
 				}
@@ -338,7 +338,7 @@ public class GeoObjectManager {
 				listaObj.add(s);
 			}
 		}
-		logger.error(String.format("Streets found: %s", listaObj.size()));
+		logger.debug(String.format("Streets found: %s", listaObj.size()));
 		
 		return listaObj; //find(query, cls);
 	}
@@ -453,7 +453,7 @@ public class GeoObjectManager {
 	
 	@SuppressWarnings("unused")
 	private Street castStreetJSONToObject(String value){
-		logger.error(String.format("Street to be casted : %s", value));
+		logger.debug(String.format("Street to be casted : %s", value));
 		JSONObject jsonStreet = new JSONObject(value);
 
 		Street s = new Street();
@@ -600,7 +600,7 @@ public class GeoObjectManager {
 	}	
 	
 	public ArrayList<PSOccupancyData> classStringToOPSObjArray(String data) throws Exception{
-    	logger.info(String.format("Map Object data: %s", data));
+    	logger.debug(String.format("Map Object data: %s", data));
     	
     	ArrayList<PSOccupancyData> correctData = new ArrayList<PSOccupancyData>();
     	
@@ -690,7 +690,7 @@ public class GeoObjectManager {
     }	
 
     public ArrayList<PMProfitData> classStringToPPMObjArray(String data) throws Exception{
-    	logger.info(String.format("Map Object data: %s", data));
+    	logger.debug(String.format("Map Object data: %s", data));
     	
     	ArrayList<PMProfitData> correctData = new ArrayList<PMProfitData>();
     	
@@ -735,7 +735,7 @@ public class GeoObjectManager {
     }
     
     public ArrayList<PSProfitData> classStringToPPSObjArray(String data) throws Exception{
-    	logger.info(String.format("Map Object data: %s", data));
+    	logger.debug(String.format("Map Object data: %s", data));
     	
     	ArrayList<PSProfitData> correctData = new ArrayList<PSProfitData>();
     	
