@@ -853,7 +853,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	}
     };
     
-    /*$scope.getAreasFromDb = function(){
+    $scope.getAreasFromDb = function(){
     	$scope.areaMapReady = false;
 		var allAreas = [];
 		var method = 'GET';
@@ -866,7 +866,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	sharedDataService.setSharedLocalAreas($scope.areaWS);
 	    	$scope.areaMapReady = true;
 	    });
-	};*/
+	};
 	
 	$scope.getAreaByIdFromDb = function(id){
 		var method = 'GET';

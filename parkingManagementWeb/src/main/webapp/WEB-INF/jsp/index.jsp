@@ -44,7 +44,6 @@
 <script src="js/controllers/ctrl_bike.js"></script>
 <script src="js/controllers/ctrl_view_gmap.js"></script>
 <script src="js/controllers/ctrl_db_viewpark.js"></script>
-<script src="js/controllers/object_controllers/ctrl_area.js"></script>
 <script src="js/services/serv.js"></script>
 <script src="js/services/serv_shared.js"></script>
 <script src="js/services/serv_initialize.js"></script>

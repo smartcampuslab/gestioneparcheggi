@@ -3442,13 +3442,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Methid getAreasFromDb: used to retrieve the rate area data form the DB
 	$scope.getAreasFromDb = function(){
-		$scope.areaMapReady = false;
 		var allAreas = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			angular.copy(result, allAreas); 
+		myDataPromise.then(function(allAreas){
 			$scope.areaWS = allAreas;
 			if(showArea){
 			    //$scope.initAreasOnMap($scope.areaWS, false, 1, false, true)[0];
