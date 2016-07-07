@@ -3143,7 +3143,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						if(updatedPath != null && updatedPath.length > 0){
 							editCorrectedPath = [];
 							for(var i = 0; i < updatedPath.length; i++){
-								var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
+								var point = $scope.getPointFromLatLng(updatedPath.b[i], 1);
 								editCorrectedPath.push(point);
 							}
 							editPaths.push(editCorrectedPath);
@@ -3154,7 +3154,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					var createdPath = garea.getPath();
 					editCorrectedPath = [];
 					for(var i = 0; i < createdPath.length; i++){
-						var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+						var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 						editCorrectedPath.push(point);
 					}
 					editPaths.push(editCorrectedPath);
@@ -3165,7 +3165,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 							createdPath = $scope.editNewAreas[j].getPath();
 							editCorrectedPath = [];
 							for(var i = 0; i < createdPath.length; i++){
-								var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+								var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 								editCorrectedPath.push(point);
 							};
 							editPaths.push(editCorrectedPath);
@@ -3178,7 +3178,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				// case creating polygons in area edit
 				var createdPath = garea.getPath();
 				for(var i = 0; i < createdPath.length; i++){
-					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+					var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 					editCorrectedPath.push(point);
 				}
 				editPaths.push(editCorrectedPath);
@@ -3187,7 +3187,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						createdPath = $scope.allNewAreas[i].getPath();
 						editCorrectedPath = [];
 						for(var i = 0; i < createdPath.length; i++){
-							var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+							var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 							editCorrectedPath.push(point);
 						};
 						editPaths.push(editCorrectedPath);
@@ -3268,13 +3268,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var updatedPath = $scope.map.shapes.editPolyline.getPath();
 			if(updatedPath != null && updatedPath.length > 0){
 			for(var i = 0; i < updatedPath.length; i++){
-				var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
+				var point = $scope.getPointFromLatLng(updatedPath.b[i], 1);
 				editCorrectedPath.push(point);
 			}
 			} else {
 				var createdPath = poly.getPath();
 				for(var i = 0; i < createdPath.length; i++){
-					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+					var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 					editCorrectedPath.push(point);
 				}
 			}
@@ -4014,13 +4014,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var updatedPath = $scope.map.shapes.editZPolygon.getPath();
 			if(updatedPath != null && updatedPath.length > 0){
 				for(var i = 0; i < updatedPath.length; i++){
-					var point = $scope.getPointFromLatLng(updatedPath.j[i], 1);
+					var point = $scope.getPointFromLatLng(updatedPath.b[i], 1);
 					editCorrectedPath.push(point);
 				}
 			} else {
 				var createdPath = gzone.getPath();
 				for(var i = 0; i < createdPath.length; i++){
-					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+					var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 					editCorrectedPath.push(point);
 				}
 			}
@@ -4437,7 +4437,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var createdPath = garea.getPath();
 			if(createdPath.length > 0){
 				for(var i = 0; i < createdPath.length; i++){
-					var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+					var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 					newCorrectedPath.push(point);
 				};
 				createdPaths.push(newCorrectedPath);
@@ -4447,7 +4447,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					createdPath = $scope.allNewAreas[j].getPath();
 					newCorrectedPath = [];
 					for(var i = 0; i < createdPath.length; i++){
-						var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+						var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 						newCorrectedPath.push(point);
 					};
 					createdPaths.push(newCorrectedPath);
@@ -4511,7 +4511,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var newCorrectedPath = [];
 			var createdPath = poly.getPath();
 			for(var i = 0; i < createdPath.length; i++){
-				var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+				var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 				newCorrectedPath.push(point);
 			};
 			var calculatedTotSlots = $scope.initIfNull(street.handicappedSlotNumber) + $scope.initIfNull(street.reservedSlotNumber) + $scope.initIfNull(street.paidSlotNumber) + $scope.initIfNull(street.timedParkSlotNumber) + $scope.initIfNull(street.freeParkSlotNumber) + $scope.initIfNull(street.freeParkSlotSignNumber) + $scope.initIfNull(street.unusuableSlotNumber);
@@ -4721,7 +4721,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var newCorrectedPath = [];
 			var createdPath = gzone.getPath();
 			for(var i = 0; i < createdPath.length; i++){
-				var point = $scope.getPointFromLatLng(createdPath.j[i], 1);
+				var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
 				newCorrectedPath.push(point);
 			};
 			var method = 'POST';
