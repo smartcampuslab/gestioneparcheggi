@@ -2961,17 +2961,19 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     };
 	
 	$scope.updateAreasOccupancyTimeCost = function(){
-		for(var i = 0; i < $scope.areaWS.length; i++){
-			var slotsInArea = sharedDataService.getTotalSlotsInArea($scope.areaWS[i].id, $scope.streetWS);
-			$scope.areaWS[i].slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(areas[i].id);
-			$scope.areaWS[i].slotOccupied = slotsInArea[1]; //Math.round(area.data.slotNumber * areaOccupancy / 100);
-			var areaOccupancy = sharedDataService.getStreetsInAreaOccupancy($scope.areaWS[i].id, $scope.streetWS);
-			if(areaOccupancy != -1){
-				areaOccupancy = slotsInArea[2];
+		if($scope.areaWS){
+			for(var i = 0; i < $scope.areaWS.length; i++){
+				var slotsInArea = sharedDataService.getTotalSlotsInArea($scope.areaWS[i].id, $scope.streetWS);
+				$scope.areaWS[i].slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(areas[i].id);
+				$scope.areaWS[i].slotOccupied = slotsInArea[1]; //Math.round(area.data.slotNumber * areaOccupancy / 100);
+				var areaOccupancy = sharedDataService.getStreetsInAreaOccupancy($scope.areaWS[i].id, $scope.streetWS);
+				if(areaOccupancy != -1){
+					areaOccupancy = slotsInArea[2];
+				}
+				var timeCost = gMapService.getExtratimeFromOccupancy(areaOccupancy);
+				$scope.areaWS[i].occupancy = (areaOccupancy != -1) ? Math.round(areaOccupancy) : areaOccupancy;
+				$scope.areaWS[i].extratime = timeCost;
 			}
-			var timeCost = gMapService.getExtratimeFromOccupancy(areaOccupancy);
-			$scope.areaWS[i].occupancy = (areaOccupancy != -1) ? Math.round(areaOccupancy) : areaOccupancy;
-			$scope.areaWS[i].extratime = timeCost;
 		}
 	};
 	

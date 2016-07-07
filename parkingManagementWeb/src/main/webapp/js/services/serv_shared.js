@@ -10,6 +10,14 @@ pm.service('sharedDataService', function(){
 	this.name = '';
 	this.surname = '';
 	
+    this.authHeaders = {
+        'Accept': 'application/json;charset=UTF-8'
+    };
+    
+    this.getAuthHeaders = function(){
+    	return this.authHeaders;
+    };
+	
 	// Shared field app conf
 	this.conf_app_id;
 	this.conf_url_ws;
@@ -727,6 +735,51 @@ pm.service('sharedDataService', function(){
 	// ----- List of functions shared between controllers  -------------------------------------------- 
 	//       (for objects data extensions like occupancy, slots number, profit data...)
 	
+	this.setSharedLocalZones = function(zones, zindex){
+		switch(zindex){
+			case 0:
+				this.setSharedLocalZones0(zones);
+				break;
+			case 1: 
+				this.setSharedLocalZones1(zones);
+				break;
+			case 2: 
+				this.setSharedLocalZones2(zones);
+				break;
+			case 3: 
+				this.setSharedLocalZones3(zones);
+				break;
+			case 4: 
+				this.setSharedLocalZones4(zones);
+				break;
+			default: break;
+		}
+	};
+	
+	this.getSharedLocalZones = function(zindex){
+		var zones = null;
+		switch(zindex){
+			case 0:
+				zones = this.getSharedLocalZones0();
+				break;
+			case 1: 
+				zones = this.getSharedLocalZones1();
+				break;
+			case 2: 
+				zones = this.getSharedLocalZones2();
+				break;
+			case 3: 
+				zones = this.getSharedLocalZones3();
+				break;
+			case 4: 
+				zones = this.getSharedLocalZones4();
+				break;
+			default: break;
+		}
+		return zones;
+	};
+	
+	
 	// Method getTotalSlotsInZone: used to count the total slots of a zone from the slots in streets
 	this.getTotalSlotsInZone = function(z_id, occStreetList){
 		var totalSlots = 0;
@@ -1104,6 +1157,78 @@ pm.service('sharedDataService', function(){
 				return myAreas[i];
 			}
 		}
+	};
+	
+	// Method addLabelToZoneObject: used to add a label to the zone object to be used in the relation configuring
+    this.addLabelToZoneObject = function(zone){
+    	var sub = (zone.submacro) ? zone.submacro : ((zone.submicro) ? zone.submicro : null);
+    	var lbl = (sub) ? (zone.name + "_" + sub) : zone.name;
+    	var corrected_zone = {
+    		id: zone.id,
+    		id_app: zone.id_app,
+    		color: zone.color,
+    		name: zone.name,
+    		submacro: zone.submacro,
+    		submicro: zone.submicro,
+    		type: zone.type,
+    		note: zone.note,
+    		geometry: zone.geometry,
+    		geometryFromSubelement: zone.geometryFromSubelement,
+    		subelements: zone.subelements,
+    		label: lbl
+    	};
+    	return corrected_zone;
+    };
+    
+	// used to correct polygon to be saved in db - it is already present in sharedDataService but copied here to avoid circular dependency
+	this.correctMyGeometryPolygon = function(geo){
+		var tmpPolygon = {
+			points: null
+		};
+		var points = [];
+		if(geo != null && geo.points != null && geo.points.length > 0){
+			for(var i = 0; i < geo.points.length; i++){
+				var tmpPoint = geo.points[i];
+				points.push(tmpPoint);
+			}
+		}
+		
+		tmpPolygon.points = points;
+
+		return tmpPolygon;
+	};
+    
+    // Method getLocaZoneById: used to get the zone list by the id and the z_index
+	this.getLocalZoneById = function(id, type, zindex){
+		var find = false;
+		var corrZone = null;
+		var myZones = this.getSharedLocalZones(zindex);
+		if(myZones){
+			for(var i = 0; i < myZones.length && !find; i++){
+				if(myZones[i].id == id){
+					find = true;
+					if(type == 1){
+						corrZone = myZones[i];
+					} else {
+						var sub = (myZones[i].submacro) ? myZones[i].submacro : ((myZones[i].submicro) ? myZones[i].submicro : null);
+						var lbl = (sub) ? (myZones[i].name + "_" + sub) : myZones[i].name;
+						corrZone = {
+							id: myZones[i].id,
+							id_app: myZones[i].id_app,
+							color: myZones[i].color,
+							name: myZones[i].name,
+							submacro: myZones[i].submacro,
+							submicro: myZones[i].submicro,
+							type: myZones[i].type,
+							note: myZones[i].note,
+							geometry: this.correctMyGeometryPolygon(myZones[i].geometry),
+							label: lbl
+						};
+					}			
+				}
+			}
+		}
+		return corrZone;
 	};
 	
 	

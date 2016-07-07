@@ -2,8 +2,8 @@
 
 /* Services for maps management */
 var pmServices = angular.module('pmServices');
-pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService', 
-                  function($rootScope, $dialogs, sharedDataService){
+pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataService', 
+                  function($rootScope, $dialogs, $timeout, sharedDataService){
 	
 	// context variables;
 	this.profitParkingMeterWS = [];
@@ -119,6 +119,32 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 	// used to correct a point to be used in gmap
 	this.correctPointGoogle = function(point){
 		return point.lat + "," + point.lng;
+	};
+	
+	// used to get a point object from lat-long value
+	this.getPointFromLatLng = function(latLng, type){
+		var res = {};
+		if(latLng){
+			var point = "" + latLng;
+			var pointCoord = point.split(",");
+			if(type == 1){
+				var lat = pointCoord[0].substring(1, pointCoord[0].length);
+				var lng = pointCoord[1].substring(0, pointCoord[1].length - 1);
+			
+				res = {
+					latitude: lat,
+					longitude: lng
+				};
+			} else {
+				var lat = Number(pointCoord[0]);
+				var lng = Number(pointCoord[1]);
+				res = {
+					lat: lat,
+					lng: lng
+				};
+			}
+		}
+		return res;
 	};
 	
 	// used to correct points like db format
@@ -1451,6 +1477,547 @@ pm.service('gMapService',['$rootScope', '$dialogs', 'sharedDataService',
 		return ret;
 	};
 	
+	// ---------------------------------------- Start block for Map in editing controller -----------------------------------
+	this.map = null;
+	this.areaPolygons = [];
+	this.allNewAreas = [];
+	this.editNewAreas = [];
+    this.editGAreas = [];
+    this.myAreaPath = [];
+    this.myPolGeometry = [];
+    this.myLineGeometry = [];
+    this.myZonePath = [];
+	
+	this.getMap = function(){
+		return this.map;
+	};
+	
+	this.getAreaPolygons = function(){
+		return this.areaPolygons;
+	};
+	
+	this.setAreaPolygons = function(pol){
+		this.areaPolygons = pol;
+	};
+	
+	this.refreshMap = function(map) {
+        //optional param if you want to refresh you can pass null undefined or false or empty arg
+        map.control.refresh(map.center);
+        map.control.getGMap().setZoom(5);
+        map.control.getGMap().setZoom(map.zoom);
+    };
+	
+	this.mapCenter = {
+		latitude: 45.88875357753771,
+		longitude: 11.037440299987793
+	};
+	
+	this.mapOption = {
+		center : sharedDataService.getConfMapCenter(),	//"[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
+		zoom : sharedDataService.getConfMapZoom()
+	};
+	
+    //For Area
+    var garea = garea = new google.maps.Polygon({
+        strokeColor: '#000000',
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+        fillColor: '#000000',
+        fillOpacity: 0.4,
+        editable:true,
+        draggable:true,
+        visible:true
+    });
+    
+    this.myNewArea;
+    
+    this.getMyNewArea = function(){
+    	return this.myNewArea;
+    };
+    
+    this.setMyNewArea = function(new_area){
+    	this.myNewArea = new_area;
+    };
+    
+	//For Street
+    var poly = poly = new google.maps.Polyline({
+        strokeColor: (this.myNewArea != null)?this.correctColor(this.myNewArea.color):'#000000',
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+        editable:true,
+        draggable:true,
+        visible:true
+    });
+    
+    //For Zone
+    var gzone = gzone = new google.maps.Polygon({
+        strokeColor: '#000000',
+        strokeOpacity: 1.0,
+        strokeWeight: 3,
+        fillColor: '#000000',
+        fillOpacity: 0.35,
+        editable:true,
+        draggable:true,
+        visible:true
+    });
+	
+	//$scope.$on('mapInitialized', function(evt, map) {
+	this.getMapInitializationById = function(map){	
+    	switch(map.id){
+	    	case "viewArea":
+	    		this.vAreaMap = map;
+	    		break;
+	    	case "editArea":
+	    		this.eAreaMap = map;
+	    		garea.setMap(map);
+	    		break;	
+	    	case "viewStreet":
+	    		this.vStreetMap = map;
+	    		break;
+	    	case "editStreet":
+	    		this.eStreetMap = map;
+	    		poly.setMap(map);
+	    		break;
+	    	case "viewPm":
+	    		this.vPmMap = map;
+	    		break;
+	    	case "editPm":
+	    		this.ePmMap = map;
+	    		break;	
+	    	case "viewPs":
+	    		this.vPsMap = map;
+	    		break;
+	    	case "editPs":
+	    		this.ePsMap = map;
+	    		break;
+	    	case "viewZone0":
+	    		this.vZoneMap0 = map;
+	    		break;
+	    	case "editZone0":
+	    		this.eZoneMap0 = map;
+	    		gzone.setMap(map);
+	    		break;
+	    	case "viewZone1":
+	    		this.vZoneMap1 = map;
+	    		break;
+	    	case "editZone1":
+	    		this.eZoneMap1 = map;
+	    		gzone.setMap(map);
+	    		break;
+	    	case "viewZone2":
+	    		this.vZoneMap2 = map;
+	    		break;
+	    	case "editZone2":
+	    		this.eZoneMap2 = map;
+	    		gzone.setMap(map);
+	    		break;
+	    	case "viewZone3":
+	    		this.vZoneMap3 = map;
+	    		break;
+	    	case "editZone3":
+	    		this.eZoneMap3 = map;
+	    		gzone.setMap(map);
+	    		break;
+	    	case "viewZone4":
+	    		this.vZoneMap4 = map;
+	    		break;
+	    	case "editZone4":
+	    		this.eZoneMap4 = map;
+	    		gzone.setMap(map);
+	    		break;
+	    	case "editZoneCenter0":
+				this.eZoneCenter0 = map;
+				break;
+			case "editZoneCenter1":
+				this.eZoneCenter1 = map;
+				break;
+			case "editZoneCenter2":
+				this.eZoneCenter2 = map;
+				break;
+			case "editZoneCenter3":
+				this.eZoneCenter3 = map;
+				break;
+			case "editZoneCenter4":
+				this.eZoneCenter4 = map;
+				break;	
+	    	case "viewMicroZone":
+	    		this.vMicroZoneMap = map;
+	    		break;
+	    	case "editMicroZone":
+	    		this.eMicroZoneMap = map;
+	    		//gMicrozone.setMap(map);
+	    		break;	
+	    	case "viewBike":
+	    		this.vBpMap = map;
+	    		break;
+	    	case "editBike":
+	    		this.eBpMap = map;
+	    		break;	
+	    	default: break;
+    	}
+    };
+	
+	this.getCorrectMap = function(type){
+		var map = null;
+		switch(type){
+			case "viewArea":
+				map = this.vAreaMap;
+				break;
+			case "editArea":
+				map = this.eAreaMap;
+				break;
+			case "viewStreet":
+				map = this.vStreetMap;
+				break;
+			case "editStreet":
+				map = this.eStreetMap;
+				break;
+			case "viewPm":
+				map = this.vPmMap;
+				break;
+			case "editPm":
+				map = this.ePmMap;
+				break;
+			case "viewPs":
+				map = this.vPsMap;
+				break;
+			case "editPs":
+				map = this.ePsMap;	
+				break;
+			case "viewZone0":
+				map = this.vZoneMap0;
+				break;
+			case "editZone0":
+				map = this.eZoneMap0;	
+				break;
+			case "viewZone1":
+				map = this.vZoneMap1;
+				break;
+			case "editZone1":
+				map = this.eZoneMap1;	
+				break;
+			case "viewZone2":
+				map = this.vZoneMap2;
+				break;
+			case "editZone2":
+				map = this.eZoneMap2;	
+				break;
+			case "viewZone3":
+				map = this.vZoneMap3;
+				break;
+			case "editZone3":
+				map = this.eZoneMap3;	
+				break;
+			case "viewZone4":
+				map = this.vZoneMap4;
+				break;
+			case "editZone4":
+				map = this.eZoneMap4;	
+				break;
+			case "editZoneCenter0":
+				map = this.eZoneCenter0;
+				break;
+			case "editZoneCenter1":
+				map = this.eZoneCenter1;
+				break;
+			case "editZoneCenter2":
+				map = this.eZoneCenter2;
+				break;
+			case "editZoneCenter3":
+				map = this.eZoneCenter3;
+				break;
+			case "editZoneCenter4":
+				map = this.eZoneCenter4;
+				break;
+			case "viewMicroZone":
+				map = this.vMicroZoneMap;
+				break;
+			case "editMicroZone":
+				map = this.eMicroZoneMap;	
+				break;	
+			case "viewBike":
+				map = this.vBpMap;
+				break;
+			case "editBike":
+				map = this.eBpMap;	
+				break;	
+			default:
+				break;
+		}
+		return map;
+	};
+	
+	// I need this to resize the map (gray map problem on load)
+    this.resizeMap = function(type){
+    	this.map = this.getCorrectMap(type);
+    	if(this.map != null){ 	// the first time I show the area map it is null
+    		google.maps.event.trigger(this.map, 'resize');
+    		this.map.setCenter(this.getPointFromLatLng(this.mapOption.center, 2));
+    		this.map.setZoom(parseInt(this.mapOption.zoom));
+    	}
+        return this.map;
+    };
+    
+    this.resizeMapTimed = function(type, center){
+    	this.map = $scope.getCorrectMap(type);
+    	$timeout(function(){ 
+    		google.maps.event.trigger(this.map, 'resize');
+    		this.map.setCenter(this.getPointFromLatLng(this.mapOption.center, 2));
+    		if(center)this.map.setZoom(parseInt(this.mapOption.zoom));
+    	}, 1000);
+    };
+    
+    this.removeAllNewPolygons = function(){
+    	garea.setMap(null);
+    	garea.setPath([]);				// and clear the path
+		// Here i check if there are old 'create/edit' polygons in editAreaMap and remove them from it
+		if(this.allNewAreas != null && this.allNewAreas.length > 0){
+			for(var i = 0; i < this.allNewAreas.length; i++){
+				this.allNewAreas[i].visible = false;
+				this.allNewAreas[i].setMap(null);			// I clean the edit map form old polygons
+			}
+			this.allNewAreas = [];
+		}
+    };
+    
+    this.removeLastNewPolygon = function(){
+    	garea.setMap(null);
+    	garea.setPath([]);				// and clear the path
+    };
+    
+    this.removeAreaPath = function(event, value){
+    	var found = false;
+    	console.log("Area to remove" + JSON.stringify(value)); 
+    	for(var i = 0; !found && (i < this.editGAreas.length); i++){
+    		if(this.editGAreas[i].id == value.id){
+    			this.eAreaMap.shapes[this.editGAreas[i].id].setMap(null);
+    			this.vAreaMap.shapes[this.editGAreas[i].id].setMap(null);	//remove polygon from area view map too
+    			this.editGAreas.splice(i, 1);
+    			found = true;
+    		}
+    	}
+    	if(!found){
+    		garea.setPath([]);
+    		garea.setMap(null);
+    	}
+    };
+    
+	this.addAreaPath = function(event){
+	    var path = garea.getPath();
+	    if(path.length == 0){
+		    this.myAreaPath = [];
+	    }
+	    path.push(event.latLng);
+	    var myPoint = this.getPointFromLatLng(event.latLng, 1);
+	    this.myAreaPath.push(myPoint);
+	    this.setMyPolGeometry(this.myAreaPath);
+	    garea.setPath(path);
+	    garea.setMap(this.map);
+	};
+	
+	this.addNewAreaPath = function(event){
+		// Check if I am in creation or update operation
+		if(this.editGAreas != null && this.editGAreas.length > 0){
+			this.aEditAddingPolygon = true;	//editing
+			if(garea.visible){
+				this.editNewAreas.push(garea);
+			}
+		} else {
+			this.allNewAreas.push(garea);		//creation
+		}
+		// Here I create a new Area
+		garea = new google.maps.Polygon({
+	        strokeColor: '#000000',
+	        strokeOpacity: 1.0,
+	        strokeWeight: 3,
+	        fillColor: '#000000',
+	        fillOpacity: 0.4,
+	        editable:true,
+	        draggable:true,
+	        visible:true
+	    });
+		
+	    var path = garea.getPath();
+	    if(path.length == 0){
+		    this.myAreaPath = [];
+	    }
+	    if(event){
+	    	path.push(event.latLng);
+	    	var myPoint = this.getPointFromLatLng(event.latLng, 1);
+	    	this.myAreaPath.push(myPoint);
+	    }
+	    this.setMyPolGeometry(this.myAreaPath);
+	    garea.setMap(this.map);
+	};
+	
+	this.addPath = function(event){
+		var streetAddress = "";
+	    var path = poly.getPath();
+		if(path.length == 0){
+		   streetAddress = this.getStreetAddress(event);	// Retrieve the street address from the map
+		   this.myPath = [];
+		}
+		path.push(event.latLng);
+		var myPoint = this.getPointFromLatLng(event.latLng, 1);
+		this.myPath.push(myPoint);
+		this.setMyLineGeometry(this.myPath);
+		poly.setMap(this.map);
+		return streetAddress;
+	};
+	
+	this.addZonePath = function(event){
+	    var path = gzone.getPath();
+	    if(path.length == 0){
+		    this.myZonePath = [];
+	    }
+	    path.push(event.latLng);
+	    var myPoint = this.getPointFromLatLng(event.latLng, 1);
+	    this.myZonePath.push(myPoint);
+	    this.setMyPolGeometry(this.myZonePath);
+	    gzone.setMap(this.map);
+	};
+	
+	this.getStreetAddress = function(event){
+		var streetAddress = "";
+		//console.log("I am in get street address function" + event.latLng);
+		var geocoder = new google.maps.Geocoder();
+		geocoder.geocode({location:event.latLng}, function(response) {
+			var result = response[0].formatted_address;
+			if (result != undefined && result != null) {
+				streetAddress = result.substring(0, result.indexOf(','));
+			}
+			return streetAddress;
+		});
+	};
+	
+	this.getStructAddress = function(event){
+		var address = "";
+		//console.log("I am in get struct address function" + event.latLng);
+		var geocoder = new google.maps.Geocoder();
+		geocoder.geocode({location:event.latLng}, function(response) {
+			var result = response[0].formatted_address;
+			if (result != undefined && result != null) {
+				address =  result.substring(0, result.indexOf(','));
+			}
+			return address;
+		});
+	};
+	
+	this.setMyPolGeometry = function(value){
+		this.myPolGeometry = value;
+	};
+	
+	this.setMyLineGeometry = function(value){
+		this.myLineGeometry = value;
+	};
+	
+	this.correctObjId = function(id, i){
+		if(i == 0){
+			return id;
+		} else {
+			return id + '_' + i;
+		}
+	};
+	
+	this.setAreaMapDetails = function(area){
+		$scope.aViewMapReady = false;
+		$scope.mySpecialAreas = [];
+		this.viewArea = area;
+		
+		// Init the map for view
+		/*$scope.viewAreaMap = {
+			control: {},
+			center: $scope.mapCenter,
+			zoom: 14,
+			bounds: {},
+			options: {
+				scrollwheel: true
+			}
+		};*/
+		
+		if(area.geometry != null && area.geometry.length > 0 && area.geometry[0].points.length > 0){
+			// Move this code in the if blok to preserve from the udefined map exception
+			var toHide = this.vAreaMap.shapes;
+			if(area.geometry.length == 1){
+				toHide[area.id].setMap(null);
+			} else {
+				for(var i = 0; i < area.geometry.length; i++){
+					var myId = this.correctObjId(area.id, i);
+					toHide[myId].setMap(null);
+				}
+			}
+			
+			var myZones0 = [];
+			var myZones1 = [];
+			var myZones2 = [];
+			var myZones3 = [];
+			var myZones4 = [];
+			if(area.zones){
+				for(var i = 0; i < area.zones.length; i++){
+					var z0 = $scope.getLocalZoneById(area.zones[i], 1, 0);
+					var z1 = $scope.getLocalZoneById(area.zones[i], 1, 1);
+					var z2 = $scope.getLocalZoneById(area.zones[i], 1, 2);
+					var z3 = $scope.getLocalZoneById(area.zones[i], 1, 3);
+					var z4 = $scope.getLocalZoneById(area.zones[i], 1, 4);
+					if(z0){
+						myZones0.push($scope.addLabelToZoneObject(z0));
+					} else if(z1){
+						myZones1.push($scope.addLabelToZoneObject(z1));
+					} else if(z2){
+						myZones2.push($scope.addLabelToZoneObject(z2));
+					} else if(z3){
+						myZones3.push($scope.addLabelToZoneObject(z3));
+					} else if(z4){
+						myZones4.push($scope.addLabelToZoneObject(z4));
+					}
+				}
+			}
+			
+			for(var j = 0; j < area.geometry.length; j++){
+			
+				var tmpPol = "";
+				for(var i = 0; i < area.geometry[j].points.length; i++){
+					var tmpPoint = area.geometry[j].points[i].lat + "," + area.geometry[j].points[i].lng;
+					tmpPol = tmpPol + tmpPoint + ",";
+				}
+				tmpPol = tmpPol.substring(0, tmpPol.length-1);
+				$scope.setMyPolGeometry(tmpPol);
+				
+				$scope.myAreaPol = {
+					id: $scope.correctObjId(area.id, j),
+					path: $scope.correctPoints(area.geometry[j].points),
+					gpath: $scope.correctPointsGoogle(area.geometry[j].points),
+					stroke: {
+					    color: $scope.correctColor(area.color),
+					    weight: 4
+					},
+					data:area,
+					zones0: myZones0,
+					zones1: myZones1,
+					zones2: myZones2,
+					zones3: myZones3,
+					zones4: myZones4,
+					info_windows_pos: $scope.correctPointGoogle(area.geometry[j].points[1]),
+					info_windows_cod: "ma" + area.id,
+					editable: false,
+					draggable: false,
+					geodesic: false,
+					visible: true,
+					fill: {
+					    color: $scope.correctColor(area.color),
+					    opacity: 0.8
+					}
+				};
+				$scope.mySpecialAreas.push($scope.myAreaPol);
+			}
+		}
+		
+		$scope.viewModeA = true;
+		$scope.editModeA = false;
+		$scope.aViewMapReady = true;
+	};
+	
+	// ----------------------------------------------------------------------------------------------------------------------
 	
 	// ---------------------------------------------- Start block Utilization diagrams --------------------------------------
 	this.initAllDiagrams = function(){
