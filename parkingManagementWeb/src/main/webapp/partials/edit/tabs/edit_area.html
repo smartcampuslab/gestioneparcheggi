@@ -47,7 +47,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z0 in a.zones0 track by z0.id">
+												<tr ng-repeat="z0 in a.data.zones0 track by z0.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 													<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 												</tr>
@@ -60,7 +60,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z1 in a.zones1 track by z1.id">
+												<tr ng-repeat="z1 in a.data.zones1 track by z1.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 													<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 												</tr>
@@ -73,7 +73,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z2 in a.zones2 track by z2.id">
+												<tr ng-repeat="z2 in a.data.zones2 track by z2.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 													<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 												</tr>
@@ -86,7 +86,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z3 in s.zones3 track by z3.id">
+												<tr ng-repeat="z3 in s.data.zones3 track by z3.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 													<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 												</tr>
@@ -99,7 +99,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z4 in s.zones4 track by z4.id">
+												<tr ng-repeat="z4 in s.data.zones4 track by z4.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 													<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 												</tr>
@@ -361,7 +361,7 @@
 							</td>
 							<td class="detailsViewAreaDX">
 								<table width="100%">
-									<tr ng-repeat="z0 in viewArea.myZones0 track by z0.id">
+									<tr ng-repeat="z0 in viewArea.zones0 track by z0.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 										<td width="85%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 									</tr>
@@ -374,7 +374,7 @@
 							</td>
 							<td class="detailsViewAreaDX">
 								<table width="100%">
-									<tr ng-repeat="z1 in viewArea.myZones1 track by z1.id">
+									<tr ng-repeat="z1 in viewArea.zones1 track by z1.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 										<td width="85%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 									</tr>
@@ -387,7 +387,7 @@
 							</td>
 							<td class="detailsViewAreaDX">
 								<table width="100%">
-									<tr ng-repeat="z2 in viewArea.myZones2 track by z2.id">
+									<tr ng-repeat="z2 in viewArea.zones2 track by z2.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 										<td width="85%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 									</tr>
@@ -400,7 +400,7 @@
 							</td>
 							<td class="detailsViewAreaDX">
 								<table width="100%">
-									<tr ng-repeat="z3 in viewArea.myZones3 track by z3.id">
+									<tr ng-repeat="z3 in viewArea.zones3 track by z3.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 										<td width="85%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 									</tr>
@@ -413,7 +413,7 @@
 							</td>
 							<td class="detailsViewAreaDX">
 								<table width="100%">
-									<tr ng-repeat="z4 in viewArea.myZones4 track by z4.id">
+									<tr ng-repeat="z4 in viewArea.zones4 track by z4.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 										<td width="85%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 									</tr>

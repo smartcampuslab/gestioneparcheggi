@@ -1231,6 +1231,26 @@ pm.service('sharedDataService', function(){
 		return corrZone;
 	};
 	
+	this.correctMyZonesForStreet = function(zone0, zone1, zone2, zone3, zone4){
+		var correctedZones = [];
+		if(zone0){
+			correctedZones.push(zone0.id);
+		}
+		if(zone1){
+			correctedZones.push(zone1.id);
+		}
+		if(zone2){
+			correctedZones.push(zone2.id);
+		}
+		if(zone3){
+			correctedZones.push(zone3.id);
+		}
+		if(zone4){
+			correctedZones.push(zone4.id);
+		}
+		return correctedZones;
+	};
+	
 	
 	
 	// ----- End of part for functions shared between controllers  -------------------------------------

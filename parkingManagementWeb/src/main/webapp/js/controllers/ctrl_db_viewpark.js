@@ -4931,7 +4931,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    $scope.setTimeCostZoneList(z_index, zonetimecostOnMap);
 				break;
 			case 5:
-				object = gMapService.initAreaObject(object);
+				object = gMapService.initAreaObject(object, 0);
 				$scope.closeAllDetails(theme);	// Here I check if there is a selected object and I fix it
 				object.stroke.weight = 3;
 				object.stroke.opacity = 1.0;

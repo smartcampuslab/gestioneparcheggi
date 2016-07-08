@@ -5,15 +5,17 @@ var pmServices = angular.module('pmServices');
 pm.service('areaService',['$rootScope', 'invokeWSService', 'sharedDataService', 'gMapService',
                  function($rootScope, invokeWSService, sharedDataService, gMapService){
 	
+	this.showLog = false;
+	
+	// Areas get method
     this.getAreasFromDb = function(showArea){
 		var allAreas = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allAreas){
-	    	//$scope.areaWS = this.initAreasObjects(allAreas);
+	    	allAreas = gMapService.initAllAreaObjects(allAreas);	// The only solution found to retrieve all data;
 	    	if(showArea){
-	    		gMapService.resizeMap("viewArea");
 	    		gMapService.setAreaPolygons(gMapService.initAreasOnMap(allAreas, true, 1, false, true)[0]);
 	    	}
 	    	sharedDataService.setSharedLocalAreas(allAreas);
@@ -31,45 +33,43 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'sharedDataService', 
 	    });
 	};
 	
-	// Method used when an area object is selected. It add the zone details to the area object
-	this.initAreaObject = function(area){
-		var myArea = {};
-		//for(var i = 0; i < areas.length; i++){
-			var zones0 = [];
-			var zones1 = [];
-			var zones2 = [];
-			var zones3 = [];
-			var zones4 = [];
-			// zone init
-			if(area.zones){
-				for(var j = 0; j < areas[i].zones.length; j++){
-					var z0 = this.getLocalZoneById(areas[i].zones[j], 2, 0);
-					var z1 = this.getLocalZoneById(areas[i].zones[j], 2, 1);
-					var z2 = this.getLocalZoneById(areas[i].zones[j], 2, 2);
-					var z3 = this.getLocalZoneById(areas[i].zones[j], 2, 3);
-					var z4 = this.getLocalZoneById(areas[i].zones[j], 2, 4);
-					if(z0 != null){
-						zones0.push(this.addLabelToZoneObject(z0));
-					} else if(z1 != null){
-						zones1.push(this.addLabelToZoneObject(z1));
-					} else if(z2 != null){
-						zones2.push(this.addLabelToZoneObject(z2));
-					} else if(z3 != null){
-						zones3.push(this.addLabelToZoneObject(z3));
-					} else if(z4 != null){
-						zones4.push(this.addLabelToZoneObject(z4));
-					}
-				}
-			}
-			var myArea = area;
-			myArea.myZones0 = zones0;
-			myArea.myZones1 = zones1;
-			myArea.myZones2 = zones2;
-			myArea.myZones3 = zones3;
-			myArea.myZones4 = zones4;
-		//}
-		return myArea;
-	};
-	
-	
+	// Area update method
+	this.updateAreaInDb = function(area, color, zone0, zone1, zone2, zone3, zone4, editPaths){
+		var validityPeriod = [];
+		for(var i = 0; i < area.validityPeriod.length; i++){
+			var corrPeriod = {
+				from: area.validityPeriod[i].from,
+				to: area.validityPeriod[i].to,
+				weekDays: area.validityPeriod[i].weekDays,
+				timeSlot: area.validityPeriod[i].timeSlot,
+				rateValue: area.validityPeriod[i].rateValue,
+				holiday: area.validityPeriod[i].holiday,
+				note: area.validityPeriod[i].note
+			};
+			validityPeriod.push(corrPeriod);
+		}
+			
+		var id = area.id;
+		var appId = sharedDataService.getConfAppId();
+		var method = 'PUT';
+		var data = {
+			id: area.id,
+			id_app: area.id_app,
+			name: area.name,
+			validityPeriod: validityPeriod,
+			smsCode: area.smsCode,
+			color: color.substring(1, color.length),
+			note: area.note,
+			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
+			geometry: gMapService.correctMyGeometryPolygonForArea(editPaths)
+		};
+			
+	    var value = JSON.stringify(data);
+	    if(this.showLog) console.log("Area data : " + value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + id, null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    	if(this.showLog) console.log("Updated street: " + result);
+		});
+	    return myDataPromise;
+	}; 
 }]);
