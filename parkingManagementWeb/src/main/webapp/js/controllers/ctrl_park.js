@@ -3299,6 +3299,37 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		$scope.newBikePointMarkers[0].pos = val;
     	}
     };
+    
+    // Object Creation Methods
+	// Area
+	$scope.createArea = function(form, area, myColor, zone0, zone1, zone2, zone3, zone4){ //, polygon
+		if(!form.$valid){
+			$scope.isInit=false;
+		} else {
+			$scope.isInit=true;
+			$scope.showUpdatingAErrorMessage = false;
+			
+			var newCorrectedPath = [];
+			var createdPaths = [];
+			createdPaths = gMapService.createPolygonInAreaEdit(garea, newCorrectedPath, createdPaths, $scope.allNewAreas);
+			
+			var updateResponse = areaService.createAreaInDb(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths);
+			updateResponse.then(function(result){
+				if(result != null && result != ""){
+		    		$scope.getAllAreas();
+		    		$scope.myAZone0 = null;
+		    		$scope.myAZone1 = null;
+		    		$scope.myAZone2 = null;
+		    		$scope.myAZone3 = null;
+		    		$scope.myAZone4 = null;
+		    		$scope.editModeA = false;
+		    	} else {
+		    		$scope.editModeA = true;
+		    		$scope.showUpdatingAErrorMessage = true;
+		    	}
+			});
+		}
+	};
 	
 	// Object Update methods
 	// Area
@@ -3355,7 +3386,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 			else {
-				createdPath = gMapService.createPolygonInAreaEdit(editCorrectedPath, editPaths, $scope.allNewAreas);
+				if((editCorrectedPath && editCorrectedPath.length > 0) || (editPaths && editPaths.length > 0)){
+					editPaths = gMapService.createPolygonInAreaEdit(garea, editCorrectedPath, editPaths, $scope.allNewAreas);
 				/*// case creating polygons in area edit
 				var createdPath = garea.getPath();
 				for(var i = 0; i < createdPath.length; i++){
@@ -3374,62 +3406,65 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 						editPaths.push(editCorrectedPath);
 					}
 				}*/
+				}
 			}
 			
 			var updateResponse = areaService.updateAreaInDb(area, color, zone0, zone1, zone2, zone3, zone4, editPaths);
 			updateResponse.then(function(result){
 				if(result != null){
-		    		$scope.getAreasFromDb();
+		    		//$scope.getAreasFromDb();
+		    		$scope.getAllAreas();
 					$scope.editModeA = false;
 		    	} else {
 		    		$scope.editModeA = true;
 		    		$scope.showUpdatingAErrorMessage = true;
 		    	}
 			});
-			
-			/*var validityPeriod = [];
-			for(var i = 0; i < area.validityPeriod.length; i++){
-				var corrPeriod = {
-					from: area.validityPeriod[i].from,
-					to: area.validityPeriod[i].to,
-					weekDays: area.validityPeriod[i].weekDays,
-					timeSlot: area.validityPeriod[i].timeSlot,
-					rateValue: area.validityPeriod[i].rateValue,
-					holiday: area.validityPeriod[i].holiday,
-					note: area.validityPeriod[i].note
-				};
-				validityPeriod.push(corrPeriod);
-			}
-			
-			var id = area.id;
-			var appId = sharedDataService.getConfAppId();
-			var method = 'PUT';
-			var data = {
-				id: area.id,
-				id_app: area.id_app,
-				name: area.name,
-				validityPeriod: validityPeriod,
-				smsCode: area.smsCode,
-				color: color.substring(1, color.length),
-				note: area.note,
-				zones: $scope.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-				geometry: $scope.correctMyGeometryPolygonForArea(editPaths)
-			};
-			
-		    var value = JSON.stringify(data);
-		    if($scope.showLog) console.log("Area data : " + value);
-		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + id, null, $scope.authHeaders, value);
-		    myDataPromise.then(function(result){
-		    	console.log("Updated street: " + result);
-		    	if(result != null){
-		    		$scope.getAreasFromDb();
-					$scope.editModeA = false;
-		    	} else {
-		    		$scope.editModeA = true;
-		    		$scope.showUpdatingAErrorMessage = true;
-		    	}
-		    });*/
 		}
+	};
+	
+	//Delete Area Method
+	$scope.deleteArea = function(area){
+		$scope.showDeletingAErrorMessage = false;
+		//var method = 'DELETE';
+		//var appId = sharedDataService.getConfAppId();
+		
+		// area removing from gmap
+		gMapService.removeAreaPolygons($scope.vAreaMap, area);
+		/*var toDelArea = $scope.vAreaMap.shapes;
+		if(area.geometry.length == 1){
+			if(toDelArea[area.id] != null){
+				toDelArea[area.id].setMap(null);
+			}
+		} else {
+			for(var i = 0; i < area.geometry.length; i++){
+				var myId = $scope.correctObjId(area.id, i);
+				if(toDelArea[myId] != null){
+					toDelArea[myId].setMap(null);
+				}
+			}
+		}*/
+		
+		var deleteResponse = areaService.deleteAreaInDb(area);
+		deleteResponse.then(function(result){
+			if(result != null && result != ""){
+	    		//$scope.getAreasFromDb();
+	    		$scope.getAllAreas();
+	    	} else {
+	    		$scope.showDeletingAErrorMessage = true;
+	    	}
+		});
+		
+	   	/*var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + area.id , null, $scope.authHeaders, null);
+	    myDataPromise.then(function(result){
+	    	console.log("Deleted area: " + JSON.stringify(result));
+	    	if(result != null && result != ""){
+	    		//$scope.getAreasFromDb();
+	    		$scope.getAllAreas();
+	    	} else {
+	    		$scope.showDeletingAErrorMessage = true;
+	    	}
+	    });*/
 	};
 	
 	// Used to reload the area relations with zones
@@ -4138,41 +4173,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// Object Deleting Methods
-	//Area
-	$scope.deleteArea = function(area){
-		$scope.showDeletingAErrorMessage = false;
-		var method = 'DELETE';
-		var appId = sharedDataService.getConfAppId();
-		
-		// area removing from gmap
-		var toDelArea = $scope.vAreaMap.shapes;
-		if(area.geometry.length == 1){
-			if(toDelArea[area.id] != null){
-				toDelArea[area.id].setMap(null);
-			}
-		} else {
-			for(var i = 0; i < area.geometry.length; i++){
-				var myId = $scope.correctObjId(area.id, i);
-				if(toDelArea[myId] != null){
-					toDelArea[myId].setMap(null);
-				}
-			}
-		}
-		
-	   	//var myDataPromise = invokeWSServiceProxy.getProxy(method, "area/" + area.id , null, $scope.authHeaders, null);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + area.id , null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	console.log("Deleted area: " + JSON.stringify(result));
-	    	if(result != null && result != ""){
-	    		$scope.getAreasFromDb();
-	    		//$scope.editModeA = false;
-	    	} else {
-	    		//$scope.editModeA = true;
-	    		$scope.showDeletingAErrorMessage = true;
-	    	}
-	    });
-	};
-	
 	// Street
 	$scope.deleteStreet = function(street){
 		$scope.showDeletingSErrorMessage = false;
@@ -4358,67 +4358,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			var newCorrectedPath = [];
 			var createdPaths = [];
-			var createdPath = garea.getPath();
-			if(createdPath.length > 0){
-				for(var i = 0; i < createdPath.length; i++){
-					var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
-					newCorrectedPath.push(point);
-				};
-				createdPaths.push(newCorrectedPath);
-			}
-			if($scope.allNewAreas != null && $scope.allNewAreas.length > 0){
-				for(var j = 0; j < $scope.allNewAreas.length; j++){
-					createdPath = $scope.allNewAreas[j].getPath();
-					newCorrectedPath = [];
-					for(var i = 0; i < createdPath.length; i++){
-						var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
-						newCorrectedPath.push(point);
-					};
-					createdPaths.push(newCorrectedPath);
-				}
-			}
-			//$scope.allNewAreas = [];	// Here I clear the array of area polygons
+			createdPaths = gMapService.createPolygonInAreaEdit(garea, newCorrectedPath, createdPaths, $scope.allNewAreas);
 			
-			var method = 'POST';
-			var appId = sharedDataService.getConfAppId();
-			
-			var validityPeriod = [];
-			for(var i = 0; i < area.validityPeriod.length; i++){
-				var corrPeriod = {
-					//from: area.validityPeriod[i].from.getTime(),
-					from: area.validityPeriod[i].from,
-					//to: area.validityPeriod[i].to.getTime(),
-					to: area.validityPeriod[i].to,
-					weekDays: area.validityPeriod[i].weekDays,
-					timeSlot: area.validityPeriod[i].timeSlot,
-					rateValue: area.validityPeriod[i].rateValue,
-					holiday: area.validityPeriod[i].holiday,
-					note: area.validityPeriod[i].note
-				};
-				validityPeriod.push(corrPeriod);
-			}
-			
-			//var decimalFee = $scope.correctDecimal(area.fee, 1);
-			var data = {
-				id_app: $scope.myAppId,
-				name: area.name,
-				//fee: parseFloat(decimalFee),
-				//timeSlot: area.timeSlot,
-				validityPeriod: validityPeriod,
-				smsCode: area.smsCode,
-				color: myColor.substring(1, myColor.length),	// I have to remove '#' char
-				note: area.note,
-				zones: $scope.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-				geometry: $scope.correctMyGeometryPolygonForArea(createdPaths)
-			};
-			
-		    var value = JSON.stringify(data);
-		    if($scope.showLog) console.log("Area data : " + value);
-		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, $scope.authHeaders, value);
-		    myDataPromise.then(function(result){
-		    	console.log("Created area: " + JSON.stringify(result));
-		    	if(result != null && result != ""){
-		    		$scope.getAreasFromDb();
+			var updateResponse = areaService.createAreaInDb(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths);
+			updateResponse.then(function(result){
+				if(result != null && result != ""){
+		    		$scope.getAllAreas();
 		    		$scope.myAZone0 = null;
 		    		$scope.myAZone1 = null;
 		    		$scope.myAZone2 = null;
@@ -4429,7 +4374,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    		$scope.editModeA = true;
 		    		$scope.showUpdatingAErrorMessage = true;
 		    	}
-		    });
+			});
 		}
 	};
 	

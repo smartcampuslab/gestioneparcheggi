@@ -1359,8 +1359,8 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		} else {
 			aZones = area.zones;
 		}
-		if(aZones.zones){
-			for(var j = 0; j < aZones.zones.length; j++){
+		if(aZones){
+			for(var j = 0; j < aZones.length; j++){
 				var z0 = this.getLocalZoneById(aZones[j], 2, 0);
 				var z1 = this.getLocalZoneById(aZones[j], 2, 1);
 				var z2 = this.getLocalZoneById(aZones[j], 2, 2);
@@ -2061,7 +2061,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
     };
     
     // Method used when creating polygons in area edit
-    this.createPolygonInAreaEdit = function(editCorrectedPath, editPaths, allNewAreas){
+    this.createPolygonInAreaEdit = function(garea, editCorrectedPath, editPaths, allNewAreas){
 		var createdPath = garea.getPath();
 		for(var i = 0; i < createdPath.length; i++){
 			var point = this.getPointFromLatLng(createdPath.b[i], 1);
@@ -2081,6 +2081,47 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		}
 		return editPaths;
     };
+    
+    // Method used when creating polygons in area creation
+    this.createPolygonInAreaCreate = function(garea, newCorrectedPath, createdPaths, allNewAreas){
+    	var createdPath = garea.getPath();
+		if(createdPath.length > 0){
+			for(var i = 0; i < createdPath.length; i++){
+				var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
+				newCorrectedPath.push(point);
+			};
+			createdPaths.push(newCorrectedPath);
+		}
+		if(allNewAreas != null && allNewAreas.length > 0){
+			for(var j = 0; j < allNewAreas.length; j++){
+				createdPath = allNewAreas[j].getPath();
+				newCorrectedPath = [];
+				for(var i = 0; i < createdPath.length; i++){
+					var point = this.getPointFromLatLng(createdPath.b[i], 1);
+					newCorrectedPath.push(point);
+				};
+				createdPaths.push(newCorrectedPath);
+			}
+		}
+		return createdPaths;
+    };
+    
+    // Method used when deleting polygons in area removing
+    this.removeAreaPolygons = function(vAreaMap, area){
+    	var toDelArea = vAreaMap.shapes;
+		if(area.geometry.length == 1){
+			if(toDelArea[area.id] != null){
+				toDelArea[area.id].setMap(null);
+			}
+		} else {
+			for(var i = 0; i < area.geometry.length; i++){
+				var myId = this.correctObjId(area.id, i);
+				if(toDelArea[myId] != null){
+					toDelArea[myId].setMap(null);
+				}
+			}
+		}
+    }
 	
     // Method used when an area object is selected. It add the zone details to the area object
 	/*this.initAreaObject = function(area){
