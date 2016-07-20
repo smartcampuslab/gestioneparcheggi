@@ -4727,7 +4727,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				}
 				break;
 			case 3:
-				object = gMapService.initStreetObject(object);
+				object = gMapService.initStreetObject(object, 0);
 				$scope.closeAllDetails(theme);		// Here I check if there is a selected object and I fix it
 				object.stroke.weight = 4;			//10
 				object.stroke.opacity = 1.0;
@@ -5237,7 +5237,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    var sObj = {
 			    	data : object
 			    };
-			    $scope.sDetails = gMapService.initStreetObject(sObj).data;
+			    $scope.sDetails = gMapService.initStreetObject(sObj, 0).data;
 				gMapService.initStreetParkSupplyDiagram(object, 2);
 				break;
 			case 4:
@@ -5282,7 +5282,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    var sObj = {
 				    data : object
 				};
-				object = gMapService.initStreetObject(sObj).data;
+				object = gMapService.initStreetObject(sObj, 0).data;
 				// Block to manage free slots and unusuabled slots
 				var freeParkSlotDisp = (object.freeParkSlotNumber > 0) ? (object.freeParkSlotNumber - object.freeParkSlotOccupied) : 0;
 		    	var freeParkSlotSignDisp = (object.freeParkSlotSignNumber > 0) ? (object.freeParkSlotSignNumber - object.freeParkSlotSignOccupied) : 0;
@@ -5389,7 +5389,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    var sObj = {
 					data : object
 				};
-			    $scope.sDetails = gMapService.initStreetObject(sObj).data;
+			    $scope.sDetails = gMapService.initStreetObject(sObj, 0).data;
 				gMapService.initStreetOccupancyDiagram(object, 2);
 			    $scope.showReportCompare("1","2", 3, 3);	// 3 = street, 3 = time cost
 				break;
@@ -5440,7 +5440,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    var sObj = {
 					data : object
 				};
-				$scope.sDetails = gMapService.initStreetObject(sObj).data;
+				$scope.sDetails = gMapService.initStreetObject(sObj, 0).data;
 			    //gMapService.initStreetOccupancyDiagram(object, 2);
 				$scope.showReportCompare("1", "2", 3, 2);	// 3 = street, 2 = profit
 				break;

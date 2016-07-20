@@ -2,23 +2,19 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('areaService',['$rootScope', 'invokeWSService', 'sharedDataService', 'gMapService',
+pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService', 'gMapService',
                  function($rootScope, invokeWSService, sharedDataService, gMapService){
 	
 	this.showLog = false;
 	
-	// Areas get method
-    this.getAreasFromDb = function(showArea){
-		var allAreas = [];
+	// Streets get method
+    this.getStreetsFromDb = function(showStreets){
+		var allStreet = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), null);
-	    myDataPromise.then(function(allAreas){
-	    	allAreas = gMapService.initAllAreaObjects(allAreas);	// The only solution found to retrieve all data;
-	    	if(showArea){
-	    		gMapService.setAreaPolygons(gMapService.initAreasOnMap(allAreas, true, 1, false, true)[0]);
-	    	}
-	    	sharedDataService.setSharedLocalAreas(allAreas);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/street", null, sharedDataService.getAuthHeaders(), null);
+	    myDataPromise.then(function(allStreet){
+	    	// console.log("streets from DB " + JSON.stringify(result));
 	    });
 	    return myDataPromise;
 	};
