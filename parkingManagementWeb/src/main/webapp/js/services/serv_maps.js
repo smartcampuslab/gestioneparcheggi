@@ -176,6 +176,23 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		return corr_points;
 	};
 	
+	// used to correct polyline to be saved in db
+	this.correctMyGeometryPolyline = function(geo){
+		var tmpLine = {
+			points: null
+		};
+		var points = [];
+		for(var i = 0; i < geo.length; i++){
+			var tmpPoint = {
+				lat: Number(geo[i].latitude),
+				lng: Number(geo[i].longitude)
+			};
+			points.push(tmpPoint);
+		}
+		tmpLine.points = points;
+		return tmpLine;
+	};
+	
 	// used to correct polygon to be saved in db
 	this.correctMyGeometryPolygon = function(geo){
 		var tmpPolygon = {
@@ -856,6 +873,53 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		}
 		return correctedZones;
 	};	
+	
+	this.hideZonePolygons = function(toHideZone, zones){
+		if(toHideZone != null){
+	    	for(var i = 0; i < zones.length; i++){
+	    		if(zones[i].data == null){	// case zone list
+		    		if(zones[i].subelements != null && zones[i].subelements.length > 0 && zones[i].geometryFromSubelement){
+		    			if(zones[i].subelements.length == 1){
+		    				if(toHideZone[zones[i].id] != null){
+		    	    			toHideZone[zones[i].id].setMap(null);
+		    	    		}
+		    			} else {
+		    				for(var j = 0; j < zones[i].subelements.length; j++){
+		    					var myId = this.correctObjId(zones[i].id, j);
+		    					if(toHideZone[myId] != null){
+		    						toHideZone[myId].setMap(null);
+					    		}
+		    				}
+		    			}
+		    		} else {
+			    		if(toHideZone[zones[i].id] != null){
+			    			toHideZone[zones[i].id].setMap(null);
+			    		}
+		    		}
+	    		} else {					// case zone polygon list
+	    			if(zones[i].data.subelements != null && zones[i].data.subelements.length > 0 && zones[i].data.geometryFromSubelement){
+		    			if(zones[i].data.subelements.length == 1){
+		    				if(toHideZone[zones[i].id] != null){
+		    	    			toHideZone[zones[i].id].setMap(null);
+		    	    		}
+		    			} else {
+		    				for(var j = 0; j < zones[i].data.subelements.length; j++){
+		    					var myId = this.correctObjId(zones[i].id, j);
+		    					if(toHideZone[myId] != null){
+		    						toHideZone[myId].setMap(null);
+					    		}
+		    				}
+		    			}
+		    		} else {
+			    		if(toHideZone[zones[i].id] != null){
+			    			toHideZone[zones[i].id].setMap(null);
+			    		}
+		    		}
+	    		}
+	    	}
+		}
+		return toHideZone;
+	};
 	
 //	this.initZonesOnMapComplete = function(zones, visible, type, firstInit, firstTime){
 //		var zone = {};
@@ -1607,32 +1671,6 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
         visible:true
     });
 	
-	this.getStreetAddress = function(event){
-		var streetAddress = "";
-		//console.log("I am in get street address function" + event.latLng);
-		var geocoder = new google.maps.Geocoder();
-		geocoder.geocode({location:event.latLng}, function(response) {
-			var result = response[0].formatted_address;
-			if (result != undefined && result != null) {
-				streetAddress = result.substring(0, result.indexOf(','));
-			}
-			return streetAddress;
-		});
-	};
-	
-	this.getStructAddress = function(event){
-		var address = "";
-		//console.log("I am in get struct address function" + event.latLng);
-		var geocoder = new google.maps.Geocoder();
-		geocoder.geocode({location:event.latLng}, function(response) {
-			var result = response[0].formatted_address;
-			if (result != undefined && result != null) {
-				address =  result.substring(0, result.indexOf(','));
-			}
-			return address;
-		});
-	};
-	
 	this.setMyPolGeometry = function(value){
 		this.myPolGeometry = value;
 	};
@@ -1658,7 +1696,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 			}
 		}
 		return toHideStreet;
-	}
+	};
 	
 	// Method deleteAreaMapObjects: used to hide in map a specific area polygon/polygons
 	this.deleteAreaMapObjects = function(area, toHideArea){
@@ -1682,7 +1720,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 			}
 		}
 		return toHideArea;
-	}
+	};
 	
 	// Method hideAllAreas: used to hide in map all area polygons
 	this.hideAllAreas = function(areas, toHideArea){
@@ -1700,6 +1738,25 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
     	}
 		return toHideStreet;
     };
+    
+    // Method updatePolylineInStreetEdit: used to update polyline elements in street editing
+    this.updatePolylineInStreetEdit = function(map, poly){
+    	var editCorrectedPath = [];
+		var updatedPath = map.shapes.editPolyline.getPath();
+		if(updatedPath != null && updatedPath.length > 0){
+			for(var i = 0; i < updatedPath.length; i++){
+				var point = this.getPointFromLatLng(updatedPath.b[i], 1);
+				editCorrectedPath.push(point);
+			}
+		} else {
+			var createdPath = poly.getPath();
+			for(var i = 0; i < createdPath.length; i++){
+				var point = this.getPointFromLatLng(createdPath.b[i], 1);
+				editCorrectedPath.push(point);
+			}
+		}
+		return editCorrectedPath;
+    }
     
     // Method used when updating polygons in area edit
     this.udpatePolygonInAreaEdit = function(editGAreas, map, editCorrectedPath, editPaths){
@@ -1874,34 +1931,36 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 	}
     
     // Method used to initialize the area map object when details are showed
-	this.setAreaMapDetails = function(area){
+	this.setAreaMapDetails = function(area, type){
 		var mySpecialAreas = [];
 		
 		if(area.geometry != null && area.geometry.length > 0 && area.geometry[0].points.length > 0){
 			//this.deleteAreaMapObjects(area);
 			// Move this code in the if blok to preserve from the udefined map exception
-			var myZones0 = [];
-			var myZones1 = [];
-			var myZones2 = [];
-			var myZones3 = [];
-			var myZones4 = [];
-			if(area.zones){
-				for(var i = 0; i < area.zones.length; i++){
-					var z0 = this.getLocalZoneById(area.zones[i], 1, 0);
-					var z1 = this.getLocalZoneById(area.zones[i], 1, 1);
-					var z2 = this.getLocalZoneById(area.zones[i], 1, 2);
-					var z3 = this.getLocalZoneById(area.zones[i], 1, 3);
-					var z4 = this.getLocalZoneById(area.zones[i], 1, 4);
-					if(z0){
-						myZones0.push(this.addLabelToZoneObject(z0));
-					} else if(z1){
-						myZones1.push(this.addLabelToZoneObject(z1));
-					} else if(z2){
-						myZones2.push(this.addLabelToZoneObject(z2));
-					} else if(z3){
-						myZones3.push(this.addLabelToZoneObject(z3));
-					} else if(z4){
-						myZones4.push(this.addLabelToZoneObject(z4));
+			if(type == 0){
+				var myZones0 = [];
+				var myZones1 = [];
+				var myZones2 = [];
+				var myZones3 = [];
+				var myZones4 = [];
+				if(area.zones){
+					for(var i = 0; i < area.zones.length; i++){
+						var z0 = this.getLocalZoneById(area.zones[i], 1, 0);
+						var z1 = this.getLocalZoneById(area.zones[i], 1, 1);
+						var z2 = this.getLocalZoneById(area.zones[i], 1, 2);
+						var z3 = this.getLocalZoneById(area.zones[i], 1, 3);
+						var z4 = this.getLocalZoneById(area.zones[i], 1, 4);
+						if(z0){
+							myZones0.push(this.addLabelToZoneObject(z0));
+						} else if(z1){
+							myZones1.push(this.addLabelToZoneObject(z1));
+						} else if(z2){
+							myZones2.push(this.addLabelToZoneObject(z2));
+						} else if(z3){
+							myZones3.push(this.addLabelToZoneObject(z3));
+						} else if(z4){
+							myZones4.push(this.addLabelToZoneObject(z4));
+						}
 					}
 				}
 			}
@@ -1915,114 +1974,228 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 				tmpPol = tmpPol.substring(0, tmpPol.length-1);
 				this.setMyPolGeometry(tmpPol);
 				
-				var myAreaPol = {
-					id: this.correctObjId(area.id, j),
-					path: this.correctPoints(area.geometry[j].points),
-					gpath: this.correctPointsGoogle(area.geometry[j].points),
-					stroke: {
-					    color: this.correctColor(area.color),
-					    weight: 4
-					},
-					data:area,
-					zones0: myZones0,
-					zones1: myZones1,
-					zones2: myZones2,
-					zones3: myZones3,
-					zones4: myZones4,
-					info_windows_pos: this.correctPointGoogle(area.geometry[j].points[1]),
-					info_windows_cod: "ma" + area.id,
-					editable: false,
-					draggable: false,
-					geodesic: false,
-					visible: true,
-					fill: {
-					    color: this.correctColor(area.color),
-					    opacity: 0.8
-					}
-				};
+				var myAreaPol
+				if(type == 0){
+					myAreaPol = {
+						id: this.correctObjId(area.id, j),
+						path: this.correctPoints(area.geometry[j].points),
+						gpath: this.correctPointsGoogle(area.geometry[j].points),
+						stroke: {
+						    color: this.correctColor(area.color),
+						    weight: 4
+						},
+						data:area,
+						zones0: myZones0,
+						zones1: myZones1,
+						zones2: myZones2,
+						zones3: myZones3,
+						zones4: myZones4,
+						info_windows_pos: this.correctPointGoogle(area.geometry[j].points[1]),
+						info_windows_cod: "ma" + area.id,
+						editable: false,
+						draggable: false,
+						geodesic: false,
+						visible: true,
+						fill: {
+						    color: this.correctColor(area.color),
+						    opacity: 0.8
+						}
+					};
+				} else {
+					var poligons = area.geometry[j];
+					myAreaPol = {
+						id: this.correctObjId(area.id, j),
+						path: this.correctPoints(poligons.points),
+						gpath: this.correctPointsGoogle(poligons.points),
+						stroke: {
+						    color: this.correctColor(area.color),
+						    weight: 3
+						},
+						geodesic: false,
+						editable: true,
+						draggable: true,
+						visible: true,
+						fill: {
+						    color: this.correctColor(area.color),
+						    opacity: 0.4
+						}
+					};
+				}
+				
 				mySpecialAreas.push(myAreaPol);
 			}
 		}
 		return mySpecialAreas;
 	};
 	
+	// Method used to initialize the zone map object when details are showed
+	this.setZoneMapDetails = function(zone, toHide, type){
+		var mySpecialZones = [];
+		if(zone.geometryFromSubelement){
+			var streets = zone.subelements;//$scope.loadStreetsFromZone(zones[i].id);
+			var color = this.lightgray;
+			if(streets != null && streets.length > 0){
+				color = streets[0].area_color;
+			}
+			if(streets != null && streets.length > 0){
+				for(var j = 0; j < streets.length; j++){
+					if(toHide[this.correctObjId(zone.id,j)] != null){
+						toHide[this.correctObjId(zone.id,j)].setMap(null);
+					}
+					var polyline = streets[j].geometry;
+					var pol_zone = {
+						id: this.correctObjId(zone.id, j),
+						type: "polyline",
+						path: this.correctPoints(polyline.points),
+						gpath: this.correctPointsGoogle(polyline.points),
+						stroke: {
+						    color: this.correctColor(color),
+						    weight: 4,
+						    opacity: 1.0
+						},
+						data: zone,
+						info_windows_pos: this.correctPointGoogle(polyline.points[1]),
+						info_windows_cod: "z" + zone.id,
+						editable: true,
+						draggable: true,
+						geodesic: false,
+						visible: true,
+						subelements: streets
+					};
+					mySpecialZones.push(pol_zone);
+				}
+			}		
+		} else {
+			if(zone.geometry != null && zone.geometry.points.length > 0){
+				if(toHide[zone.id] != null){
+					toHide[zone.id].setMap(null);
+				}
+				var myZonePol = {
+					id: zone.id,
+					type: "polygon",
+					path: this.correctPoints(zone.geometry.points),
+					gpath: this.correctPointsGoogle(zone.geometry.points),
+					stroke: {
+					    color: this.correctColor(zone.color),
+					    weight: 4,
+					    opacity: 1.0
+					},
+					data: zone,
+					info_windows_pos: this.correctPointGoogle(zone.geometry.points[1]),
+					info_windows_cod: "z" + zone.id,
+					editable: false,
+					draggable: false,
+					geodesic: false,
+					visible: true,
+					fill: {
+					    color: this.correctColor(zone.color),
+					    opacity: 0.8
+					}
+				};
+				mySpecialZones.push(myZonePol);
+			}			
+		}
+		return mySpecialZones;
+	};
+	
 	// Method used to initialize the street map object when details are showed
-	this.setStreetMapDetails = function(street){
+	this.setStreetMapDetails = function(street, type){
 		var mySpecialStreets = [];
 		
 		var myAreaS = sharedDataService.getLocalAreaById(street.rateAreaId);
 		var allPms = sharedDataService.getSharedLocalPms();
-		// I show only the pms in the same area of the street
+			// I show only the pms in the same area of the street
 		var myPms = sharedDataService.getPmsFromArea(allPms, myAreaS);
 		var myStreetPms = [];
-		for(var j = 0; j < myPms.length; j++){
-			myPms[j].selected = false;
-			if(street.myPms != null && street.myPms.length > 0){
-				for(var i = 0; i < street.myPms.length; i++){
-					if(myPms[j].id == street.myPms[i].id){	
-						myStreetPms.push(myPms[j]);
+		if(type == 0){	
+			for(var j = 0; j < myPms.length; j++){
+				myPms[j].selected = false;
+				if(street.myPms != null && street.myPms.length > 0){
+					for(var i = 0; i < street.myPms.length; i++){
+						if(myPms[j].id == street.myPms[i].id){	
+							myStreetPms.push(myPms[j]);
+						}
 					}
 				}
 			}
 		}
 		
 		if(street.geometry != null && street.geometry.points.length > 0){
-			var tmpLine = "";
-			for(var i = 0; i < street.geometry.points.length; i++){
-				var tmpPoint = street.geometry.points[i].lat + "," + street.geometry.points[i].lng;
-				tmpLine = tmpLine + tmpPoint + ",";
-			}
-			tmpLine = tmpLine.substring(0, tmpLine.length-1);
-			this.setMyLineGeometry(tmpLine);
-			
-			var myZones0 = [];
-			var myZones1 = [];
-			var myZones2 = [];
-			var myZones3 = [];
-			var myZones4 = [];
-			
-			for(var i = 0; i < street.zones.length; i++){
-				var z0 = this.getLocalZoneById(street.zones[i], 1, 0);
-				var z1 = this.getLocalZoneById(street.zones[i], 1, 1);
-				var z2 = this.getLocalZoneById(street.zones[i], 1, 2);
-				var z3 = this.getLocalZoneById(street.zones[i], 1, 3);
-				var z4 = this.getLocalZoneById(street.zones[i], 1, 4);
-				if(z0){
-					myZones0.push(this.addLabelToZoneObject(z0));
-				} else if(z1){
-					myZones1.push(this.addLabelToZoneObject(z1));
-				} else if(z2){
-					myZones2.push(this.addLabelToZoneObject(z2));
-				} else if(z3){
-					myZones3.push(this.addLabelToZoneObject(z3));
-				} else if(z4){
-					myZones4.push(this.addLabelToZoneObject(z4));
+			if(type == 0){
+				var tmpLine = "";
+				for(var i = 0; i < street.geometry.points.length; i++){
+					var tmpPoint = street.geometry.points[i].lat + "," + street.geometry.points[i].lng;
+					tmpLine = tmpLine + tmpPoint + ",";
+				}
+				tmpLine = tmpLine.substring(0, tmpLine.length-1);
+				this.setMyLineGeometry(tmpLine);
+				
+				var myZones0 = [];
+				var myZones1 = [];
+				var myZones2 = [];
+				var myZones3 = [];
+				var myZones4 = [];
+				
+				for(var i = 0; i < street.zones.length; i++){
+					var z0 = this.getLocalZoneById(street.zones[i], 1, 0);
+					var z1 = this.getLocalZoneById(street.zones[i], 1, 1);
+					var z2 = this.getLocalZoneById(street.zones[i], 1, 2);
+					var z3 = this.getLocalZoneById(street.zones[i], 1, 3);
+					var z4 = this.getLocalZoneById(street.zones[i], 1, 4);
+					if(z0){
+						myZones0.push(this.addLabelToZoneObject(z0));
+					} else if(z1){
+						myZones1.push(this.addLabelToZoneObject(z1));
+					} else if(z2){
+						myZones2.push(this.addLabelToZoneObject(z2));
+					} else if(z3){
+						myZones3.push(this.addLabelToZoneObject(z3));
+					} else if(z4){
+						myZones4.push(this.addLabelToZoneObject(z4));
+					}
 				}
 			}
-			
-			var myStreetLine = {
-				id: street.id,
-				path: this.correctPoints(street.geometry.points),
-				gpath: this.correctPointsGoogle(street.geometry.points),
-				stroke: {
-				    color: this.correctColor(street.color),
-				    weight: 4
-				},
-				data: street,
-				area: myAreaS,
-				zones0: myZones0,
-				zones1: myZones1,
-				zones2: myZones2,
-				zones3: myZones3,
-				zones4: myZones4,
-				pms: myStreetPms,
-				info_windows_pos: this.correctPointGoogle(street.geometry.points[1]),
-				info_windows_cod: "ms" + street.id,
-				editable: false,
-				draggable: false,
-				geodesic: false,
-				visible: true
-			};
+			var myStreetLine;
+			if(type == 0){
+				myStreetLine = {
+					id: street.id,
+					path: this.correctPoints(street.geometry.points),
+					gpath: this.correctPointsGoogle(street.geometry.points),
+					stroke: {
+					    color: this.correctColor(street.color),
+					    weight: 4
+					},
+					data: street,
+					area: myAreaS,
+					zones0: myZones0,
+					zones1: myZones1,
+					zones2: myZones2,
+					zones3: myZones3,
+					zones4: myZones4,
+					pms: myStreetPms,
+					info_windows_pos: this.correctPointGoogle(street.geometry.points[1]),
+					info_windows_cod: "ms" + street.id,
+					editable: false,
+					draggable: false,
+					geodesic: false,
+					visible: true
+				};
+			} else {
+				var poligons = street.geometry;
+				myStreetLine = {
+					id: street.id,
+					path: this.correctPoints(poligons.points),
+					gpath: this.correctPointsGoogle(poligons.points),
+					stroke: {
+					    color: this.correctColor(street.color),
+					    opacity: 1.0,
+					    weight: 3
+					},
+					editable: true,
+					draggable: true,
+					visible: true
+				};
+			}
 			
 			mySpecialStreets.push(myStreetLine);
 		}

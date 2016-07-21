@@ -1266,7 +1266,59 @@ pm.service('sharedDataService', function(){
 		return correctedZones;
 	};
 	
+	// correctMyZones: used to correct the zone object with all the necessary data
+	this.correctMyZones = function(zones){
+		var correctedZones = [];
+		for(var i = 0; i < zones.length; i++){
+			var sub = (zones[i].submacro) ? zones[i].submacro : ((zones[i].submicro) ? zones[i].submicro : null);
+			var corrType = this.getCorrectZoneType(zones[i].type);
+			var lbl = (sub) ? (zones[i].name + "_" + sub) : zones[i].name;
+			var correctZone = {
+				id: zones[i].id,
+				id_app: zones[i].id_app,
+				color: zones[i].color,
+				name: zones[i].name,
+				submacro: zones[i].submacro,
+				submicro: zones[i].submicro,
+				type: zones[i].type,
+				myType: corrType,
+				note: zones[i].note,
+				geometry: this.correctMyGeometryPolygon(zones[i].geometry),
+				centermap: zones[i].centermap,
+				geometryFromSubelement: zones[i].geometryFromSubelement,
+				subelements: this.loadStreetsFromZone(zones[i].id),
+				label: lbl
+			};
+			correctedZones.push(correctZone);
+		}
+		return correctedZones;
+	};
 	
+	this.correctMyPmsForStreet = function(pms){
+		var correctedPms = [];
+		for(var i = 0; i < pms.length; i++){
+			if(pms[i].selected){
+				correctedPms.push(String(pms[i].id));
+			}
+		}
+		return correctedPms;
+	};
+	
+	this.initIfNull = function(value){
+		if(value == null || value == ""){
+			value = 0;
+		}
+		return parseInt(value);
+	};
+	
+	this.getAreaFilter = function(){
+		var allAreaFilter = [];
+		angular.copy(this.getSharedLocalAreas(), allAreaFilter);
+		if(allAreaFilter != null && allAreaFilter.length > 0 && allAreaFilter[0].id != ''){
+			allAreaFilter.splice(0,0,{id:'', name: "Tutte"});
+		}
+		return allAreaFilter;
+	};
 	
 	// ----- End of part for functions shared between controllers  -------------------------------------
 });

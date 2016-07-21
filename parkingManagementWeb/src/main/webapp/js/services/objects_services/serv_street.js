@@ -19,103 +19,117 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	    return myDataPromise;
 	};
 	
-	this.getAreaByIdFromDb = function(id){
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/"+ id, null, sharedDataService.getAuthHeaders(), null);
-	    myDataPromise.then(function(result){
-	    	//console.log("rateArea by id retrieved from db: " + JSON.stringify(result));
-	    	return result;
-	    });
-	};
-	
-	// Area update method
-	this.updateAreaInDb = function(area, color, zone0, zone1, zone2, zone3, zone4, editPaths){
-		var validityPeriod = [];
-		for(var i = 0; i < area.validityPeriod.length; i++){
-			var corrPeriod = {
-				from: area.validityPeriod[i].from,
-				to: area.validityPeriod[i].to,
-				weekDays: area.validityPeriod[i].weekDays,
-				timeSlot: area.validityPeriod[i].timeSlot,
-				rateValue: area.validityPeriod[i].rateValue,
-				holiday: area.validityPeriod[i].holiday,
-				note: area.validityPeriod[i].note
-			};
-			validityPeriod.push(corrPeriod);
-		}
-			
-		var id = area.id;
+	// Street update method
+	this.updateStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, editPolyline){
+		var calculatedTotSlots = sharedDataService.initIfNull(street.handicappedSlotNumber) + sharedDataService.initIfNull(street.reservedSlotNumber) + sharedDataService.initIfNull(street.paidSlotNumber) + sharedDataService.initIfNull(street.timedParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotSignNumber) + sharedDataService.initIfNull(street.unusuableSlotNumber);
+		var id = street.id;
 		var appId = sharedDataService.getConfAppId();
 		var method = 'PUT';
-		var data = {
-			id: area.id,
-			id_app: area.id_app,
-			name: area.name,
-			validityPeriod: validityPeriod,
-			smsCode: area.smsCode,
-			color: color.substring(1, color.length),
-			note: area.note,
-			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			geometry: gMapService.correctMyGeometryPolygonForArea(editPaths)
-		};
-			
-	    var value = JSON.stringify(data);
-	    if(this.showLog) console.log("Area data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + id, null, sharedDataService.getAuthHeaders(), value);
-	    myDataPromise.then(function(result){
-	    	console.log("Updated area: " + result.name);
-		});
-	    return myDataPromise;
-	}; 
-	
-	// Area create method
-	this.createAreaInDb = function(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths){
-		var method = 'POST';
-		var appId = sharedDataService.getConfAppId();
-		
-		var validityPeriod = [];
-		for(var i = 0; i < area.validityPeriod.length; i++){
-			var corrPeriod = {
-				from: area.validityPeriod[i].from,
-				to: area.validityPeriod[i].to,
-				weekDays: area.validityPeriod[i].weekDays,
-				timeSlot: area.validityPeriod[i].timeSlot,
-				rateValue: area.validityPeriod[i].rateValue,
-				holiday: area.validityPeriod[i].holiday,
-				note: area.validityPeriod[i].note
-			};
-			validityPeriod.push(corrPeriod);
-		}
 		
 		var data = {
-			id_app: area.id_app,
-			name: area.name,
-			validityPeriod: validityPeriod,
-			smsCode: area.smsCode,
-			color: myColor.substring(1, myColor.length),	// I have to remove '#' char
-			note: area.note,
+			id: street.id,
+			id_app: street.id_app,
+			streetReference: street.streetReference,
+			slotNumber: calculatedTotSlots,
+			handicappedSlotNumber: street.handicappedSlotNumber,
+			reservedSlotNumber: street.reservedSlotNumber,
+			timedParkSlotNumber:street.timedParkSlotNumber,
+			paidSlotNumber: street.paidSlotNumber,
+			freeParkSlotNumber: street.freeParkSlotNumber,
+			freeParkSlotSignNumber: street.freeParkSlotSignNumber,
+			unusuableSlotNumber: street.unusuableSlotNumber,
+			subscritionAllowedPark: street.subscritionAllowedPark,
+			color: area.color,
+			rateAreaId: area.id,
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			geometry: gMapService.correctMyGeometryPolygonForArea(createdPaths)
+			parkingMeters: sharedDataService.correctMyPmsForStreet(pms),
+			geometry: gMapService.correctMyGeometryPolyline(editPolyline)
 		};
 		
 	    var value = JSON.stringify(data);
-	    if(this.showLog) console.log("Area data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), value);
+	    if(this.showLog) console.log("Street data : " + value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
-	    	console.log("Created area: " + result.name);
+	    	console.log("Updated street: " + result.streetReference);
 	    });
 	    return myDataPromise;
 	};
 	
-	// Area delete method
-	this.deleteAreaInDb = function(area){
+	// Used to update street relations with zones/parkingmeters
+	this.updateStreetRelations = function(street){
+		var id = street.id;
+		var appId = sharedDataService.getConfAppId();
+		var method = 'PUT';
+		
+		var data = {
+			id: street.id,
+			id_app: street.id_app,
+			streetReference: street.streetReference,
+			slotNumber: street.slotNumber,
+			handicappedSlotNumber: street.handicappedSlotNumber,
+			reservedSlotNumber: street.reservedSlotNumber,
+			timedParkSlotNumber:street.timedParkSlotNumber,
+			paidSlotNumber: street.paidSlotNumber,
+			freeParkSlotNumber: street.freeParkSlotNumber,
+			freeParkSlotSignNumber: street.freeParkSlotSignNumber,
+			unusuableSlotNumber: street.unusuableSlotNumber,
+			subscritionAllowedPark: street.subscritionAllowedPark,
+			color: street.color,
+			rateAreaId: street.rateAreaId,
+			zones: street.zones,
+			parkingMeters: street.parkingMeters,
+			geometry: street.geometry
+		};
+		
+	    var value = JSON.stringify(data);
+	    if(this.showLog) console.log("Street data : " + value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    	console.log("Updated street: " + result.streetReference);	
+	    });	
+	};
+	
+	// Street create method
+	this.createStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, createPolyline){
+		var calculatedTotSlots = sharedDataService.initIfNull(street.handicappedSlotNumber) + sharedDataService.initIfNull(street.reservedSlotNumber) + sharedDataService.initIfNull(street.paidSlotNumber) + sharedDataService.initIfNull(street.timedParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotSignNumber) + sharedDataService.initIfNull(street.unusuableSlotNumber);
+		var method = 'POST';
+		var appId = sharedDataService.getConfAppId();
+		var data = {
+			id_app: appId,
+			streetReference: street.streetReference,
+			slotNumber: calculatedTotSlots,
+			handicappedSlotNumber: street.handicappedSlotNumber,
+			reservedSlotNumber: street.reservedSlotNumber,
+			timedParkSlotNumber:street.timedParkSlotNumber,
+			paidSlotNumber: street.paidSlotNumber,
+			freeParkSlotNumber: street.freeParkSlotNumber,
+			freeParkSlotSignNumber: street.freeParkSlotSignNumber,
+			unusuableSlotNumber: street.unusuableSlotNumber,
+			subscritionAllowedPark: street.subscritionAllowedPark,
+			color: area.color,
+			rateAreaId: area.id,
+			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
+			parkingMeters: sharedDataService.correctMyPmsForStreet(pms),
+			geometry: gMapService.correctMyGeometryPolyline(createPolyline)
+		};
+		
+	    var value = JSON.stringify(data);
+	    if(this.showLog) console.log("Street data : " + value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    	console.log("Created street: " + result.streetReference);
+	    });
+	    return myDataPromise;
+	};
+	
+	// Street delete method
+	this.deleteStreetInDb = function(street){
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		
-		var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + area.id , null, sharedDataService.getAuthHeaders(), null);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + street.rateAreaId + "/" + street.id , null, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
-	    	console.log("Deleted area: " +area.name);
+	    	console.log("Deleted street: " + street.name);
 	    });
 	    return myDataPromise;
 	};
