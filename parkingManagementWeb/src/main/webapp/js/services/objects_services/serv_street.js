@@ -15,6 +15,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 		var myDataPromise = invokeWSService.getProxy(method, appId + "/street", null, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allStreet){
 	    	// console.log("streets from DB " + JSON.stringify(result));
+	    	gMapService.setOccupancyStreet(allStreet);
 	    });
 	    return myDataPromise;
 	};
@@ -86,7 +87,8 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated street: " + result.streetReference);	
-	    });	
+	    });
+	    return myDataPromise;
 	};
 	
 	// Street create method

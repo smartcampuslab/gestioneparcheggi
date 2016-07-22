@@ -52,6 +52,7 @@
 <script src="js/services/objects_services/serv_area.js"></script>
 <script src="js/services/objects_services/serv_street.js"></script>
 <script src="js/services/objects_services/serv_zone.js"></script>
+<script src="js/services/objects_services/serv_parking_structure.js"></script>
 <script src="js/filters.js?1001"></script>
 <!-- <script src="js/services.js?1001"></script> -->
 <script src="js/directives.js"></script>

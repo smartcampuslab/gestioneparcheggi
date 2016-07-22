@@ -7,7 +7,7 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'sharedDataService', 
 	
 	this.showLog = false;
 	
-	// Areas get method
+	// PS get method
     this.getAreasFromDb = function(showArea){
 		var allAreas = [];
 		var method = 'GET';
@@ -34,35 +34,52 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'sharedDataService', 
 	};
 	
 	// Area update method
-	this.updateAreaInDb = function(area, color, zone0, zone1, zone2, zone3, zone4, editPaths){
+	this.updateAreaInDb = function(area, color, zone0, zone1, zone2, zone3, zone4, editPaths, type){
 		var validityPeriod = [];
-		for(var i = 0; i < area.validityPeriod.length; i++){
-			var corrPeriod = {
-				from: area.validityPeriod[i].from,
-				to: area.validityPeriod[i].to,
-				weekDays: area.validityPeriod[i].weekDays,
-				timeSlot: area.validityPeriod[i].timeSlot,
-				rateValue: area.validityPeriod[i].rateValue,
-				holiday: area.validityPeriod[i].holiday,
-				note: area.validityPeriod[i].note
-			};
-			validityPeriod.push(corrPeriod);
+		if(type == 0){
+			for(var i = 0; i < area.validityPeriod.length; i++){
+				var corrPeriod = {
+					from: area.validityPeriod[i].from,
+					to: area.validityPeriod[i].to,
+					weekDays: area.validityPeriod[i].weekDays,
+					timeSlot: area.validityPeriod[i].timeSlot,
+					rateValue: area.validityPeriod[i].rateValue,
+					holiday: area.validityPeriod[i].holiday,
+					note: area.validityPeriod[i].note
+				};
+				validityPeriod.push(corrPeriod);
+			}
 		}
 			
 		var id = area.id;
 		var appId = sharedDataService.getConfAppId();
 		var method = 'PUT';
-		var data = {
-			id: area.id,
-			id_app: area.id_app,
-			name: area.name,
-			validityPeriod: validityPeriod,
-			smsCode: area.smsCode,
-			color: color.substring(1, color.length),
-			note: area.note,
-			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			geometry: gMapService.correctMyGeometryPolygonForArea(editPaths)
-		};
+		var data = {};
+		if(type == 0){
+			data = {
+				id: area.id,
+				id_app: area.id_app,
+				name: area.name,
+				validityPeriod: validityPeriod,
+				smsCode: area.smsCode,
+				color: color.substring(1, color.length),
+				note: area.note,
+				zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
+				geometry: gMapService.correctMyGeometryPolygonForArea(editPaths)
+			};
+		} else {
+			data = {
+				id: area.id,
+				id_app: area.id_app,
+				name: area.name,
+				validityPeriod: area.validityPeriod,
+				smsCode: area.smsCode,
+				color: area.color,
+				note: area.note,
+				zones: area.zones,
+				geometry: area.geometry
+			};
+		}
 			
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Area data : " + value);

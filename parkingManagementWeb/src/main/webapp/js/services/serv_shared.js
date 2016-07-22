@@ -1267,7 +1267,7 @@ pm.service('sharedDataService', function(){
 	};
 	
 	// correctMyZones: used to correct the zone object with all the necessary data
-	this.correctMyZones = function(zones){
+	/*this.correctMyZones = function(zones){
 		var correctedZones = [];
 		for(var i = 0; i < zones.length; i++){
 			var sub = (zones[i].submacro) ? zones[i].submacro : ((zones[i].submicro) ? zones[i].submicro : null);
@@ -1292,7 +1292,7 @@ pm.service('sharedDataService', function(){
 			correctedZones.push(correctZone);
 		}
 		return correctedZones;
-	};
+	};*/
 	
 	this.correctMyPmsForStreet = function(pms){
 		var correctedPms = [];
@@ -1318,6 +1318,96 @@ pm.service('sharedDataService', function(){
 			allAreaFilter.splice(0,0,{id:'', name: "Tutte"});
 		}
 		return allAreaFilter;
+	};
+	
+	this.cash_mode = "CASH";
+    this.automated_teller_mode = "AUTOMATED_TELLER";
+    this.prepaid_card_mode = "PREPAID_CARD";
+    this.parcometro = "PARCOMETRO";
+	
+	this.listaPagamenti = [
+	    {
+	        idObj: this.cash_mode,
+	        descrizione: "Contanti"
+	    },
+	    {
+	        idObj: this.automated_teller_mode,
+	        descrizione: "Cassa automatica"
+	    },
+	    {
+	        idObj: this.prepaid_card_mode,
+	        descrizione: "Carta prepagata"
+	    },
+	    {
+	        idObj: this.parcometro,
+	        descrizione: "Parcometro"
+	    }
+	];
+	
+	this.getListaPagamenti = function(){
+		return this.listaPagamenti;
+	};
+	
+	this.correctMyPaymentMode = function(myPm){
+		var correctedPm = [];
+		if(myPm.cash_checked){
+			correctedPm.push(this.listaPagamenti[0].idObj);
+		}
+		if(myPm.automated_teller_checked){
+			correctedPm.push(this.listaPagamenti[1].idObj);
+		}
+		if(myPm.prepaid_card_checked){
+			correctedPm.push(this.listaPagamenti[2].idObj);
+		}
+		if(myPm.parcometro_checked){
+			correctedPm.push(this.listaPagamenti[3].idObj);
+		}
+		return correctedPm;
+	};
+	
+	this.castMyPaymentModeToString = function(myPm){
+		var correctedPm = "";
+		for(var i = 0; i < myPm.length; i++){
+			var stringVal = "";
+			switch (myPm[i]){
+				case this.cash_mode : 
+					stringVal = this.listaPagamenti[0].descrizione;
+					break;
+				case this.automated_teller_mode: 
+					stringVal = this.listaPagamenti[1].descrizione;
+					break;
+				case this.prepaid_card_mode: 
+					stringVal = this.listaPagamenti[2].descrizione;
+					break;
+				case this.parcometro: 
+					stringVal = this.listaPagamenti[3].descrizione;
+					break;
+				default: break;
+			}
+			correctedPm = correctedPm + stringVal + ",";
+		}
+		correctedPm = correctedPm.substring(0, correctedPm.length-1);
+		return correctedPm;
+	};
+	
+	this.checkMyPaymentMode = function(paymentMode, myPayment){
+		for(var i = 0; i < paymentMode.length; i++){
+			switch(paymentMode[i]){
+				case this.cash_mode:
+					myPayment.cash_checked = true;
+					break;
+				case this.automated_teller_mode: 
+					myPayment.automated_teller_checked = true;
+					break;
+				case this.prepaid_card_mode: 
+					myPayment.prepaid_card_checked = true;
+					break;
+				case this.parcometro: 
+					myPayment.parcometro_checked = true;
+					break;
+			}
+		}
+		return myPayment;
 	};
 	
 	// ----- End of part for functions shared between controllers  -------------------------------------

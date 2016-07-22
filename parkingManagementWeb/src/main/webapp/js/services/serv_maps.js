@@ -176,6 +176,18 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		return corr_points;
 	};
 	
+	this.correctMyGeometry = function(geo){
+		if(geo){
+			var pos = geo.split(",");
+			return {
+				lat: pos[0].trim(),
+				lng: pos[1].trim()
+			};
+		} else {
+			return null;
+		}
+	};
+	
 	// used to correct polyline to be saved in db
 	this.correctMyGeometryPolyline = function(geo){
 		var tmpLine = {
@@ -789,7 +801,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 						for(var j = 0; j < streets.length; j++){
 							var polyline = streets[j].geometry;
 							zone = {
-								id: "mz" +	streets[j].id,	//$scope.correctObjId(zones[i].id, j),	// I try to use id of street instead of id of zone
+								id: this.correctObjId(zones[i].id, j),
 								type: "polyline",
 								path: this.correctPoints(polyline.points),
 								gpath: this.correctPointsGoogle(polyline.points),
@@ -882,18 +894,21 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		    			if(zones[i].subelements.length == 1){
 		    				if(toHideZone[zones[i].id] != null){
 		    	    			toHideZone[zones[i].id].setMap(null);
+		    	    			toHideZone[zones[i].id].visible = false;
 		    	    		}
 		    			} else {
 		    				for(var j = 0; j < zones[i].subelements.length; j++){
 		    					var myId = this.correctObjId(zones[i].id, j);
 		    					if(toHideZone[myId] != null){
 		    						toHideZone[myId].setMap(null);
+		    						toHideZone[myId].visible = false;
 					    		}
 		    				}
 		    			}
 		    		} else {
 			    		if(toHideZone[zones[i].id] != null){
 			    			toHideZone[zones[i].id].setMap(null);
+			    			toHideZone[zones[i].id].visible = false;
 			    		}
 		    		}
 	    		} else {					// case zone polygon list
@@ -901,18 +916,21 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		    			if(zones[i].data.subelements.length == 1){
 		    				if(toHideZone[zones[i].id] != null){
 		    	    			toHideZone[zones[i].id].setMap(null);
+		    	    			toHideZone[zones[i].id].visible = false;
 		    	    		}
 		    			} else {
 		    				for(var j = 0; j < zones[i].data.subelements.length; j++){
 		    					var myId = this.correctObjId(zones[i].id, j);
 		    					if(toHideZone[myId] != null){
 		    						toHideZone[myId].setMap(null);
+		    						toHideZone[myId].visible = false;
 					    		}
 		    				}
 		    			}
 		    		} else {
 			    		if(toHideZone[zones[i].id] != null){
 			    			toHideZone[zones[i].id].setMap(null);
+			    			toHideZone[zones[i].id].visible = false;
 			    		}
 		    		}
 	    		}
@@ -1582,6 +1600,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 	this.map = null;
 	this.areaPolygons = [];
 	this.streetPolylines = [];
+	this.parkingStructureMarkers = [];
 	this.allNewAreas = [];
 	this.editNewAreas = [];
     this.editGAreas = [];
@@ -1609,6 +1628,15 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 	this.setStreetPolylines = function(pol){
 		this.streetPolylines = pol;
 	};
+	
+	this.getParkingStructuresMarkers = function(){
+		return this.parkingStructureMarkers;
+	};
+	
+	this.setParkingStructuresMarkers = function(markers){
+		this.parkingStructureMarkers = markers;
+	};
+	
 	
 	this.refreshMap = function(map) {
         //optional param if you want to refresh you can pass null undefined or false or empty arg
@@ -1929,6 +1957,17 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		}
 		return correctedStreets;
 	}
+	
+	this.initAllPSObjects = function(structures){
+		var correctedStructures = [];
+		if(structures){
+			for(var i = 0; i < structures.length; i++){
+				var myPs = this.initPSObject(structures[i]);
+				correctedStructures.push(myPs);
+			}
+		}
+		return correctedStructures;
+	}
     
     // Method used to initialize the area map object when details are showed
 	this.setAreaMapDetails = function(area, type){
@@ -2031,7 +2070,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 	// Method used to initialize the zone map object when details are showed
 	this.setZoneMapDetails = function(zone, toHide, type){
 		var mySpecialZones = [];
-		if(zone.geometryFromSubelement){
+		if(zone.geometryFromSubelement && type == 0){
 			var streets = zone.subelements;//$scope.loadStreetsFromZone(zones[i].id);
 			var color = this.lightgray;
 			if(streets != null && streets.length > 0){
@@ -2067,31 +2106,53 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 			}		
 		} else {
 			if(zone.geometry != null && zone.geometry.points.length > 0){
-				if(toHide[zone.id] != null){
-					toHide[zone.id].setMap(null);
-				}
-				var myZonePol = {
-					id: zone.id,
-					type: "polygon",
-					path: this.correctPoints(zone.geometry.points),
-					gpath: this.correctPointsGoogle(zone.geometry.points),
-					stroke: {
-					    color: this.correctColor(zone.color),
-					    weight: 4,
-					    opacity: 1.0
-					},
-					data: zone,
-					info_windows_pos: this.correctPointGoogle(zone.geometry.points[1]),
-					info_windows_cod: "z" + zone.id,
-					editable: false,
-					draggable: false,
-					geodesic: false,
-					visible: true,
-					fill: {
-					    color: this.correctColor(zone.color),
-					    opacity: 0.8
+				var myZonePol;
+				if(type == 0){
+					if(toHide[zone.id] != null){
+						toHide[zone.id].setMap(null);
 					}
-				};
+					myZonePol = {
+						id: zone.id,
+						type: "polygon",
+						path: this.correctPoints(zone.geometry.points),
+						gpath: this.correctPointsGoogle(zone.geometry.points),
+						stroke: {
+						    color: this.correctColor(zone.color),
+						    weight: 4,
+						    opacity: 1.0
+						},
+						data: zone,
+						info_windows_pos: this.correctPointGoogle(zone.geometry.points[1]),
+						info_windows_cod: "z" + zone.id,
+						editable: false,
+						draggable: false,
+						geodesic: false,
+						visible: true,
+						fill: {
+						    color: this.correctColor(zone.color),
+						    opacity: 0.8
+						}
+					};
+				} else {
+					var poligons = zone.geometry;
+					myZonePol = {
+						id: zone.id,
+						path: this.correctPoints(poligons.points),
+						gpath: this.correctPointsGoogle(poligons.points),
+						stroke: {
+						    color: this.correctColor(zone.color),
+						    weight: 3
+						},
+						geodesic: false,
+						editable: true,
+						draggable: true,
+						visible: true,
+						fill: {
+						    color: this.correctColor(zone.color),
+						    opacity: 0.4
+						}
+					};
+				}
 				mySpecialZones.push(myZonePol);
 			}			
 		}
@@ -2201,6 +2262,85 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		}
 		return mySpecialStreets;
 	};
+	
+	// Method used to initialize the parkingStructure map object when details are showed
+	this.setParkingStructureMapDetails = function(parkingStructure, type){
+		var mySpecialPSMarkers = [];
+		if(type == 0){
+			// zone init
+			var myZones0 = [];
+			var myZones1 = [];
+			var myZones2 = [];
+			var myZones3 = [];
+			var myZones4 = [];
+			if(parkingStructure.zones){
+				for(var i = 0; i < parkingStructure.zones.length; i++){
+					var z0 = this.getLocalZoneById(parkingStructure.zones[i], 1, 0);
+					var z1 = this.getLocalZoneById(parkingStructure.zones[i], 1, 1);
+					var z2 = this.getLocalZoneById(parkingStructure.zones[i], 1, 2);
+					var z3 = this.getLocalZoneById(parkingStructure.zones[i], 1, 3);
+					var z4 = this.getLocalZoneById(parkingStructure.zones[i], 1, 4);
+					if(z0){
+						myZones0.push(this.addLabelToZoneObject(z0));
+					} else if(z1){
+						myZones1.push(this.addLabelToZoneObject(z1));
+					} else if(z2){
+						myZones2.push(this.addLabelToZoneObject(z2));
+					} else if(z3){
+						myZones3.push(this.addLabelToZoneObject(z3));
+					} else if(z4){
+						myZones4.push(this.addLabelToZoneObject(z4));
+					}
+				}
+			}
+		}
+		var mySpecialPSMarker = {};
+		if(type == 0){
+			mySpecialPSMarker = {
+				id: 0,
+				coords: {
+					latitude: parkingStructure.geometry.lat,
+					longitude: parkingStructure.geometry.lng
+				},
+				position: parkingStructure.geometry.lat + "," + parkingStructure.geometry.lng,
+				data: parkingStructure,
+				
+				visible: true,
+				options: { 
+					draggable: false,
+					animation: 	""  //1 "BOUNCE"
+				},
+				zones0: myZones0,
+				zones1: myZones1,
+				zones2: myZones2,
+				zones3: myZones3,
+				zones4: myZones4,
+				icon: this.useSelectedIcon(this.psMarkerIcon)
+			};
+		} else {
+			mySpecialPSMarker = {
+				id: 0,
+				coords: {
+					latitude: parkingStructure.geometry.lat,
+					longitude: parkingStructure.geometry.lng
+				},
+				pos:parkingStructure.geometry.lat + "," + parkingStructure.geometry.lng,
+				options: { 
+					draggable: true
+				},
+				icon: this.psMarkerIcon
+			};
+		}
+		mySpecialPSMarkers.push(mySpecialPSMarker);
+		return mySpecialPSMarkers;
+	};
+	
+	this.useSelectedIcon = function(icon){
+		if(icon.indexOf("_outline") > -1){
+			icon = icon.substring(0, icon.length - 12);
+		}
+		return icon + ".png";
+	};	
 	
 	// ----------------------------------------------------------------------------------------------------------------------
 	
