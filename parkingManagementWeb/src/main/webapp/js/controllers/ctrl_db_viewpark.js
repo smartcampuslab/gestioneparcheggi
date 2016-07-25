@@ -3093,7 +3093,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myStreets;
 	};
 	
-	$scope.initPMObjects = function(pmeters){
+	/*$scope.initPMObjects = function(pmeters){
 		var myPms = [];
 		for(var i = 0; i < pmeters.length; i++){
 			var area = sharedDataService.getLocalAreaById(pmeters[i].areaId);
@@ -3136,7 +3136,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			myPms.push(myPmeter);
 		}
 		return myPms;
-	};
+	};*/
 	
 	$scope.initPMObjectsLight = function(pmeters){
 		var myPms = [];
@@ -4652,7 +4652,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.theme = theme;	// used in close details panel
 		switch(type){
 			case 1:
-				object = gMapService.initPMObject(object);	//MB_lightWS
+				object = gMapService.initPMObject(object, 0);	//MB_lightWS
 				//------ To be configured in external conf file!!!!!------
 				var company = "tm";
 				/*var appId = sharedDataService.getConfAppId();
@@ -5225,7 +5225,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var pmObj = {
 					data : object	
 				};
-				$scope.pmDetails = gMapService.initPMObject(pmObj).data;
+				$scope.pmDetails = gMapService.initPMObject(pmObj, 0).data;
 				break;
 			case 2:
 				$scope.showPSDet();
@@ -5269,7 +5269,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var pmObj = {
 					data : object	
 				};
-				$scope.pmDetails = gMapService.initPMObject(pmObj).data;
+				$scope.pmDetails = gMapService.initPMObject(pmObj, 0).data;
 				break;
 			case 2:
 				$scope.showPSDet();
@@ -5376,7 +5376,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var pmObj = {
 					data : object	
 				};
-				$scope.pmDetails = gMapService.initPMObject(pmObj).data;
+				$scope.pmDetails = gMapService.initPMObject(pmObj, 0).data;
 				break;
 			case 2:
 				$scope.showPSDet();
@@ -5425,7 +5425,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var pmObj = {
 					data : object	
 				};
-				$scope.pmDetails = gMapService.initPMObject(pmObj).data;
+				$scope.pmDetails = gMapService.initPMObject(pmObj,0).data;
 				// To show the historycal data
 			    $scope.showReportCompare("1", "2", 1, 2);	// 1 = parking meters, 2 = profit
 				break;

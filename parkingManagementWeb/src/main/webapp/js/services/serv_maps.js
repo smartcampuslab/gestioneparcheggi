@@ -24,8 +24,9 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 	this.violet = "#8904B1";
 	this.blue = "#383BEE";
 	
+	this.pmMarkerIcon = "imgs/parkingMeterIcons/parcometro_general.png";			// icon for parkingMeter object
 	this.psMarkerIcon = "imgs/structIcons/parking_structures_general_outline.png";	// icon for parkingStructure object
-	this.bpMarkerIcon = "imgs/markerIcons/puntobici.png";							// icon for bikePoint object
+	this.bpMarkerIcon = "imgs/bikeIcons/bicicle_outline.png";						// icon for bikePoint object
 	
 	this.getPsMarkerIcon = function(){
 		return this.psMarkerIcon;
@@ -1290,22 +1291,22 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
     	return myMarkers;
     };
     
-    // Method initPMObject: used to init a pm object with all the related object data
-	this.initPMObject = function(pmeter){
-		var area = sharedDataService.getLocalAreaById(pmeter.data.areaId);
+    // Method initBPObject: used to init a bp object with all the related object data
+    this.initBPObject = function(bp){
+		var myBp = {};
 		var zones0 = [];
 		var zones1 = [];
 		var zones2 = [];
 		var zones3 = [];
 		var zones4 = [];
 		// zone init
-		if(pmeter.zones){
-			for(var j = 0; j < pmeter.data.zones.length; j++){
-				var z0 = this.getLocalZoneById(pmeter.data.zones[j], 2, 0);
-				var z1 = this.getLocalZoneById(pmeter.data.zones[j], 2, 1);
-				var z2 = this.getLocalZoneById(pmeter.data.zones[j], 2, 2);
-				var z3 = this.getLocalZoneById(pmeter.data.zones[j], 2, 3);
-				var z4 = this.getLocalZoneById(pmeter.data.zones[j], 2, 4);
+		if(bp.zones){
+			for(var j = 0; j < bp.zones.length; j++){
+				var z0 = this.getLocalZoneById(bp.zones[j], 2, 0);
+				var z1 = this.getLocalZoneById(bp.zones[j], 2, 1);
+				var z2 = this.getLocalZoneById(bp.zones[j], 2, 2);
+				var z3 = this.getLocalZoneById(bp.zones[j], 2, 3);
+				var z4 = this.getLocalZoneById(bp.zones[j], 2, 4);
 				if(z0 != null){
 					zones0.push(this.addLabelToZoneObject(z0));
 				} else if(z1 != null){
@@ -1319,15 +1320,61 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 				}
 			}
 		}
-		pmeter.myStatus = (pmeter.data.status == 'ACTIVE')?"ON-ACTIVE":"OFF-INACTIVE";
-		pmeter.data.area_name = area.name,
-		pmeter.data.area_color= area.color;
-		pmeter.data.area = area;
-		pmeter.data.myZones0 = zones0;
-		pmeter.data.myZones1 = zones1;
-		pmeter.data.myZones2 = zones2;
-		pmeter.data.myZones3 = zones3;
-		pmeter.data.myZones4 = zones4;
+		var myBp = bp;
+		myBp.zones0 = zones0;
+		myBp.zones1 = zones1;
+		myBp.zones2 = zones2;
+		myBp.zones3 = zones3;
+		myBp.zones4 = zones4;
+		return myBp;
+	};
+    
+    // Method initPMObject: used to init a pm object with all the related object data
+	this.initPMObject = function(pmeter, type){
+		var pMeter = {};
+		if(type == 0){
+			pMeter = pmeter.data;
+		} else {
+			pMeter = pmeter;
+		}
+		var area = sharedDataService.getLocalAreaById(pMeter.areaId);
+		var zones0 = [];
+		var zones1 = [];
+		var zones2 = [];
+		var zones3 = [];
+		var zones4 = [];
+		// zone init
+		if(pmeter.zones){
+			for(var j = 0; j < pMeter.zones.length; j++){
+				var z0 = this.getLocalZoneById(pMeter.zones[j], 2, 0);
+				var z1 = this.getLocalZoneById(pMeter.zones[j], 2, 1);
+				var z2 = this.getLocalZoneById(pMeter.zones[j], 2, 2);
+				var z3 = this.getLocalZoneById(pMeter.zones[j], 2, 3);
+				var z4 = this.getLocalZoneById(pMeter.zones[j], 2, 4);
+				if(z0 != null){
+					zones0.push(this.addLabelToZoneObject(z0));
+				} else if(z1 != null){
+					zones1.push(this.addLabelToZoneObject(z1));
+				} else if(z2 != null){
+					zones2.push(this.addLabelToZoneObject(z2));
+				} else if(z3 != null){
+					zones3.push(this.addLabelToZoneObject(z3));
+				} else if(z4 != null){
+					zones4.push(this.addLabelToZoneObject(z4));
+				}
+			}
+		}
+		pmeter.myStatus = (pMeter.status == 'ACTIVE')?"ON-ACTIVE":"OFF-INACTIVE";
+		if(type == 0){
+			pmeter.data.area_name = area.name,
+			pmeter.data.area_color= area.color;
+			pmeter.data.area = area;
+			pmeter.data.myZones0 = zones0;
+			pmeter.data.myZones1 = zones1;
+			pmeter.data.myZones2 = zones2;
+			pmeter.data.myZones3 = zones3;
+			pmeter.data.myZones4 = zones4;
+		}
 		// To align with old management
 		pmeter.area = area;
 		pmeter.zones0 = zones0;
@@ -1366,11 +1413,12 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 				}
 			}
 		}
-		ps.myZones0 = zones0;
-		ps.myZones1 = zones1;
-		ps.myZones2 = zones2;
-		ps.myZones3 = zones3;
-		ps.myZones4 = zones4;
+		ps.zones0 = zones0;
+		ps.zones1 = zones1;
+		ps.zones2 = zones2;
+		ps.zones3 = zones3;
+		ps.zones4 = zones4;
+		//ps.myPaymentMode = sharedDataService.castMyPaymentModeToString(ps.paymentMode);	// to cast paymentMode to a list of strigs
 		return ps;
 	};
 	
@@ -1601,6 +1649,8 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 	this.areaPolygons = [];
 	this.streetPolylines = [];
 	this.parkingStructureMarkers = [];
+	this.parkingMeterMarkers = [];
+	this.bikePointMarkers = [];
 	this.allNewAreas = [];
 	this.editNewAreas = [];
     this.editGAreas = [];
@@ -1637,6 +1687,21 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		this.parkingStructureMarkers = markers;
 	};
 	
+	this.getParkingMetersMarkers = function(){
+		return this.parkingMeterMarkers;
+	};
+	
+	this.setParkingMetersMarkers = function(markers){
+		this.parkingMeterMarkers = markers;
+	};
+	
+	this.getBikePointsMarkers = function(markers){
+		return this.bikePointMarkers;
+	}
+	
+	this.setBikePointsMarkers = function(markers){
+		this.bikePointMarkers = markers;
+	}
 	
 	this.refreshMap = function(map) {
         //optional param if you want to refresh you can pass null undefined or false or empty arg
@@ -1969,6 +2034,28 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		return correctedStructures;
 	}
     
+	this.initAllPMObjects = function(parkingMeters){
+		var correctedParkingMeters = [];
+		if(parkingMeters){
+			for(var i = 0; i < parkingMeters.length; i++){
+				var myPs = this.initPMObject(parkingMeters[i], 1);
+				correctedParkingMeters.push(myPs);
+			}
+		}
+		return correctedParkingMeters;
+	}
+	
+	this.initAllBPObjects = function(bikePoints){
+		var correctedBikePointMeters = [];
+		if(bikePoints){
+			for(var i = 0; i < bikePoints.length; i++){
+				var myPs = this.initBPObject(bikePoints[i]);
+				correctedBikePointMeters.push(myPs);
+			}
+		}
+		return correctedBikePointMeters;
+	}
+	
     // Method used to initialize the area map object when details are showed
 	this.setAreaMapDetails = function(area, type){
 		var mySpecialAreas = [];
@@ -2333,6 +2420,153 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		}
 		mySpecialPSMarkers.push(mySpecialPSMarker);
 		return mySpecialPSMarkers;
+	};
+	
+	// Method used to initialize the parkingStructure map object when details are showed
+	this.setParkingMeterMapDetails = function(parkingMeter, type){
+		var company = "tm";
+		var baseUrl = "rest/nosec";
+		var myAreaP = sharedDataService.getLocalAreaById(parkingMeter.areaId);
+		
+		var mySpecialPMMarkers = [];
+		if(type == 0){
+			// zone init
+			var myZones0 = [];
+			var myZones1 = [];
+			var myZones2 = [];
+			var myZones3 = [];
+			var myZones4 = [];
+			if(parkingMeter.zones){
+				for(var i = 0; i < parkingMeter.zones.length; i++){
+					var z0 = this.getLocalZoneById(parkingMeter.zones[i], 1, 0);
+					var z1 = this.getLocalZoneById(parkingMeter.zones[i], 1, 1);
+					var z2 = this.getLocalZoneById(parkingMeter.zones[i], 1, 2);
+					var z3 = this.getLocalZoneById(parkingMeter.zones[i], 1, 3);
+					var z4 = this.getLocalZoneById(parkingMeter.zones[i], 1, 4);
+					if(z0){
+						myZones0.push(this.addLabelToZoneObject(z0));
+					} else if(z1){
+						myZones1.push(this.addLabelToZoneObject(z1));
+					} else if(z2){
+						myZones2.push(this.addLabelToZoneObject(z2));
+					} else if(z3){
+						myZones3.push(this.addLabelToZoneObject(z3));
+					} else if(z4){
+						myZones4.push(this.addLabelToZoneObject(z4));
+					}
+				}
+			}
+		}
+		var mySpecialPMMarker = {};
+		if(type == 0){
+			mySpecialPMMarker = {
+				id: 0,
+				coords: {
+					latitude: parkingMeter.geometry.lat,
+					longitude: parkingMeter.geometry.lng
+				},
+				position: parkingMeter.geometry.lat + "," + parkingMeter.geometry.lng,
+				data: parkingMeter,
+				area: myAreaP,
+				visible:true,
+				options: { 
+					draggable: false,
+					animation: ""	//1 "BOUNCE"
+				},
+				zones0: myZones0,
+				zones1: myZones1,
+				zones2: myZones2,
+				zones3: myZones3,
+				zones4: myZones4,
+				icon: baseUrl+'/marker/'+company+'/parcometroneg/'+((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor)	//$scope.pmMarkerIcon
+			};
+		} else {
+			mySpecialPMMarker = {
+				id: 0,
+				coords: {
+					latitude: parkingMeter.geometry.lat,
+					longitude: parkingMeter.geometry.lng
+				},
+				pos:parkingMeter.geometry.lat + "," + parkingMeter.geometry.lng,
+				options: { 
+					draggable: true
+				},
+				icon: this.pmMarkerIcon
+			};
+		}
+		mySpecialPMMarkers.push(mySpecialPMMarker);
+		return mySpecialPMMarkers;
+	};
+	
+	// Method used to initialize the parkingStructure map object when details are showed
+	this.setBikePointMapDetails = function(bikePoint, type){
+		var mySpecialBPMarkers = [];
+		if(type == 0){
+			// zone init
+			var myZones0 = [];
+			var myZones1 = [];
+			var myZones2 = [];
+			var myZones3 = [];
+			var myZones4 = [];
+			if(bikePoint.zones){
+				for(var i = 0; i < bikePoint.zones.length; i++){
+					var z0 = this.getLocalZoneById(bikePoint.zones[i], 1, 0);
+					var z1 = this.getLocalZoneById(bikePoint.zones[i], 1, 1);
+					var z2 = this.getLocalZoneById(bikePoint.zones[i], 1, 2);
+					var z3 = this.getLocalZoneById(bikePoint.zones[i], 1, 3);
+					var z4 = this.getLocalZoneById(bikePoint.zones[i], 1, 4);
+					if(z0){
+						myZones0.push(this.addLabelToZoneObject(z0));
+					} else if(z1){
+						myZones1.push(this.addLabelToZoneObject(z1));
+					} else if(z2){
+						myZones2.push(this.addLabelToZoneObject(z2));
+					} else if(z3){
+						myZones3.push(this.addLabelToZoneObject(z3));
+					} else if(z4){
+						myZones4.push(this.addLabelToZoneObject(z4));
+					}
+				}
+			}
+		}
+		var mySpecialBPMarker = {};
+		if(type == 0){
+			mySpecialBPMarker = {
+				id: bikePoint.id,
+				coords: {
+					latitude: bikePoint.geometry.lat,
+					longitude: bikePoint.geometry.lng
+				},
+				pos: bikePoint.geometry.lat + "," + bikePoint.geometry.lng,
+				data: bikePoint,
+				visible: true,
+				options: { 
+					draggable: false,
+					animation: ""	//1 "BOUNCE"
+				},
+				zones0: myZones0,
+				zones1: myZones1,
+				zones2: myZones2,
+				zones3: myZones3,
+				zones4: myZones4,
+				icon: this.useSelectedIcon(this.bpMarkerIcon)
+			};
+		} else {
+			mySpecialBPMarker = {
+				id: 0,
+				coords: {
+					latitude: bikePoint.geometry.lat,
+					longitude: bikePoint.geometry.lng
+				},
+				pos: bikePoint.geometry.lat + "," + bikePoint.geometry.lng,
+				options: { 
+					draggable: true
+				},
+				icon: this.bpMarkerIcon
+			};
+		}
+		mySpecialBPMarkers.push(mySpecialBPMarker);
+		return mySpecialBPMarkers;
 	};
 	
 	this.useSelectedIcon = function(icon){

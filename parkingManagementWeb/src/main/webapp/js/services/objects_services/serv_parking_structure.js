@@ -29,7 +29,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	
 	// PS update method
-	this.updateParkingStructuresInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type){
+	this.updateParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type){
 		var validityPeriod = [];
 		var id = ps.id;
 		var appId = sharedDataService.getConfAppId();
@@ -48,9 +48,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 				};
 				validityPeriod.push(corrPeriod);
 			}
-		
 			var totalStructSlots = sharedDataService.initIfNull(ps.payingSlotNumber) + sharedDataService.initIfNull(ps.handicappedSlotNumber); // + sharedDataService.initIfNull(ps.unusuableSlotNumber);
-		
 			data = {
 				id: ps.id,
 				id_app: ps.id_app,
@@ -66,7 +64,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 				handicappedSlotNumber: ps.handicappedSlotNumber,
 				unusuableSlotNumber: ps.unusuableSlotNumber,
 				geometry: gMapService.correctMyGeometry(geo),
-				zones: gMapService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
+				zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 				parkAndRide: ps.parkAndRide
 			};
 		} else {
@@ -91,7 +89,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 		}
 		
 	    var value = JSON.stringify(data);
-	    if(this.showLog) console.log("Parkingmeter data : " + value);
+	    if(this.showLog) console.log("ParkingStructure data : " + value);
 		
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + id, null, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
@@ -100,53 +98,63 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	    return myDataPromise;
 	}; 
 	
-	// Area create method
-	this.createAreaInDb = function(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths){
+	// PS create method
+	this.createParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo){
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		
 		var validityPeriod = [];
-		for(var i = 0; i < area.validityPeriod.length; i++){
+		for(var i = 0; i < ps.validityPeriod.length; i++){
 			var corrPeriod = {
-				from: area.validityPeriod[i].from,
-				to: area.validityPeriod[i].to,
-				weekDays: area.validityPeriod[i].weekDays,
-				timeSlot: area.validityPeriod[i].timeSlot,
-				rateValue: area.validityPeriod[i].rateValue,
-				holiday: area.validityPeriod[i].holiday,
-				note: area.validityPeriod[i].note
+				from: ps.validityPeriod[i].from,
+				to: ps.validityPeriod[i].to,
+				weekDays: ps.validityPeriod[i].weekDays,
+				timeSlot: ps.validityPeriod[i].timeSlot,
+				rateValue: ps.validityPeriod[i].rateValue,
+				holiday: ps.validityPeriod[i].holiday,
+				note: ps.validityPeriod[i].note
 			};
 			validityPeriod.push(corrPeriod);
 		}
 		
+		var totalStructSlots = sharedDataService.initIfNull(ps.payingSlotNumber) + sharedDataService.initIfNull(ps.handicappedSlotNumber);// + sharedDataService.initIfNull(ps.unusuableSlotNumber);
+		var method = 'POST';
+		var appId = sharedDataService.getConfAppId();
 		var data = {
-			id_app: area.id_app,
-			name: area.name,
+			id_app: appId,
+			name: ps.name,
+			streetReference: ps.streetReference,
 			validityPeriod: validityPeriod,
-			smsCode: area.smsCode,
-			color: myColor.substring(1, myColor.length),	// I have to remove '#' char
-			note: area.note,
+			managementMode: ps.managementMode,
+			manager: ps.manager,
+			phoneNumber: ps.phoneNumber,
+			paymentMode: sharedDataService.correctMyPaymentMode(paymode),
+			slotNumber: totalStructSlots,
+			payingSlotNumber: ps.payingSlotNumber,
+			handicappedSlotNumber: ps.handicappedSlotNumber,
+			unusuableSlotNumber: ps.unusuableSlotNumber,
+			geometry: gMapService.correctMyGeometry(geo),
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			geometry: gMapService.correctMyGeometryPolygonForArea(createdPaths)
+			parkAndRide: ps.parkAndRide
 		};
 		
 	    var value = JSON.stringify(data);
-	    if(this.showLog) console.log("Area data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), value);
+	    if(this.showLogDates) console.log("ParkingStructure data : " + value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure", null, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
-	    	console.log("Created area: " + result.name);
+	    	console.log("Created parkingStructure: " + result.name);
 	    });
 	    return myDataPromise;
 	};
 	
-	// Area delete method
-	this.deleteAreaInDb = function(area){
+	// PS delete method
+	this.deleteParkingStructureInDb = function(ps){
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		
-		var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + area.id , null, sharedDataService.getAuthHeaders(), null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + ps.id, null, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
-	    	console.log("Deleted area: " +area.name);
+	    	console.log("Deleted struct: " + ps.name);
 	    });
 	    return myDataPromise;
 	};

@@ -47,6 +47,7 @@ pm.service('sharedDataService', function(){
 	this.sharedLocalZones4 = [];
 	this.sharedLocalMicroZones = [];
 	this.sharedLocalPms = [];
+	this.sharedLocalBps = [];
 	
 	this.allFamilyUpdated = false;
 	this.isTest = false;
@@ -704,16 +705,7 @@ pm.service('sharedDataService', function(){
 	
 	this.setSharedLocalZones4 = function(list){
 		this.sharedLocalZones4 = list;
-	};	
-	
-	// MicroZones
-/*	this.getSharedLocalMicroZones = function(){
-		return this.sharedLocalMicroZones;
 	};
-	
-	this.setSharedLocalMicroZones = function(list){
-		this.sharedLocalMicroZones = list;
-	};*/
 	
 	this.getSharedLocalPms = function(){
 		return this.sharedLocalPms;
@@ -721,6 +713,14 @@ pm.service('sharedDataService', function(){
 	
 	this.setSharedLocalPms = function(list){
 		this.sharedLocalPms = list;
+	};
+	
+	this.getSharedLocalBps = function(){
+		return this.sharedLocalBps;
+	};
+	
+	this.setSharedLocalBps = function(list){
+		this.sharedLocalBps = list;
 	};
 	
 	
