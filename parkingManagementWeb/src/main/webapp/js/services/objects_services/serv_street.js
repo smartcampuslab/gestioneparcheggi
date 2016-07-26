@@ -2,8 +2,8 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService', 'gMapService',
-                 function($rootScope, invokeWSService, sharedDataService, gMapService){
+pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService', 'invokeWSServiceNS', 'gMapService',
+                 function($rootScope, invokeWSService, sharedDataService, invokeWSServiceNS, gMapService){
 	
 	this.showLog = false;
 	
@@ -20,73 +20,73 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	    return myDataPromise;
 	};
 	
+	// Streets get method without security
+    this.getStreetsFromDbNS = function(showStreets){
+		var allStreet = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/street", null, sharedDataService.getAuthHeaders(), null);
+	    myDataPromise.then(function(allStreet){
+	    	gMapService.setOccupancyStreet(allStreet);
+	    });
+	    return myDataPromise;
+	};
+	
 	// Street update method
-	this.updateStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, editPolyline){
+	this.updateStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, editPolyline, type){
 		var calculatedTotSlots = sharedDataService.initIfNull(street.handicappedSlotNumber) + sharedDataService.initIfNull(street.reservedSlotNumber) + sharedDataService.initIfNull(street.paidSlotNumber) + sharedDataService.initIfNull(street.timedParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotSignNumber) + sharedDataService.initIfNull(street.unusuableSlotNumber);
 		var id = street.id;
 		var appId = sharedDataService.getConfAppId();
 		var method = 'PUT';
 		
-		var data = {
-			id: street.id,
-			id_app: street.id_app,
-			streetReference: street.streetReference,
-			slotNumber: calculatedTotSlots,
-			handicappedSlotNumber: street.handicappedSlotNumber,
-			reservedSlotNumber: street.reservedSlotNumber,
-			timedParkSlotNumber:street.timedParkSlotNumber,
-			paidSlotNumber: street.paidSlotNumber,
-			freeParkSlotNumber: street.freeParkSlotNumber,
-			freeParkSlotSignNumber: street.freeParkSlotSignNumber,
-			unusuableSlotNumber: street.unusuableSlotNumber,
-			subscritionAllowedPark: street.subscritionAllowedPark,
-			color: area.color,
-			rateAreaId: area.id,
-			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			parkingMeters: sharedDataService.correctMyPmsForStreet(pms),
-			geometry: gMapService.correctMyGeometryPolyline(editPolyline)
-		};
+		var data = {};
+		if(type == 0){
+			data = {
+				id: street.id,
+				id_app: street.id_app,
+				streetReference: street.streetReference,
+				slotNumber: calculatedTotSlots,
+				handicappedSlotNumber: street.handicappedSlotNumber,
+				reservedSlotNumber: street.reservedSlotNumber,
+				timedParkSlotNumber:street.timedParkSlotNumber,
+				paidSlotNumber: street.paidSlotNumber,
+				freeParkSlotNumber: street.freeParkSlotNumber,
+				freeParkSlotSignNumber: street.freeParkSlotSignNumber,
+				unusuableSlotNumber: street.unusuableSlotNumber,
+				subscritionAllowedPark: street.subscritionAllowedPark,
+				color: area.color,
+				rateAreaId: area.id,
+				zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
+				parkingMeters: sharedDataService.correctMyPmsForStreet(pms),
+				geometry: gMapService.correctMyGeometryPolyline(editPolyline)
+			};
+		} else {
+			data = {
+				id: street.id,
+				id_app: street.id_app,
+				streetReference: street.streetReference,
+				slotNumber: street.slotNumber,
+				handicappedSlotNumber: street.handicappedSlotNumber,
+				reservedSlotNumber: street.reservedSlotNumber,
+				timedParkSlotNumber:street.timedParkSlotNumber,
+				paidSlotNumber: street.paidSlotNumber,
+				freeParkSlotNumber: street.freeParkSlotNumber,
+				freeParkSlotSignNumber: street.freeParkSlotSignNumber,
+				unusuableSlotNumber: street.unusuableSlotNumber,
+				subscritionAllowedPark: street.subscritionAllowedPark,
+				color: street.color,
+				rateAreaId: street.rateAreaId,
+				zones: street.zones,
+				parkingMeters: street.parkingMeters,
+				geometry: street.geometry
+			};
+		}
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Street data : " + value);
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated street: " + result.streetReference);
-	    });
-	    return myDataPromise;
-	};
-	
-	// Used to update street relations with zones/parkingmeters
-	this.updateStreetRelations = function(street){
-		var id = street.id;
-		var appId = sharedDataService.getConfAppId();
-		var method = 'PUT';
-		
-		var data = {
-			id: street.id,
-			id_app: street.id_app,
-			streetReference: street.streetReference,
-			slotNumber: street.slotNumber,
-			handicappedSlotNumber: street.handicappedSlotNumber,
-			reservedSlotNumber: street.reservedSlotNumber,
-			timedParkSlotNumber:street.timedParkSlotNumber,
-			paidSlotNumber: street.paidSlotNumber,
-			freeParkSlotNumber: street.freeParkSlotNumber,
-			freeParkSlotSignNumber: street.freeParkSlotSignNumber,
-			unusuableSlotNumber: street.unusuableSlotNumber,
-			subscritionAllowedPark: street.subscritionAllowedPark,
-			color: street.color,
-			rateAreaId: street.rateAreaId,
-			zones: street.zones,
-			parkingMeters: street.parkingMeters,
-			geometry: street.geometry
-		};
-		
-	    var value = JSON.stringify(data);
-	    if(this.showLog) console.log("Street data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, sharedDataService.getAuthHeaders(), value);
-	    myDataPromise.then(function(result){
-	    	console.log("Updated street: " + result.streetReference);	
 	    });
 	    return myDataPromise;
 	};

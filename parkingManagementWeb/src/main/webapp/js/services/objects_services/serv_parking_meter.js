@@ -2,8 +2,8 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataService', 'gMapService',
-                 function($rootScope, invokeWSService, sharedDataService, gMapService){
+pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataService', 'invokeWSServiceNS', 'gMapService',
+                 function($rootScope, invokeWSService, sharedDataService, invokeWSServiceNS, gMapService){
 	
 	this.showLog = false;
 	
@@ -27,9 +27,29 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	    return myDataPromise;
 	};
 	
+	// PM get method without security
+    this.getParkingMetersFromDbNS = function(showPm){
+		var markers = [];
+		var allPmeters = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingmeter", null, sharedDataService.getAuthHeaders(), null);
+	    myDataPromise.then(function(allPmeters){
+	    	allPmeters = gMapService.initAllPMObjects(allPmeters);	// The only solution found to retrieve all data;
+	    	sharedDataService.setSharedLocalPms(allPmeters);
+	    	if(showPm){
+	    		for (var i = 0; i <  allPmeters.length; i++) {
+		    		markers.push(gMapService.createMarkers(i, allPmeters[i], 1));
+			    }
+	    		gMapService.setParkingMetersMarkers(markers);
+	    	}
+	    });
+	    return myDataPromise;
+	};
+	
 	
 	// PS update method
-	this.updatePmeter = function(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, type){
+	this.updatePmeterInDb = function(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, type){
 		var validityPeriod = [];
 		var id = pm.id;
 		var appId = sharedDataService.getConfAppId();

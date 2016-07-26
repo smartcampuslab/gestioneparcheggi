@@ -2,8 +2,8 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataService', 'gMapService',
-                 function($rootScope, invokeWSService, sharedDataService, gMapService){
+pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataService', 'invokeWSServiceNS', 'gMapService',
+                 function($rootScope, invokeWSService, sharedDataService, invokeWSServiceNS, gMapService){
 	
 	this.showLog = false;
 	
@@ -27,6 +27,25 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	    return myDataPromise;
 	};
 	
+	// PS get method without security
+    this.getParkingStructuresFromDbNS = function(showPs){
+    	var markers = [];
+    	var allPstructs = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", null, sharedDataService.getAuthHeaders(), null);
+	    myDataPromise.then(function(allPstructs){
+	    	allPstructs = gMapService.initAllPSObjects(allPstructs);	// The only solution found to retrieve all data;
+	    	if(showPs){
+	    		for (var i = 0; i <  allPstructs.length; i++) {
+		    		markers.push(gMapService.createMarkers(i, allPstructs[i], 2));
+		    		//allPstructs[i] = $scope.correctFeeData(allPstructs[i]);
+			    }
+	    		gMapService.setParkingStructuresMarkers(markers);
+	    	}
+	    });
+	    return myDataPromise;
+	};
 	
 	// PS update method
 	this.updateParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type){

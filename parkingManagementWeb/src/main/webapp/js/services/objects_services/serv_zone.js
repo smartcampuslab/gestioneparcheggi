@@ -2,8 +2,8 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService', 'gMapService',
-                    function($rootScope, invokeWSService, sharedDataService, gMapService){
+pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService', 'invokeWSServiceNS', 'gMapService',
+                    function($rootScope, invokeWSService, sharedDataService, invokeWSServiceNS, gMapService){
 	
 	this.showLog = false;
 	
@@ -13,6 +13,18 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + z_type, null, sharedDataService.getAuthHeaders(), null);
+	    myDataPromise.then(function(allZones){
+	    	
+	    });
+	    return myDataPromise;
+	};
+	
+	// Get zones from DB method
+	this.getZonesFromDbNS = function(z_type){
+		var allZones = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/zone/" + z_type, null, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allZones){
 	    	
 	    });

@@ -551,60 +551,62 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		var aColor = "";
 		var timeCost = {};
 		
-		for(var i = 0; i < areas.length; i++){
-			var areaOccupancy = 0;
-			var areaProfit = [];
-			if(type == 1){
-				aColor = this.correctColor(areas[i].color);
-			} else if(type == 2){
-				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
-				areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
-				if(areaOccupancy != -1){
-					areaOccupancy = slotsInArea[2];
+		if(areas){
+			for(var i = 0; i < areas.length; i++){
+				var areaOccupancy = 0;
+				var areaProfit = [];
+				if(type == 1){
+					aColor = this.correctColor(areas[i].color);
+				} else if(type == 2){
+					var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+					areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
+					if(areaOccupancy != -1){
+						areaOccupancy = slotsInArea[2];
+					}
+					aColor = this.getOccupancyColor(areaOccupancy);
+				} else if(type == 3){
+					areaProfit = sharedDataService.getPMsInAreaProfit(areas[i].id, this.profitParkingMeterWS);
+					aColor = this.getProfitColor(areaProfit[0]);
+				} else if(type == 4){
+					var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+					areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
+					if(areaOccupancy != -1){
+						areaOccupancy = slotsInArea[2];
+					}
+					timeCost = this.getExtratimeFromOccupancy(areaOccupancy);
+					areas[i].extratime = timeCost;
+					aColor = this.getTimeCostColor(timeCost);
 				}
-				aColor = this.getOccupancyColor(areaOccupancy);
-			} else if(type == 3){
-				areaProfit = sharedDataService.getPMsInAreaProfit(areas[i].id, this.profitParkingMeterWS);
-				aColor = this.getProfitColor(areaProfit[0]);
-			} else if(type == 4){
-				var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
-				areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
-				if(areaOccupancy != -1){
-					areaOccupancy = slotsInArea[2];
-				}
-				timeCost = this.getExtratimeFromOccupancy(areaOccupancy);
-				areas[i].extratime = timeCost;
-				aColor = this.getTimeCostColor(timeCost);
-			}
-			areas[i].profit = areaProfit[0];
-			areas[i].tickets = areaProfit[1];
-			areas[i].pmsInArea = areaProfit[2];
-			
-			if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
-				for(var j = 0; j < areas[i].geometry.length; j++){
-					poligons = areas[i].geometry;
-					area = {
-						id: this.correctAreaId(areas[i].id, j),
-						path: this.correctPoints(poligons[j].points),
-						gpath: this.correctPointsGoogle(poligons[j].points),
-						stroke: {
-						    color: aColor, //$scope.correctColor(areas[i].color),
-						    weight: 3,
-						    opacity: 0.7
-						},
-						data: areas[i],
-						info_windows_pos: this.correctPointGoogle(poligons[j].points[1]),
-						info_windows_cod: "a" + areas[i].id,
-						editable: false,
-						draggable: false,
-						geodesic: false,
-						visible: visible,
-						fill: {
-						    color: aColor, //$scope.correctColor(areas[i].color),
-						    opacity: 0.5
-						}
-					};
-					tmpAreas.push(area);
+				areas[i].profit = areaProfit[0];
+				areas[i].tickets = areaProfit[1];
+				areas[i].pmsInArea = areaProfit[2];
+				
+				if(areas[i].geometry != null && areas[i].geometry.length > 0 && areas[i].geometry[0].points.length > 0){
+					for(var j = 0; j < areas[i].geometry.length; j++){
+						poligons = areas[i].geometry;
+						area = {
+							id: this.correctAreaId(areas[i].id, j),
+							path: this.correctPoints(poligons[j].points),
+							gpath: this.correctPointsGoogle(poligons[j].points),
+							stroke: {
+							    color: aColor, //$scope.correctColor(areas[i].color),
+							    weight: 3,
+							    opacity: 0.7
+							},
+							data: areas[i],
+							info_windows_pos: this.correctPointGoogle(poligons[j].points[1]),
+							info_windows_cod: "a" + areas[i].id,
+							editable: false,
+							draggable: false,
+							geodesic: false,
+							visible: visible,
+							fill: {
+							    color: aColor, //$scope.correctColor(areas[i].color),
+							    opacity: 0.5
+							}
+						};
+						tmpAreas.push(area);
+					}
 				}
 			}
 		}
@@ -877,6 +879,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 				type: zones[i].type,
 				myType: corrType,
 				note: zones[i].note,
+				centermap : zones[i].centermap,
 				geometry: this.correctMyGeometryPolygon(zones[i].geometry),
 				geometryFromSubelement: zones[i].geometryFromSubelement,
 				subelements: sharedDataService.loadStreetsFromZone(zones[i].id, this.occupancyStreetsWS),
@@ -1081,40 +1084,42 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		var sColor = "";
 		var timeCost = {};
 		
-		for(var i = 0; i < streets.length; i++){	
-			if(!onlyData){
-				if(type == 1){
-					sColor = this.correctColor(streets[i].color);
-				} else if(type == 2){
-					sColor = this.getOccupancyColor(streets[i].occupancyRate);
-				} else if(type == 3){
-					sColor = this.getProfitColor(streets[i].profit);
-				} else if(type == 4){
-					timeCost = this.getExtratimeFromOccupancy(streets[i].occupancyRate);
-					streets[i].extratime = timeCost;
-					sColor = this.getTimeCostColor(timeCost);
-				}
-			
-				if(streets[i].geometry != null){
-					poligons = streets[i].geometry;
-					street = {
-						id: streets[i].id,
-						path: this.correctPoints(poligons.points),
-						gpath: this.correctPointsGoogle(poligons.points),
-						stroke: {
-						    color: sColor,
-						    weight: (visible) ? 3 : 0,
-						    opacity: 0.7
-						},
-						data: streets[i],
-						info_windows_pos: this.correctPointGoogle(poligons.points[1]),
-						info_windows_cod: "s" + streets[i].id,
-						editable: false,
-						draggable: false,
-						geodesic: false,
-						visible: visible
-					};
-					tmpStreets.push(street);
+		if(streets){
+			for(var i = 0; i < streets.length; i++){
+				if(!onlyData){
+					if(type == 1){
+						sColor = this.correctColor(streets[i].color);
+					} else if(type == 2){
+						sColor = this.getOccupancyColor(streets[i].occupancyRate);
+					} else if(type == 3){
+						sColor = this.getProfitColor(streets[i].profit);
+					} else if(type == 4){
+						timeCost = this.getExtratimeFromOccupancy(streets[i].occupancyRate);
+						streets[i].extratime = timeCost;
+						sColor = this.getTimeCostColor(timeCost);
+					}
+				
+					if(streets[i].geometry != null){
+						poligons = streets[i].geometry;
+						street = {
+							id: streets[i].id,
+							path: this.correctPoints(poligons.points),
+							gpath: this.correctPointsGoogle(poligons.points),
+							stroke: {
+							    color: sColor,
+							    weight: (visible) ? 3 : 0,
+							    opacity: 0.7
+							},
+							data: streets[i],
+							info_windows_pos: this.correctPointGoogle(poligons.points[1]),
+							info_windows_cod: "s" + streets[i].id,
+							editable: false,
+							draggable: false,
+							geodesic: false,
+							visible: visible
+						};
+						tmpStreets.push(street);
+					}
 				}
 			}
 		}
@@ -1237,7 +1242,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 //		return [tmpStreets, streets];
 //	}
 	
-    this.setAllMarkersMap = function(markers, map, visible, type){
+    this.setAllMarkersMap = function(markers, map, visible, type, show_only_active){
     	//------ To be configured in external conf file!!!!!------
 		var company = "tm";
 		/*var appId = sharedDataService.getConfAppId();
@@ -1252,8 +1257,16 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		//--------------------------------------------------------
 		var myAreaPm = {};
 		for(var i = 0; i < markers.length; i++){
+			var visible_state = true;
+    		if(show_only_active){
+    			if(markers[i].data.status == "ACTIVE"){
+    				visible_state = true
+    			} else {
+    				visible_state = false;
+    			}
+    		}
 			var myMarker = markers[i];
-			myMarker.options.visible = visible;
+			myMarker.options.visible = visible && visible_state;
 			myMarker.options.map = map;
     		switch(type){
 	    		case 0:

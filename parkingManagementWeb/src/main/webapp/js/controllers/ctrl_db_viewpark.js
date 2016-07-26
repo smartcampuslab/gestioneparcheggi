@@ -2,7 +2,7 @@
 
 /* Controllers */
 var pmControllers = angular.module('pmControllers');//, ['googlechart','angular-spinkit']
-pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize', 'sharedDataService', 'initializeService', 'gMapService',
+pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'localize', 'sharedDataService', 'initializeService', 'gMapService', 
                                 function($scope, $route, $rootScope, $filter, localize, sharedDataService, initializeService, gMapService) {
 	$scope.vis = 'vis_medium'; //vis_last_value
 	$scope.visOptions = ['vis_medium','vis_last_value', 'vis_medium_year', 'vis_medium_month', 'vis_medium_day'];
@@ -265,8 +265,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 
 }]);
 
-pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', 'initializeService', 'utilsService', 'gMapService', '$timeout', '$q', 
-                               function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, initializeService, utilsService, gMapService, $timeout, $q, $location, $filter) {
+pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', 'initializeService', 'utilsService', 'gMapService', 'areaService', 'zoneService', '$timeout', '$q', 
+                               function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, initializeService, utilsService, gMapService, areaService, zoneService, $timeout, $q, $location, $filter) {
 
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection
 	$scope.showLogs = false;
@@ -3313,7 +3313,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// retrieve all data Parallel: function that retrieve data in parallel way 
 	$scope.retrieveAllDataFromDBParallel = function(){
 		var isFirst = true;
-		var returnedAreas = $scope.getAreasFromDb();
+		var returnedAreas = $scope.getAllAreas();
 		returnedAreas.then(function(result){
 			sharedDataService.setSharedLocalAreas(result);
 		});
@@ -3328,34 +3328,34 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		});
 		if(showZones0){
 			var type = $scope.getCorrectZoneTypeFromId(2);
-			$scope.getZonesFromDb(type, 0);
+			$scope.getAllZones(type, 0);
 		}
 		if(showZones1){
 			var type = $scope.getCorrectZoneTypeFromId(3);
-			$scope.getZonesFromDb(type, 1);
+			$scope.getAllZones(type, 1);
 		}
 		if(showZones2){
 			var type = $scope.getCorrectZoneTypeFromId(4);
-			$scope.getZonesFromDb(type, 2);
+			$scope.getAllZones(type, 2);
 		}
 		if(showZones3){
 			var type = $scope.getCorrectZoneTypeFromId(5);
-			$scope.getZonesFromDb(type, 3);
+			$scope.getAllZones(type, 3);
 		}
 		if(showZones4){
 			var type = $scope.getCorrectZoneTypeFromId(6);
-			$scope.getZonesFromDb(type, 4);
+			$scope.getAllZones(type, 4);
 		}
 		$scope.getBikePointFromDb(isFirst);
 	};
 	
 	$scope.retrieveAllDataFromDBSerial = function(){
 		var isFirst = true;
-		var myAreaReturnData = $scope.getAreasFromDb();
+		var myAreaReturnData = $scope.getAllAreas();
 		myAreaReturnData.then(function(result){
 			if(showZones0){
 				var type = $scope.getCorrectZoneTypeFromId(2);
-				return $scope.getZonesFromDb(type, 0);
+				return $scope.getAllZones(type, 0);
 			} else {
 				var deferred = $q.defer();
 				deferred.resolve(true);
@@ -3364,7 +3364,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}).then(function(result){
 			if(showZones1){
 				var type = $scope.getCorrectZoneTypeFromId(3);
-				return $scope.getZonesFromDb(type, 1);
+				return $scope.getAllZones(type, 1);
 			} else {
 				var deferred = $q.defer();
 				deferred.resolve(true);
@@ -3373,7 +3373,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}).then(function(result){
 			if(showZones2){
 				var type = $scope.getCorrectZoneTypeFromId(4);
-				return $scope.getZonesFromDb(type, 2);
+				return $scope.getAllZones(type, 2);
 			} else {
 				var deferred = $q.defer();
 				deferred.resolve(true);
@@ -3382,7 +3382,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}).then(function(result){
 			if(showZones3){
 				var type = $scope.getCorrectZoneTypeFromId(5);
-				return $scope.getZonesFromDb(type, 3);
+				return $scope.getAllZones(type, 3);
 			} else {
 				var deferred = $q.defer();
 				deferred.resolve(true);
@@ -3391,7 +3391,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}).then(function(result){
 			if(showZones4){
 				var type = $scope.getCorrectZoneTypeFromId(6);
-				return $scope.getZonesFromDb(type, 4);
+				return $scope.getAllZones(type, 4);
 			} else {
 				var deferred = $q.defer();
 				deferred.resolve(true);
@@ -3443,7 +3443,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	// Methid getAreasFromDb: used to retrieve the rate area data form the DB
-	$scope.getAreasFromDb = function(){
+	/*$scope.getAreasFromDb = function(){
 		var allAreas = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
@@ -3457,6 +3457,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			sharedDataService.setSharedLocalAreas($scope.areaWS);
 		});
 		return myDataPromise;
+	};*/
+	
+	// Retrieve all Area Method
+    $scope.getAllAreas = function(){
+		$scope.polygons = [];
+		var promiseAreas = areaService.getAreasFromDb(showArea);
+		promiseAreas.then(function(result){
+			$scope.areaWS = result;
+			if(showArea){
+			    gMapService.initAreasOnMap($scope.areaWS, false, 1, false, true)[0];	//MB_lightWS
+			}    
+			sharedDataService.setSharedLocalAreas($scope.areaWS);
+		});
+		return promiseAreas;
 	};
 	
 	// Method correctParamsFromSemicolon: used to replace the semicolon with a comma
@@ -4422,13 +4436,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    return myDataPromise;
 	};
 	
-	$scope.getZonesFromDb = function(z_type, tindex){
+	$scope.getAllZones = function(z_type, tindex){
 		$scope.zoneMapReady = false;
+		
 		var allZones = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/zone/" + z_type, null, $scope.authHeaders, null);
-	    myDataPromise.then(function(allZones){
+		var myZonePromise = zoneService.getZonesFromDb(z_type);
+		myZonePromise.then(function(allZones){
+		//var method = 'GET';
+		//var appId = sharedDataService.getConfAppId();
+	   	//var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/zone/" + z_type, null, $scope.authHeaders, null);
+	    //myDataPromise.then(function(allZones){
 	    	//angular.copy(result, allZones);
 	    	switch(tindex){
 	    		case 0:
@@ -4474,7 +4491,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    	};
 	    	$scope.zoneMapReady = true;
 	    });
-	    return myDataPromise;
+	    return myZonePromise;
 	};
 	
 	$scope.detailsOpened = false;

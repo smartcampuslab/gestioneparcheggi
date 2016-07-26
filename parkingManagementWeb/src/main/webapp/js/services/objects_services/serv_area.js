@@ -2,17 +2,33 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('areaService',['$rootScope', 'invokeWSService', 'sharedDataService', 'gMapService',
-                 function($rootScope, invokeWSService, sharedDataService, gMapService){
+pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 'sharedDataService', 'gMapService',
+                 function($rootScope, invokeWSService, invokeWSServiceNS, sharedDataService, gMapService){
 	
 	this.showLog = false;
 	
-	// PS get method
+	// Area get method
     this.getAreasFromDb = function(showArea){
 		var allAreas = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), null);
+	    myDataPromise.then(function(allAreas){
+	    	allAreas = gMapService.initAllAreaObjects(allAreas);	// The only solution found to retrieve all data;
+	    	if(showArea){
+	    		gMapService.setAreaPolygons(gMapService.initAreasOnMap(allAreas, true, 1, false, true)[0]);
+	    	}
+	    	sharedDataService.setSharedLocalAreas(allAreas);
+	    });
+	    return myDataPromise;
+	};
+	
+	// Area get method without security
+	this.getAreasFromDbNS = function(showArea){
+		var allAreas = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allAreas){
 	    	allAreas = gMapService.initAllAreaObjects(allAreas);	// The only solution found to retrieve all data;
 	    	if(showArea){
