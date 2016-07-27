@@ -2,8 +2,8 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 'sharedDataService', 'gMapService',
-                 function($rootScope, invokeWSService, invokeWSServiceNS, sharedDataService, gMapService){
+pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 'invokeDashboardWSService', 'sharedDataService', 'utilsService', 'gMapService',
+                 function($rootScope, invokeWSService, invokeWSServiceNS, invokeDashboardWSService, sharedDataService, utilsService, gMapService){
 	
 	this.showLog = false;
 	
@@ -156,4 +156,177 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	    });
 	    return myDataPromise;
 	};
+	
+	// Method getAreaSupplyCsv: used to crate a report csv file from the areaWS list (supply data)
+	this.getAreaSupplyCsv = function(areas){
+		var method = 'POST';
+		var value = utilsService.correctAreaObjectForWS(areas);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/area/csv", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// Method getAreaOccupancyCsv: used to crate a report csv file from the areaWS list (occupancy data)
+	this.getAreaOccupancyCsv = function(areas){
+		var method = 'POST';
+		var value = utilsService.correctAreaOccObjectForWS(areas);
+		
+	    if(this.showLog)console.log("Area list data : " + value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/area/csv", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// Method getAreaProfitCsv: used to get the csv file of the report of area profit
+	this.getAreaProfitCsv = function(areas){
+		var method = 'POST';
+		var value = utilsService.correctAreaProfitObjectForWS(areas);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/area/csv", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// Method getAreaTimeCostCsv: used to get the csv file of the report of area time cost
+	this.getAreaTimeCostCsv = function(areas){
+		var method = 'POST';
+		var value = utilsService.correctAreaTimeCostObjectForWS(areas);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/area/csv", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// method used to retrieve historical occupancy data of area
+	this.getHistorycalOccupancyAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			lang: language,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/areacompare/" + id, params, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(result){
+		});
+		return myDataPromise;
+	};
+	
+	// Create history occupancy csv file for area
+	this.getOccupancyAreaHistoryCsv = function(dArea, matrixAreaOcc){
+		var method = 'POST';
+		var params = {
+				darea_name: dArea.name,
+				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
+				darea_totalslot: dArea.slotNumber
+		};
+		var value = JSON.stringify(matrixAreaOcc);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupation/areahistory/csv", params, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });
+	    return myDataPromise;
+	};
+	
+	this.getHistorycalProfitAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			lang: language,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/areacompare/" + id, params, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(result){
+		});
+		return myDataPromise;
+	};
+	
+	// Area historycal profit csv data
+	this.getProfitAreaHistoryCsv = function(dArea, matrixPAreaAll){
+		var method = 'POST';
+		var params = {
+				darea_name: dArea.name,
+				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
+				darea_totalslot: dArea.slotNumber
+		};
+		var value = JSON.stringify(matrixPAreaAll);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/areahistory/csv", params, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// Method getHistorycalTimeCostAreaFromDb: used to retrieve the historycal streets extratime cost data from the db
+	this.getHistorycalTimeCostAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			lang: language,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/areacompare/" + id, params, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(result){
+		});
+		return myDataPromise;
+	};
+	
+	// Area historycal time cost csv data
+	this.getTimeCostAreaHistoryCsv = function(dArea, matrixAreaTimeCost){
+		var method = 'POST';
+		var params = {
+				darea_name: dArea.name,
+				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
+				darea_totalslot: dArea.slotNumber
+		};
+		var value = JSON.stringify(matrixAreaTimeCost);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/areahistory/csv", params, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });
+	    return myDataPromise;
+	};	
+	
 }]);

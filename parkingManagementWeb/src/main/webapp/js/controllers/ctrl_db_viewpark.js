@@ -188,75 +188,75 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	    if((type == 1 && $scope.dashboard_topics == "occupation") || (type == 2 && $scope.dashboard_topics_list == "occupation")){
 		    switch($scope.vis){
 		    	case "vis_last_value": 
-		    		//$scope.getOccupancyStreetsFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1);
-		    		$scope.getOccupancyStreetsUpdatesFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, $scope.streetWS, 1);
-		    		//$scope.getOccupancyParksFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2);
-		    		$scope.getOccupancyParksUpdatedFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2, $scope.actualParks, 1);
+		    		//$scope.getAllOccupancyStreets($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1);
+		    		$scope.getAllOccupancyStreetsUpdates($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, $scope.streetWS, 1);
+		    		//$scope.getAllOccupancyParks($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2);
+		    		$scope.getAllOccupancyParksUpdated($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2, $scope.actualParks, 1);
 		    		break;
 		    	case "vis_medium":
-		    		$scope.getOccupancyStreetsUpdatesFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 1);
-		    		$scope.getOccupancyParksUpdatedFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 1);
+		    		$scope.getAllOccupancyStreetsUpdates($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 1);
+		    		$scope.getAllOccupancyParksUpdated($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 1);
 		    		break;
 		    	case "vis_medium_year":
-		    		$scope.getOccupancyStreetsUpdatesFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 1);
-		    		$scope.getOccupancyParksUpdatedFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 1);
+		    		$scope.getAllOccupancyStreetsUpdates(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 1);
+		    		$scope.getAllOccupancyParksUpdated(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 1);
 		    		break;
 		    	case "vis_medium_month":
-		    		$scope.getOccupancyStreetsUpdatesFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 1);
-		    		$scope.getOccupancyParksUpdatedFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 1);
+		    		$scope.getAllOccupancyStreetsUpdates(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 1);
+		    		$scope.getAllOccupancyParksUpdated(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 1);
 		    		break;
 		    	case "vis_medium_day":
-		    		$scope.getOccupancyStreetsUpdatesFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, $scope.streetWS, 1);
-		    		$scope.getOccupancyParksUpdatedFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, 2, $scope.actualParks, 1);
+		    		$scope.getAllOccupancyStreetsUpdates(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, $scope.streetWS, 1);
+		    		$scope.getAllOccupancyParksUpdated(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, 2, $scope.actualParks, 1);
 		    		break;
 		    	default: break;	
 		    }
 	    } else if((type == 1 && $scope.dashboard_topics == "receipts") || (type == 2 && $scope.dashboard_topics_list == "receipts")){
 	    	switch($scope.vis){
 		    	case "vis_last_value": 
-		    		$scope.getProfitPMFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, false);
-		    		$scope.getProfitParksFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, false);
-		    		//$scope.getOccupancyParksUpdatedFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2, $scope.actualParks);
+		    		$scope.getAllProfitPM($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, false);
+		    		$scope.getAllProfitParks($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, false);
+		    		//$scope.getAllOccupancyParksUpdated($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2, $scope.actualParks);
 		    		break;
 		    	case "vis_medium":
-		    		$scope.getProfitPMFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
-		    		$scope.getProfitParksFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
+		    		$scope.getAllProfitPM($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
+		    		$scope.getAllProfitParks($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
 		    		break;
 		    	case "vis_medium_year":
-		    		$scope.getProfitPMFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
-		    		$scope.getProfitParksFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
+		    		$scope.getAllProfitPM(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
+		    		$scope.getAllProfitParks(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
 		    		break;
 		    	case "vis_medium_month":
-		    		$scope.getProfitPMFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
-		    		$scope.getProfitParksFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
+		    		$scope.getAllProfitPM(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
+		    		$scope.getAllProfitParks(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, false);
 		    		break;
 		    	case "vis_medium_day":
-		    		$scope.getProfitPMFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 1, false);
-		    		$scope.getProfitParksFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 1, false);
+		    		$scope.getAllProfitPM(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 1, false);
+		    		$scope.getAllProfitParks(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 1, false);
 		    		break;
 		    	default: break;
 	    	}
 	    } else if((type == 1 && $scope.dashboard_topics == "timeCost") || (type == 2 && $scope.dashboard_topics_list == "timeCost")){
 	    	switch($scope.vis){
 	    	case "vis_last_value": 
-	    		$scope.getOccupancyStreetsUpdatesFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, $scope.streetWS, 2);
-	    		$scope.getOccupancyParksUpdatedFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2, $scope.actualParks, 2);
+	    		$scope.getAllOccupancyStreetsUpdates($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, $scope.streetWS, 2);
+	    		$scope.getAllOccupancyParksUpdated($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 1, 2, $scope.actualParks, 2);
 	    		break;
 	    	case "vis_medium":
-	    		$scope.getOccupancyStreetsUpdatesFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 2);
-	    		$scope.getOccupancyParksUpdatedFromDb($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
+	    		$scope.getAllOccupancyStreetsUpdates($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 2);
+	    		$scope.getAllOccupancyParksUpdated($scope.year, $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
 	    		break;
 	    	case "vis_medium_year":
-	    		$scope.getOccupancyStreetsUpdatesFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 2);
-	    		$scope.getOccupancyParksUpdatedFromDb(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
+	    		$scope.getAllOccupancyStreetsUpdates(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 2);
+	    		$scope.getAllOccupancyParksUpdated(d.getFullYear(), $scope.monthSliderValue, $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
 	    		break;
 	    	case "vis_medium_month":
-	    		$scope.getOccupancyStreetsUpdatesFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 2);
-	    		$scope.getOccupancyParksUpdatedFromDb(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
+	    		$scope.getAllOccupancyStreetsUpdates(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, $scope.streetWS, 2);
+	    		$scope.getAllOccupancyParksUpdated(d.getFullYear(), d.getMonth(), $scope.daySliderValue, $scope.dayOptions.value, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
 	    		break;
 	    	case "vis_medium_day":
-	    		$scope.getOccupancyStreetsUpdatesFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, $scope.streetWS, 2);
-	    		$scope.getOccupancyParksUpdatedFromDb(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
+	    		$scope.getAllOccupancyStreetsUpdates(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, $scope.streetWS, 2);
+	    		$scope.getAllOccupancyParksUpdated(d.getFullYear(), d.getMonth(), weekDay, null, $scope.hourSliderValue, 2, 2, $scope.actualParks, 2);
 	    		break;
 	    	default: break;	
 	    	}
@@ -265,8 +265,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 
 }]);
 
-pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS', 'invokeWSServiceProxy', 'initializeService', 'utilsService', 'gMapService', 'areaService', 'zoneService', '$timeout', '$q', 
-                               function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS, invokeWSServiceProxy, initializeService, utilsService, gMapService, areaService, zoneService, $timeout, $q, $location, $filter) {
+pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'initializeService', 'utilsService', 'gMapService', 'areaService', 'zoneService', 'bikePointService', 'parkingMeterService', 'structureService', 'streetService', '$timeout', '$q', 
+                               function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, initializeService, utilsService, gMapService, areaService, zoneService, bikePointService, parkingMeterService, structureService, streetService, $timeout, $q, $location, $filter) {
 
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection
 	$scope.showLogs = false;
@@ -3317,14 +3317,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		returnedAreas.then(function(result){
 			sharedDataService.setSharedLocalAreas(result);
 		});
-		$scope.getProfitPMFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
-		var returnedStreets = $scope.getOccupancyStreetsFromDb("", "1;12", "1,2,3,4,5,6,7", "custom", "0;23", 2, isFirst);
+		$scope.getAllProfitPM("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+		var returnedStreets = $scope.getAllOccupancyStreets("", "1;12", "1,2,3,4,5,6,7", "custom", "0;23", 2, isFirst);
 		returnedStreets.then(function(result){
 			gMapService.setOccupancyStreet(result);
 		});
-		var returnedPs = $scope.getOccupancyParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+		var returnedPs = $scope.getAllOccupancyParks("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		returnedPs.then(function(result){
-			$scope.getProfitParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);	// light version return only profit data
+			$scope.getAllProfitParks("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);	// light version return only profit data
 		});
 		if(showZones0){
 			var type = $scope.getCorrectZoneTypeFromId(2);
@@ -3346,7 +3346,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var type = $scope.getCorrectZoneTypeFromId(6);
 			$scope.getAllZones(type, 4);
 		}
-		$scope.getBikePointFromDb(isFirst);
+		$scope.getAllBikes(isFirst);
 	};
 	
 	$scope.retrieveAllDataFromDBSerial = function(){
@@ -3398,20 +3398,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				return deferred.promise;
 			}
 		}).then(function(result){
-			return $scope.getProfitPMFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+			return $scope.getAllProfitPM("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		}).then(function(result){
-			return $scope.getOccupancyStreetsFromDb("", "1;12", "1,2,3,4,5,6,7", "custom", "0;23", 2, isFirst);
+			return $scope.getAllOccupancyStreets("", "1;12", "1,2,3,4,5,6,7", "custom", "0;23", 2, isFirst);
 		}).then(function(result){
 			$scope.dashboard_space.microzone_part = true;
 	    	$scope.dashboard_topics == "parkSupply";
 	    	if(showStreets){
 		    	$scope.updateStreetOccupancy($scope.streetWS);
 			}
-			return $scope.getOccupancyParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+			return $scope.getAllOccupancyParks("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		}).then(function(result){
-			return $scope.getBikePointFromDb(isFirst);
+			return $scope.getAllBikes(isFirst);
 		}).then(function(result){
-			return $scope.getProfitParksFromDb("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
+			return $scope.getAllProfitParks("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		}).then(function(result){
 			if(showStreets){
 				$scope.updateStreetProfit(isFirst, $scope.dashboard_space.microzone_part);
@@ -3441,23 +3441,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 		})
 	};
-	
-	// Methid getAreasFromDb: used to retrieve the rate area data form the DB
-	/*$scope.getAreasFromDb = function(){
-		var allAreas = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
-		myDataPromise.then(function(allAreas){
-			$scope.areaWS = allAreas;
-			if(showArea){
-			    //$scope.initAreasOnMap($scope.areaWS, false, 1, false, true)[0];
-			    gMapService.initAreasOnMap($scope.areaWS, false, 1, false, true)[0];	//MB_lightWS
-			}    
-			sharedDataService.setSharedLocalAreas($scope.areaWS);
-		});
-		return myDataPromise;
-	};*/
 	
 	// Retrieve all Area Method
     $scope.getAllAreas = function(){
@@ -3555,29 +3538,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return corrVal;
 	};
 	
-	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
-	$scope.getOccupancyStreetsFromDb = function(year, month, weekday, dayType, hour, valueType, isFirst){
-		// period params
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
+	// Method getAllOccupancyStreets: used to retrieve te streets occupancy data from the db
+	$scope.getAllOccupancyStreets = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		$scope.streetMapReady = false;
 		var allStreet = [];
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streets", params, $scope.authHeaders, null);
+		var myDataPromise = streetService.getOccupancyStreetsFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allStreet){
-		    //console.log("streets occupancy retrieved from db: " + JSON.stringify(result));
 		    gMapService.updateLoadingMapState();
 		    $scope.myTmpZoneOccupation = [];
 		    //$scope.streetWS = $scope.initStreetsObjects(allStreet);
@@ -3647,30 +3613,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myDataPromise;
 	};
 	
-	// Method getProfitPMFromDb: used to retrieve te streets occupancy data from the db
-	$scope.getProfitPMFromDb = function(year, month, weekday, dayType, hour, valueType, isFirst){
-		// period params
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
+	// Method getAllProfitPM: used to retrieve te streets occupancy data from the db
+	$scope.getAllProfitPM = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		$scope.streetMapReady = false;
 		var markers = [];
-		var allPMs = [];
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkingmeters", params, $scope.authHeaders, null);
+		var myDataPromise = parkingMeterService.getProfitPMFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allPMs){
-		    //$scope.parkingMeterWS = $scope.initPMObjects(allPMs);
 		    $scope.parkingMeterWS = $scope.initPMObjectsLight(allPMs);	//MB_lightWS
 		    
 		    if(showPm){
@@ -3711,35 +3659,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myDataPromise;
 	};
 	
-	// Method getOccupancyStreetsUpdatesFromDb: used to retrieve te streets occupancy data from the db
-	$scope.getOccupancyStreetsUpdatesFromDb = function(year, month, weekday, dayType, hour, valueType, oldStreets, cost_type){
+	// Method getAllOccupancyStreetsUpdates: used to retrieve te streets occupancy data from the db
+	$scope.getAllOccupancyStreetsUpdates = function(year, month, weekday, dayType, hour, valueType, oldStreets, cost_type){
 		$scope.streetMapReady = false;
 		$scope.streetCvsFile = "";
 		$scope.zoneCvsFile = "";
 		$scope.areaCvsFile = "";
 		$scope.structCvsFile = "";
-		// period params
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
 		
-		var allStreet = [];
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));
-			
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancychanged/" + idApp + "/streets", params, $scope.authHeaders, null);
+		var myDataPromise = streetService.getOccupancyStreetsUpdatesFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allStreet){
-		    //angular.copy(result, allStreet);
 		    gMapService.updateLoadingMapState();
 		    $scope.myTmpZoneOccupation = [];
 		    allStreet = $scope.mergeStreetsObjects(allStreet, oldStreets);	
@@ -3846,38 +3775,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	// Method getProfitStructFromDb: used to retrieve te streets occupancy data from the db
-	$scope.getProfitParksFromDb = function(year, month, weekday, dayType, hour, valueType, isFirst){
-		// period params
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
+	$scope.getAllProfitParks = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		$scope.streetMapReady = false;
 		var markers = [];
 		var allPSs = [];
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params)); 	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "profitchanged/" + idApp + "/parkstructs", params, $scope.authHeaders, null);	//MB_lightWS: invoke only profitchanged instead of profit
+		
+		var myDataPromise = structureService.getProfitParksFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allPSs){
-		    //angular.copy(result, allPSs);
 		    $scope.profitStructWS = $scope.mergeParkDbData($scope.pstructWS, allPSs);
-		    //$scope.mergeParkDbData($scope.pstructWS, $scope.profitStructWS);	// here I obtain an object with correct occupancy and profit data
 		    angular.copy( $scope.profitStructWS, $scope.allDataStructWS);
 		    
 			if(showPs){
 				for (var i = 0; i <  $scope.allDataStructWS.length; i++) {
 			    	markers.push(gMapService.createMarkers(i, $scope.allDataStructWS[i], 6));	//MB_lightWS
 			    }
-				//$scope.parkingStructureMarkers = markers;
 			   	angular.copy(markers, $scope.parkingStructureMarkers);
 			   	$scope.updateParkProfit();
 			}
@@ -3895,29 +3806,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	
-	// Method getOccupancyParksFromDb: used to retrieve te parks occupancy data from the db
-	$scope.getOccupancyParksFromDb = function(year, month, weekday, dayType, hour, valueType, isFirst){
-		// period params
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
+	// Method getAllOccupancyParks: used to retrieve te parks occupancy data from the db
+	$scope.getAllOccupancyParks = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		var allParks = [];
 		var markers = [];
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructures", params, $scope.authHeaders, null);
+		var myDataPromise = structureService.getOccupancyParksFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allParks){
-		    //angular.copy(result, allParks);
 		    gMapService.updateLoadingMapState();
 		    $scope.actualParks = allParks;
 		    $scope.pstructWS = allParks;
@@ -3946,30 +3840,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myDataPromise;
 	};
 	
-	// Method getOccupancyParksUpdatedFromDb: used to retrieve te parks occupancy data from the db
-	$scope.getOccupancyParksUpdatedFromDb = function(year, month, weekday, dayType, hour, valueType, callType, oldParks, cost_type){
-		// period params
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var allParks = [];
+	// Method getAllOccupancyParksUpdated: used to retrieve te parks occupancy data from the db
+	$scope.getAllOccupancyParksUpdated = function(year, month, weekday, dayType, hour, valueType, callType, oldParks, cost_type){
 		var markers = [];
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancychanged/" + idApp + "/parkingstructures", params, $scope.authHeaders, null);
+		var myDataPromise = structureService.getOccupancyParksUpdatedFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allParks){
-		    //angular.copy(result, allParks);
-		    gMapService.updateLoadingMapState();
+			//angular.copy(result, allParks);
+			gMapService.updateLoadingMapState();
 		    allParks = $scope.mergeParksObjects(allParks, oldParks);
 		    $scope.actualParks = allParks;
 		    $scope.pstructWS = allParks;
@@ -3986,9 +3863,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    	$scope.updateParkTimeCost();
 			    }
 			}
-		    /*if(callType == 1){
-		    	$scope.getBikePointFromDb(false);
-		    }*/
+		    if(callType == 1){
+		    	$scope.getAllBikes(false);
+		    }
 		});
 	};
 	
@@ -4417,36 +4294,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		}
 	};
 	
-	$scope.getBikePointFromDb = function(isFirst){
+	$scope.getAllBikes = function(isFirst){
 		var markers = [];
 		var allBikePoints = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(allBikePoints){
-	    	//angular.copy(result, allBikePoints);   	
-	    	if(showBp){
+		var myBikePromise = bikePointService.getBikePointsFromDbDashboard();
+		myBikePromise.then(function(allBikePoints){
+			if(showBp){
 	    		for (var i = 0; i <  allBikePoints.length; i++) {
 		    		markers.push(gMapService.createMarkers(i, allBikePoints[i], 3));	//MB_lightWS
 			    }
 	    		angular.copy(markers, $scope.bikePointMarkers);
 	    	}
 		});
-	    return myDataPromise;
+		return myBikePromise;
 	};
 	
 	$scope.getAllZones = function(z_type, tindex){
 		$scope.zoneMapReady = false;
 		
 		var allZones = [];
-		var myZonePromise = zoneService.getZonesFromDb(z_type);
+		var myZonePromise = zoneService.getZonesFromDbDashboard(z_type);
 		myZonePromise.then(function(allZones){
-		//var method = 'GET';
-		//var appId = sharedDataService.getConfAppId();
-	   	//var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/zone/" + z_type, null, $scope.authHeaders, null);
-	    //myDataPromise.then(function(allZones){
-	    	//angular.copy(result, allZones);
 	    	switch(tindex){
 	    		case 0:
 	    			if(showZones0){
@@ -4855,8 +4723,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				if(object.subelements && object.subelements.length && object.subelements.length > 0){
 					for(var z = 0; z < object.subelements.length; z++){
 						var s = object.subelements[z];
-						var subId = "mz" + s.id;
-						toDelZones[subId].setMap(null);
+						var subId = gMapService.correctObjId(object.data.id, z);//"mz" + s.id;
+						if(toDelZones[subId]){
+							toDelZones[subId].setMap(null);
+							toDelZones[subId].visible = false;
+						}	
 						if(theme == 0){
 						    for(var i = 0; i < zoneOnMap.length; i++){	//$scope.mapMicroZones
 						    	if(zoneOnMap[i].id == subId){			//$scope.mapMicroZones
@@ -4884,7 +4755,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 					    }
 						var polyline = s.geometry;
 						var mzone = {
-								id: "mz" +	s.id,	//$scope.correctObjId(zones[i].id, j),	// I try to use id of street instead of id of zone
+								id: subId, //"mz" +	s.id,	// I try to use id of street instead of id of zone
 								type: "polyline",
 								path: gMapService.correctPoints(polyline.points),
 								gpath: gMapService.correctPointsGoogle(polyline.points),
@@ -4992,9 +4863,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var toDelZones = $scope.map.shapes;
 				for(var z = 0; z < object.subelements.length; z++){
 					var s = object.subelements[z];
-					var subId = "mz" + s.id;
+					var subId = gMapService.correctObjId(object.data.id, z); //"mz" + s.id;
 				    //toDelZones[object.id].setMap(null);		// I can access dinamically the value of the object shapes for street
-					toDelZones[subId].setMap(null);
+					if(toDelZones[subId]){
+						toDelZones[subId].setMap(null);
+						toDelZones[subId].visible = false;
+					}
 					if(theme == 0){
 					    for(var i = 0; i < $scope.mapMicroZones.length; i++){
 					    	if($scope.mapMicroZones[i].id == subId){		//object.id
@@ -5022,7 +4896,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				    }
 					var polyline = s.geometry;
 					var mzone = {
-							id: "mz" +	s.id,	//$scope.correctObjId(zones[i].id, j),	// I try to use id of street instead of id of zone
+							id: subId, //"mz" +	s.id,	// I try to use id of street instead of id of zone
 							path: gMapService.correctPoints(polyline.points),
 							gpath: gMapService.correctPointsGoogle(polyline.points),
 							stroke: {
@@ -5143,12 +5017,16 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    var subele = object.subelements;
 		    if(subele && subele.length > 0){	// case zone with subelements
 		    	for(var i = 0; i < subele.length; i++){
+		    		var myId = gMapService.correctObjId(object.data.id, i);
 					var s = subele[i];
-					var sid = "mz" + s.id;
-			    	toDelZone[sid].setMap(null);
+					//var sid = "mz" + s.id;
+			    	if(toDelZone[myId]){
+			    		toDelZone[myId].setMap(null);
+			    		toDelZone[myId].visible = false;
+			    	}
 			    	var polyline = s.geometry;
 					var mzone = {
-							id: sid,
+							id: myId, //sid,
 							type: "polyline",
 							path: gMapService.correctPoints(polyline.points),
 							gpath: gMapService.correctPointsGoogle(polyline.points),
@@ -5602,7 +5480,62 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				for(var i = 0; i < list.length; i++){
 					var object = list[i];
 					var toDelZone = $scope.map.shapes;
-			    	toDelZone[object.id].setMap(null);
+					var subele = object.subelements;
+				    if(subele && subele.length > 0){	// case zone with subelements
+				    	for(var i = 0; i < subele.length; i++){
+				    		var myId = gMapService.correctObjId(object.data.id, i);
+							var s = subele[i];
+							//var sid = "mz" + s.id;
+					    	if(toDelZone[myId]){
+					    		toDelZone[myId].setMap(null);
+					    		toDelZone[myId].visible = false;
+					    	}
+					    	var polyline = s.geometry;
+							var mzone = {
+									id: myId, //sid,
+									type: "polyline",
+									path: gMapService.correctPoints(polyline.points),
+									gpath: gMapService.correctPointsGoogle(polyline.points),
+									stroke: {
+									    color: object.stroke.color,
+									    weight: 3,
+									    opacity: 0.5
+									},
+									data: object.data,
+									info_windows_pos: gMapService.correctPointGoogle(polyline.points[1]),
+									info_windows_cod: "z" + object.id,
+									editable: true,
+									draggable: true,
+									geodesic: false,
+									visible: true,
+									subelements: object.subelements
+							};
+					    	if($scope.theme == 0){
+					    		zoneOnMap.push(mzone);
+					    	} else if($scope.theme == 1){
+					    		zoneoccupancyOnMap.push(mzone);
+					    	} else if($scope.theme == 2){
+					    		zoneprofitOnMap.push(mzone);
+					    	} else if($scope.theme == 3){
+					    		zonetimecostOnMap.push(mzone);
+					    	}
+						}
+				    } else {	// zone standard
+				    	toDelZone[object.id].setMap(null);
+				    	object.stroke.weight = 3;
+				    	object.stroke.opacity = 0.7;
+						object.fill.opacity = 0.5;
+				    	if(theme == 0){	
+				    		zoneOnMap.push(object);	
+				    	} else if(theme == 1){
+				    		zoneoccupancyOnMap.push(object);
+				    	} else if(theme == 2){
+				    		zoneprofitOnMap.push(object);
+				    	} else if(theme == 3){
+				    		zonetimecostOnMap.push(object);
+				    	}
+				    }
+			    	/*toDelZone[object.id].setMap(null);
 			    	object.stroke.weight = 3;
 			    	if(object.fill){
 			    		// case polygon
@@ -5620,7 +5553,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			    		zoneprofitOnMap.push(object);		//$scope.profitZones
 			    	} else if(theme == 3){
 			    		zonetimecostOnMap.push(object);		//$scope.timeCostZones
-			    	}
+			    	}*/
 				}
 			}
 			$scope.setMapSelectedZones(z_index, []);	//$scope.mapSelectedZones = [];
@@ -5874,56 +5807,26 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // -------------------------------------------------- Block for supply CSV creation ---------------------------------------------
 	$scope.getStreetSupplyCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.streetWS);
-		var value = utilsService.correctStreetObjectForWS($scope.streetWS);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/street/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = streetService.getStreetSupplyCsv($scope.streetWS);
+		myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.streetSupplyCvsFile = result;
 	    	window.location.href = $scope.streetSupplyCvsFile;
-	    });	
+	    });
 	};
 	
 	$scope.getPMSupplyCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.parkingMeterWS);
-		var value = utilsService.correctPMObjectForWS($scope.parkingMeterWS);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/parkingmeter/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = parkingMeterService.getPMSupplyCsv($scope.parkingMeterWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.pmSupplyCvsFile = result;
 	    	window.location.href = $scope.pmSupplyCvsFile;
-	    });	
+	    });
 	};
 	
 	$scope.getZoneSupplyCsv = function(z_index){
-		var method = 'POST';
-		var value = "";
-		switch(z_index){
-			case 0:
-				//value = JSON.stringify($scope.zoneWS0);
-				value = utilsService.correctZoneObjectForWS($scope.zoneWS0);
-				break;
-			case 1:
-				//value = JSON.stringify($scope.zoneWS1);
-				value = utilsService.correctZoneObjectForWS($scope.zoneWS1);
-				break;
-			case 2:
-				//value = JSON.stringify($scope.zoneWS2);
-				value = utilsService.correctZoneObjectForWS($scope.zoneWS2);
-				break;
-			case 3:
-				//value = JSON.stringify($scope.zoneWS3);
-				value = utilsService.correctZoneObjectForWS($scope.zoneWS3);
-				break;
-			case 4:
-				//value = JSON.stringify($scope.zoneWS4);
-				value = utilsService.correctZoneObjectForWS($scope.zoneWS4);
-				break;
-		}
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/zone/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = zoneService.getZoneSupplyCsv(z_index, $scope.zoneWS0, $scope.zoneWS1, $scope.zoneWS2, $scope.zoneWS3, $scope.zoneWS4);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneSupplyCvsFile = result;
 	    	window.location.href = $scope.zoneSupplyCvsFile;
@@ -5932,72 +5835,37 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getAreaSupplyCsv: used to crate a report csv file from the areaWS list (supply data)
 	$scope.getAreaSupplyCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.areaWS);
-		var value = utilsService.correctAreaObjectForWS($scope.areaWS);
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/area/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = areaService.getAreaSupplyCsv($scope.areaWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.areaSupplyCvsFile = result;
 	    	window.location.href = $scope.areaSupplyCvsFile;
-	    });	
+	    });
 	};
 	
 	$scope.getStructureSupplyCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.pstructWS);
-		var value = utilsService.correctStructObjectForWS($scope.pstructWS);
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/parkingstructures/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = structureService.getStructureSupplyCsv($scope.pstructWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.structSupplyCvsFile = result;
 	    	window.location.href = $scope.structSupplyCvsFile;
-	    });	
+	    });
 	};
 	// ---------------------------------------------- End of block for supply CSV creation ------------------------------------------
     
     // ------------------------------------------- Block for occupancy CSV creation --------------------------------------
     $scope.getStreetOccupancyCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.streetWS);
-		var value = utilsService.correctOccStreetObjectForWS($scope.streetWS);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/street/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = streetService.getStreetOccupancyCsv($scope.streetWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.streetCvsFile = result;
 	    	window.location.href = $scope.streetCvsFile;
-	    });	
+	    });
 	};
 	
 	$scope.getZoneOccupancyCsv = function(z_index){
-		var method = 'POST';
-		var value = "";
-		switch(z_index){
-			case 0:
-				//value = JSON.stringify($scope.zoneWS0);
-				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS0);
-				break;
-			case 1:
-				//value = JSON.stringify($scope.zoneWS1);
-				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS1);
-				break;
-			case 2:
-				//value = JSON.stringify($scope.zoneWS2);
-				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS2);
-				break;
-			case 3:
-				//value = JSON.stringify($scope.zoneWS3);
-				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS3);
-				break;
-			case 4:
-				//value = JSON.stringify($scope.zoneWS4);
-				value = utilsService.correctOccZoneObjectForWS($scope.zoneWS4);
-				break;
-		}
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/zone/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = zoneService.getZoneOccupancyCsv(z_index, $scope.zoneWS0, $scope.zoneWS1, $scope.zoneWS2, $scope.zoneWS3, $scope.zoneWS4);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneCvsFile = result;
 	    	window.location.href = $scope.zoneCvsFile;
@@ -6006,13 +5874,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getAreaOccupancyCsv: used to crate a report csv file from the areaWS list (occupancy data)
 	$scope.getAreaOccupancyCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.areaWS);
-		var value = utilsService.correctAreaOccObjectForWS($scope.areaWS);
-		
-	    console.log("Area list data : " + value);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/area/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = areaService.getAreaOccupancyCsv($scope.areaWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.areaCvsFile = result;
 	    	window.location.href = $scope.areaCvsFile;
@@ -6020,64 +5883,36 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.getStructureOccupancyCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.pstructWS);
-		var value = utilsService.correctOccStructObjectForWS($scope.pstructWS);
-	    console.log("Structure list data : " + value);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/parkingstructures/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = structureService.getStructureOccupancyCsv($scope.pstructWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.structCvsFile = result;
 	    	window.location.href = $scope.structCvsFile;
-	    });	
+	    });
 	};
 	// --------------------------------------------- End of block for occupancy CSV creation ----------------------------------------
 	
 	// -------------------------------------------------- Block for profit CSV creation ---------------------------------------------
 	$scope.getStreetProfitCsv = function(){
-		var method = 'POST';
-		var value = utilsService.correctProfitStreetObjectForWS($scope.profitStreetsList);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/street/csv", null, $scope.authHeaders, value);
+		var myDataPromise = streetService.getStreetProfitCsv($scope.profitStreetsList);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.streetProfitCvsFile = result;
 	    	window.location.href = $scope.streetProfitCvsFile;
-	    });	
+	    });
 	};
 	
 	$scope.getPMProfitCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.parkingMeterWS);
-		var value = utilsService.correctProfitPMObjectForWS($scope.parkingMeterWS);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingmeter/csv", null, $scope.authHeaders, value);
+		var myDataPromise = parkingMeterService.getPMProfitCsv($scope.parkingMeterWS);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.pmProfitCvsFile = result;
 	    	window.location.href = $scope.pmProfitCvsFile;
-	    });	
+	    });
 	};
 	
 	$scope.getZoneProfitCsv = function(z_index){
-		var method = 'POST';
-		var value = "";
-		switch(z_index){
-			case 0:
-				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList0);
-				break;
-			case 1:
-				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList1);
-				break;
-			case 2:
-				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList2);
-				break;
-			case 3:
-				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList3);
-				break;
-			case 4:
-				value = utilsService.correctProfitZoneObjectForWS($scope.profitZonesList4);
-				break;
-		}
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/zone/csv", null, $scope.authHeaders, value);
+		var myDataPromise = zoneService.getZoneProfitCsv(z_index, $scope.profitZonesList0, $scope.profitZonesList1, $scope.profitZonesList2, $scope.profitZonesList3, $scope.profitZonesList4);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneProfitCvsFile = result;
@@ -6087,11 +5922,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getAreaProfitCsv: used to get the csv file of the report of area profit
 	$scope.getAreaProfitCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.profitAreaList);
-		var value = utilsService.correctAreaProfitObjectForWS($scope.profitAreaList);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/area/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = areaService.getAreaProfitCsv($scope.profitAreaList);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.areaProfitCvsFile = result;
 	    	window.location.href = $scope.areaProfitCvsFile;
@@ -6099,11 +5931,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.getStructureProfitCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.profitStructWS);
-		var value = utilsService.correctStructProfitObjectForWS($scope.profitStructWS);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingstructures/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = structureService.getStructureProfitCsv($scope.profitStructWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.structProfitCvsFile = result;
 	    	window.location.href = $scope.structProfitCvsFile;
@@ -6113,57 +5942,27 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// ------------------------------------------------ Block for time cost CSV creation ---------------------------------------------
 	$scope.getStreetTimeCostCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.streetWS);
-		var value = utilsService.correctTimeCostStreetObjectForWS($scope.streetWS);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/street/csv", null, $scope.authHeaders, value);
+		var myDataPromise = streetService.getStreetTimeCostCsv($scope.streetWS);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.streetTimeCostCvsFile = result;
 	    	window.location.href = $scope.streetTimeCostCvsFile;
-	    });	
+	    });
 	};
 	
 	$scope.getZoneTimeCostCsv = function(z_index){
-		var method = 'POST';
-		var value = "";
-		switch(z_index){
-			case 0:
-				//value = JSON.stringify($scope.zoneWS0);
-				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS0);
-				break;
-			case 1:
-				//value = JSON.stringify($scope.zoneWS1);
-				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS1);
-				break;
-			case 2:
-				//value = JSON.stringify($scope.zoneWS2);
-				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS2);
-				break;
-			case 3:
-				//value = JSON.stringify($scope.zoneWS3);
-				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS3);
-				break;
-			case 4:
-				//value = JSON.stringify($scope.zoneWS4);
-				value = utilsService.correctTimeCostZoneObjectForWS($scope.zoneWS4);
-				break;
-		}
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/zone/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = zoneService.getZoneTimeCostCsv(z_index, $scope.zoneWS0, $scope.zoneWS1, $scope.zoneWS2, $scope.zoneWS3, $scope.zoneWS4);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneTimeCostCvsFile = result;
 	    	window.location.href = $scope.zoneTimeCostCvsFile;
-	    });	
+	    });
 	};
 	
 	// Method getAreaTimeCostCsv: used to get the csv file of the report of area time cost
 	$scope.getAreaTimeCostCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.areaWS);
-		var value = utilsService.correctAreaTimeCostObjectForWS($scope.areaWS);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/area/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = areaService.getAreaTimeCostCsv($scope.areaWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.areaTimeCostCvsFile = result;
 	    	window.location.href = $scope.areaTimeCostCvsFile;
@@ -6171,11 +5970,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 	
 	$scope.getStructureTimeCostCsv = function(){
-		var method = 'POST';
-		//var value = JSON.stringify($scope.allDataStructWS);
-		var value = utilsService.correctStructTimeCostObjectForWS($scope.allDataStructWS);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/parkingstructures/csv", null, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = structureService.getStructureTimeCostCsv($scope.allDataStructWS);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.structTimeCostCvsFile = result;
 	    	window.location.href = $scope.structTimeCostCvsFile;
@@ -6461,27 +6257,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 
 	// Method getHistorycalOccupancyStreetsFromDb: used to retrieve the historycal streets occupancy data from the db
 	$scope.getHistorycalOccupancyAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/areacompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = areaService.getHistorycalOccupancyAreaFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixAreaOcc);
 		    if($scope.showLogs)console.log("area occupancy history retrieved from db: " + JSON.stringify(result));
@@ -6490,45 +6266,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Zone historycal occupancy csv data
 	$scope.getOccupancyAreaHistoryCsv = function(dArea){
-		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var params = {
-				darea_name: dArea.name,
-				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
-				darea_totalslot: dArea.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixAreaOcc);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupation/areahistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = areaService.getOccupancyAreaHistoryCsv(dArea, $scope.matrixAreaOcc);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneOccCvsHistorycalFile = result;
 	    	window.location.href = $scope.zoneOccCvsHistorycalFile;
-	    });	
+	    });
 	};	
 	
 	// Method getHistorycalOccupancyZoneFromDb: used to retrieve the historycal zones occupancy data from the db
 	$scope.getHistorycalOccupancyZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = zoneService.getHistorycalOccupancyZoneFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixZoneOcc);
 		    if($scope.showLogs)console.log("zone occupancy history retrieved from db: " + JSON.stringify(result));
@@ -6537,45 +6285,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Zone historycal occupancy csv data
 	$scope.getOccupancyZoneHistoryCsv = function(dZone){
-		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var params = {
-				dzone_name: dZone.name,
-				dzone_sub: dZone.submacro,
-				dzone_totalslot: dZone.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixZoneOcc);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupation/zonehistory/csv", params, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = zoneService.getOccupancyZoneHistoryCsv(dZone, $scope.matrixZoneOcc);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneOccCvsHistorycalFile = result;
 	    	window.location.href = $scope.zoneOccCvsHistorycalFile;
-	    });	
+	    });
 	};
 	
 	// Method getHistorycalOccupancyMicroZoneFromDb: used to retrieve the historycal microzone occupancy data from the db
 	$scope.getHistorycalOccupancyMicroZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = zoneService.getHistorycalOccupancyMicroZoneFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixMicroZoneOcc);
 		    if($scope.showLogs)console.log("microzone occupancy history retrieved from db: " + JSON.stringify(result));
@@ -6584,16 +6304,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Zone historycal occupancy csv data
 	$scope.getOccupancyMicroZoneHistoryCsv = function(dZone){
-		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var params = {
-				dzone_name: dZone.name,
-				dzone_submacro: dZone.submacro,
-				dzone_submicro: dZone.submicro,
-				dzone_totalslot: dZone.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixMicroZoneOcc);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupation/zonehistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = zoneService.getOccupancyMicroZoneHistoryCsv(dZone, $scope.matrixMicroZoneOcc);
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneOccCvsHistorycalFile = result;
@@ -6603,28 +6314,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getHistorycalOccupancyStreetFromDb: used to retrieve the historycal streets occupancy data from the db
 	$scope.getHistorycalOccupancyStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		$scope.streetMapReady = false;
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streetcompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = streetService.getHistorycalOccupancyStreetFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixOcc);
 		    if($scope.showLogs)console.log("street occupancy history retrieved from db: " + JSON.stringify(result));
@@ -6633,14 +6323,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Street historycal occupancy csv data
 	$scope.getOccupancyStreetHistoryCsv = function(dStreet){
-		var method = 'POST';
-		var params = {
-				dstreet_name: dStreet.streetReference,
-				dstreet_area: dStreet.area_name,
-				dstreet_totalslot: dStreet.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixOcc);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupation/streethistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = streetService.getOccupancyStreetHistoryCsv(dStreet, $scope.matrixOcc);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.streetOccCvsHistorycalFile = result;
@@ -6650,28 +6333,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getHistorycalOccupancyParkingFromDb: used to retrieve the historycal parking occupancy data from the db
 	$scope.getHistorycalOccupancyParkingFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		$scope.streetMapReady = false;
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructurecompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = structureService.getHistorycalOccupancyParkingFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixOcc);
 		    if($scope.showLogs)console.log("parking occupancy history retrieved from db: " + JSON.stringify(result));
@@ -6680,15 +6342,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Parking historycal occupancy csv data
 	$scope.getOccupancyParkingHistoryCsv = function(dParking){
-		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var params = {
-			dparking_name: dParking.name,
-			dparking_streetreference: dParking.streetReference,
-			dparking_totalslot: dParking.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixOcc);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupation/parkingstructureshistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = structureService.getOccupancyParkingHistoryCsv(dParking, $scope.matrixOcc);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.parkingOccCvsHistorycalFile = result;
@@ -6698,28 +6352,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 
 	// Method getHistorycalProfitAreaFromDb: used to retrieve the historycal area profit data from the db
 	$scope.getHistorycalProfitAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
 		$scope.loadingMatrix = true;
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/areacompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = areaService.getHistorycalProfitAreaFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 			angular.copy(result, $scope.matrixPAreaAll);
 			angular.copy(result, $scope.matrixAreaProf);
@@ -6748,45 +6382,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Area historycal profit csv data
 	$scope.getProfitAreaHistoryCsv = function(dArea){
-		var method = 'POST';
-		var params = {
-				darea_name: dArea.name,
-				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
-				darea_totalslot: dArea.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixPAreaAll);
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/areahistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = areaService.getProfitAreaHistoryCsv(dArea, $scope.matrixPAreaAll);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneProfCvsHistorycalFile = result;
 	    	window.location.href = $scope.zoneProfCvsHistorycalFile;
-	    });	
+	    });
 	};	
 	
 	// Method getHistorycalProfitZoneFromDb: used to retrieve the historycal zone profit data from the db
 	$scope.getHistorycalProfitZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = zoneService.getHistorycalProfitZoneFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 			var profDataPresent = false;
 			if(result != null && result != ""){
@@ -6821,45 +6427,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Zone historycal profit csv data
 	$scope.getProfitZoneHistoryCsv = function(dZone){
-		var method = 'POST';
-		var params = {
-				dzone_name: dZone.name,
-				dzone_sub: dZone.submacro,
-				dzone_totalslot: dZone.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixPZoneAll);
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/zonehistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = zoneService.getProfitZoneHistoryCsv(dZone, $scope.matrixPZoneAll);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneProfCvsHistorycalFile = result;
 	    	window.location.href = $scope.zoneProfCvsHistorycalFile;
-	    });	
+	    });
 	};
 	
 	// Method getHistorycalProfitZoneFromDb: used to retrieve the historycal zone profit data from the db
 	$scope.getHistorycalProfitMicroZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = zoneService.getHistorycalProfitMicroZoneFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 			var profDataPresent = false;
 			if(result != null && result != ""){
@@ -6894,16 +6472,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Zone historycal profit csv data
 	$scope.getProfitMicroZoneHistoryCsv = function(dZone){
-		var method = 'POST';
-		var params = {
-				dzone_name: dZone.name,
-				dzone_submacro: dZone.submacro,
-				dzone_submicro: dZone.submicro,
-				dzone_totalslot: dZone.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixPMicroZoneAll);
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/zonehistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = zoneService.getProfitMicroZoneHistoryCsv(dZone, $scope.matrixPMicroZoneAll);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneProfCvsHistorycalFile = result;
@@ -6913,27 +6482,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getHistorycalProfitStreetFromDb: used to retrieve the historycal street profit data from the db
 	$scope.getHistorycalProfitStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/streetcompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = streetService.getHistorycalProfitStreetFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 			angular.copy(result, $scope.matrixPStreetAll);
 			angular.copy(result, $scope.matrixStreetProf);
@@ -6961,46 +6510,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Street historycal profit csv data
 	$scope.getProfitStreetHistoryCsv = function(dStreet){
-		var method = 'POST';
-		var params = {
-				dstreet_name: dStreet.streetReference,
-				dstreet_area: dStreet.area_name,
-				dstreet_totalslot: dStreet.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixPStreetAll);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/streethistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = streetService.getProfitStreetHistoryCsv(dStreet, $scope.matrixPStreetAll);
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.streetProfCvsHistorycalFile = result;
 	    	window.location.href = $scope.streetProfCvsHistorycalFile;
-	    });	
-	};		
+	    });
+	};	
 	
 	// Method getHistorycalProfitPmFromDb: used to retrieve the historycal parking profit data from the db
 	$scope.getHistorycalProfitPmFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		$scope.streetMapReady = false;
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkingmetercompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = parkingMeterService.getHistorycalProfitPmFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 			angular.copy(result, $scope.matrixPAll);
 			angular.copy(result, $scope.matrixProf);
@@ -7028,16 +6548,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// ParkingMeter historycal profit csv data
 	$scope.getProfitParkingHistoryCsv = function(dParking){
-		var method = 'POST';
-		var params = {
-				dparking_code: dParking.code,
-				dparking_note: dParking.note,
-				dparking_area: dParking.area.name
-		};
-		var value = JSON.stringify($scope.matrixPAll);
-		
-	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingmeterhistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = parkingMeterService.getProfitParkingHistoryCsv(dParking, $scope.matrixPAll);
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.parkingProfCvsHistorycalFile = result;
@@ -7047,29 +6558,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method getHistorycalProfitPsFromDb: used to retrieve the historycal parkStruct profit data from the db
 	$scope.getHistorycalProfitPsFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		$scope.streetMapReady = false;
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		//var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, null);
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkstructcompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = structureService.getHistorycalProfitPsFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 			angular.copy(result, $scope.matrixPAll);
 			angular.copy(result, $scope.matrixProf);
@@ -7097,44 +6586,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// ParkiStruct historycal time cost csv data
 	$scope.getProfitParkStructHistoryCsv = function(dParkstruct){
-		var method = 'POST';
-		var params = {
-			dparkstruct_name: dParkstruct.name,
-			dparkstruct_streetreference: dParkstruct.streetReference,
-			dparkstruct_totalslot: dParkstruct.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixPAll);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkstructhistory/csv", params, $scope.authHeaders, value);
-	    myDataPromise.then(function(result){
+		var myDataPromise = structureService.getProfitParkStructHistoryCsv(dParkstruct, $scope.matrixPAll);
+		myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.parkstructProfCvsHistorycalFile = result;
 	    	window.location.href = $scope.parkstructProfCvsHistorycalFile;
-	    });	
+	    });
 	};
 	
 	// Method getHistorycalTimeCostAreaFromDb: used to retrieve the historycal streets extratime cost data from the db
 	$scope.getHistorycalTimeCostAreaFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/areacompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = areaService.getHistorycalTimeCostAreaFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixAreaTimeCost);
 		    for(var i = 1; i < result.length; i++){
@@ -7148,45 +6610,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Area historycal time cost csv data
 	$scope.getTimeCostAreaHistoryCsv = function(dArea){
-		var method = 'POST';
-		var params = {
-				darea_name: dArea.name,
-				darea_fee: (dArea.validityPeriod) ? utilsService.correctRatePeriodsForWSAsString(dArea.validityPeriod) : null,
-				darea_totalslot: dArea.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixAreaTimeCost);
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/areahistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = areaService.getTimeCostAreaHistoryCsv(dArea, $scope.matrixAreaTimeCost);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.areaTimeCostCvsHistorycalFile = result;
 	    	window.location.href = $scope.areaTimeCostCvsHistorycalFile;
-	    });	
+	    });
 	};	
 	
 	// Method getHistorycalTimeCostZoneFromDb: used to retrieve the historycal zone extratime cost data from the db
 	$scope.getHistorycalTimeCostZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = zoneService.getHistorycalTimeCostZoneFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixZoneTimeCost);
 		    for(var i = 1; i < result.length; i++){
@@ -7200,46 +6634,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Zone historycal time cost csv data
 	$scope.getTimeCostZoneHistoryCsv = function(dZone){
-		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var params = {
-				dzone_name: dZone.name,
-				dzone_sub: dZone.submacro,
-				dzone_totalslot: dZone.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixZoneTimeCost);
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/zonehistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = zoneService.getTimeCostZoneHistoryCsv(dZone, $scope.matrixZoneTimeCost);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneTimeCostCvsHistorycalFile = result;
 	    	window.location.href = $scope.zoneTimeCostCvsHistorycalFile;
-	    });	
+	    });
 	};
 	
 	// Method getHistorycalTimeCostMicroZoneFromDb: used to retrieve the historycal microzone extratime cost data from the db
 	$scope.getHistorycalTimeCostMicroZoneFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/zonecompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = zoneService.getHistorycalTimeCostMicroZoneFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixMicroZoneTimeCost);
 		    for(var i = 1; i < result.length; i++){
@@ -7253,48 +6658,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// MicroZone historycal time cost csv data
 	$scope.getTimeCostMicroZoneHistoryCsv = function(dZone){
-		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var params = {
-				dzone_name: dZone.name,
-				dzone_submacro: dZone.submacro,
-				dzone_submicro: dZone.submicro,
-				dzone_totalslot: dZone.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixMicroZoneTimeCost);
-		
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/zonehistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = zoneService.getTimeCostMicroZoneHistoryCsv(dZone, $scope.matrixMicroZoneTimeCost);
 	    myDataPromise.then(function(result){
 	    	console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.zoneTimeCostCvsHistorycalFile = result;
 	    	window.location.href = $scope.zoneTimeCostCvsHistorycalFile;
-	    });	
+	    });
 	};	
 	
 	// Method getHistorycalTimeCostStreetFromDb: used to retrieve the historycal streets extratime cost data from the db
 	$scope.getHistorycalTimeCostStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		$scope.streetMapReady = false;
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/streetcompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = streetService.getHistorycalTimeCostStreetFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixTimeCost);
 		    for(var i = 1; i < result.length; i++){
@@ -7308,46 +6682,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Street historycal occupancy csv data
 	$scope.getTimeCostStreetHistoryCsv = function(dStreet){
-		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var params = {
-				dstreet_name: dStreet.streetReference,
-				dstreet_area: dStreet.area_name,
-				dstreet_totalslot: dStreet.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixTimeCost);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/streethistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = streetService.getTimeCostStreetHistoryCsv(dStreet, $scope.matrixTimeCost);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.streetTimeCostCvsHistorycalFile = result;
 	    	window.location.href = $scope.streetTimeCostCvsHistorycalFile;
-	    });	
+	    });
 	};	
 	
 	// Method getHistorycalTimeCostParkingFromDb: used to retrieve the historycal parking occupancy data from the db
 	$scope.getHistorycalTimeCostParkingFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
-		// period params
-		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
-		var monthRange = $scope.chekIfAllRange(month, 1);
-		var weekRange = $scope.chekIfAllRange(weekday, 2);
-		var hourRange = $scope.chekIfAllRange(hour, 3);
-		$scope.streetMapReady = false;
-		var idApp = sharedDataService.getConfAppId();
-		var method = 'GET';
-		var params = {
-			verticalVal: verticalVal,
-			orizontalVal: orizontalVal,
-			year: $scope.correctParamsFromSemicolon(year),
-			month: $scope.correctParamsFromSemicolonForMonth(monthRange),
-			weekday: $scope.correctParamsFromSemicolon(weekRange),
-			dayType: dayType,
-			hour: $scope.correctParamsFromSemicolon(hourRange),
-			valueType: valueType,
-			lang: language,
-			noCache: new Date().getTime()
-		};
-		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructurecompare/" + id, params, $scope.authHeaders, null);
+		var myDataPromise = structureService.getHistorycalTimeCostParkingFromDb(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(result){
 		    angular.copy(result, $scope.matrixTimeCost);
 		    for(var i = 1; i < result.length; i++){
@@ -7361,22 +6706,12 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Parking historycal occupancy csv data
 	$scope.getTimeCostParkingHistoryCsv = function(dParking){
-		var method = 'POST';
-		//var appId = sharedDataService.getConfAppId();
-		var params = {
-			dparking_name: dParking.name,
-			dparking_streetreference: dParking.streetReference,
-			dparking_totalslot: dParking.slotNumber
-		};
-		var value = JSON.stringify($scope.matrixTimeCost);
-		
-	    //var myDataPromise = invokeWSServiceProxy.getProxy(method, "street", null, $scope.authHeaders, value);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/parkingstructureshistory/csv", params, $scope.authHeaders, value);
+		var myDataPromise = structureService.getTimeCostParkingHistoryCsv(dParking, $scope.matrixTimeCost);
 	    myDataPromise.then(function(result){
 	    	if($scope.showLogs)console.log("Created csv file: " + JSON.stringify(result));
 	    	$scope.parkingTimeCostCvsHistorycalFile = result;
 	    	window.location.href = $scope.parkingTimeCostCvsHistorycalFile;
-	    });	
+	    });
 	};
 	
 	// ---------------------------------------------------------- End of WS call ----------------------------------------------------

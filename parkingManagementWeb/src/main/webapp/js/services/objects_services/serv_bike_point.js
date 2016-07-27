@@ -2,8 +2,8 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataService', 'invokeWSServiceNS', 'gMapService',
-                 function($rootScope, invokeWSService, sharedDataService, invokeWSServiceNS, gMapService){
+pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataService', 'invokeWSServiceNS', 'invokeDashboardWSService', 'gMapService',
+                 function($rootScope, invokeWSService, sharedDataService, invokeWSServiceNS, invokeDashboardWSService, gMapService){
 	
 	this.showLog = false;
 	// BP get method
@@ -42,6 +42,18 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			    }
 		    	gMapService.setBikePointsMarkers(markers);
 	    	}
+	    });
+		return myDataPromise;
+	};
+	
+	// BP get method for dashboard
+	this.getBikePointsFromDbDashboard = function(){
+		var markers = [];
+		var allBpoints = [];
+		var method = 'GET';
+		var appId = sharedDataService.getConfAppId();
+		var myDataPromise = invokeDashboardWSService.getProxy(method, appId + "/bikepoint", null, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(allBpoints){
 	    });
 		return myDataPromise;
 	};

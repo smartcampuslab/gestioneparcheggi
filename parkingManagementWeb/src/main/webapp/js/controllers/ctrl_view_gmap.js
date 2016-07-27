@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'invokeWSService', 'invokeWSServiceNS', 'invokeWSServiceProxy', 'initializeService', 'gMapService', 'areaService', 'streetService', 'parkingMeterService', 'structureService', 'bikePointService', 'zoneService', '$timeout',
-                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, invokeWSService, invokeWSServiceNS, invokeWSServiceProxy, initializeService, gMapService, areaService, streetService, parkingMeterService, structureService, bikePointService, zoneService, $timeout, $location, $filter) {
+pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', 'sharedDataService', 'initializeService', 'gMapService', 'areaService', 'streetService', 'parkingMeterService', 'structureService', 'bikePointService', 'zoneService', '$timeout',
+                          function($scope, $http, $route, $routeParams, $rootScope, localize, sharedDataService, initializeService, gMapService, areaService, streetService, parkingMeterService, structureService, bikePointService, zoneService, $timeout, $location, $filter) {
 
 	$scope.params = $routeParams;
 	
@@ -1247,34 +1247,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		}
 	};
 	
-	
-	
-	
-	/*$scope.getLocalPmByCode = function(code){
-		var find = false;
-		var myPms = sharedDataService.getSharedLocalPms();
-		for(var i = 0; i < myPms.length && !find; i++){
-			var pmCodeString = String(myPms[i].code);
-			if(pmCodeString.localeCompare(code) == 0){
-				find = true;
-				return myPms[i];
-			}
-		}
-	};*/
-	
-	/*$scope.getLocalPmById = function(objId){
-		var find = false;
-		var myPms = sharedDataService.getSharedLocalPms();
-		for(var i = 0; i < myPms.length && !find; i++){
-			var pmIdString = String(myPms[i].id);
-			if(pmIdString.localeCompare(objId) == 0){
-				find = true;
-				return myPms[i];
-			}
-		}
-		return null;
-	};*/
-	
 	/*$scope.initAreasObjects = function(areas){
 		var myAreas = [];
 		for(var i = 0; i < areas.length; i++){
@@ -1412,94 +1384,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			myPms.push(myPmeter);
 		}
 		return myPms;
-	};*/	
-	
-	/*$scope.getLocalAreaById = function(id){
-		var find = false;
-		var myAreas = sharedDataService.getSharedLocalAreas();
-		for(var i = 0; i < myAreas.length && !find; i++){
-			if(myAreas[i].id == id){
-				find = true;
-				return myAreas[i];
-			}
-		}
-	};
-	*/
-	
-	/*$scope.getLocalZoneById = function(id, type, zindex){
-		var find = false;
-		var corrZone = null;
-		var myZones = $scope.getSharedLocalZones(zindex);
-		if(myZones){
-			for(var i = 0; i < myZones.length && !find; i++){
-				if(myZones[i].id == id){
-					find = true;
-					if(type == 1){
-						corrZone = myZones[i];
-					} else {
-						var sub = (myZones[i].submacro) ? myZones[i].submacro : ((myZones[i].submicro) ? myZones[i].submicro : null);
-						var lbl = (sub) ? (myZones[i].name + "_" + sub) : myZones[i].name;
-						corrZone = {
-							id: myZones[i].id,
-							id_app: myZones[i].id_app,
-							color: myZones[i].color,
-							name: myZones[i].name,
-							submacro: myZones[i].submacro,
-							submicro: myZones[i].submicro,
-							type: myZones[i].type,
-							note: myZones[i].note,
-							geometry: $scope.correctMyGeometryPolygon(myZones[i].geometry),
-							label: lbl
-						};
-					}			
-				}
-			}
-		}
-		return corrZone;
-	};*/
-	
-	/*$scope.setSharedLocalZones = function(zones, zindex){
-		switch(zindex){
-			case 0:
-				sharedDataService.setSharedLocalZones0(zones);
-				break;
-			case 1: 
-				sharedDataService.setSharedLocalZones1(zones);
-				break;
-			case 2: 
-				sharedDataService.setSharedLocalZones2(zones);
-				break;
-			case 3: 
-				sharedDataService.setSharedLocalZones3(zones);
-				break;
-			case 4: 
-				sharedDataService.setSharedLocalZones4(zones);
-				break;
-			default: break;
-		}
-	};*/
-	
-	/*$scope.getSharedLocalZones = function(zindex){
-		var zones = null;
-		switch(zindex){
-			case 0:
-				zones = sharedDataService.getSharedLocalZones0();
-				break;
-			case 1: 
-				zones = sharedDataService.getSharedLocalZones1();
-				break;
-			case 2: 
-				zones = sharedDataService.getSharedLocalZones2();
-				break;
-			case 3: 
-				zones = sharedDataService.getSharedLocalZones3();
-				break;
-			case 4: 
-				zones = sharedDataService.getSharedLocalZones4();
-				break;
-			default: break;
-		}
-		return zones;
 	};*/
 	
 	$scope.filterAllData = function(zone, indx){
@@ -1646,118 +1530,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	    	$scope.initFilters();
 		});
 	};
-	
-	
-	/*$scope.getAreasFromDb = function(fzones){
-		$scope.areaMapReady = false;
-		var allAreas = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/area", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			angular.copy(result, allAreas);  
-			$scope.areaWS = $scope.filterAreas(allAreas, fzones);
-			if($scope.isAreaVisible()){
-			    $scope.initAreasOnMap($scope.areaWS, $scope.checkArea);
-			}  
-			sharedDataService.setSharedLocalAreas(allAreas);
-		});
-		return myDataPromise;
-	};*/
-	
-	/*$scope.getStreetsFromDb = function(first, fzones){
-		$scope.streetMapReady = false;
-		var allStreet = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/street", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-		    //angular.copy(result, allStreet); 
-			allStreet = $scope.filterStreets(result, fzones);
-		    $scope.streetWS = $scope.initStreetsObjects(allStreet);
-		    if(!first){
-		    	firstStreetCall = false;
-		    	if($scope.isStreetVisible()){
-		    		$scope.mapStreets = $scope.initStreetsOnMap($scope.streetWS, $scope.checkStreets);
-		    	}
-		    } else {
-		    	firstStreetCall = true;
-		    }
-		});
-		return myDataPromise;
-	};*/
-	
-	/*$scope.getParkingMetersFromDb = function(fzones){
-	    var markers = [];
-		var allParkingMeters = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingmeter", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-			angular.copy(result, allParkingMeters);
-			var filteredParkingMeters = $scope.filterPms(allParkingMeters, fzones);
-		    if($scope.isPmVisible()){
-		    	for (var i = 0; i < filteredParkingMeters.length; i++) {
-		    		markers.push(createMarkers(i, filteredParkingMeters[i], 1));
-		    	}
-		    	angular.copy(markers, $scope.parkingMetersMarkers);
-		    	if($scope.checkPm){
-		    		$scope.pmInitialMarkers = markers;
-		    	} else {
-		    		$scope.pmInitialMarkers = [];
-		    	}
-		    }
-		    sharedDataService.setSharedLocalPms(allParkingMeters);
-		});
-		return myDataPromise;
-	};*/
-	
-	/*$scope.getParkingStructuresFromDb = function(fzones){
-		var markers = [];
-		var allParkingStructures = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", null, $scope.authHeaders, null);
-		myDataPromise.then(function(result){
-		    allParkingStructures = $scope.filterPss(result, fzones);
-		    if($scope.isPsVisible()){
-		    	for (var i = 0; i <  allParkingStructures.length; i++) {
-			    	markers.push(createMarkers(i, allParkingStructures[i], 2));
-			    }
-		    	angular.copy(markers, $scope.parkingStructureMarkers);
-		    	if($scope.checkPs){
-		    		$scope.psInitialMarkers = markers;
-		    	} else {
-		    		$scope.psInitialMarkers = [];
-		    	}
-		    }
-		});
-		return myDataPromise;
-	};*/
-	
-	/*$scope.getBikePointFromDb = function(fzones){		
-		var markers = [];
-		var allBikePoints = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/bikepoint", null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	allBikePoints = $scope.filterBps(result, fzones);
-	    	if($scope.isBpVisible()){
-	    		for (var i = 0; i <  allBikePoints.length; i++) {
-		    		markers.push(createMarkers(i, allBikePoints[i], 3));
-			    }
-	    		angular.copy(markers, $scope.bikePointMarkers);
-	    		if($scope.checkBp){
-	    			$scope.bpInitialMarkers = markers;
-	    		} else {
-	    			$scope.bpInitialMarkers = [];
-	    		}
-	    	}
-	    	$scope.initMap($scope.pmInitialMarkers, $scope.psInitialMarkers, $scope.bpInitialMarkers);
-		});
-	    return myDataPromise;
-	};*/
 	
 	// Retrieve all Areas Method
     $scope.getAllAreas = function(fzones){
@@ -1921,63 +1693,6 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			
 		});
 	};
-	
-	/*$scope.getZonesFromDb = function(z_type, tindex, lastindex, fzones){
-		$scope.zoneMapReady = false;
-		$scope.zoneWS = [];	// clear zones;
-		var allZones = [];
-		var method = 'GET';
-		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/zone/" + z_type, null, $scope.authHeaders, null);
-	    myDataPromise.then(function(result){
-	    	angular.copy(result, allZones);
-	    	switch(tindex){
-		    	case 0:
-		    		$scope.zoneWS0 = $scope.correctMyZones(allZones);
-				    $scope.initZonesOnMap($scope.zoneWS0, tindex, $scope.checkZones0);
-				    var sharedzones = $scope.getSharedLocalZones(tindex);
-				    if(sharedzones == null || sharedzones.length == 0){
-				    	$scope.setSharedLocalZones($scope.zoneWS0, tindex);
-				    }
-		    		break;
-		    	case 1:
-		    		$scope.zoneWS1 = $scope.correctMyZones(allZones);
-				    $scope.initZonesOnMap($scope.zoneWS1, tindex, $scope.checkZones1);
-				    var sharedzones = $scope.getSharedLocalZones(tindex);
-				    if(sharedzones == null || sharedzones.length == 0){
-				    	$scope.setSharedLocalZones($scope.zoneWS1, tindex);
-				    }
-		    		break;
-		    	case 2:
-		    		$scope.zoneWS2 = $scope.correctMyZones(allZones);
-				    $scope.initZonesOnMap($scope.zoneWS2, tindex, $scope.checkZones2);
-				    var sharedzones = $scope.getSharedLocalZones(tindex);
-				    if(sharedzones == null || sharedzones.length == 0){
-				    	$scope.setSharedLocalZones($scope.zoneWS2, tindex);
-				    }
-		    		break;
-		    	case 3:
-		    		$scope.zoneWS3 = $scope.correctMyZones(allZones);
-				    $scope.initZonesOnMap($scope.zoneWS3, tindex, $scope.checkZones3);
-				    if(sharedzones == null || sharedzones.length == 0){
-				    	$scope.setSharedLocalZones($scope.zoneWS3, tindex);
-				    }
-		    		break;
-		    	case 4:
-		    		$scope.zoneWS4 = $scope.correctMyZones(allZones);
-				    $scope.initZonesOnMap($scope.zoneWS4, tindex, $scope.checkZones4);
-				    if(sharedzones == null || sharedzones.length == 0){
-				    	$scope.setSharedLocalZones($scope.zoneWS4, tindex);
-				    }
-		    		break;
-		    	default:break;
-	    	}
-	    	if(tindex == lastindex){
-	    		$scope.callMyDbFunctionStack(fzones);
-	    	}
-	    	$scope.zoneMapReady = true;
-	    });
-	};*/
 	
 	$scope.findZoneByName = function(z_type, names){
 		var idAndCenter = [];

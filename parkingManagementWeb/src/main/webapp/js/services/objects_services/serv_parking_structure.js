@@ -2,8 +2,8 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataService', 'invokeWSServiceNS', 'gMapService',
-                 function($rootScope, invokeWSService, sharedDataService, invokeWSServiceNS, gMapService){
+pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataService', 'invokeWSServiceNS', 'invokeDashboardWSService', 'utilsService', 'gMapService',
+                 function($rootScope, invokeWSService, sharedDataService, invokeWSServiceNS, invokeDashboardWSService, utilsService, gMapService){
 	
 	this.showLog = false;
 	
@@ -45,6 +45,83 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	    	}
 	    });
 	    return myDataPromise;
+	};
+	
+	// Method getProfitStructFromDb: used to retrieve te streets occupancy data from the db
+	this.getProfitParksFromDb = function(year, month, weekday, dayType, hour, valueType){
+		// period params
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var markers = [];
+		var allPSs = [];
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params)); 	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "profitchanged/" + idApp + "/parkstructs", params, sharedDataService.getAuthHeaders(), null);	//MB_lightWS: invoke only profitchanged instead of profit
+		myDataPromise.then(function(allPSs){
+		});
+		return myDataPromise;
+	};
+	
+	// Occupancy Park retrieving method
+	this.getOccupancyParksFromDb = function(year, month, weekday, dayType, hour, valueType){
+		// period params
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var allParks = [];
+		var markers = [];
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructures", params, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(allParks){
+		});
+		return myDataPromise;
+	};
+	
+	// Method getOccupancyParksUpdatedFromDb: used to retrieve te parks occupancy data from the db
+	this.getOccupancyParksUpdatedFromDb = function(year, month, weekday, dayType, hour, valueType){
+		// period params
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var allParks = [];
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancychanged/" + idApp + "/parkingstructures", params, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(allParks){
+		});
+		return myDataPromise;
 	};
 	
 	// PS update method
@@ -158,7 +235,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 		};
 		
 	    var value = JSON.stringify(data);
-	    if(this.showLogDates) console.log("ParkingStructure data : " + value);
+	    if(this.showLog) console.log("ParkingStructure data : " + value);
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure", null, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created parkingStructure: " + result.name);
@@ -177,4 +254,176 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	    });
 	    return myDataPromise;
 	};
+	
+	// PS create supply csv file
+	this.getStructureSupplyCsv = function(structures){
+		var method = 'POST';
+		var value = utilsService.correctStructObjectForWS(structures);
+		
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "supply/parkingstructures/csv", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// PS create occupancy csv file
+	this.getStructureOccupancyCsv = function(structures){
+		var method = 'POST';
+		var value = utilsService.correctOccStructObjectForWS(structures);
+	    if(this.showLog)console.log("Structure list data : " + value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/parkingstructures/csv", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });
+	    return myDataPromise;
+	};
+	
+	// PS create profit csv file
+	this.getStructureProfitCsv = function(structures){
+		var method = 'POST';
+		var value = utilsService.correctStructProfitObjectForWS(structures);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkingstructures/csv", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// PS create timecost csv file
+	this.getStructureTimeCostCsv = function(structures){
+		var method = 'POST';
+		var value = utilsService.correctStructTimeCostObjectForWS(structures);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timeCost/parkingstructures/csv", null, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// Method getHistorycalOccupancyParkingFromDb: used to retrieve the historycal parking occupancy data from the db
+	this.getHistorycalOccupancyParkingFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			lang: language,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructurecompare/" + id, params, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(result){
+		});
+		return myDataPromise;
+	};
+	
+	// create a csv file with parking structure historycal occupancy
+	this.getOccupancyParkingHistoryCsv = function(dParking, matrixOcc){
+		var method = 'POST';
+		var params = {
+			dparking_name: dParking.name,
+			dparking_streetreference: dParking.streetReference,
+			dparking_totalslot: dParking.slotNumber
+		};
+		var value = JSON.stringify(matrixOcc);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupation/parkingstructureshistory/csv", params, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// Retrieve all historycal profit parkingStructures data from db
+	this.getHistorycalProfitPsFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			lang: language,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/" + idApp + "/parkstructcompare/" + id, params, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(result){
+		});
+		return myDataPromise;
+	};
+	
+	// ParkiStruct historycal profit csv data
+	this.getProfitParkStructHistoryCsv = function(dParkstruct, matrixPAll){
+		var method = 'POST';
+		var params = {
+			dparkstruct_name: dParkstruct.name,
+			dparkstruct_streetreference: dParkstruct.streetReference,
+			dparkstruct_totalslot: dParkstruct.slotNumber
+		};
+		var value = JSON.stringify(matrixPAll);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "profit/parkstructhistory/csv", params, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
+	// Method getHistorycalTimeCostParkingFromDb: used to retrieve the historycal parking occupancy data from the db
+	this.getHistorycalTimeCostParkingFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+		// period params
+		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
+		var monthRange = sharedDataService.chekIfAllRange(month, 1);
+		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
+		var hourRange = sharedDataService.chekIfAllRange(hour, 3);
+		var idApp = sharedDataService.getConfAppId();
+		var method = 'GET';
+		var params = {
+			verticalVal: verticalVal,
+			orizontalVal: orizontalVal,
+			year: sharedDataService.correctParamsFromSemicolon(year),
+			month: sharedDataService.correctParamsFromSemicolonForMonth(monthRange),
+			weekday: sharedDataService.correctParamsFromSemicolon(weekRange),
+			dayType: dayType,
+			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
+			valueType: valueType,
+			lang: language,
+			noCache: new Date().getTime()
+		};
+		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));	
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/" + idApp + "/parkingstructurecompare/" + id, params, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(result){
+		});
+		return myDataPromise;
+	};
+	
+	// Parking historycal occupancy csv data
+	this.getTimeCostParkingHistoryCsv = function(dParking, matrixTimeCost){
+		var method = 'POST';
+		var params = {
+			dparking_name: dParking.name,
+			dparking_streetreference: dParking.streetReference,
+			dparking_totalslot: dParking.slotNumber
+		};
+		var value = JSON.stringify(matrixTimeCost);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "timecost/parkingstructureshistory/csv", params, sharedDataService.getAuthHeaders(), value);
+	    myDataPromise.then(function(result){
+	    });	
+	    return myDataPromise;
+	};
+	
 }]);

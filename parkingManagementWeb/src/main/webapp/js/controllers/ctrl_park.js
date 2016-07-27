@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokePdfServiceProxy', 'initializeService','gMapService','areaService', 'streetService', 'zoneService', 'structureService', 'parkingMeterService', 'bikePointService', 'getMyMessages','$timeout',
-                   function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, gMapService, areaService, streetService, zoneService, structureService, parkingMeterService, bikePointService, getMyMessages, $timeout) { 
+pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'initializeService','gMapService','areaService', 'streetService', 'zoneService', 'structureService', 'parkingMeterService', 'bikePointService', 'getMyMessages','$timeout',
+                   function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, initializeService, gMapService, areaService, streetService, zoneService, structureService, parkingMeterService, bikePointService, getMyMessages, $timeout) { 
 	this.$scope = $rootScope;
     $scope.params = $routeParams;
     $scope.showLog = true;
@@ -3387,39 +3387,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    		$scope.showUpdatingBPErrorMessage = true;
 		    	}
 		    });
-			
-			/*var id = $scope.bikePoint.id;
-			var appId = sharedDataService.getConfAppId();
-			var method = 'PUT';
-			
-			var data = {
-				id: bp.id,
-				id_app: bp.id_app,
-				name: bp.name,
-				slotNumber: bp.slotNumber,
-				bikeNumber: bp.bikeNumber,
-				zones: $scope.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-				geometry: $scope.correctMyGeometry(geo)
-			};
-			
-		    var value = JSON.stringify(data);
-		    if($scope.showLog) console.log("Bikepoint data : " + value);
-		   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + id, null, $scope.authHeaders, value);
-		    myDataPromise.then(function(result){
-		    	console.log("Updated bikepoint: " + result);
-		    	if(result != null){//== "OK"){
-		    		$scope.getAllBikePoints();
-		    		$scope.myBpZone0 = null;
-		    		$scope.myBpZone1 = null;
-		    		$scope.myBpZone2 = null;
-		    		$scope.myBpZone3 = null;
-		    		$scope.myBpZone4 = null;
-					$scope.editModeBP = false;
-		    	} else {
-		    		$scope.editModeBP = true;
-		    		$scope.showUpdatingBPErrorMessage = true;
-		    	}
-		    });*/
 		}
 	};
 	

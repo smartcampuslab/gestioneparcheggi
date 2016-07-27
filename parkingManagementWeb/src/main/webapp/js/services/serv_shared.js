@@ -1266,6 +1266,88 @@ pm.service('sharedDataService', function(){
 		return correctedZones;
 	};
 	
+	// Method correctParamsFromSemicolon: used to replace the semicolon with a comma
+	this.correctParamsFromSemicolon = function(value){
+		if(value != null){
+			var res = value+"";
+			if(res.indexOf(";") > -1){
+				return res.replace(";",",");
+			} else {
+				return res;
+			}
+		} else {
+			return value;
+		}
+	};
+	
+	// Method correctParamsFromSemicolonForMonth: used to replace the semicolon with a comma. In this case the vales are 
+	// corrected becouse in the slider the month range is 1-12 but in java is 0, 11
+	this.correctParamsFromSemicolonForMonth = function(value){
+		if(value != null){
+			var res = value+"";
+			if(res.indexOf(";") > -1){
+				var arr = res.split(";");
+				var val1 = parseInt(arr[0]) - 1;
+				var val2 = parseInt(arr[1]) - 1;
+				return val1 + "," + val2;
+			} else if(res.indexOf(",") > -1){
+				var arr = res.split(",");
+				var val1 = parseInt(arr[0]) - 1;
+				var val2 = parseInt(arr[1]) - 1;
+				return val1 + "," + val2;
+			} else {
+				var val = parseInt(res) - 1;
+				return val + "";
+			}
+		} else {
+			return value;
+		}
+	};
+	
+	// Method chekIfAllRange: used to control if a range is complete. In this case the range value is set to null
+	this.chekIfAllRange = function(arr, type){
+		var corrVal = arr;
+		var res;
+		switch(type){
+			case 1:	// months
+				if(arr != null && arr != ""){
+					arr = arr + ""; // to force to string
+					if(arr.indexOf(";") > -1){
+						res = arr.split(";");
+						if(res[0] == "1" && res[1] == "12"){
+							corrVal = null;
+						}
+					}
+				}
+				break;
+			case 2: // week day
+				if(arr != null && arr != ""){
+					arr = arr + ""; // to force to string
+					if(arr.indexOf(",") > -1){
+						res = arr.split(",");
+						//if(res[0] == "1" && res[1] == "7"){
+						if(res.length == 7){	// all day selected	
+							corrVal = null;
+						}
+					}
+				}
+				break;
+			case 3: // hour
+				if(arr != null && arr != ""){
+					arr = arr + ""; // to force to string
+					if(arr.indexOf(";") > -1){
+						res = arr.split(";");
+						if(res[0] == "0" && res[1] == "23"){
+							corrVal = null;
+						}
+					}
+				}
+				break;
+			default: break;
+		}
+		return corrVal;
+	};
+	
 	// correctMyZones: used to correct the zone object with all the necessary data
 	/*this.correctMyZones = function(zones){
 		var correctedZones = [];
