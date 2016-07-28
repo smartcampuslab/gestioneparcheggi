@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" id="WebApp_ID" version="2.5">
   <display-name>Gestione Parcheggi</display-name>
-<!--   <welcome-file-list> -->
-<!--     <welcome-file>index.html</welcome-file> -->
-<!--   </welcome-file-list> -->
    <welcome-file-list>
-<!--     <welcome-file>/WEB-INF/jsp/index.jsp</welcome-file> -->
     <welcome-file>/WEB-INF/jsp/index.jsp</welcome-file>
   </welcome-file-list>
   <listener>
     <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+  </listener>
+  <listener>
+	<listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
   </listener>
   <filter>
     <filter-name>springSecurityFilterChain</filter-name>
@@ -51,15 +50,14 @@
   </servlet-mapping>
   <servlet-mapping>
     <servlet-name>SpringAppDispatcher</servlet-name>
-<!--     <url-pattern>/rest/*</url-pattern> -->
     <url-pattern>/</url-pattern>
   </servlet-mapping>
-<!--   <servlet-mapping> -->
-<!-- 		<servlet-name>SpringAppDispatcher</servlet-name> -->
-<!-- 		<url-pattern>/rest/*</url-pattern> -->
-<!-- 	</servlet-mapping> -->
   <error-page>
     <error-code>404</error-code>
+    <location>/partials/errors/error.html</location>
+  </error-page>
+  <error-page>
+    <error-code>405</error-code>
     <location>/partials/errors/error.html</location>
   </error-page>
 </web-app>

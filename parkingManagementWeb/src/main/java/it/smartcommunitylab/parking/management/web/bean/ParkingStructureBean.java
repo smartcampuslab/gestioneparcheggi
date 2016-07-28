@@ -239,11 +239,11 @@ public class ParkingStructureBean {
 		for(int i = 0; i < this.validityPeriod.size(); i++){
 			float euro_val = validityPeriod.get(i).getRateValue() / 100F;
 			String dayNightMode = "";
-			if(validityPeriod.get(i).getDayOrNight().compareTo(DAY_MODE) == 0){
-				dayNightMode = "Tariffa diurna: ";
-			} else if(validityPeriod.get(i).getDayOrNight().compareTo(NIGHT_MODE) == 0){
-				dayNightMode = "Tariffa notturna: ";
-			}
+			//if(validityPeriod.get(i).getDayOrNight().compareTo(DAY_MODE) == 0){
+			//	dayNightMode = "Tariffa diurna: ";
+			//} else if(validityPeriod.get(i).getDayOrNight().compareTo(NIGHT_MODE) == 0){
+			//	dayNightMode = "Tariffa notturna: ";
+			//}
 			if(validityPeriod.get(i).isHoliday()) {
 				pSumm += dayNightMode
 						+ String.format("%.2f", euro_val) + " euro/h"

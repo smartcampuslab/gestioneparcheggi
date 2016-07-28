@@ -25,7 +25,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in bp.zones0 track by z0.id">
+														<tr ng-repeat="z0 in bp.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -38,7 +38,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in bp.zones1 track by z1.id">
+														<tr ng-repeat="z1 in bp.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -51,7 +51,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in bp.zones2 track by z2.id">
+														<tr ng-repeat="z2 in bp.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -64,7 +64,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in bp.zones3 track by z3.id">
+														<tr ng-repeat="z3 in bp.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -77,7 +77,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in bp.zones4 track by z4.id">
+														<tr ng-repeat="z4 in bp.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
@@ -123,7 +123,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in sbp.zones0 track by z0.id">
+														<tr ng-repeat="z0 in sbp.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -136,7 +136,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in sbp.zones1 track by z1.id">
+														<tr ng-repeat="z1 in sbp.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -149,7 +149,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in sbp.zones2 track by z2.id">
+														<tr ng-repeat="z2 in sbp.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -162,7 +162,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in sbp.zones3 track by z3.id">
+														<tr ng-repeat="z3 in sbp.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -175,7 +175,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in sbp.zones4 track by z4.id">
+														<tr ng-repeat="z4 in sbp.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
@@ -285,7 +285,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z0 in bikePoint.myZones0 track by z0.id">
+											<tr ng-repeat="z0 in bikePoint.zones0 track by z0.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 												<td width="85%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 											</tr>
@@ -298,7 +298,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z1 in bikePoint.myZones1 track by z1.id">
+											<tr ng-repeat="z1 in bikePoint.zones1 track by z1.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 												<td width="85%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 											</tr>
@@ -311,7 +311,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z2 in bikePoint.myZones2 track by z2.id">
+											<tr ng-repeat="z2 in bikePoint.zones2 track by z2.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 												<td width="85%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 											</tr>
@@ -324,7 +324,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z3 in bikePoint.myZones3 track by z3.id">
+											<tr ng-repeat="z3 in bikePoint.zones3 track by z3.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 												<td width="85%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 											</tr>
@@ -337,7 +337,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z4 in bikePoint.myZones4 track by z4.id">
+											<tr ng-repeat="z4 in bikePoint.zones4 track by z4.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 												<td width="85%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 											</tr>
@@ -442,8 +442,8 @@
 							   			<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
 							   		</td>
 							   		<td width="7%" align="right">
-							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(0, bikePoint, form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, bikePoint, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 							   		</td>
 								</tr>
 								<tr>

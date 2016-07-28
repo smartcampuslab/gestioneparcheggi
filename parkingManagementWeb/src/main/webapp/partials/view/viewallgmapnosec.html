@@ -26,7 +26,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in pm.zones0 track by z0.id">
+														<tr ng-repeat="z0 in pm.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -39,7 +39,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in pm.zones1 track by z1.id">
+														<tr ng-repeat="z1 in pm.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -52,7 +52,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in pm.zones2 track by z2.id">
+														<tr ng-repeat="z2 in pm.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -65,7 +65,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in pm.zones3 track by z3.id">
+														<tr ng-repeat="z3 in pm.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -78,7 +78,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in pm.zones4 track by z4.id">
+														<tr ng-repeat="z4 in pm.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
@@ -95,14 +95,6 @@
 																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
 																	<td width="55%">{{ pm.area.name }}</td>
 																</tr>
-																<!-- <tr>	
-																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ pm.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-																	<td>{{ pm.area.timeSlot }}</td>
-																</tr> -->
 																<tr>
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
 																	<td>
@@ -148,8 +140,6 @@
 												<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
 												<td>
 													<div ng-repeat="r in ps.data.validityPeriod">
-														<!-- <span ng-show="r.dayOrNight == day_mode">{{ 'period_rate_day_title' | i18n }} :</span>
-														<span ng-show="r.dayOrNight == night_mode">{{ 'period_rate_night_title' | i18n }} :</span> -->
 														<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
 														<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
 														<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
@@ -158,20 +148,6 @@
 													</div>
 												</td>
 											</tr>
-											<!-- <tr ng-show="psconf.ps_fee.visible">
-								       			<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
-								       			<td ng-if="ps.data.fee_val != null">&nbsp;{{ ps.data.fee_val | centToeuroVal }} {{ 'euro_hour' | i18n }}</td>
-								       			<td ng-if="ps.data.fee_val == null">&nbsp;n.p.</td>
-								       		</tr>
-							        		<tr ng-show="psconf.ps_fee.visible">
-							        			<td><strong>{{ 'ps_fee_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.fee_note }}</td>
-							        		</tr>
-							        		<tr ng-show="psconf.ps_timeSlot.visible">
-								       			<td><strong>{{ 'ps_time' | i18n }}:</strong></td>
-								       			<td ng-if="ps.data.openingTime != null"><span ng-repeat="ops in ps.data.openingTime.period">&nbsp;{{ ops.from }} - {{ ops.to }};</span></td>
-								       			<td ng-if="ps.data.openingTime == null">&nbsp;n.p.</td>
-								       		</tr> -->
 							        		<tr ng-show="psconf.ps_phoneNumber.visible">
 							        			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
@@ -201,7 +177,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in ps.zones0 track by z0.id">
+														<tr ng-repeat="z0 in ps.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -214,7 +190,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in ps.zones1 track by z1.id">
+														<tr ng-repeat="z1 in ps.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -227,7 +203,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in ps.zones2 track by z2.id">
+														<tr ng-repeat="z2 in ps.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -240,7 +216,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in ps.zones3 track by z3.id">
+														<tr ng-repeat="z3 in ps.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -253,7 +229,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in ps.zones4 track by z4.id">
+														<tr ng-repeat="z4 in ps.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
@@ -274,10 +250,6 @@
 																	<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
 																	<td>{{ ps.data.handicappedSlotNumber }}</td>
 																</tr>
-<!-- 																<tr ng-show="psconf.ps_unusuableSlot.visible">	 -->
-<!-- 																	<td><strong>{{ 'ps_unusuable_slot' | i18n }}:</strong></td> -->
-<!-- 																	<td>{{ ps.data.unusuableSlotNumber }}</td> -->
-<!-- 																</tr> -->
 															</table>
 														</div>
 													</div>
@@ -309,7 +281,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in bp.zones0 track by z0.id">
+														<tr ng-repeat="z0 in bp.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -322,7 +294,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in bp.zones1 track by z1.id">
+														<tr ng-repeat="z1 in bp.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -335,7 +307,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in bp.zones2 track by z2.id">
+														<tr ng-repeat="z2 in bp.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -348,7 +320,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in bp.zones3 track by z3.id">
+														<tr ng-repeat="z3 in bp.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -361,7 +333,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in bp.zones4 track by z4.id">
+														<tr ng-repeat="z4 in bp.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
@@ -422,7 +394,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="p in s.pms track by p.code">
+														<tr ng-repeat="p in s.data.pms track by p.code">
 															<td width="30%">{{ p.code }}</td>
 															<td width="70%">{{ p.note }}</td>
 														</tr>
@@ -435,7 +407,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in s.zones0 track by z0.id">
+														<tr ng-repeat="z0 in s.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -448,7 +420,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in s.zones1 track by z1.id">
+														<tr ng-repeat="z1 in s.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -461,7 +433,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in s.zones2 track by z2.id">
+														<tr ng-repeat="z2 in s.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -474,7 +446,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in s.zones3 track by z3.id">
+														<tr ng-repeat="z3 in s.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -487,7 +459,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in s.zones4 track by z4.id">
+														<tr ng-repeat="z4 in s.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
@@ -502,12 +474,12 @@
 															<table width="100%">
 																<tr>
 																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-																	<td width="55%">{{ s.area.name }}</td>
+																	<td width="55%">{{ s.data.area.name }}</td>
 																</tr>
 																<tr>
 																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
 																	<td>
-																		<div ng-repeat="r in s.area.validityPeriod">
+																		<div ng-repeat="r in s.data.area.validityPeriod">
 																			<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
 																			<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
 																			<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
@@ -516,21 +488,13 @@
 																		</div>
 																	</td>
 																</tr>
-																<!-- <tr>	
-																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-																	<td>{{ s.area.timeSlot }}</td>
-																</tr> -->
 																<tr>	
 																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-																	<td>{{ s.area.smsCode }}</td>
+																	<td>{{ s.data.area.smsCode }}</td>
 																</tr>
 																<tr>	
 																	<td><strong>{{ 'area_color' | i18n }}:</strong></td>
-																	<td><span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span></td>
+																	<td><span class="colorBox" ng-style="{'background-color': correctColor(s.data.area.color)}"></span></td>
 																</tr>
 															</table>
 														</div>
@@ -693,14 +657,6 @@
 													</div>
 												</td>
 											</tr>
-											<!-- <tr ng-show="aconf.a_fee.visible">	
-												<td width="45%"><strong>{{ 'area_rate' | i18n }}:</strong></td>
-												<td width="55%">{{ a.data.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
-											</tr>
-											<tr ng-show="aconf.a_timeSlot.visible">	
-												<td><strong>{{ 'area_time' | i18n }}:</strong></td>
-												<td>{{ a.data.timeSlot }}</td>
-											</tr> -->
 											<tr ng-show="aconf.a_smsCode.visible">	
 												<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
 												<td>{{ a.data.smsCode }}</td>
@@ -719,7 +675,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in a.zones0 track by z0.id">
+														<tr ng-repeat="z0 in a.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -732,7 +688,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in a.zones1 track by z1.id">
+														<tr ng-repeat="z1 in a.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -745,7 +701,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in a.zones2 track by z2.id">
+														<tr ng-repeat="z2 in a.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -758,7 +714,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in s.zones3 track by z3.id">
+														<tr ng-repeat="z3 in a.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -771,7 +727,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in s.zones4 track by z4.id">
+														<tr ng-repeat="z4 in a.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>

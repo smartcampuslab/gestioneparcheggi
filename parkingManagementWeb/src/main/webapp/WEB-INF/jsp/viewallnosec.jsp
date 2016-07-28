@@ -46,6 +46,13 @@
 <script src="../js/services/serv_shared.js"></script>
 <script src="../js/services/serv_initialize.js"></script>
 <script src="../js/services/serv_utils.js"></script>
+<script src="../js/services/serv_maps.js"></script>
+<script src="../js/services/objects_services/serv_area.js"></script>
+<script src="../js/services/objects_services/serv_street.js"></script>
+<script src="../js/services/objects_services/serv_zone.js"></script>
+<script src="../js/services/objects_services/serv_parking_structure.js"></script>
+<script src="../js/services/objects_services/serv_parking_meter.js"></script>
+<script src="../js/services/objects_services/serv_bike_point.js"></script>
 <script src="../js/directives.js"></script>
 
 <script src="../lib/lodash.js"></script>

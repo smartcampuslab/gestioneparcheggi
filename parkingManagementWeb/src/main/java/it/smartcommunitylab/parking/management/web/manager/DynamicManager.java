@@ -2870,6 +2870,44 @@ public class DynamicManager {
 		return parkstructs;
 	}
 	
+	/**
+	 * getProfitChangeFromAllParkStructs: used to retrieve only the profit data of the parking structure list.
+	 * Is a compact version of the getProfitFromAllParkStructs method
+	 * @param appId
+	 * @param type
+	 * @param params
+	 * @param years
+	 * @param months
+	 * @param dayType
+	 * @param days
+	 * @param hours
+	 * @param valueType
+	 * @return
+	 */
+	public List<CompactParkingStructureBean> getProfitChangeFromAllParkStructs(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+		List<ParkingStructureBean> parkstructs = getAllParkingStructureInAppId(null, appId);
+		List<CompactParkingStructureBean> correctedParkings = new ArrayList<CompactParkingStructureBean>();
+		String pId = "";
+		for(ParkingStructureBean p : parkstructs){
+			CompactParkingStructureBean cp = new CompactParkingStructureBean();
+			double profitVal = 0;
+			int ticketsNum = 0;
+			pId = getCorrectId(p.getId(), "parkstruct", appId);
+			if(valueType == 1){
+				profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+				ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+			} else {
+				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+			}
+			cp.setId(p.getId());
+			cp.setProfit(profitVal);
+			cp.setTickets(ticketsNum);
+			correctedParkings.add(cp);
+		}
+		return correctedParkings;
+	}
+	
 	public ParkingStructureBean getProfitFromParkStruct(String id, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		ParkingStructureBean p = new ParkingStructureBean();
 		String pId = "";

@@ -201,7 +201,7 @@ public class ObjectController  {
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/streets") 
 	public @ResponseBody List<Street> getStreets(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.info("I'm in get all street - auxiliary app!!!");
+		logger.debug("I'm in get all street - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
 			return dataService.getStreets(agency, lat, lon, radius);
 		} 
@@ -210,7 +210,7 @@ public class ObjectController  {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkings") 
 	public @ResponseBody List<Parking> getParkings(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.info("I'm in get all parkings - auxiliary app!!!");
+		logger.debug("I'm in get all parkings - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
 			return dataService.getParkings(agency, lat, lon, radius);
 		} 
@@ -219,7 +219,7 @@ public class ObjectController  {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkingmeters") 
 	public @ResponseBody List<ParkMeter> getParkingMeters(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.info("I'm in get all parkingmeters - auxiliary app!!!");
+		logger.debug("I'm in get all parkingmeters - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
 			return dataService.getParkingMeters(agency, lat, lon, radius);
 		} 
@@ -243,7 +243,7 @@ public class ObjectController  {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
 			if(period != null){
-				logger.error("Inserted period = " + period[0] + "-" + period[1] );
+				logger.debug("Inserted period = " + period[0] + "-" + period[1] );
 			}
 			dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, NO_PERIOD);
 			return "OK";
@@ -283,7 +283,7 @@ public class ObjectController  {
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/fileupload/{userId:.*}") 
 	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data,  @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			logger.info("started file uplodad flux");
+			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PSOccupancyData> allData = dataService.classStringToOPSObjArray(datas);
 			for(PSOccupancyData p : allData){
@@ -345,7 +345,7 @@ public class ObjectController  {
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
 	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			logger.info("started file uplodad flux");
+			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas);
 			for(SOccupancyData s : allData){
@@ -440,7 +440,7 @@ public class ObjectController  {
 					}	
 				}
 			}
-			logger.info("ended file uplodad flux");
+			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -487,7 +487,7 @@ public class ObjectController  {
             file.close();
 
 			
-			logger.info("started file uplodad flux");
+			logger.debug("started file uplodad flux");
 			String datas = null; //data.get("logData").toString();
 			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas);
 			
@@ -583,7 +583,7 @@ public class ObjectController  {
 					}	
 				}
 			}
-			logger.info("ended file uplodad flux");
+			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -595,7 +595,7 @@ public class ObjectController  {
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/fileupload/{userId:.*}") 
 	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			logger.info("started file uplodad flux");
+			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PMProfitData> allData = dataService.classStringToPPMObjArray(datas);
 			for(PMProfitData p : allData){
@@ -620,7 +620,7 @@ public class ObjectController  {
 					logger.error("parkingmeter with code: " + p.getpCode() + " not found in db");
 				}
 			}
-			logger.info("ended file uplodad flux");
+			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			// TODO Auto-generated catch block
@@ -633,7 +633,7 @@ public class ObjectController  {
 	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			
-			logger.info("started file uplodad flux");
+			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PSProfitData> allData = dataService.classStringToPPSObjArray(datas);
 			for(PSProfitData p : allData){
@@ -658,7 +658,7 @@ public class ObjectController  {
 					logger.error("parkingstructure with name: " + p.getpName() + " not found in db");
 				}
 			}
-			logger.info("ended file uplodad flux");
+			logger.debug("ended file uplodad flux");
 			
 			
 			return "OK";
@@ -678,10 +678,10 @@ public class ObjectController  {
 		String createdFile = "";
 		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
-		logger.info("Current path: " + path);
+		logger.debug("Current path: " + path);
 		
 		JSONArray logList = new JSONArray(data);
-		logger.info("log list size: " + logList.length());
+		logger.debug("log list size: " + logList.length());
 	   	
 	    for(int i = 0; i < logList.length(); i++){
 	    	JSONObject log = logList.getJSONObject(i);

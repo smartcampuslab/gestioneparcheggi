@@ -25,6 +25,8 @@ public class CompactParkingStructureBean {
 	private Integer handicappedSlotOccupied;
 	private Integer unusuableSlotNumber;
 	private double occupancyRate;	// I use it only in the bean and not in the db object
+	private double profit;			// in eurocent
+	private int tickets;			// number of tickets
 	
 	public Integer getSlotNumber() {
 		return slotNumber;
@@ -88,6 +90,22 @@ public class CompactParkingStructureBean {
 
 	public void setPayingSlotOccupied(Integer payingSlotOccupied) {
 		this.payingSlotOccupied = payingSlotOccupied;
+	}
+
+	public double getProfit() {
+		return profit;
+	}
+
+	public int getTickets() {
+		return tickets;
+	}
+
+	public void setProfit(double profit) {
+		this.profit = profit;
+	}
+
+	public void setTickets(int tickets) {
+		this.tickets = tickets;
 	}
 
 	public String toJSON(){
