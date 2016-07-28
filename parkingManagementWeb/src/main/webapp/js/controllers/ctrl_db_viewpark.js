@@ -3017,7 +3017,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myAreas;
 	};
 	
-	$scope.initStreetsObjects = function(streets){
+	/*$scope.initStreetsObjects = function(streets){
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
 			var zones0 = [];
@@ -3068,7 +3068,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			myStreets.push(mystreet);
 		}
 		return myStreets;
-	};
+	};*/
 	
 	$scope.initAreasForStreetsObjects = function(streets){
 		for(var i = 0; i < streets.length; i++){

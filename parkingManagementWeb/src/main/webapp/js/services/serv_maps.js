@@ -794,8 +794,8 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 					if(streets != null && streets.length > 0){
 						if(type == 1){
 							var z_col = color;
-							if(streets[0].area.color){
-								z_col = streets[0].area.color;
+							if(streets[0].color){
+								z_col = streets[0].color;
 							}
 							zones[i].color = z_col;	// here I force to use the color of the street and not the eventualy color of the zone
 							color = this.correctColor(z_col);
