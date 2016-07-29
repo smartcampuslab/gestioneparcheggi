@@ -22,7 +22,9 @@ public class StreetBean {
 	private String id_app;
 	private String streetReference;
 	private Integer slotNumber;
-	private Integer handicappedSlotNumber;
+	private List<VehicleSlotBean> slotsConfiguration;
+	
+	/*private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
 	private Integer reservedSlotNumber;
 	private Integer reservedSlotOccupied;
@@ -34,7 +36,8 @@ public class StreetBean {
 	private Integer freeParkSlotSignOccupied;
 	private Integer paidSlotNumber;
 	private Integer paidSlotOccupied;
-	private Integer unusuableSlotNumber;
+	private Integer unusuableSlotNumber;*/
+	
 	private boolean subscritionAllowedPark;
 	private String rateAreaId;
 	private LineBean geometry;
@@ -58,6 +61,14 @@ public class StreetBean {
 
 	public void setStreetReference(String streetReference) {
 		this.streetReference = streetReference;
+	}
+
+	public List<VehicleSlotBean> getSlotsConfiguration() {
+		return slotsConfiguration;
+	}
+
+	public void setSlotsConfiguration(List<VehicleSlotBean> slotsConfiguration) {
+		this.slotsConfiguration = slotsConfiguration;
 	}
 
 	public Integer getSlotNumber() {
@@ -92,7 +103,58 @@ public class StreetBean {
 		this.color = color;
 	}
 
-	public Integer getHandicappedSlotNumber() {
+	public boolean isSubscritionAllowedPark() {
+		return subscritionAllowedPark;
+	}
+
+	public void setSubscritionAllowedPark(boolean subscritionAllowedPark) {
+		this.subscritionAllowedPark = subscritionAllowedPark;
+	}
+
+	public String getId_app() {
+		return id_app;
+	}
+	
+	//public List<ZoneBean> getZoneBeans() {
+	//	return zones;
+	//}
+	public List<String> getZones(){
+		return zones;
+	}
+
+	public List<String> getParkingMeters() {
+		return parkingMeters;
+	}
+
+	public Long getLastChange() {
+		return lastChange;
+	}
+
+	public void setId_app(String id_app) {
+		this.id_app = id_app;
+	}
+	
+	public void setZones(List<String> zones) {
+		this.zones = zones;
+	}
+
+	public void setParkingMeters(List<String> parkingMeters) {
+		this.parkingMeters = parkingMeters;
+	}
+
+	public void setLastChange(Long lastChange) {
+		this.lastChange = lastChange;
+	}
+	
+	public double getOccupancyRate() {
+		return occupancyRate;
+	}
+
+	public void setOccupancyRate(double occupancyRate) {
+		this.occupancyRate = occupancyRate;
+	}
+
+	/*public Integer getHandicappedSlotNumber() {
 		return handicappedSlotNumber;
 	}
 
@@ -114,18 +176,6 @@ public class StreetBean {
 
 	public void setFreeParkSlotNumber(Integer freeParkSlotNumber) {
 		this.freeParkSlotNumber = freeParkSlotNumber;
-	}
-
-	public boolean isSubscritionAllowedPark() {
-		return subscritionAllowedPark;
-	}
-
-	public void setSubscritionAllowedPark(boolean subscritionAllowedPark) {
-		this.subscritionAllowedPark = subscritionAllowedPark;
-	}
-
-	public String getId_app() {
-		return id_app;
 	}
 
 	public Integer getHandicappedSlotOccupied() {
@@ -164,25 +214,6 @@ public class StreetBean {
 		return paidSlotOccupied;
 	}
 
-	//public List<ZoneBean> getZoneBeans() {
-	//	return zones;
-	//}
-	public List<String> getZones(){
-		return zones;
-	}
-
-	public List<String> getParkingMeters() {
-		return parkingMeters;
-	}
-
-	public Long getLastChange() {
-		return lastChange;
-	}
-
-	public void setId_app(String id_app) {
-		this.id_app = id_app;
-	}
-
 	public void setHandicappedSlotOccupied(Integer handicappedSlotOccupied) {
 		this.handicappedSlotOccupied = handicappedSlotOccupied;
 	}
@@ -219,39 +250,19 @@ public class StreetBean {
 		this.paidSlotOccupied = paidSlotOccupied;
 	}
 	
-	public void setZones(List<String> zones) {
-		this.zones = zones;
-	}
-
-	public void setParkingMeters(List<String> parkingMeters) {
-		this.parkingMeters = parkingMeters;
-	}
-
-	public void setLastChange(Long lastChange) {
-		this.lastChange = lastChange;
-	}
-	
 	public Integer getUnusuableSlotNumber() {
 		return unusuableSlotNumber;
 	}
 
 	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
 		this.unusuableSlotNumber = unusuableSlotNumber;
-	}
-	
-	public double getOccupancyRate() {
-		return occupancyRate;
-	}
-
-	public void setOccupancyRate(double occupancyRate) {
-		this.occupancyRate = occupancyRate;
-	}
+	}*/
 
 	@Override
 	public String toString() {
 		return "StreetBean [id=" + id + ", id_app=" + id_app
-				+ ", streetReference=" + streetReference + ", slotNumber="
-				+ slotNumber + ", handicappedSlotNumber="
+				+ ", streetReference=" + streetReference + ", slotNumber=" + slotNumber
+				/*+ ", handicappedSlotNumber="
 				+ handicappedSlotNumber + ", handicappedSlotOccupied="
 				+ handicappedSlotOccupied+ ", reservedSlotNumber="
 						+ reservedSlotNumber + ", reservedSlotOccupied="
@@ -263,7 +274,7 @@ public class StreetBean {
 				+ freeParkSlotSignNumber + ", freeParkSlotSignOccupied="
 				+ freeParkSlotSignOccupied + ", paidSlotNumber="
 				+ paidSlotNumber + ", paidSlotOccupied=" + paidSlotOccupied
-				+ ", unusuableSlotNumber=" + unusuableSlotNumber
+				+ ", unusuableSlotNumber=" + unusuableSlotNumber*/
 				+ ", subscritionAllowedPark=" + subscritionAllowedPark
 				+ ", rateAreaId=" + rateAreaId + ", geometry=" + geometry
 				+ ", color=" + color + ", zones=" + zones + ", parkingMeters="
@@ -277,7 +288,7 @@ public class StreetBean {
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
+		/*json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
 		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";
 		json += "\"freeParkSlotSignNumber\":\"" + getFreeParkSlotSignNumber() + "\",";
 		json += "\"freeParkSlotSignOccupied\":\"" + getFreeParkSlotSignOccupied() + "\",";
@@ -287,7 +298,7 @@ public class StreetBean {
 		json += "\"timedParkSlotOccupied\":\"" + getTimedParkSlotOccupied() + "\",";
 		json += "\"paidSlotNumber\":\"" + getPaidSlotNumber() + "\",";
 		json += "\"paidSlotOccupied\":\"" + getPaidSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"subscritionAllowedPark\":\"" + isSubscritionAllowedPark() + "\",";
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";

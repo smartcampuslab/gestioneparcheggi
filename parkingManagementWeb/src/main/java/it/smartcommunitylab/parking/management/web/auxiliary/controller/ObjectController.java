@@ -232,7 +232,6 @@ public class ObjectController  {
 			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -248,7 +247,6 @@ public class ObjectController  {
 			dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -261,7 +259,6 @@ public class ObjectController  {
 			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -274,7 +271,6 @@ public class ObjectController  {
 			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -336,7 +332,6 @@ public class ObjectController  {
 			//dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -389,7 +384,8 @@ public class ObjectController  {
 						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
-						if(slotOccLc != -1){
+						//TODO manage new vehicleSlotsConfiguration
+						/*if(slotOccLc != -1){
 							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
 							skipUpdate = false;
 						} else {
@@ -430,7 +426,7 @@ public class ObjectController  {
 							skipUpdate = false;
 						} else {
 							street.setSlotsUnavailable(-1);
-						}
+						}*/
 						int year = Integer.parseInt(s.getPeriod().getYear());
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
@@ -443,7 +439,6 @@ public class ObjectController  {
 			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -532,7 +527,8 @@ public class ObjectController  {
 						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
-						if(slotOccLc != -1){
+						//TODO manage new vehicleSlotsConfiguration
+						/*if(slotOccLc != -1){
 							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
 							skipUpdate = false;
 						} else {
@@ -573,7 +569,7 @@ public class ObjectController  {
 							skipUpdate = false;
 						} else {
 							street.setSlotsUnavailable(-1);
-						}
+						}*/
 						int year = Integer.parseInt(s.getPeriod().getYear());
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
@@ -586,7 +582,6 @@ public class ObjectController  {
 			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -623,7 +618,6 @@ public class ObjectController  {
 			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -663,7 +657,6 @@ public class ObjectController  {
 			
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}

@@ -24,6 +24,7 @@ import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.PolygonBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
@@ -502,13 +503,16 @@ public class StorageManager {
 					List<Point> points = new ArrayList<Point>();
 					Line line = new Line();
 					temp.setSlotNumber(sb.getSlotNumber());
-					temp.setFreeParkSlotNumber(sb.getFreeParkSlotNumber());
+					/*temp.setFreeParkSlotNumber(sb.getFreeParkSlotNumber());
 					temp.setFreeParkSlotSignNumber(sb.getFreeParkSlotSignNumber());
 					temp.setUnusuableSlotNumber(sb.getUnusuableSlotNumber());
 					temp.setHandicappedSlotNumber(sb.getHandicappedSlotNumber());
 					temp.setReservedSlotNumber(sb.getReservedSlotNumber());
 					temp.setPaidSlotNumber(sb.getPaidSlotNumber());
-					temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());
+					temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());*/
+					List<VehicleSlotBean> editedSlotsConfBean = sb.getSlotsConfiguration();
+					temp.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, temp.getSlotsConfiguration()));
+					
 					temp.setStreetReference(sb.getStreetReference());
 					temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());
 					if(temp.getGeometry() != null && temp.getGeometry().getPoints() != null && temp.getGeometry().getPoints().size() > 0){
@@ -589,12 +593,8 @@ public class StorageManager {
 			DataLogBean dl = new DataLogBean();
 			dl.setObjId("@" + s.getId_app() + "@street@" + s.getId());
 			dl.setType("street");
-			//dl.setVersion(new Integer(1));
 			dl.setTime(System.currentTimeMillis());
 			dl.setAuthor("999");
-			//if(street.getGeometry() != null && street.getGeometry().getPointBeans().size() > 0){
-			//	dl.setLocation(street.getGeometry().getPointBeans().get(0));	// I get the first element of the line
-			//}
 			dl.setDeleted(false);
 			@SuppressWarnings("unchecked")
 			Map<String,Object> map = ModelConverter.convert(s, Map.class);
@@ -1025,7 +1025,6 @@ public class StorageManager {
 			    	try {
 						editStreet(s, appId);
 					} catch (DatabaseException e) {
-						// TODO Auto-generated catch block
 						logger.error(String.format("Error in update street: %s", e.getMessage()));
 					}
 			    }
@@ -1068,8 +1067,7 @@ public class StorageManager {
 	@SuppressWarnings("unchecked")
 	private <T> T processId(Object o, Class<T> javaClass) {
 		try {
-			String id = (String) o.getClass().getMethod("getId", null)
-					.invoke(o, null);
+			String id = (String) o.getClass().getMethod("getId", null).invoke(o, null);
 			if (id == null || id.trim().isEmpty()) {
 				o.getClass().getMethod("setId", String.class)
 						.invoke(o, new ObjectId().toString());

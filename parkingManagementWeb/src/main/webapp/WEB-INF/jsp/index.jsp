@@ -87,6 +87,7 @@ var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
 var conf_ps_managers="<%=request.getAttribute("ps_managers")%>";
 var conf_elements="<%=request.getAttribute("elements")%>";
 var conf_filters="<%=request.getAttribute("filters")%>";
+var conf_vehicle_type_list="<%=request.getAttribute("vehicle_type_list")%>";
 var ctx="<%=request.getContextPath()%>";
 </script>
   

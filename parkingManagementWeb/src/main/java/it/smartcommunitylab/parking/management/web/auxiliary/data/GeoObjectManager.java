@@ -30,11 +30,13 @@ import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
 import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
 
@@ -459,19 +461,13 @@ public class GeoObjectManager {
 		Street s = new Street();
 		s.setId(jsonStreet.getString("id"));
 		s.setAgency(jsonStreet.getString("agency"));
-		s.setSlotsFree(Integer.valueOf(jsonStreet.getInt("slotsFree")));
+		// TODO update slots uploading from json
+		/*s.setSlotsFree(Integer.valueOf(jsonStreet.getInt("slotsFree")));
 		s.setSlotsPaying(Integer.valueOf(jsonStreet.getInt("slotsPaying")));
-		s.setSlotsTimed(Integer.valueOf(jsonStreet.getInt("slotsTimed")));
+		s.setSlotsTimed(Integer.valueOf(jsonStreet.getInt("slotsTimed")));*/
+		
 		s.setName(jsonStreet.getString("name"));
 		s.setPolyline(jsonStreet.getString("polyline"));
-		//String pos = jsonStreet.getString("position");
-		//if(pos != null && pos.length() > 0){
-		//	String[] pos_string = pos.split(",");
-		//	double[] pos_double = new double[2];
-		//	pos_double[0] = Double.valueOf(pos_string[0]);
-		//	pos_double[1] = Double.valueOf(pos_string[1]);
-		//	s.setPosition(pos_double);
-		//}
 		JSONArray pos = jsonStreet.getJSONArray("position");//getString("position");
 		if(pos != null && pos.length() > 0){
 			//String[] pos_string = pos.split(",");
@@ -520,7 +516,10 @@ public class GeoObjectManager {
 //				s.setSlotsFree(street.getFreeParkSlotSignNumber());
 //			}
 //		}
-		if(street.getFreeParkSlotNumber() != null){
+		List<VehicleSlotBean> editedSlotsConfBean = street.getSlotsConfiguration();
+		s.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, s.getSlotsConfiguration()));
+		
+		/*if(street.getFreeParkSlotNumber() != null){
 			s.setSlotsFree(street.getFreeParkSlotNumber());
 		}
 		if(street.getFreeParkSlotSignNumber() != null){
@@ -537,7 +536,7 @@ public class GeoObjectManager {
 		}
 		if(street.getReservedSlotNumber() != null){
 			s.setSlotsReserved(street.getReservedSlotNumber());
-		}
+		}*/
 		s.setName(street.getStreetReference());
 		if(street.getGeometry()!= null && street.getGeometry().getPoints() != null && street.getGeometry().getPoints().size() > 0){
 			s.setPolyline(PolylineEncoder.encode(street.getGeometry().getPoints()));

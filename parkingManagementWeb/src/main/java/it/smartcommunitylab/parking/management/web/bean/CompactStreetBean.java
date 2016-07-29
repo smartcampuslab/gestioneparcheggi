@@ -15,11 +15,14 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
+import java.util.List;
 
 public class CompactStreetBean {
 	private String id;
 	private Integer slotNumber;
-	private Integer handicappedSlotNumber;
+	private List<VehicleSlotBean> slotsConfiguration;
+	
+	/*private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
 	private Integer reservedSlotNumber;
 	private Integer reservedSlotOccupied;
@@ -31,7 +34,8 @@ public class CompactStreetBean {
 	private Integer freeParkSlotSignOccupied;
 	private Integer paidSlotNumber;
 	private Integer paidSlotOccupied;
-	private Integer unusuableSlotNumber;
+	private Integer unusuableSlotNumber;*/
+	
 	private double occupancyRate;	// I use it only in the bean and not in the db object
 
 	public String getId() {
@@ -50,7 +54,7 @@ public class CompactStreetBean {
 		this.slotNumber = slotNumber;
 	}
 
-	public Integer getHandicappedSlotNumber() {
+	/*public Integer getHandicappedSlotNumber() {
 		return handicappedSlotNumber;
 	}
 
@@ -152,8 +156,16 @@ public class CompactStreetBean {
 
 	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
 		this.unusuableSlotNumber = unusuableSlotNumber;
-	}
+	}*/
 	
+	public List<VehicleSlotBean> getSlotsConfiguration() {
+		return slotsConfiguration;
+	}
+
+	public void setSlotsConfiguration(List<VehicleSlotBean> slotsConfiguration) {
+		this.slotsConfiguration = slotsConfiguration;
+	}
+
 	public double getOccupancyRate() {
 		return occupancyRate;
 	}
@@ -164,8 +176,8 @@ public class CompactStreetBean {
 
 	@Override
 	public String toString() {
-		return "StreetBean [id=" + id + ", slotNumber="
-				+ slotNumber + ", handicappedSlotNumber="
+		return "StreetBean [id=" + id + ", slotNumber="+ slotNumber
+				/*+ ", handicappedSlotNumber="
 				+ handicappedSlotNumber + ", handicappedSlotOccupied="
 				+ handicappedSlotOccupied+ ", reservedSlotNumber="
 						+ reservedSlotNumber + ", reservedSlotOccupied="
@@ -177,7 +189,7 @@ public class CompactStreetBean {
 				+ freeParkSlotSignNumber + ", freeParkSlotSignOccupied="
 				+ freeParkSlotSignOccupied + ", paidSlotNumber="
 				+ paidSlotNumber + ", paidSlotOccupied=" + paidSlotOccupied
-				+ ", unusuableSlotNumber=" + unusuableSlotNumber
+				+ ", unusuableSlotNumber=" + unusuableSlotNumber*/
 				+ ", occupancyRate=" + occupancyRate + "]";
 	}
 	
@@ -185,7 +197,7 @@ public class CompactStreetBean {
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
+		/*json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
 		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";
 		json += "\"freeParkSlotSignNumber\":\"" + getFreeParkSlotSignNumber() + "\",";
 		json += "\"freeParkSlotSignOccupied\":\"" + getFreeParkSlotSignOccupied() + "\",";
@@ -195,7 +207,7 @@ public class CompactStreetBean {
 		json += "\"timedParkSlotOccupied\":\"" + getTimedParkSlotOccupied() + "\",";
 		json += "\"paidSlotNumber\":\"" + getPaidSlotNumber() + "\",";
 		json += "\"paidSlotOccupied\":\"" + getPaidSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\"";
 		json += "}";
 		return json;

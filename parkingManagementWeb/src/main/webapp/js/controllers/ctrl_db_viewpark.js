@@ -3084,11 +3084,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.initStreetsObjectsLight = function(streets){
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
-			var mystreet = sharedDataService.cleanStreetNullValue(streets[i]);
-			mystreet.slotOccupied = sharedDataService.getTotalOccupiedSlots(mystreet);
-			mystreet.extratime = gMapService.getExtratimeFromOccupancy(mystreet.occupancyRate);
-			mystreet.area_color= streets[i].color;
-			myStreets.push(mystreet);
+			if(streets[i]){
+				var mystreet = sharedDataService.cleanStreetNullValue(streets[i]);
+				mystreet.slotOccupied = sharedDataService.getTotalOccupiedSlots(mystreet);
+				mystreet.extratime = gMapService.getExtratimeFromOccupancy(mystreet.occupancyRate);
+				mystreet.area_color= streets[i].color;
+				myStreets.push(mystreet);
+			}
 		}
 		return myStreets;
 	};

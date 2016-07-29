@@ -12,33 +12,46 @@
 						    </h4>
 							<div id="bodyContent">
 							    <table>
-							        <tr ng-show="sconf.s_slotNum.visible">
+							    	<tr ng-show="sconf.s_slotNum.visible">
 							        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
 							        	<td>&nbsp;{{ s.data.slotNumber }}</td>
 							   		</tr>
-									<tr ng-show="sconf.s_handicappedSlot.visible">
-							    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_reservedSlot.visible">
-							    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.reservedSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_paidSlot.visible">
-							    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.paidSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_timedSlot.visible">
-							    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_freeSlot.visible">
-							    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_unusuableSlot.visible">
-							    		<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
+							    	<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in s.data.slotsConfiguration">
+							    		<td colspan="2" ng-show="sc.vehicleTypeActive">
+							    			<table>
+							    				<tr ng-show="sconf.s_slotNum.visible">
+							    					<td colspan="2">{{ sc.vehicleType }}</td>
+							    				</tr>
+							    				<tr ng-show="sconf.s_slotNum.visible">
+										        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
+										        	<td>&nbsp;{{ sc.slotNumber }}</td>
+										   		</tr>
+							    				<tr ng-show="sconf.s_handicappedSlot.visible">
+										    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="sconf.s_reservedSlot.visible">
+										    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.reservedSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="sconf.s_paidSlot.visible">
+										    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.paidSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="sconf.s_timedSlot.visible">
+										    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="sconf.s_freeSlot.visible">
+										    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="sconf.s_unusuableSlot.visible">
+										    		<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.unusuableSlotNumber }}</td>
+										    	</tr>
+							    			</table>
+							    		</td>	
 							    	</tr>
 							    	<tr ng-show="sconf.s_subscrition.visible">
 							    		<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>

@@ -2441,4 +2441,22 @@
 }, {
     "key": "btn_edit_text",
     "value": "Modifica"
+}, {
+    "key": "car_vehicle",
+    "value": "Automobile"
+}, {
+    "key": "moto_vehicle",
+    "value": "Moto"
+}, {
+    "key": "taxi_vehicle",
+    "value": "Taxi"
+}, {
+    "key": "autobus_vehicle",
+    "value": "Autobus"
+}, {
+    "key": "bike_vehicle",
+    "value": "Rastrelliera"
+}, {
+    "key": "camper_vehicle",
+    "value": "Camper"
 }]

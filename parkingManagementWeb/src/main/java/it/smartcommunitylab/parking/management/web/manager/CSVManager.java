@@ -57,7 +57,6 @@ public class CSVManager {
 	private static final String CSV_NOVAL = "/";
 
 	public CSVManager() {
-		// TODO Auto-generated constructor stub
 	}
 	
 	// Method used to create the csv file for the street occupation
@@ -95,7 +94,8 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getFreeParkSlotSignNumber() + "");
+				// TODO: manage vehicle type slots correctly
+				/*writer.append(s.getFreeParkSlotSignNumber() + "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getFreeParkSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
@@ -106,13 +106,12 @@ public class CSVManager {
 				writer.append(s.getReservedSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getHandicappedSlotNumber() + "");
-				writer.append(CSV_NEWLINE);
+				writer.append(CSV_NEWLINE);*/
 			}
 			writer.flush();
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in street csv creation: " + e1);
 		}
@@ -158,7 +157,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in zone csv creation: " + e1);
 		}
@@ -202,7 +200,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in area csv creation: " + e1);
 		}
@@ -267,7 +264,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in structures csv creation: " + e1);
 		}
@@ -305,7 +301,6 @@ public class CSVManager {
 			writer.close();
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in supply parking meter csv creation: " + e1);
 		}
@@ -353,7 +348,8 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
-				writer.append(s.getFreeParkSlotSignOccupied() + "");
+				// TODO: manage vehicle type slots correctly
+				/*writer.append(s.getFreeParkSlotSignOccupied() + "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getFreeParkSlotOccupied() + "");
 				writer.append(CSV_SEPARATOR);
@@ -366,14 +362,13 @@ public class CSVManager {
 				writer.append(s.getReservedSlotOccupied() + "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getUnusuableSlotNumber() + "");
-				writer.append(CSV_NEWLINE);
+				writer.append(CSV_NEWLINE);*/
 			}
 			
 			writer.flush();
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in occupancy street csv creation: " + e1);
 		}
@@ -422,7 +417,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in occupancy zone csv creation: " + e1);
 		}
@@ -468,7 +462,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in occupancy area csv creation: " + e1);
 		}
@@ -521,7 +514,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in occupancy structures csv creation: " + e1);
 		}
@@ -618,7 +610,6 @@ public class CSVManager {
 			writer.close();
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in log csv creation: " + e1);
 		}
@@ -660,8 +651,9 @@ public class CSVManager {
 						: "n.p.");
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getSlotNumber() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getPaidSlotNumber() + "");
+				// TODO: manage vehicle type slots correctly
+				//writer.append(CSV_SEPARATOR);
+				//writer.append(s.getPaidSlotNumber() + "");
 				writer.append(CSV_NEWLINE);
 			}
 			// String arr = writer.toString();
@@ -670,7 +662,6 @@ public class CSVManager {
 			writer.close();
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in profit street csv creation: " + e1);
 		}
@@ -717,7 +708,6 @@ public class CSVManager {
 			writer.close();
 
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in profit parking meter csv creation: " + e1);
 		}
@@ -765,7 +755,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in profit zone csv creation: " + e1);
 		}
@@ -809,7 +798,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in profit area csv creation: " + e1);
 		}
@@ -850,9 +838,7 @@ public class CSVManager {
 			}
 			writer.flush();
 			writer.close();
-			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in structures csv creation: " + e1);
 		}
@@ -905,7 +891,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in timeCost street csv creation: " + e1);
 		}
@@ -957,7 +942,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error timeCost zone csv creation: " + e1);
 		}
@@ -1009,7 +993,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in time cost area csv creation: " + e1);
 		}
@@ -1060,7 +1043,6 @@ public class CSVManager {
 			writer.close();
 			
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in timeCost structures csv creation: " + e1);
 		}
@@ -1105,7 +1087,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in historycal street csv creation: " + e1);
 		}
@@ -1158,7 +1139,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in historycal occupancy zone csv creation: " + e1);
 		}
@@ -1204,7 +1184,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in historycal occupancy area csv creation: " + e1);
 		}
@@ -1249,7 +1228,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in historycal struct csv creation: " + e1);
 		}
@@ -1350,7 +1328,6 @@ public class CSVManager {
 				writer.close();
 		
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				logger.error("Error in historycal profit parking meter csv creation: " + e1);
 			}		
@@ -1453,7 +1430,6 @@ public class CSVManager {
 				writer.close();
 	
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				logger.error("Error in historycal profit parking meter csv creation: " + e1);
 			}		
@@ -1565,7 +1541,6 @@ public class CSVManager {
 				writer.close();
 	
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				logger.error("Error in historycal profit zone csv creation: " + e1);
 			}		
@@ -1666,7 +1641,6 @@ public class CSVManager {
 				writer.close();
 	
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				logger.error("Error in historycal profit area csv creation: " + e1);
 			}		
@@ -1767,7 +1741,6 @@ public class CSVManager {
 				writer.close();
 					
 			} catch (IOException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
 				logger.error("Error in historycal profit struct csv creation: " + e1);
 			}
@@ -1817,7 +1790,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in historycal street csv creation: " + e1);
 		}
@@ -1874,7 +1846,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in historycal zone csv creation: " + e1);
 		}
@@ -1924,7 +1895,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in historycal area csv creation: " + e1);
 		}
@@ -1973,7 +1943,6 @@ public class CSVManager {
 			writer.close();
 				
 		} catch (IOException e1) {
-			// TODO Auto-generated catch block
 			e1.printStackTrace();
 			logger.error("Error in historycal timecost struct csv creation: " + e1);
 		}

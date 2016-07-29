@@ -16,30 +16,6 @@
 package it.smartcommunitylab.parking.management.web.model;
 
 public class OccupancyStreet extends Street{
-//	private String id;
-//	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
-//	private String streetReference;
-//	private Integer slotNumber;
-//	private Integer handicappedSlotNumber;	// off_h
-//	private Integer handicappedSlotOccupied;
-//	private Integer reservedSlotNumber;	// off_rs
-//	private Integer reservedSlotOccupied;
-//	private Integer timedParkSlotNumber;	// off_do
-//	private Integer timedParkSlotOccupied;
-//	private Integer freeParkSlotNumber;		// off_ls
-//	private Integer freeParkSlotOccupied;
-//	private Integer freeParkSlotSignNumber;	// off_lc
-//	private Integer freeParkSlotSignOccupied;
-//	private Integer paidSlotNumber;			// off_p
-//	private Integer paidSlotOccupied;
-//	private Integer unusuableSlotNumber;	// off_in
-//	private boolean subscritionAllowedPark;
-//	private String rateAreaId;				// I need this field in data log
-//	private String color;
-//	private List<String> zones;
-//	private List<String> parkingMeters;
-//	private String area_name;
-//	private String area_color;
 
 	private Integer occupancyRate;
 	private Integer freeParkOccupied;

@@ -2441,4 +2441,22 @@
 }, {
     "key": "btn_edit_text",
     "value": "Edit"
+}, {
+    "key": "car_vehicle",
+    "value": "Auto"
+}, {
+    "key": "moto_vehicle",
+    "value": "Motorcycle"
+}, {
+    "key": "taxi_vehicle",
+    "value": "Taxi"
+}, {
+    "key": "autobus_vehicle",
+    "value": "Bus"
+}, {
+    "key": "bike_vehicle",
+    "value": "Bike rack"
+}, {
+    "key": "camper_vehicle",
+    "value": "Camper"
 }]

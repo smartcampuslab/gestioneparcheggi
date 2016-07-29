@@ -18,9 +18,13 @@ package it.smartcommunitylab.parking.management.web.controller;
 //import eu.trentorise.smartcampus.aac.AACException;
 import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
 import it.smartcommunitylab.parking.management.web.model.UserSetting;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.security.MongoUserDetailsService;
+import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.security.Principal;
+import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -46,6 +50,9 @@ public class PortalController extends SCController{
 	
 	@Autowired
 	private MongoUserDetailsService mongoUserDetailsService;
+	
+	@Autowired
+	private VehicleTypeDataSetup vehicleTypeDataSetup;
 	
 	@Autowired
 	@Value("${smartcommunity.parkingmanagement.url}")
@@ -100,6 +107,9 @@ public class PortalController extends SCController{
 		model.addAttribute("ps_managers", psManagers);
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
 		logger.debug("I am in get root console. object_showed: " + objectToShow.getShowObjectsMap());
+		List<Map> myVehicleType = vehicleTypeDataSetup.getVehicleTypesMap(vehicleTypeDataSetup.findVehicleTypesByAppIdAndUsername(objectToShow.getAppId(), user.getUsername()));
+		model.addAttribute("vehicle_type_list", myVehicleType);
+		
 		return new ModelAndView("index", model);
 	}
 	

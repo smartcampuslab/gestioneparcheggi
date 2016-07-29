@@ -98,9 +98,10 @@ public class ZipCsvExporter implements Exporter {
 					result += "\"" + area.getName() + "\"" + CSV_SEPARATOR
 							+ "\"" + via.getStreetReference() + "\""
 							+ CSV_SEPARATOR + via.getSlotNumber()
-							+ CSV_SEPARATOR + via.getHandicappedSlotNumber()
+							// TODO: manage vehicle type slots correctly
+							/*+ CSV_SEPARATOR + via.getHandicappedSlotNumber()
 							+ CSV_SEPARATOR + via.getTimedParkSlotNumber()
-							+ CSV_SEPARATOR + via.getFreeParkSlotNumber()
+							+ CSV_SEPARATOR + via.getFreeParkSlotNumber()*/
 							+ CSV_SEPARATOR + via.isSubscritionAllowedPark()
 							+ CSV_SEPARATOR + geoToCsv(via.getGeometry())
 							+ "\n";
