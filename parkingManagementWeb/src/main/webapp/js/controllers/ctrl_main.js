@@ -308,6 +308,31 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     	return tmp;
     };
     
+    var correctStringToList = function(stringList){
+    	// appId=tn, description=posti per automobile, name=Car, language_key=car_vehicle, userName=trento1
+    	var list = [];
+    	var subList = stringList.substring(1, stringList.length - 1);
+    	var elements = subList.split("},");
+    	for(var i = 0; i < (elements.length - 1); i++){
+    		var allAttribute = elements[i].split(", ");
+    		var appId = allAttribute[0].split("=")[1];
+    		var description = allAttribute[1].split("=")[1];
+    		var name = allAttribute[2].split("=")[1];
+    		var language = allAttribute[3].split("=")[1];
+    		var userName = allAttribute[4].split("=")[1];
+    		var corrVehicleType = {
+    			appId: appId,
+    			description: description,
+    			name: name,
+    			language_key: language,
+    			userName: userName,
+    			visible: false
+    		};
+    		list.push(corrVehicleType);
+    	}
+    	return list;
+    }
+    
     sharedDataService.setConfAppId(conf_app_id);
     sharedDataService.setConfMapCenter(conf_map_center);
     if(conf_map_recenter && conf_map_recenter != "null"){
@@ -324,6 +349,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     sharedDataService.setPsManagerVals(ps_manager_vals);
     $scope.widget_filters = initializeService.setWidgetFilters(conf_filters);
     $scope.widget_show_elements = initializeService.setWidgetElements(conf_elements);
+    $scope.slots_vehicle_types = initializeService.setSlotsTypes(correctStringToList(conf_vehicle_type_list));
     initializeService.setConfAppId(conf_app_id);
     initializeService.setConfWidgetUrl(conf_widget_url);
     $scope.show_vt_footer = (conf_app_id == 'tn')?true:false;

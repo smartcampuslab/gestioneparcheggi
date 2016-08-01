@@ -251,6 +251,100 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	return $scope.errorTimeFromToStructure;
     };
     
+    $scope.getVehicleKey = function(car_type){
+    	var corr_type_key = "car_vehicle";
+    	var vehicleTypes = initializeService.getSlotsTypes();
+    	for(var i = 0; i < vehicleTypes.length; i++){
+    		if(vehicleTypes[i].name == car_type){
+    			corr_type_key = vehicleTypes[i].language_key;
+    		}
+    	}
+    	return corr_type_key;
+    };
+    
+    var vehicleTypesList = [];
+    var vehicleTypesNew = false;
+    $scope.inithializeVehicleTypeList = function(activedSlotsConfiguration){
+    	vehicleTypesList = initializeService.getSlotsTypes();
+    	for(var i = 0; i < vehicleTypesList.length; i++){
+    		vehicleTypesList[i].show = false;
+    	}
+    	$scope.newVehicleList = angular.copy(vehicleTypesList);
+    	for(var i = 0; i < activedSlotsConfiguration.length; i++){
+    		var found = false;
+    		for(var j = 0; (j < $scope.newVehicleList.length) && !found; j++)
+    		if($scope.newVehicleList[j].name == activedSlotsConfiguration[i].vehicleType){
+    			$scope.newVehicleList.splice(j, 1);
+    			found = true;
+    		}
+    	}
+    };
+    
+    $scope.reloadConfigurationSlots = function(newSlotsConf){
+    	if(newSlotsConf){
+    		var newSlotConfiguration = {
+    			vehicleType: newSlotsConf.name,
+    			vehicleTypeActive: true,
+    			handicappedSlotNumber: 0,
+    			reservedSlotNumber: 0,
+    			timedParkSlotNumber:0,
+    			paidSlotNumber: 0,
+    			freeParkSlotNumber: 0,
+    			freeParkSlotSignNumber: 0,
+    			rechargeableSlotNumber: 0,
+    			loadingUnloadingSlotNumber: 0,
+    			pinkSlotNumber: 0,
+    			carSharingSlotNumber: 0
+    		};
+    		$scope.eStreet.slotsConfiguration.push(newSlotConfiguration);
+    	}
+    };
+    
+    $scope.addNewConfigurationSlots = function(newSlotsConf){
+    	if(newSlotsConf){
+    		var newSlotConfiguration = {
+    			vehicleType: newSlotsConf.vehicleType.name,
+    			vehicleTypeActive: true,
+    			handicappedSlotNumber: newSlotsConf.handicappedSlotNumber,
+    			reservedSlotNumber: newSlotsConf.reservedSlotNumber,
+    			timedParkSlotNumber:newSlotsConf.timedParkSlotNumber,
+    			paidSlotNumber: newSlotsConf.paidSlotNumber,
+    			freeParkSlotNumber: newSlotsConf.freeParkSlotNumber,
+    			freeParkSlotSignNumber: newSlotsConf.freeParkSlotSignNumber,
+    			rechargeableSlotNumber: newSlotsConf.rechargeableSlotNumber,
+    			loadingUnloadingSlotNumber: newSlotsConf.loadingUnloadingSlotNumber,
+    			pinkSlotNumber: newSlotsConf.pinkSlotNumber,
+    			carSharingSlotNumber: newSlotsConf.carSharingSlotNumber
+    		};
+    		$scope.eStreet.slotsConfiguration.push(newSlotConfiguration);
+    	}
+    	$scope.hideVehicleSlotsPanelNew();
+    };
+    
+    $scope.showVehicleSlotsPanel = function(index){
+    	vehicleTypesList[index].show = true;
+    };
+    
+    $scope.hideVehicleSlotsPanel = function(index){
+    	vehicleTypesList[index].show = false;
+    };
+    
+    $scope.vehicle_slots_panel_showed = function(index){
+    	return vehicleTypesList[index].show;
+    };
+    
+    $scope.showVehicleSlotsPanelNew = function(){
+    	vehicleTypesNew = true;
+    };
+    
+    $scope.hideVehicleSlotsPanelNew = function(){
+    	vehicleTypesNew = false;
+    };
+    
+    $scope.vehicle_slots_panel_showed_new = function(){
+    	return vehicleTypesNew;
+    };
+    
     // Init edit pages element from initialize service
     $scope.initComponents = function(){
     	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
@@ -2527,6 +2621,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.myZone3 = null;
 		$scope.myZone4 = null;
 		
+		$scope.inithializeVehicleTypeList(street.slotsConfiguration);
+		$scope.newSlotsConf = {};
+		
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
 		$scope.allPms = sharedDataService.getSharedLocalPms();
 		$scope.sZones0 = sharedDataService.getSharedLocalZones0();
@@ -2626,11 +2723,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				id_app: null,
 				streetReference: null,
 				slotNumber: null,
-				handicappedSlotNumber: null,
+				slotsConfiguration: [],
+				/*handicappedSlotNumber: null,
 				reservedSlotNumber: null,
 				timedParkSlotNumber: null,
 				freeParkSlotNumber: null,
-				unusuableSlotNumber: null,
+				unusuableSlotNumber: null,*/
 				color: null,
 				rateAreaId: null,
 				zones: null,

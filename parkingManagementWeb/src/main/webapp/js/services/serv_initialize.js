@@ -15,6 +15,7 @@ pm.service('initializeService', function(){
 	this.conf_show_zone;
 	this.widget_filters;
 	this.widget_elements;
+	this.slot_types;
 	this.showWidgetArea = false;
 	this.showWidgetStreet = false;
 	this.showWidgetPs = false;
@@ -244,6 +245,14 @@ pm.service('initializeService', function(){
 	this.getWidgetElements = function(){
 		return this.widget_elements;
 	};
+	
+	this.setSlotsTypes = function(slots){
+		this.slot_types = slots;
+	}
+	
+	this.getSlotsTypes = function(){
+		return this.slot_types;
+	}
 	
 	this.setVisibleObjList = function(value){
 		this.conf_visible_obj_list = value;

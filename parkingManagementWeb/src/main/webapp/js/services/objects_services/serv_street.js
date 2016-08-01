@@ -86,7 +86,16 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	
 	// Street update method
 	this.updateStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, editPolyline, type){
-		var calculatedTotSlots = sharedDataService.initIfNull(street.handicappedSlotNumber) + sharedDataService.initIfNull(street.reservedSlotNumber) + sharedDataService.initIfNull(street.paidSlotNumber) + sharedDataService.initIfNull(street.timedParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotSignNumber) + sharedDataService.initIfNull(street.unusuableSlotNumber);
+		var streetSlots = 0;
+		if(street.slotsConfiguration){
+			for(var i = 0; i < street.slotsConfiguration.length; i++){
+				var sc = street.slotsConfiguration[i];
+				var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.unusuableSlotNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
+				street.slotsConfiguration[i].slotNumber = calculatedTotSlots;
+				streetSlots += calculatedTotSlots;
+			}
+		}
+		
 		var id = street.id;
 		var appId = sharedDataService.getConfAppId();
 		var method = 'PUT';
@@ -97,14 +106,15 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 				id: street.id,
 				id_app: street.id_app,
 				streetReference: street.streetReference,
-				slotNumber: calculatedTotSlots,
-				handicappedSlotNumber: street.handicappedSlotNumber,
+				slotNumber: streetSlots,
+				slotsConfiguration: street.slotsConfiguration,
+				/*handicappedSlotNumber: street.handicappedSlotNumber,
 				reservedSlotNumber: street.reservedSlotNumber,
 				timedParkSlotNumber:street.timedParkSlotNumber,
 				paidSlotNumber: street.paidSlotNumber,
 				freeParkSlotNumber: street.freeParkSlotNumber,
 				freeParkSlotSignNumber: street.freeParkSlotSignNumber,
-				unusuableSlotNumber: street.unusuableSlotNumber,
+				unusuableSlotNumber: street.unusuableSlotNumber,*/
 				subscritionAllowedPark: street.subscritionAllowedPark,
 				color: area.color,
 				rateAreaId: area.id,
@@ -118,13 +128,14 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 				id_app: street.id_app,
 				streetReference: street.streetReference,
 				slotNumber: street.slotNumber,
-				handicappedSlotNumber: street.handicappedSlotNumber,
+				slotsConfiguration: street.slotsConfiguration,
+				/*handicappedSlotNumber: street.handicappedSlotNumber,
 				reservedSlotNumber: street.reservedSlotNumber,
 				timedParkSlotNumber:street.timedParkSlotNumber,
 				paidSlotNumber: street.paidSlotNumber,
 				freeParkSlotNumber: street.freeParkSlotNumber,
 				freeParkSlotSignNumber: street.freeParkSlotSignNumber,
-				unusuableSlotNumber: street.unusuableSlotNumber,
+				unusuableSlotNumber: street.unusuableSlotNumber,*/
 				subscritionAllowedPark: street.subscritionAllowedPark,
 				color: street.color,
 				rateAreaId: street.rateAreaId,
@@ -145,20 +156,31 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	
 	// Street create method
 	this.createStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, createPolyline){
-		var calculatedTotSlots = sharedDataService.initIfNull(street.handicappedSlotNumber) + sharedDataService.initIfNull(street.reservedSlotNumber) + sharedDataService.initIfNull(street.paidSlotNumber) + sharedDataService.initIfNull(street.timedParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotSignNumber) + sharedDataService.initIfNull(street.unusuableSlotNumber);
+		//var calculatedTotSlots = sharedDataService.initIfNull(street.handicappedSlotNumber) + sharedDataService.initIfNull(street.reservedSlotNumber) + sharedDataService.initIfNull(street.paidSlotNumber) + sharedDataService.initIfNull(street.timedParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotSignNumber) + sharedDataService.initIfNull(street.unusuableSlotNumber);
+		var streetSlots = 0;
+		if(street.slotsConfiguration){
+			for(var i = 0; i < street.slotsConfiguration.length; i++){
+				var sc = street.slotsConfiguration[i];
+				var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.unusuableSlotNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
+				street.slotsConfiguration[i].slotNumber = calculatedTotSlots;
+				streetSlots += calculatedTotSlots;
+			}
+		}
+		
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var data = {
 			id_app: appId,
 			streetReference: street.streetReference,
-			slotNumber: calculatedTotSlots,
-			handicappedSlotNumber: street.handicappedSlotNumber,
+			slotNumber: street.slotNumber,
+			slotsConfiguration: street.slotsConfiguration,
+			/*handicappedSlotNumber: street.handicappedSlotNumber,
 			reservedSlotNumber: street.reservedSlotNumber,
 			timedParkSlotNumber:street.timedParkSlotNumber,
 			paidSlotNumber: street.paidSlotNumber,
 			freeParkSlotNumber: street.freeParkSlotNumber,
 			freeParkSlotSignNumber: street.freeParkSlotSignNumber,
-			unusuableSlotNumber: street.unusuableSlotNumber,
+			unusuableSlotNumber: street.unusuableSlotNumber,*/
 			subscritionAllowedPark: street.subscritionAllowedPark,
 			color: area.color,
 			rateAreaId: area.id,

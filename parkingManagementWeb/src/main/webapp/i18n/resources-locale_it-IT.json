@@ -783,6 +783,22 @@
     "value": "Posti a pagamento",
     "description": "Label campo posti a pagamento per oggetto strada"
 }, {
+    "key": "street_rechargeable_slot",
+    "value": "Posti con ricarica elettrica",
+    "description": "Label campo posti ricaricabili per oggetto strada"
+}, {
+    "key": "street_loading_unloading_slot",
+    "value": "Posti carico-scarico",
+    "description": "Label campo posti carico scarico per oggetto strada"
+}, {
+    "key": "street_pink_slot",
+    "value": "Posti rosa",
+    "description": "Label campo posti rosa per oggetto strada"
+}, {
+    "key": "street_car_sharing_slot",
+    "value": "Posti car sharing",
+    "description": "Label campo posti car sharing per oggetto strada"
+}, {
     "key": "street_totalslot",
     "value": "Posti totali",
     "description": "Label campo posti totali per oggetto strada"
@@ -823,6 +839,10 @@
     "value": "Campo posti totali obbligatorio.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
+    "key": "street_vehicle_type_err_required",
+    "value": "Campo tipo veicolo obbligatorio.",
+    "description": "Messaggio errore campo tipo veicolo in strada obbligatorio"
+}, {
     "key": "street_handicapped_slots_err_required",
     "value": "Campo posti per disabili obbligatorio.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
@@ -845,6 +865,22 @@
 }, {
     "key": "street_freepark_slots_sign_err_required",
     "value": "Campo posti gratuiti obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_rechargeable_slots_err_required",
+    "value": "Campo posti con ricarica elettrica obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_loading_unloading_slots_err_required",
+    "value": "Campo posti carico-scarico obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_pink_slots_err_required",
+    "value": "Campo posti rosa obbligatorio.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_car_sharing_slots_err_required",
+    "value": "Campo posti car sharing obbligatorio.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_unusuable_slots_err_required",
@@ -1106,6 +1142,22 @@
     "key": "street_freeparkslotsign_placeholder",
     "value": "Inserire il numero di posti gratuiti (con segnaletica)",
     "description": "Testo placeholder campo posti gratuiti con segnaletica in via"
+}, {
+    "key": "street_rechargeableslot_placeholder",
+    "value": "Inserire il numero di posti con ricarica per auto elettrica",
+    "description": "Testo placeholder campo posti ricarica auto elettrica in via"
+}, {
+    "key": "street_loadingunloadingslot_placeholder",
+    "value": "Inserire il numero di posti di carico-scarico merci",
+    "description": "Testo placeholder campo posti carico-scarico in via"
+}, {
+    "key": "street_pinkslot_placeholder",
+    "value": "Inserire il numero di posti rosa",
+    "description": "Testo placeholder campo posti rosa in via"
+}, {
+    "key": "street_carsharingslot_placeholder",
+    "value": "Inserire il numero di posti car sharing",
+    "description": "Testo placeholder campo posti car sharing in via"
 }, {
     "key": "street_unusuableslot_placeholder",
     "value": "Inserire il numero di posti inutilizzabili",
@@ -2459,4 +2511,10 @@
 }, {
     "key": "camper_vehicle",
     "value": "Camper"
+}, {
+	"key": "add_new_vehicle_slots",
+	"value": "Aggiungi posti nuovo veicolo"
+}, {
+	"key": "vehicle_type",
+	"value": "Tipo veicolo"
 }]
