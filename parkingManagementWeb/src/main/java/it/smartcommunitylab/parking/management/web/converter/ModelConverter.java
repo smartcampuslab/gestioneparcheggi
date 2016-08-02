@@ -126,6 +126,7 @@ public class ModelConverter {
 	public static List<VehicleSlot> toVehicleSlotList(List<VehicleSlotBean> vehicleSlotsBean, List<VehicleSlot> oldVehicleSlot){
 		List<VehicleSlot> corrVehicleSlots = oldVehicleSlot;
 		if(oldVehicleSlot == null || oldVehicleSlot.isEmpty()){
+			corrVehicleSlots = new ArrayList<VehicleSlot>();
 			for(VehicleSlotBean vehicleTypeSlotsBean : vehicleSlotsBean){
 				VehicleSlot vehicleTypeSlots = convert(vehicleTypeSlotsBean, VehicleSlot.class);
 				corrVehicleSlots.add(vehicleTypeSlots);

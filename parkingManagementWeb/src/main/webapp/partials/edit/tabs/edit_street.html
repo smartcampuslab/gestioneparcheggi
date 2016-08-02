@@ -19,46 +19,50 @@
 							    	<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in s.data.slotsConfiguration">
 							    		<td colspan="2" ng-show="sc.vehicleTypeActive">
 							    			<table frame="box" width="100%" >
-							    				<tr ng-show="sconf.s_slotNum.visible">
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
 							    					<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
 							    				</tr>
-							    				<tr ng-show="sconf.s_slotNum.visible">
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
 										        	<td width="70%"><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
 										        	<td width="30%">&nbsp;{{ sc.slotNumber }}</td>
 										   		</tr>
-							    				<tr ng-show="sconf.s_handicappedSlot.visible && sc.handicappedSlotNumber">
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
 										    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_reservedSlot.visible && sc.reservedSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
 										    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.reservedSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_paidSlot.visible && sc.paidSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
 										    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.paidSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_timedSlot.visible && sc.timedParkSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
 										    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.freeParkSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
 										    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.rechargeableSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+										    		<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
 										    		<td><strong>{{ 'street_rechargeable_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.rechargeableSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.loadingUnloadingSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
 										    		<td><strong>{{ 'street_loading_unloading_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.pinkSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
 										    		<td><strong>{{ 'street_pink_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.pinkSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.carSharingSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
 										    		<td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
 										    	</tr>
@@ -224,46 +228,50 @@
 									<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in s.data.slotsConfiguration">
 							    		<td colspan="2" ng-show="sc.vehicleTypeActive">
 							    			<table frame="box" width="100%" >
-							    				<tr ng-show="sconf.s_slotNum.visible">
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
 							    					<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
 							    				</tr>
-							    				<tr ng-show="sconf.s_slotNum.visible">
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
 										        	<td width="70%"><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
 										        	<td width="30%">&nbsp;{{ sc.slotNumber }}</td>
 										   		</tr>
-							    				<tr ng-show="sconf.s_handicappedSlot.visible && sc.handicappedSlotNumber">
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
 										    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_reservedSlot.visible && sc.reservedSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
 										    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.reservedSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_paidSlot.visible && sc.paidSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
 										    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.paidSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_timedSlot.visible && sc.timedParkSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
 										    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.freeParkSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
 										    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.rechargeableSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+										    		<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
 										    		<td><strong>{{ 'street_rechargeable_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.rechargeableSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.loadingUnloadingSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
 										    		<td><strong>{{ 'street_loading_unloading_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.pinkSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
 										    		<td><strong>{{ 'street_pink_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.pinkSlotNumber }}</td>
 										    	</tr>
-										    	<tr ng-show="sconf.s_freeSlot.visible && sc.carSharingSlotNumber">
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
 										    		<td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
 										    		<td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
 										    	</tr>
@@ -495,46 +503,50 @@
 						<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in viewStreet.slotsConfiguration">
 							<td colspan="2" ng-show="sc.vehicleTypeActive" >
 								<table frame="box" width="100%">
-									<tr ng-show="sconf.s_slotNum.visible">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
 							    		<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
 							    	</tr>
-							    	<tr ng-show="sconf.s_slotNum.visible">
+							    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
 							        	<td class="detailsViewStreetSX">{{ 'street_totalslot' | i18n }}:</td>
 						        		<td class="detailsViewStreetDX">&nbsp;{{ sc.slotNumber }}</td>
 							   		</tr>
-							    	<tr ng-show="sconf.s_handicappedSlot.visible && sc.handicappedSlotNumber">
+							    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_handicapped_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.handicappedSlotNumber }}</td>
 									</tr>
-									<tr ng-show="sconf.s_reservedSlot.visible && sc.reservedSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_reserved_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.reservedSlotNumber }}</td>
 									</tr>
-									<tr ng-show="sconf.s_paidSlot.visible && sc.paidSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_paidpark_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.paidSlotNumber }}</td>
 									</tr>
-									<tr ng-show="sconf.s_timedSlot.visible && sc.timedParkSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_timedpark_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.timedParkSlotNumber }}</td>
 									</tr>
-									<tr ng-show="sconf.s_freeSlot.visible && sc.freeParkSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_freepark_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.freeParkSlotNumber }}</td>
 									</tr>
-									<tr ng-show="sconf.s_freeSlot.visible && sc.rechargeableSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+										<td class="detailsViewStreetSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_rechargeable_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.rechargeableSlotNumber }}</td>
 									</tr>
-									<tr ng-show="sconf.s_freeSlot.visible && sc.loadingUnloadingSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
 									</tr>
-									<tr ng-show="sconf.s_freeSlot.visible && sc.pinkSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible.s_freeSlot.visible && sc.pinkSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_pink_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.pinkSlotNumber }}</td>
 									</tr>
-									<tr ng-show="sconf.s_freeSlot.visible && sc.carSharingSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible.s_freeSlot.visible && sc.carSharingSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.carSharingSlotNumber }}</td>
 									</tr>
@@ -763,72 +775,73 @@
 							<div class="panel-heading">
 		    					<table width="100%">
 								<tr>
-									<td width="25%"></td>
-									<td width="50%" align="center"><h3 class="panel-title">{{ getVehicleKey(sc.vehicleType) | i18n }}</h3></td>
-									<td width="25%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed($index)" ng-click="showVehicleSlotsPanel($index)"></span></td>
+									<td width="40%"></td>
+									<td width="20%" align="center"><h3 class="panel-title">{{ getVehicleKey(sc.vehicleType) | i18n }}</h3></td>
+									<td width="30%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed($index)" ng-click="showVehicleSlotsPanel($index)"></span></td>
+									<td width="10%" align="right"><span class="glyphicon glyphicon-trash" ng-click="deleteVehicleTypeSlots(sc)"></span></td>
 								</tr>
 								</table>
 		  					</div>
 		  					<div class="well" ng-show="vehicle_slots_panel_showed($index)"><!-- class="panel-body" -->
 							   	<div class="panel-body">
-									<div class="form-group" ng-show="sconf.s_handicappedSlot.visible">
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible">
 								    	<label for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
-								    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="sc.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="sc.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 								    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
 								   	</div>
-								   	<div class="form-group" ng-show="sconf.s_reservedSlot.visible">
+								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible">
 								    	<label for="reservedSlot">{{ 'street_reserved_slot' | i18n }}</label>
-								    	<input id="reservedSlot" type="text" class="form-control" name="sReservedslot" ng-model="sc.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<input id="reservedSlot" type="text" class="form-control" name="sReservedslot" ng-model="sc.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 								    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
 								   	</div>
-								   	<div class="form-group" ng-show="sconf.s_timedSlot.visible">
+								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible">
 								    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
-								    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="sc.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_timedSlot.required" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="sc.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_timedSlot.required" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 								    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
 								   	</div>
-								   	<div class="form-group" ng-show="sconf.s_paidSlot.visible">
+								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible">
 								    	<label for="timedSlot">{{ 'street_paidpark_slot' | i18n }}</label>
-								    	<input id="timedSlot" type="text" class="form-control" name="sPaidslot" ng-model="sc.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sPaidslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<input id="timedSlot" type="text" class="form-control" name="sPaidslot" ng-model="sc.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sPaidslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 								    	<div class="field-error" ng-show="!isInit && form.sPaiddslot.$error.required">{{ 'street_paidpark_slots_err_required' | i18n }}</div>
 								   	</div>
-								   	<div class="form-group" ng-show="sconf.s_freeSlot.visible">
+								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible">
 								    	<label for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
-								    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="sc.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="sc.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 								    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
 								   	</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible">
 									    <label for="freeparkSlotSigned">{{ 'street_freepark_slot_signed' | i18n }}</label>
-									    <input id="freeparkSlotSigned" type="text" class="form-control" name="sFreeparkslotSigned" ng-model="sc.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <input id="freeparkSlotSigned" type="text" class="form-control" name="sFreeparkslotSigned" ng-model="sc.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 									    <div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
 									</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible">
 									    <label for="rechargeableSlot">{{ 'street_rechargeable_slot' | i18n }}</label>
-									    <input id="rechargeableSlot" type="text" class="form-control" name="sRechargeableslot" ng-model="sc.rechargeableSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_rechargeableslot_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sRechargeableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <input id="rechargeableSlot" type="text" class="form-control" name="sRechargeableslot" ng-model="sc.rechargeableSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.required" placeholder="{{ 'street_rechargeableslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sRechargeableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 									    <div class="field-error" ng-show="!isInit && form.sRechargeableslot.$error.required">{{ 'street_rechargeable_slots_err_required' | i18n }}</div>
 									</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible">
 									    <label for="loadingUnloadingSlot">{{ 'street_loading_unloading_slot' | i18n }}</label>
-									    <input id="loadingUnloadingSlot" type="text" class="form-control" name="sLoadingunloadingslot" ng-model="sc.loadingUnloadingSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_loadingunloadingslot_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sLoadingunloadingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <input id="loadingUnloadingSlot" type="text" class="form-control" name="sLoadingunloadingslot" ng-model="sc.loadingUnloadingSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.required" placeholder="{{ 'street_loadingunloadingslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sLoadingunloadingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 									    <div class="field-error" ng-show="!isInit && form.sLoadingunloadingslot.$error.required">{{ 'street_loading_unloading_slots_err_required' | i18n }}</div>
 									</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible">
 									    <label for="pinkSlot">{{ 'street_pink_slot' | i18n }}</label>
-									    <input id="pinkSlot" type="text" class="form-control" name="sPinkslot" ng-model="sc.pinkSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_pinkslot_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sPinkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <input id="pinkSlot" type="text" class="form-control" name="sPinkslot" ng-model="sc.pinkSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_pinkSlot.required" placeholder="{{ 'street_pinkslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sPinkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 									    <div class="field-error" ng-show="!isInit && form.sPinkslot.$error.required">{{ 'street_pink_slots_err_required' | i18n }}</div>
 									</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible">
 									    <label for="carSharingSlot">{{ 'street_car_sharing_slot' | i18n }}</label>
-									    <input id="carSharingSlot" type="text" class="form-control" name="sCarsharingslot" ng-model="sc.carSharingSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_carsharingslot_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sCarsharingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <input id="carSharingSlot" type="text" class="form-control" name="sCarsharingslot" ng-model="sc.carSharingSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.required" placeholder="{{ 'street_carsharingslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sCarsharingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 									    <div class="field-error" ng-show="!isInit && form.sCarsharingslot.$error.required">{{ 'street_car_sharing_slots_err_required' | i18n }}</div>
 									</div>
 							   	</div>
@@ -838,85 +851,86 @@
 							<div class="panel-heading">
 		    					<table width="100%">
 								<tr>
-									<td width="25%"></td>
-									<td width="50%" align="center"><h3 class="panel-title">{{ 'add_new_vehicle_slots' | i18n }}</h3></td>
-									<td width="25%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed_new()" ng-click="hideVehicleSlotsPanelNew()"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed_new()" ng-click="showVehicleSlotsPanelNew()"></span></td>
+									<td width="40%"></td>
+									<td width="20%" align="center"><h3 class="panel-title">{{ 'add_new_vehicle_slots' | i18n }}</h3></td>
+									<td width="40%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed_new()" ng-click="hideVehicleSlotsPanelNew()"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed_new()" ng-click="showVehicleSlotsPanelNew()"></span></td>
 								</tr>
 								</table>
 		  					</div>
 		  					<div class="well" ng-show="vehicle_slots_panel_showed_new()"><!-- class="panel-body" -->
 							   	<div class="panel-body">
-						   			<div class="form-group" ng-show="sconf.s_handicappedSlot.visible">
+						   			<div class="form-group" ng-show="sconf.s_slotNum.visible">
 								    	<label for="svehicleType">{{ 'vehicle_type' | i18n }}</label>
-								    	<select class="form-control" id="svehicleType" name="sVehicleType" ng-model="newSlotsConf.vehicleType">
-      										<option ng-repeat="nvs in newVehicleList track by $index" ng-value="nvs">{{ nvs.language_key | i18n }}</option>
+								    	<select class="form-control" id="svehicleType" name="sVehicleType" ng-model="newSlotsConf.vehicleType" ng-change="showHideSlotsByVehicle(newSlotsConf.vehicleType)">
+      										<option value="">{{ 'vehicle_type_placeholder' | i18n }}</option>
+      										<option ng-repeat="nvs in newVehicleList track by $index" ng-value="nvs.name">{{ nvs.language_key | i18n }}</option>
     									</select>
     									<!-- <select class="form-control" id="vehicleType" name="sVehicleType" ng-model="newSlotsConf.vehicleType"
 									      ng-options="nvs.name as nvs.language_key for nvs in newVehicleList">
 									    </select> -->
-								    	<div class="field-error" ng-show="!isInit && form.sVehicleType.$error.required">{{ 'street_vehicle_type_err_required' | i18n }}</div>
+								    	<div class="field-error" ng-show="(!isInit && form.sVehicleType.$error.required) || showErrorTypeReq">{{ 'street_vehicle_type_err_required' | i18n }}</div>
 								   	</div>
-									<div class="form-group" ng-show="sconf.s_handicappedSlot.visible">
+									<div class="form-group" ng-show="newVSC.s_handicappedSlot.visible">
 								    	<label for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
-								    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="newSlotsConf.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-								    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
+								    	<input id="handicappedSlot" type="text" class="form-control" name="nsHandicappedslot" ng-model="newSlotsConf.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
 								   	</div>
-								   	<div class="form-group" ng-show="sconf.s_reservedSlot.visible">
+								   	<div class="form-group" ng-show="newVSC.s_reservedSlot.visible">
 								    	<label for="reservedSlot">{{ 'street_reserved_slot' | i18n }}</label>
-								    	<input id="reservedSlot" type="text" class="form-control" name="sReservedslot" ng-model="newSlotsConf.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-								    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
+								    	<input id="reservedSlot" type="text" class="form-control" name="nsReservedslot" ng-model="newSlotsConf.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
 								   	</div>
-								   	<div class="form-group" ng-show="sconf.s_timedSlot.visible">
+								   	<div class="form-group" ng-show="newVSC.s_timedSlot.visible">
 								    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
-								    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="newSlotsConf.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_timedSlot.required" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-								    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
+								    	<input id="timedSlot" type="text" class="form-control" name="nsTimedslot" ng-model="newSlotsConf.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_timedSlot.required" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
 								   	</div>
-								   	<div class="form-group" ng-show="sconf.s_paidSlot.visible">
+								   	<div class="form-group" ng-show="newVSC.s_paidSlot.visible">
 								    	<label for="timedSlot">{{ 'street_paidpark_slot' | i18n }}</label>
-								    	<input id="timedSlot" type="text" class="form-control" name="sPaidslot" ng-model="newSlotsConf.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sPaidslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-								    	<div class="field-error" ng-show="!isInit && form.sPaiddslot.$error.required">{{ 'street_paidpark_slots_err_required' | i18n }}</div>
+								    	<input id="timedSlot" type="text" class="form-control" name="nsPaidslot" ng-model="newSlotsConf.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsPaidslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsPaiddslot.$error.required">{{ 'street_paidpark_slots_err_required' | i18n }}</div>
 								   	</div>
-								   	<div class="form-group" ng-show="sconf.s_freeSlot.visible">
+								   	<div class="form-group" ng-show="newVSC.s_freeSlot.visible">
 								    	<label for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
-								    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="newSlotsConf.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
-								    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-								    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
+								    	<input id="freeparkSlot" type="text" class="form-control" name="nsFreeparkslot" ng-model="newSlotsConf.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
 								   	</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="newVSC.s_freeSlotSign.visible">
 									    <label for="freeparkSlotSigned">{{ 'street_freepark_slot_signed' | i18n }}</label>
-									    <input id="freeparkSlotSigned" type="text" class="form-control" name="sFreeparkslotSigned" ng-model="newSlotsConf.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-									    <div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
+									    <input id="freeparkSlotSigned" type="text" class="form-control" name="nsFreeparkslotSigned" ng-model="newSlotsConf.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
 									</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="newVSC.s_rechargeableSlot.visible">
 									    <label for="rechargeableSlot">{{ 'street_rechargeable_slot' | i18n }}</label>
-									    <input id="rechargeableSlot" type="text" class="form-control" name="sRechargeableslot" ng-model="newSlotsConf.rechargeableSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_rechargeableslot_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sRechargeableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-									    <div class="field-error" ng-show="!isInit && form.sRechargeableslot.$error.required">{{ 'street_rechargeable_slots_err_required' | i18n }}</div>
+									    <input id="rechargeableSlot" type="text" class="form-control" name="nsRechargeableslot" ng-model="newSlotsConf.rechargeableSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_rechargeableSlot.required" placeholder="{{ 'street_rechargeableslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsRechargeableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsRechargeableslot.$error.required">{{ 'street_rechargeable_slots_err_required' | i18n }}</div>
 									</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="newVSC.s_loadingUnloadingSlot.visible">
 									    <label for="loadingUnloadingSlot">{{ 'street_loading_unloading_slot' | i18n }}</label>
-									    <input id="loadingUnloadingSlot" type="text" class="form-control" name="sLoadingunloadingslot" ng-model="newSlotsConf.loadingUnloadingSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_loadingunloadingslot_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sLoadingunloadingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-									    <div class="field-error" ng-show="!isInit && form.sLoadingunloadingslot.$error.required">{{ 'street_loading_unloading_slots_err_required' | i18n }}</div>
+									    <input id="loadingUnloadingSlot" type="text" class="form-control" name="nsLoadingunloadingslot" ng-model="newSlotsConf.loadingUnloadingSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_loadingUnloadingSlot.required" placeholder="{{ 'street_loadingunloadingslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsLoadingunloadingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsLoadingunloadingslot.$error.required">{{ 'street_loading_unloading_slots_err_required' | i18n }}</div>
 									</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="newVSC.s_pinkSlot.visible">
 									    <label for="pinkSlot">{{ 'street_pink_slot' | i18n }}</label>
-									    <input id="pinkSlot" type="text" class="form-control" name="sPinkslot" ng-model="newSlotsConf.pinkSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_pinkslot_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sPinkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-									    <div class="field-error" ng-show="!isInit && form.sPinkslot.$error.required">{{ 'street_pink_slots_err_required' | i18n }}</div>
+									    <input id="pinkSlot" type="text" class="form-control" name="nsPinkslot" ng-model="newSlotsConf.pinkSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_pinkSlot.required" placeholder="{{ 'street_pinkslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsPinkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsPinkslot.$error.required">{{ 'street_pink_slots_err_required' | i18n }}</div>
 									</div>
-									<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
+									<div class="form-group" ng-show="newVSC.s_carSharingSlot.visible">
 									    <label for="carSharingSlot">{{ 'street_car_sharing_slot' | i18n }}</label>
-									    <input id="carSharingSlot" type="text" class="form-control" name="sCarsharingslot" ng-model="newSlotsConf.carSharingSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_carsharingslot_placeholder' | i18n }}" >
-									    <div class="field-error" ng-show="!isInit && form.sCarsharingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-									    <div class="field-error" ng-show="!isInit && form.sCarsharingslot.$error.required">{{ 'street_car_sharing_slots_err_required' | i18n }}</div>
+									    <input id="carSharingSlot" type="text" class="form-control" name="nsCarsharingslot" ng-model="newSlotsConf.carSharingSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_carSharingSlot.required" placeholder="{{ 'street_carsharingslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsCarsharingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsCarsharingslot.$error.required">{{ 'street_car_sharing_slots_err_required' | i18n }}</div>
 									</div>
-									<button type="button" class="btn btn-primary btn-lg" ng-click="addNewConfigurationSlots(newSlotsConf)">{{ 'text_btn_save' | i18n  }}</button>
+									<button type="button" class="btn btn-primary" ng-click="addNewConfigurationSlots(newSlotsConf)">{{ 'ok_button' | i18n  }}</button>
 							   	</div>
 	  						</div>
 	  					</div>

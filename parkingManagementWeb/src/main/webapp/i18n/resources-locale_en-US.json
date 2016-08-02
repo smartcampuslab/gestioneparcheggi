@@ -1115,6 +1115,10 @@
     "value": "Insert the street referenced address",
     "description": "Testo placeholder campo indirizzo via"
 }, {
+    "key": "vehicle_type_placeholder",
+    "value": "Insert slot vehicle type",
+    "description": "Testo placeholder campo tipo veicolo per posti in via"
+}, {
     "key": "street_totalslot_placeholder",
     "value": "Insert the total slot number of the street",
     "description": "Testo placeholder campo posti totali via"

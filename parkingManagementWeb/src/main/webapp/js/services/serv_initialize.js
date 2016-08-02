@@ -9,6 +9,7 @@ pm.service('initializeService', function(){
 	this.conf_visible_obj_list = [];
 	this.conf_show_area;
 	this.conf_show_street;
+	this.conf_slots_conf_street = [];
 	this.conf_show_pm;
 	this.conf_show_ps;
 	this.conf_show_bp;
@@ -74,6 +75,21 @@ pm.service('initializeService', function(){
         s_zones3: null,
         s_zones4: null
     }
+	var slot_conf = {
+	    s_slotNum: null,
+	    s_handicappedSlot: null,
+	    s_reservedSlot: null,
+	    s_timedSlot: null,
+	    s_paidSlot: null,
+	    s_freeSlot: null,
+	    s_freeSlotSign: null,
+	    s_rechargeableSlot: null,
+	    s_loadingUnloadingSlot: null,
+	    s_pinkSlot: null,
+	    s_carSharingSlot: null,
+	    s_unusuableSlot: null,
+	}
+	this.street_slot_configuration = [];
 	this.pm_conf = {
     	pm_code: null,
     	pm_note: null,
@@ -213,6 +229,14 @@ pm.service('initializeService', function(){
 	this.showZone3Edit = false;
 	this.showZone4Edit = false;
 	this.zonePageList = [];
+	
+	this.setStreetSlotConfiguration = function(value){
+		this.street_slot_configuration = value;
+	};
+	
+	this.getStreetSlotConfiguration = function(){
+		return this.street_slot_configuration;
+	};
 	
 	this.setConfAppId = function(app_id){
 		this.app_id = app_id;
@@ -747,6 +771,51 @@ pm.service('initializeService', function(){
     	return this.street_conf;
     };
     
+    //Street Component settings
+    this.addStreetSlotsConf = function(attributes, type){
+    	var slot_conf = {};
+    	slot_conf.type = type;
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'slotNumber'){
+    			slot_conf.s_slotNum = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			slot_conf.s_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'reservedSlotNumber'){
+    			slot_conf.s_reservedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'timedParkSlotNumber'){
+    			slot_conf.s_timedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'paidSlotNumber'){
+    			slot_conf.s_paidSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotNumber'){
+    			slot_conf.s_freeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotSignNumber'){
+    			slot_conf.s_freeSlotSign = attributes[i];
+    		}
+    		if(attributes[i].code == 'rechargeableSlotNumber'){
+    			slot_conf.s_rechargeableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'loadingUnloadingSlotNumber'){
+    			slot_conf.s_loadingUnloadingSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'pinkSlotNumber'){
+    			slot_conf.s_pinkSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'carSharingSlotNumber'){
+    			slot_conf.s_carSharingSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			slot_conf.s_unusuableSlot = attributes[i];
+    		}
+    	}
+    	this.street_slot_configuration.push(slot_conf);
+    };
+    
     //Pm Component settings
     this.loadPmAttributes = function(attributes){
     	for(var i = 0; i < attributes.length; i++){
@@ -1228,6 +1297,7 @@ pm.service('initializeService', function(){
     };
     
     this.initComponents = function(){
+    	this.street_slot_configuration = [];
     	this.zonePageList = [];
 		var showedObjects = this.getVisibleObjList();
 		for(var i = 0; i < showedObjects.length; i++){
@@ -1236,6 +1306,9 @@ pm.service('initializeService', function(){
 	   		}
 	   		if(showedObjects[i].id == 'Street'){
 	   			this.loadStreetAttributes(showedObjects[i].attributes);
+	   		}
+	   		if(showedObjects[i].id == 'vehicleSlots'){
+	   			this.addStreetSlotsConf(showedObjects[i].attributes, showedObjects[i].type);
 	   		}
 	   		if(showedObjects[i].id == 'Pm'){
 	   			this.loadPmAttributes(showedObjects[i].attributes);
@@ -1299,6 +1372,14 @@ pm.service('initializeService', function(){
     			}
 	   		}
 	   	}
+    };
+    
+    this.getSlotConfigurationByType = function(type){
+    	for(var i = 0; i < this.street_slot_configuration.length; i++){
+    		if(this.street_slot_configuration[i].type == type){
+    			return this.street_slot_configuration[i];
+    		}
+    	}
     };
     
     this.correctWidgetFiltersAndElements = function(){

@@ -1115,6 +1115,10 @@
     "value": "Inserire l'indirizzo di riferimento della via",
     "description": "Testo placeholder campo indirizzo via"
 }, {
+    "key": "vehicle_type_placeholder",
+    "value": "Inserire il tipo di veicolo",
+    "description": "Testo placeholder campo tipo veicolo per posti in via"
+}, {
     "key": "street_totalslot_placeholder",
     "value": "Inserire il numero totale di posti della via",
     "description": "Testo placeholder campo posti totali via"

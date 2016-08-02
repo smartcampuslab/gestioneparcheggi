@@ -511,7 +511,7 @@ public class StorageManager {
 					temp.setPaidSlotNumber(sb.getPaidSlotNumber());
 					temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());*/
 					List<VehicleSlotBean> editedSlotsConfBean = sb.getSlotsConfiguration();
-					temp.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, temp.getSlotsConfiguration()));
+					temp.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, null));
 					
 					temp.setStreetReference(sb.getStreetReference());
 					temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());
@@ -579,6 +579,7 @@ public class StorageManager {
 		street = processId(street, Street.class);
 		street.setZones(s.getZones());
 		street.setParkingMeters(s.getParkingMeters());
+		street.setSlotsConfiguration(ModelConverter.toVehicleSlotList(s.getSlotsConfiguration(), null));
 		street.setId_app(appId);
 		try {
 			RateArea area = findById(s.getRateAreaId(), RateArea.class);

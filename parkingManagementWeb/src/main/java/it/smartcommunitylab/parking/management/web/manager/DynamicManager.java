@@ -356,7 +356,6 @@ public class DynamicManager {
 		if (area.getStreets() != null) {
 			for (Street temp : area.getStreets()) {
 				if (temp.getId().equals(vb.getId())) {
-//					temp.setSubscritionAllowedPark(vb.isSubscritionAllowedPark());
 					// Dynamic data
 					/*temp.setFreeParkSlotOccupied(vb.getFreeParkSlotOccupied());
 					temp.setFreeParkSlotSignOccupied(vb.getFreeParkSlotSignOccupied());
@@ -364,7 +363,10 @@ public class DynamicManager {
 					temp.setTimedParkSlotOccupied(vb.getTimedParkSlotOccupied());
 					temp.setPaidSlotOccupied(vb.getPaidSlotOccupied());*/
 					List<VehicleSlot> corrVehicleSlots = temp.getSlotsConfiguration();
-					if(vb.getSlotsConfiguration() != null && !vb.getSlotsConfiguration().isEmpty()){
+					List<VehicleSlotBean> editedSlotsConfBean = vb.getSlotsConfiguration();
+					temp.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, corrVehicleSlots));
+					
+					/*if(vb.getSlotsConfiguration() != null && !vb.getSlotsConfiguration().isEmpty()){
 						List<VehicleSlotBean> vehicleSlotsEdited = vb.getSlotsConfiguration();
 						for(int i = 0; i < vehicleSlotsEdited.size(); i++){
 							VehicleSlotBean vehicleSlot = vehicleSlotsEdited.get(i);
@@ -376,7 +378,7 @@ public class DynamicManager {
 							}
 						}
 					}
-					temp.setSlotsConfiguration(corrVehicleSlots);
+					temp.setSlotsConfiguration(corrVehicleSlots);*/
 					
 					temp.setLastChange(timestamp);
 					mongodb.save(area);

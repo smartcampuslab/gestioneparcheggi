@@ -172,7 +172,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 		var data = {
 			id_app: appId,
 			streetReference: street.streetReference,
-			slotNumber: street.slotNumber,
+			slotNumber: streetSlots,
 			slotsConfiguration: street.slotsConfiguration,
 			/*handicappedSlotNumber: street.handicappedSlotNumber,
 			reservedSlotNumber: street.reservedSlotNumber,

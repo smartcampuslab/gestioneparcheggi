@@ -410,7 +410,7 @@ providers:
         - code: link
           editable: false
           required: false
-          visible: true
+          visible: false
      - id: Area
        type: area
        label: area
@@ -535,6 +535,271 @@ providers:
           visible: true
         - code: widget
           editable: false
+          required: false
+          visible: true
+     - id: vehicleSlots
+       type: Car
+       label: vehicleSlots
+       title: vehicleSlots
+       attributes:
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotSignNumber
+          editable: true
+          required: false
+          visible: true
+        - code: rechargeableSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: loadingUnloadingSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: pinkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: carSharingSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
+     - id: vehicleSlots
+       type: Moto
+       label: vehicleSlots
+       title: vehicleSlots
+       attributes:
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotSignNumber
+          editable: true
+          required: false
+          visible: true
+        - code: rechargeableSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: loadingUnloadingSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: pinkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: carSharingSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
+     - id: vehicleSlots
+       type: Taxi
+       label: vehicleSlots
+       title: vehicleSlots
+       attributes:
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: freeParkSlotSignNumber
+          editable: true
+          required: false
+          visible: false
+        - code: rechargeableSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: loadingUnloadingSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: pinkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: carSharingSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
+     - id: vehicleSlots
+       type: Autobus
+       label: vehicleSlots
+       title: vehicleSlots
+       attributes:
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotSignNumber
+          editable: true
+          required: false
+          visible: false
+        - code: rechargeableSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: loadingUnloadingSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: pinkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: carSharingSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
+     - id: vehicleSlots
+       type: Rastrelliera
+       label: vehicleSlots
+       title: vehicleSlots
+       attributes:
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotSignNumber
+          editable: true
+          required: false
+          visible: false
+        - code: rechargeableSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: loadingUnloadingSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: pinkSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: carSharingSlotNumber
+          editable: true
+          required: false
+          visible: false
+        - code: unusuableSlotNumber
+          editable: true
           required: false
           visible: true
      - id: Pm

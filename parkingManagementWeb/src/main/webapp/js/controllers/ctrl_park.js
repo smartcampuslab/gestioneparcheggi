@@ -251,6 +251,19 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	return $scope.errorTimeFromToStructure;
     };
     
+    $scope.manageVehicleTypes = function(type){
+    	var corrConfigurationType = initializeService.getSlotConfigurationByType(type);
+    	return corrConfigurationType;
+    };
+    
+    $scope.showHideSlotsByVehicle = function(type){
+    	if(type){
+    		$scope.showErrorTypeReq = false;
+    		$scope.newVSC = $scope.manageVehicleTypes(type);
+    	}
+    };
+    
+    // Method used to translate the vehicle type in the correct i18n key
     $scope.getVehicleKey = function(car_type){
     	var corr_type_key = "car_vehicle";
     	var vehicleTypes = initializeService.getSlotsTypes();
@@ -260,65 +273,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		}
     	}
     	return corr_type_key;
-    };
-    
-    var vehicleTypesList = [];
-    var vehicleTypesNew = false;
-    $scope.inithializeVehicleTypeList = function(activedSlotsConfiguration){
-    	vehicleTypesList = initializeService.getSlotsTypes();
-    	for(var i = 0; i < vehicleTypesList.length; i++){
-    		vehicleTypesList[i].show = false;
-    	}
-    	$scope.newVehicleList = angular.copy(vehicleTypesList);
-    	for(var i = 0; i < activedSlotsConfiguration.length; i++){
-    		var found = false;
-    		for(var j = 0; (j < $scope.newVehicleList.length) && !found; j++)
-    		if($scope.newVehicleList[j].name == activedSlotsConfiguration[i].vehicleType){
-    			$scope.newVehicleList.splice(j, 1);
-    			found = true;
-    		}
-    	}
-    };
-    
-    $scope.reloadConfigurationSlots = function(newSlotsConf){
-    	if(newSlotsConf){
-    		var newSlotConfiguration = {
-    			vehicleType: newSlotsConf.name,
-    			vehicleTypeActive: true,
-    			handicappedSlotNumber: 0,
-    			reservedSlotNumber: 0,
-    			timedParkSlotNumber:0,
-    			paidSlotNumber: 0,
-    			freeParkSlotNumber: 0,
-    			freeParkSlotSignNumber: 0,
-    			rechargeableSlotNumber: 0,
-    			loadingUnloadingSlotNumber: 0,
-    			pinkSlotNumber: 0,
-    			carSharingSlotNumber: 0
-    		};
-    		$scope.eStreet.slotsConfiguration.push(newSlotConfiguration);
-    	}
-    };
-    
-    $scope.addNewConfigurationSlots = function(newSlotsConf){
-    	if(newSlotsConf){
-    		var newSlotConfiguration = {
-    			vehicleType: newSlotsConf.vehicleType.name,
-    			vehicleTypeActive: true,
-    			handicappedSlotNumber: newSlotsConf.handicappedSlotNumber,
-    			reservedSlotNumber: newSlotsConf.reservedSlotNumber,
-    			timedParkSlotNumber:newSlotsConf.timedParkSlotNumber,
-    			paidSlotNumber: newSlotsConf.paidSlotNumber,
-    			freeParkSlotNumber: newSlotsConf.freeParkSlotNumber,
-    			freeParkSlotSignNumber: newSlotsConf.freeParkSlotSignNumber,
-    			rechargeableSlotNumber: newSlotsConf.rechargeableSlotNumber,
-    			loadingUnloadingSlotNumber: newSlotsConf.loadingUnloadingSlotNumber,
-    			pinkSlotNumber: newSlotsConf.pinkSlotNumber,
-    			carSharingSlotNumber: newSlotsConf.carSharingSlotNumber
-    		};
-    		$scope.eStreet.slotsConfiguration.push(newSlotConfiguration);
-    	}
-    	$scope.hideVehicleSlotsPanelNew();
     };
     
     $scope.showVehicleSlotsPanel = function(index){
@@ -351,6 +305,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	$scope.editparktabs = [];
 	    	$scope.aconf = initializeService.getAreaConfData();
 	    	$scope.sconf = initializeService.getStreetConfData();
+	    	$scope.slot_conf_street = initializeService.getStreetSlotConfiguration();
 	    	$scope.pmconf = initializeService.getPmConfData();
 	    	$scope.psconf = initializeService.getPsConfData();
 	    	$scope.bpconf = initializeService.getBpConfData();
@@ -2606,11 +2561,85 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.editModeS = false;
 	};
 	
+	var vehicleTypesList = [];
+    var vehicleTypesNew = false;
+    
+    // Method used to inithialize the vehicle type slots configuration elements in street editing / creation (create the panels and select values)
+    $scope.inithializeVehicleTypeList = function(activedSlotsConfiguration){
+    	vehicleTypesList = initializeService.getSlotsTypes();
+    	for(var i = 0; i < vehicleTypesList.length; i++){
+    		vehicleTypesList[i].show = false;
+    	}
+    	$scope.newVehicleList = angular.copy(vehicleTypesList);
+    	if(activedSlotsConfiguration){
+	    	for(var i = 0; i < activedSlotsConfiguration.length; i++){
+	    		var found = false;
+	    		for(var j = 0; (j < $scope.newVehicleList.length) && !found; j++)
+	    		if($scope.newVehicleList[j].name == activedSlotsConfiguration[i].vehicleType){
+	    			$scope.newVehicleList.splice(j, 1);
+	    			found = true;
+	    		}
+	    	}
+    	}
+    };
+    
+    // Method used to add a new vehicle type slot configuration in a street
+    $scope.addNewConfigurationSlots = function(newSlotsConf){
+    	if(newSlotsConf != null && newSlotsConf.vehicleType && newSlotsConf.vehicleType != ""){
+    		$scope.showErrorTypeReq = false;
+    		$scope.isInitNS=true;
+    		var newSlotConfiguration = {
+    			vehicleType: newSlotsConf.vehicleType,
+    			vehicleTypeActive: true,
+    			handicappedSlotNumber: newSlotsConf.handicappedSlotNumber,
+    			reservedSlotNumber: newSlotsConf.reservedSlotNumber,
+    			timedParkSlotNumber:newSlotsConf.timedParkSlotNumber,
+    			paidSlotNumber: newSlotsConf.paidSlotNumber,
+    			freeParkSlotNumber: newSlotsConf.freeParkSlotNumber,
+    			freeParkSlotSignNumber: newSlotsConf.freeParkSlotSignNumber,
+    			rechargeableSlotNumber: newSlotsConf.rechargeableSlotNumber,
+    			loadingUnloadingSlotNumber: newSlotsConf.loadingUnloadingSlotNumber,
+    			pinkSlotNumber: newSlotsConf.pinkSlotNumber,
+    			carSharingSlotNumber: newSlotsConf.carSharingSlotNumber
+    		};
+    		$scope.eStreet.slotsConfiguration.push(newSlotConfiguration);
+    		$scope.hideVehicleSlotsPanelNew();
+    		$scope.inithializeVehicleTypeList($scope.eStreet.slotsConfiguration);
+    		$scope.initVehicleType();
+    	} else {
+    		$scope.showErrorTypeReq = true;
+    		$scope.isInitNS=false;
+    	}
+    };
+    
+    // Method used to init the vehicle type for a new slot configuration creation (show the placeholder)
+    $scope.initVehicleType = function(){
+    	$scope.newSlotsConf = {
+    		vehicleType: "",
+    		vehicleTypeActive: false
+    	};
+    };
+    
+    // Method used to delete a specific vehicle type slot configuration in street
+    $scope.deleteVehicleTypeSlots = function(vehicleTypeSlots){
+    	if(vehicleTypeSlots && vehicleTypeSlots.vehicleType){
+    	var found = false
+	    	for(var i = 0; (i < $scope.eStreet.slotsConfiguration.length) && !found; i++){
+	    		if($scope.eStreet.slotsConfiguration[i].vehicleType == vehicleTypeSlots.vehicleType){
+	    			$scope.eStreet.slotsConfiguration.splice(i, 1);	// remove the specific element from slot configuration list
+	    			found = true;
+	    		}
+	    	}
+    		$scope.inithializeVehicleTypeList($scope.eStreet.slotsConfiguration);
+    	}
+    };
+	
 	// Init Streets edit data method
 	$scope.setSEdit = function(street){
 		// Case create
 		$scope.isEditing = false;
 		$scope.isInit = true;
+		$scope.isInitNS = true;
 		$scope.myPms = [];
 		$scope.myArea = null;
 		$scope.myNewArea = null;
@@ -2620,9 +2649,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.myZone2 = null;
 		$scope.myZone3 = null;
 		$scope.myZone4 = null;
-		
-		$scope.inithializeVehicleTypeList(street.slotsConfiguration);
-		$scope.newSlotsConf = {};
 		
 		$scope.allArea = sharedDataService.getSharedLocalAreas();
 		$scope.allPms = sharedDataService.getSharedLocalPms();
@@ -2649,6 +2675,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		
 		// Case edit
 		if(street != null){
+			$scope.inithializeVehicleTypeList(street.slotsConfiguration);
 			poly.visible = false;		// here I hide the polyline for creation
 			poly.setPath([]);			// and clear the path
 			
@@ -2712,6 +2739,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 		} else {
+			$scope.inithializeVehicleTypeList(null);
 			gMapService.setMyNewArea({});
 			poly.setPath([]);										// here I clear the old path
 			poly.visible = true;									// here I show the polyline for creation
@@ -2736,6 +2764,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				geometry: null
 			};
 		}
+		$scope.initVehicleType();
 		$scope.viewModeS = false;
 		$scope.editModeS = true;
 		$scope.resizeMapTimed("editStreet", false);
