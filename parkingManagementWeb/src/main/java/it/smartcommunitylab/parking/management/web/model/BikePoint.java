@@ -30,6 +30,7 @@ public class BikePoint {
 	private Point geometry;
 	private Long lastChange;
 	private List<String> zones;
+	private List<String> agencyId;	// relation to agency object
 
 	public String getId() {
 		return id;
@@ -101,6 +102,14 @@ public class BikePoint {
 
 	public void setZones(List<String> zones) {
 		this.zones = zones;
+	}
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
 	}
 
 	public String toJSON(){

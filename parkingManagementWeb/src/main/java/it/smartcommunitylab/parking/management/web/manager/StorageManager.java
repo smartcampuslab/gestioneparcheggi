@@ -41,6 +41,7 @@ import it.smartcommunitylab.parking.management.web.model.geo.Line;
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
+import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -77,9 +78,6 @@ public class StorageManager {
 		RateArea area = findById(a.getId(), RateArea.class);
 		area.setName(a.getName());
 		area.setColor(a.getColor());
-		//area.setFee(a.getFee());
-		//area.setTimeSlot(a.getTimeSlot());
-		//area.setValidityPeriod(a.getValidityPeriod());
 		if(a.getNote() != null){
 			area.setNote(a.getNote());
 		}
@@ -99,9 +97,6 @@ public class StorageManager {
 			area.getValidityPeriod().add(
 					ModelConverter.convert(ratePeriod, RatePeriod.class));
 		}
-		/*if(a.getMunicipality() != null){
-			area.setMunicipality(a.getMunicipality());
-		}*/
 		if (area.getGeometry() != null) {
 			area.getGeometry().clear();
 		} else {
@@ -112,6 +107,60 @@ public class StorageManager {
 					ModelConverter.convert(polygon, Polygon.class));
 		}
 		if(a.getZones()!= null)area.setZones(a.getZones());
+		a.setAgencyId(area.getAgencyId());
+
+		mongodb.save(area);
+		return a;
+	}
+	
+	public RateAreaBean editArea(RateAreaBean a, String appId, List<String> agencyId) throws NotFoundException {
+		RateArea area = findById(a.getId(), RateArea.class);
+		String userAid = "";
+		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
+			for(String agId : agencyId){
+				if(area.getAgencyId().contains(agId)){
+					userAid = agId;
+					break;
+				}
+			}
+			if(userAid.compareTo("") != 0){
+				// agency presente. Dovrei verificare i permessi che ha
+			} else {
+				throw new AccessControlException("no update permission for this object");
+			}
+		}
+		area.setName(a.getName());
+		area.setColor(a.getColor());
+		if(a.getNote() != null){
+			area.setNote(a.getNote());
+		}
+		if(a.getSmsCode() != null){
+			area.setSmsCode(a.getSmsCode());
+		}
+		if(a.getValidityPeriod() != null){
+			if(area.getValidityPeriod() != null){
+				area.getValidityPeriod().clear();
+			} else {
+				area.setValidityPeriod(new ArrayList<RatePeriod>());
+			}
+		} else {
+			area.setValidityPeriod(new ArrayList<RatePeriod>());
+		}
+		for (RatePeriodBean ratePeriod : a.getValidityPeriod()) {
+			area.getValidityPeriod().add(
+					ModelConverter.convert(ratePeriod, RatePeriod.class));
+		}
+		if (area.getGeometry() != null) {
+			area.getGeometry().clear();
+		} else {
+			area.setGeometry(new ArrayList<Polygon>());
+		}
+		for (PolygonBean polygon : a.getGeometry()) {
+			area.getGeometry().add(
+					ModelConverter.convert(polygon, Polygon.class));
+		}
+		if(a.getZones()!= null)area.setZones(a.getZones());
+		a.setAgencyId(area.getAgencyId());
 
 		mongodb.save(area);
 		return a;
@@ -121,6 +170,20 @@ public class StorageManager {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
 		//logger.error(String.format("Area app id: %s", appId));
 		for (RateArea a : mongodb.findAll(RateArea.class)) {
+			if(a != null && appId.compareTo("all") == 0){
+				result.add(ModelConverter.convert(a, RateAreaBean.class));
+			} else if(a != null && a.getId_app().compareTo(appId) == 0){
+				result.add(ModelConverter.convert(a, RateAreaBean.class));
+			}
+		}
+		return result;
+	}
+
+	public List<RateAreaBean> getAllAreaByAgency(String agencyId, String appId) {
+		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
+		Criteria crit = new Criteria();
+		crit.and("agencyId").in(agencyId);
+		for (RateArea a : mongodb.find(Query.query(crit), RateArea.class)) {
 			if(a != null && appId.compareTo("all") == 0){
 				result.add(ModelConverter.convert(a, RateAreaBean.class));
 			} else if(a != null && a.getId_app().compareTo(appId) == 0){

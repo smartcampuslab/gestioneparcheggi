@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
+import java.util.List;
+
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
 public class ZoneBean {
@@ -30,6 +32,7 @@ public class ZoneBean {
 	private PointBean centermap;
 	private PolygonBean geometry;
 	private boolean geometryFromSubelement;
+	private List<String> agencyId;	// relation to agency object
 	
 	public String getId() {
 		return id;
@@ -134,6 +137,14 @@ public class ZoneBean {
 
 	public void setCentermap(PointBean centermap) {
 		this.centermap = centermap;
+	}
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
 	}
 	
 }

@@ -49,7 +49,7 @@ public class ParkingStructure {
 	private boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
 	private boolean abuttingPark;	// if there is a bus service
 	private List<String> zones;		// list of related zones (id)
-	
+	private List<String> agencyId;	// relation to agency object
 	
 	public String getId_app() {
 		return id_app;
@@ -218,7 +218,15 @@ public class ParkingStructure {
 	public void setZones(List<String> zones) {
 		this.zones = zones;
 	}
-	
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
+	}
+
 	public String feePeriodsSummary(){
 		String DATA_SEPARATOR = " / ";
 		String PERIOD_SEPARATOR = " // ";

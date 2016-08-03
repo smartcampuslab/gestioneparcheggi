@@ -15,6 +15,8 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.List;
+
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
@@ -27,11 +29,11 @@ public class Zone {
 	private String type; 		//type of division(geo, green, history, etc)
 	private String note;
 	private String color;
-	//private String municipality;
 	private Point centermap;
 	private Polygon geometry;
 	private boolean geometryFromSubelement;
 	private Integer slotNumber;	// used in supply csv creation
+	private List<String> agencyId;	// relation to agency object
 
 	public String getId() {
 		return id;
@@ -121,20 +123,20 @@ public class Zone {
 		this.geometryFromSubelement = geometryFromSubelement;
 	}
 
-	/*public String getMunicipality() {
-		return municipality;
-	}
-
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
-	}*/
-
 	public Point getCentermap() {
 		return centermap;
 	}
 
 	public void setCentermap(Point centermap) {
 		this.centermap = centermap;
+	}
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
 	}
 
 }

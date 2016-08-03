@@ -50,6 +50,7 @@ public class Street {
 	private String color;
 	private String area_name;
 	private String area_color;
+	private List<String> agencyId;	// relation to agency object
 
 	public String getId() {
 		return id;
@@ -275,6 +276,14 @@ public class Street {
 
 	public void setColor(String color) {
 		this.color = color;
+	}
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
 	}
 
 	public String toJSON(){

@@ -46,7 +46,8 @@ public class StreetBean {
 	private List<String> parkingMeters;	//List with the id of the associated pms (optional)
 	private Long lastChange;
 	private double occupancyRate;	// I use it only in the bean and not in the db object
-
+	private List<String> agencyId;	// relation to agency object
+	
 	public String getId() {
 		return id;
 	}
@@ -115,9 +116,6 @@ public class StreetBean {
 		return id_app;
 	}
 	
-	//public List<ZoneBean> getZoneBeans() {
-	//	return zones;
-	//}
 	public List<String> getZones(){
 		return zones;
 	}
@@ -258,6 +256,14 @@ public class StreetBean {
 		this.unusuableSlotNumber = unusuableSlotNumber;
 	}*/
 
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
+	}
+
 	@Override
 	public String toString() {
 		return "StreetBean [id=" + id + ", id_app=" + id_app
@@ -280,7 +286,7 @@ public class StreetBean {
 				+ ", color=" + color + ", zones=" + zones + ", parkingMeters="
 				+ parkingMeters + ", lastChange=" + lastChange + ", occupancyRate=" + occupancyRate + "]";
 	}
-	
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";

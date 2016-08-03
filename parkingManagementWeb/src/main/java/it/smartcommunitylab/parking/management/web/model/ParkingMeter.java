@@ -31,6 +31,7 @@ public class ParkingMeter {
 	private Status status;
 	private Point geometry;
 	private List<String> zones;
+	private List<String> agencyId;	// relation to agency object
 	
 	public String getId_app() {
 		return id_app;
@@ -86,6 +87,14 @@ public class ParkingMeter {
 
 	public void setZones(List<String> zones) {
 		this.zones = zones;
+	}
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
 	}
 
 	@Override

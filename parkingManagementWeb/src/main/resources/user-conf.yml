@@ -6,6 +6,9 @@ users:
     name: Comune
     surname: Rovereto
     mail: info@comune.rovereto.tn.it
+    agencies:
+       - prova 123
+       - prova 456
   - id: ComuneRovereto2
     username: rovereto
     password: rovereto
@@ -13,6 +16,9 @@ users:
     name: Comune
     surname: Rovereto
     mail: info@comune.rovereto.tn.it
+    agencies:
+       - prova 123
+       - prova 456
   - id: TrentinoMobilita
     username: trento1
     password: metroTN$15
@@ -20,6 +26,9 @@ users:
     name: Trentino
     surname: Mobilita
     mail: info@trentinomobilita.it
+    agencies:
+       - prova 123
+       - prova 456
   - id: ComuneTrento
     username: comunetrentotest
     password: metroCTT$16
@@ -27,6 +36,9 @@ users:
     name: Comune
     surname: Trento
     mail: info@comune.trento.tn.it
+    agencies:
+       - prova 123
+       - prova 456
   - id: ComuneTrento2
     username: trentosc
     password: trentoSC&15
@@ -34,10 +46,16 @@ users:
     name: Comune
     surname: Trento
     mail: info@comune.trento.tn.it
+    agencies:
+       - prova 123
+       - prova 456
   - id: RoveretoTest
     username: roveretotest
     password: metroRVtest
     appId: rvtest
     name: Test
     surname: Rovereto
-    mail: info@comune.rovereto.tn.it    
+    mail: info@comune.rovereto.tn.it
+    agencies:
+       - prova 123
+       - prova 456

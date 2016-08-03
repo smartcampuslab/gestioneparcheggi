@@ -43,6 +43,7 @@ public class ParkingStructureBean {
 	private boolean parkAndRide;
 	private boolean abuttingPark;	// if there is a bus service
 	private List<String> zones;		// list of related zones (id)
+	private List<String> agencyId;	// relation to agency object
 	
 	public String getId_app() {
 		return id_app;
@@ -235,7 +236,15 @@ public class ParkingStructureBean {
 	public void setZones(List<String> zones) {
 		this.zones = zones;
 	}
-	
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
+	}
+
 	public String feePeriodsSummary(){
 		String DATA_SEPARATOR = " / ";
 		String PERIOD_SEPARATOR = " // ";

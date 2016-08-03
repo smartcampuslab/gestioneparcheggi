@@ -36,6 +36,7 @@ public class RateArea {
 	private List<Street> streets;
 	private List<ParkingMeter> parkingMeters;
 	private List<String> zones;	// id of the related zones
+	private List<String> agencyId;	// relation to agency object
 
 	public String getId() {
 		return id;
@@ -156,7 +157,15 @@ public class RateArea {
 	public void setValidityPeriod(List<RatePeriod> validityPeriod) {
 		this.validityPeriod = validityPeriod;
 	}
-	
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
+	}
+
 	public String feePeriodsSummary(){
 		String DATA_SEPARATOR = " / ";
 		String PERIOD_SEPARATOR = " // ";
