@@ -555,12 +555,13 @@ public class GeoObjectManager {
 		p.setId("parking@" + park.getId_app() + "@" + park.getId());
 		p.setAgency(park.getId_app());
 		p.setSlotsTotal(park.getSlotNumber());
-		if(park.getPayingSlotNumber() != null){
+		// TODO update slots uploading from json
+		/*if(park.getPayingSlotNumber() != null){
 			p.setSlotsPaying(park.getPayingSlotNumber());
 		}
 		if(park.getHandicappedSlotNumber() != null){
 			p.setSlotsHandicapped(park.getHandicappedSlotNumber());
-		}
+		}*/
 		p.setName(park.getName());
 		if(park.getGeometry()!= null){
 			p.setPosition(new double[]{park.getGeometry().getLat(), park.getGeometry().getLng()});

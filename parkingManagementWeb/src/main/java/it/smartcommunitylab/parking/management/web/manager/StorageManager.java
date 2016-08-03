@@ -330,7 +330,6 @@ public class StorageManager {
 			logger.error("Exception saving parcometro, relative area not found");
 			throw new DatabaseException();
 		}
-
 	}
 
 	// Street Methods
@@ -579,7 +578,9 @@ public class StorageManager {
 		street = processId(street, Street.class);
 		street.setZones(s.getZones());
 		street.setParkingMeters(s.getParkingMeters());
-		street.setSlotsConfiguration(ModelConverter.toVehicleSlotList(s.getSlotsConfiguration(), null));
+		if(s.getSlotsConfiguration() != null && !s.getSlotsConfiguration().isEmpty()){
+			street.setSlotsConfiguration(ModelConverter.toVehicleSlotList(s.getSlotsConfiguration(), null));
+		}
 		street.setId_app(appId);
 		try {
 			RateArea area = findById(s.getRateAreaId(), RateArea.class);
@@ -731,7 +732,6 @@ public class StorageManager {
 		dl.setType("parkingStructure");
 		dl.setTime(System.currentTimeMillis());
 		dl.setAuthor("999");
-		//dl.setVersion(getLastVersion(dl.getObjId()));
 		dl.setDeleted(true);
 		mongodb.save(dl);
 		
@@ -746,19 +746,15 @@ public class StorageManager {
 		entity.setId_app(appId);
 		mongodb.save(entity);
 		entityBean.setId(entity.getId());
+		if(entityBean.getSlotsConfiguration() != null && !entityBean.getSlotsConfiguration().isEmpty()){
+			entity.setSlotsConfiguration(ModelConverter.toVehicleSlotList(entityBean.getSlotsConfiguration(), null));
+		}
 		
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + entity.getId_app() + "@parkingStructure@" + entity.getId());
 		dl.setType("parkingStructure");
-		//dl.setVersion(new Integer(1));
 		dl.setTime(System.currentTimeMillis());
 		dl.setAuthor("999");
-		//if(entity.getGeometry() != null){
-		//	PointBean point = new PointBean();
-		//	point.setLat(entity.getGeometry().getLat());
-		//	point.setLng(entity.getGeometry().getLng());
-		//	dl.setLocation(point);
-		//}
 		dl.setDeleted(false);
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(entity, Map.class);
@@ -829,21 +825,18 @@ public class StorageManager {
 	public ParkingStructureBean editParkingStructure(ParkingStructureBean entityBean, String appId) throws NotFoundException {
 		ParkingStructure entity = findById(entityBean.getId(),
 				ParkingStructure.class);
-//		entity.setFee_val(entityBean.getFee_val());
-//		entity.setFee_note(entityBean.getFee_note());
 		entity.setManagementMode(entityBean.getManagementMode());
 		entity.setName(entityBean.getName());
 		entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean.getPaymentMode()));
 		entity.setManager(entityBean.getManager());
-		//entity.setMunicipality(entityBean.getMunicipality());
 		entity.setPhoneNumber(entityBean.getPhoneNumber());
 		entity.setSlotNumber(entityBean.getSlotNumber());
-		entity.setPayingSlotNumber(entityBean.getPayingSlotNumber());
+		List<VehicleSlotBean> editedSlotsConfBean = entityBean.getSlotsConfiguration();
+		entity.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, null));
+		/*entity.setPayingSlotNumber(entityBean.getPayingSlotNumber());
 		entity.setHandicappedSlotNumber(entityBean.getHandicappedSlotNumber());
-		entity.setUnusuableSlotNumber(entityBean.getUnusuableSlotNumber());
+		entity.setUnusuableSlotNumber(entityBean.getUnusuableSlotNumber());*/
 		entity.setStreetReference(entityBean.getStreetReference());
-//		entity.setTimeSlot(entityBean.getTimeSlot());
-//		entity.setOpeningTime(entityBean.getOpeningTime());
 		if(entityBean.getValidityPeriod() != null){
 			if(entity.getValidityPeriod() != null){
 				entity.getValidityPeriod().clear();
@@ -861,6 +854,7 @@ public class StorageManager {
 		entity.getGeometry().setLat(entityBean.getGeometry().getLat());
 		entity.getGeometry().setLng(entityBean.getGeometry().getLng());
 		entity.setParkAndRide(entityBean.isParkAndRide());
+		entity.setAbuttingPark(entityBean.isAbuttingPark());
 		if(entityBean.getZones()!=null)entity.setZones(entityBean.getZones());
 		mongodb.save(entity);
 		return entityBean;
@@ -1068,7 +1062,8 @@ public class StorageManager {
 	@SuppressWarnings("unchecked")
 	private <T> T processId(Object o, Class<T> javaClass) {
 		try {
-			String id = (String) o.getClass().getMethod("getId", null).invoke(o, null);
+			String id = (String) o.getClass().getMethod("getId", null)
+					.invoke(o, null);
 			if (id == null || id.trim().isEmpty()) {
 				o.getClass().getMethod("setId", String.class)
 						.invoke(o, new ObjectId().toString());

@@ -254,10 +254,11 @@ public class CSVManager {
 				writer.append((ps.getValidityPeriod()!= null && !ps.getValidityPeriod().isEmpty()) ? ps.feePeriodsSummary() : "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
-				writer.append(CSV_SEPARATOR);
+				// TODO: manage vehicle type slots correctly
+				/*writer.append(CSV_SEPARATOR);
 				writer.append((ps.getPayingSlotNumber() >= 0) ? (ps.getPayingSlotNumber() + "") : "0");
 				writer.append(CSV_SEPARATOR);
-				writer.append((ps.getHandicappedSlotNumber() >= 0) ? (ps.getHandicappedSlotNumber() + "") : "0");
+				writer.append((ps.getHandicappedSlotNumber() >= 0) ? (ps.getHandicappedSlotNumber() + "") : "0");*/
 				writer.append(CSV_NEWLINE);
 			}
 			writer.flush();
@@ -500,12 +501,13 @@ public class CSVManager {
 				writer.append((ps.getOccupancyRate() != -1) ? (ps.getOccupancyRate() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
-				writer.append(CSV_SEPARATOR);
+				// TODO: manage vehicle type slots correctly
+				/*writer.append(CSV_SEPARATOR);
 				writer.append((ps.getPayingSlotOccupied() >= 0) ? (ps.getPayingSlotOccupied() + "") : "n.p." );
 				writer.append(CSV_SEPARATOR);
 				writer.append((ps.getHandicappedSlotOccupied() >= 0) ? (ps.getHandicappedSlotOccupied() + "") : "n.p." );
 				writer.append(CSV_SEPARATOR);
-				writer.append((ps.getUnusuableSlotNumber() >= 0) ? (ps.getUnusuableSlotNumber() + "") : "n.p." );
+				writer.append((ps.getUnusuableSlotNumber() >= 0) ? (ps.getUnusuableSlotNumber() + "") : "n.p." );*/
 				writer.append(CSV_NEWLINE);
 			}
 			//String arr = writer.toString();

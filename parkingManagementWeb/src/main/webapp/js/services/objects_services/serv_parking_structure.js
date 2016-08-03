@@ -132,19 +132,32 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 		var method = 'PUT';
 		var data = {};
 		if(type == 0){
-			for(var i = 0; i < ps.validityPeriod.length; i++){
-				var corrPeriod = {
-					from: ps.validityPeriod[i].from,
-					to: ps.validityPeriod[i].to,
-					weekDays: ps.validityPeriod[i].weekDays,
-					timeSlot: ps.validityPeriod[i].timeSlot,
-					rateValue: ps.validityPeriod[i].rateValue,
-					holiday: ps.validityPeriod[i].holiday,
-					note: ps.validityPeriod[i].note
-				};
-				validityPeriod.push(corrPeriod);
+			if(ps.validityPeriod){
+				for(var i = 0; i < ps.validityPeriod.length; i++){
+					var corrPeriod = {
+						from: ps.validityPeriod[i].from,
+						to: ps.validityPeriod[i].to,
+						weekDays: ps.validityPeriod[i].weekDays,
+						timeSlot: ps.validityPeriod[i].timeSlot,
+						rateValue: ps.validityPeriod[i].rateValue,
+						holiday: ps.validityPeriod[i].holiday,
+						note: ps.validityPeriod[i].note
+					};
+					validityPeriod.push(corrPeriod);
+				}
 			}
-			var totalStructSlots = sharedDataService.initIfNull(ps.payingSlotNumber) + sharedDataService.initIfNull(ps.handicappedSlotNumber); // + sharedDataService.initIfNull(ps.unusuableSlotNumber);
+			var psSlots = 0;
+			if(ps.slotsConfiguration){
+				for(var i = 0; i < ps.slotsConfiguration.length; i++){
+					var sc = ps.slotsConfiguration[i];
+					var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.unusuableSlotNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
+					ps.slotsConfiguration[i].slotNumber = calculatedTotSlots;
+					if(sc.vehicleTypeActive){
+						psSlots += calculatedTotSlots;
+					}
+				}
+			}
+			//var totalStructSlots = sharedDataService.initIfNull(ps.payingSlotNumber) + sharedDataService.initIfNull(ps.handicappedSlotNumber); // + sharedDataService.initIfNull(ps.unusuableSlotNumber);
 			data = {
 				id: ps.id,
 				id_app: ps.id_app,
@@ -155,13 +168,15 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 				managementMode: ps.managementMode,
 				phoneNumber: ps.phoneNumber,
 				paymentMode: sharedDataService.correctMyPaymentMode(paymode),
-				slotNumber: totalStructSlots,
-				payingSlotNumber: ps.payingSlotNumber,
+				slotNumber: psSlots,
+				slotsConfiguration: ps.slotsConfiguration,
+				/*payingSlotNumber: ps.payingSlotNumber,
 				handicappedSlotNumber: ps.handicappedSlotNumber,
-				unusuableSlotNumber: ps.unusuableSlotNumber,
+				unusuableSlotNumber: ps.unusuableSlotNumber,*/
 				geometry: gMapService.correctMyGeometry(geo),
 				zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-				parkAndRide: ps.parkAndRide
+				parkAndRide: ps.parkAndRide,
+				abuttingPark: ps.abuttingPark
 			};
 		} else {
 			data = {
@@ -175,12 +190,14 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 				phoneNumber: ps.phoneNumber,
 				paymentMode: ps.paymentMode,
 				slotNumber: ps.slotNumber,
-				payingSlotNumber: ps.payingSlotNumber,
+				slotsConfiguration: ps.slotsConfiguration,
+				/*payingSlotNumber: ps.payingSlotNumber,
 				handicappedSlotNumber: ps.handicappedSlotNumber,
-				unusuableSlotNumber: ps.unusuableSlotNumber,
+				unusuableSlotNumber: ps.unusuableSlotNumber,*/
 				geometry: ps.geometry,
 				zones: ps.zones,
-				parkAndRide: ps.parkAndRide
+				parkAndRide: ps.parkAndRide,
+				abuttingPark: ps.abuttingPark
 			};
 		}
 		
@@ -200,20 +217,33 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 		var appId = sharedDataService.getConfAppId();
 		
 		var validityPeriod = [];
-		for(var i = 0; i < ps.validityPeriod.length; i++){
-			var corrPeriod = {
-				from: ps.validityPeriod[i].from,
-				to: ps.validityPeriod[i].to,
-				weekDays: ps.validityPeriod[i].weekDays,
-				timeSlot: ps.validityPeriod[i].timeSlot,
-				rateValue: ps.validityPeriod[i].rateValue,
-				holiday: ps.validityPeriod[i].holiday,
-				note: ps.validityPeriod[i].note
-			};
-			validityPeriod.push(corrPeriod);
+		if(ps.validityPeriod){
+			for(var i = 0; i < ps.validityPeriod.length; i++){
+				var corrPeriod = {
+					from: ps.validityPeriod[i].from,
+					to: ps.validityPeriod[i].to,
+					weekDays: ps.validityPeriod[i].weekDays,
+					timeSlot: ps.validityPeriod[i].timeSlot,
+					rateValue: ps.validityPeriod[i].rateValue,
+					holiday: ps.validityPeriod[i].holiday,
+					note: ps.validityPeriod[i].note
+				};
+				validityPeriod.push(corrPeriod);
+			}
 		}
 		
-		var totalStructSlots = sharedDataService.initIfNull(ps.payingSlotNumber) + sharedDataService.initIfNull(ps.handicappedSlotNumber);// + sharedDataService.initIfNull(ps.unusuableSlotNumber);
+		var psSlots = 0;
+		if(ps.slotsConfiguration){
+			for(var i = 0; i < ps.slotsConfiguration.length; i++){
+				var sc = ps.slotsConfiguration[i];
+				var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.unusuableSlotNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
+				ps.slotsConfiguration[i].slotNumber = calculatedTotSlots;
+				if(sc.vehicleTypeActive){
+					psSlots += calculatedTotSlots;
+				}
+			}
+		}
+		//var totalStructSlots = sharedDataService.initIfNull(ps.payingSlotNumber) + sharedDataService.initIfNull(ps.handicappedSlotNumber);// + sharedDataService.initIfNull(ps.unusuableSlotNumber);
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var data = {
@@ -225,13 +255,15 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			manager: ps.manager,
 			phoneNumber: ps.phoneNumber,
 			paymentMode: sharedDataService.correctMyPaymentMode(paymode),
-			slotNumber: totalStructSlots,
-			payingSlotNumber: ps.payingSlotNumber,
+			slotNumber: psSlots,
+			slotsConfiguration: ps.slotsConfiguration,
+			/*payingSlotNumber: ps.payingSlotNumber,
 			handicappedSlotNumber: ps.handicappedSlotNumber,
-			unusuableSlotNumber: ps.unusuableSlotNumber,
+			unusuableSlotNumber: ps.unusuableSlotNumber,*/
 			geometry: gMapService.correctMyGeometry(geo),
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			parkAndRide: ps.parkAndRide
+			parkAndRide: ps.parkAndRide,
+			abuttingPark: ps.abuttingPark
 		};
 		
 	    var value = JSON.stringify(data);

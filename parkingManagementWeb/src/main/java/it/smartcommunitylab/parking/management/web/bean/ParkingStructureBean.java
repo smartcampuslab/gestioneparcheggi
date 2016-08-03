@@ -25,18 +25,15 @@ public class ParkingStructureBean {
 	private String streetReference;
 	private String managementMode;
 	private String manager;
-	//private String municipality;
-	//private Integer fee_val;
-	//private String timeSlot;
-	//private OpeningTime openingTime;
 	private List<RatePeriodBean> validityPeriod;
 	private PointBean geometry;
 	private Integer slotNumber;
-	private Integer payingSlotNumber;
+	private List<VehicleSlotBean> slotsConfiguration;
+	/*private Integer payingSlotNumber;
 	private Integer payingSlotOccupied;
 	private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
-	private Integer unusuableSlotNumber;
+	private Integer unusuableSlotNumber;*/
 	private List<String> paymentMode;
 	private String phoneNumber;
 	private Long lastChange;
@@ -44,6 +41,7 @@ public class ParkingStructureBean {
 	private double profit;			// in eurocent
 	private int tickets;			// number of tickets
 	private boolean parkAndRide;
+	private boolean abuttingPark;	// if there is a bus service
 	private List<String> zones;		// list of related zones (id)
 	
 	public String getId_app() {
@@ -85,8 +83,8 @@ public class ParkingStructureBean {
 	public void setSlotNumber(Integer slotNumber) {
 		this.slotNumber = slotNumber;
 	}
-
-	public Integer getPayingSlotNumber() {
+	
+	/*public Integer getPayingSlotNumber() {
 		return payingSlotNumber;
 	}
 
@@ -124,6 +122,14 @@ public class ParkingStructureBean {
 
 	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
 		this.unusuableSlotNumber = unusuableSlotNumber;
+	}*/
+
+	public List<VehicleSlotBean> getSlotsConfiguration() {
+		return slotsConfiguration;
+	}
+
+	public void setSlotsConfiguration(List<VehicleSlotBean> slotsConfiguration) {
+		this.slotsConfiguration = slotsConfiguration;
 	}
 
 	public String getPhoneNumber() {
@@ -198,6 +204,14 @@ public class ParkingStructureBean {
 		this.parkAndRide = parkAndRide;
 	}
 
+	public boolean isAbuttingPark() {
+		return abuttingPark;
+	}
+
+	public void setAbuttingPark(boolean abuttingPark) {
+		this.abuttingPark = abuttingPark;
+	}
+
 	public String getManager() {
 		return manager;
 	}
@@ -205,14 +219,6 @@ public class ParkingStructureBean {
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
-
-	/*public String getMunicipality() {
-		return municipality;
-	}
-
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
-	}*/
 
 	public List<String> getZones() {
 		return zones;
@@ -233,8 +239,8 @@ public class ParkingStructureBean {
 	public String feePeriodsSummary(){
 		String DATA_SEPARATOR = " / ";
 		String PERIOD_SEPARATOR = " // ";
-		String DAY_MODE = "day mode";
-		String NIGHT_MODE = "night mode";
+		//String DAY_MODE = "day mode";
+		//String NIGHT_MODE = "night mode";
 		String pSumm = "";
 		for(int i = 0; i < this.validityPeriod.size(); i++){
 			float euro_val = validityPeriod.get(i).getRateValue() / 100F;
@@ -299,18 +305,17 @@ public class ParkingStructureBean {
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
+		/*json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
 		json += "\"payingSlotOccupied\":\"" + getPayingSlotOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
 		json += "\"profit\":\"" + getProfit() + "\",";
 		json += "\"tickets\":\"" + getTickets() + "\",";
 		json += "\"parkAndRide\":\"" + isParkAndRide() + "\",";
 		json += "\"manager\":\"" + getManager() + "\"";
-		//json += "\"municipality\":\"" + getMunicipality() + "\"";
 		json += "}";
 		return json;
 	}

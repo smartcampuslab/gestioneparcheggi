@@ -2521,4 +2521,10 @@
 }, {
 	"key": "vehicle_type",
 	"value": "Vehicle Type"
+}, {
+	"key": "street_active_vehicle_type",
+	"value": "Active"
+}, {
+	"key": "ps_abutting_park",
+	"value": "Park with bus service"
 }]

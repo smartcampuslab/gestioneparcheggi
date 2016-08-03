@@ -2521,4 +2521,10 @@
 }, {
 	"key": "vehicle_type",
 	"value": "Tipo veicolo"
+}, {
+	"key": "street_active_vehicle_type",
+	"value": "Attivo"
+}, {
+	"key": "ps_abutting_park",
+	"value": "Parcheggio di attestamento"
 }]

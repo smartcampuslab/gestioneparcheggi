@@ -92,7 +92,9 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 				var sc = street.slotsConfiguration[i];
 				var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.unusuableSlotNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
 				street.slotsConfiguration[i].slotNumber = calculatedTotSlots;
-				streetSlots += calculatedTotSlots;
+				if(sc.vehicleTypeActive){
+					streetSlots += calculatedTotSlots;
+				}
 			}
 		}
 		
@@ -163,7 +165,9 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 				var sc = street.slotsConfiguration[i];
 				var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.unusuableSlotNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
 				street.slotsConfiguration[i].slotNumber = calculatedTotSlots;
-				streetSlots += calculatedTotSlots;
+				if(sc.vehicleTypeActive){
+					streetSlots += calculatedTotSlots;
+				}
 			}
 		}
 		

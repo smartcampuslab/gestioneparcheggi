@@ -16,6 +16,7 @@
 package it.smartcommunitylab.parking.management.web.model;
 
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 import java.util.List;
 
@@ -31,24 +32,22 @@ public class ParkingStructure {
 	private String streetReference;
 	private String managementMode;
 	private String manager;		// used to specify if the park is a municipality park or a private manager park
-	//private String municipality;
-//	private Integer fee_val;	// in eurocent / hour
-//	private String timeSlot;	// used in csv creation for openingTime string value
-//	private OpeningTime openingTime;
 	private List<RatePeriod> validityPeriod;
 	private Point geometry;
-	private Integer slotNumber;		
-	private Integer payingSlotNumber;
+	private Integer slotNumber;
+	private List<VehicleSlot> slotsConfiguration;	// Slot configuration for each vehicle type
+	/*private Integer payingSlotNumber;
 	private Integer handicappedSlotNumber;
 	private Integer unusuableSlotNumber;
 	// dynamic data
 	private Integer payingSlotOccupied;		// on Paying
-	private Integer handicappedSlotOccupied;
+	private Integer handicappedSlotOccupied;*/
 	
 	private List<PaymentMode> paymentMode;
 	private String phoneNumber;
 	private Long lastChange;
 	private boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
+	private boolean abuttingPark;	// if there is a bus service
 	private List<String> zones;		// list of related zones (id)
 	
 	
@@ -120,11 +119,19 @@ public class ParkingStructure {
 		this.paymentMode = paymentMode;
 	}
 
+	public List<VehicleSlot> getSlotsConfiguration() {
+		return slotsConfiguration;
+	}
+
+	public void setSlotsConfiguration(List<VehicleSlot> slotsConfiguration) {
+		this.slotsConfiguration = slotsConfiguration;
+	}
+
 	public List<PaymentMode> getPaymentMode() {
 		return paymentMode;
 	}
 
-	public Integer getPayingSlotNumber() {
+	/*public Integer getPayingSlotNumber() {
 		return payingSlotNumber;
 	}
 
@@ -162,7 +169,7 @@ public class ParkingStructure {
 
 	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
 		this.unusuableSlotNumber = unusuableSlotNumber;
-	}
+	}*/
 
 	public Long getLastChange() {
 		return lastChange;
@@ -180,6 +187,14 @@ public class ParkingStructure {
 		this.parkAndRide = parkAndRide;
 	}
 
+	public boolean isAbuttingPark() {
+		return abuttingPark;
+	}
+
+	public void setAbuttingPark(boolean abuttingPark) {
+		this.abuttingPark = abuttingPark;
+	}
+
 	public String getManager() {
 		return manager;
 	}
@@ -187,14 +202,6 @@ public class ParkingStructure {
 	public void setManager(String manager) {
 		this.manager = manager;
 	}
-
-//	public String getMunicipality() {
-//		return municipality;
-//	}
-//
-//	public void setMunicipality(String municipality) {
-//		this.municipality = municipality;
-//	}
 
 	public List<RatePeriod> getValidityPeriod() {
 		return validityPeriod;
@@ -278,15 +285,13 @@ public class ParkingStructure {
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"manager\":\"" + getManager() + "\",";
-//		json += "\"municipality\":\"" + getMunicipality() + "\",";
-//		json += "\"fee_val\":" + getFee_val() + ",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"slotPaying\":\"" + getPayingSlotNumber() + "\",";
+		/*json += "\"slotPaying\":\"" + getPayingSlotNumber() + "\",";
 		json += "\"slotOccupiedOnPaying\":\"" + getPayingSlotOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"parkAndRide\":\"" + isParkAndRide() + "\"";
 		json += "}";

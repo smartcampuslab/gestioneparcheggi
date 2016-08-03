@@ -302,7 +302,8 @@ public class ObjectController  {
 						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
-						if(slotsOccOnPaying != -1){
+						//TODO manage new vehicleSlotsConfiguration
+						/*if(slotsOccOnPaying != -1){
 							park.setSlotsOccupiedOnPaying(slotsOccOnPaying);
 							skipUpdate = false;
 						} else {
@@ -319,7 +320,7 @@ public class ObjectController  {
 							skipUpdate = false;
 						} else {
 							park.setSlotsUnavailable(-1);
-						}
+						}*/
 						if(!skipUpdate){
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;

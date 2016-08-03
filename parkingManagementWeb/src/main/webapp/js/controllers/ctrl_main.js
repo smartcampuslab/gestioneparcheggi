@@ -313,7 +313,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     	var list = [];
     	var subList = stringList.substring(1, stringList.length - 1);
     	var elements = subList.split("},");
-    	for(var i = 0; i < (elements.length - 1); i++){
+    	for(var i = 0; i < elements.length; i++){
     		var allAttribute = elements[i].split(", ");
     		var appId = allAttribute[0].split("=")[1];
     		var description = allAttribute[1].split("=")[1];
