@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
@@ -146,17 +147,17 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/area")
 	public @ResponseBody
-	RateAreaBean createRateArea(@PathVariable("appId") String appId,
+	RateAreaBean createRateArea(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, 
 			@RequestBody RateAreaBean area) {
-		return storage.save(area, appId);
+		return storage.save(area, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/area/{aid}")
 	public @ResponseBody
 	RateAreaBean editRateArea(@PathVariable("appId") String appId,
-			@PathVariable("aid") String aid,
+			@PathVariable("aid") String aid,  @RequestParam(required=true) String agencyId, 
 			@RequestBody RateAreaBean area) throws NotFoundException {
-		return storage.editArea(area, appId);
+		return storage.editArea(area, appId, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/area/{aid}")
@@ -175,8 +176,13 @@ public class EditingController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/area")
 	public @ResponseBody
-	List<RateAreaBean> getAllRateAreaByAppId(@PathVariable("appId") String appId) {
-		return storage.getAllArea(appId);
+	List<RateAreaBean> getAllRateAreaByAppId(@PathVariable("appId") String appId, 
+			@RequestParam(required=false) String agencyId) {
+		if(agencyId != null){
+			return storage.getAllAreaByAgency(appId, agencyId);
+		} else {
+			return storage.getAllArea(appId);
+		}
 	}
 	
 	// Method without security
@@ -188,16 +194,16 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/area/{aid}")
 	public @ResponseBody
-	boolean deleteRateArea(@PathVariable("appId") String appId,
-			@PathVariable("aid") String aid) {
-		return storage.removeArea(aid, appId);
+	boolean deleteRateArea(@PathVariable("appId") String appId, @PathVariable("aid") String aid,
+			@RequestParam(required=true) String agencyId) {
+		return storage.removeArea(aid, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/zone")
 	public @ResponseBody
-	ZoneBean createZone(@PathVariable("appId") String appId,
+	ZoneBean createZone(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, 
 			@RequestBody ZoneBean zone) throws DatabaseException {
-		return storage.save(zone, appId);
+		return storage.save(zone, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/zone")
@@ -234,17 +240,17 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/zone/{zid}")
 	public @ResponseBody
 	ZoneBean editZone(@PathVariable("appId") String appId,
-			@PathVariable("zid") String zid,
+			@PathVariable("zid") String zid, @RequestParam(required=true) String agencyId, 
 			@RequestBody ZoneBean zone) throws NotFoundException {
 		System.out.println(String.format("Zone to edit id:%s; name:%s; submacro:%s", zone.getId(), zone.getName(), zone.getSubmacro()));
-		return storage.editZone(zone, appId);
+		return storage.editZone(zone, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/zone/{zid}")
 	public @ResponseBody
-	boolean deleteZone(@PathVariable("appId") String appId,
-			@PathVariable("zid") String zid) {
-		return storage.removeZone(zid, appId);
+	boolean deleteZone(@PathVariable("appId") String appId, @PathVariable("zid") String zid, 
+			@RequestParam(required=true) String agencyId) {
+		return storage.removeZone(zid, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/bikepoint")

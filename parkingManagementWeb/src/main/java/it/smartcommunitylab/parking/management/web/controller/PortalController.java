@@ -15,11 +15,13 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.controller;
 
+import it.smartcommunitylab.parking.management.web.model.Agency;
 //import eu.trentorise.smartcampus.aac.AACException;
 import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
 import it.smartcommunitylab.parking.management.web.model.UserSetting;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.security.MongoUserDetailsService;
+import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
 import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.security.Principal;
@@ -55,6 +57,9 @@ public class PortalController extends SCController{
 	private VehicleTypeDataSetup vehicleTypeDataSetup;
 	
 	@Autowired
+	private AgencyDataSetup agencyDataSetup;
+	
+	@Autowired
 	@Value("${smartcommunity.parkingmanagement.url}")
 	private String mainURL;
 	
@@ -81,6 +86,7 @@ public class PortalController extends SCController{
 	private static final Logger logger = Logger.getLogger(PortalController.class);
 	
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.GET, value = "/home")
 	public ModelAndView index_console(ModelMap model, Principal principal) {
 		String name = principal.getName();
@@ -95,6 +101,7 @@ public class PortalController extends SCController{
 		UserSetting user = mongoUserDetailsService.getUserDetails(name);
 		logger.debug("I am in home redirect. User id: " + name);
 		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetails(user.getUsername());
+		String userAgency = user.getAgency();
 		model.addAttribute("user_name", user.getUsername());
 		model.addAttribute("user_surname", objectToShow.getId());
 		model.addAttribute("no_sec", "false");
@@ -109,7 +116,8 @@ public class PortalController extends SCController{
 		logger.debug("I am in get root console. object_showed: " + objectToShow.getShowObjectsMap());
 		List<Map> myVehicleType = vehicleTypeDataSetup.getVehicleTypesMap(vehicleTypeDataSetup.findVehicleTypesByAppIdAndUsername(objectToShow.getAppId(), user.getUsername()));
 		model.addAttribute("vehicle_type_list", myVehicleType);
-		
+		Map userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(userAgency));
+		model.addAttribute("user_agency", userAgencyData);
 		return new ModelAndView("index", model);
 	}
 	

@@ -86,7 +86,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z3 in s.data.zones3 track by z3.id">
+												<tr ng-repeat="z3 in a.data.zones3 track by z3.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 													<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 												</tr>
@@ -99,7 +99,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z4 in s.data.zones4 track by z4.id">
+												<tr ng-repeat="z4 in a.data.zones4 track by z4.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 													<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 												</tr>
@@ -113,8 +113,8 @@
 									</tr>
 									<tr>
 										<td colspan="2" class="info_window_buttons">
-											<a href type="button" class="btn btn-primary" ng-click="setAEdit(a.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
-											<a href type="button" class="btn btn-danger" ng-click="setARemove(a.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+											<a ng-show="(areaPermissions >= 2) && isMyAgency(a.data.agencyId)" href type="button" class="btn btn-primary" ng-click="setAEdit(a.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a ng-show="(areaPermissions >= 3) && isMyAgency(a.data.agencyId)" href type="button" class="btn btn-danger" ng-click="setARemove(a.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 										</td>
 									</tr>
 					        	</table>
@@ -232,8 +232,8 @@
 									</tr>
 									<tr>
 										<td colspan="2" class="info_window_buttons">
-											<a href type="button" class="btn btn-primary" ng-click="setAEdit(a.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
-											<a href type="button" class="btn btn-danger" ng-click="setARemove(a.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+											<a ng-show="(areaPermissions >= 2) && isMyAgency(a.data.agencyId)" href type="button" class="btn btn-primary" ng-click="setAEdit(a.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a ng-show="(areaPermissions >= 3) && isMyAgency(a.data.agencyId)" href type="button" class="btn btn-danger" ng-click="setARemove(a.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 										</td>
 									</tr>
 					        	</table>
@@ -249,7 +249,7 @@
 					<table width="100%">
 						<tr>
 							<td align="left"><h5 class="panel-title">{{ 'area_list' | i18n }}</h5></td>
-							<td align="right"><button type="button" class="btn btn-success" ng-click="setAEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+							<td align="right"><button ng-show="areaPermissions >= 3" type="button" class="btn btn-success" ng-click="setAEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
 						</tr>
 					</table>
 				</div>
@@ -258,6 +258,15 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="areaWS.length != 0">
+								<th width="3%">
+									<a href ng-click="showAgencyAFilter();currentPageA=0" ng-show="!showAgencyAreaFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="agencyAreaFilter=null;hideAgencyAFilter()" ng-show="showAgencyAreaFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+									<div ng-show="showAgencyAreaFilter">
+						    			<select id="f_agency_area" class="form-control" ng-model="agencyAreaFilter">
+						    				<option ng-repeat="a in allAgencyFilter" value="{{a.id}}" >{{ a.name }}</option>
+						    			</select>
+						    		</div>
+								</th>
 								<th width="20%">
 									<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>&nbsp;
 									<a href ng-click="showAreaNameFilter();currentPageA=0" ng-show="!showAreaNFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -269,13 +278,18 @@
 								<!-- <th width="14%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
 								<th width="31%"><span ng-show="aconf.a_timeSlot.visible">{{ 'area_time' | i18n }}</span></th> -->
 								<th width="43%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
-								<th class="myCenter" width="7%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
+								<th class="myCenter" width="4%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
 								<th class="myCenter" width="30%">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
-								ng-repeat="area in filtered = (areaWS | filter:nameFilter) | orderBy:'name' | startFrom:currentPageA*maxAreas | limitTo:maxAreas">
+								ng-repeat="area in filtered = (areaWS | filter:nameFilter | filter: agencyAreaFilter) | orderBy:'name' | startFrom:currentPageA*maxAreas | limitTo:maxAreas">
 								<tr>
-									<td align="left"><span ng-show="aconf.a_name.visible">{{area.name}}</span></td>
+									<td align="left">
+										<span ng-show="isMyAgency(area.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+									</td>
+									<td align="left">
+										<span ng-show="aconf.a_name.visible">{{area.name}}</span>
+									</td>
 									<!-- <td width="14%" align="left"><span ng-show="aconf.a_fee.visible">{{area.fee | euroVal}} {{ 'euro_hour' | i18n }}</span></td>
 									<td width="31%" align="left"><span ng-show="aconf.a_timeSlot.visible">{{area.timeSlot}}</span></td> -->
 									<td align="left">
@@ -290,9 +304,9 @@
 									</td>
 									<td align="center"><div class="colorBox" ng-show="aconf.a_color.visible" ng-style="{'background-color': correctColor(area.color)}"></div></td>
 									<td align="center">
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setADetails(area)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setAEdit(area)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setARemove(area)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+										<a ng-show="(areaPermissions >= 1) || !isMyAgency(area.agencyId)" href type="button" class="btn btn-primary btn-xs" ng-click="setADetails(area)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a ng-show="(areaPermissions >= 2) && isMyAgency(area.agencyId)" href type="button" class="btn btn-primary btn-xs" ng-click="setAEdit(area)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a ng-show="(areaPermissions >= 3) && isMyAgency(area.agencyId)" href type="button" class="btn btn-primary btn-xs" ng-click="setARemove(area)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 									</td>
 								</tr>
 							</tbody>
@@ -429,7 +443,7 @@
 								<button type="button" class="btn btn-default btn-lg" ng-click="closeAView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
 							<td width="15%" align="center">
-								<button type="button" class="btn btn-primary btn-lg" ng-click="setAEdit(viewArea)">{{ 'text_btn_edit' | i18n  }}</button>
+								<button ng-show="areaPermissions >= 2" type="button" class="btn btn-primary btn-lg" ng-click="setAEdit(viewArea)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>

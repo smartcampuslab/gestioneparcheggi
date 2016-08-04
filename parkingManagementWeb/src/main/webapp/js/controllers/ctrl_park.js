@@ -198,6 +198,24 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	$scope.showAreaNFilter = false;
     };
     
+    // Methods to show/hide area agency filter
+    $scope.showAgencyAFilter = function(){
+    	$scope.showAgencyAreaFilter = true;
+    };
+    
+    $scope.hideAgencyAFilter = function(){
+    	$scope.showAgencyAreaFilter = false;
+    };
+    
+    // Methods to show/hide zone agency filter
+    $scope.showAgencyZFilter = function(){
+    	$scope.showAgencyZoneFilter = true;
+    };
+    
+    $scope.hideAgencyZFilter = function(){
+    	$scope.showAgencyZoneFilter = false;
+    };
+    
     // Methods to show/hide ps name filter
     $scope.showPsNameFilter = function(){
     	$scope.showPsFilter = true;
@@ -308,6 +326,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	return vehicleTypesNew;
     };
     
+    var agencyId;
     // Init edit pages element from initialize service
     $scope.initComponents = function(){
     	if($scope.editparktabs == null || $scope.editparktabs.length == 0){
@@ -332,7 +351,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	showStreets = initializeService.isShowedStreetEdit();
 	    	showPm = initializeService.isShowedPmEdit();
 	    	showPs = initializeService.isShowedPsEdit();
-	    	showZones = initializeService.isShowedZone0Edit() || initializeService.isShowedZone1Edit();	// TODO: manage more zones
+	    	showZones = initializeService.isShowedZone0Edit() || initializeService.isShowedZone1Edit() || initializeService.isShowedZone2Edit();	// TODO: manage more zones
 	    	showBp = initializeService.isShowedBpEdit();
 	    	var parktabs = [];
 	    	var zone_tab_list = [];
@@ -352,8 +371,26 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	if(showPs)parktabs.push(ps_tab_obj);
 	    	if(showPm)parktabs.push(pm_tab_obj);
 	    	if(showBp)parktabs.push(bp_tab_obj);
+	    	agencyId = sharedDataService.getConfUserAgency().id;
+	    	$scope.areaPermissions = sharedDataService.getAgencyPermissionsForObject("area");
+	    	$scope.zonePermissions = sharedDataService.getAgencyPermissionsForObject("zone");
+	    	$scope.streetPermissions = sharedDataService.getAgencyPermissionsForObject("street");
+	    	$scope.psPermissions = sharedDataService.getAgencyPermissionsForObject("structure");
+	    	$scope.pmPermissions = sharedDataService.getAgencyPermissionsForObject("parkingmeter");
+	    	$scope.bikePermissions = sharedDataService.getAgencyPermissionsForObject("bike");
+	    	$scope.allAgencyFilter = [{
+	    		id: "",
+	    		name: "Tutto"
+	    	},{
+	    		id: agencyId,
+	    		name: "Miei dati"
+	    	}];
 	    	angular.copy(parktabs, $scope.editparktabs);
     	}
+    };
+    
+    $scope.isMyAgency = function(agency){
+    	return (agencyId == agency);
     };
     
     // -------------------------------- New part for periods and rate ----------------------------------
@@ -1857,7 +1894,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var createdPaths = [];
 			createdPaths = gMapService.createPolygonInAreaEdit(garea, newCorrectedPath, createdPaths, $scope.allNewAreas);
 			
-			var updateResponse = areaService.createAreaInDb(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths);
+			var updateResponse = areaService.createAreaInDb(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths, agencyId);
 			updateResponse.then(function(result){
 				if(result != null && result != ""){
 		    		$scope.getAllAreas();
@@ -1933,7 +1970,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 			
-			var updateResponse = areaService.updateAreaInDb(area, color, zone0, zone1, zone2, zone3, zone4, editPaths, 0);
+			var updateResponse = areaService.updateAreaInDb(area, color, zone0, zone1, zone2, zone3, zone4, editPaths, 0, agencyId);
 			updateResponse.then(function(result){
 				if(result != null){
 		    		//$scope.getAreasFromDb();
@@ -1965,7 +2002,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		// area removing from gmap
 		gMapService.removeAreaPolygons($scope.vAreaMap, area);
 		
-		var deleteResponse = areaService.deleteAreaInDb(area);
+		var deleteResponse = areaService.deleteAreaInDb(area, agencyId);
 		deleteResponse.then(function(result){
 			if(result != null && result != ""){
 	    		//$scope.getAreasFromDb();

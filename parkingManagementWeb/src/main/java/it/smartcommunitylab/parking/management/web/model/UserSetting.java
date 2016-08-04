@@ -28,7 +28,7 @@ public class UserSetting implements Serializable {
     private String name;
     private String surname;
     private String mail;
-    private List<String> agencies;
+    private String agency;
 
     
 	/**
@@ -106,12 +106,12 @@ public class UserSetting implements Serializable {
 		this.mail = mail;
 	}
 
-	public List<String> getAgencies() {
-		return agencies;
+	public String getAgency() {
+		return agency;
 	}
 
-	public void setAgencies(List<String> agencies) {
-		this.agencies = agencies;
+	public void setAgency(String agency) {
+		this.agency = agency;
 	}
 
 	@Override

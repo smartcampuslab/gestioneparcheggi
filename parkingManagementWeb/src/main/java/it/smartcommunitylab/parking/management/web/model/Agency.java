@@ -1,13 +1,19 @@
 package it.smartcommunitylab.parking.management.web.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Agency {
 
 	private String id;
 	private String name;
 	private String description;
-	private int reading;	// reading permission: 0 false, 1 true;
-	private int editing;	// editing permission: 0 false, 1 true;
-	private int creation;	// creation and deleting permission: 0 false, 1 true;
+	private int area;	// permissions in area: 0 no, 1 read, 2 update, 3 create-delete;
+	private int zone;	// permissions in zone: 0 no, 1 read, 2 update, 3 create-delete;
+	private int street;	// permissions in street: 0 no, 1 read, 2 update, 3 create-delete;
+	private int structure;	// permissions in ps: 0 no, 1 read, 2 update, 3 create-delete;
+	private int parkingmeter;	// permissions in pm: 0 no, 1 read, 2 update, 3 create-delete;
+	private int bike;	// permissions in bike: 0 no, 1 read, 2 update, 3 create-delete;
 	
 	public String getId() {
 		return id;
@@ -33,28 +39,66 @@ public class Agency {
 		this.description = description;
 	}
 
-	public int getReading() {
-		return reading;
+	public int getArea() {
+		return area;
 	}
 
-	public int getEditing() {
-		return editing;
+	public int getZone() {
+		return zone;
 	}
 
-	public int getCreation() {
-		return creation;
+	public int getStreet() {
+		return street;
 	}
 
-	public void setReading(int reading) {
-		this.reading = reading;
+	public int getStructure() {
+		return structure;
 	}
 
-	public void setEditing(int editing) {
-		this.editing = editing;
+	public int getParkingmeter() {
+		return parkingmeter;
 	}
 
-	public void setCreation(int creation) {
-		this.creation = creation;
+	public int getBike() {
+		return bike;
+	}
+
+	public void setArea(int area) {
+		this.area = area;
+	}
+
+	public void setZone(int zone) {
+		this.zone = zone;
+	}
+
+	public void setStreet(int street) {
+		this.street = street;
+	}
+
+	public void setStructure(int structure) {
+		this.structure = structure;
+	}
+
+	public void setParkingmeter(int parkingmeter) {
+		this.parkingmeter = parkingmeter;
+	}
+
+	public void setBike(int bike) {
+		this.bike = bike;
+	}
+	
+	public Map<String, Object> toMap(){
+		Map<String,Object> comp = new HashMap<String,Object>();
+		comp.put("id", id);
+		comp.put("name", name);
+		comp.put("description", description);
+		comp.put("area", area);
+		comp.put("zone", zone);
+		comp.put("street", street);
+		comp.put("structure", structure);
+		comp.put("parkingmeter", parkingmeter);
+		comp.put("bike", bike);
+		return comp;
 	}
 
 }

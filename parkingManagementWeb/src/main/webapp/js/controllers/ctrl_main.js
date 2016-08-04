@@ -333,6 +333,70 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     	return list;
     }
     
+    var correctStringToAgecyData = function(stringAg){
+    	// id=prova789, structure=2, bike=2, area=3, description=Agency id per trentino mobilita', street=2, name=Agency tn, zone=1, parkingmeter=2
+    	var data = {};
+    	var substringAg = stringAg.substring(1, stringAg.length - 1);
+    		var allAttribute = substringAg.split(", ");
+    		var id;
+    		var name;
+    		var description;
+    		var area;
+    		var zone;
+    		var street;
+    		var structure;
+    		var parkingmeter;
+    		var bike;
+    		for(var i = 0; i < allAttribute.length; i++){
+    			if(allAttribute[i].indexOf("id=") !== -1){
+    				id = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("name=") !== -1){
+    				name = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("description=") !== -1){
+    				description = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("area=") !== -1){
+    				area = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("zone=") !== -1){
+    				zone = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("street=") !== -1){
+    				street = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("structure=") !== -1){
+    				structure = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("parkingmeter=") !== -1){
+    				parkingmeter = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("bike=") !== -1){
+    				bike = allAttribute[i].split("=")[1];
+    			}
+    		}
+    		data = {
+    			id: id,
+    			name: name,
+    			description: description,
+    			area: area,
+    			zone: zone,
+    			street: street,
+    			structure: structure,
+    			parkingmeter: parkingmeter,
+    			bike: bike
+    		};
+    	return data;
+    }
+    
+    // for agency id
+    if(conf_agency && conf_agency != ''){
+    	//var tmp_ags = conf_agency_list.substring(1, conf_agency_list.length - 1);
+    	//var user_agencies = tmp_ags.split(",");
+    	sharedDataService.setConfUserAgency(correctStringToAgecyData(conf_agency));
+    }
+    
     sharedDataService.setConfAppId(conf_app_id);
     sharedDataService.setConfMapCenter(conf_map_center);
     if(conf_map_recenter && conf_map_recenter != "null"){

@@ -80,7 +80,6 @@ var conf_app_id="<%=request.getAttribute("app_id")%>";
 var conf_map_center="<%=request.getAttribute("map_center")%>";
 var conf_map_recenter="<%=request.getAttribute("map_recenter")%>";
 var conf_map_zoom="<%=request.getAttribute("map_zoom")%>";
-var object_to_show="<%=request.getAttribute("object_showed")%>";
 var conf_widget_url="<%=request.getAttribute("widget_url")%>";
 var conf_macrozone_type="<%=request.getAttribute("macrozone_type")%>";
 var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
@@ -88,6 +87,8 @@ var conf_ps_managers="<%=request.getAttribute("ps_managers")%>";
 var conf_elements="<%=request.getAttribute("elements")%>";
 var conf_filters="<%=request.getAttribute("filters")%>";
 var conf_vehicle_type_list="<%=request.getAttribute("vehicle_type_list")%>";
+var conf_agency="<%=request.getAttribute("user_agency")%>";
+var object_to_show="<%=request.getAttribute("object_showed")%>";
 var ctx="<%=request.getContextPath()%>";
 </script>
   

@@ -8,11 +8,18 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	this.showLog = false;
 	
 	// Area get method
-    this.getAreasFromDb = function(showArea){
+    this.getAreasFromDb = function(showArea, agencyId){
 		var allAreas = [];
 		var method = 'GET';
+		var params = null;
+		if(agencyId){
+			params = {
+				agencyId: agencyId,
+				noCache: new Date().getTime()
+			};
+		}
 		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), null);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allAreas){
 	    	allAreas = gMapService.initAllAreaObjects(allAreas);	// The only solution found to retrieve all data;
 	    	if(showArea){
@@ -50,25 +57,30 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	};
 	
 	// Area update method
-	this.updateAreaInDb = function(area, color, zone0, zone1, zone2, zone3, zone4, editPaths, type){
+	this.updateAreaInDb = function(area, color, zone0, zone1, zone2, zone3, zone4, editPaths, type, agencyId){
 		var validityPeriod = [];
 		if(type == 0){
-			for(var i = 0; i < area.validityPeriod.length; i++){
-				var corrPeriod = {
-					from: area.validityPeriod[i].from,
-					to: area.validityPeriod[i].to,
-					weekDays: area.validityPeriod[i].weekDays,
-					timeSlot: area.validityPeriod[i].timeSlot,
-					rateValue: area.validityPeriod[i].rateValue,
-					holiday: area.validityPeriod[i].holiday,
-					note: area.validityPeriod[i].note
-				};
-				validityPeriod.push(corrPeriod);
+			if(area.validityPeriod){
+				for(var i = 0; i < area.validityPeriod.length; i++){
+					var corrPeriod = {
+						from: area.validityPeriod[i].from,
+						to: area.validityPeriod[i].to,
+						weekDays: area.validityPeriod[i].weekDays,
+						timeSlot: area.validityPeriod[i].timeSlot,
+						rateValue: area.validityPeriod[i].rateValue,
+						holiday: area.validityPeriod[i].holiday,
+						note: area.validityPeriod[i].note
+					};
+					validityPeriod.push(corrPeriod);
+				}
 			}
 		}
 			
 		var id = area.id;
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
 		var method = 'PUT';
 		var data = {};
 		if(type == 0){
@@ -93,13 +105,14 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 				color: area.color,
 				note: area.note,
 				zones: area.zones,
-				geometry: area.geometry
+				geometry: area.geometry,
+				agencyId: area.agencyId
 			};
 		}
 			
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Area data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + id, null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + id, params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated area: " + result.name);
 		});
@@ -107,38 +120,47 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	}; 
 	
 	// Area create method
-	this.createAreaInDb = function(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths){
+	this.createAreaInDb = function(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths, agencyId){
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
-		
+		var params = {
+			agencyId: agencyId
+		};
+		var myAgencyList = []
+		if(agencyId){
+			myAgencyList.push(agencyId);
+		}
 		var validityPeriod = [];
-		for(var i = 0; i < area.validityPeriod.length; i++){
-			var corrPeriod = {
-				from: area.validityPeriod[i].from,
-				to: area.validityPeriod[i].to,
-				weekDays: area.validityPeriod[i].weekDays,
-				timeSlot: area.validityPeriod[i].timeSlot,
-				rateValue: area.validityPeriod[i].rateValue,
-				holiday: area.validityPeriod[i].holiday,
-				note: area.validityPeriod[i].note
-			};
-			validityPeriod.push(corrPeriod);
+		if(area.validityPeriod){
+			for(var i = 0; i < area.validityPeriod.length; i++){
+				var corrPeriod = {
+					from: area.validityPeriod[i].from,
+					to: area.validityPeriod[i].to,
+					weekDays: area.validityPeriod[i].weekDays,
+					timeSlot: area.validityPeriod[i].timeSlot,
+					rateValue: area.validityPeriod[i].rateValue,
+					holiday: area.validityPeriod[i].holiday,
+					note: area.validityPeriod[i].note
+				};
+				validityPeriod.push(corrPeriod);
+			}
 		}
 		
 		var data = {
-			id_app: area.id_app,
+			id_app: appId,
 			name: area.name,
 			validityPeriod: validityPeriod,
 			smsCode: area.smsCode,
 			color: myColor.substring(1, myColor.length),	// I have to remove '#' char
 			note: area.note,
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			geometry: gMapService.correctMyGeometryPolygonForArea(createdPaths)
+			geometry: gMapService.correctMyGeometryPolygonForArea(createdPaths),
+			agencyId: myAgencyList		// in this case I set the agencyId
 		};
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Area data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/area", params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created area: " + result.name);
 	    });
@@ -146,11 +168,14 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	};
 	
 	// Area delete method
-	this.deleteAreaInDb = function(area){
+	this.deleteAreaInDb = function(area, agencyId){
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId	
+		};
 		
-		var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + area.id , null, sharedDataService.getAuthHeaders(), null);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + area.id , params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted area: " +area.name);
 	    });

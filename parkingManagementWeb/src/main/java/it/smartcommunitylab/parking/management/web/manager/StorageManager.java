@@ -34,12 +34,14 @@ import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.RatePeriod;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.Agency;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.Zone;
 import it.smartcommunitylab.parking.management.web.model.geo.Line;
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
+import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
 
 import java.security.AccessControlException;
 import java.util.ArrayList;
@@ -60,21 +62,32 @@ import org.springframework.stereotype.Service;
 public class StorageManager {
 
 	private static final Logger logger = Logger.getLogger(StorageManager.class);
+	private static final int READ_VAL = 1;
+	private static final int UPDATE_VAL = 2;
+	private static final int CREATE_REM_VAL = 3;
 
 	@Autowired
 	private MongoTemplate mongodb;
+	
+	@Autowired
+	private AgencyDataSetup agencyDataSetup;
 
 	// RateArea Methods
-	public RateAreaBean save(RateAreaBean a, String appId) {
-		RateArea area = ModelConverter.convert(a, RateArea.class);
-		area = processId(area, RateArea.class);
-		area.setId_app(appId);
-		mongodb.save(area);	
-		a.setId(area.getId());
+	public RateAreaBean save(RateAreaBean a, String appId, String agencyId) {
+		Agency ag = agencyDataSetup.getAgencyById(agencyId);
+		if(ag.getArea() >= CREATE_REM_VAL){
+			RateArea area = ModelConverter.convert(a, RateArea.class);
+			area = processId(area, RateArea.class);
+			area.setId_app(appId);
+			mongodb.save(area);	
+			a.setId(area.getId());
+		} else {
+			throw new AccessControlException("no create permission for area object");
+		}
 		return a;
 	}
 
-	public RateAreaBean editArea(RateAreaBean a, String appId) throws NotFoundException {
+	/*public RateAreaBean editArea(RateAreaBean a, String appId) throws NotFoundException {
 		RateArea area = findById(a.getId(), RateArea.class);
 		area.setName(a.getName());
 		area.setColor(a.getColor());
@@ -111,58 +124,55 @@ public class StorageManager {
 
 		mongodb.save(area);
 		return a;
-	}
+	}*/
 	
-	public RateAreaBean editArea(RateAreaBean a, String appId, List<String> agencyId) throws NotFoundException {
+	public RateAreaBean editArea(RateAreaBean a, String appId, String agencyId) throws NotFoundException {
 		RateArea area = findById(a.getId(), RateArea.class);
-		String userAid = "";
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
-			for(String agId : agencyId){
-				if(area.getAgencyId().contains(agId)){
-					userAid = agId;
-					break;
-				}
-			}
-			if(userAid.compareTo("") != 0){
-				// agency presente. Dovrei verificare i permessi che ha
-			} else {
-				throw new AccessControlException("no update permission for this object");
-			}
-		}
-		area.setName(a.getName());
-		area.setColor(a.getColor());
-		if(a.getNote() != null){
-			area.setNote(a.getNote());
-		}
-		if(a.getSmsCode() != null){
-			area.setSmsCode(a.getSmsCode());
-		}
-		if(a.getValidityPeriod() != null){
-			if(area.getValidityPeriod() != null){
-				area.getValidityPeriod().clear();
-			} else {
-				area.setValidityPeriod(new ArrayList<RatePeriod>());
-			}
-		} else {
-			area.setValidityPeriod(new ArrayList<RatePeriod>());
-		}
-		for (RatePeriodBean ratePeriod : a.getValidityPeriod()) {
-			area.getValidityPeriod().add(
-					ModelConverter.convert(ratePeriod, RatePeriod.class));
-		}
-		if (area.getGeometry() != null) {
-			area.getGeometry().clear();
-		} else {
-			area.setGeometry(new ArrayList<Polygon>());
-		}
-		for (PolygonBean polygon : a.getGeometry()) {
-			area.getGeometry().add(
-					ModelConverter.convert(polygon, Polygon.class));
-		}
-		if(a.getZones()!= null)area.setZones(a.getZones());
-		a.setAgencyId(area.getAgencyId());
+			if(area.getAgencyId().contains(agencyId)){
+				Agency ag = agencyDataSetup.getAgencyById(agencyId);
+				if(ag.getArea() >= UPDATE_VAL){
+					area.setName(a.getName());
+					area.setColor(a.getColor());
+					if(a.getNote() != null){
+						area.setNote(a.getNote());
+					}
+					if(a.getSmsCode() != null){
+						area.setSmsCode(a.getSmsCode());
+					}
+					if(a.getValidityPeriod() != null){
+						if(area.getValidityPeriod() != null){
+							area.getValidityPeriod().clear();
+						} else {
+							area.setValidityPeriod(new ArrayList<RatePeriod>());
+						}
+					} else {
+						area.setValidityPeriod(new ArrayList<RatePeriod>());
+					}
+					for (RatePeriodBean ratePeriod : a.getValidityPeriod()) {
+						area.getValidityPeriod().add(
+								ModelConverter.convert(ratePeriod, RatePeriod.class));
+					}
+					if (area.getGeometry() != null) {
+						area.getGeometry().clear();
+					} else {
+						area.setGeometry(new ArrayList<Polygon>());
+					}
+					for (PolygonBean polygon : a.getGeometry()) {
+						area.getGeometry().add(
+								ModelConverter.convert(polygon, Polygon.class));
+					}
+					if(a.getZones()!= null)area.setZones(a.getZones());
+					//a.setAgencyId(area.getAgencyId());	Verify if it is usefull to uncomment or not
 
-		mongodb.save(area);
+					mongodb.save(area);
+				} else {
+					throw new AccessControlException("no update permission for area object");
+				}
+			} else {
+				throw new AccessControlException("no update permission for area object");
+			}
+		}
 		return a;
 	}
 
@@ -179,16 +189,21 @@ public class StorageManager {
 		return result;
 	}
 
-	public List<RateAreaBean> getAllAreaByAgency(String agencyId, String appId) {
+	public List<RateAreaBean> getAllAreaByAgency(String appId, String agencyId) {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
-		Criteria crit = new Criteria();
-		crit.and("agencyId").in(agencyId);
-		for (RateArea a : mongodb.find(Query.query(crit), RateArea.class)) {
-			if(a != null && appId.compareTo("all") == 0){
-				result.add(ModelConverter.convert(a, RateAreaBean.class));
-			} else if(a != null && a.getId_app().compareTo(appId) == 0){
-				result.add(ModelConverter.convert(a, RateAreaBean.class));
+		Agency ag = agencyDataSetup.getAgencyById(agencyId);
+		if(ag.getArea() >= READ_VAL){
+			Criteria crit = new Criteria();
+			crit.and("agencyId").in(agencyId);
+			for (RateArea a : mongodb.find(Query.query(crit), RateArea.class)) {
+				if(a != null && appId.compareTo("all") == 0){
+					result.add(ModelConverter.convert(a, RateAreaBean.class));
+				} else if(a != null && a.getId_app().compareTo(appId) == 0){
+					result.add(ModelConverter.convert(a, RateAreaBean.class));
+				}
 			}
+		} else {
+			throw new AccessControlException("no read permission for area object");
 		}
 		return result;
 	}
@@ -220,12 +235,10 @@ public class StorageManager {
 		return ra;
 	}
 	
-	public boolean removeArea(String areaId, String appId) {
+	/*public boolean removeArea(String areaId, String appId) {
 		Criteria crit = new Criteria();
 		crit.and("id").is(areaId);
-		
 		RateAreaBean ra = getAreaById(areaId, appId);
-		
 		// Here I save the dataLog of the streets removing
 		for(StreetBean sb : getAllStreets(ra, appId)){
 			DataLogBean dl = new DataLogBean();
@@ -237,10 +250,33 @@ public class StorageManager {
 			dl.setDeleted(true);
 			mongodb.save(dl);
 		}
-		
 		mongodb.remove(Query.query(crit), RateArea.class);
-		
 		return true;
+	}*/
+	
+	public boolean removeArea(String areaId, String appId, String agencyId) {
+		boolean result = false;
+		Agency ag = agencyDataSetup.getAgencyById(agencyId);
+		if(ag.getArea() >= CREATE_REM_VAL){
+			Criteria crit = new Criteria();
+			crit.and("id").is(areaId);
+			RateAreaBean ra = getAreaById(areaId, appId);
+			// Here I save the dataLog of the streets removing
+			for(StreetBean sb : getAllStreets(ra, appId)){
+				DataLogBean dl = new DataLogBean();
+				dl.setObjId("@" + sb.getId_app() + "@street@" + sb.getId());
+				dl.setType("street");
+				dl.setTime(System.currentTimeMillis());
+				dl.setAuthor("999");
+				dl.setDeleted(true);
+				mongodb.save(dl);
+				result = true;
+			}
+			mongodb.remove(Query.query(crit), RateArea.class);
+		} else {
+			throw new AccessControlException("no remove permission for area object");
+		}
+		return result;
 	}
 
 	// ParkMeter Methods
@@ -924,12 +960,17 @@ public class StorageManager {
 	}
 	
 	// Zone Methods
-	public ZoneBean save(ZoneBean z, String appId) {
-		Zone zona = ModelConverter.convert(z, Zone.class);
-		zona = processId(zona, Zone.class);
-		zona.setId_app(appId);
-		mongodb.save(zona);
-		z.setId(zona.getId());
+	public ZoneBean save(ZoneBean z, String appId, String agencyId) {
+		Agency ag = agencyDataSetup.getAgencyById(agencyId);
+		if(ag.getZone() >= CREATE_REM_VAL){
+			Zone zona = ModelConverter.convert(z, Zone.class);
+			zona = processId(zona, Zone.class);
+			zona.setId_app(appId);
+			mongodb.save(zona);
+			z.setId(zona.getId());
+		} else {
+			throw new AccessControlException("no create permission for zone object");
+		}
 		return z;
 	}
 
@@ -941,6 +982,25 @@ public class StorageManager {
 			} else if(z != null && z.getId_app().compareTo(appId) == 0){
 				result.add(ModelConverter.convert(z, ZoneBean.class));
 			}
+		}
+		return result;
+	}
+	
+	public List<ZoneBean> getAllZoneByAgencyId(String appId, String agencyId) {
+		List<ZoneBean> result = new ArrayList<ZoneBean>();
+		Agency ag = agencyDataSetup.getAgencyById(agencyId);
+		if(ag.getZone() >= READ_VAL){
+			Criteria crit = new Criteria();
+			crit.and("agencyId").in(agencyId);
+			for (Zone z : mongodb.find(new Query(crit), Zone.class)) {
+				if(z != null && appId.compareTo("all") == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				} else if(z != null && z.getId_app().compareTo(appId) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
+			}
+		} else {
+			throw new AccessControlException("no read permission for zone object");
 		}
 		return result;
 	}
@@ -1017,80 +1077,93 @@ public class StorageManager {
 		return result.get(0);
 	}	
 
-	public ZoneBean editZone(ZoneBean z, String appId) throws NotFoundException {
+	public ZoneBean editZone(ZoneBean z, String appId, String agencyId) throws NotFoundException {
 		Zone zona = findById(z.getId(), Zone.class);
-		zona.setName(z.getName());
-		zona.setSubmacro(z.getSubmacro());
-		zona.setSubmicro(z.getSubmicro());
-		zona.setColor(z.getColor());
-		zona.setType(z.getType());
-		zona.setNote(z.getNote());
-		//zona.setMunicipality(z.getMunicipality());
-		if(z.getCentermap() != null){
-			if(zona.getCentermap() != null){
-				zona.getCentermap().setLat(z.getCentermap().getLat());
-				zona.getCentermap().setLng(z.getCentermap().getLng());
-			} else {
-				Point p = new Point();
-				p.setLat(z.getCentermap().getLat());
-				p.setLng(z.getCentermap().getLng());
-				zona.setCentermap(p);
-			}
-		}
-		zona.setGeometryFromSubelement(z.isGeometryFromSubelement());
-		if(z.getGeometry()!= null && z.getGeometry().getPoints() != null && z.getGeometry().getPoints().size() > 0){
-			if(zona.getGeometry() != null && zona.getGeometry().getPoints() != null && zona.getGeometry().getPoints().size() > 0){
-				zona.getGeometry().getPoints().clear();
-				for (PointBean pb : z.getGeometry().getPoints()) {
-					zona.getGeometry().getPoints()
-							.add(ModelConverter.convert(pb, Point.class));
-				}	
-			} else {
-				Polygon geo = new Polygon();
-				List<Point> points = new ArrayList<Point>();
-				for (PointBean pb : z.getGeometry().getPoints()) {
-					points.add(ModelConverter.convert(pb, Point.class));
+		if(zona.getAgencyId() != null && !zona.getAgencyId().isEmpty()){
+			if(zona.getAgencyId().contains(agencyId)){
+				Agency ag = agencyDataSetup.getAgencyById(agencyId);
+				if(ag.getZone() >= UPDATE_VAL){
+					zona.setName(z.getName());
+					zona.setSubmacro(z.getSubmacro());
+					zona.setSubmicro(z.getSubmicro());
+					zona.setColor(z.getColor());
+					zona.setType(z.getType());
+					zona.setNote(z.getNote());
+					if(z.getCentermap() != null){
+						if(zona.getCentermap() != null){
+							zona.getCentermap().setLat(z.getCentermap().getLat());
+							zona.getCentermap().setLng(z.getCentermap().getLng());
+						} else {
+							Point p = new Point();
+							p.setLat(z.getCentermap().getLat());
+							p.setLng(z.getCentermap().getLng());
+							zona.setCentermap(p);
+						}
+					}
+					zona.setGeometryFromSubelement(z.isGeometryFromSubelement());
+					if(z.getGeometry()!= null && z.getGeometry().getPoints() != null && z.getGeometry().getPoints().size() > 0){
+						if(zona.getGeometry() != null && zona.getGeometry().getPoints() != null && zona.getGeometry().getPoints().size() > 0){
+							zona.getGeometry().getPoints().clear();
+							for (PointBean pb : z.getGeometry().getPoints()) {
+								zona.getGeometry().getPoints()
+										.add(ModelConverter.convert(pb, Point.class));
+							}	
+						} else {
+							Polygon geo = new Polygon();
+							List<Point> points = new ArrayList<Point>();
+							for (PointBean pb : z.getGeometry().getPoints()) {
+								points.add(ModelConverter.convert(pb, Point.class));
+							}
+							geo.setPoints(points);
+							zona.setGeometry(geo);
+						}
+					}
+					mongodb.save(zona);
+				} else {
+					throw new AccessControlException("no update permission for zone object");
 				}
-				geo.setPoints(points);
-				zona.setGeometry(geo);
+			} else {
+				throw new AccessControlException("no update permission for zone object");
 			}
 		}
-		mongodb.save(zona);
 		return z;
 	}
 
-	public boolean removeZone(String zonaId, String appId) {
+	public boolean removeZone(String zonaId, String appId, String agencyId) {
+		boolean result = false;
 		Criteria crit = new Criteria();
 		crit.and("id").is(zonaId);
-		
 		ZoneBean z = ModelConverter.convert(mongodb.findById(zonaId, Zone.class), ZoneBean.class);
-		
-		List<StreetBean> streets = getAllStreets(z, appId);
-		for(StreetBean s : streets){
-			List<String> zones = s.getZones();
-//			for(String zb : zones){
-//				logger.info(String.format("Finded zona: %s", zb));
-//				if(zb.compareTo(zonaId) == 0){
-//					logger.info(String.format("Try to remove zona: %s", zb));
-//					zones.remove(zb);
-//				}
-//			}
-			for (Iterator<String> iterator = zones.iterator(); iterator.hasNext(); ) {
-			    String value = iterator.next();
-			    if(value.compareTo(zonaId) == 0){
-			    	logger.info(String.format("Finded zona: %s", value));
-			    	iterator.remove();
-			    	try {
-						editStreet(s, appId);
-					} catch (DatabaseException e) {
-						logger.error(String.format("Error in update street: %s", e.getMessage()));
+		if(z.getAgencyId() != null && !z.getAgencyId().isEmpty()){
+			if(z.getAgencyId().contains(agencyId)){
+				Agency ag = agencyDataSetup.getAgencyById(agencyId);
+				if(ag.getZone() >= UPDATE_VAL){
+					List<StreetBean> streets = getAllStreets(z, appId);
+					for(StreetBean s : streets){
+						List<String> zones = s.getZones();
+						for (Iterator<String> iterator = zones.iterator(); iterator.hasNext(); ) {
+						    String value = iterator.next();
+						    if(value.compareTo(zonaId) == 0){
+						    	logger.info(String.format("Finded zona: %s", value));
+						    	iterator.remove();
+						    	try {
+									editStreet(s, appId);
+								} catch (DatabaseException e) {
+									logger.error(String.format("Error in update street: %s", e.getMessage()));
+								}
+						    }
+						}
 					}
-			    }
+					mongodb.remove(Query.query(crit), Zone.class);
+					result = true;
+				} else {
+					throw new AccessControlException("no delete permission for zone object");
+				}
+			} else {
+				throw new AccessControlException("no delete permission for zone object");
 			}
 		}
-		
-		mongodb.remove(Query.query(crit), Zone.class);
-		return true;
+		return result;
 	}
 
 	public byte[] exportData() throws ExportException {

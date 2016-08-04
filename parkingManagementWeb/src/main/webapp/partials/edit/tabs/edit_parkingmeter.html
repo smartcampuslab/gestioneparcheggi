@@ -330,7 +330,7 @@
 									</tr>
 									<tbody class="animate-repeat"
 										ng-repeat="pmeter in filtered = (pmeterWS | filter:noteFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:'code' | startFrom:currentPagePm*maxPmeters | limitTo:maxPmeters">
-										<tr ><!--  ng-show="pmeter.status!='ACTIVE' && pmStatusFilter!='ACTIVE'" -->
+										<tr><!--  ng-show="pmeter.status!='ACTIVE' && pmStatusFilter!='ACTIVE'" -->
 											<td align="left"><span ng-show="pmconf.pm_code.visible">{{pmeter.code}}</span></td>
 											<td align="left"><span ng-show="pmconf.pm_note.visible">{{pmeter.note}}</span></td>
 											<td align="center">

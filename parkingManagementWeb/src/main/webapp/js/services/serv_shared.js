@@ -32,6 +32,7 @@ pm.service('sharedDataService', function(){
 	this.conf_show_ps;
 	this.conf_show_bp;
 	this.conf_show_zone;
+	this.conf_user_agency;
 	
 	this.ueCitizen = false;
 	this.familyAllowances = false;
@@ -321,6 +322,18 @@ pm.service('sharedDataService', function(){
     };
     this.getReportName = function(){
     	return this.report_name;
+    };
+    
+    this.setConfUserAgency = function(list){
+    	this.conf_user_agency = list;
+    };
+    
+    this.getConfUserAgency = function(){
+    	return this.conf_user_agency;
+    };
+    
+    this.getAgencyPermissionsForObject = function(obj){
+    	return this.conf_user_agency[obj];
     };
     
 	// Get and Set methods
@@ -1556,7 +1569,7 @@ pm.factory('invokeWSService', function($http, $q) {
 			$http({
 				method : method,
 				url : url + funcName,
-				params : params + '&noCache=' + new Date().getTime(),
+				params : params,// + '&noCache=' + new Date().getTime(),
 				headers : headers,
 				data : data
 			}).success(function(data) {
@@ -1611,7 +1624,7 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 			$http({
 				method : method,
 				url : url + funcName,
-				params : params + '&noCache=' + new Date().getTime(),
+				params : params, // + '&noCache=' + new Date().getTime(),
 				headers : headers,
 				data : data
 			}).success(function(data) {
