@@ -44,9 +44,12 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 	};
 	
 	// Zone update method
-	this.updateZoneInDb = function(zone, myColor, center, corrType, editCorrectedPath){
+	this.updateZoneInDb = function(zone, myColor, center, corrType, editCorrectedPath, agencyId){
 		var id = zone.id;
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
 		var method = 'PUT';
 		
 		var data = {
@@ -65,7 +68,7 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Zone data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + id, null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + id, params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated Zone: " + result.name);
 	    });
@@ -73,9 +76,16 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 	};
 	
 	// Zone create method
-	this.createZoneInDb = function(zone, myColor, center, corrType, newCorrectedPath){
+	this.createZoneInDb = function(zone, myColor, center, corrType, newCorrectedPath, agencyId){
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
+		var myAgencyList = []
+		if(agencyId){
+			myAgencyList.push(agencyId);
+		}
 		var data = {
 			id_app: appId,
 			name: zone.name,
@@ -86,11 +96,12 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 			type: corrType,
 			centermap: gMapService.correctMyGeometry(center),
 			geometry: gMapService.correctMyGeometryPolyline(newCorrectedPath),
-			geometryFromSubelement: zone.geometryFromSubelement
+			geometryFromSubelement: zone.geometryFromSubelement,
+			agencyId: myAgencyList
 		};
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Zone data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone", null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/zone", params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created zone: " + result.name);
 	    });
@@ -98,11 +109,14 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 	};
 	
 	// Zone delete method
-	this.deleteZoneInDb = function(zone){
+	this.deleteZoneInDb = function(zone, agencyId){
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId	
+		};
 		
-		var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + zone.id, null, sharedDataService.getAuthHeaders(), null);
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + zone.id, params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted zones: " + zone.name);
 	    });

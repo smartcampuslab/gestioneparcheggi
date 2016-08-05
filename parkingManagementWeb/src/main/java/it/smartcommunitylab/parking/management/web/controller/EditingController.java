@@ -62,25 +62,26 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/street")
 	public @ResponseBody
-	StreetBean createStreet(@PathVariable("appId") String appId,
+	StreetBean createStreet(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId,
 			@RequestBody StreetBean street) throws DatabaseException {
-		return storage.save(street, appId);
+		return storage.save(street, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/street/{aid}/{sid}")
 	public @ResponseBody
-	boolean deleteStreet(@PathVariable("appId") String appId,
-			@PathVariable("aid") String aid,
-			@PathVariable("sid") String sid) throws DatabaseException {
-		return storage.removeStreet(aid, sid, appId);
+	boolean deleteStreet(@PathVariable("appId") String appId, @PathVariable("aid") String aid,
+			@PathVariable("sid") String sid, 
+			@RequestParam(required=true) String agencyId) throws DatabaseException {
+		return storage.removeStreet(aid, sid, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/street/{sid}")
 	public @ResponseBody
 	StreetBean editStreet(@PathVariable("appId") String appId,
-			@PathVariable("sid") String vid, @RequestBody StreetBean street)
+			@PathVariable("sid") String vid, @RequestBody StreetBean street, 
+			@RequestParam(required=true) String agencyId)
 			throws DatabaseException {
-		return storage.editStreet(street, appId);
+		return storage.editStreet(street, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/street")
@@ -95,6 +96,12 @@ public class EditingController {
 		return storage.getAllStreets(appId);
 	}
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/street/{streetId}")
+	public @ResponseBody
+	StreetBean getStreetById(@PathVariable("appId") String appId, @PathVariable("streetId") String streetId) {
+		return storage.findStreet(streetId);
+	}
+	
 	// Method without security
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/street")
 	public @ResponseBody
@@ -104,10 +111,10 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingmeter")
 	public @ResponseBody
-	ParkingMeterBean createParkingMeter(@PathVariable("appId") String appId,
+	ParkingMeterBean createParkingMeter(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId,
 			@RequestBody ParkingMeterBean parkingMeter)
 			throws DatabaseException {
-		return storage.save(parkingMeter, appId);
+		return storage.save(parkingMeter, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingmeter")
@@ -132,17 +139,17 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/parkingmeter/{aid}/{pid}")
 	public @ResponseBody
 	boolean deleteParkingMeter(@PathVariable("appId") String appId,
-			@PathVariable("aid") String aid,
-			@PathVariable("pid") String pid) {
-		return storage.removeParkingMeter(aid, pid, appId);
+			@PathVariable("aid") String aid, @PathVariable("pid") String pid,
+			@RequestParam(required=true) String agencyId) {
+		return storage.removeParkingMeter(aid, pid, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/parkingmeter/{pid}")
 	public @ResponseBody
-	ParkingMeterBean editParkingMeter(@PathVariable("appId") String appId,
-			@PathVariable("pid") String pid,
+	ParkingMeterBean editParkingMeter(@PathVariable("appId") String appId, @PathVariable("pid") String pid,
+			@RequestParam(required=true) String agencyId,
 			@RequestBody ParkingMeterBean parkingMeter) throws DatabaseException {
-		return storage.editParkingMeter(parkingMeter, appId);
+		return storage.editParkingMeter(parkingMeter, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/area")
@@ -298,10 +305,10 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingstructure")
 	public @ResponseBody
 	ParkingStructureBean createParkingStructure(
-			@PathVariable("appId") String appId,
+			@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, 
 			@RequestBody ParkingStructureBean entityBean)
 			throws DatabaseException {
-		return storage.save(entityBean, appId);
+		return storage.save(entityBean, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingstructure")
@@ -325,18 +332,18 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/parkingstructure/{id}")
 	public @ResponseBody
-	boolean deleteParkingStructure(@PathVariable("appId") String appId, 
-			@PathVariable String id) {
-		return storage.removeParkingStructure(id, appId);
+	boolean deleteParkingStructure(@PathVariable("appId") String appId, @PathVariable String id, 
+			@RequestParam(required=true) String agencyId) {
+		return storage.removeParkingStructure(id, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/parkingstructure/{id}")
 	public @ResponseBody
 	ParkingStructureBean editParkingStructure(@PathVariable("appId") String appId,
-			@PathVariable String id,
+			@PathVariable String id, @RequestParam(required=true) String agencyId, 
 			@RequestBody ParkingStructureBean entityBean)
 			throws NotFoundException {
-		return storage.editParkingStructure(entityBean, appId);
+		return storage.editParkingStructure(entityBean, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/data")

@@ -13,9 +13,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     $scope.maxAreas = 8;
     $scope.maxStreets = 8;
-    $scope.maxPmeters = 7;
+    $scope.maxPmeters = 9;
     $scope.maxPStructs = 8;
-    $scope.maxZones = 8;
+    $scope.maxZones = 12;
     $scope.maxMicroZones = 8;
     $scope.maxBPoints = 11;
     
@@ -216,6 +216,42 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	$scope.showAgencyZoneFilter = false;
     };
     
+    // Methods to show/hide street agency filter
+    $scope.showAgencySFilter = function(){
+    	$scope.showAgencyStreetFilter = true;
+    };
+    
+    $scope.hideAgencySFilter = function(){
+    	$scope.showAgencyStreetFilter = false;
+    };
+    
+    // Methods to show/hide struct agency filter
+    $scope.showAgencyPSFilter = function(){
+    	$scope.showAgencyPStructFilter = true;
+    };
+    
+    $scope.hideAgencyPSFilter = function(){
+    	$scope.showAgencyPStructFilter = false;
+    };
+    
+    // Methods to show/hide parkingmeter agency filter
+    $scope.showAgencyPMFilter = function(){
+    	$scope.showAgencyPMeterFilter = true;
+    };
+    
+    $scope.hideAgencyPMFilter = function(){
+    	$scope.showAgencyPMeterFilter = false;
+    };
+    
+    // Methods to show/hide bikepoint agency filter
+    $scope.showAgencyBPFilter = function(){
+    	$scope.showAgencyBPointFilter = true;
+    };
+    
+    $scope.hideAgencyBPFilter = function(){
+    	$scope.showAgencyBPointFilter = false;
+    };
+    
     // Methods to show/hide ps name filter
     $scope.showPsNameFilter = function(){
     	$scope.showPsFilter = true;
@@ -390,7 +426,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
     
     $scope.isMyAgency = function(agency){
-    	return (agencyId == agency);
+    	//return (agencyId == agency);
+    	if(agency){
+    		return (agency.indexOf(agencyId) !== -1);
+    	} else {
+    		return false;
+    	}
     };
     
     // -------------------------------- New part for periods and rate ----------------------------------
@@ -2417,7 +2458,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 			
 			var zindex = $scope.tabIndex - 1;
-			var myZonePromise = zoneService.updateZoneInDb(zone, myColor, center, corrType, editCorrectedPath);
+			var myZonePromise = zoneService.updateZoneInDb(zone, myColor, center, corrType, editCorrectedPath, agencyId);
 			myZonePromise.then(function(result){
 		    	if(result != null){ // == "OK"){
 		    		$scope.getAllZones(corrType, zindex);
@@ -2447,7 +2488,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			};
 			
 			var zindex = $scope.tabIndex - 1;
-			var myDataPromise = zoneService.createZoneInDb(zone, myColor, center, corrType, newCorrectedPath);
+			var myDataPromise = zoneService.createZoneInDb(zone, myColor, center, corrType, newCorrectedPath, agencyId);
 			myDataPromise.then(function(result){
 		    	if(result != null && result != ""){
 		    		$scope.getAllZones(corrType, zindex);
@@ -2472,7 +2513,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     		toDelZone[zone.id].setMap(null);
     	}
     	
-	   	var myDataPromise = zoneService.deleteZoneInDb(zone);
+	   	var myDataPromise = zoneService.deleteZoneInDb(zone, agencyId);
 	    myDataPromise.then(function(result){
 	    	if(result != null && result != ""){
 	    		// Here I have to remove the zone id from the street
@@ -2866,7 +2907,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.isInit=true;
 			$scope.showUpdatingSErrorMessage = false;
 			var editCorrectedPath = gMapService.updatePolylineInStreetEdit($scope.map, poly);
-			var myStreetPromise = streetService.updateStreetInDb(street, area, zone0, zone1, zone2, zone3, zone4, pms, editCorrectedPath, 0);
+			var myStreetPromise = streetService.updateStreetInDb(street, area, zone0, zone1, zone2, zone3, zone4, pms, editCorrectedPath, 0, agencyId);
 			myStreetPromise.then(function(result){
 				if(result != null){ // == "OK"){
 		    		$scope.getAllStreets();
@@ -2908,7 +2949,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var point = gMapService.getPointFromLatLng(createdPath.b[i], 1);
 				newCorrectedPath.push(point);
 			};
-			var myStreetPromise = streetService.createStreetInDb(street, area, zone0, zone1, zone2, zone3, zone4, pms, newCorrectedPath);
+			var myStreetPromise = streetService.createStreetInDb(street, area, zone0, zone1, zone2, zone3, zone4, pms, newCorrectedPath, agencyId);
 		    myStreetPromise.then(function(result){
 		    	if(result != null && result != ""){
 		    		$scope.getAllStreets();
@@ -2933,7 +2974,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.showDeletingSErrorMessage = false;
 		var toDelStreet = gMapService.deleteStreetMapObject(street, $scope.vStreetMap.shapes);
 		
-    	var myStreetPromise = streetService.deleteStreetInDb(street);
+    	var myStreetPromise = streetService.deleteStreetInDb(street, agencyId);
 	    myStreetPromise.then(function(result){
 	    	console.log("Deleted street: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -3027,7 +3068,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.myPmZone2 = null;
 		$scope.myPmZone3 = null;
 		$scope.myPmZone4 = null;
-		$scope.myPmStatus = null;
+		$scope.myPmStatus = $scope.listaStati[0];	// default is active TODO: correct!!!
 		$scope.pmZones0 = sharedDataService.getSharedLocalZones0();
 		$scope.pmZones1 = sharedDataService.getSharedLocalZones1();
 		$scope.pmZones2 = sharedDataService.getSharedLocalZones2();
@@ -3107,7 +3148,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				status = form.pStatus.$modelValue;	// force to use form value;
 			}
 			
-			var myDataPromise = parkingMeterService.updatePmeterInDb(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, type);
+			var myDataPromise = parkingMeterService.updatePmeterInDb(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId);
 		    myDataPromise.then(function(result){
 		    	if(result != null){ // == "OK"){
 		    		$scope.getAllParkingMeters();
@@ -3148,7 +3189,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		} else {
 			$scope.isInit=true;
 			$scope.showUpdatingErrorMessage = false;
-			var myDataPromise = parkingMeterService.createParkingMeterInDb(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry);
+			var myDataPromise = parkingMeterService.createParkingMeterInDb(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, agencyId);
 			myDataPromise.then(function(result){
 		    	if(result != null && result != ""){
 		    		$scope.getAllParkingMeters();
@@ -3170,7 +3211,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.deletePMeter = function(pMeter){
 		$scope.showDeletingPMErrorMessage = false;
 		
-	   	var myDataPromise = parkingMeterService.deleteParkingMeterInDb(pMeter);
+	   	var myDataPromise = parkingMeterService.deleteParkingMeterInDb(pMeter, agencyId);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted parkingmeter: " + JSON.stringify(result));
 	    	if(result != null && result != ""){
@@ -3387,7 +3428,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.showUpdatingPSErrorMessage = false;
 				$scope.setMyPaymentoErrMode(false);
 				
-				var myStructurePromise = structureService.updateParkingStructureInDb(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type);
+				var myStructurePromise = structureService.updateParkingStructureInDb(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type, agencyId);
 				myStructurePromise.then(function(result){
 					if(result != null){ // == "OK"){
 			    		$scope.getAllParkingStructures();
@@ -3425,7 +3466,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.showUpdatingPSErrorMessage = false;
 				$scope.setMyPaymentoErrMode(false);
 				
-				var myPSPromise = structureService.createParkingStructureInDb(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo);
+				var myPSPromise = structureService.createParkingStructureInDb(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, agencyId);
 				myPSPromise.then(function(result){
 			    	if(result != null && result != ""){
 			    		$scope.getAllParkingStructures();
@@ -3448,7 +3489,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	// ParkingStructure
 	$scope.deletePStruct = function(pStruct){
 		$scope.showDeletingPSErrorMessage = false;
-		var myPSPromise = structureService.deleteParkingStructureInDb(pStruct);
+		var myPSPromise = structureService.deleteParkingStructureInDb(pStruct, agencyId);
 		myPSPromise.then(function(result){
 	    	if(result != null && result != ""){
 	    		$scope.getAllParkingStructures();
@@ -4036,6 +4077,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    }
 	    path.push(event.latLng);
 	    var myPoint = gMapService.getPointFromLatLng(event.latLng, 1);
+	    if(myPoint){
+	    	$scope.myGeometry = myPoint.latitude + "," + myPoint.longitude;
+	    }
 	    $scope.myZonePath.push(myPoint);
 	    $scope.setMyPolGeometry($scope.myZonePath);
 	    gzone.setMap($scope.map);

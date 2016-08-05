@@ -207,8 +207,8 @@
 									</tr>
 									<tr>
 										<td colspan="2" class="info_window_buttons">
-											<a href type="button" class="btn btn-primary" ng-click="setPsEdit(ps.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
-											<a href type="button" class="btn btn-danger" ng-click="setPsRemove(ps.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+											<a href ng-show="(psPermissions >= 2) && isMyAgency(ps.data.agencyId)" type="button" class="btn btn-primary" ng-click="setPsEdit(ps.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a href ng-show="(psPermissions >= 3) && isMyAgency(ps.data.agencyId)" type="button" class="btn btn-danger" ng-click="setPsRemove(ps.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 										</td>
 									</tr>
 					        	</table>
@@ -421,8 +421,8 @@
 									</tr>
 									<tr>
 										<td colspan="2" class="info_window_buttons">
-											<a href type="button" class="btn btn-primary" ng-click="setPsEdit(sps.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
-											<a href type="button" class="btn btn-danger" ng-click="setPsRemove(sps.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+											<a href ng-show="(psPermissions >= 2) && isMyAgency(sps.data.agencyId)" type="button" class="btn btn-primary" ng-click="setPsEdit(sps.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a href ng-show="(psPermissions >= 3) && isMyAgency(sps.data.agencyId)" type="button" class="btn btn-danger" ng-click="setPsRemove(sps.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 										</td>
 									</tr>
 					        	</table>
@@ -438,7 +438,7 @@
 					<table width="100%">
 						<tr>
 							<td align="left"><h5 class="panel-title">{{ 'ps_list' | i18n }}</h5></td>
-							<td align="right"><button type="button" class="btn btn-success" ng-click="setPsEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+							<td align="right"><button ng-show="psPermissions >= 3" type="button" class="btn btn-success" ng-click="setPsEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
 						</tr>
 					</table>
 				</div>
@@ -447,7 +447,16 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="pstructWS.length != 0 && !tabletWiew">
-								<th width="30%">
+								<th width="5%">
+									<a href ng-click="showAgencyPSFilter();currentPagePs=0" ng-show="!showAgencyPStructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="agencyPStructFilter=null;hideAgencyPSFilter()" ng-show="showAgencyPStructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+									<div ng-show="showAgencyPStructFilter">
+						    			<select id="f_agency_struct" class="form-control" ng-model="agencyPStructFilter">
+						    				<option ng-repeat="a in allAgencyFilter" value="{{a.id}}" >{{ a.name }}</option>
+						    			</select>
+						    		</div>
+								</th>
+								<th width="28%">
 									<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>&nbsp;
 									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -455,13 +464,22 @@
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPagePs = 0" />
 						    		</div>
 								</th>
-								<th width="30%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+								<th width="27%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 								<th width="5%" ng-show="psconf.ps_parkride.visible">{{ 'ps_park_and_ride_title' | i18n }}</th>
 								<th width="5%"><span ng-show="psconf.ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
 								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tr ng-show="pstructWS.length != 0 && tabletWiew">
-								<th width="30%">
+								<th width="5%">
+									<a href ng-click="showAgencyPSFilter();currentPagePs=0" ng-show="!showAgencyPStructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="agencyPStructFilter=null;hideAgencyPSFilter()" ng-show="showAgencyPStructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+									<div ng-show="showAgencyPStructFilter">
+						    			<select id="f_agency_struct" class="form-control" ng-model="agencyPStructFilter">
+						    				<option ng-repeat="a in allAgencyFilter" value="{{a.id}}" >{{ a.name }}</option>
+						    			</select>
+						    		</div>
+								</th>
+								<th width="28%">
 									<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>&nbsp;
 									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -469,13 +487,16 @@
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPagePs = 0" />
 						    		</div>
 								</th>
-								<th width="30%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+								<th width="27%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 								<th width="10%"><span ng-show="psconf.ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
 								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody ng-if="!tabletWiew" class="animate-repeat"
-								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
+								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter | filter:agencyPStructFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
 								<tr>
+									<td align="left">
+										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+									</td>
 									<td align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
 									<td align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
 									<td align="center" ng-show="psconf.ps_parkride.visible">
@@ -484,22 +505,25 @@
 									</td>
 									<td align="center"><span ng-show="psconf.ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
 									<td align="center">
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+										<a href ng-show="(psPermissions >= 1) || !isMyAgency(pstruct.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a href ng-show="(psPermissions >= 2) && isMyAgency(pstruct.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href ng-show="(psPermissions >= 3) && isMyAgency(pstruct.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 									</td>
 								</tr>
 							</tbody>
 							<tbody ng-if="tabletWiew" class="animate-repeat"
-								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
+								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter | filter:agencyPStructFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
 								<tr>
+									<td align="left">
+										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+									</td>
 									<td align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
 									<td align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
 									<td align="center"><span ng-show="psconf.ps_timeSlot.visible">{{pstruct.slotNumber}}</span></td>
 									<td align="center">
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+										<a href ng-show="(psPermissions >= 1) || !isMyAgency(pstruct.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPsDetails(pstruct)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a href ng-show="(psPermissions >= 2) && isMyAgency(pstruct.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPsEdit(pstruct)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href ng-show="(psPermissions >= 3) && isMyAgency(pstruct.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPsRemove(pstruct)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 									</td>
 								</tr>
 							</tbody>
@@ -609,11 +633,11 @@
 										<td class="detailsViewStreetSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
 									</tr>
-									<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_pinkSlot.visible.s_freeSlot.visible && sc.pinkSlotNumber">
+									<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_pink_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.pinkSlotNumber }}</td>
 									</tr>
-									<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_carSharingSlot.visible.s_freeSlot.visible && sc.carSharingSlotNumber">
+									<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.carSharingSlotNumber }}</td>
 									</tr>
@@ -716,7 +740,7 @@
 								<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
 							<td width="15%" align="left">
-								<button type="button" class="btn btn-primary btn-lg" ng-click="setPsEdit(viewParkingStructure)">{{ 'text_btn_edit' | i18n  }}</button>
+								<button ng-show="(psPermissions >= 2) && isMyAgency(viewParkingStructure.agencyId)" type="button" class="btn btn-primary btn-lg" ng-click="setPsEdit(viewParkingStructure)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>

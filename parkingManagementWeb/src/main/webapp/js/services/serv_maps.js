@@ -137,8 +137,8 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 				var lng = pointCoord[1].substring(0, pointCoord[1].length - 1);
 			
 				res = {
-					latitude: lat,
-					longitude: lng
+					latitude: lat.trim(),
+					longitude: lng.trim()
 				};
 			} else {
 				var lat = Number(pointCoord[0]);
@@ -875,6 +875,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 			var correctZone = {
 				id: zones[i].id,
 				id_app: zones[i].id_app,
+				agencyId: zones[i].agencyId,
 				color: zones[i].color,
 				name: zones[i].name,
 				submacro: zones[i].submacro,
@@ -1498,6 +1499,9 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 			street.data.myZones3 = zones3;
 			street.data.myZones4 = zones4;
 			street.data.myPms = pms;
+			street.data.agencyId = street.data.agencyId;
+		} else {
+			street.agencyId = street.agencyId;
 		}
 		// To align with old management
 		street.area = area;
@@ -1941,7 +1945,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
     	var createdPath = garea.getPath();
 		if(createdPath.length > 0){
 			for(var i = 0; i < createdPath.length; i++){
-				var point = $scope.getPointFromLatLng(createdPath.b[i], 1);
+				var point = this.getPointFromLatLng(createdPath.b[i], 1);
 				newCorrectedPath.push(point);
 			};
 			createdPaths.push(newCorrectedPath);

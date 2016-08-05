@@ -111,6 +111,9 @@ public class ModelConverter {
 		sb.setGeometry(convert(s.getGeometry(), LineBean.class));
 		sb.setZones(s.getZones());
 		sb.setParkingMeters(s.getParkingMeters());
+		if(s.getAgencyId() != null && !s.getAgencyId().isEmpty()){
+			sb.setAgencyId(s.getAgencyId());
+		}
 		return sb;
 	}
 	

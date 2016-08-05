@@ -125,10 +125,13 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// PS update method
-	this.updateParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type){
+	this.updateParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type, agencyId){
 		var validityPeriod = [];
 		var id = ps.id;
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
 		var method = 'PUT';
 		var data = {};
 		if(type == 0){
@@ -197,14 +200,15 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 				geometry: ps.geometry,
 				zones: ps.zones,
 				parkAndRide: ps.parkAndRide,
-				abuttingPark: ps.abuttingPark
+				abuttingPark: ps.abuttingPark,
+				agencyId: ps.agencyId
 			};
 		}
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("ParkingStructure data : " + value);
 		
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + id, null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + id, params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated parkingStructure: " + result.name);
 	    });
@@ -212,10 +216,16 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	}; 
 	
 	// PS create method
-	this.createParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo){
+	this.createParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, agencyId){
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
-		
+		var params = {
+			agencyId: agencyId
+		};
+		var myAgencyList = []
+		if(agencyId){
+			myAgencyList.push(agencyId);
+		}
 		var validityPeriod = [];
 		if(ps.validityPeriod){
 			for(var i = 0; i < ps.validityPeriod.length; i++){
@@ -263,12 +273,13 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			geometry: gMapService.correctMyGeometry(geo),
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 			parkAndRide: ps.parkAndRide,
-			abuttingPark: ps.abuttingPark
+			abuttingPark: ps.abuttingPark,
+			agencyId: myAgencyList
 		};
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("ParkingStructure data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure", null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure", params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created parkingStructure: " + result.name);
 	    });
@@ -276,11 +287,13 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// PS delete method
-	this.deleteParkingStructureInDb = function(ps){
+	this.deleteParkingStructureInDb = function(ps, agencyId){
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
-		
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + ps.id, null, sharedDataService.getAuthHeaders(), null);
+		var params = {
+			agencyId: agencyId
+		};
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + ps.id, params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted struct: " + ps.name);
 	    });

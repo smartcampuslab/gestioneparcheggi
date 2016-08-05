@@ -128,7 +128,7 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="zoneWS.length != 0">
-								<th width="5%">
+								<th width="10%">
 									<a href ng-click="showAgencyZFilter();currentPageZ=0" ng-show="!showAgencyZoneFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="agencyZoneFilter=null;hideAgencyZFilter()" ng-show="showAgencyZoneFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showAgencyZoneFilter">
@@ -146,7 +146,7 @@
 						    		</div>
 								</th>
 								<th width="20%" class="myCenter"><span ng-show="zpc.att.zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
-								<th width="10%"><span ng-show="zpc.att.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
+								<th width="5%"><span ng-show="zpc.att.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
 								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
@@ -159,9 +159,9 @@
 									<td align="center"><span ng-show="zpc.att.zone_submacro.visible">{{zone.submacro}}</span></td>
 									<td align="center"><div class="colorBox" ng-show="zpc.att.zone_color.visible" ng-style="{'background-color': correctColor(zone.color)}"></div></td>
 									<td align="center">
-										<a href ng-show="(zonePermissions >= 1) || !isMyAgency(z.data.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setZDetails(zone, 0)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-										<a href ng-show="(zonePermissions >= 2) && isMyAgency(z.data.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setZEdit(zone)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-										<a href ng-show="(zonePermissions >= 3) && isMyAgency(z.data.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setZRemove(zone)"  alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+										<a href ng-show="(zonePermissions >= 1) || !isMyAgency(zone.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setZDetails(zone, 0)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a href ng-show="(zonePermissions >= 2) && isMyAgency(zone.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setZEdit(zone)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href ng-show="(zonePermissions >= 3) && isMyAgency(zone.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setZRemove(zone)"  alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 									</td>
 								</tr>
 							</tbody>
@@ -173,7 +173,7 @@
 					<button class="btn btn-default"
 							ng-disabled="currentPageZ == 0"
 							ng-click="currentPageZ=currentPageZ-1">{{ 'previous_label' | i18n }}</button>
-						{{currentPageZ+1}}/{{numberOfPages(filtered, 5)}}
+						{{currentPageZ+1}}/{{numberOfPages(5, filtered)}}
 					<button class="btn btn-default"
 							ng-disabled="currentPageZ >= filtered.length/maxZones - 1"
 							ng-click="currentPageZ=currentPageZ+1">{{ 'next_label' | i18n }}</button>

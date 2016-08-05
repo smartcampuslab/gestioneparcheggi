@@ -85,7 +85,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	};
 	
 	// Street update method
-	this.updateStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, editPolyline, type){
+	this.updateStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, editPolyline, type, agencyId){
 		var streetSlots = 0;
 		if(street.slotsConfiguration){
 			for(var i = 0; i < street.slotsConfiguration.length; i++){
@@ -100,6 +100,9 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 		
 		var id = street.id;
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
 		var method = 'PUT';
 		
 		var data = {};
@@ -143,13 +146,14 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 				rateAreaId: street.rateAreaId,
 				zones: street.zones,
 				parkingMeters: street.parkingMeters,
-				geometry: street.geometry
+				geometry: street.geometry,
+				agencyId: street.agencyId
 			};
 		}
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Street data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + id, params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated street: " + result.streetReference);
 	    });
@@ -157,7 +161,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	};
 	
 	// Street create method
-	this.createStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, createPolyline){
+	this.createStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, createPolyline, agencyId){
 		//var calculatedTotSlots = sharedDataService.initIfNull(street.handicappedSlotNumber) + sharedDataService.initIfNull(street.reservedSlotNumber) + sharedDataService.initIfNull(street.paidSlotNumber) + sharedDataService.initIfNull(street.timedParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotSignNumber) + sharedDataService.initIfNull(street.unusuableSlotNumber);
 		var streetSlots = 0;
 		if(street.slotsConfiguration){
@@ -173,6 +177,13 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 		
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
+		var myAgencyList = []
+		if(agencyId){
+			myAgencyList.push(agencyId);
+		}
 		var data = {
 			id_app: appId,
 			streetReference: street.streetReference,
@@ -190,12 +201,13 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 			rateAreaId: area.id,
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 			parkingMeters: sharedDataService.correctMyPmsForStreet(pms),
-			geometry: gMapService.correctMyGeometryPolyline(createPolyline)
+			geometry: gMapService.correctMyGeometryPolyline(createPolyline),
+			agencyId: myAgencyList
 		};
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Street data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street", null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/street", params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created street: " + result.streetReference);
 	    });
@@ -203,11 +215,13 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	};
 	
 	// Street delete method
-	this.deleteStreetInDb = function(street){
+	this.deleteStreetInDb = function(street, agencyId){
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
-		
-		var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + street.rateAreaId + "/" + street.id , null, sharedDataService.getAuthHeaders(), null);
+		var params = {
+			agencyId: agencyId
+		};
+		var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + street.rateAreaId + "/" + street.id , params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted street: " + street.name);
 	    });

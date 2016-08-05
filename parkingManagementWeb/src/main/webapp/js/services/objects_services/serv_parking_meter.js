@@ -76,10 +76,13 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	
 	
 	// PS update method
-	this.updatePmeterInDb = function(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, type){
+	this.updatePmeterInDb = function(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId){
 		var validityPeriod = [];
 		var id = pm.id;
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
 		var method = 'PUT';
 		var data = {};
 		if(type == 0){
@@ -102,14 +105,15 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 				status: pm.status,
 				areaId: pm.areaId,
 				zones: pm.zones,
-				geometry: pm.geometry
+				geometry: pm.geometry,
+				agencyId: pm.agencyId
 			};
 		}
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Parkingmeter data : " + value);
 		
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter/" + id, null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter/" + id, params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated parkinMeter: " + result.code);
 	    });
@@ -117,9 +121,16 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	};
 	
 	// PM create method
-	this.createParkingMeterInDb = function(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry){
+	this.createParkingMeterInDb = function(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, agencyId){
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
+		var myAgencyList = []
+		if(agencyId){
+			myAgencyList.push(agencyId);
+		}
 		var data = {
 			id_app: appId,
 			code: pm.code,
@@ -127,13 +138,14 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 			status: status.idObj,
 			areaId: area.id,
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			geometry: gMapService.correctMyGeometry(geometry)
+			geometry: gMapService.correctMyGeometry(geometry),
+			agencyId: myAgencyList
 		};
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Parkingmeter data : " + value);
 		
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter", null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter", params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Created parkinMeter: " + result.code);
 	    });
@@ -141,11 +153,13 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	};
 	
 	// PM delete method
-	this.deleteParkingMeterInDb = function(pMeter){
+	this.deleteParkingMeterInDb = function(pMeter, agencyId){
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
-		
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , null, sharedDataService.getAuthHeaders(), null);
+		var params = {
+			agencyId: agencyId
+		};
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted parkingmeter: " + pMeter.code);
 	    });

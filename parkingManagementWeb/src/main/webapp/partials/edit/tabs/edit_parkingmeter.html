@@ -134,8 +134,8 @@
 											</tr>
 											<tr>
 												<td colspan="2" class="info_window_buttons">
-													<a href type="button" class="btn btn-primary" ng-click="setPmEdit(pm.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
-													<a href type="button" class="btn btn-danger" ng-click="setPmRemove(pm.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+													<a href ng-show="(pmPermissions >= 2) && isMyAgency(pm.data.agencyId)" type="button" class="btn btn-primary" ng-click="setPmEdit(pm.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+													<a href ng-show="(pmPermissions >= 3) && isMyAgency(pm.data.agencyId)" type="button" class="btn btn-danger" ng-click="setPmRemove(pm.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 												</td>
 											</tr>
 							        	</table>
@@ -275,8 +275,8 @@
 											</tr>
 											<tr>
 												<td colspan="2" class="info_window_buttons">
-													<a href type="button" class="btn btn-primary" ng-click="setPmEdit(spm.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
-													<a href type="button" class="btn btn-danger" ng-click="setPmRemove(spm.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+													<a href ng-show="(pmPermissions >= 2) && isMyAgency(pm.data.agencyId)" type="button" class="btn btn-primary" ng-click="setPmEdit(spm.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+													<a href ng-show="(pmPermissions >= 3) && isMyAgency(pm.data.agencyId)" type="button" class="btn btn-danger" ng-click="setPmRemove(spm.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 												</td>
 											</tr>
 							        	</table>
@@ -292,7 +292,7 @@
 							<table width="100%">
 								<tr>
 									<td align="left"><h5 class="panel-title">{{ 'pm_list' | i18n }}</h5></td>
-									<td align="right"><button type="button" class="btn btn-success" ng-click="setPmEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+									<td align="right"><button ng-show="pmPermissions >= 3" type="button" class="btn btn-success" ng-click="setPmEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
 								</tr>
 							</table>
 <!-- 							<h5 class="panel-title">{{ 'pm_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setPmEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
@@ -302,8 +302,17 @@
 							<div class="tablewrapper">
 								<table class="table table-striped" style="width: 100%">
 									<tr ng-show="pmeterWS.length != 0">
-										<th width="15%"><span ng-show="pmconf.pm_code.visible">{{ 'pm_code' | i18n }}</span></th>
-										<th width="20%">
+										<th width="5%">
+											<a href ng-click="showAgencyPMFilter();currentPagePm=0" ng-show="!showAgencyPMtructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+											<a href ng-click="agencyPMeterFilter=null;hideAgencyPMFilter()" ng-show="showAgencyPMeterFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+											<div ng-show="showAgencyPMeterFilter">
+								    			<select id="f_agency_pmeter" class="form-control" ng-model="agencyPMeterFilter">
+								    				<option ng-repeat="a in allAgencyFilter" value="{{a.id}}" >{{ a.name }}</option>
+								    			</select>
+								    		</div>
+										</th>
+										<th width="12%"><span ng-show="pmconf.pm_code.visible">{{ 'pm_code' | i18n }}</span></th>
+										<th width="18%">
 											<span ng-show="pmconf.pm_note.visible">{{ 'pm_note' | i18n }}</span>&nbsp;
 											<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 											<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -329,8 +338,11 @@
 										<th width="30%" class="myCenter"><span>{{ 'operations' | i18n }}</span></th>
 									</tr>
 									<tbody class="animate-repeat"
-										ng-repeat="pmeter in filtered = (pmeterWS | filter:noteFilter | filter:pmAreaFilter | filter:pmStatusFilter) | orderBy:'code' | startFrom:currentPagePm*maxPmeters | limitTo:maxPmeters">
+										ng-repeat="pmeter in filtered = (pmeterWS | filter:noteFilter | filter:pmAreaFilter | filter:pmStatusFilter | filter:agencyPMeterFilter) | orderBy:'code' | startFrom:currentPagePm*maxPmeters | limitTo:maxPmeters">
 										<tr><!--  ng-show="pmeter.status!='ACTIVE' && pmStatusFilter!='ACTIVE'" -->
+											<td align="left">
+												<span ng-show="isMyAgency(pmeter.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+											</td>
 											<td align="left"><span ng-show="pmconf.pm_code.visible">{{pmeter.code}}</span></td>
 											<td align="left"><span ng-show="pmconf.pm_note.visible">{{pmeter.note}}</span></td>
 											<td align="center">
@@ -340,9 +352,9 @@
 											<td align="center"><div class="colorBox" ng-show="pmconf.pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
 											<td align="center"><span ng-show="pmconf.pm_rateArea.visible">{{pmeter.area.name}}</span></td>
 											<td align="center">
-												<a href type="button" class="btn btn-primary btn-xs" ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-												<a href type="button" class="btn btn-primary btn-xs" ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-												<a href type="button" class="btn btn-primary btn-xs" ng-click="setPmRemove(pmeter)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+												<a href ng-show="(pmPermissions >= 1) || !isMyAgency(pmeter.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPmDetails(pmeter)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+												<a href ng-show="(pmPermissions >= 2) && isMyAgency(pmeter.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPmEdit(pmeter)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+												<a href ng-show="(pmPermissions >= 3) && isMyAgency(pmeter.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setPmRemove(pmeter)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 											</td>
 										</tr>
 	<!-- 									<tr class="success" ng-show="pmeter.status=='ACTIVE'"> -->
@@ -512,7 +524,7 @@
 									<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>	
 								</td>
 								<td width="15%" align="left">
-									<button type="button" class="btn btn-primary btn-lg" ng-click="setPmEdit(viewParckingMeter)">{{ 'text_btn_edit' | i18n  }}</button>
+									<button ng-show="(pmPermissions >= 2) && isMyAgency(viewParckingMeter.agencyId)" type="button" class="btn btn-primary btn-lg" ng-click="setPmEdit(viewParckingMeter)">{{ 'text_btn_edit' | i18n  }}</button>
 								</td>
 							</tr>
 						</table>
