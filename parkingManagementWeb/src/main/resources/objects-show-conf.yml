@@ -410,7 +410,7 @@ providers:
         - code: link
           editable: false
           required: false
-          visible: false
+          visible: true
      - id: Area
        type: area
        label: area

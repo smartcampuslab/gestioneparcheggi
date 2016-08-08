@@ -90,12 +90,6 @@ public class ModelConverter {
 		sb.setId_app(s.getId_app());
 		sb.setStreetReference(s.getStreetReference());
 		sb.setSlotNumber(s.getSlotNumber());
-		try {
-			sb.setSlotsConfiguration(toVehicleSlotBeanList(s.getSlotsConfiguration()));
-		} catch (NullPointerException ex){
-			sb.setSlotsConfiguration(new ArrayList<VehicleSlotBean>()); // here I associate an empty list
-		}
-		
 		/*sb.setFreeParkSlotNumber(s.getFreeParkSlotNumber());
 		sb.setFreeParkSlotSignNumber(s.getFreeParkSlotSignNumber());
 		sb.setHandicappedSlotNumber(s.getHandicappedSlotNumber());
@@ -103,9 +97,8 @@ public class ModelConverter {
 		sb.setPaidSlotNumber(s.getPaidSlotNumber());
 		sb.setTimedParkSlotNumber(s.getTimedParkSlotNumber());
 		sb.setUnusuableSlotNumber(s.getUnusuableSlotNumber());*/
-		
 		sb.setLastChange(s.getLastChange());
-		sb.setRateAreaId(s.getRateAreaId());
+		sb.setRateAreaId(area.getId());
 		//sb.setRateAreaId(area.getId());
 		sb.setColor(area.getColor());
 		sb.setGeometry(convert(s.getGeometry(), LineBean.class));
@@ -113,6 +106,11 @@ public class ModelConverter {
 		sb.setParkingMeters(s.getParkingMeters());
 		if(s.getAgencyId() != null && !s.getAgencyId().isEmpty()){
 			sb.setAgencyId(s.getAgencyId());
+		}
+		try {
+			sb.setSlotsConfiguration(toVehicleSlotBeanList(s.getSlotsConfiguration()));
+		} catch (NullPointerException ex){
+			sb.setSlotsConfiguration(new ArrayList<VehicleSlotBean>()); // here I associate an empty list
 		}
 		return sb;
 	}

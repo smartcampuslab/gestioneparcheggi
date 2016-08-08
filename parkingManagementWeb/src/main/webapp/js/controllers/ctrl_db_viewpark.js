@@ -88,6 +88,9 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
     $scope.isActiveEnglish = function(){
     	return (sharedDataService.getUsedLanguage() == 'eng');
     };
+    
+    $scope.vehicleType = "Car";	//TODO: manage this variable in a dashboard filter
+    sharedDataService.setVehicleType($scope.vehicleType);
 	
 	// init shared filter values
 	sharedDataService.setFilterVis($scope.vis);	
@@ -2963,7 +2966,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.updateAreasOccupancyTimeCost = function(){
 		if($scope.areaWS){
 			for(var i = 0; i < $scope.areaWS.length; i++){
-				var slotsInArea = sharedDataService.getTotalSlotsInArea($scope.areaWS[i].id, $scope.streetWS);
+				var slotsInArea = sharedDataService.getTotalSlotsInArea($scope.areaWS[i].id, $scope.streetWS, sharedDataService.getVehicleType());
 				$scope.areaWS[i].slotNumber = slotsInArea[0]; //$scope.getTotalSlotsInArea(areas[i].id);
 				$scope.areaWS[i].slotOccupied = slotsInArea[1]; //Math.round(area.data.slotNumber * areaOccupancy / 100);
 				var areaOccupancy = sharedDataService.getStreetsInAreaOccupancy($scope.areaWS[i].id, $scope.streetWS);
@@ -3085,8 +3088,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
 			if(streets[i]){
-				var mystreet = sharedDataService.cleanStreetNullValue(streets[i]);
-				mystreet.slotOccupied = sharedDataService.getTotalOccupiedSlots(mystreet);
+				if(streets[i].slotsConfiguration){
+					var corSlotsConf = [];
+					var streetOccupiedSlot = 0;
+					for(var j = 0; j < streets[i].slotsConfiguration.length; j++){
+						var vs = sharedDataService.cleanStreetNullValue(streets[i].slotsConfiguration[j]);
+						vs.slotOccupied = sharedDataService.getTotalOccupiedSlots(vs);
+						streetOccupiedSlot += vs.slotOccupied;
+						corSlotsConf.push(vs);
+					}
+				}
+				//var mystreet = sharedDataService.cleanStreetNullValue(streets[i]);
+				var mystreet = angular.copy(streets[i]);
+				mystreet.slotsConfiguration = corSlotsConf;
+				mystreet.slotOccupied = streetOccupiedSlot;//sharedDataService.getTotalOccupiedSlots(mystreet);
 				mystreet.extratime = gMapService.getExtratimeFromOccupancy(mystreet.occupancyRate);
 				mystreet.area_color= streets[i].color;
 				myStreets.push(mystreet);

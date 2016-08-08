@@ -558,7 +558,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 				if(type == 1){
 					aColor = this.correctColor(areas[i].color);
 				} else if(type == 2){
-					var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+					var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS,  sharedDataService.getVehicleType());
 					areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
 					if(areaOccupancy != -1){
 						areaOccupancy = slotsInArea[2];
@@ -568,7 +568,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 					areaProfit = sharedDataService.getPMsInAreaProfit(areas[i].id, this.profitParkingMeterWS);
 					aColor = this.getProfitColor(areaProfit[0]);
 				} else if(type == 4){
-					var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS);
+					var slotsInArea = sharedDataService.getTotalSlotsInArea(areas[i].id, this.occupancyStreetsWS, sharedDataService.getVehicleType());
 					areaOccupancy = sharedDataService.getStreetsInAreaOccupancy(areas[i].id, this.occupancyStreetsWS);
 					if(areaOccupancy != -1){
 						areaOccupancy = slotsInArea[2];

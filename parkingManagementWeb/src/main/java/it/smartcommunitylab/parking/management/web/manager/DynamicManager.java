@@ -52,6 +52,7 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
+import org.bson.types.ObjectId;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
@@ -147,8 +148,22 @@ public class DynamicManager {
 		return result;
 	}
 	
-	public ParkingMeterBean findParkingMeter(String parcometroId) {
-		List<RateArea> aree = mongodb.findAll(RateArea.class);
+	public ParkingMeterBean findParkingMeter(String parcometroId, String appId) {
+		Criteria crit_pm = new Criteria();
+		crit_pm.and("_id").is(new ObjectId(parcometroId));
+		Criteria crit = new Criteria();
+		crit.and("id_app").is(appId);
+		crit.and("parkingMeters").elemMatch(crit_pm);
+		RateArea ra = mongodb.findOne(new Query(crit), RateArea.class);
+		ParkingMeter p = new ParkingMeter();
+		p.setId(parcometroId);
+		int index = ra.getParkingMeters().indexOf(p);
+		if (index != -1) {
+			ParkingMeterBean result = ModelConverter.convert(ra.getParkingMeters().get(index), ParkingMeterBean.class);
+			result.setAreaId(ra.getId());
+			return result;
+		}
+		/*List<RateArea> aree = mongodb.findAll(RateArea.class);
 		ParkingMeter p = new ParkingMeter();
 		for (RateArea area : aree) {
 			if (area.getParkingMeters() != null) {
@@ -161,7 +176,7 @@ public class DynamicManager {
 					return result;
 				}
 			}
-		}
+		}*/
 		return null;
 	}
 
@@ -287,8 +302,22 @@ public class DynamicManager {
 		return result;
 	}
 
-	public StreetBean findStreet(String streetId) {
-		List<RateArea> aree = mongodb.findAll(RateArea.class);
+	public StreetBean findStreet(String streetId, String appId) {
+		Criteria crit_street = new Criteria();
+		crit_street.and("_id").is(new ObjectId(streetId));
+		Criteria crit = new Criteria();
+		crit.and("id_app").is(appId);
+		crit.and("streets").elemMatch(crit_street);
+		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
+		Street s = new Street();
+		s.setId(streetId);
+		int index = ra.getStreets().indexOf(s);
+		if (index != -1) {
+			Street st = ra.getStreets().get(index);
+			StreetBean result = ModelConverter.toStreetBean(ra, st);
+			return result;
+		}
+		/*List<RateArea> aree = mongodb.findAll(RateArea.class);
 		Street s = new Street();
 		for (RateArea area : aree) {
 			if (area.getStreets() != null) {
@@ -297,12 +326,10 @@ public class DynamicManager {
 				if (index != -1) {
 					Street st = area.getStreets().get(index);
 					StreetBean result = ModelConverter.toStreetBean(area, st);
-					//StreetBean result = ModelConverter.convert(area.getStreets().get(index), StreetBean.class);
-					//result.setRateAreaId(area.getId());
 					return result;
 				}
 			}
-		}
+		}*/
 		return null;
 	}
 	
@@ -1311,7 +1338,7 @@ public class DynamicManager {
 		pm.setUpdateTime(timestamp);
 		pm.setUser(Integer.valueOf(authorId));
 		
-		ParkingMeterBean entity = findParkingMeter(pmId);
+		ParkingMeterBean entity = findParkingMeter(pmId, agencyId);
 		//mongodb.save(entity);
 		
 		//ProfitLogBean pl = new ProfitLogBean();
@@ -1640,11 +1667,53 @@ public class DynamicManager {
 		}
 	}
 	
+	private int retrieveSlots(Integer slots){
+		return (slots != null) ? slots.intValue() : 0;
+	}
+	
+	private boolean rilevationPresent(VehicleSlotBean vs){
+		boolean rilevPresent = false;
+		if(vs.getCarSharingSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getFreeParkSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getFreeParkSlotSignOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getHandicappedSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getLoadingUnloadingSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getPaidSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getPinkSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getRechargeableSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getReservedSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getTimedParkSlotOccupied() != null){
+			rilevPresent = true;
+		}
+		if(vs.getUnusuableSlotNumber() != null && vs.getUnusuableSlotNumber() > 0){
+			rilevPresent = true;
+		}
+		return rilevPresent;
+	}
+	
 	public StreetBean getOccupationRateFromStreet(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		String vehicleType = "Car"; //TODO: change this filed to a method param
-		StreetBean s = findStreet(objectId);
+		StreetBean s = findStreet(objectId, appId);
 		String sId = getCorrectId(objectId, "street", appId);
-		double occRate = 0;
+		double occRate = -1;
 		double averageOccRate = 0;
 		
 		try {
@@ -1656,21 +1725,25 @@ public class DynamicManager {
 					if(tmp_vs.getVehicleType().compareTo(vehicleType) == 0){
 						vehicleType = "@" + vehicleType;
 						vs = calculateAndUpdateSlots(tmp_vs, sId, appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
-						int[] totalSlot = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
-						int[] totalUsed = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
-						occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
-						if(occRate > 100){
-							occRate = 100;
+						if(rilevationPresent(vs)){
+							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
+							occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
+							if(occRate > 100){
+								occRate = 100;
+							}
+							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
 						}
-						vehicleSlotList.set(i, vs);	// update specific vehicle type slots
 						break;
 					} else if(vehicleType != null && vehicleType.compareTo("all") != 0){
 						vehicleType = "@" + tmp_vs.getVehicleType();
 						vs = calculateAndUpdateSlots(tmp_vs, sId, appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
-						vehicleSlotList.set(i, vs);	// update specific vehicle type slots
-						int[] totalSlot = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
-						int[] totalUsed = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
-						averageOccRate = averageOccRate + findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
+						if(rilevationPresent(vs)){
+							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
+							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
+							averageOccRate = averageOccRate + findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
+						}
 					}
 				}
 			}
@@ -1683,8 +1756,8 @@ public class DynamicManager {
 			}
 			s.setSlotsConfiguration(vehicleSlotList);
 			s.setOccupancyRate(occRate);
-		} catch (NullPointerException ex){
-			//logger.error("Error in slots configuration reading " + ex.getMessage());
+		} catch (Exception ex){
+			logger.error("Error in slots configuration reading " + ex.getMessage());
 		}
 		return s;
 	}
@@ -1698,7 +1771,7 @@ public class DynamicManager {
 			e.printStackTrace();
 		}
 		String pId = getCorrectId(p.getId(), "parking", appId);
-		double occRate = 0;
+		double occRate = -1;
 		double averageOccRate = 0;
 		/*if(valueType == 1){
 			occRate	= getOccupationRateFromObject(p.getId(), appId, type, params, years, months, dayType, days, hours);
@@ -1715,22 +1788,26 @@ public class DynamicManager {
 					if(tmp_vs.getVehicleType().compareTo(vehicleType) == 0){
 						vehicleType = "@" + vehicleType;
 						vs = calculateAndUpdateSlots(tmp_vs, pId, appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
-						int[] totalSlot = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
-						int[] totalUsed = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
-						occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
-						if(occRate > 100){
-							occRate = 100;
+						if(rilevationPresent(vs)){
+							int[] totalSlot = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
+							int[] totalUsed = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
+							occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
+							if(occRate > 100){
+								occRate = 100;
+							}
+							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
 						}
-						vehicleSlotList.set(i, vs);	// update specific vehicle type slots
 						break;
 					} else if(vehicleType != null && vehicleType.compareTo("all") != 0){
 						vehicleType = "@" + tmp_vs.getVehicleType();
 						vs = calculateAndUpdateSlots(tmp_vs, pId, appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
-						vehicleSlotList.set(i, vs);	// update specific vehicle type slots
-						int[] totalSlot = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
-						int[] totalUsed = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
-						averageOccRate = averageOccRate + findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
-					}
+						if(rilevationPresent(vs)){
+							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
+							int[] totalSlot = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
+							int[] totalUsed = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
+							averageOccRate = averageOccRate + findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
+						}
+					}	
 				}
 			}
 			if(averageOccRate > 0){
@@ -1850,176 +1927,178 @@ public class DynamicManager {
 		if(unusuabledParks > 0){
 			vs.setUnusuableSlotNumber(unusuabledParks);
 		}
-		// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
-		if(vs.getFreeParkSlotNumber() != null && vs.getFreeParkSlotNumber() > 0){
-			int freeSlotNumber = vs.getFreeParkSlotNumber();
-			if(unusuabledParks > 0){
-				freeSlotNumber = freeSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(freeSlotNumber < 0){
-					unusuabledParks = Math.abs(freeSlotNumber);
-					freeSlotNumber = 0;
+		if(occRate != -1.0){
+			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
+			if(vs.getFreeParkSlotNumber() != null && vs.getFreeParkSlotNumber() > 0 && freeOccRate > -1){
+				int freeSlotNumber = vs.getFreeParkSlotNumber();
+				if(unusuabledParks > 0){
+					freeSlotNumber = freeSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(freeSlotNumber < 0){
+						unusuabledParks = Math.abs(freeSlotNumber);
+						freeSlotNumber = 0;
+					}
 				}
-			}
-			if(multipark > 1){
-				freeParks_occ = (int)Math.round(freeSlotNumber * freeOccRate / 100);
-			} else {
-				freeParks_occ = (int)Math.round(freeSlotNumber * occRate / 100);
-			}
-			vs.setFreeParkSlotOccupied(freeParks_occ);
-		}
-		if(vs.getFreeParkSlotSignNumber() != null && vs.getFreeParkSlotSignNumber() > 0){
-			int freeSlotSignNumber = vs.getFreeParkSlotSignNumber();
-			if(unusuabledParks > 0){
-				freeSlotSignNumber = freeSlotSignNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(freeSlotSignNumber < 0){
-					unusuabledParks = Math.abs(freeSlotSignNumber);
-					freeSlotSignNumber = 0;
+				if(multipark > 1){
+					freeParks_occ = (int)Math.round(freeSlotNumber * freeOccRate / 100);
+				} else {
+					freeParks_occ = (int)Math.round(freeSlotNumber * occRate / 100);
 				}
+				vs.setFreeParkSlotOccupied(freeParks_occ);
 			}
-			if(multipark > 1){
-				freeSignParks_occ = (int)Math.round(freeSlotSignNumber * freeOccSignedRate / 100);
-			} else {
-				freeSignParks_occ = (int)Math.round(freeSlotSignNumber * occRate / 100);
-			}
-			vs.setFreeParkSlotSignOccupied(freeSignParks_occ);
-		}
-		if(vs.getPaidSlotNumber() != null && vs.getPaidSlotNumber() > 0){
-			int paidSlotNumber = vs.getPaidSlotNumber();
-			if(unusuabledParks > 0){
-				paidSlotNumber = paidSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(paidSlotNumber < 0){
-					unusuabledParks = Math.abs(paidSlotNumber);
-					paidSlotNumber = 0;
+			if(vs.getFreeParkSlotSignNumber() != null && vs.getFreeParkSlotSignNumber() > 0 && freeOccSignedRate > -1){
+				int freeSlotSignNumber = vs.getFreeParkSlotSignNumber();
+				if(unusuabledParks > 0){
+					freeSlotSignNumber = freeSlotSignNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(freeSlotSignNumber < 0){
+						unusuabledParks = Math.abs(freeSlotSignNumber);
+						freeSlotSignNumber = 0;
+					}
 				}
-			}
-			if(multipark > 1){
-				paidSlotParks_occ = (int)Math.round(paidSlotNumber * paidOccRate / 100);
-			} else {
-				paidSlotParks_occ = (int)Math.round(paidSlotNumber * occRate / 100);
-			}
-			vs.setPaidSlotOccupied(paidSlotParks_occ);
-		}
-		if(vs.getTimedParkSlotNumber() != null && vs.getTimedParkSlotNumber() > 0){
-			int timedParkSlotNumber = vs.getTimedParkSlotNumber();
-			if(unusuabledParks > 0){
-				timedParkSlotNumber = timedParkSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(timedParkSlotNumber < 0){
-					unusuabledParks = Math.abs(timedParkSlotNumber);
-					timedParkSlotNumber = 0;
+				if(multipark > 1){
+					freeSignParks_occ = (int)Math.round(freeSlotSignNumber * freeOccSignedRate / 100);
+				} else {
+					freeSignParks_occ = (int)Math.round(freeSlotSignNumber * occRate / 100);
 				}
+				vs.setFreeParkSlotSignOccupied(freeSignParks_occ);
 			}
-			if(multipark > 1){
-				timedParks_occ = (int)Math.round(timedParkSlotNumber * timedOccRate / 100);
-			} else {
-				timedParks_occ = (int)Math.round(timedParkSlotNumber * occRate / 100);
-			}
-			vs.setTimedParkSlotOccupied(timedParks_occ);
-		}
-		if(vs.getHandicappedSlotNumber() != null && vs.getHandicappedSlotNumber() > 0){
-			int handicappedSlotNumber = vs.getHandicappedSlotNumber();
-			if(unusuabledParks > 0){
-				handicappedSlotNumber = handicappedSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(handicappedSlotNumber < 0){
-					unusuabledParks = Math.abs(handicappedSlotNumber);
-					handicappedSlotNumber = 0;
+			if(vs.getPaidSlotNumber() != null && vs.getPaidSlotNumber() > 0 && paidOccRate > -1){
+				int paidSlotNumber = vs.getPaidSlotNumber();
+				if(unusuabledParks > 0){
+					paidSlotNumber = paidSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(paidSlotNumber < 0){
+						unusuabledParks = Math.abs(paidSlotNumber);
+						paidSlotNumber = 0;
+					}
 				}
-			}
-			if(multipark > 1){
-				handicappedParks_occ = (int)Math.round(handicappedSlotNumber * handicappedOccRate / 100);
-			} else {
-				handicappedParks_occ = (int)Math.round(handicappedSlotNumber * occRate / 100);
-			}
-			vs.setHandicappedSlotOccupied(handicappedParks_occ);
-		}
-		if(vs.getReservedSlotNumber() != null && vs.getReservedSlotNumber() > 0){
-			int reservedSlotNumber = vs.getReservedSlotNumber();
-			if(unusuabledParks > 0){
-				reservedSlotNumber = reservedSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(reservedSlotNumber < 0){
-					unusuabledParks = Math.abs(reservedSlotNumber);
-					reservedSlotNumber = 0;
+				if(multipark > 1){
+					paidSlotParks_occ = (int)Math.round(paidSlotNumber * paidOccRate / 100);
+				} else {
+					paidSlotParks_occ = (int)Math.round(paidSlotNumber * occRate / 100);
 				}
+				vs.setPaidSlotOccupied(paidSlotParks_occ);
 			}
-			if(multipark > 1){
-				reservedParks_occ = (int)Math.round(reservedSlotNumber * reservedOccRate / 100);
-			} else {
-				reservedParks_occ = (int)Math.round(reservedSlotNumber * occRate / 100);
-			}
-			vs.setReservedSlotOccupied(reservedParks_occ);
-		}
-		if(vs.getRechargeableSlotNumber() != null && vs.getRechargeableSlotNumber() > 0){
-			int rechargeableSlotNumber = vs.getRechargeableSlotNumber();
-			if(unusuabledParks > 0){
-				rechargeableSlotNumber = rechargeableSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(rechargeableSlotNumber < 0){
-					unusuabledParks = Math.abs(rechargeableSlotNumber);
-					rechargeableSlotNumber = 0;
+			if(vs.getTimedParkSlotNumber() != null && vs.getTimedParkSlotNumber() > 0 && timedOccRate > -1){
+				int timedParkSlotNumber = vs.getTimedParkSlotNumber();
+				if(unusuabledParks > 0){
+					timedParkSlotNumber = timedParkSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(timedParkSlotNumber < 0){
+						unusuabledParks = Math.abs(timedParkSlotNumber);
+						timedParkSlotNumber = 0;
+					}
 				}
-			}
-			if(multipark > 1){
-				rechargeableParks_occ = (int)Math.round(rechargeableSlotNumber * rechargeableOccRate / 100);
-			} else {
-				rechargeableParks_occ = (int)Math.round(rechargeableSlotNumber * occRate / 100);
-			}
-			vs.setRechargeableSlotOccupied(rechargeableParks_occ);
-		}
-		if(vs.getLoadingUnloadingSlotNumber() != null && vs.getLoadingUnloadingSlotNumber() > 0){
-			int loadingUnloadingSlotNumber = vs.getLoadingUnloadingSlotNumber();
-			if(unusuabledParks > 0){
-				loadingUnloadingSlotNumber = loadingUnloadingSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(loadingUnloadingSlotNumber < 0){
-					unusuabledParks = Math.abs(loadingUnloadingSlotNumber);
-					loadingUnloadingSlotNumber = 0;
+				if(multipark > 1){
+					timedParks_occ = (int)Math.round(timedParkSlotNumber * timedOccRate / 100);
+				} else {
+					timedParks_occ = (int)Math.round(timedParkSlotNumber * occRate / 100);
 				}
+				vs.setTimedParkSlotOccupied(timedParks_occ);
 			}
-			if(multipark > 1){
-				loadingUnloadingParks_occ = (int)Math.round(loadingUnloadingSlotNumber * loadingUnloadingOccRate / 100);
-			} else {
-				loadingUnloadingParks_occ = (int)Math.round(loadingUnloadingSlotNumber * occRate / 100);
-			}
-			vs.setLoadingUnloadingSlotOccupied(loadingUnloadingParks_occ);
-		}
-		if(vs.getPinkSlotNumber() != null && vs.getPinkSlotNumber() > 0){
-			int pinkSlotNumber = vs.getPinkSlotNumber();
-			if(unusuabledParks > 0){
-				pinkSlotNumber = pinkSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(pinkSlotNumber < 0){
-					unusuabledParks = Math.abs(pinkSlotNumber);
-					pinkSlotNumber = 0;
+			if(vs.getHandicappedSlotNumber() != null && vs.getHandicappedSlotNumber() > 0 && handicappedOccRate > -1){
+				int handicappedSlotNumber = vs.getHandicappedSlotNumber();
+				if(unusuabledParks > 0){
+					handicappedSlotNumber = handicappedSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(handicappedSlotNumber < 0){
+						unusuabledParks = Math.abs(handicappedSlotNumber);
+						handicappedSlotNumber = 0;
+					}
 				}
-			}
-			if(multipark > 1){
-				pinkParks_occ = (int)Math.round(pinkSlotNumber * pinkOccRate / 100);
-			} else {
-				pinkParks_occ = (int)Math.round(pinkSlotNumber * occRate / 100);
-			}
-			vs.setPinkSlotOccupied(pinkParks_occ);
-		}
-		if(vs.getCarSharingSlotNumber() != null && vs.getCarSharingSlotNumber() > 0){
-			int carSharingSlotNumber = vs.getCarSharingSlotNumber();
-			if(unusuabledParks > 0){
-				carSharingSlotNumber = carSharingSlotNumber - unusuabledParks;
-				unusuabledParks = 0;
-				if(carSharingSlotNumber < 0){
-					unusuabledParks = Math.abs(carSharingSlotNumber);
-					carSharingSlotNumber = 0;
+				if(multipark > 1){
+					handicappedParks_occ = (int)Math.round(handicappedSlotNumber * handicappedOccRate / 100);
+				} else {
+					handicappedParks_occ = (int)Math.round(handicappedSlotNumber * occRate / 100);
 				}
+				vs.setHandicappedSlotOccupied(handicappedParks_occ);
 			}
-			if(multipark > 1){
-				carSharingParks_occ = (int)Math.round(carSharingSlotNumber * carSharingOccRate / 100);
-			} else {
-				carSharingParks_occ = (int)Math.round(carSharingSlotNumber * occRate / 100);
+			if(vs.getReservedSlotNumber() != null && vs.getReservedSlotNumber() > 0 && reservedOccRate > -1){
+				int reservedSlotNumber = vs.getReservedSlotNumber();
+				if(unusuabledParks > 0){
+					reservedSlotNumber = reservedSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(reservedSlotNumber < 0){
+						unusuabledParks = Math.abs(reservedSlotNumber);
+						reservedSlotNumber = 0;
+					}
+				}
+				if(multipark > 1){
+					reservedParks_occ = (int)Math.round(reservedSlotNumber * reservedOccRate / 100);
+				} else {
+					reservedParks_occ = (int)Math.round(reservedSlotNumber * occRate / 100);
+				}
+				vs.setReservedSlotOccupied(reservedParks_occ);
 			}
-			vs.setCarSharingSlotOccupied(carSharingParks_occ);
+			if(vs.getRechargeableSlotNumber() != null && vs.getRechargeableSlotNumber() > 0 && rechargeableOccRate > -1){
+				int rechargeableSlotNumber = vs.getRechargeableSlotNumber();
+				if(unusuabledParks > 0){
+					rechargeableSlotNumber = rechargeableSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(rechargeableSlotNumber < 0){
+						unusuabledParks = Math.abs(rechargeableSlotNumber);
+						rechargeableSlotNumber = 0;
+					}
+				}
+				if(multipark > 1){
+					rechargeableParks_occ = (int)Math.round(rechargeableSlotNumber * rechargeableOccRate / 100);
+				} else {
+					rechargeableParks_occ = (int)Math.round(rechargeableSlotNumber * occRate / 100);
+				}
+				vs.setRechargeableSlotOccupied(rechargeableParks_occ);
+			}
+			if(vs.getLoadingUnloadingSlotNumber() != null && vs.getLoadingUnloadingSlotNumber() > 0 && loadingUnloadingOccRate > -1){
+				int loadingUnloadingSlotNumber = vs.getLoadingUnloadingSlotNumber();
+				if(unusuabledParks > 0){
+					loadingUnloadingSlotNumber = loadingUnloadingSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(loadingUnloadingSlotNumber < 0){
+						unusuabledParks = Math.abs(loadingUnloadingSlotNumber);
+						loadingUnloadingSlotNumber = 0;
+					}
+				}
+				if(multipark > 1){
+					loadingUnloadingParks_occ = (int)Math.round(loadingUnloadingSlotNumber * loadingUnloadingOccRate / 100);
+				} else {
+					loadingUnloadingParks_occ = (int)Math.round(loadingUnloadingSlotNumber * occRate / 100);
+				}
+				vs.setLoadingUnloadingSlotOccupied(loadingUnloadingParks_occ);
+			}
+			if(vs.getPinkSlotNumber() != null && vs.getPinkSlotNumber() > 0 && pinkOccRate > -1){
+				int pinkSlotNumber = vs.getPinkSlotNumber();
+				if(unusuabledParks > 0){
+					pinkSlotNumber = pinkSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(pinkSlotNumber < 0){
+						unusuabledParks = Math.abs(pinkSlotNumber);
+						pinkSlotNumber = 0;
+					}
+				}
+				if(multipark > 1){
+					pinkParks_occ = (int)Math.round(pinkSlotNumber * pinkOccRate / 100);
+				} else {
+					pinkParks_occ = (int)Math.round(pinkSlotNumber * occRate / 100);
+				}
+				vs.setPinkSlotOccupied(pinkParks_occ);
+			}
+			if(vs.getCarSharingSlotNumber() != null && vs.getCarSharingSlotNumber() > 0 && carSharingOccRate > -1){
+				int carSharingSlotNumber = vs.getCarSharingSlotNumber();
+				if(unusuabledParks > 0){
+					carSharingSlotNumber = carSharingSlotNumber - unusuabledParks;
+					unusuabledParks = 0;
+					if(carSharingSlotNumber < 0){
+						unusuabledParks = Math.abs(carSharingSlotNumber);
+						carSharingSlotNumber = 0;
+					}
+				}
+				if(multipark > 1){
+					carSharingParks_occ = (int)Math.round(carSharingSlotNumber * carSharingOccRate / 100);
+				} else {
+					carSharingParks_occ = (int)Math.round(carSharingSlotNumber * occRate / 100);
+				}
+				vs.setCarSharingSlotOccupied(carSharingParks_occ);
+			}
 		}
 		return vs;
 	}
@@ -2258,14 +2337,14 @@ public class DynamicManager {
 	public String[][] getHistorycalProfitDataFromStreet(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		String[][] profMatrix = null;
 		
-		StreetBean s = findStreet(objectId);
+		StreetBean s = findStreet(objectId, appId);
 		List<String> pmCodes = s.getParkingMeters();
 		if(pmCodes != null && pmCodes.size() > 0){
-			ParkingMeterBean pmb = findParkingMeter(pmCodes.get(0));
+			ParkingMeterBean pmb = findParkingMeter(pmCodes.get(0), appId);
 			//ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
 			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			for(int i = 1; i < pmCodes.size(); i++){
-				pmb = findParkingMeter(pmCodes.get(i));
+				pmb = findParkingMeter(pmCodes.get(i), appId);
 				//pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
 				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang));
 			}
@@ -2295,11 +2374,11 @@ public class DynamicManager {
 		// iterate the parkingmeter list and merge the profit matrix
 		if(pmCodes != null && pmCodes.size() > 0){
 			//ParkingMeterBean pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(0)), appId);
-			ParkingMeterBean pmb = findParkingMeter(pmCodes.get(0));
+			ParkingMeterBean pmb = findParkingMeter(pmCodes.get(0), appId);
 			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			for(int i = 1; i < pmCodes.size(); i++){
 				//pmb = findParkingMeterByCode(Integer.parseInt(pmCodes.get(i)), appId);
-				pmb = findParkingMeter(pmCodes.get(i));
+				pmb = findParkingMeter(pmCodes.get(i), appId);
 				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang));
 			}
 		}
@@ -2312,10 +2391,10 @@ public class DynamicManager {
 		RateArea a = mongodb.findById(objectId, RateArea.class);
 		List<ParkingMeter> pms = a.getParkingMeters();
 		if(pms != null && pms.size() > 0){
-			ParkingMeterBean pmb = findParkingMeter(pms.get(0).getId());
+			ParkingMeterBean pmb = findParkingMeter(pms.get(0).getId(), appId);
 			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			for(int i = 1; i < pms.size(); i++){
-				pmb = findParkingMeter(pms.get(i).getId());
+				pmb = findParkingMeter(pms.get(i).getId(), appId);
 				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang));
 			}
 		}

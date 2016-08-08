@@ -17,6 +17,8 @@ pm.service('sharedDataService', function(){
     this.getAuthHeaders = function(){
     	return this.authHeaders;
     };
+    
+    this.vehicle_type = "Car";
 	
 	// Shared field app conf
 	this.conf_app_id;
@@ -77,11 +79,6 @@ pm.service('sharedDataService', function(){
 	this.infoPanelStatesLoc = false;	// default value: the panel is closed
 	
 	this.isInList = false;
-	
-//	this.searchTab = '';
-//	this.searchOpt = '';
-//	this.searchVal = '';
-//	this.searchList = [];
 	
 	this.utente = {};
 	
@@ -180,6 +177,14 @@ pm.service('sharedDataService', function(){
     	periodic : '1',
     	startperiod : new Date(1441058400000),
     	mail : 'prova@prova.it'
+    };
+    
+    this.setVehicleType = function(vt){
+    	this.vehicle_type = vt;
+    };
+    
+    this.getVehicleType = function(){
+    	return this.vehicle_type;
     };
     
     this.report_list.push(this.preloaded_report_1);
@@ -426,42 +431,6 @@ pm.service('sharedDataService', function(){
 	this.isInGlobalLogPage = function(){
 		return this.inGlobalLogPage;
 	};
-//	
-//	this.setInParkLogPage = function(value){
-//		this.inParkLogPage = value;
-//	};
-//	
-//	this.isInParkLogPage = function(){
-//		return this.inParkLogPage;
-//	};
-//	
-//	this.setInStreetLogPage = function(value){
-//		this.inStreetLogPage = value;
-//	};
-//	
-//	this.isInStreetLogPage = function(){
-//		return this.inStreetLogPage;
-//	};
-//	
-//	this.setInProfitParkLogPage = function(value){
-//		this.inProfitParkLogPage = value;
-//	};
-//	
-//	this.isInProfitParkLogPage = function(){
-//		return this.inProfitParkLogPage;
-//	};
-//	
-//	this.setInProfitParkmeterLogPage = function(value){
-//		this.inProfitParkmeterLogPage = value;
-//	};
-//	
-//	this.isInProfitParkmeterLogPage = function(){
-//		return this.inProfitParkmeterLogPage;
-//	};
-	
-//	this.getUserIdentity = function(){
-//		return this.utente.codiceFiscale;
-//	};
 	
 	// ----------------- ONLY FOR TESTS-------------
 	this.getUserIdentity = function(){
@@ -830,16 +799,34 @@ pm.service('sharedDataService', function(){
 	};
 	
 	// Method getTotalSlotsInArea: used to count the total slots of an area from the slots in streets
-	this.getTotalSlotsInArea = function(a_id, occStreetList){
+	this.getTotalSlotsInArea = function(a_id, occStreetList, vehicleType){
 		var totalSlots = 0;
 		var occupiedSlots = 0;
 		if(occStreetList != null && occStreetList.length > 0){
 			for(var i = 0; i < occStreetList.length; i++){
 				if(occStreetList[i].rateAreaId == a_id){
-					var mystreet = this.cleanStreetNullValue(occStreetList[i]);// NB: I have to use the average occupancy value and not the data stored in db
-					var tmp_occ = this.getTotalOccupiedSlots(mystreet);
-					totalSlots += (mystreet.slotNumber - mystreet.unusuableSlotNumber);
-					occupiedSlots += tmp_occ;
+					for(var j = 0; j < occStreetList[i].slotsConfiguration.length; j++){
+						var tmpSlotConf = occStreetList[i].slotsConfiguration[j];
+						if(vehicleType){
+							if(tmpSlotConf.vehicleType == vehicleType){
+								var slotConf = this.cleanStreetNullValue(tmpSlotConf);// NB: I have to use the average occupancy value and not the data stored in db
+								var tmp_occ = this.getTotalOccupiedSlots(slotConf);
+								totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
+								occupiedSlots += tmp_occ;
+								break;
+							}
+						} else {
+							var slotConf = this.cleanStreetNullValue(occStreetList[i].slotsConfiguration[j]);// NB: I have to use the average occupancy value and not the data stored in db
+							var tmp_occ = this.getTotalOccupiedSlots(slotConf);
+							totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
+							occupiedSlots += tmp_occ;
+						}
+					}
+					// TODO: manage correctly slotsConfiguration in area slot occupation calculating
+					//var mystreet = this.cleanStreetNullValue(occStreetList[i]);// NB: I have to use the average occupancy value and not the data stored in db
+					//var tmp_occ = this.getTotalOccupiedSlots(mystreet);
+					//totalSlots += (mystreet.slotNumber - mystreet.unusuableSlotNumber);
+					//occupiedSlots += tmp_occ;
 				}
 			}
 		}
@@ -854,7 +841,11 @@ pm.service('sharedDataService', function(){
 				s_object.paidSlotOccupied + 
 				s_object.timedParkSlotOccupied + 
 				s_object.handicappedSlotOccupied + 
-				s_object.reservedSlotOccupied);
+				s_object.reservedSlotOccupied + 
+				s_object.rechargeableSlotOccupied +
+				s_object.loadingUnloadingSlotOccupied + 
+				s_object.pinkSlotOccupied + 
+				s_object.carSharingSlotOccupied);
 	};
 	
 	// Method cleanStreetNullValue: used to init to 0 the null value in the slotNumber data and to init to the correct value the valorize slots
@@ -868,12 +859,23 @@ pm.service('sharedDataService', function(){
 			street.timedParkSlotNumber = (s_object.timedParkSlotNumber != null && s_object.timedParkSlotNumber > 0) ? s_object.timedParkSlotNumber : 0;
 			street.handicappedSlotNumber = (s_object.handicappedSlotNumber != null && s_object.handicappedSlotNumber > 0) ? s_object.handicappedSlotNumber : 0;
 			street.reservedSlotNumber = (s_object.reservedSlotNumber != null && s_object.reservedSlotNumber > 0) ? s_object.reservedSlotNumber : 0;
+			// new street slot types
+			street.rechargeableSlotNumber = (street.rechargeableSlotNumber != null && street.rechargeableSlotNumber > 0) ? street.rechargeableSlotNumber : 0;
+			street.loadingUnloadingSlotNumber = (street.loadingUnloadingSlotNumber != null && street.loadingUnloadingSlotNumber > 0) ? street.loadingUnloadingSlotNumber : 0;
+			street.pinkSlotNumber = (street.pinkSlotNumber != null && street.pinkSlotNumber > 0) ? street.pinkSlotNumber : 0;
+			street.carSharingSlotNumber = (street.carSharingSlotNumber != null && street.carSharingSlotNumber > 0) ? street.carSharingSlotNumber : 0;
+			// ----------------------------------------------------------------
 			street.freeParkOccupied = (s_object.freeParkSlotOccupied != null && s_object.freeParkSlotOccupied > 0 && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotOccupied : 0;
 			street.freeParkSlotSignOccupied = (s_object.freeParkSlotSignOccupied != null && s_object.freeParkSlotSignOccupied > 0 && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignOccupied : 0;
 			street.paidSlotOccupied = (s_object.paidSlotOccupied != null && s_object.paidSlotOccupied > 0) ? s_object.paidSlotOccupied : 0;
 			street.timedParkSlotOccupied = (s_object.timedParkSlotOccupied != null && s_object.timedParkSlotOccupied > 0) ? s_object.timedParkSlotOccupied : 0;
 			street.handicappedSlotOccupied = (s_object.handicappedSlotOccupied != null && s_object.handicappedSlotOccupied > 0) ? s_object.handicappedSlotOccupied : 0;
 			street.reservedSlotOccupied = (s_object.reservedSlotOccupied != null && s_object.reservedSlotOccupied > 0) ? s_object.reservedSlotOccupied : 0;
+			// new street slot types
+			street.rechargeableSlotOccupied = (street.rechargeableSlotOccupied != null && street.rechargeableSlotOccupied > 0) ? street.rechargeableSlotOccupied : 0;
+			street.loadingUnloadingSlotOccupied = (street.loadingUnloadingSlotOccupied != null && street.loadingUnloadingSlotOccupied > 0) ? street.loadingUnloadingSlotOccupied : 0;
+			street.pinkSlotOccupied = (street.pinkSlotOccupied != null && street.pinkSlotOccupied > 0) ? street.pinkSlotOccupied : 0;
+			street.carSharingSlotOccupied = (street.carSharingSlotOccupied != null && street.carSharingSlotOccupied > 0) ? street.carSharingSlotOccupied : 0;
 			street.unusuableSlotNumber = (s_object.unusuableSlotNumber != null && s_object.unusuableSlotNumber > 0) ? s_object.unusuableSlotNumber : 0;
 		}
 		return street;
