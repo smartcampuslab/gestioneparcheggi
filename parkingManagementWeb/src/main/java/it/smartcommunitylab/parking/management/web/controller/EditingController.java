@@ -186,7 +186,7 @@ public class EditingController {
 	List<RateAreaBean> getAllRateAreaByAppId(@PathVariable("appId") String appId, 
 			@RequestParam(required=false) String agencyId) {
 		if(agencyId != null){
-			return storage.getAllAreaByAgency(appId, agencyId);
+			return storage.getAllAreaByAgencyId(appId, agencyId);
 		} else {
 			return storage.getAllArea(appId);
 		}
@@ -262,10 +262,10 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/bikepoint")
 	public @ResponseBody
-	BikePointBean createBikePoint(@PathVariable("appId") String appId,
+	BikePointBean createBikePoint(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId,
 			@RequestBody BikePointBean puntobici)
 			throws DatabaseException {
-		return storage.save(puntobici, appId);
+		return storage.save(puntobici, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/bikepoint")
@@ -289,17 +289,17 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/bikepoint/{pbid}")
 	public @ResponseBody
-	boolean deleteBikePoint(@PathVariable("appId") String appId,
-			@PathVariable("pbid") String pbid) {
-		return storage.removeBikePoint(pbid, appId);
+	boolean deleteBikePoint(@PathVariable("appId") String appId, @PathVariable("pbid") String pbid, 
+			@RequestParam(required=true) String agencyId) {
+		return storage.removeBikePoint(pbid, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/bikepoint/{pbid}")
 	public @ResponseBody
-	BikePointBean editBikePoint(@PathVariable("appId") String appId,
-			@PathVariable("pbid") String pbid,
+	BikePointBean editBikePoint(@PathVariable("appId") String appId, @PathVariable("pbid") String pbid,
+			@RequestParam(required=true) String agencyId, 
 			@RequestBody BikePointBean bici) throws NotFoundException {
-		return storage.editBikePoint(bici, appId);
+		return storage.editBikePoint(bici, appId, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingstructure")

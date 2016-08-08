@@ -7,7 +7,7 @@ agencies:
     street: 3
     structure: 3
     parkingmeter: 3
-    bike: 2
+    bike: 3
   - id: prova123
     name: Agency rv
     description: Agency id per amr rovereto

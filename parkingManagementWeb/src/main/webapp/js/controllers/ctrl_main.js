@@ -65,8 +65,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     	$scope.used_lang = "i18n/angular-locale_en-EN.js";
     	itaLanguage = "";
     	engLanguage = "active";
-    	//$scope.setUserLocale("en-US");
-    	//$locale.id = "en-US";
     	localize.setLanguage('en-US');
     	sharedDataService.setUsedLanguage('eng');
     };
@@ -75,8 +73,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     	$scope.used_lang = "i18n/angular-locale_it-IT.js";
     	itaLanguage = "active";
     	engLanguage = "";
-    	//$scope.setUserLocale("it-IT");
-    	//$locale.id = "it-IT";
     	localize.setLanguage('it-IT');
     	sharedDataService.setUsedLanguage('ita');
     };
@@ -269,26 +265,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
          'Authorization': $scope.getToken(),
          'Accept': 'application/json;charset=UTF-8'
     };
-                  		    
-    // ------------------- User section ------------------
-    //$scope.retrieveUserData = function() {
-    	//$scope.getUser();				// retrieve user data
-    	//$scope.getUserUeNationality();	// retrieve the user ue/extraue Nationality
-    //};
-    
-//    $scope.user;
-//    $scope.getUser = function() {
-//    	console.log("user id " + $scope.citizenId );
-//    	$http({
-//        	method : 'GET',
-//        	url : 'rest/citizen/user/' + $scope.citizenId,
-//        	params : {},
-//            headers : $scope.authHeaders
-//        }).success(function(data) {
-//        	$scope.user = data;
-//        }).error(function(data) {
-//        });
-//    };
     
     // For user shared data
     if(user_name != null && user_surname != null){

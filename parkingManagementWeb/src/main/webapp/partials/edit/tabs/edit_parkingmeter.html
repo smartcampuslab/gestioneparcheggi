@@ -303,7 +303,7 @@
 								<table class="table table-striped" style="width: 100%">
 									<tr ng-show="pmeterWS.length != 0">
 										<th width="5%">
-											<a href ng-click="showAgencyPMFilter();currentPagePm=0" ng-show="!showAgencyPMtructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+											<a href ng-click="showAgencyPMFilter();currentPagePm=0" ng-show="!showAgencyPMeterFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 											<a href ng-click="agencyPMeterFilter=null;hideAgencyPMFilter()" ng-show="showAgencyPMeterFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 											<div ng-show="showAgencyPMeterFilter">
 								    			<select id="f_agency_pmeter" class="form-control" ng-model="agencyPMeterFilter">
@@ -550,13 +550,17 @@
 					   		<div class="field-error" ng-show="!isInit && form.pNote.$error.required">{{ 'parkingmeter_note_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="pmconf.pm_status.visible">
-					    	<label for="status">{{ 'pm_status' | i18n }}</label>
-					    	<select ng-if="isUsedItaLang()" id="status" name="pStatus" class="form-control" ng-options="s as s.descrizione for s in listaStati" ng-model="myPmStatus" ng-required="pmconf.pm_status.required">
+					    	<label for="pm_status">{{ 'pm_status' | i18n }}</label>
+					    	<select class="form-control" id="pm_status" name="pStatus" ng-model="parckingMeter.status" ng-required="pmconf.pm_status.required">
+		      					<option value="">{{ 'pm_status_placeholder' | i18n }}</option>
+		      					<option ng-repeat="s in listaStati" ng-value="s.idObj">{{ s.language_key | i18n }}</option>
+		    				</select>
+					    	<!-- <select id="status" name="pStatus" class="form-control" ng-options="s as s.descrizione for s in listaStati" ng-model="myPmStatus" ng-required="pmconf.pm_status.required">ng-if="isUsedItaLang()"
 					    		<option value="">{{ 'pm_status_placeholder' | i18n }}</option>
-					    	</select>
-					    	<select ng-if="isUsedEngLang()" id="status" name="pStatus" class="form-control" ng-options="s as s.descrizione_eng for s in listaStati" ng-model="myPmStatus" ng-required="pmconf.pm_status.required">
+					    	</select> -->
+					    	<!-- <select ng-if="isUsedEngLang()" id="status" name="pStatus" class="form-control" ng-options="s as s.descrizione_eng for s in listaStati" ng-model="myPmStatus" ng-required="pmconf.pm_status.required">
 					    		<option value="">{{ 'pm_status_placeholder' | i18n }}</option>
-					    	</select>
+					    	</select> -->
 					    	<div class="field-error" ng-show="!isInit && form.pStatus.$error.required">{{ 'parkingmeter_status_select_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="pmconf.pm_rateArea.visible">
@@ -624,8 +628,8 @@
 					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePmeter(0, parckingMeter, form, myPmStatus, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPmeter(form, parckingMeter, myPmStatus, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePmeter(0, parckingMeter, form, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPmeter(form, parckingMeter, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>
 						</tr>
 						<tr>

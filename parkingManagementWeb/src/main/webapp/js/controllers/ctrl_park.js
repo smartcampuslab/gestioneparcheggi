@@ -832,12 +832,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			idObj: "ACTIVE",
 			descrizione: "Attivo",
 			descrizione_eng: "Active",
+			language_key: "pm_state_active",
 			filter: "ON-ACTIVE"
 		},
 		{
 			idObj: "INACTIVE",
 			descrizione: "Disattivo",
 			descrizione_eng: "Off",
+			language_key: "pm_state_disabled",
 			filter: "OFF-INACTIVE"
 		}
 	];
@@ -1072,32 +1074,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return corrZones;
 	};
 	
-	/*$scope.getLocalPmByCode = function(code){
-		var find = false;
-		var myPms = sharedDataService.getSharedLocalPms();
-		for(var i = 0; i < myPms.length && !find; i++){
-			var pmCodeString = String(myPms[i].code);
-			if(pmCodeString.localeCompare(code) == 0){
-				find = true;
-				return myPms[i];
-			}
-		}
-		return null;
-	};*/
-	
-	/*$scope.getLocalPmById = function(objId){
-		var find = false;
-		var myPms = sharedDataService.getSharedLocalPms();
-		for(var i = 0; i < myPms.length && !find; i++){
-			var pmIdString = String(myPms[i].id);
-			if(pmIdString.localeCompare(objId) == 0){
-				find = true;
-				return myPms[i];
-			}
-		}
-		return null;
-	};*/
-	
 	$scope.initFiltersForPM = function(){
 		$scope.allPmAreaFilter = [];
 		angular.copy(sharedDataService.getSharedLocalAreas(),$scope.allPmAreaFilter);
@@ -1120,109 +1096,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.correctColor = function(value){
 		return "#" + value;
 	};
-	
-	/*$scope.correctPointGoogle = function(point){
-		return point.lat + "," + point.lng;
-	};
-	
-	$scope.getPointFromLatLng = function(latLng, type){
-		var res = {};
-		if(latLng){
-			var point = "" + latLng;
-			var pointCoord = point.split(",");
-			if(type == 1){
-				var lat = pointCoord[0].substring(1, pointCoord[0].length);
-				var lng = pointCoord[1].substring(0, pointCoord[1].length - 1);
-			
-				res = {
-					latitude: lat,
-					longitude: lng
-				};
-			} else {
-				var lat = Number(pointCoord[0]);
-				var lng = Number(pointCoord[1]);
-				res = {
-					lat: lat,
-					lng: lng
-				};
-			}
-		}
-		return res;
-	};
-	
-	$scope.correctPoints = function(points){
-		var corr_points = [];
-		for(var i = 0; i < points.length; i++){
-			var point = {
-				latitude: points[i].lat,
-				longitude: points[i].lng
-			};
-			corr_points.push(point);
-		}
-		return corr_points;
-	};
-	
-	$scope.correctPointsGoogle = function(points){
-		var corr_points = "[";
-		for(var i = 0; i < points.length; i++){
-			var point = "[ " + points[i].lat + "," + points[i].lng + "]";
-			corr_points = corr_points +point + ",";
-		}
-		corr_points = corr_points.substring(0, corr_points.length-1);
-		corr_points = corr_points + "]";
-		return corr_points;
-	};
-	
-	$scope.correctMyGeometry = function(geo){
-		if(geo){
-			var pos = geo.split(",");
-			return {
-				lat: pos[0].trim(),
-				lng: pos[1].trim()
-			};
-		} else {
-			return null;
-		}
-	};
-	
-	$scope.correctMyGeometryPolyline = function(geo){
-		//var corrected = [];
-		var tmpLine = {
-			points: null
-			//pointObjs: null
-		};
-		var points = [];
-		for(var i = 0; i < geo.length; i++){
-			var tmpPoint = {
-				lat: Number(geo[i].latitude),
-				lng: Number(geo[i].longitude)
-			};
-			points.push(tmpPoint);
-		}
-		
-		tmpLine.points = points;
-		//tmpLine.pointObjs = points;
-		//corrected.push(tmpLine);
-		
-		return tmpLine;
-	};
-	
-	$scope.correctMyGeometryPolygon = function(geo){
-		var tmpPolygon = {
-			points: null
-		};
-		var points = [];
-		if(geo != null && geo.points != null && geo.points.length > 0){
-			for(var i = 0; i < geo.points.length; i++){
-				var tmpPoint = geo.points[i];
-				points.push(tmpPoint);
-			}
-		}
-		
-		tmpPolygon.points = points;
-
-		return tmpPolygon;
-	};*/
 	
 	$scope.checkCorrectPaymode = function(myPm, isReq){
 		var correctedPm = true;
@@ -1249,69 +1122,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.castMyPaymentModeToString = function(myPm){
 		return sharedDataService.castMyPaymentModeToString(myPm);
 	};
-	
-	
-	// correctMyZones: used to correct the zone object with all the necessary data
-	/*$scope.correctMyZones = function(zones){
-		var correctedZones = [];
-		for(var i = 0; i < zones.length; i++){
-			var sub = (zones[i].submacro) ? zones[i].submacro : ((zones[i].submicro) ? zones[i].submicro : null);
-			var corrType = $scope.getCorrectZoneType(zones[i].type);
-			var lbl = (sub) ? (zones[i].name + "_" + sub) : zones[i].name;
-			var correctZone = {
-				id: zones[i].id,
-				id_app: zones[i].id_app,
-				color: zones[i].color,
-				name: zones[i].name,
-				submacro: zones[i].submacro,
-				submicro: zones[i].submicro,
-				type: zones[i].type,
-				myType: corrType,
-				note: zones[i].note,
-				geometry: $scope.correctMyGeometryPolygon(zones[i].geometry),
-				centermap: zones[i].centermap,
-				geometryFromSubelement: zones[i].geometryFromSubelement,
-				subelements: $scope.loadStreetsFromZone(zones[i].id),
-				label: lbl
-			};
-			correctedZones.push(correctZone);
-		}
-		return correctedZones;
-	};*/
-	
-	/*$scope.correctMyZonesForStreet = function(zone0, zone1, zone2, zone3, zone4){
-		var correctedZones = [];
-		if(zone0){
-			correctedZones.push(zone0.id);
-		}
-		if(zone1){
-			correctedZones.push(zone1.id);
-		}
-		if(zone2){
-			correctedZones.push(zone2.id);
-		}
-		if(zone3){
-			correctedZones.push(zone3.id);
-		}
-		if(zone4){
-			correctedZones.push(zone4.id);
-		}
-		return correctedZones;
-	};*/
-	
-	/*$scope.correctMyPmsForStreet = function(pms){
-		var correctedPms = [];
-		for(var i = 0; i < pms.length; i++){
-			if(pms[i].selected){
-				correctedPms.push(String(pms[i].id));
-			}
-		}
-		return correctedPms;
-	};*/
-	
-//	$scope.setMyArea = function(area){
-//		$scope.myNewArea = area;
-//	};
 	
 	$scope.setMyPaymentoErrMode = function(value){
 		$scope.noPaymentChecked = value;
@@ -1555,13 +1365,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			return id + '_' + i;
 		}
 	};
-	
-	/*$scope.useSelectedIcon = function(icon){
-		if(icon.indexOf("_outline") > -1){
-			icon = icon.substring(0, icon.length - 12);
-		}
-		return icon + ".png";
-	};	*/
 	
 	$scope.useNormalIcon = function(icon){
 		if(icon.indexOf(".png") > -1){
@@ -3068,7 +2871,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.myPmZone2 = null;
 		$scope.myPmZone3 = null;
 		$scope.myPmZone4 = null;
-		$scope.myPmStatus = $scope.listaStati[0];	// default is active TODO: correct!!!
+		//$scope.myPmStatus = $scope.listaStati[0];	// default is active TODO: correct!!!
 		$scope.pmZones0 = sharedDataService.getSharedLocalZones0();
 		$scope.pmZones1 = sharedDataService.getSharedLocalZones1();
 		$scope.pmZones2 = sharedDataService.getSharedLocalZones2();
@@ -3108,11 +2911,6 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			
 			pmEditCode = parkingMeter.code;	// Here I temporary store the value of the actual code
 			angular.copy(parkingMeter, $scope.parckingMeter);
-			if(parkingMeter.status == "ACTIVE"){
-				$scope.myPmStatus = $scope.listaStati[0];
-			} else {
-				$scope.myPmStatus = $scope.listaStati[1];
-			}
 			for(var i = 0; i < $scope.allArea.length; i++){
 				if(parkingMeter.areaId == $scope.allArea[i].id){
 					$scope.myArea = $scope.allArea[i];
@@ -3128,7 +2926,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				id: null,
 				code: null,
 				note: null,
-				status: null,
+				status: "",
 				areaId: null,
 				zones: null,
 				geometry: null
@@ -3140,15 +2938,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// Update parkingMeter Object
-	$scope.updatePmeter = function(type, pm, form, status, area, geometry, zone0, zone1, zone2, zone3, zone4){
+	$scope.updatePmeter = function(type, pm, form, area, geometry, zone0, zone1, zone2, zone3, zone4){
 		if(!form.$valid){
 			$scope.isInit=false;
 		} else {
-			if(form.pStatus.$dirty){	// if pm status value is dirty
-				status = form.pStatus.$modelValue;	// force to use form value;
-			}
+			//if(form.pStatus.$dirty){	// if pm status value is dirty
+			//	status = form.pStatus.$modelValue;	// force to use form value;
+			//}
 			
-			var myDataPromise = parkingMeterService.updatePmeterInDb(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId);
+			var myDataPromise = parkingMeterService.updatePmeterInDb(pm, area, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId);
 		    myDataPromise.then(function(result){
 		    	if(result != null){ // == "OK"){
 		    		$scope.getAllParkingMeters();
@@ -3183,13 +2981,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// ParkingMeter create object method
-	$scope.createPmeter = function(form, pm, status, area, geometry, zone0, zone1, zone2, zone3, zone4){
+	$scope.createPmeter = function(form, pm, area, geometry, zone0, zone1, zone2, zone3, zone4){
 		if(!form.$valid || showPMErrorCode){
 			$scope.isInit=false;
 		} else {
 			$scope.isInit=true;
 			$scope.showUpdatingErrorMessage = false;
-			var myDataPromise = parkingMeterService.createParkingMeterInDb(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, agencyId);
+			var myDataPromise = parkingMeterService.createParkingMeterInDb(pm, area, zone0, zone1, zone2, zone3, zone4, geometry, agencyId);
 			myDataPromise.then(function(result){
 		    	if(result != null && result != ""){
 		    		$scope.getAllParkingMeters();
@@ -3632,7 +3430,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.isInit=true;
 			$scope.showUpdatingBPErrorMessage = false;
 			//var bp = $scope.bikePoint;
-			var myDataPromise = bikePointService.updateBikePointInDb(bp, zone0, zone1, zone2, zone3, zone4, geo, type);
+			var myDataPromise = bikePointService.updateBikePointInDb(bp, zone0, zone1, zone2, zone3, zone4, geo, type, agencyId);
 			myDataPromise.then(function(result){
 		    	if(result != null){//== "OK"){
 		    		$scope.getAllBikePoints();
@@ -3657,7 +3455,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		} else {
 			$scope.isInit=true;
 			$scope.showUpdatingBPErrorMessage = false;
-			var myDataPromise = bikePointService.createBikePointInDb(bp, zone0, zone1, zone2, zone3, zone4, geo);
+			var myDataPromise = bikePointService.createBikePointInDb(bp, zone0, zone1, zone2, zone3, zone4, geo, agencyId);
 			myDataPromise.then(function(result){
 		    	if(result != null && result != ""){
 		    		$scope.getAllBikePoints();
@@ -3678,7 +3476,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	// BikePoint
 	$scope.deleteBPoint = function(bPoint){
 		$scope.showDeletingBPErrorMessage = false;
-		var myDataPromise = bikePointService.deleteBikePointInDb(bPoint);
+		var myDataPromise = bikePointService.deleteBikePointInDb(bPoint, agencyId);
 		myDataPromise.then(function(result){
 	    	console.log("Deleted bikePoint: " + JSON.stringify(result));
 	    	if(result != null && result != ""){

@@ -74,9 +74,20 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 		return myDataPromise;
 	};
 	
+	this.correctMyPmStatus = function(pm_status){
+		var correctPmS = "ACTIVE";
+		if(pm_status == "Active" || pm_status == "Attivo"){
+			correctPmS = "ACTIVE";
+		} else if(pm_status == "Disabled" || pm_status == "Spento"){
+			correctPmS = "INACTIVE";
+		} else {
+			correctPmS = pm_status;
+		}
+		return correctPmS;
+	};
 	
 	// PS update method
-	this.updatePmeterInDb = function(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId){
+	this.updatePmeterInDb = function(pm, area, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId){
 		var validityPeriod = [];
 		var id = pm.id;
 		var appId = sharedDataService.getConfAppId();
@@ -91,7 +102,7 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 				id_app: pm.id_app,
 				code: pm.code,
 				note: pm.note,
-				status: status.idObj,
+				status: this.correctMyPmStatus(pm.status),
 				areaId: area.id,
 				zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 				geometry: gMapService.correctMyGeometry(geometry)
@@ -121,7 +132,7 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	};
 	
 	// PM create method
-	this.createParkingMeterInDb = function(pm, status, area, zone0, zone1, zone2, zone3, zone4, geometry, agencyId){
+	this.createParkingMeterInDb = function(pm, area, zone0, zone1, zone2, zone3, zone4, geometry, agencyId){
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
@@ -135,7 +146,7 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 			id_app: appId,
 			code: pm.code,
 			note: pm.note,
-			status: status.idObj,
+			status: this.correctMyPmStatus(pm.status),
 			areaId: area.id,
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 			geometry: gMapService.correctMyGeometry(geometry),

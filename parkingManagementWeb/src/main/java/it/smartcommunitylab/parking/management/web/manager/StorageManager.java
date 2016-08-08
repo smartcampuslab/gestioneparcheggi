@@ -189,7 +189,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public List<RateAreaBean> getAllAreaByAgency(String appId, String agencyId) {
+	public List<RateAreaBean> getAllAreaByAgencyId(String appId, String agencyId) {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getArea() >= READ_VAL){
@@ -294,7 +294,7 @@ public class StorageManager {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getParkingmeter() >= READ_VAL){
-			for (RateAreaBean temp : getAllAreaByAgency(appId, agencyId)) {
+			for (RateAreaBean temp : getAllAreaByAgencyId(appId, agencyId)) {
 				if(temp != null && temp.getId_app().compareTo(appId) == 0){
 					result.addAll(getAllParkingMeters(temp, appId));
 				}
@@ -401,7 +401,7 @@ public class StorageManager {
 							&& area.getParkingMeters().remove(p);
 					if (result) {
 						mongodb.save(area);
-						logger.info(String.format(
+						logger.debug(String.format(
 								"Success removing parcometro %s of area %s", parcometroId,
 								areaId));
 					} else {
@@ -607,7 +607,7 @@ public class StorageManager {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getStreet() >= READ_VAL){
-			for (RateAreaBean temp : getAllAreaByAgency(appId, agencyId)) {
+			for (RateAreaBean temp : getAllAreaByAgencyId(appId, agencyId)) {
 				if(temp != null && appId.compareTo("all") == 0){
 					result.addAll(getAllStreets(temp, "all"));
 				} else if(temp != null && temp.getId_app().compareTo(appId) == 0){
@@ -748,7 +748,7 @@ public class StorageManager {
 					result = area.getStreets() != null && area.getStreets().remove(s);
 					if (result) {
 						mongodb.save(area);
-						logger.info(String.format("Success removing via %s of area %s", streetId, areaId));
+						logger.debug(String.format("Success removing via %s of area %s", streetId, areaId));
 						DataLogBean dl = new DataLogBean();
 						dl.setObjId("@" + area.getId_app() + "@street@" + streetId);
 						dl.setType("street");
@@ -821,40 +821,65 @@ public class StorageManager {
 	}
 
 	// BikePoint Methods
-	public BikePointBean editBikePoint(BikePointBean pb, String appId)
+	public BikePointBean editBikePoint(BikePointBean pb, String appId, String agencyId)
 			throws NotFoundException {
 		BikePoint bici = findById(pb.getId(), BikePoint.class);
-		bici.setName(pb.getName());
-		bici.setSlotNumber(pb.getSlotNumber());
-		bici.setBikeNumber(pb.getBikeNumber());
-		//bici.setMunicipality(pb.getMunicipality());
-		bici.getGeometry().setLat(pb.getGeometry().getLat());
-		bici.getGeometry().setLng(pb.getGeometry().getLng());
-		if(pb.getZones() != null)bici.setZones(pb.getZones());
-		mongodb.save(bici);
+		if(bici.getAgencyId() != null && !bici.getAgencyId().isEmpty()){
+			if(bici.getAgencyId().contains(agencyId)){
+				Agency ag = agencyDataSetup.getAgencyById(agencyId);
+				if(ag.getBike() >= UPDATE_VAL){
+					bici.setName(pb.getName());
+					bici.setSlotNumber(pb.getSlotNumber());
+					bici.setBikeNumber(pb.getBikeNumber());
+					//bici.setMunicipality(pb.getMunicipality());
+					bici.getGeometry().setLat(pb.getGeometry().getLat());
+					bici.getGeometry().setLng(pb.getGeometry().getLng());
+					if(pb.getZones() != null)bici.setZones(pb.getZones());
+					mongodb.save(bici);
+				} else {
+					throw new AccessControlException("no update permission for bike point object");
+				}
+			} else {
+				throw new AccessControlException("no update permission for bike point object");
+			}
+		}
 		return pb;
 	}
 	
-	public boolean removeBikePoint(String puntobiciId, String appId) {
+	public boolean removeBikePoint(String puntobiciId, String appId, String agencyId) {
+		boolean result = false;
 		Criteria crit = new Criteria();
 		crit.and("id").is(puntobiciId);
-		
 		BikePoint bp = mongodb.findById(puntobiciId, BikePoint.class);
-		DataLogBean dl = new DataLogBean();
-		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + puntobiciId);
-		dl.setType("bikePoint");
-		dl.setTime(System.currentTimeMillis());
-		dl.setAuthor("999");
-		//dl.setVersion(getLastVersion(dl.getObjId()));
-		dl.setDeleted(true);
-		mongodb.save(dl);
-		
-		mongodb.remove(Query.query(crit), BikePoint.class);
-		return true;
+		if(bp.getAgencyId() != null && !bp.getAgencyId().isEmpty()){
+			if(bp.getAgencyId().contains(agencyId)){
+				Agency ag = agencyDataSetup.getAgencyById(agencyId);
+				if(ag.getBike() >= CREATE_REM_VAL){
+					DataLogBean dl = new DataLogBean();
+					dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + puntobiciId);
+					dl.setType("bikePoint");
+					dl.setTime(System.currentTimeMillis());
+					dl.setAuthor("999");
+					//dl.setVersion(getLastVersion(dl.getObjId()));
+					dl.setDeleted(true);
+					mongodb.save(dl);
+					
+					mongodb.remove(Query.query(crit), BikePoint.class);
+					result = true;
+				} else {
+					throw new AccessControlException("no delete permission for bike point object");
+				}
+			} else {
+				throw new AccessControlException("no delete permission for bike point object");
+			}
+		}
+		return result;
 	}
 
-	public BikePointBean save(BikePointBean bp, String appId) {
+	public BikePointBean save(BikePointBean bp, String appId, String agencyId) {
 		BikePoint puntoBici = ModelConverter.convert(bp, BikePoint.class);
+		Agency ag = agencyDataSetup.getAgencyById(agencyId);
+		if(ag.getBike() >= CREATE_REM_VAL){
 		puntoBici = processId(puntoBici, BikePoint.class);
 		puntoBici.setId_app(appId);
 		mongodb.save(puntoBici);
@@ -876,6 +901,9 @@ public class StorageManager {
 		Map<String,Object> map = ModelConverter.convert(bp, Map.class);
 		dl.setValue(map);
 		mongodb.save(dl);
+		} else {
+			throw new AccessControlException("no create permission for bike point object");
+		} 
 		
 		return bp;
 	}
@@ -889,6 +917,26 @@ public class StorageManager {
 			//logger.info(String.format("Bike point found : %s", pb.toString()));
 				result.add(ModelConverter.convert(bp, BikePointBean.class));
 			}
+		}
+		return result;
+	}
+	
+	public List<BikePointBean> getAllBikePointsByAgencyId(String appId, String agencyId) {
+		List<BikePointBean> result = new ArrayList<BikePointBean>();
+		Agency ag = agencyDataSetup.getAgencyById(agencyId);
+		if(ag.getBike() >= READ_VAL){
+			Criteria crit = new Criteria();
+			crit.and("agencyId").in(agencyId);
+			for (BikePoint bp : mongodb.find(Query.query(crit), BikePoint.class)) {
+			//for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
+				if(bp != null && appId.compareTo("all") == 0){
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				} else if(bp != null && bp.getId_app().compareTo(appId) == 0){
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				}
+			}
+		} else {
+			throw new AccessControlException("no read permission for bike point object");
 		}
 		return result;
 	}
@@ -934,7 +982,7 @@ public class StorageManager {
 	public ParkingStructureBean save(ParkingStructureBean entityBean, String appId, String agencyId) {
 		ParkingStructure entity = ModelConverter.convert(entityBean, ParkingStructure.class);
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
-		if(ag.getArea() >= CREATE_REM_VAL){
+		if(ag.getStructure() >= CREATE_REM_VAL){
 			entity = processId(entity, ParkingStructure.class);
 			entity.setId_app(appId);
 			mongodb.save(entity);
@@ -977,7 +1025,7 @@ public class StorageManager {
 		if(ag.getStructure() >= READ_VAL){
 			Criteria crit = new Criteria();
 			crit.and("agencyId").in(agencyId);
-			for (ParkingStructure entity : mongodb.find(new Query(crit), ParkingStructure.class)) {
+			for (ParkingStructure entity : mongodb.find(Query.query(crit), ParkingStructure.class)) {
 				if(entity != null && appId.compareTo("all") == 0){
 					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
 				} else if(entity != null && entity.getId_app().compareTo(appId) == 0){
@@ -1074,7 +1122,7 @@ public class StorageManager {
 		if(ps.getAgencyId() != null && !ps.getAgencyId().isEmpty()){
 			if(ps.getAgencyId().contains(agencyId)){
 				Agency ag = agencyDataSetup.getAgencyById(agencyId);
-				if(ag.getZone() >= UPDATE_VAL){
+				if(ag.getStructure() >= CREATE_REM_VAL){
 					DataLogBean dl = new DataLogBean();
 					dl.setObjId("@" + ps.getId_app() + "@parkingStructure@" + id);
 					dl.setType("parkingStructure");
@@ -1128,7 +1176,7 @@ public class StorageManager {
 		if(ag.getZone() >= READ_VAL){
 			Criteria crit = new Criteria();
 			crit.and("agencyId").in(agencyId);
-			for (Zone z : mongodb.find(new Query(crit), Zone.class)) {
+			for (Zone z : mongodb.find(Query.query(crit), Zone.class)) {
 				if(z != null && appId.compareTo("all") == 0){
 					result.add(ModelConverter.convert(z, ZoneBean.class));
 				} else if(z != null && z.getId_app().compareTo(appId) == 0){
@@ -1280,7 +1328,7 @@ public class StorageManager {
 						for (Iterator<String> iterator = zones.iterator(); iterator.hasNext(); ) {
 						    String value = iterator.next();
 						    if(value.compareTo(zonaId) == 0){
-						    	logger.info(String.format("Finded zona: %s", value));
+						    	logger.debug(String.format("Finded zona: %s", value));
 						    	iterator.remove();
 						    	try {
 									editStreet(s, appId, agencyId);

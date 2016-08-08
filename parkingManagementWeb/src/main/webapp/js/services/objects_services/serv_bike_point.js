@@ -59,9 +59,12 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// BP update method
-	this.updateBikePointInDb = function(bp, zone0, zone1, zone2, zone3, zone4, geometry, type){
+	this.updateBikePointInDb = function(bp, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId){
 		var id = bp.id;
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId
+		};
 		var method = 'PUT';
 		
 		var data = {};
@@ -83,13 +86,14 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 				slotNumber: bp.slotNumber,
 				bikeNumber: bp.bikeNumber,
 				zones: bp.zones,
-				geometry: bp.geometry	
+				geometry: bp.geometry,
+				agencyId: bp.agencyId
 			};
 		}
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Bikepoint data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + id, null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + id, params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Updated bikepoint: " + result.name);
 	    });
@@ -97,22 +101,29 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// BP create method
-	this.createBikePointInDb = function(bp, zone0, zone1, zone2, zone3, zone4, geometry){
+	this.createBikePointInDb = function(bp, zone0, zone1, zone2, zone3, zone4, geometry, agencyId){
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
-		
+		var params = {
+			agencyId: agencyId
+		};
+		var myAgencyList = []
+		if(agencyId){
+			myAgencyList.push(agencyId);
+		}
 		var data = {
 			id_app: appId,
 			name: bp.name,
 			slotNumber: bp.slotNumber,
 			bikeNumber: bp.bikeNumber,
 			zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-			geometry: gMapService.correctMyGeometry(geometry)
+			geometry: gMapService.correctMyGeometry(geometry),
+			agencyId: myAgencyList
 		};
 		
 	    var value = JSON.stringify(data);
 	    if(this.showLog) console.log("Bikepoint data : " + value);
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint", null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint", params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    	console.log("Create bikePoint: " + result.name);
 	    });
@@ -120,11 +131,13 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// PM delete method
-	this.deleteBikePointInDb = function(bp){
+	this.deleteBikePointInDb = function(bp, agencyId){
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
-		
-	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + bp.id , null, sharedDataService.getAuthHeaders(), null);
+		var params = {
+			agencyId: agencyId
+		};
+	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + bp.id , params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted bikepoint: " + bp.name);
 	    });

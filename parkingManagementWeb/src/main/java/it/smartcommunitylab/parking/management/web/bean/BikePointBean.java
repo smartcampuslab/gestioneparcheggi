@@ -26,7 +26,7 @@ public class BikePointBean {
 	private PointBean geometry;
 	private Long lastChange;
 	private List<String> zones;
-	private String agencyId;	// relation to agency object
+	private List<String> agencyId;	// relation to agency object
 
 	public String getId() {
 		return id;
@@ -92,11 +92,11 @@ public class BikePointBean {
 		this.zones = zones;
 	}
 
-	public String getAgencyId() {
+	public List<String> getAgencyId() {
 		return agencyId;
 	}
 
-	public void setAgencyId(String agencyId) {
+	public void setAgencyId(List<String> agencyId) {
 		this.agencyId = agencyId;
 	}
 

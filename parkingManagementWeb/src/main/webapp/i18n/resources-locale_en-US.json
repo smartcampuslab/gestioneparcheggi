@@ -455,6 +455,14 @@
     "value": "Status",
     "description": "Label stato parcometro"
 }, {
+    "key": "pm_state_active",
+    "value": "Active",
+    "description": "Label stato parcometro attivo"
+}, {
+    "key": "pm_state_disabled",
+    "value": "Disabled",
+    "description": "Label stato parcometro disattivo"
+}, {
     "key": "pm_geometry",
     "value": "Position",
     "description": "Label geometry parcometro"
