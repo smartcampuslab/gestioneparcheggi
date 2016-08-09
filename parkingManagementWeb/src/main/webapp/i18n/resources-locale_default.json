@@ -1976,11 +1976,11 @@
 	"description": "Messaggio campo posti disco orario obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_timed_error_min",
-	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore maggiore.",
+	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore maggiore",
 	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_timed_error_max",
-	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore minore.",
+	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore minore",
 	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_free_error_pattern",
@@ -1994,6 +1994,70 @@
 	"key": "log_street_occupied_free_signed_error_required",
 	"value": "Campo 'posti gratuiti occupati con segnaletica' obbligatorio. Inserire un valore numerico",
 	"description": "Messaggio campo posti gratuiti con segnaletica obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_rechargeable_error_pattern",
+	"value": "Campo 'posti ricaricabili occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti ricaricabili occupati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_rechargeable_error_required",
+	"value": "Campo 'posti ricaricabili occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti ricaricabili obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_rechargeable_error_min",
+	"value": "Valore non corretto nel campo 'posti ricaricabili occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti ricaricabili non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_rechargeable_error_max",
+	"value": "Valore non corretto nel campo 'posti ricaricabili occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti ricaricabili non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_loadingUnloading_error_pattern",
+	"value": "Campo 'posti carico-scarico occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti carico-scarico occupati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_loadingUnloading_error_required",
+	"value": "Campo 'posti carico-scarico occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti carico-scarico obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_loadingUnloading_error_min",
+	"value": "Valore non corretto nel campo 'posti carico-scarico occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti carico-scarico non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_loadingUnloading_error_max",
+	"value": "Valore non corretto nel campo 'posti carico-scarico occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti carico-scarico non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_pink_error_pattern",
+	"value": "Campo 'posti rosa occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti rosa occupati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_pink_error_required",
+	"value": "Campo 'posti rosa occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti rosa obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_pink_error_min",
+	"value": "Valore non corretto nel campo 'posti rosa occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti rosa non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_pink_error_max",
+	"value": "Valore non corretto nel campo 'posti rosa occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti rosa non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_car_sharing_error_pattern",
+	"value": "Campo 'posti auto-condivisa occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti auto-condivisa occupati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_car_sharing_error_required",
+	"value": "Campo 'posti auto-condivisa occupati' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti auto-condivisa obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_car_sharing_error_min",
+	"value": "Valore non corretto nel campo 'posti auto-condivisa occupati'. Inserire un valore maggiore",
+	"description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_car_sharing_error_max",
+	"value": "Valore non corretto nel campo 'posti auto-condivisa occupati'. Inserire un valore minore",
+	"description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_reserved_error_pattern",
 	"value": "Campo 'posti riservati occupati' non corretto. Inserire un valore numerico",

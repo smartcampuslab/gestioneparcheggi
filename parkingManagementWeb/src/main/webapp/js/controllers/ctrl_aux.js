@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokePdfServiceProxy', 'invokeAuxWSService', 'getMyMessages', '$timeout','FileUploader',
-                               function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokePdfServiceProxy, invokeAuxWSService, getMyMessages, $timeout, FileUploader) { 
+pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$route', '$location', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeWSServiceProxy', 'invokeAuxWSService','initializeService', 'getMyMessages', '$timeout','FileUploader',
+                               function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokeAuxWSService, initializeService, getMyMessages, $timeout, FileUploader) { 
 	this.$scope = $scope;
     $scope.params = $routeParams;
     $scope.systemUserNumber = 999;
@@ -686,6 +686,87 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
         'Accept': 'application/json;charset=UTF-8'
     };
     
+    // ------------------------ Part for vehicle slots type ---------------------------
+    var vehicleTypesList = [];
+	$scope.manageVehicleTypes = function(type){
+	    var corrConfigurationType = initializeService.getSlotConfigurationByType(type);
+	    return corrConfigurationType;
+	};
+	
+	// Method used to translate the vehicle type in the correct i18n key
+    $scope.getVehicleKey = function(car_type){
+    	var corr_type_key = "car_vehicle";
+    	var vehicleTypes = initializeService.getSlotsTypes();
+    	for(var i = 0; i < vehicleTypes.length; i++){
+    		if(vehicleTypes[i].name == car_type){
+    			corr_type_key = vehicleTypes[i].language_key;
+    		}
+    	}
+    	return corr_type_key;
+    };
+    
+    // Method used to show in dashboard only the specific vehicle type slots configuration (or all if no filter is specified)
+    $scope.isFilteredFromVehicle = function(sc){
+    	if(sharedDataService.getVehicleType() != "" && sharedDataService.getVehicleType() != "ALL"){
+    		if(sc.vehicleType == sharedDataService.getVehicleType()){
+    			return true;
+    		} else {
+    			return false;
+    		}
+    	} else {
+    		return true;
+    	}
+    };
+    
+    // Method used to inithialize the vehicle type slots configuration elements in street editing / creation (create the panels and select values)
+    $scope.inithializeVehicleTypeList = function(activedSlotsConfiguration, type){
+    	vehicleTypesList = initializeService.getSlotsTypesByObject(type);	//initializeService.getSlotsTypes();
+    	for(var i = 0; i < vehicleTypesList.length; i++){
+    		vehicleTypesList[i].show = false;
+    	}
+    	$scope.newVehicleList = angular.copy(vehicleTypesList);
+    	if(activedSlotsConfiguration){
+	    	for(var i = 0; i < activedSlotsConfiguration.length; i++){
+	    		var found = false;
+	    		for(var j = 0; (j < $scope.newVehicleList.length) && !found; j++)
+	    		if($scope.newVehicleList[j].name == activedSlotsConfiguration[i].vehicleType){
+	    			$scope.newVehicleList.splice(j, 1);
+	    			found = true;
+	    		}
+	    	}
+    	}
+    };
+    
+    $scope.showVehicleSlotsPanel = function(index){
+    	vehicleTypesList[index].show = true;
+    };
+    
+    $scope.hideVehicleSlotsPanel = function(index){
+    	vehicleTypesList[index].show = false;
+    };
+    
+    $scope.vehicle_slots_panel_showed = function(index){
+    	return vehicleTypesList[index].show;
+    };
+    // ---------------------------------------------------------------------------------
+    
+    $scope.getRemainingSlots = function(sc){
+    	var street = sc;
+		street.freeParkOccupied = (sc.freeParkSlotOccupied != null && sc.freeParkSlotOccupied > 0 && sc.freeParkSlotNumber > 0) ? sc.freeParkSlotOccupied : 0;
+		street.freeParkSlotSignOccupied = (sc.freeParkSlotSignOccupied != null && sc.freeParkSlotSignOccupied > 0 && sc.freeParkSlotSignNumber > 0) ? sc.freeParkSlotSignOccupied : 0;
+		street.paidSlotOccupied = (sc.paidSlotOccupied != null && sc.paidSlotOccupied > 0) ? sc.paidSlotOccupied : 0;
+		street.timedParkSlotOccupied = (sc.timedParkSlotOccupied != null && sc.timedParkSlotOccupied > 0) ? sc.timedParkSlotOccupied : 0;
+		street.handicappedSlotOccupied = (sc.handicappedSlotOccupied != null && sc.handicappedSlotOccupied > 0) ? sc.handicappedSlotOccupied : 0;
+		street.reservedSlotOccupied = (sc.reservedSlotOccupied != null && sc.reservedSlotOccupied > 0) ? sc.reservedSlotOccupied : 0;
+		// new street slot types
+		street.rechargeableSlotOccupied = (sc.rechargeableSlotOccupied != null && sc.rechargeableSlotOccupied > 0) ? sc.rechargeableSlotOccupied : 0;
+		street.loadingUnloadingSlotOccupied = (sc.loadingUnloadingSlotOccupied != null && sc.loadingUnloadingSlotOccupied > 0) ? sc.loadingUnloadingSlotOccupied : 0;
+		street.pinkSlotOccupied = (sc.pinkSlotOccupied != null && sc.pinkSlotOccupied > 0) ? sc.pinkSlotOccupied : 0;
+		street.carSharingSlotOccupied = (sc.carSharingSlotOccupied != null && sc.carSharingSlotOccupied > 0) ? sc.carSharingSlotOccupied : 0;
+		var remaining = sc.slotNumber - (street.freeParkOccupied + street.freeParkSlotSignOccupied + street.paidSlotOccupied + street.timedParkSlotOccupied + street.handicappedSlotOccupied + street.reservedSlotOccupied + street.rechargeableSlotOccupied + street.loadingUnloadingSlotOccupied + street.pinkSlotOccupied + street.carSharingSlotOccupied);
+		return remaining;
+    };
+    
     $scope.wait_dialog_text_string_it = "Aggiornamento dati in corso...";
 	$scope.wait_dialog_text_string_en = "Loading elements ...";
 	$scope.wait_dialog_title_string_it = "Attendere Prego";
@@ -1032,6 +1113,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getDetailData = function(street){
 		$scope.myStreetDetails = street;
+		$scope.inithializeVehicleTypeList(street.slotsConfiguration, 0);
 		$scope.initTimeValues();
 		$scope.streetLoadedAndSelected = true;
 		// to hide the messages (error or success)
@@ -1107,7 +1189,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.showUpdatingSSuccessMessage = false;
 		myStreetDetails.user = $scope.systemUserNumber;
 		
-		if($scope.checkCorrectSlots(myStreetDetails)){
+		//if($scope.checkCorrectSlots(myStreetDetails)){
 			
 			var periodFrom = (myStreetDetails.logPeriodFrom != null) ? new Date(myStreetDetails.logPeriodFrom) : null;
 			var periodTo = (myStreetDetails.logPeriodTo != null) ? new Date(myStreetDetails.logPeriodTo) : null;
@@ -1129,8 +1211,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						name: myStreetDetails.name, 
 						description: myStreetDetails.description,
 						updateTime: $scope.getLogMillis(myStreetDetails.loghour, myStreetDetails.logtime), 
-						user: parseInt(myStreetDetails.user), 
-						slotsFree: parseInt(myStreetDetails.slotsFree), 
+						user: parseInt(myStreetDetails.user),
+						/*slotsFree: parseInt(myStreetDetails.slotsFree), 
 						slotsOccupiedOnFree: parseInt(myStreetDetails.slotsOccupiedOnFree), 
 						slotsFreeSigned: parseInt(myStreetDetails.slotsFreeSigned), 
 						slotsOccupiedOnFreeSigned: parseInt(myStreetDetails.slotsOccupiedOnFreeSigned), 
@@ -1142,7 +1224,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						slotsOccupiedOnHandicapped: parseInt(myStreetDetails.slotsOccupiedOnHandicapped),
 						slotsReserved: parseInt(myStreetDetails.slotsReserved), 
 						slotsOccupiedOnReserved: parseInt(myStreetDetails.slotsOccupiedOnReserved),
-						slotsUnavailable: parseInt(myStreetDetails.slotsUnavailable), 
+						slotsUnavailable: parseInt(myStreetDetails.slotsUnavailable),*/ 
+						slotsConfiguration: myStreetDetails.slotsConfiguration,
 						polyline: myStreetDetails.polyline, 
 						areaId: myStreetDetails.areaId,
 						version: myStreetDetails.version,
@@ -1170,7 +1253,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				    });	
 				}
 			}
-		}
+		//}
 	};
 	
 	// Method insertParkingLog: used to insert in the db (table dataLogBean) a new parking log

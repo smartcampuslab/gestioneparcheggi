@@ -645,6 +645,38 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    'Accept': 'application/json;charset=UTF-8'
 	};
 	
+	// ------------------------ Part for vehicle slots type ---------------------------
+	$scope.manageVehicleTypes = function(type){
+	    var corrConfigurationType = initializeService.getSlotConfigurationByType(type);
+	    return corrConfigurationType;
+	};
+	
+	// Method used to translate the vehicle type in the correct i18n key
+    $scope.getVehicleKey = function(car_type){
+    	var corr_type_key = "car_vehicle";
+    	var vehicleTypes = initializeService.getSlotsTypes();
+    	for(var i = 0; i < vehicleTypes.length; i++){
+    		if(vehicleTypes[i].name == car_type){
+    			corr_type_key = vehicleTypes[i].language_key;
+    		}
+    	}
+    	return corr_type_key;
+    };
+    
+    // Method used to show in dashboard only the specific vehicle type slots configuration (or all if no filter is specified)
+    $scope.isFilteredFromVehicle = function(sc){
+    	if(sharedDataService.getVehicleType() != "" && sharedDataService.getVehicleType() != "ALL"){
+    		if(sc.vehicleType == sharedDataService.getVehicleType()){
+    			return true;
+    		} else {
+    			return false;
+    		}
+    	} else {
+    		return true;
+    	}
+    };
+    // ---------------------------------------------------------------------------------
+	
 	$scope.launchReport = function(report){
 		if(report!=null){
 			if(report != 'history'){
@@ -3088,9 +3120,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var myStreets = [];
 		for(var i = 0; i < streets.length; i++){
 			if(streets[i]){
+				var corSlotsConf = [];
+				var streetOccupiedSlot = 0;
 				if(streets[i].slotsConfiguration){
-					var corSlotsConf = [];
-					var streetOccupiedSlot = 0;
 					for(var j = 0; j < streets[i].slotsConfiguration.length; j++){
 						var vs = sharedDataService.cleanStreetNullValue(streets[i].slotsConfiguration[j]);
 						vs.slotOccupied = sharedDataService.getTotalOccupiedSlots(vs);
@@ -3899,7 +3931,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						id_app: oldStreets[i].id_app,
 						streetReference : oldStreets[i].streetReference,
 						slotNumber: newStreets[j].slotNumber,
-						freeParkSlotNumber: newStreets[j].freeParkSlotNumber,
+						/*freeParkSlotNumber: newStreets[j].freeParkSlotNumber,
 						freeParkSlotOccupied: newStreets[j].freeParkSlotOccupied,
 						freeParkSlotSignNumber: newStreets[j].freeParkSlotSignNumber,
 						freeParkSlotSignOccupied: newStreets[j].freeParkSlotSignOccupied,
@@ -3911,7 +3943,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						reservedSlotOccupied: newStreets[j].reservedSlotOccupied,
 						handicappedSlotNumber: newStreets[j].handicappedSlotNumber,
 						handicappedSlotOccupied: newStreets[j].handicappedSlotOccupied,
-						unusuableSlotNumber: newStreets[j].unusuableSlotNumber,
+						unusuableSlotNumber: newStreets[j].unusuableSlotNumber,*/
+						slotsConfiguration: newStreets[j].slotsConfiguration,
 						subscritionAllowedPark: oldStreets[i].subscritionAllowedPark,
 						rateAreaId: oldStreets[i].rateAreaId,
 						geometry: oldStreets[i].geometry,
@@ -3949,12 +3982,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						fee: oldParks[i].fee,
 						timeSlot: oldParks[i].timeSlot,
 						slotNumber: newParks[j].slotNumber,
-						slotOccupied: parseInt(newParks[j].payingSlotOccupied) + parseInt(newParks[j].handicappedSlotOccupied), 
-						payingSlotNumber: newParks[j].payingSlotNumber,
+						slotsConfiguration: newParks[j].slotsConfiguration,
+						slotOccupied: parseInt(newParks[j].payingSlotOccupied) + parseInt(newParks[j].handicappedSlotOccupied), //TODO: correct this value
+						/*payingSlotNumber: newParks[j].payingSlotNumber,
 						payingSlotOccupied: newParks[j].payingSlotOccupied,
 						handicappedSlotNumber: newParks[j].handicappedSlotNumber,
 						handicappedSlotOccupied: newParks[j].handicappedSlotOccupied,
-						unusuableSlotNumber: newParks[j].unusuableSlotNumber,
+						unusuableSlotNumber: newParks[j].unusuableSlotNumber,*/
 						geometry: oldParks[i].geometry,
 						paymentMode: oldParks[i].paymentMode,
 						phoneNumber: oldParks[i].phoneNumber,
@@ -3987,12 +4021,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						manager: occupancyStructs[i].manager,
 						validityPeriod: occupancyStructs[i].validityPeriod,
 						slotNumber: occupancyStructs[i].slotNumber,
-						slotOccupied: parseInt(occupancyStructs[i].payingSlotOccupied) + parseInt(occupancyStructs[i].handicappedSlotOccupied), 
-						payingSlotNumber: occupancyStructs[i].payingSlotNumber,
+						slotsConfiguration: occupancyStructs[j].slotsConfiguration,
+						slotOccupied: parseInt(occupancyStructs[i].payingSlotOccupied) + parseInt(occupancyStructs[i].handicappedSlotOccupied), //TODO: correct this value
+						/*payingSlotNumber: occupancyStructs[i].payingSlotNumber,
 						payingSlotOccupied: occupancyStructs[i].payingSlotOccupied,
 						handicappedSlotNumber: occupancyStructs[i].handicappedSlotNumber,
 						handicappedSlotOccupied: occupancyStructs[i].handicappedSlotOccupied,
-						unusuableSlotNumber: occupancyStructs[i].unusuableSlotNumber,
+						unusuableSlotNumber: occupancyStructs[i].unusuableSlotNumber,*/
 						geometry: occupancyStructs[i].geometry,
 						paymentMode: occupancyStructs[i].paymentMode,
 						phoneNumber: occupancyStructs[i].phoneNumber,

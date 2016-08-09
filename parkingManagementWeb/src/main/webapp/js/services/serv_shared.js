@@ -775,7 +775,7 @@ pm.service('sharedDataService', function(){
 	
 	
 	// Method getTotalSlotsInZone: used to count the total slots of a zone from the slots in streets
-	this.getTotalSlotsInZone = function(z_id, occStreetList){
+	this.getTotalSlotsInZone = function(z_id, occStreetList, vehicleType){
 		var totalSlots = 0;
 		var occupiedSlots = 0;
 		if(occStreetList != null && occStreetList.length > 0){
@@ -786,10 +786,23 @@ pm.service('sharedDataService', function(){
 					//myZones.push(zone);
 					if(occStreetList[i].zones[j] == z_id){
 						found = true;
-						var mystreet = this.cleanStreetNullValue(occStreetList[i]);// NB: I have to use the average occupancy value and not the data stored in db
-						var tmp_occ = this.getTotalOccupiedSlots(mystreet);
-						totalSlots += (mystreet.slotNumber - mystreet.unusuableSlotNumber);
-						occupiedSlots += tmp_occ;
+						for(var j = 0; j < occStreetList[i].slotsConfiguration.length; j++){
+							var tmpSlotConf = occStreetList[i].slotsConfiguration[j];
+							if(vehicleType){
+								if(tmpSlotConf.vehicleType == vehicleType){
+									var slotConf = this.cleanStreetNullValue(tmpSlotConf);// NB: I have to use the average occupancy value and not the data stored in db
+									var tmp_occ = this.getTotalOccupiedSlots(slotConf);
+									totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
+									occupiedSlots += tmp_occ;
+									break;
+								}
+							} else {
+								var slotConf = this.cleanStreetNullValue(occStreetList[i].slotsConfiguration[j]);// NB: I have to use the average occupancy value and not the data stored in db
+								var tmp_occ = this.getTotalOccupiedSlots(slotConf);
+								totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
+								occupiedSlots += tmp_occ;
+							}
+						}
 					}
 				}
 			}
@@ -822,11 +835,6 @@ pm.service('sharedDataService', function(){
 							occupiedSlots += tmp_occ;
 						}
 					}
-					// TODO: manage correctly slotsConfiguration in area slot occupation calculating
-					//var mystreet = this.cleanStreetNullValue(occStreetList[i]);// NB: I have to use the average occupancy value and not the data stored in db
-					//var tmp_occ = this.getTotalOccupiedSlots(mystreet);
-					//totalSlots += (mystreet.slotNumber - mystreet.unusuableSlotNumber);
-					//occupiedSlots += tmp_occ;
 				}
 			}
 		}
@@ -881,7 +889,7 @@ pm.service('sharedDataService', function(){
 		return street;
 	};
 	
-	// Method getStreetInZoneOccupancy: used to get the occupancy if all the streets in a specific zone
+	// Method getStreetInZoneOccupancy: used to get the occupancy in all the streets in a specific zone
 	this.getStreetsInZoneOccupancy = function(z_id, occStreetList){
 		var totalOccupancy = 0;
 		var streetsInZone = 0;

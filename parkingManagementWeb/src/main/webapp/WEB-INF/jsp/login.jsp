@@ -66,14 +66,14 @@
 									<form name="f" action="login.do" method="POST" accept-charset="utf-8"><!-- j_spring_security_check -->
 										<table style="width: 45%;">
 											<tr>
-												<td colspan="2" id="err_login_cel">
+												<td colspan="2" id="err_login">
 													<script>
 														if(get('error') == 'true'){
 															var err_div = document.createElement('div');
 														 	err_div.className = 'alert alert-danger';
 														 	err_div.id = 'err_log_text';
 														 	err_div.innerHTML = 'Errore Autenticazione: username o password non corretti';
-														 	$("#err_login_cel").append(err_div);
+														 	$("#err_login").append(err_div);
 														}
 													</script>							
 												</td>

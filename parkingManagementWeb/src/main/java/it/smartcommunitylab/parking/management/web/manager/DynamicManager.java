@@ -571,8 +571,8 @@ public class DynamicManager {
 	
 	private void updateVehicleSlotsData(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, DataLogBean dl, VehicleSlot vs, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period, int p_type){
 		// Update Stat report
-		int[] total = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
-		int[] occupied = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
+		int[] total = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+		int[] occupied = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
 		double statValue = findOccupationRate(total, occupied, 0, 0, 1, vs.getUnusuableSlotNumber());
 		int unavailableSlots = vs.getUnusuableSlotNumber();
 		String vehicleType = "@" + vs.getVehicleType();
