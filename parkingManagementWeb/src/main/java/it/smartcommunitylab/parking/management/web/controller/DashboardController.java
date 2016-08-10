@@ -50,7 +50,9 @@ import it.smartcommunitylab.parking.management.web.model.TimeCostRateArea;
 import it.smartcommunitylab.parking.management.web.model.TimeCostStreet;
 import it.smartcommunitylab.parking.management.web.model.TimeCostZone;
 import it.smartcommunitylab.parking.management.web.model.Zone;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
+import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -89,6 +91,9 @@ public class DashboardController {
 	CSVManager csvManager;
 
 	MarkerIconStorage markerIconStorage;
+	
+	@Autowired
+	private VehicleTypeDataSetup vehicleTypeDataSetup;
 
 	@PostConstruct
 	private void init() throws IOException {
@@ -192,10 +197,25 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/parkingstructurecompare/{id}")
-	public @ResponseBody String[][] getHistorycalParkingStructureOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) int lang) throws Exception {
+	public @ResponseBody String[][] getHistorycalParkingStructureOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) int lang, @RequestParam(required=false) String vehicleType) throws Exception {
 		//byte[] hour = new byte[]{(byte)10,(byte)12};
 		String type = Parking.class.getCanonicalName();
-		return dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 2, lang);
+		String[][] tmpMatrix;
+		String[][] occMatrix;
+		if(vehicleType != null && vehicleType.compareTo("") != 0){
+			type = type + "@" + vehicleType;
+			occMatrix = dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 2, lang);
+		} else {
+			List<VehicleType> allVehicles = vehicleTypeDataSetup.findVehicleTypeByAppId(appId);
+			type = type + "@" + allVehicles.get(0).getName();
+			occMatrix = dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 2, lang);
+			for(int j = 1; j < allVehicles.size(); j++){
+				type = type + "@" + allVehicles.get(j).getName();
+				tmpMatrix = dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 2, lang);
+				occMatrix = dynamic.mergeStringSlotMatrix(tmpMatrix, occMatrix);
+			}
+		}
+		return occMatrix;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/parkingstructures")
@@ -220,23 +240,38 @@ public class DashboardController {
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/streetcompare/{id}")
-	public @ResponseBody String[][] getHistorycalStreetOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) int lang) throws Exception {
+	public @ResponseBody String[][] getHistorycalStreetOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) int lang, @RequestParam(required=false) String vehicleType) throws Exception {
 		//byte[] hour = new byte[]{(byte)10,(byte)12};
 		String type = Street.class.getCanonicalName();
-		return dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4, lang);
+		String[][] tmpMatrix;
+		String[][] occMatrix;
+		if(vehicleType != null && vehicleType.compareTo("") != 0){
+			type = type + "@" + vehicleType;
+			occMatrix = dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4, lang);
+		} else {
+			List<VehicleType> allVehicles = vehicleTypeDataSetup.findVehicleTypeByAppId(appId);
+			type = type + "@" + allVehicles.get(0).getName();
+			occMatrix = dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4, lang);
+			for(int j = 1; j < allVehicles.size(); j++){
+				type = type + "@" + allVehicles.get(j).getName();
+				tmpMatrix = dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4, lang);
+				occMatrix = dynamic.mergeStringSlotMatrix(tmpMatrix, occMatrix);
+			}
+		}
+		return occMatrix;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/zonecompare/{id}")
-	public @ResponseBody String[][] getHistorycalZoneOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) int lang) throws Exception {
+	public @ResponseBody String[][] getHistorycalZoneOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) int lang, @RequestParam(required=false) String vehicleType) throws Exception {
 		String type = Street.class.getCanonicalName();
-		return dynamic.getHistorycalDataFromZone(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4, lang);
+		return dynamic.getHistorycalDataFromZone(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4, lang, vehicleType);
 		//return dynamic.getHistorycalDataFromObject(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/areacompare/{id}")
-	public @ResponseBody String[][] getHistorycalAreaOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) int lang) throws Exception {
+	public @ResponseBody String[][] getHistorycalAreaOccupancy(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int verticalVal, @RequestParam(required=false) int orizontalVal, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) int lang, @RequestParam(required=false) String vehicleType) throws Exception {
 		String type = Street.class.getCanonicalName();
-		return dynamic.getHistorycalDataFromArea(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4, lang);
+		return dynamic.getHistorycalDataFromArea(id, appId, type, verticalVal, orizontalVal, null, year, month, dayType, weekday, hour, valueType, 4, lang, vehicleType);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/streets")

@@ -536,7 +536,7 @@
     "description": "Label capienza struttura"
 }, {
     "key": "ps_paying_slot",
-    "value": "Standard slots",
+    "value": "Paying slots",
     "description": "Label posti a pagamento in struttura"
 }, {
     "key": "ps_handicapped_slot",
@@ -1552,11 +1552,11 @@
     "description": "Testo pulsante aggiungi in edit parcheggi"
 }, {
     "key": "info_1",
-    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped, ND: not available",
+    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped, E: eletrics rechargeable, C/S: loading/unloading, RO: pink, CS: car sharing, ND: not available",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_2",
-    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped",
+    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped, E: eletrics rechargeable, C/S: loading/unloading, RO: pink, CS: car sharing",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_3",

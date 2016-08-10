@@ -651,6 +651,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	    return corrConfigurationType;
 	};
 	
+	$scope.manageVehicleTypesPs = function(type){
+    	var corrConfigurationType = initializeService.getSlotConfigurationByTypePs(type);
+    	return corrConfigurationType;
+    };
+	
 	// Method used to translate the vehicle type in the correct i18n key
     $scope.getVehicleKey = function(car_type){
     	var corr_type_key = "car_vehicle";
@@ -675,6 +680,59 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     		return true;
     	}
     };
+    
+    $scope.getCorrectConfType = function(sc){
+    	var completeConf;
+    	if(sc){
+    		if(sharedDataService.getVehicleType() != "" && sharedDataService.getVehicleType() != "ALL"){
+	    		for(var i = 0; i < sc.length; i++){
+	    			if(sc[i].vehicleType == sharedDataService.getVehicleType()){
+	    				completeConf = sc[i];
+	    			}
+	    		}
+    		} else {
+    			completeConf = {
+    				vehicleType: "all",
+    	    		vehicleTypeActive: true,
+    	    		handicappedSlotOccupied: 0,
+    	    		reservedSlotOccupied: 0,
+    	    		timedParkSlotOccupied: 0,
+    	    		paidSlotOccupied: 0,
+    	    		freeParkSlotOccupied: 0,
+    	    		freeParkSlotSignOccupied: 0,
+    	    		rechargeableSlotOccupied: 0,
+    	    		loadingUnloadingSlotOccupied: 0,
+    	    		pinkSlotOccupied: 0,
+    	    		carSharingSlotOccupied: 0,
+    	    		unusuableSlotNumber : 0
+    			}
+    			for(var i = 0; i < sc.length; i++){
+	    			completeConf = $scope.mergeSlotConf(sc[i], completeConf);
+	    		}
+    		}
+    	}
+    	return completeConf;
+    };
+    
+    $scope.mergeSlotConf = function(new_sc, old_sc){
+    	var merged_sc = {
+    		vehicleType: "all",
+	    	vehicleTypeActive: true,
+	    	handicappedSlotOccupied: old_sc.handicappedSlotOccupied + ((new_sc.handicappedSlotOccupied) ? new_sc.handicappedSlotOccupied : 0),
+	    	reservedSlotOccupied: old_sc.reservedSlotOccupied + ((new_sc.reservedSlotOccupied) ? new_sc.reservedSlotOccupied : 0),
+	    	timedParkSlotOccupied: old_sc.timedParkSlotOccupied + ((new_sc.timedParkSlotOccupied) ? new_sc.timedParkSlotOccupied : 0),
+	    	paidSlotOccupied: old_sc.paidSlotOccupied + ((new_sc.paidSlotOccupied) ? new_sc.paidSlotOccupied : 0),
+	    	freeParkSlotOccupied: old_sc.freeParkSlotOccupied + ((new_sc.freeParkSlotOccupied) ? new_sc.freeParkSlotOccupied : 0),
+	    	freeParkSlotSignOccupied: old_sc.freeParkSlotSignOccupied + ((new_sc.freeParkSlotSignOccupied) ? new_sc.freeParkSlotSignOccupied : 0),
+	    	rechargeableSlotOccupied: old_sc.rechargeableSlotOccupied + ((new_sc.rechargeableSlotOccupied) ? new_sc.rechargeableSlotOccupied : 0),
+	    	loadingUnloadingSlotOccupied: old_sc.loadingUnloadingSlotOccupied + ((new_sc.loadingUnloadingSlotOccupied) ? new_sc.loadingUnloadingSlotOccupied : 0),
+	    	pinkSlotOccupied: old_sc.pinkSlotOccupied + ((new_sc.pinkSlotOccupied) ? new_sc.pinkSlotOccupied : 0),
+	    	carSharingSlotOccupied: old_sc.carSharingSlotOccupied + ((new_sc.carSharingSlotOccupied) ? new_sc.carSharingSlotOccupied : 0),
+	    	unusuableSlotNumber : old_sc.unusuableSlotNumber + ((new_sc.unusuableSlotNumber) ? new_sc.unusuableSlotNumber : 0),
+    	}
+    	return merged_sc;
+    }
+    
     // ---------------------------------------------------------------------------------
 	
 	$scope.launchReport = function(report){
@@ -3122,11 +3180,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			if(streets[i]){
 				var corSlotsConf = [];
 				var streetOccupiedSlot = 0;
+				var streetPaidSlot = 0;
 				if(streets[i].slotsConfiguration){
 					for(var j = 0; j < streets[i].slotsConfiguration.length; j++){
 						var vs = sharedDataService.cleanStreetNullValue(streets[i].slotsConfiguration[j]);
 						vs.slotOccupied = sharedDataService.getTotalOccupiedSlots(vs);
 						streetOccupiedSlot += vs.slotOccupied;
+						streetPaidSlot += (vs.paidSlotNumber) ? vs.paidSlotNumber : 0;
 						corSlotsConf.push(vs);
 					}
 				}
@@ -3134,6 +3194,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				var mystreet = angular.copy(streets[i]);
 				mystreet.slotsConfiguration = corSlotsConf;
 				mystreet.slotOccupied = streetOccupiedSlot;//sharedDataService.getTotalOccupiedSlots(mystreet);
+				mystreet.paidSlot = streetPaidSlot;
 				mystreet.extratime = gMapService.getExtratimeFromOccupancy(mystreet.occupancyRate);
 				mystreet.area_color= streets[i].color;
 				myStreets.push(mystreet);
@@ -3662,6 +3723,15 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		return myDataPromise;
 	};
 	
+	$scope.getAreaName = function(a_id){
+		var area = sharedDataService.getLocalAreaById(a_id);
+		if(area){
+			return area.name;
+		} else {
+			return "";
+		}
+	};
+	
 	// Method getAllProfitPM: used to retrieve te streets occupancy data from the db
 	$scope.getAllProfitPM = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		$scope.streetMapReady = false;
@@ -3866,7 +3936,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    $scope.pstructWS = allParks;
 		    
 		    // to correct null values in parking slots
-		    for(var i = 0; i < $scope.pstructWS.length; i++){
+		    /*for(var i = 0; i < $scope.pstructWS.length; i++){
 		    	if($scope.pstructWS[i].unusuableSlotNumber == null || $scope.pstructWS[i].unusuableSlotNumber == ""){
 		    		$scope.pstructWS[i].unusuableSlotNumber = 0;
 		    	}
@@ -3876,7 +3946,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    	if($scope.pstructWS[i].handicappedSlotOccupied == null || $scope.pstructWS[i].handicappedSlotOccupied == ""){
 		    		$scope.pstructWS[i].handicappedSlotOccupied = 0;
 		    	}
-		    }
+		    }*/
 		    
 			if(showPs){
 				for (var i = 0; i <  allParks.length; i++) {
@@ -3972,6 +4042,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						newParks[j].unusuableSlotNumber = 0;
 					}
 					found = true;
+					// ---- part to align slots configuration data -----
+					var corSlotsConf = [];
+					var psOccupiedSlot = 0;
+					var psPaidSlot = 0;
+					if(newParks[j].slotsConfiguration){
+						for(var z = 0; z < newParks[j].slotsConfiguration.length; z++){
+							var vs = sharedDataService.cleanStreetNullValue(newParks[j].slotsConfiguration[z]);
+							vs.slotOccupied = sharedDataService.getTotalOccupiedSlots(vs);
+							psOccupiedSlot += vs.slotOccupied;
+							psPaidSlot += (vs.paidSlotNumber) ? vs.paidSlotNumber : 0;
+							corSlotsConf.push(vs);
+						}
+					}
+					// -------------------------------------------------
 					var p = {
 						id: oldParks[i].id,
 						id_app: oldParks[i].id_app,
@@ -3982,8 +4066,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						fee: oldParks[i].fee,
 						timeSlot: oldParks[i].timeSlot,
 						slotNumber: newParks[j].slotNumber,
-						slotsConfiguration: newParks[j].slotsConfiguration,
-						slotOccupied: parseInt(newParks[j].payingSlotOccupied) + parseInt(newParks[j].handicappedSlotOccupied), //TODO: correct this value
+						slotsConfiguration: corSlotsConf, //newParks[j].slotsConfiguration,
+						slotOccupied: psOccupiedSlot, //parseInt(newParks[j].payingSlotOccupied) + parseInt(newParks[j].handicappedSlotOccupied),
+						paidSlot: psPaidSlot,
 						/*payingSlotNumber: newParks[j].payingSlotNumber,
 						payingSlotOccupied: newParks[j].payingSlotOccupied,
 						handicappedSlotNumber: newParks[j].handicappedSlotNumber,
@@ -4012,6 +4097,20 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 				if(occupancyStructs[i].id == profitStructs[j].id){
 					found = true;
 					timeCost = gMapService.getExtratimeFromOccupancy(occupancyStructs[i].occupancyRate);
+					// ---- part to align slots configuration data -----
+					var corSlotsConf = [];
+					var psOccupiedSlot = 0;
+					var psPaidSlot = 0;
+					if(occupancyStructs[i].slotsConfiguration){
+						for(var z = 0; z < occupancyStructs[i].slotsConfiguration.length; z++){
+							var vs = sharedDataService.cleanStreetNullValue(occupancyStructs[i].slotsConfiguration[z]);
+							vs.slotOccupied = sharedDataService.getTotalOccupiedSlots(vs);
+							psOccupiedSlot += vs.slotOccupied;
+							psPaidSlot += (vs.paidSlotNumber) ? vs.paidSlotNumber : 0;
+							corSlotsConf.push(vs);
+						}
+					}
+					// -------------------------------------------------
 					var p = {
 						id: occupancyStructs[i].id,
 						id_app: occupancyStructs[i].id_app,
@@ -4021,8 +4120,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						manager: occupancyStructs[i].manager,
 						validityPeriod: occupancyStructs[i].validityPeriod,
 						slotNumber: occupancyStructs[i].slotNumber,
-						slotsConfiguration: occupancyStructs[j].slotsConfiguration,
-						slotOccupied: parseInt(occupancyStructs[i].payingSlotOccupied) + parseInt(occupancyStructs[i].handicappedSlotOccupied), //TODO: correct this value
+						slotsConfiguration: corSlotsConf, //occupancyStructs[i].slotsConfiguration,
+						slotOccupied: psOccupiedSlot, //parseInt(occupancyStructs[i].payingSlotOccupied) + parseInt(occupancyStructs[i].handicappedSlotOccupied), //TODO: correct this value
+						paidSlot: psPaidSlot,
 						/*payingSlotNumber: occupancyStructs[i].payingSlotNumber,
 						payingSlotOccupied: occupancyStructs[i].payingSlotOccupied,
 						handicappedSlotNumber: occupancyStructs[i].handicappedSlotNumber,

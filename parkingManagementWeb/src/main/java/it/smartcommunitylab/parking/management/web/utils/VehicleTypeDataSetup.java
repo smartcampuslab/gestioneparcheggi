@@ -3,6 +3,7 @@ package it.smartcommunitylab.parking.management.web.utils;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -61,6 +62,24 @@ public class VehicleTypeDataSetup {
 			if((v_type.getAppId().compareTo(appId) == 0) && (v_type.getUserName().compareTo(userName) == 0)){
 				myAppVehicleTypes.add(v_type);
 			}
+		}
+		return myAppVehicleTypes;
+	}
+	
+	public List<VehicleType> findVehicleTypeByAppId(String appId){
+		List<VehicleType> myAppVehicleTypes = new ArrayList<VehicleType>();
+		if(vehicleTypesMap == null){
+			vehicleTypesMap = new HashMap<String, VehicleType>();
+			for(VehicleType v_type : vehicleTypes){
+				vehicleTypesMap.put(v_type.getName() + "_" + v_type.getAppId(), v_type);
+			}
+		}
+		@SuppressWarnings("rawtypes")
+		Iterator it = vehicleTypesMap.entrySet().iterator();
+		while (it.hasNext()){
+			@SuppressWarnings("unchecked")
+			Map.Entry<String, VehicleType> vt = (Map.Entry<String, VehicleType>)it.next();
+			myAppVehicleTypes.add(vt.getValue());
 		}
 		return myAppVehicleTypes;
 	}

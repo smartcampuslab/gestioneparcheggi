@@ -41,10 +41,12 @@ import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.Zone;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.StatRepository;
+import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -97,6 +99,9 @@ public class DynamicManager {
 	
 	@Autowired
 	private StatRepository repo;
+	
+	@Autowired
+	private VehicleTypeDataSetup vehicleTypeDataSetup;
 	
 	// RateArea Methods
 	public List<RateAreaBean> getAllArea() {
@@ -1789,8 +1794,8 @@ public class DynamicManager {
 						vehicleType = "@" + vehicleType;
 						vs = calculateAndUpdateSlots(tmp_vs, pId, appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
 						if(rilevationPresent(vs)){
-							int[] totalSlot = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
-							int[] totalUsed = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
+							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
 							occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
 							if(occRate > 100){
 								occRate = 100;
@@ -1803,8 +1808,8 @@ public class DynamicManager {
 						vs = calculateAndUpdateSlots(tmp_vs, pId, appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
 						if(rilevationPresent(vs)){
 							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
-							int[] totalSlot = {vs.getFreeParkSlotNumber(), vs.getFreeParkSlotSignNumber(), vs.getPaidSlotNumber(), vs.getTimedParkSlotNumber(), vs.getHandicappedSlotNumber(), vs.getReservedSlotNumber(), vs.getRechargeableSlotNumber(), vs.getLoadingUnloadingSlotNumber(), vs.getPinkSlotNumber(), vs.getCarSharingSlotNumber()};
-							int[] totalUsed = {vs.getFreeParkSlotOccupied(), vs.getFreeParkSlotSignOccupied(), vs.getPaidSlotOccupied(), vs.getTimedParkSlotOccupied(), vs.getHandicappedSlotOccupied(), vs.getReservedSlotOccupied(), vs.getRechargeableSlotOccupied(), vs.getLoadingUnloadingSlotOccupied(), vs.getPinkSlotOccupied(), vs.getCarSharingSlotOccupied()};
+							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
 							averageOccRate = averageOccRate + findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
 						}
 					}	
@@ -2120,7 +2125,7 @@ public class DynamicManager {
 	 * @param objType: type of object to find: street, parkingmeter, parking structure
 	 * @return String matrix with the zone occupancy compare
 	 */
-	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
+	public String[][] getHistorycalDataFromZone(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang, String vehicleType){
 		String[][] occMatrix = null;
 		String[][] tmpMatrix = null;
 		String[][] result = null;
@@ -2132,15 +2137,31 @@ public class DynamicManager {
 		ZoneBean z = findZoneById(objectId, appId);
 		List<StreetBean> streets = getAllStreets(z, null);
 		if(streets != null && streets.size() > 0){
-			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
-			sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
-			totalSlot = streets.get(0).getSlotNumber();
-			for(int i = 1; i < streets.size(); i++){
-				//occMatrix = mergeMatrix(occMatrix, getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType));
-				tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
-				usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
-				sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
-				totalSlot += streets.get(i).getSlotNumber();
+			if(vehicleType != null && vehicleType.compareTo("") != 0){
+				type = type + "@" + vehicleType;
+				occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
+				sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
+				totalSlot = streets.get(0).getSlotNumber();
+				for(int i = 1; i < streets.size(); i++){
+					tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
+					usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
+					sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
+					totalSlot += streets.get(i).getSlotNumber();
+				}
+			} else {
+				List<VehicleType> allVehicles = vehicleTypeDataSetup.findVehicleTypeByAppId(appId);
+				for(int j = 0; j < allVehicles.size(); j++){
+					type = type + "@" + allVehicles.get(j).getName();
+					occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
+					sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
+					totalSlot = streets.get(0).getSlotNumber();
+					for(int i = 1; i < streets.size(); i++){
+						tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
+						usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
+						sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
+						totalSlot += streets.get(i).getSlotNumber();
+					}
+				}
 			}
 		}
 		//return cleanAverageMatrix(occMatrix, streets.size());
@@ -2168,7 +2189,7 @@ public class DynamicManager {
 	 * @param objType: type of object to find: street, parkingmeter, parking structure
 	 * @return String matrix with the area occupancy compare
 	 */
-	public String[][] getHistorycalDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
+	public String[][] getHistorycalDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang, String vehicleType){
 		String[][] occMatrix = null;
 		String[][] tmpMatrix = null;
 		int[][] usedSlotMatrix = null;
@@ -2179,15 +2200,33 @@ public class DynamicManager {
 		RateAreaBean a = getAreaById(objectId, appId);
 		List<StreetBean> streets = getAllStreets(a, null);
 		if(streets != null && streets.size() > 0){
-			occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
-			sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
-			totalSlot = streets.get(0).getSlotNumber();
-			for(int i = 1; i < streets.size(); i++){
-				tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
-				//occMatrix = mergeMatrix(occMatrix, tmpMatrix);
-				usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
-				sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
-				totalSlot += streets.get(i).getSlotNumber();
+			if(vehicleType != null && vehicleType.compareTo("") != 0){
+				type = type + "@" + vehicleType;
+				occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
+				sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
+				totalSlot = streets.get(0).getSlotNumber();
+				for(int i = 1; i < streets.size(); i++){
+					tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
+					//occMatrix = mergeMatrix(occMatrix, tmpMatrix);
+					usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
+					sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
+					totalSlot += streets.get(i).getSlotNumber();
+				}
+			} else {
+				List<VehicleType> allVehicles = vehicleTypeDataSetup.findVehicleTypeByAppId(appId);
+				for(int j = 0; j < allVehicles.size(); j++){
+					type = type + "@" + allVehicles.get(j).getName();
+					occMatrix = getHistorycalDataFromObject(streets.get(0).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
+					sumSlotMatrix = calculateUsedSlot(streets.get(0), occMatrix);
+					totalSlot = streets.get(0).getSlotNumber();
+					for(int i = 1; i < streets.size(); i++){
+						tmpMatrix = getHistorycalDataFromObject(streets.get(i).getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
+						//occMatrix = mergeMatrix(occMatrix, tmpMatrix);
+						usedSlotMatrix = calculateUsedSlot(streets.get(i), tmpMatrix);
+						sumSlotMatrix = mergeSlotMatrix(usedSlotMatrix, sumSlotMatrix);
+						totalSlot += streets.get(i).getSlotNumber();
+					}
+				}
 			}
 		}
 		//return cleanAverageMatrix(occMatrix, streets.size());
@@ -2282,6 +2321,29 @@ public class DynamicManager {
 					merge = -1;
 				}
 				tmp[i][j] = merge;
+			}
+		}
+		return tmp;
+	}
+	
+	// Method mergeStringSlotMatrix: used to merge the value of two matrix (with same size) in a single matrix (string mode)
+	public String[][] mergeStringSlotMatrix(String[][] m1, String[][] m2){
+		String[][] tmp = m1;
+		for(int i = 1; i < m1.length; i++){
+			for(int j = 1; j < m1[i].length; j++){
+				int slot1 = Integer.parseInt(m1[i][j]);
+				int slot2 = Integer.parseInt(m2[i][j]);
+				int merge = 0;
+				if((slot1 != -1) && (slot2 != -1)){
+					 merge = slot1 + slot2;
+				} else if((slot1 != -1) && (slot2 == -1)){
+					merge = slot1;
+				} else if((slot1 == -1) && (slot2 != -1)){
+					merge = slot2;
+				} else {
+					merge = -1;
+				}
+				tmp[i][j] = merge + "";
 			}
 		}
 		return tmp;
@@ -3366,7 +3428,7 @@ public class DynamicManager {
 			}*/
 			corrParkings.add(corrPark);
 		}
-		return parkings;
+		return corrParkings;
 	}
 	
 	/**

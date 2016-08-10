@@ -139,6 +139,59 @@ providers:
           editable: false
           required: false
           visible: true
+     - id: vehicleSlots
+       type: Car
+       label: vehicleSlots
+       title: vehicleSlots
+       attributes:
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotSignNumber
+          editable: true
+          required: false
+          visible: true
+        - code: rechargeableSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: loadingUnloadingSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: pinkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: carSharingSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true          
      - id: Pm
        type: pm
        label: pm
@@ -235,6 +288,59 @@ providers:
           visible: true
         - code: widget
           editable: false
+          required: false
+          visible: true
+     - id: vehicleSlotsPS
+       type: Car
+       label: vehicleSlots
+       title: vehicleSlots
+       attributes:
+        - code: slotNumber
+          editable: true
+          required: true
+          visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: reservedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: timedParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: paidSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: freeParkSlotSignNumber
+          editable: true
+          required: false
+          visible: true
+        - code: rechargeableSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: loadingUnloadingSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: pinkSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: carSharingSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: unusuableSlotNumber
+          editable: true
           required: false
           visible: true
      - id: Zone0

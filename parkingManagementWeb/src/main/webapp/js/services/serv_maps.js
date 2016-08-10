@@ -1488,12 +1488,14 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		var area = sharedDataService.getLocalAreaById((type == 0) ? street.data.rateAreaId : street.rateAreaId);
 		var corSlotsConf = [];
 		var streetOccupiedSlot = 0;
+		//var streetPaidSlot = 0;
 		if(type == 0){
 			if(street.data.slotsConfiguration){
 				for(var i = 0; i < street.data.slotsConfiguration.length; i++){
 					var vs = sharedDataService.cleanStreetNullValue(street.data.slotsConfiguration[i]);
 					vs.slotOccupied = sharedDataService.getTotalOccupiedSlots(vs);
 					streetOccupiedSlot += vs.slotOccupied;
+					//streetPaidSlot += (vs.paidSlotNumber) ? vs.paidSlotNumber : 0;
 					corSlotsConf.push(vs);
 				}
 			}
@@ -1503,6 +1505,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 					var vs = sharedDataService.cleanStreetNullValue(street.slotsConfiguration[i]);
 					vs.slotOccupied = sharedDataService.getTotalOccupiedSlots(vs);
 					streetOccupiedSlot += vs.slotOccupied;
+					//streetPaidSlot += (vs.paidSlotNumber) ? vs.paidSlotNumber : 0;
 					corSlotsConf.push(vs);
 				}
 			}
@@ -1511,6 +1514,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		if(type == 0){
 			street.data.slotsConfiguration = corSlotsConf;
 			street.data.slotOccupied = streetOccupiedSlot; //sharedDataService.getTotalOccupiedSlots(street.data);
+			//street.data.paidSlot = streetPaidSlot;
 			street.data.extratime = this.getExtratimeFromOccupancy(street.data.occupancyRate);
 			street.data.area_name = area.name;
 			street.data.area_color= area.color;
