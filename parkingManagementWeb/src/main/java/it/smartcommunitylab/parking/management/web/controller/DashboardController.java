@@ -537,16 +537,16 @@ public class DashboardController {
 	// --------------------------------------- Occupancy CSV --------------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/street/csv")
 	public @ResponseBody
-	String createOccupancyStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<OccupancyStreet> data) { //@RequestBody String data
+	String createOccupancyStreetCSV(HttpServletRequest request, HttpServletResponse response,  @RequestParam(required=false) String vehicleType,
+			@RequestBody ArrayList<OccupancyStreet> data) { //@RequestBody String data
 		logger.debug("I am in street csv creation.");
-//		ArrayList<OccupancyStreet> streetData = new ArrayList<OccupancyStreet>();
+		//	ArrayList<OccupancyStreet> streetData = new ArrayList<OccupancyStreet>();
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
 		logger.debug("Current path: " + path);
-
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_streets(data, path);
+			createdFile = csvManager.create_occupancy_file_streets(data, path, vehicleType);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per vie: " + e.getMessage());
 		}
@@ -587,14 +587,15 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/dashboard/rest/occupancy/parkingstructures/csv")
 	public @ResponseBody
-	String createOccupancyStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<OccupancyParkingStructure> data) {	//@RequestBody String data
+	String createOccupancyStructureCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String vehicleType, 
+			@RequestBody ArrayList<OccupancyParkingStructure> data) {	//@RequestBody String data
 		logger.debug("I am in parkingstructures csv creation.");
 		String createdFile = "";
 		String path = request.getSession().getServletContext().getRealPath("/csv/");	
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_structs(data, path);
+			createdFile = csvManager.create_occupancy_file_structs(data, path, vehicleType);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}

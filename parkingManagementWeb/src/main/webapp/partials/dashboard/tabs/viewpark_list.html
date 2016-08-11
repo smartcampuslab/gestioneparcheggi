@@ -263,7 +263,7 @@
 						    </div>	
 						</th>
 						<th width="9%">{{ 'street_slots' | i18n }} Tot</th>
-						<th width="41%" colspan="6">{{ 'street_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(2)"></th>
+						<th width="41%">{{ 'street_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(2)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_2==true">
@@ -276,12 +276,21 @@
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
 							<td width="20%" align="left">{{street.area_name}}</td>
 							<td width="9%" align="left">{{street.slotNumber}}</td>
-							<td width="7%" align="left">LC:{{street.freeParkSlotSignNumber}}</td>
-							<td width="7%" align="left">LS:{{street.freeParkSlotNumber}}</td>
-							<td width="7%" align="left">P:{{street.paidSlotNumber}}</td>
-							<td width="7%" align="left">DO:{{street.timedParkSlotNumber}}</td>
-							<td width="7%" align="left">R:{{street.reservedSlotNumber}}</td>
-							<td width="6%" align="left">H:{{street.handicappedSlotNumber}}</td>
+							<td align="left">
+								<div ng-repeat="sc in street.slotsConfiguration">
+									<span> {{ getVehicleKey(sc.vehicleType) | i18n }} - </span>
+									<span ng-show="sc.freeParkSlotSignNumber" > LC: {{sc.freeParkSlotSignNumber}}</span>
+									<span ng-show="sc.freeParkSlotNumber"> LS: {{sc.freeParkSlotNumber}}</span>
+									<span ng-show="sc.paidSlotNumber"> P: {{sc.paidSlotNumber}}</span>
+									<span ng-show="sc.timedParkSlotNumber"> DO: {{sc.timedParkSlotNumber}}</span>
+									<span ng-show="sc.reservedSlotNumber"> R: {{sc.reservedSlotNumber}}</span>
+									<span ng-show="sc.handicappedSlotNumber"> H: {{sc.handicappedSlotNumber}}</span>
+									<span ng-show="sc.rechargeableSlotNumber"> E: {{sc.rechargeableSlotNumber}}</span>
+									<span ng-show="sc.loadingUnloadingSlotNumber"> C/S: {{sc.loadingUnloadingSlotNumber}}</span>
+									<span ng-show="sc.pinkSlotNumber"> RO: {{sc.pinkSlotNumber}}</span>
+									<span ng-show="sc.carSharingSlotNumber"> CS: {{sc.carSharingSlotNumber}}</span>
+								</div>
+							</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
@@ -322,7 +331,7 @@
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="12%">{{ 'street_area_name' | i18n }}&nbsp;
+						<th width="20%">{{ 'street_area_name' | i18n }}&nbsp;
 							<a href ng-click="showSAreaFilter();currentPageSo=0" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="streetAreaFilter=null;hideSAreaFilter()" ng-show="showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaStreetFilter">
@@ -333,7 +342,7 @@
 						</th><!-- colspan="2" -->
 						<th width="10%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="8%">{{ 'street_slots' | i18n }} Tot</th>
-						<th width="49%" colspan="11" valign="top">{{ 'street_occupied_slots' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(1)"></th>
+						<th width="41%" valign="top">{{ 'street_occupied_slots' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(1)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_1==true">
@@ -344,24 +353,27 @@
 						<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageSo*maxPractices | limitTo:maxPractices"> -->
 						<tr>
 							<td width="16%" align="left">{{street.streetReference}}</td>
-							<td width="12%" align="left">{{street.area_name}}</td>
+							<td width="20%" align="left">{{street.area_name}}</td>
 							<td width="5%" align="center"><div class="colorBox" ng-style="{'background-color': getOccupancyColor(street.occupancyRate)}"></div></td><!-- {{area.color}} -->
 							<td width="5%" align="left">
 								<span ng-show="street.occupancyRate != '-1'">{{ street.occupancyRate | doubleWithTwoDecimals}}%</span>
 								<span ng-show="street.occupancyRate == '-1'">n.p.</span>
 							</td>
 							<td width="8%" align="left">{{street.slotNumber}}</td>
-							<td align="left">LC: {{getCorrectConfType(street.slotsConfiguration).freeParkSlotSignOccupied}}</td>
-							<td align="left">LS: {{getCorrectConfType(street.slotsConfiguration).freeParkSlotOccupied}}</td>
-							<td align="left">P: {{getCorrectConfType(street.slotsConfiguration).paidSlotOccupied}}</td>
-							<td align="left">DO: {{getCorrectConfType(street.slotsConfiguration).timedParkSlotOccupied}}</td>
-							<td align="left">R: {{getCorrectConfType(street.slotsConfiguration).reservedSlotOccupied}}</td>
-							<td align="left">H: {{getCorrectConfType(street.slotsConfiguration).handicappedSlotOccupied}}</td>
-							<td align="left">E: {{getCorrectConfType(street.slotsConfiguration).rechargeableSlotOccupied}}</td>
-							<td align="left">C/S: {{getCorrectConfType(street.slotsConfiguration).loadingUnloadingSlotOccupied}}</td>
-							<td align="left">RO: {{getCorrectConfType(street.slotsConfiguration).pinkSlotOccupied}}</td>
-							<td align="left">CS: {{getCorrectConfType(street.slotsConfiguration).carSharingSlotOccupied}}</td>
-							<td align="left">ND:{{getCorrectConfType(street.slotsConfiguration).unusuableSlotNumber}}</td>
+							<td align="left">
+								<span> {{ getVehicleKey(getCorrectConfType(street.slotsConfiguration).vehicleType) | i18n }} - </span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).freeParkSlotSignNumber" > LC: {{getCorrectConfType(street.slotsConfiguration).freeParkSlotSignOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).freeParkSlotNumber"> LS: {{getCorrectConfType(street.slotsConfiguration).freeParkSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).paidSlotNumber"> P: {{getCorrectConfType(street.slotsConfiguration).paidSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).timedParkSlotNumber"> DO: {{getCorrectConfType(street.slotsConfiguration).timedParkSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).reservedSlotNumber"> R: {{getCorrectConfType(street.slotsConfiguration).reservedSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).handicappedSlotNumber"> H: {{getCorrectConfType(street.slotsConfiguration).handicappedSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).rechargeableSlotNumber"> E: {{getCorrectConfType(street.slotsConfiguration).rechargeableSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).loadingUnloadingSlotNumber"> C/S: {{getCorrectConfType(street.slotsConfiguration).loadingUnloadingSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).pinkSlotNumber"> RO: {{getCorrectConfType(street.slotsConfiguration).pinkSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).carSharingSlotNumber"> CS: {{getCorrectConfType(street.slotsConfiguration).carSharingSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(street.slotsConfiguration).unusuableSlotNumber"> ND:{{getCorrectConfType(street.slotsConfiguration).unusuableSlotNumber}}</span>
+							</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
 							</td>
@@ -1980,7 +1992,7 @@
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="pstructWS.length != 0">
-						<th width="20%">
+						<th width="24%">
 							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
 							<a href ng-click="showPsNameFilter();currentPagePsa=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -1988,12 +2000,12 @@
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>						
 						</th>
-						<th width="30%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<!-- <th width="30%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th> -->
 						<th width="5%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 						<th width="18%">{{ 'ps_fee' | i18n }}</th>
 						<!-- <th width="10%">{{ 'ps_time' | i18n }}</th> -->
 						<th width="8%" class="myCenter" >{{ 'ps_slots' | i18n }}</th>
-						<th width="14%" colspan="2">{{ 'ps_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
+						<th width="40%">{{ 'ps_slots_composition' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_3==true">
@@ -2002,8 +2014,8 @@
 					<tbody class="animate-repeat"
 						ng-repeat="pstruct in filtered = (allDataStructWS | filter:nameFilter) | orderBy:['name'] | startFrom:currentPagePsa*maxPStructs | limitTo:maxPStructs">
 						<tr>
-							<td width="20%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
-							<td width="30%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="24%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
+							<!-- <td width="30%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td> -->
 							<td width="5%" align="left">
 								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
 								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
@@ -2015,17 +2027,22 @@
 									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
 								</div>
 							</td>
-							<!-- <td width="10%" align="left">
-								<span ng-if="pstruct.fee_val != null">{{ pstruct.fee_val | euroVal}} {{ 'euro_hour' | i18n }}</span>
-								<span ng-if="pstruct.fee_val == null">n.p.</span>
-							</td>
-							<td width="10%" align="left">
-								<span ng-if="pstruct.openingTime != null" ng-repeat="ops in pstruct.openingTime.period">{{ ops.from }} - {{ ops.to }};</span>
-								<span ng-if="pstruct.openingTime == null">n.p.</span>
-							</td> -->
 							<td width="8%" align="center">{{pstruct.slotNumber}}</td>
-							<td width="7%" align="left">S: {{pstruct.payingSlotNumber}}</td>
-							<td width="7%" align="left">H: {{pstruct.handicappedSlotNumber}}</td>
+							<td align="left">
+								<div ng-repeat="sc in pstruct.slotsConfiguration">
+									<span> {{ getVehicleKey(sc.vehicleType) | i18n }} - </span>
+									<span ng-show="sc.freeParkSlotSignNumber" > LC: {{sc.freeParkSlotSignNumber}}</span>
+									<span ng-show="sc.freeParkSlotNumber"> LS: {{sc.freeParkSlotNumber}}</span>
+									<span ng-show="sc.paidSlotNumber"> P: {{sc.paidSlotNumber}}</span>
+									<span ng-show="sc.timedParkSlotNumber"> DO: {{sc.timedParkSlotNumber}}</span>
+									<span ng-show="sc.reservedSlotNumber"> R: {{sc.reservedSlotNumber}}</span>
+									<span ng-show="sc.handicappedSlotNumber"> H: {{sc.handicappedSlotNumber}}</span>
+									<span ng-show="sc.rechargeableSlotNumber"> E: {{sc.rechargeableSlotNumber}}</span>
+									<span ng-show="sc.loadingUnloadingSlotNumber"> C/S: {{sc.loadingUnloadingSlotNumber}}</span>
+									<span ng-show="sc.pinkSlotNumber"> RO: {{sc.pinkSlotNumber}}</span>
+									<span ng-show="sc.carSharingSlotNumber"> CS: {{sc.carSharingSlotNumber}}</span>
+								</div>
+							</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showDetailsInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
 							</td>
@@ -2058,7 +2075,7 @@
 			<div class="listwrapper">
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="pstructWS.length != 0">
-						<th width="15%">
+						<th width="25%">
 							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
 							<a href ng-click="showPsNameFilter();currentPagePso=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -2066,11 +2083,11 @@
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
 						    </div>
 						</th>
-						<th width="34%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
+						<!-- <th width="34%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th> -->
 						<th width="5%">{{ 'ps_park_and_ride_title' | i18n }}</th>
 						<th width="10%" colspan="2">{{ 'element_occupancy' | i18n }}</th>
 						<th width="10%" class="myCenter"><span ng-show="psconf.ps_slotNumber.visible">{{ 'ps_slots' | i18n }}</span></th>
-						<th width="21%" class="myCenter" colspan="3">{{ 'ps_occupiedslot' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
+						<th width="45%">{{ 'ps_occupiedslot' | i18n }}&nbsp;&nbsp;<img src="imgs/info.png" alt="{{ 'info_alt_title' | i18n }}" title="{{ 'info_alt_title' | i18n }}" ng-click="showInfo(3)"></th>
 						<th width="5%" class="myCenter">{{ 'operations' | i18n }}</th>
 					</tr>
 					<tr ng-show="showInfo_3==true">
@@ -2079,8 +2096,8 @@
 					<tbody class="animate-repeat"
 						ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter) | orderBy:['-occupancyRate', 'name'] | startFrom:currentPagePso*maxPStructs | limitTo:maxPStructs">
 						<tr>
-							<td width="15%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
-							<td width="34%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
+							<td width="25%" align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
+							<!-- <td width="34%" align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td> -->
 							<td width="5%" align="left">
 								<span ng-if="isUsedItaLang()">{{ pstruct.parkAndRide | boolToString }}</span>
 								<span ng-if="isUsedEngLang()">{{ pstruct.parkAndRide | boolToStringEng }}</span>
@@ -2091,7 +2108,7 @@
 								<span ng-show="pstruct.occupancyRate == '-1'">n.p.</span>
 							</td>
 							<td width="10%" align="center"><span ng-show="psconf.ps_slotNumber.visible">{{pstruct.slotNumber}}</span></td>
-							<td width="7%" align="left">
+							<!-- <td width="7%" align="left">
 								<span ng-show="pstruct.occupancyRate >= 0">S: {{pstruct.payingSlotOccupied}}</span>
 								<span ng-show="pstruct.occupancyRate < 0">S: 0</span>		
 							</td>
@@ -2102,6 +2119,20 @@
 							<td width="7%" align="left">
 								<span ng-show="pstruct.unusuableSlotNumber != -1">ND: {{pstruct.unusuableSlotNumber}}</span>
 								<span ng-show="pstruct.unusuableSlotNumber == -1">ND: 0</span>
+							</td> -->
+							<td align="left">
+								<span>{{ getVehicleKey(getCorrectConfType(pstruct.slotsConfiguration).vehicleType) | i18n }} - </span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).freeParkSlotSignNumber" > LC: {{getCorrectConfType(pstruct.slotsConfiguration).freeParkSlotSignOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).freeParkSlotNumber"> LS: {{getCorrectConfType(pstruct.slotsConfiguration).freeParkSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).paidSlotNumber"> P: {{getCorrectConfType(pstruct.slotsConfiguration).paidSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).timedParkSlotNumber"> DO: {{getCorrectConfType(pstruct.slotsConfiguration).timedParkSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).reservedSlotNumber"> R: {{getCorrectConfType(pstruct.slotsConfiguration).reservedSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).handicappedSlotNumber"> H: {{getCorrectConfType(pstruct.slotsConfiguration).handicappedSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).rechargeableSlotNumber"> E: {{getCorrectConfType(pstruct.slotsConfiguration).rechargeableSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).loadingUnloadingSlotNumber"> C/S: {{getCorrectConfType(pstruct.slotsConfiguration).loadingUnloadingSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).pinkSlotNumber"> RO: {{getCorrectConfType(pstruct.slotsConfiguration).pinkSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).carSharingSlotNumber"> CS: {{getCorrectConfType(pstruct.slotsConfiguration).carSharingSlotOccupied}}</span>
+								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).unusuableSlotNumber"> ND:{{getCorrectConfType(pstruct.slotsConfiguration).unusuableSlotNumber}}</span>
 							</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
@@ -2589,7 +2620,7 @@
 			<div ng-if="isPSDetShow()">
 				<table width="100%">
 					<tr>
-						<td width="33%" align="left" valign="middle">
+						<td width="33%" align="left" valign="top">
 							<table width="100%">
 								<tr>
 									<td class="detailsListTableCXS"></td>
@@ -2799,7 +2830,7 @@
 								</tr>
 							</table>
 						</td>
-						<td width="34%" valign="middle">
+						<td width="34%" valign="top">
 							<table width="100%">
 								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsListTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
@@ -2816,28 +2847,6 @@
 										</div>
 									</td>
 								</tr>
-								
-								<!-- <tr ng-show="psconf.ps_slotNumber.visible">
-									<td class="detailsListTableSX">{{ 'ps_fee_det_val' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">
-										<span ng-if="psDetails.fee_val != null">{{ psDetails.fee_val | euroVal }} {{ 'euro_hour' | i18n }}</span>
-										<span ng-if="psDetails.fee_val == null">n.p.</span>
-									</td>
-								</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'ps_fee_det_note' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ psDetails.fee_note }}</td>
-								</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'ps_time' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">
-										<span ng-if="psDetails.openingTime != null" ng-repeat="ops in psDetails.openingTime.period">{{ ops.from }} - {{ ops.to }};</span>
-										<span ng-if="psDetails.openingTime == null">n.p.</span>
-									</td>
-								</tr> -->
 							</table>
 						</td>
 						<td width="33%" valign="middle">
@@ -2852,15 +2861,72 @@
 									<td class="detailsNumberListTableCX"></td>
 									<td class="detailsNumberListTableDX">{{ psDetails.slotNumber }}</td>
 								</tr>
-								<tr ng-show="psconf.ps_slotNumber.visible">
-									<td class="detailsNumberListTableSX">{{ 'ps_paying_slot' | i18n }}:</td>
-									<td class="detailsNumberListTableCX"></td>
-									<td class="detailsNumberListTableDX">{{ psDetails.payingSlotNumber }}</td>
+								<tr>
+									<td colspan="3" class="detailsTableColSpanS">
+									   	<hr/>
+									</td>
 								</tr>
-								<tr ng-show="psconf.ps_handicappedSlot.visible">
-									<td class="detailsNumberListTableSX">{{ 'ps_handicapped_slot' | i18n }}:</td>
-									<td class="detailsNumberListTableCX"></td>
-									<td class="detailsNumberListTableDX">{{ psDetails.handicappedSlotNumber }}</td>
+								<tr ng-repeat="sc in psDetails.slotsConfiguration">
+									<td colspan="3" ng-show="sc.vehicleTypeActive">
+										<table width="100%" >
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+										    	<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+										    </tr>
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+											   	<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
+											   	<td class="detailsTableDX">&nbsp;{{ sc.slotNumber }}</td>
+											</tr>
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+												<td class="detailsTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.handicappedSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+												<td class="detailsTableSX">{{ 'street_reserved_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.reservedSlotNumber }}</td>
+									    	</tr>
+										   	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+									    		<td class="detailsTableSX">{{ 'street_paidpark_slot' | i18n }}:</td>
+									    		<td class="detailsTableDX">&nbsp;{{ sc.paidSlotNumber }}</td>
+									    	</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+									    		<td class="detailsTableSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.timedParkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+												<td class="detailsTableSX">{{ 'street_freepark_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.freeParkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+												<td class="detailsTableSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+												<td class="detailsTableSX">{{ 'street_rechargeable_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.rechargeableSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+												<td class="detailsTableSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+												<td class="detailsTableSX">{{ 'street_pink_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.pinkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+												<td class="detailsTableSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.carSharingSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
+												<td class="detailsTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
+											</tr>
+											<tr>
+									   			<td colspan="2" class="detailsTableColSpanS">
+									   				<hr/>
+									   			</td>
+									   		</tr>
+										</table>
+									</td>	
 								</tr>
 							</table>	
 						</td>
@@ -3096,51 +3162,73 @@
 						</td>
 						<td width="34%">
 							<table width="100%">
-								<tr>
-						   			<td colspan="3" class="detailsTableColSpanLeft">
-						   				{{ 'street_slots' | i18n }}
-						  			</td>
-						   		</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'street_totalslot' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.slotNumber }}</td>
-								</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'street_freepark_slot_signed_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.freeParkSlotSignNumber }}</td>
-								</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'street_freepark_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.freeParkSlotNumber }}</td>
-								</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'street_paid_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.paidSlotNumber }}</td>
-								</tr>
-									<tr ng-show="s_timedSlot.visible">
-									<td class="detailsListTableSX">{{ 'street_timedpark_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.timedParkSlotNumber }}</td>
-								</tr>
-								<tr ng-show="s_handicappedSlot.visible">
-									<td class="detailsListTableSX">{{ 'street_handicapped_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.handicappedSlotNumber }}</td>
-								</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'street_reserved_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.reservedSlotNumber }}</td>
+								<tr ng-repeat="sc in sDetails.slotsConfiguration">
+									<td colspan="3" ng-show="sc.vehicleTypeActive">
+										<table width="100%" ><!-- frame="box" -->
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+										    	<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+										    </tr>
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+											   	<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
+											   	<td class="detailsTableDX">&nbsp;{{ sc.slotNumber }}</td>
+											</tr>
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+												<td class="detailsTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.handicappedSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+												<td class="detailsTableSX">{{ 'street_reserved_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.reservedSlotNumber }}</td>
+									    	</tr>
+										   	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+									    		<td class="detailsTableSX">{{ 'street_paidpark_slot' | i18n }}:</td>
+									    		<td class="detailsTableDX">&nbsp;{{ sc.paidSlotNumber }}</td>
+									    	</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+									    		<td class="detailsTableSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.timedParkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+												<td class="detailsTableSX">{{ 'street_freepark_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.freeParkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+												<td class="detailsTableSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+												<td class="detailsTableSX">{{ 'street_rechargeable_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.rechargeableSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+												<td class="detailsTableSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+												<td class="detailsTableSX">{{ 'street_pink_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.pinkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+												<td class="detailsTableSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.carSharingSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
+												<td class="detailsTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
+											</tr>
+											<tr>
+									   			<td colspan="2" class="detailsTableColSpanS">
+									   				<hr/>
+									   			</td>
+									   		</tr>
+										</table>
+									</td>	
 								</tr>
 							</table>
 						</td>
 						<td width="33%">
-						    	<div ng-if="isActiveItalian()" google-chart chart="chartStreetParkAvailability" style="{{chart.cssStyle}}"/>
-						    	<div ng-if="isActiveEnglish()" google-chart chart="chartStreetParkAvailability_eng" style="{{chart.cssStyle}}"/>
+						    	<!-- <div ng-if="isActiveItalian()" google-chart chart="chartStreetParkAvailability" style="{{chart.cssStyle}}"/>
+						    	<div ng-if="isActiveEnglish()" google-chart chart="chartStreetParkAvailability_eng" style="{{chart.cssStyle}}"/> -->
 						</td>
 					</tr>
 				</table>										
@@ -3769,14 +3857,14 @@
 						        	<td class="detailsListTableCXS"></td>
 						        </tr>
 								<tr>
-								<tr ng-show="pmconf.pm_rateArea.visible">
+								<tr ng-show="psconf.ps_slotNumber.visible">
 									<td class="detailsListTableCXS"></td>
 						   			<td colspan="3" class="detailsTableColSpanS">
 						   				<hr/>
 						   			</td>
 						   			<td class="detailsListTableCXS"></td>
 						   		</tr>
-						   		<tr ng-show="pmconf.pm_rateArea.visible">
+						   		<tr ng-show="psconf.ps_slotNumber.visible">
 						   			<td class="detailsListTableCXS"></td>
 						   			<td colspan="3" class="detailsTableColSpanLeftS">
 										{{ 'ps_slots' | i18n }}
@@ -3790,7 +3878,7 @@
 									<td class="detailsListTableDXS">{{ psDetails.slotNumber }}</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr ng-show="psconf.ps_unusuableSlot.visible">
+								<!-- <tr ng-show="psconf.ps_unusuableSlot.visible">
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'ps_unusuable_slot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -3799,18 +3887,18 @@
 										<span ng-show="psDetails.unusuableSlotNumber == -1">0</span>
 									</td>
 									<td class="detailsListTableCXS"></td>
-								</tr>
+								</tr> -->
 								<tr>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'ps_paying_occupiedslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">
-										<span ng-show="isCorrectNumber(psDetails.payingSlotOccupied)">{{ psDetails.payingSlotOccupied }}</span>
+										<span ng-show="isCorrectNumber(psDetails.payingSlotOccupied)">{{ psDetails.slotOccupied }}</span>
 										<span ng-show="!isCorrectNumber(psDetails.payingSlotOccupied)">n.p.</span>
 									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'ps_handicapped_occupiedslot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
@@ -3819,16 +3907,98 @@
 										<span ng-show="!isCorrectNumber(psDetails.handicappedSlotOccupied)">n.p.</span>
 									</td>
 									<td class="detailsListTableCXS"></td>
-								</tr>	
+								</tr> -->	
 							</table>
 						</td>
-						<td width="55%" valign="middle" align="center">
-							<div ng-if="isActiveItalian()" google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
-							<div ng-if="isActiveEnglish()" google-chart chart="chartPsOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
+						<td width="55%" valign="top" align="center">
+							<table width="100%">	
+								<tr>
+									<td colspan="3" class="detailsTableColSpanLeft">
+									    {{ 'street_occupied_slots' | i18n }}
+									</td>
+								</tr>
+								<tr ng-repeat="sc in psDetails.slotsConfiguration">
+									<td colspan="3" ng-show="sc.vehicleTypeActive && isFilteredFromVehicle(sc)">
+										<table width="100%" ><!-- frame="box" -->
+										    <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_slotNum.visible">
+										    	<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+										    </tr>
+										    <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_slotNum.visible">
+											   	<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
+											   	<td class="detailsTableDX">&nbsp;{{ sc.slotNumber }}</td>
+											</tr>
+										    <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+												<td class="detailsTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.handicappedSlotOccupied }}/{{ sc.handicappedSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+												<td class="detailsTableSX">{{ 'street_reserved_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.reservedSlotOccupied }}/{{ sc.reservedSlotNumber }}</td>
+									    	</tr>
+										   	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+									    		<td class="detailsTableSX">{{ 'street_paidpark_slot' | i18n }}:</td>
+									    		<td class="detailsTableDX">&nbsp;{{ sc.paidSlotOccupied }}/{{ sc.paidSlotNumber }}</td>
+									    	</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+									    		<td class="detailsTableSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.timedParkSlotOccupied }}/{{ sc.timedParkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+												<td class="detailsTableSX">{{ 'street_freepark_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.freeParkSlotOccupied }}/{{ sc.freeParkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+												<td class="detailsTableSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.freeParkSlotSignOccupied }}/{{ sc.freeParkSlotSignNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+												<td class="detailsTableSX">{{ 'street_rechargeable_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.rechargeableSlotOccupied }}/{{ sc.rechargeableSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+												<td class="detailsTableSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.loadingUnloadingSlotOccupied }}/{{ sc.loadingUnloadingSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+												<td class="detailsTableSX">{{ 'street_pink_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.pinkSlotOccupied }}/{{ sc.pinkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+												<td class="detailsTableSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.carSharingSlotOccupied }}/{{ sc.carSharingSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
+												<td class="detailsTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
+											</tr>
+											<tr>
+									   			<td colspan="2" class="detailsTableColSpanS">
+									   				<hr/>
+									   			</td>
+									   		</tr>
+										</table>
+									</td>	
+								</tr>
+							</table>
 						</td>
 					</tr>
 					<tr>
-						<td colspan="2">
+						<td colspan="2" class="detailsTableColSpan">
+							<hr/>
+						</td>
+					</tr>
+					<tr>
+						<td width="50%">
+						    <div ng-if="isActiveItalian()" google-chart chart="chartPsOccupancy" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
+							<div ng-if="isActiveEnglish()" google-chart chart="chartPsOccupancy_eng" style="{{chart.cssStyle}}" ng-show="isCorrectNumber(psDetails.payingSlotOccupied)"/>
+						</td>
+						<td width="50%">
+						   <!--  <div ng-if="isActiveItalian()" google-chart chart="chartStreetFreeParkAvailability" style="{{chart.cssStyle}}"/>
+						    <div ng-if="isActiveEnglish()" google-chart chart="chartStreetFreeParkAvailability_eng" style="{{chart.cssStyle}}"/> -->
+						</td>
+					</tr>
+					<tr>
+						<td colspan="3">
 							<hr/>
 						</td>
 					</tr>
@@ -3933,55 +4103,91 @@
 									</td>
 									<td class="detailsListTableCXS"></td>
 								</tr>
-								<tr>
+								<!-- <tr>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableSXS">{{ 'street_unusuable_slot' | i18n }}:</td>
 									<td class="detailsListTableCXS"></td>
 									<td class="detailsListTableDXS">{{ sDetails.unusuableSlotNumber }}</td>
 									<td class="detailsListTableCXS"></td>
-								</tr>
+								</tr> -->
 							</table>	
 						</td>
 						<td width="34%">
 							<table width="100%">
 								<tr>
-						   			<td colspan="3" class="detailsTableColSpanLeft">
-						   				{{ 'street_free_slots' | i18n }}
-						  			</td>
-						   		</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'street_freepark_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.freeParkSlotFree }}</td>
+									<td colspan="3" class="detailsTableColSpanLeft">
+									    {{ 'street_occupied_slots' | i18n }}
+									</td>
 								</tr>
-								<tr>
-									<td class="detailsListTableSX">{{ 'street_freepark_slot_signed_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.freeParkSlotSignFree }}</td>
-								</tr>
-								<tr ng-show="sconf.s_paidSlot.visible">
-									<td class="detailsListTableSX">{{ 'street_paid_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.paidSlotFree }}</td>
-								</tr>
-								<tr ng-show="sconf.s_timedSlot.visible">
-									<td class="detailsListTableSX">{{ 'street_timedpark_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.timedParkSlotFree }}</td>
-								</tr>
-								<tr ng-show="sconf.s_handicappedSlot.visible">
-									<td class="detailsListTableSX">{{ 'street_handicapped_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.handicappedSlotFree }}</td>
-								</tr>
-								<tr ng-show="sconf.s_reservedSlot.visible">
-									<td class="detailsListTableSX">{{ 'street_reserved_slot_db' | i18n }}:</td>
-									<td class="detailsListTableCX"></td>
-									<td class="detailsListTableDX">{{ sDetails.reservedSlotFree }}</td>
+								<tr ng-repeat="sc in sDetails.slotsConfiguration">
+									<td colspan="3" ng-show="sc.vehicleTypeActive && isFilteredFromVehicle(sc)">
+										<table width="100%" ><!-- frame="box" -->
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+										    	<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+										    </tr>
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+											   	<td class="detailsTableSX">{{ 'street_totalslot' | i18n }}:</td>
+											   	<td class="detailsTableDX">&nbsp;{{ sc.slotNumber }}</td>
+											</tr>
+										    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+												<td class="detailsTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.handicappedSlotOccupied }}/{{ sc.handicappedSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+												<td class="detailsTableSX">{{ 'street_reserved_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.reservedSlotOccupied }}/{{ sc.reservedSlotNumber }}</td>
+									    	</tr>
+										   	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+									    		<td class="detailsTableSX">{{ 'street_paidpark_slot' | i18n }}:</td>
+									    		<td class="detailsTableDX">&nbsp;{{ sc.paidSlotOccupied }}/{{ sc.paidSlotNumber }}</td>
+									    	</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+									    		<td class="detailsTableSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.timedParkSlotOccupied }}/{{ sc.timedParkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+												<td class="detailsTableSX">{{ 'street_freepark_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.freeParkSlotOccupied }}/{{ sc.freeParkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+												<td class="detailsTableSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.freeParkSlotSignOccupied }}/{{ sc.freeParkSlotSignNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+												<td class="detailsTableSX">{{ 'street_rechargeable_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.rechargeableSlotOccupied }}/{{ sc.rechargeableSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+												<td class="detailsTableSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.loadingUnloadingSlotOccupied }}/{{ sc.loadingUnloadingSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+												<td class="detailsTableSX">{{ 'street_pink_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.pinkSlotOccupied }}/{{ sc.pinkSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+												<td class="detailsTableSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.carSharingSlotOccupied }}/{{ sc.carSharingSlotNumber }}</td>
+											</tr>
+											<tr ng-show="manageVehicleTypes(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
+												<td class="detailsTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+												<td class="detailsTableDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
+											</tr>
+											<tr>
+									   			<td colspan="2" class="detailsTableColSpanS">
+									   				<hr/>
+									   			</td>
+									   		</tr>
+										</table>
+									</td>	
 								</tr>
 							</table>
 						</td>
 						<td width="33%">
+							<div ng-if="isActiveItalian()" google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
+						    <div ng-if="isActiveEnglish()" google-chart chart="chartStreetOccupancy_eng" style="{{chart.cssStyle}}"/>
+						</td>
+						<!-- <td width="33%">
 							<table width="100%">
 								<tr>
 									<td colspan="3" class="detailsTableColSpanLeft">
@@ -4019,14 +4225,14 @@
 									<td class="detailsListTableDX">{{ sDetails.reservedSlotOccupied }}</td>
 								</tr>
 							</table>				
-						</td>
+						</td> -->
 					</tr>
-					<tr>
+					<!-- <tr>
 						<td colspan="3" class="detailsTableColSpan">
 							<hr/>
 						</td>
-					</tr>
-					<tr>
+					</tr> -->
+					<!-- <tr>
 						<td width="33%">
 						    <div ng-if="isActiveItalian()" google-chart chart="chartStreetOccupancy" style="{{chart.cssStyle}}"/>
 						    <div ng-if="isActiveEnglish()" google-chart chart="chartStreetOccupancy_eng" style="{{chart.cssStyle}}"/>
@@ -4039,7 +4245,7 @@
 						    <div ng-if="isActiveItalian()" google-chart chart="chartStreetOccupiedParkComposition" style="{{chart.cssStyle}}"/>
 						    <div ng-if="isActiveEnglish()" google-chart chart="chartStreetOccupiedParkComposition_eng" style="{{chart.cssStyle}}"/>
 						</td>
-					</tr>
+					</tr> -->
 					<tr>
 						<td colspan="3">
 							<hr/>

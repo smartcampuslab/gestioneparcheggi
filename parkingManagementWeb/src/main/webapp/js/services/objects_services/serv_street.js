@@ -241,8 +241,11 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	// Street csv occupancy creation
 	this.getStreetOccupancyCsv = function(streets){
 		var method = 'POST';
+		var params = {
+			vehicleType: sharedDataService.getVehicleType()
+		};
 		var value = utilsService.correctOccStreetObjectForWS(streets);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/street/csv", null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/street/csv", params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    });	
 	    return myDataPromise;

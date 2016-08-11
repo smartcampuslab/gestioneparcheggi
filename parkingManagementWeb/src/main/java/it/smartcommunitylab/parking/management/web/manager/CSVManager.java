@@ -34,6 +34,7 @@ import it.smartcommunitylab.parking.management.web.model.TimeCostRateArea;
 import it.smartcommunitylab.parking.management.web.model.TimeCostStreet;
 import it.smartcommunitylab.parking.management.web.model.TimeCostZone;
 import it.smartcommunitylab.parking.management.web.model.Zone;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -43,6 +44,7 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import org.apache.log4j.Logger;
 import org.springframework.stereotype.Service;
@@ -73,40 +75,74 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti LC");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti LS");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti P");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti DO");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti R");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti H");
+			writer.append("Configurazione posti");
 			writer.append(CSV_NEWLINE);
+			
+			VehicleSlot emptyConf = new VehicleSlot();
+			emptyConf.setVehicleType("All");
+			emptyConf.setVehicleTypeActive(true);
+			emptyConf.setSlotNumber(0);
+			emptyConf.setCarSharingSlotNumber(0);
+			emptyConf.setCarSharingSlotOccupied(0);
+			emptyConf.setFreeParkSlotNumber(0);
+			emptyConf.setFreeParkSlotOccupied(0);
+			emptyConf.setFreeParkSlotSignNumber(0);
+			emptyConf.setFreeParkSlotSignOccupied(0);
+			emptyConf.setHandicappedSlotNumber(0);
+			emptyConf.setHandicappedSlotOccupied(0);
+			emptyConf.setLoadingUnloadingSlotNumber(0);
+			emptyConf.setLoadingUnloadingSlotOccupied(0);
+			emptyConf.setPaidSlotNumber(0);
+			emptyConf.setPaidSlotOccupied(0);
+			emptyConf.setPinkSlotNumber(0);
+			emptyConf.setPinkSlotOccupied(0);
+			emptyConf.setRechargeableSlotNumber(0);
+			emptyConf.setRechargeableSlotOccupied(0);
+			emptyConf.setReservedSlotNumber(0);
+			emptyConf.setReservedSlotOccupied(0);
+			emptyConf.setTimedParkSlotNumber(0);
+			emptyConf.setTimedParkSlotOccupied(0);
+			emptyConf.setUnusuableSlotNumber(0);
 			
 			// Add the list of data in a table
 			for(Street s : streets){
+				List<VehicleSlot> streetConfig = s.getSlotsConfiguration();
 				writer.append(cleanCommaValue(s.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(cleanCommaValue(s.getArea_name()));	// to convert to area name
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
-				// TODO: manage vehicle type slots correctly
-				/*writer.append(s.getFreeParkSlotSignNumber() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getFreeParkSlotNumber() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getPaidSlotNumber() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getTimedParkSlotNumber() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getReservedSlotNumber() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getHandicappedSlotNumber() + "");
-				writer.append(CSV_NEWLINE);*/
+				for(int i = 0; i < streetConfig.size(); i++){
+					VehicleSlot streetConf = mergeSlotConf(streetConfig.get(i), emptyConf);
+					streetConf.setVehicleType(streetConfig.get(i).getVehicleType());
+					streetConf.setVehicleTypeActive(streetConfig.get(i).getVehicleTypeActive());
+					if(streetConf.getVehicleTypeActive()){
+						writer.append(streetConf.getVehicleType() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("LC: " + streetConf.getFreeParkSlotSignNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("LS: " + streetConf.getFreeParkSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("P: " + streetConf.getPaidSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("DO: " + streetConf.getTimedParkSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("H: " + streetConf.getHandicappedSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("R: " + streetConf.getReservedSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("E: " + streetConf.getRechargeableSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("C/S: " + streetConf.getLoadingUnloadingSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("RO: " + streetConf.getPinkSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("CS: " + streetConf.getCarSharingSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+					}
+				}
+				writer.append(CSV_NEWLINE);
 			}
 			writer.flush();
 			writer.close();
@@ -222,43 +258,79 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Tariffa");
 			writer.append(CSV_SEPARATOR);
-			/*writer.append("Note tariffa");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Orario");
-			writer.append(CSV_SEPARATOR);*/
 			writer.append("Posti Totali");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Standard");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti per disabili");
+			writer.append("Configurazione Posti");
 			writer.append(CSV_NEWLINE);
+			
+			VehicleSlot emptyConf = new VehicleSlot();
+			emptyConf.setVehicleType("All");
+			emptyConf.setVehicleTypeActive(true);
+			emptyConf.setSlotNumber(0);
+			emptyConf.setCarSharingSlotNumber(0);
+			emptyConf.setCarSharingSlotOccupied(0);
+			emptyConf.setFreeParkSlotNumber(0);
+			emptyConf.setFreeParkSlotOccupied(0);
+			emptyConf.setFreeParkSlotSignNumber(0);
+			emptyConf.setFreeParkSlotSignOccupied(0);
+			emptyConf.setHandicappedSlotNumber(0);
+			emptyConf.setHandicappedSlotOccupied(0);
+			emptyConf.setLoadingUnloadingSlotNumber(0);
+			emptyConf.setLoadingUnloadingSlotOccupied(0);
+			emptyConf.setPaidSlotNumber(0);
+			emptyConf.setPaidSlotOccupied(0);
+			emptyConf.setPinkSlotNumber(0);
+			emptyConf.setPinkSlotOccupied(0);
+			emptyConf.setRechargeableSlotNumber(0);
+			emptyConf.setRechargeableSlotOccupied(0);
+			emptyConf.setReservedSlotNumber(0);
+			emptyConf.setReservedSlotOccupied(0);
+			emptyConf.setTimedParkSlotNumber(0);
+			emptyConf.setTimedParkSlotOccupied(0);
+			emptyConf.setUnusuableSlotNumber(0);
 			
 			// Add the list of data in a table
 			for(ParkingStructure ps : structures){
+				List<VehicleSlot> psConfig = ps.getSlotsConfiguration();
 				writer.append(cleanCommaValue(ps.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(cleanCommaValue(ps.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
 				writer.append((ps.isParkAndRide()) ? "Si" : "No");
 				writer.append(CSV_SEPARATOR);
-				/*double fee = 0.0;
-				if(ps.getFee_val() >= 0){
-					fee = ps.getFee_val() / 100.0;
-				}
-				DecimalFormat df = new DecimalFormat("#.00");
-				writer.append("" + df.format(fee));
-				writer.append(CSV_SEPARATOR);
-				writer.append(cleanCommaValue(ps.getFee_note()));
-				writer.append(CSV_SEPARATOR);
-				writer.append(ps.getTimeSlot());*/
 				writer.append((ps.getValidityPeriod()!= null && !ps.getValidityPeriod().isEmpty()) ? ps.feePeriodsSummary() : "");
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
-				// TODO: manage vehicle type slots correctly
-				/*writer.append(CSV_SEPARATOR);
-				writer.append((ps.getPayingSlotNumber() >= 0) ? (ps.getPayingSlotNumber() + "") : "0");
 				writer.append(CSV_SEPARATOR);
-				writer.append((ps.getHandicappedSlotNumber() >= 0) ? (ps.getHandicappedSlotNumber() + "") : "0");*/
+				for(int i = 0; i < psConfig.size(); i++){
+					VehicleSlot psConf = mergeSlotConf(psConfig.get(i), emptyConf);
+					psConf.setVehicleType(psConfig.get(i).getVehicleType());
+					psConf.setVehicleTypeActive(psConfig.get(i).getVehicleTypeActive());
+					if(psConf.getVehicleTypeActive()){
+						writer.append(psConf.getVehicleType() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("LC: " + psConf.getFreeParkSlotSignNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("LS: " + psConf.getFreeParkSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("P: " + psConf.getPaidSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("DO: " + psConf.getTimedParkSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("H: " + psConf.getHandicappedSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("R: " + psConf.getReservedSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("E: " + psConf.getRechargeableSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("C/S: " + psConf.getLoadingUnloadingSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("RO: " + psConf.getPinkSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+						writer.append("CS: " + psConf.getCarSharingSlotNumber() + "");
+						writer.append(CSV_SEPARATOR);
+					}
+				}
 				writer.append(CSV_NEWLINE);
 			}
 			writer.flush();
@@ -306,10 +378,111 @@ public class CSVManager {
 			logger.error("Error in supply parking meter csv creation: " + e1);
 		}
 		return "csv/" + name; // ba
-	}	
+	}
+	    
+	// Method used to get the correct object slot configuration from the vehicle type specified in the filter
+	private VehicleSlot getCorrectConfType(List<VehicleSlot> sc, String vehicleType){
+		VehicleSlot emptyConf = new VehicleSlot();
+		emptyConf.setVehicleType("All");
+		emptyConf.setVehicleTypeActive(true);
+		emptyConf.setSlotNumber(0);
+		emptyConf.setCarSharingSlotNumber(0);
+		emptyConf.setCarSharingSlotOccupied(0);
+		emptyConf.setFreeParkSlotNumber(0);
+		emptyConf.setFreeParkSlotOccupied(0);
+		emptyConf.setFreeParkSlotSignNumber(0);
+		emptyConf.setFreeParkSlotSignOccupied(0);
+		emptyConf.setHandicappedSlotNumber(0);
+		emptyConf.setHandicappedSlotOccupied(0);
+		emptyConf.setLoadingUnloadingSlotNumber(0);
+		emptyConf.setLoadingUnloadingSlotOccupied(0);
+		emptyConf.setPaidSlotNumber(0);
+		emptyConf.setPaidSlotOccupied(0);
+		emptyConf.setPinkSlotNumber(0);
+		emptyConf.setPinkSlotOccupied(0);
+		emptyConf.setRechargeableSlotNumber(0);
+		emptyConf.setRechargeableSlotOccupied(0);
+		emptyConf.setReservedSlotNumber(0);
+		emptyConf.setReservedSlotOccupied(0);
+		emptyConf.setTimedParkSlotNumber(0);
+		emptyConf.setTimedParkSlotOccupied(0);
+		emptyConf.setUnusuableSlotNumber(0);
+		
+		VehicleSlot completeConf = null;
+	    if(sc != null && !sc.isEmpty()){
+	    	if(vehicleType.compareTo("") != 0 && vehicleType.compareTo("ALL") != 0){
+		   		for(int i = 0; i < sc.size(); i++){								// check if vehicle type active
+		   			if(sc.get(i).getVehicleType().compareTo(vehicleType) == 0 && sc.get(i).getVehicleTypeActive() == true){
+		   				completeConf = mergeSlotConf(sc.get(i), emptyConf);
+		   				completeConf.setVehicleType(sc.get(i).getVehicleType());
+		   				completeConf.setVehicleTypeActive(sc.get(i).getVehicleTypeActive());
+		   			}
+		   		}
+	    	} else {
+	    		completeConf = emptyConf;
+	    		for(int i = 0; i < sc.size(); i++){
+	    			if(sc.get(i).getVehicleTypeActive() == true){	// check if vehicle type active
+	    				completeConf = mergeSlotConf(sc.get(i), completeConf);
+	    			}
+		   		}
+	    	}
+	    }
+	    return completeConf;
+	}
+	    
+	VehicleSlot mergeSlotConf (VehicleSlot new_sc, VehicleSlot old_sc){
+		VehicleSlot merged_sc = new VehicleSlot();
+		merged_sc.setVehicleType("ALL");
+		merged_sc.setVehicleTypeActive(true);
+		int slotNumber = old_sc.getSlotNumber() + ((new_sc.getSlotNumber() != null) ? new_sc.getSlotNumber() : 0);
+		int handicappedSlotNumber = old_sc.getHandicappedSlotNumber() + ((new_sc.getHandicappedSlotNumber() != null) ? new_sc.getHandicappedSlotNumber() : 0);
+		int handicappedSlotOccupied = old_sc.getHandicappedSlotOccupied() + ((new_sc.getHandicappedSlotOccupied() != null) ? new_sc.getHandicappedSlotOccupied() : 0);
+		int reservedSlotNumber = old_sc.getReservedSlotNumber() + ((new_sc.getReservedSlotNumber() != null) ? new_sc.getReservedSlotNumber() : 0);
+		int reservedSlotOccupied = old_sc.getReservedSlotOccupied() + ((new_sc.getReservedSlotOccupied() != null) ? new_sc.getReservedSlotOccupied() : 0);
+		int timedParkSlotNumber = old_sc.getTimedParkSlotNumber() + ((new_sc.getTimedParkSlotNumber() != null) ? new_sc.getTimedParkSlotNumber() : 0);
+		int timedParkSlotOccupied = old_sc.getTimedParkSlotOccupied() + ((new_sc.getTimedParkSlotOccupied() != null) ? new_sc.getTimedParkSlotOccupied() : 0);
+		int paidSlotNumber = old_sc.getPaidSlotNumber() + ((new_sc.getPaidSlotNumber() != null) ? new_sc.getPaidSlotNumber() : 0);
+		int paidSlotOccupied = old_sc.getPaidSlotOccupied() + ((new_sc.getPaidSlotOccupied() != null) ? new_sc.getPaidSlotOccupied() : 0);
+		int freeParkSlotNumber = old_sc.getFreeParkSlotNumber() + ((new_sc.getFreeParkSlotNumber() != null) ? new_sc.getFreeParkSlotNumber() : 0);
+		int freeParkSlotOccupied = old_sc.getFreeParkSlotOccupied() + ((new_sc.getFreeParkSlotOccupied() != null) ? new_sc.getFreeParkSlotOccupied() : 0);
+		int freeParkSlotSignNumber = old_sc.getFreeParkSlotSignNumber() + ((new_sc.getFreeParkSlotSignNumber() != null) ? new_sc.getFreeParkSlotSignNumber() : 0);
+		int freeParkSlotSignOccupied = old_sc.getFreeParkSlotSignOccupied() + ((new_sc.getFreeParkSlotSignOccupied() != null) ? new_sc.getFreeParkSlotSignOccupied() : 0);
+		int rechargeableSlotNumber = old_sc.getRechargeableSlotNumber() + ((new_sc.getRechargeableSlotNumber() != null) ? new_sc.getRechargeableSlotNumber() : 0);
+		int rechargeableSlotOccupied = old_sc.getRechargeableSlotOccupied() + ((new_sc.getRechargeableSlotOccupied() != null) ? new_sc.getRechargeableSlotOccupied() : 0);
+		int loadingUnloadingSlotNumber = old_sc.getLoadingUnloadingSlotNumber() + ((new_sc.getLoadingUnloadingSlotNumber() != null) ? new_sc.getLoadingUnloadingSlotNumber() : 0);
+		int loadingUnloadingSlotOccupied = old_sc.getLoadingUnloadingSlotOccupied() + ((new_sc.getLoadingUnloadingSlotOccupied() != null) ? new_sc.getLoadingUnloadingSlotOccupied() : 0);
+		int pinkSlotNumber = old_sc.getPinkSlotNumber() + ((new_sc.getPinkSlotNumber() != null) ? new_sc.getPinkSlotNumber() : 0);
+		int pinkSlotOccupied = old_sc.getPinkSlotOccupied() + ((new_sc.getPinkSlotOccupied() != null) ? new_sc.getPinkSlotOccupied() : 0);
+		int carSharingSlotNumber = old_sc.getCarSharingSlotNumber() + ((new_sc.getCarSharingSlotNumber() != null) ? new_sc.getCarSharingSlotNumber() : 0);
+		int carSharingSlotOccupied = old_sc.getCarSharingSlotOccupied() + ((new_sc.getCarSharingSlotOccupied() != null) ? new_sc.getCarSharingSlotOccupied() : 0);
+		int unusuableSlotNumber = old_sc.getUnusuableSlotNumber() + ((new_sc.getUnusuableSlotNumber() != null) ? new_sc.getUnusuableSlotNumber() : 0);
+		merged_sc.setSlotNumber(slotNumber);
+		merged_sc.setHandicappedSlotNumber(handicappedSlotNumber);
+		merged_sc.setHandicappedSlotOccupied(handicappedSlotOccupied);
+		merged_sc.setReservedSlotNumber(reservedSlotNumber);
+		merged_sc.setReservedSlotOccupied(reservedSlotOccupied);
+		merged_sc.setTimedParkSlotNumber(timedParkSlotNumber);
+		merged_sc.setTimedParkSlotOccupied(timedParkSlotOccupied);
+		merged_sc.setPaidSlotNumber(paidSlotNumber);
+		merged_sc.setPaidSlotOccupied(paidSlotOccupied);
+		merged_sc.setFreeParkSlotNumber(freeParkSlotNumber);
+		merged_sc.setFreeParkSlotOccupied(freeParkSlotOccupied);
+		merged_sc.setFreeParkSlotSignNumber(freeParkSlotSignNumber);
+		merged_sc.setFreeParkSlotSignOccupied(freeParkSlotSignOccupied);
+		merged_sc.setRechargeableSlotNumber(rechargeableSlotNumber);
+		merged_sc.setRechargeableSlotOccupied(rechargeableSlotOccupied);
+		merged_sc.setLoadingUnloadingSlotNumber(loadingUnloadingSlotNumber);
+		merged_sc.setLoadingUnloadingSlotOccupied(loadingUnloadingSlotOccupied);
+		merged_sc.setPinkSlotNumber(pinkSlotNumber);
+		merged_sc.setPinkSlotOccupied(pinkSlotOccupied);
+		merged_sc.setCarSharingSlotNumber(carSharingSlotNumber);
+		merged_sc.setCarSharingSlotOccupied(carSharingSlotOccupied);
+		merged_sc.setUnusuableSlotNumber(unusuableSlotNumber);
+	    return merged_sc;
+	}
 	
 	// Method used to create the csv file for the street occupation
-	public String create_occupancy_file_streets(ArrayList<OccupancyStreet> streets, String path) throws FileNotFoundException, UnsupportedEncodingException{
+	public String create_occupancy_file_streets(ArrayList<OccupancyStreet> streets, String path, String vehicleType) throws FileNotFoundException, UnsupportedEncodingException{
 		String name = FILE_NAME + "OccupancyStreet.csv";
 		String long_name = path + "/" + name;
 		try {
@@ -324,23 +497,34 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati (LC)");
+			writer.append("Tipo Veicolo");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati (LS)");
+			writer.append("Occupati LC");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati (P)");
+			writer.append("Occupati LS");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati (DO)");
+			writer.append("Occupati P");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti per disabili (H)");
+			writer.append("Occupati DO");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Riservati (R)");
+			writer.append("Occupati H");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Non Disponibili (ND)");
+			writer.append("Occupati R");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati E");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati C/S");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati RO");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati CS");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati ND");
 			writer.append(CSV_NEWLINE);
 			
 			// Add the list of data in a table
 			for(OccupancyStreet s : streets){
+				VehicleSlot streetConf = getCorrectConfType(s.getSlotsConfiguration(), vehicleType);
 				writer.append(cleanCommaValue(s.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(cleanCommaValue(s.getArea_name()));
@@ -349,21 +533,33 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(s.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
-				// TODO: manage vehicle type slots correctly
-				/*writer.append(s.getFreeParkSlotSignOccupied() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getFreeParkSlotOccupied() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getPaidSlotOccupied() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getTimedParkSlotOccupied() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getHandicappedSlotOccupied() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getReservedSlotOccupied() + "");
-				writer.append(CSV_SEPARATOR);
-				writer.append(s.getUnusuableSlotNumber() + "");
-				writer.append(CSV_NEWLINE);*/
+				if(streetConf != null){
+					writer.append(streetConf.getVehicleType() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getFreeParkSlotSignOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getFreeParkSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getPaidSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getTimedParkSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getHandicappedSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getReservedSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getRechargeableSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getLoadingUnloadingSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getPinkSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getCarSharingSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(streetConf.getUnusuableSlotNumber() + "");
+					writer.append(CSV_SEPARATOR);
+				}
+				writer.append(CSV_NEWLINE);
 			}
 			
 			writer.flush();
@@ -470,7 +666,7 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the parking structures occupation
-	public String create_occupancy_file_structs(ArrayList<OccupancyParkingStructure> structures, String path) throws FileNotFoundException, UnsupportedEncodingException{
+	public String create_occupancy_file_structs(ArrayList<OccupancyParkingStructure> structures, String path, String vehicleType) throws FileNotFoundException, UnsupportedEncodingException{
 		String name = FILE_NAME + "OccupancyStructure.csv";
 		String long_name = path + "/" + name;
 		try {
@@ -485,15 +681,34 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati (S)");
+			writer.append("Tipo Veicolo");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati (H)");
+			writer.append("Occupati LC");
 			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Non Disponibili (ND)");
+			writer.append("Occupati LS");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati P");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati DO");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati H");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati R");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati E");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati C/S");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati RO");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati CS");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Occupati ND");
 			writer.append(CSV_NEWLINE);
 			
 			// Add the list of data in a table
 			for(OccupancyParkingStructure ps : structures){
+				VehicleSlot structConf = getCorrectConfType(ps.getSlotsConfiguration(), vehicleType);
 				writer.append(cleanCommaValue(ps.getName()));
 				writer.append(CSV_SEPARATOR);
 				writer.append(cleanCommaValue(ps.getStreetReference()));
@@ -501,13 +716,33 @@ public class CSVManager {
 				writer.append((ps.getOccupancyRate() != -1) ? (ps.getOccupancyRate() + "") : "n.p.");
 				writer.append(CSV_SEPARATOR);
 				writer.append(ps.getSlotNumber() + "");
-				// TODO: manage vehicle type slots correctly
-				/*writer.append(CSV_SEPARATOR);
-				writer.append((ps.getPayingSlotOccupied() >= 0) ? (ps.getPayingSlotOccupied() + "") : "n.p." );
 				writer.append(CSV_SEPARATOR);
-				writer.append((ps.getHandicappedSlotOccupied() >= 0) ? (ps.getHandicappedSlotOccupied() + "") : "n.p." );
-				writer.append(CSV_SEPARATOR);
-				writer.append((ps.getUnusuableSlotNumber() >= 0) ? (ps.getUnusuableSlotNumber() + "") : "n.p." );*/
+				if(structConf != null){
+					writer.append(structConf.getVehicleType() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getFreeParkSlotSignOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getFreeParkSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getPaidSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getTimedParkSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getHandicappedSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getReservedSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getRechargeableSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getLoadingUnloadingSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getPinkSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getCarSharingSlotOccupied() + "");
+					writer.append(CSV_SEPARATOR);
+					writer.append(structConf.getUnusuableSlotNumber() + "");
+					writer.append(CSV_SEPARATOR);
+				}
 				writer.append(CSV_NEWLINE);
 			}
 			//String arr = writer.toString();
@@ -636,8 +871,8 @@ public class CSVManager {
 			writer.append("Num Ticket");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti a Pagamento");
+			/*writer.append(CSV_SEPARATOR);
+			writer.append("Posti a Pagamento");*/
 			writer.append(CSV_NEWLINE);
 
 			// Add the list of data in a table

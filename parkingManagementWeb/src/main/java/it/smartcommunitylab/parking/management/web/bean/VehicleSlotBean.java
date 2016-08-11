@@ -32,6 +32,8 @@ public class VehicleSlotBean {
 	private Integer pinkSlotOccupied;				// posti rosa
 	private Integer carSharingSlotOccupied;			// posti car sharing
 	
+	private Integer slotOccupied;
+	
 	public Integer getRechargeableSlotNumber() {
 		return rechargeableSlotNumber;
 	}
@@ -222,6 +224,14 @@ public class VehicleSlotBean {
 
 	public void setCarSharingSlotOccupied(Integer carSharingSlotOccupied) {
 		this.carSharingSlotOccupied = carSharingSlotOccupied;
+	}
+
+	public Integer getSlotOccupied() {
+		return slotOccupied;
+	}
+
+	public void setSlotOccupied(Integer slotOccupied) {
+		this.slotOccupied = slotOccupied;
 	}
 
 }

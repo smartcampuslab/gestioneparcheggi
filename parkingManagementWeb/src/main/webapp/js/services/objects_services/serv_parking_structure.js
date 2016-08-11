@@ -314,9 +314,12 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	// PS create occupancy csv file
 	this.getStructureOccupancyCsv = function(structures){
 		var method = 'POST';
+		var params = {
+			vehicleType: sharedDataService.getVehicleType()
+		};
 		var value = utilsService.correctOccStructObjectForWS(structures);
 	    if(this.showLog)console.log("Structure list data : " + value);
-	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/parkingstructures/csv", null, sharedDataService.getAuthHeaders(), value);
+	   	var myDataPromise = invokeDashboardWSService.getProxy(method, "occupancy/parkingstructures/csv", params, sharedDataService.getAuthHeaders(), value);
 	    myDataPromise.then(function(result){
 	    });
 	    return myDataPromise;

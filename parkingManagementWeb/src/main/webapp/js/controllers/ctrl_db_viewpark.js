@@ -282,6 +282,14 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     $scope.ita_lang = "ita";
     $scope.eng_lang = "eng";
+    
+    // List size dimension
+    $scope.maxStreets = 10;
+    $scope.maxZones = 13;
+    $scope.maxMicroZones = 13;
+    $scope.maxAreas = 13;
+    $scope.maxPStructs = 13;
+    $scope.maxPMeters = 13;
 	
 	$scope.wait_dialog_text_string_it = "Aggiornamento dati in corso...";
 	$scope.wait_dialog_text_string_en = "Loading elements...";
@@ -681,33 +689,50 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	}
     };
     
+    var emptyConf = {
+		vehicleType: "all",
+    	vehicleTypeActive: true,
+    	slotNumber: 0,
+    	handicappedSlotNumber: 0,
+		handicappedSlotOccupied: 0,
+		reservedSlotNumber: 0,
+		reservedSlotOccupied: 0,
+		timedParkSlotNumber: 0,
+		timedParkSlotOccupied: 0,
+		paidSlotNumber: 0,
+		paidSlotOccupied: 0,
+		freeParkSlotNumber: 0,
+		freeParkSlotOccupied: 0,
+		freeParkSlotSignNumber: 0,
+		freeParkSlotSignOccupied: 0,
+		rechargeableSlotNumber: 0,
+		rechargeableSlotOccupied: 0,
+		loadingUnloadingSlotNumber: 0,
+		loadingUnloadingSlotOccupied: 0,
+		pinkSlotNumber: 0,
+		pinkSlotOccupied: 0,
+		carSharingSlotNumber: 0,
+		carSharingSlotOccupied: 0,
+		unusuableSlotNumber : 0
+	};
+    
+    // Method used to get the correct object slot configuration from the vehicle type specified in the filter
     $scope.getCorrectConfType = function(sc){
     	var completeConf;
     	if(sc){
     		if(sharedDataService.getVehicleType() != "" && sharedDataService.getVehicleType() != "ALL"){
-	    		for(var i = 0; i < sc.length; i++){
-	    			if(sc[i].vehicleType == sharedDataService.getVehicleType()){
-	    				completeConf = sc[i];
+	    		for(var i = 0; i < sc.length; i++){								// check if vehicle type active
+	    			if(sc[i].vehicleType == sharedDataService.getVehicleType() && sc[i].vehicleTypeActive == true){
+	    				completeConf = $scope.mergeSlotConf(sc[i], emptyConf);
+	    				completeConf.vehicleType = sc[i].vehicleType;
+	    				completeConf.vehicleTypeActive = sc[i].vehicleTypeActive;
 	    			}
 	    		}
-    		} else {
-    			completeConf = {
-    				vehicleType: "all",
-    	    		vehicleTypeActive: true,
-    	    		handicappedSlotOccupied: 0,
-    	    		reservedSlotOccupied: 0,
-    	    		timedParkSlotOccupied: 0,
-    	    		paidSlotOccupied: 0,
-    	    		freeParkSlotOccupied: 0,
-    	    		freeParkSlotSignOccupied: 0,
-    	    		rechargeableSlotOccupied: 0,
-    	    		loadingUnloadingSlotOccupied: 0,
-    	    		pinkSlotOccupied: 0,
-    	    		carSharingSlotOccupied: 0,
-    	    		unusuableSlotNumber : 0
-    			}
+    		} else {completeConf = emptyConf;
     			for(var i = 0; i < sc.length; i++){
-	    			completeConf = $scope.mergeSlotConf(sc[i], completeConf);
+    				if(sc[i].vehicleTypeActive == true){	// check if vehicle type active
+    					completeConf = $scope.mergeSlotConf(sc[i], completeConf);
+    				}
 	    		}
     		}
     	}
@@ -718,15 +743,26 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     	var merged_sc = {
     		vehicleType: "all",
 	    	vehicleTypeActive: true,
+	    	slotNumber: old_sc.slotNumber + ((new_sc.slotNumber) ? new_sc.slotNumber : 0),
+	    	handicappedSlotNumber: old_sc.handicappedSlotNumber + ((new_sc.handicappedSlotNumber) ? new_sc.handicappedSlotNumber : 0),
 	    	handicappedSlotOccupied: old_sc.handicappedSlotOccupied + ((new_sc.handicappedSlotOccupied) ? new_sc.handicappedSlotOccupied : 0),
+	    	reservedSlotNumber: old_sc.reservedSlotNumber + ((new_sc.reservedSlotNumber) ? new_sc.reservedSlotNumber : 0),
 	    	reservedSlotOccupied: old_sc.reservedSlotOccupied + ((new_sc.reservedSlotOccupied) ? new_sc.reservedSlotOccupied : 0),
+	    	timedParkSlotNumber: old_sc.timedParkSlotNumber + ((new_sc.timedParkSlotNumber) ? new_sc.timedParkSlotNumber : 0),
 	    	timedParkSlotOccupied: old_sc.timedParkSlotOccupied + ((new_sc.timedParkSlotOccupied) ? new_sc.timedParkSlotOccupied : 0),
+	    	paidSlotNumber: old_sc.paidSlotNumber + ((new_sc.paidSlotNumber) ? new_sc.paidSlotNumber : 0),
 	    	paidSlotOccupied: old_sc.paidSlotOccupied + ((new_sc.paidSlotOccupied) ? new_sc.paidSlotOccupied : 0),
+	    	freeParkSlotNumber: old_sc.freeParkSlotNumber + ((new_sc.freeParkSlotNumber) ? new_sc.freeParkSlotNumber : 0),
 	    	freeParkSlotOccupied: old_sc.freeParkSlotOccupied + ((new_sc.freeParkSlotOccupied) ? new_sc.freeParkSlotOccupied : 0),
+	    	freeParkSlotSignNumber: old_sc.freeParkSlotSignNumber + ((new_sc.freeParkSlotSignNumber) ? new_sc.freeParkSlotSignNumber : 0),
 	    	freeParkSlotSignOccupied: old_sc.freeParkSlotSignOccupied + ((new_sc.freeParkSlotSignOccupied) ? new_sc.freeParkSlotSignOccupied : 0),
+	    	rechargeableSlotNumber: old_sc.rechargeableSlotNumber + ((new_sc.rechargeableSlotNumber) ? new_sc.rechargeableSlotNumber : 0),
 	    	rechargeableSlotOccupied: old_sc.rechargeableSlotOccupied + ((new_sc.rechargeableSlotOccupied) ? new_sc.rechargeableSlotOccupied : 0),
+	    	loadingUnloadingSlotNumber: old_sc.loadingUnloadingSlotNumber + ((new_sc.loadingUnloadingSlotNumber) ? new_sc.loadingUnloadingSlotNumber : 0),
 	    	loadingUnloadingSlotOccupied: old_sc.loadingUnloadingSlotOccupied + ((new_sc.loadingUnloadingSlotOccupied) ? new_sc.loadingUnloadingSlotOccupied : 0),
+	    	pinkSlotNumber: old_sc.pinkSlotNumber + ((new_sc.pinkSlotNumber) ? new_sc.pinkSlotNumber : 0),
 	    	pinkSlotOccupied: old_sc.pinkSlotOccupied + ((new_sc.pinkSlotOccupied) ? new_sc.pinkSlotOccupied : 0),
+	    	carSharingSlotNumber: old_sc.carSharingSlotNumber + ((new_sc.carSharingSlotNumber) ? new_sc.carSharingSlotNumber : 0),
 	    	carSharingSlotOccupied: old_sc.carSharingSlotOccupied + ((new_sc.carSharingSlotOccupied) ? new_sc.carSharingSlotOccupied : 0),
 	    	unusuableSlotNumber : old_sc.unusuableSlotNumber + ((new_sc.unusuableSlotNumber) ? new_sc.unusuableSlotNumber : 0),
     	}
@@ -1537,13 +1573,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     $scope.isInListTab = function(){
     	return sharedDataService.getIsInList();
     };
-    
-    $scope.maxStreets = 13;
-    $scope.maxZones = 13;
-    $scope.maxMicroZones = 13;
-    $scope.maxAreas = 13;
-    $scope.maxPStructs = 13;
-    $scope.maxPMeters = 13;
     
     $scope.currentPage = 0;
     $scope.numberOfPages = function(type, list, z_index){
@@ -4121,7 +4150,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 						validityPeriod: occupancyStructs[i].validityPeriod,
 						slotNumber: occupancyStructs[i].slotNumber,
 						slotsConfiguration: corSlotsConf, //occupancyStructs[i].slotsConfiguration,
-						slotOccupied: psOccupiedSlot, //parseInt(occupancyStructs[i].payingSlotOccupied) + parseInt(occupancyStructs[i].handicappedSlotOccupied), //TODO: correct this value
+						slotOccupied: psOccupiedSlot, //parseInt(occupancyStructs[i].payingSlotOccupied) + parseInt(occupancyStructs[i].handicappedSlotOccupied),
 						paidSlot: psPaidSlot,
 						/*payingSlotNumber: occupancyStructs[i].payingSlotNumber,
 						payingSlotOccupied: occupancyStructs[i].payingSlotOccupied,

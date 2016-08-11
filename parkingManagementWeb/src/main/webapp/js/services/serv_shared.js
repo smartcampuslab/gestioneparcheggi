@@ -844,7 +844,7 @@ pm.service('sharedDataService', function(){
 	
 	// Method used to get the total slots occupied in a street object
 	this.getTotalOccupiedSlots = function(s_object){
-		return (s_object.freeParkOccupied +
+		return (s_object.freeParkSlotOccupied +
 				s_object.freeParkSlotSignOccupied + 
 				s_object.paidSlotOccupied + 
 				s_object.timedParkSlotOccupied + 
@@ -873,7 +873,7 @@ pm.service('sharedDataService', function(){
 			street.pinkSlotNumber = (street.pinkSlotNumber != null && street.pinkSlotNumber > 0) ? street.pinkSlotNumber : 0;
 			street.carSharingSlotNumber = (street.carSharingSlotNumber != null && street.carSharingSlotNumber > 0) ? street.carSharingSlotNumber : 0;
 			// ----------------------------------------------------------------
-			street.freeParkOccupied = (s_object.freeParkSlotOccupied != null && s_object.freeParkSlotOccupied > 0 && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotOccupied : 0;
+			street.freeParkSlotOccupied = (s_object.freeParkSlotOccupied != null && s_object.freeParkSlotOccupied > 0 && s_object.freeParkSlotNumber > 0) ? s_object.freeParkSlotOccupied : 0;
 			street.freeParkSlotSignOccupied = (s_object.freeParkSlotSignOccupied != null && s_object.freeParkSlotSignOccupied > 0 && s_object.freeParkSlotSignNumber > 0) ? s_object.freeParkSlotSignOccupied : 0;
 			street.paidSlotOccupied = (s_object.paidSlotOccupied != null && s_object.paidSlotOccupied > 0) ? s_object.paidSlotOccupied : 0;
 			street.timedParkSlotOccupied = (s_object.timedParkSlotOccupied != null && s_object.timedParkSlotOccupied > 0) ? s_object.timedParkSlotOccupied : 0;

@@ -7,12 +7,12 @@ public class VehicleSlot {
 	
 	// All possibility slots
 	private Integer slotNumber;
-	private Integer handicappedSlotNumber;	// off_h
-	private Integer reservedSlotNumber;		// off_rs
-	private Integer timedParkSlotNumber;	// off_do
-	private Integer freeParkSlotNumber;		// off_ls
-	private Integer freeParkSlotSignNumber;	// off_lc
-	private Integer paidSlotNumber;			// off_p
+	private Integer handicappedSlotNumber;		// off_h
+	private Integer reservedSlotNumber;			// off_rs
+	private Integer timedParkSlotNumber;		// off_do
+	private Integer freeParkSlotNumber;			// off_ls
+	private Integer freeParkSlotSignNumber;		// off_lc
+	private Integer paidSlotNumber;				// off_p
 	private Integer rechargeableSlotNumber;		// ricaricabili
 	private Integer loadingUnloadingSlotNumber; // posti carico scarico
 	private Integer pinkSlotNumber;				// posti rosa
@@ -31,6 +31,8 @@ public class VehicleSlot {
 	private Integer loadingUnloadingSlotOccupied; 	// posti carico scarico
 	private Integer pinkSlotOccupied;				// posti rosa
 	private Integer carSharingSlotOccupied;			// posti car sharing
+	
+	private Integer slotOccupied;
 	
 	public Integer getRechargeableSlotNumber() {
 		return rechargeableSlotNumber;
@@ -222,6 +224,14 @@ public class VehicleSlot {
 
 	public void setCarSharingSlotOccupied(Integer carSharingSlotOccupied) {
 		this.carSharingSlotOccupied = carSharingSlotOccupied;
+	}
+
+	public Integer getSlotOccupied() {
+		return slotOccupied;
+	}
+
+	public void setSlotOccupied(Integer slotOccupied) {
+		this.slotOccupied = slotOccupied;
 	}
 
 }
