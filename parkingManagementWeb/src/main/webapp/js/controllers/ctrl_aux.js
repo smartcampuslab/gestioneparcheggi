@@ -305,7 +305,9 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	return sharedDataService.getProfStructLogEdit();
     };
     
+    var agencyId;
     $scope.initComponents = function(){
+    	agencyId = sharedDataService.getConfUserAgency().id;
 	    if($scope.logtabs == null || $scope.logtabs.length == 0){
 	    	var logAuxTabs = [];
 	    	var street_occ_tab_obj = {};
@@ -327,12 +329,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   		if($scope.showedObjects[i].id == 'Ps'){
 		   			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
 		   		}
-		   		//if($scope.showedObjects[i].id == 'Bp'){
-		    	//	$scope.loadBikeAttributes($scope.showedObjects[i].attributes);
-		    	//}
-		   		//if($scope.showedObjects[i].id == 'Zone'){
-		   		//	$scope.loadZoneAttributes($scope.showedObjects[i].attributes);
-		   		//}
 		   		if($scope.showedObjects[i].id == 'Flux'){
 		   			var flux_obj = $scope.showedObjects[i].attributes;
 		   			$scope.loadFluxAttributes(flux_obj);	
@@ -386,59 +382,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   	}
 		   	angular.copy(logAuxTabs, $scope.logtabs);
 		   	sharedDataService.setFluxViewTabs($scope.logtabs);
-	    }
-//	    if($scope.addtabs == null || $scope.addtabs.length == 0){
-//	    	var logAuxTabs = [];
-//	    	var street_occ_tab_obj = {};
-//	    	var struct_occ_tab_obj = {};
-//	    	var pm_profit_tab_obj = {};
-//	    	var struct_profit_tab_obj = {};
-//		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
-//		   	for(var i = 0; i < $scope.showedObjects.length; i++){
-//		   		if($scope.showedObjects[i].id == 'Street'){
-//		   			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
-//		   		}
-//		   		if($scope.showedObjects[i].id == 'Pm'){
-//		   			$scope.loadPmAttributes($scope.showedObjects[i].attributes);
-//		   		}
-//		   		if($scope.showedObjects[i].id == 'Ps'){
-//		   			$scope.loadPsAttributes($scope.showedObjects[i].attributes);
-//		   		}
-//		   		if($scope.showedObjects[i].id == 'Flux'){
-//		   			var flux_obj = $scope.showedObjects[i].attributes;
-//		   			$scope.loadFluxAttributes(flux_obj);	
-//		   			for(var j = 0; j < flux_obj.length; j++){
-//		   				if(flux_obj[j].code == "occupancyStreet"){
-//		   					street_occ_tab_obj =  { title:'Occupazione via', index: 1, content:"partials/aux/adds/street_logs.html", active:false };
-//		   				}
-//		   				if(flux_obj[j].code == "occupancyStruct"){
-//		   					struct_occ_tab_obj = { title:'Occupazione parcheggio', index: 2, content:"partials/aux/adds/parking_logs.html", active:false };
-//		   				}
-//		   				if(flux_obj[j].code == "profitParkingMeter"){
-//		   					pm_profit_tab_obj =  { title:'Profitto parcometro', index: 3, content:"partials/aux/adds/parkmeter_profit_logs.html", active:false };
-//		   				}
-//		   				if(flux_obj[j].code == "profitStruct"){
-//		   					struct_profit_tab_obj = { title:'Profitto parcheggio', index: 4, content:"partials/aux/adds/parking_profit_logs.html", active:false };
-//		   				}
-//		   			}
-//		   		}
-//		   	}
-//		   	// Here I load the tabs for logs
-//		   	if($scope.f_occStreet.editable){
-//		   		logAuxTabs.push(street_occ_tab_obj);
-//		   	}
-//		   	if($scope.f_occStruct.editable){
-//		   		logAuxTabs.push(struct_occ_tab_obj);
-//		   	}
-//		   	if($scope.f_profParkingMeter.editable){
-//		   		logAuxTabs.push(pm_profit_tab_obj);
-//		   	}
-//		   	if($scope.f_profStruct.editable){
-//		   		logAuxTabs.push(struct_profit_tab_obj);
-//		   	}
-//		   	angular.copy(logAuxTabs, $scope.addtabs);
-//		   	sharedDataService.setFluxAddTabs($scope.addtabs);
-//	    }	    
+	    }  
     };
     
     //Area Component settings
@@ -1053,11 +997,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method getStreetsFromDb: used to init the input select in street log creation
 	$scope.getStreetsFromDb = function(){
+		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.allStreet = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets", null, $scope.authHeaders, null);
+		var params = {
+			agencyId: agencyId
+		};
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets", params, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, $scope.allStreet);
 	    	$scope.streetLoadedAndSelected = false;
@@ -1066,11 +1013,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method getParksFromDb: used to init the input select in park log creation
 	$scope.getParkingsFromDb = function(){
+		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.allParking = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings", null, $scope.authHeaders, null);
+		var params = {
+			agencyId: agencyId
+		};
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings", params, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, $scope.allParking);
 	    	$scope.parkLoadedAndSelected = false;
@@ -1080,11 +1030,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method getParkingsProfitFromDb: used to init the input select in park profit log creation
 	$scope.getParkingsProfitFromDb = function(){
+		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.allParkingProfit = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings", null, $scope.authHeaders, null);
+		var params = {
+			agencyId: agencyId
+		};
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings", params, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, $scope.allParkingProfit);
 	    	for(var i = 0; i < $scope.allParkingProfit.length; i ++){
@@ -1097,6 +1050,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method getPmProfitFromDb: used to init the input select in pm profit log creation
 	$scope.getPmProfitFromDb = function(){
+		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.allPmProfit = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
@@ -1811,6 +1765,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     // Method loadLogData: used to load the log data in the DB mongo
     $scope.loadLogData = function(cat, type){
     	var appId = sharedDataService.getConfAppId();
+    	agencyId = sharedDataService.getConfUserAgency().id;
     	var user = "999";
     	$scope.progress = 25;
  		$dialogs.wait($scope.getLoadingText(), $scope.progress, $scope.getLoadingTitle());
@@ -1831,6 +1786,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	        };
 	    	    	var params = {
 	    				isSysLog: true,
+	    				agencyId: agencyId,
 	    				period : null
 	    			};
 	    	                	
@@ -1867,6 +1823,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	        };
 	    	    	var params = {
 	    				isSysLog: true,
+	    				agencyId: agencyId,
 	    				period : null
 	    			};
 	    	                	

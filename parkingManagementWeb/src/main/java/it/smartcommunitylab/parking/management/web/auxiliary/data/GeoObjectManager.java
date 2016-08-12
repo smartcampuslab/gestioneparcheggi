@@ -78,20 +78,20 @@ public class GeoObjectManager {
 	private static final int OCCUPANCY_PS_CELLS_OFFSET = 4;
 	private static final int OCCUPANCY_CELLS_FIRSTVAL = 4;
 	
-	public List<Parking> getParkings(String agency) throws Exception { 
-		return searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
+	public List<Parking> getParkings(String agency, String agencyId) throws Exception { 
+		return searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", agency), agencyId); //(Circle)null,
 	}
 	
-	public List<Parking> getParkings(String agency, double lat, double lon, double radius) throws Exception {
-		return searchParkings(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+	public List<Parking> getParkings(String agency, double lat, double lon, double radius, String agencyId) throws Exception {
+		return searchParkings(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
-	public List<Street> getStreets(String agency) throws Exception {
-		return searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null, 
+	public List<Street> getStreets(String agency, String agencyId) throws Exception {
+		return searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", agency), agencyId); //(Circle)null, 
 	}
 	
-	public List<Street> getStreets(String agency, double lat, double lon, double radius) throws Exception {
-		return searchStreets(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+	public List<Street> getStreets(String agency, double lat, double lon, double radius, String agencyId) throws Exception {
+		return searchStreets(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
 	public List<ParkMeter> getParkingMeters(String agency) throws Exception { 
@@ -128,11 +128,11 @@ public class GeoObjectManager {
 		return pstruct;
 	}
 	
-	public Street getStreetByName(String name, String appId) throws Exception{
+	public Street getStreetByName(String name, String appId, String agencyId) throws Exception{
 		Street street = null;
 		boolean find = false;
 		//return 
-		List<Street> all = searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<Street> all = searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
 		for(int i = 0; i < all.size() && !find; i++){
 			Street s = all.get(i);
 			if(s.getName().compareToIgnoreCase(name) == 0){
@@ -143,11 +143,11 @@ public class GeoObjectManager {
 		return street;
 	}
 	
-	public Parking getParkingByName(String name, String appId) throws Exception{
+	public Parking getParkingByName(String name, String appId, String agencyId) throws Exception{
 		Parking park = null;
 		boolean find = false;
 		//return 
-		List<Parking> all = searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<Parking> all = searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
 		for(int i = 0; i < all.size() && !find; i++){
 			Parking pk = all.get(i);
 			if(pk.getName().compareToIgnoreCase(name) == 0){
@@ -312,11 +312,11 @@ public class GeoObjectManager {
 	
 	// -------------------- Methods from geoStorage ---------------------------
 	
-	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
-		return searchStreets(circle, inCriteria, 0, 0);//circle,
+	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria, String agencyId) throws Exception { //Circle circle
+		return searchStreets(circle, inCriteria, 0, 0, agencyId);//circle,
 	}
 	
-	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle
+	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria, int limit, int skip, String agencyId) throws Exception { //Circle circle
 		//Criteria criteria = createSearchCriteria(type, circle, inCriteria); //circle,
 		//Query query = Query.query(criteria);
 		//if (limit > 0) query.limit(limit);
@@ -324,7 +324,7 @@ public class GeoObjectManager {
 
 		List<Street> listaObj = new ArrayList<Street>();
 		//storageManager.setAppId(inCriteria.get("agency").toString());
-		List<StreetBean> myStreets = storageManager.getAllStreets(inCriteria.get("agency").toString());
+		List<StreetBean> myStreets = storageManager.getAllStreetsByAgencyId(inCriteria.get("agency").toString(), agencyId);
 		for(int i = 0; i < myStreets.size(); i++){
 			Street s = castPMStreetBeanToStreet(myStreets.get(i));
 			if(circle != null){
@@ -345,11 +345,11 @@ public class GeoObjectManager {
 		return listaObj; //find(query, cls);
 	}
 	
-	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
-		return searchParkings(circle, inCriteria, 0, 0);//circle,
+	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria , String agencyId) throws Exception { //Circle circle
+		return searchParkings(circle, inCriteria, 0, 0, agencyId);//circle,
 	}
 	
-	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle
+	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria, int limit, int skip, String agencyId) throws Exception { //Circle circle
 //		Criteria criteria = createSearchCriteria(type, circle, inCriteria); //circle,
 //		Query query = Query.query(criteria);
 //		if (limit > 0) query.limit(limit);
@@ -359,7 +359,7 @@ public class GeoObjectManager {
 		
 		List<Parking> listaObj = new ArrayList<Parking>();
 		//storageManager.setAppId(inCriteria.get("agency").toString());
-		List<ParkingStructureBean> myStructures = storageManager.getAllParkingStructure(inCriteria.get("agency").toString());
+		List<ParkingStructureBean> myStructures = storageManager.getAllParkingStructureByAgencyId(inCriteria.get("agency").toString(), agencyId);
 		
 		for(int i = 0; i < myStructures.size(); i++){
 			Parking p = castPMStructureBeanToParking(myStructures.get(i));

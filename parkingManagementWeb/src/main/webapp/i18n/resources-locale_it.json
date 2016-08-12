@@ -2570,6 +2570,12 @@
     "key": "btn_edit_text",
     "value": "Modifica"
 }, {
+    "key": "vehicle_type_label",
+    "value": "Tipo veicolo"
+}, {
+    "key": "all_vehicle_types",
+    "value": "Tutti"
+}, {
     "key": "car_vehicle",
     "value": "Automobile"
 }, {

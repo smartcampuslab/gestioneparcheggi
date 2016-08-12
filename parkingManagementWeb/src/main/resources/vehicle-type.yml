@@ -14,12 +14,12 @@ vehicleTypes:
     userName: trento1
     description: posti per taxi
     language_key: taxi_vehicle
-  - name: Autobus
+  - name: Bus
     appId: tn
     userName: trento1
     description: posti per autobus
     language_key: autobus_vehicle
-  - name: Rastrelliera
+  - name: Rack
     appId: tn
     userName: trento1
     description: posti per bici

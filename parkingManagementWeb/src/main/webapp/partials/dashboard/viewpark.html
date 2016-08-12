@@ -127,6 +127,15 @@
 	                        </select>
 	                    </td>
 	                </tr>
+	                <tr ng-show="vehicleTypes.length > 1">
+	                    <td align="left">
+	                        <label class="left-filter">{{ 'vehicle_type_label' | i18n }}</label>
+	                        <select class="form-control input-sm" ng-model="vehicleType" ng-change="updateSearch()">
+	                            <option ng-repeat="vt in vehicleTypes" value="{{ vt.name }}">{{ vt.language_key | i18n }}</option>
+	                        	<option value="">{{ 'all_vehicle_types' | i18n }}</option>
+	                        </select>
+	                    </td>
+	                </tr>
 	                <tr ng-if="vis=='vis_medium' || vis=='vis_last_value'">
 	                    <td align="left">
 	                        <label class="left-filter">{{'year_vis'|i18n}}</label><!-- ticks="sliderMonth.ticks" ticks_positions="sliderMonth.ticks_pos" ticks_labels="sliderMonth.ticks_labels" ticks_snap_bounds="sliderMonth.ticks_snap_bound" -->

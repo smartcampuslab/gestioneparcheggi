@@ -6,6 +6,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
                                 function($scope, $route, $rootScope, $filter, localize, sharedDataService, initializeService, gMapService) {
 	$scope.vis = 'vis_medium'; //vis_last_value
 	$scope.visOptions = ['vis_medium','vis_last_value', 'vis_medium_year', 'vis_medium_month', 'vis_medium_day'];
+	$scope.vehicleType = 'Car';
 	var date = new Date();
 	$scope.years = [];
 	$scope.year = "";
@@ -89,7 +90,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
     	return (sharedDataService.getUsedLanguage() == 'eng');
     };
     
-    $scope.vehicleType = "Car";	//TODO: manage this variable in a dashboard filter
+    $scope.vehicleTypes = initializeService.getSlotsTypes();
     sharedDataService.setVehicleType($scope.vehicleType);
 	
 	// init shared filter values
@@ -155,6 +156,7 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	};
 	
 	$scope.updateSearch = function(){	//type
+		sharedDataService.setVehicleType($scope.vehicleType);
 		var type = 1;
 		if(sharedDataService.getIsInList()){
 			type = 2;
@@ -666,7 +668,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	// Method used to translate the vehicle type in the correct i18n key
     $scope.getVehicleKey = function(car_type){
-    	var corr_type_key = "car_vehicle";
+    	var corr_type_key = "all_vehicle_types";
     	var vehicleTypes = initializeService.getSlotsTypes();
     	for(var i = 0; i < vehicleTypes.length; i++){
     		if(vehicleTypes[i].name == car_type){
@@ -690,8 +692,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     };
     
     var emptyConf = {
-		vehicleType: "all",
-    	vehicleTypeActive: true,
+		vehicleType: 'empty',
+    	vehicleTypeActive: false,
     	slotNumber: 0,
     	handicappedSlotNumber: 0,
 		handicappedSlotOccupied: 0,
@@ -718,7 +720,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     // Method used to get the correct object slot configuration from the vehicle type specified in the filter
     $scope.getCorrectConfType = function(sc){
-    	var completeConf;
+    	var completeConf = emptyConf;
+    	completeConf.vehicleType = sharedDataService.getVehicleType();
     	if(sc){
     		if(sharedDataService.getVehicleType() != "" && sharedDataService.getVehicleType() != "ALL"){
 	    		for(var i = 0; i < sc.length; i++){								// check if vehicle type active
@@ -741,7 +744,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     $scope.mergeSlotConf = function(new_sc, old_sc){
     	var merged_sc = {
-    		vehicleType: "all",
+    		vehicleType: 'ALL',
 	    	vehicleTypeActive: true,
 	    	slotNumber: old_sc.slotNumber + ((new_sc.slotNumber) ? new_sc.slotNumber : 0),
 	    	handicappedSlotNumber: old_sc.handicappedSlotNumber + ((new_sc.handicappedSlotNumber) ? new_sc.handicappedSlotNumber : 0),

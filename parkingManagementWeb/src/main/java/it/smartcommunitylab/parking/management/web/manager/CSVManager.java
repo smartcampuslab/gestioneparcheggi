@@ -35,6 +35,8 @@ import it.smartcommunitylab.parking.management.web.model.TimeCostStreet;
 import it.smartcommunitylab.parking.management.web.model.TimeCostZone;
 import it.smartcommunitylab.parking.management.web.model.Zone;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
+import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
@@ -47,10 +49,14 @@ import java.util.Date;
 import java.util.List;
 
 import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service("csvManager")
 public class CSVManager {
+	
+	@Autowired
+	private VehicleTypeDataSetup vehicleTypeDataSetup;
 	
 	private static final Logger logger = Logger.getLogger(CSVManager.class);
 	private static final String FILE_NAME = "report";
@@ -61,12 +67,30 @@ public class CSVManager {
 	public CSVManager() {
 	}
 	
+	// Method used to retrieve a vehicle type description string from the vehicle type key in slot configuration
+	private String castVechicleTypeToDescription(String v_type){
+		List<VehicleType> allVehicles = vehicleTypeDataSetup.getVehicleTypes();
+		for(VehicleType vt : allVehicles){
+			if(vt.getName().compareTo(v_type) == 0){
+				if(vt.getDescription().contains("posti per ")){
+					return vt.getDescription().replace("posti per ", "");
+				} else {
+					return vt.getDescription();
+				}
+			}
+		}
+		return "Tutti";
+	};
+	
 	// Method used to create the csv file for the street occupation
 	public String create_supply_file_streets(ArrayList<Street> streets, String path) throws FileNotFoundException, UnsupportedEncodingException{
 		String name = FILE_NAME + "Street.csv";
 		String long_name = path + "/" + name;
+		
 		try {
 			FileWriter writer = new FileWriter(long_name);
+			
+			
 			
 			// Added the table cols headers
 			writer.append("Nome");
@@ -118,7 +142,7 @@ public class CSVManager {
 					streetConf.setVehicleType(streetConfig.get(i).getVehicleType());
 					streetConf.setVehicleTypeActive(streetConfig.get(i).getVehicleTypeActive());
 					if(streetConf.getVehicleTypeActive()){
-						writer.append(streetConf.getVehicleType() + "");
+						writer.append(castVechicleTypeToDescription(streetConf.getVehicleType()) + "");
 						writer.append(CSV_SEPARATOR);
 						writer.append("LC: " + streetConf.getFreeParkSlotSignNumber() + "");
 						writer.append(CSV_SEPARATOR);
@@ -210,8 +234,6 @@ public class CSVManager {
 			writer.append("Nome");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Tariffa");
-			//writer.append(CSV_SEPARATOR);
-			//writer.append("Orario");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Servizio telepark");
 			writer.append(CSV_SEPARATOR);
@@ -222,9 +244,6 @@ public class CSVManager {
 			for(RateArea a : areas){
 				writer.append(cleanCommaValue(a.getName()));	// to convert to area name
 				writer.append(CSV_SEPARATOR);
-				//writer.append(a.getFee() + "");
-				//writer.append(CSV_SEPARATOR);
-				//writer.append(a.getTimeSlot());
 				writer.append((a.getValidityPeriod()!= null && !a.getValidityPeriod().isEmpty()) ? a.feePeriodsSummary() : "");		// used to get a string that is the summary of the fee period data
 				writer.append(CSV_SEPARATOR);
 				writer.append(a.getSmsCode());
@@ -307,7 +326,7 @@ public class CSVManager {
 					psConf.setVehicleType(psConfig.get(i).getVehicleType());
 					psConf.setVehicleTypeActive(psConfig.get(i).getVehicleTypeActive());
 					if(psConf.getVehicleTypeActive()){
-						writer.append(psConf.getVehicleType() + "");
+						writer.append(castVechicleTypeToDescription(psConf.getVehicleType()) + "");
 						writer.append(CSV_SEPARATOR);
 						writer.append("LC: " + psConf.getFreeParkSlotSignNumber() + "");
 						writer.append(CSV_SEPARATOR);
@@ -534,7 +553,7 @@ public class CSVManager {
 				writer.append(s.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
 				if(streetConf != null){
-					writer.append(streetConf.getVehicleType() + "");
+					writer.append(castVechicleTypeToDescription(streetConf.getVehicleType()) + "");
 					writer.append(CSV_SEPARATOR);
 					writer.append(streetConf.getFreeParkSlotSignOccupied() + "");
 					writer.append(CSV_SEPARATOR);
@@ -718,7 +737,7 @@ public class CSVManager {
 				writer.append(ps.getSlotNumber() + "");
 				writer.append(CSV_SEPARATOR);
 				if(structConf != null){
-					writer.append(structConf.getVehicleType() + "");
+					writer.append(castVechicleTypeToDescription(structConf.getVehicleType()) + "");
 					writer.append(CSV_SEPARATOR);
 					writer.append(structConf.getFreeParkSlotSignOccupied() + "");
 					writer.append(CSV_SEPARATOR);

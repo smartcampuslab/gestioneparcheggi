@@ -373,6 +373,7 @@
 								<span ng-show="getCorrectConfType(street.slotsConfiguration).pinkSlotNumber"> RO: {{getCorrectConfType(street.slotsConfiguration).pinkSlotOccupied}}</span>
 								<span ng-show="getCorrectConfType(street.slotsConfiguration).carSharingSlotNumber"> CS: {{getCorrectConfType(street.slotsConfiguration).carSharingSlotOccupied}}</span>
 								<span ng-show="getCorrectConfType(street.slotsConfiguration).unusuableSlotNumber"> ND:{{getCorrectConfType(street.slotsConfiguration).unusuableSlotNumber}}</span>
+								<span ng-show="!getCorrectConfType(street.slotsConfiguration).vehicleTypeActive">n.p.</span>
 							</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(street, 3)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>
@@ -2133,6 +2134,7 @@
 								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).pinkSlotNumber"> RO: {{getCorrectConfType(pstruct.slotsConfiguration).pinkSlotOccupied}}</span>
 								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).carSharingSlotNumber"> CS: {{getCorrectConfType(pstruct.slotsConfiguration).carSharingSlotOccupied}}</span>
 								<span ng-show="getCorrectConfType(pstruct.slotsConfiguration).unusuableSlotNumber"> ND:{{getCorrectConfType(pstruct.slotsConfiguration).unusuableSlotNumber}}</span>
+								<span ng-show="!getCorrectConfType(pstruct.slotsConfiguration).vehicleTypeActive">n.p.</span>
 							</td>
 							<td width="5%" align="center">
 								<a href type="button" class="btn btn-primary btn-xs" ng-click="showOccupancyInList(pstruct, 2)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;

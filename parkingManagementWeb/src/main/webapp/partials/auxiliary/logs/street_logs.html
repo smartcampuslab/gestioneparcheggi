@@ -173,7 +173,7 @@
 		  		<div class="panel-body">
 		  			<div class="form-group">
 			    		<label for="streetN">{{ 'street_name_log' | i18n }}</label>
-			    		<select id="streetN" name="streetN" class="form-control" ng-options="s as s.name for s in allStreet" ng-model="myStreet" required ng-change="getDetailData(myStreet)">
+			    		<select id="streetN" name="streetN" class="form-control" ng-options="s as s.name for s in allStreet | orderBy:'name'" ng-model="myStreet" required ng-change="getDetailData(myStreet)">
 			    			<option value="">{{ 'street_log_placeholder' | i18n }}</option>
 			    		</select>
 			   			<div class="field-error" ng-show="!isInit && form.streetN.$error.required">{{ 'street_name_select_err_required' | i18n }}</div>

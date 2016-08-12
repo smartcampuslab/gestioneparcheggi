@@ -90,6 +90,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			dayType: dayType,
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			vehicleType: sharedDataService.getVehicleType(),
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
@@ -115,6 +116,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			dayType: dayType,
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			vehicleType: sharedDataService.getVehicleType(),
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));

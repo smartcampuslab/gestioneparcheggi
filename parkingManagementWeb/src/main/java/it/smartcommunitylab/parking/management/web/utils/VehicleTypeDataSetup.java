@@ -71,7 +71,9 @@ public class VehicleTypeDataSetup {
 		if(vehicleTypesMap == null){
 			vehicleTypesMap = new HashMap<String, VehicleType>();
 			for(VehicleType v_type : vehicleTypes){
-				vehicleTypesMap.put(v_type.getName() + "_" + v_type.getAppId(), v_type);
+				if(v_type.getAppId().compareTo(appId) == 0){
+					vehicleTypesMap.put(v_type.getName() + "_" + v_type.getAppId(), v_type);
+				}
 			}
 		}
 		@SuppressWarnings("rawtypes")

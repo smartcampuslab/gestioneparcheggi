@@ -803,7 +803,7 @@ providers:
           required: false
           visible: true
      - id: vehicleSlots
-       type: Autobus
+       type: Bus
        label: vehicleSlots
        title: vehicleSlots
        attributes:
@@ -909,7 +909,7 @@ providers:
           required: false
           visible: true
      - id: vehicleSlots
-       type: Rastrelliera
+       type: Rack
        label: vehicleSlots
        title: vehicleSlots
        attributes:
@@ -1182,7 +1182,7 @@ providers:
           required: false
           visible: true
      - id: vehicleSlotsPS
-       type: Autobus
+       type: Bus
        label: vehicleSlots
        title: vehicleSlots
        attributes:
@@ -1235,7 +1235,7 @@ providers:
           required: false
           visible: true
      - id: vehicleSlotsPS
-       type: Rastrelliera
+       type: Rack
        label: vehicleSlots
        title: vehicleSlots
        attributes:

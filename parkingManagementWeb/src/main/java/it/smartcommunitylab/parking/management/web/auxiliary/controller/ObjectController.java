@@ -200,21 +200,21 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/streets") 
-	public @ResponseBody List<Street> getStreets(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+	public @ResponseBody List<Street> getStreets(@PathVariable String agency, @RequestParam(required=true) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
 		logger.debug("I'm in get all street - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
-			return dataService.getStreets(agency, lat, lon, radius);
+			return dataService.getStreets(agency, lat, lon, radius, agencyId);
 		} 
-		return dataService.getStreets(agency);
+		return dataService.getStreets(agency, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkings") 
-	public @ResponseBody List<Parking> getParkings(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+	public @ResponseBody List<Parking> getParkings(@PathVariable String agency, @RequestParam(required=true) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
 		logger.debug("I'm in get all parkings - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
-			return dataService.getParkings(agency, lat, lon, radius);
+			return dataService.getParkings(agency, lat, lon, radius, agencyId);
 		} 
-		return dataService.getParkings(agency);
+		return dataService.getParkings(agency, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkingmeters") 
@@ -277,13 +277,13 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data,  @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PSOccupancyData> allData = dataService.classStringToOPSObjArray(datas);
 			for(PSOccupancyData p : allData){
-				Parking park = dataService.getParkingByName(p.getpName(), agency);
+				Parking park = dataService.getParkingByName(p.getpName(), agency, agencyId);
 				if(park != null){
 					List<String> slotsOcc = p.getOccSlots();
 					List<String> slotsH = p.getHSlots();
@@ -339,13 +339,13 @@ public class ObjectController  {
 	}	
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
-	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId,  @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas);
 			for(SOccupancyData s : allData){
-				Street street = dataService.getStreetByName(s.getsName(),agency);
+				Street street = dataService.getStreetByName(s.getsName(),agency, agencyId);
 				if (street != null){
 					List<String> slotsLC = s.getOccLC();
 					List<String> slotsLS = s.getOccLS();
@@ -446,7 +446,7 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload2/{userId:.*}") 
-	public @ResponseBody String updateStreetListWithFile(@RequestParam("tData") MultipartFile data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreetListWithFile(@RequestParam("tData") MultipartFile data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			
 			File convFile = new File(data.getOriginalFilename());
@@ -488,7 +488,7 @@ public class ObjectController  {
 			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas);
 			
 			for(SOccupancyData s : allData){
-				Street street = dataService.getStreetByName(s.getsName(),agency);
+				Street street = dataService.getStreetByName(s.getsName(),agency, agencyId);
 				if (street != null){
 					List<String> slotsLC = s.getOccLC();
 					List<String> slotsLS = s.getOccLS();
