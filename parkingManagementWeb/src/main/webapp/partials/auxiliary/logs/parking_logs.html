@@ -39,40 +39,85 @@
 			<tr>
 				<td colspan="2"><strong>{{ 'log_value' | i18n }}</strong></td>
 			</tr>
-			<tr>
-				<td colspan="2">
-<!-- 					<div class="well"> -->
-						<table width="100%">
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_standard' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsPaying}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_occupied_on_standard' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsOccupiedOnPaying}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsHandicapped}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_occupied_on_handicapped' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsOccupiedOnHandicapped}}</td>
-							</tr>
-							<tr>
-								<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
-								<td>{{logDetails.value.slotsUnavailable}}</td>
-							</tr>
-						</table>
-<!-- 					</div> -->
-				</td>
+			<tr ng-repeat="sc in logDetails.value.slotsConfiguration">
+				<td colspan="2" ng-show="sc.vehicleTypeActive">
+					<table width="100%" ><!-- frame="box" -->
+					    <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_slotNum.visible">
+					    	<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+					    </tr>
+					    <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+							<td class="detailsLogTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.handicappedSlotOccupied }}/{{ sc.handicappedSlotNumber }}</td>
+						</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+							<td class="detailsLogTableSX">{{ 'street_reserved_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.reservedSlotOccupied }}/{{ sc.reservedSlotNumber }}</td>
+				    	</tr>
+					   	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+				    		<td class="detailsLogTableSX">{{ 'street_paidpark_slot' | i18n }}:</td>
+				    		<td class="detailsLogTableDX">&nbsp;{{ sc.paidSlotOccupied }}/{{ sc.paidSlotNumber }}</td>
+				    	</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+				    		<td class="detailsLogTableSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.timedParkSlotOccupied }}/{{ sc.timedParkSlotNumber }}</td>
+						</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+							<td class="detailsLogTableSX">{{ 'street_freepark_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.freeParkSlotOccupied }}/{{ sc.freeParkSlotNumber }}</td>
+						</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+							<td class="detailsLogTableSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.freeParkSlotSignOccupied }}/{{ sc.freeParkSlotSignNumber }}</td>
+						</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+							<td class="detailsLogTableSX">{{ 'street_rechargeable_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.rechargeableSlotOccupied }}/{{ sc.rechargeableSlotNumber }}</td>
+						</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+							<td class="detailsLogTableSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.loadingUnloadingSlotOccupied }}/{{ sc.loadingUnloadingSlotNumber }}</td>
+						</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+							<td class="detailsLogTableSX">{{ 'street_pink_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.pinkSlotOccupied }}/{{ sc.pinkSlotNumber }}</td>
+						</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+							<td class="detailsLogTableSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.carSharingSlotOccupied }}/{{ sc.carSharingSlotNumber }}</td>
+						</tr>
+						<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
+							<td class="detailsLogTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
+						</tr>
+					</table>
+				</td>	
 			</tr>
-<!-- 			<tr> -->
-<!-- 				<td colspan="2"><strong>{{ 'log_value' | i18n }}</strong></td> -->
-<!-- 			</tr> -->
-<!-- 			<tr> -->
-<!-- 				<td colspan="2"><pre ng-bind-html="json_log_value"></pre></td> -->
-<!-- 			</tr> -->
+			<!-- <tr>
+				<td colspan="2">
+					<table width="100%">
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_standard' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsPaying}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_occupied_on_standard' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsOccupiedOnPaying}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsHandicapped}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_occupied_on_handicapped' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsOccupiedOnHandicapped}}</td>
+						</tr>
+						<tr>
+							<td width="30%"><strong>{{ 'log_slot_unavailable' | i18n }}</strong></td>
+							<td>{{logDetails.value.slotsUnavailable}}</td>
+						</tr>
+					</table>
+				</td>
+			</tr> -->
 		</table>
 		<table style="width: 100%">
 			<tr>	
@@ -265,6 +310,170 @@
 					   	</div>
 					</div>
 					<div ng-show="parkLoadedAndSelected">
+			   		<label>{{ 'street_slots' | i18n }}</label>
+					   	<div class="panel panel-default" ng-repeat="sc in myParkingDetails.slotsConfiguration track by $index" >
+							<div class="panel-heading">
+		    					<table width="100%">
+								<tr>
+									<td width="40%"></td>
+									<td width="20%" align="center"><h3 class="panel-title">{{ getVehicleKey(sc.vehicleType) | i18n }}</h3></td>
+									<td width="30%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed($index)" ng-click="showVehicleSlotsPanel($index)"></span></td>
+									<td width="10%" align="right"></td>
+								</tr>
+								</table>
+		  					</div>
+		  					<div class="well" ng-show="vehicle_slots_panel_showed($index)"><!-- class="panel-body" -->
+							   	<div class="panel-body">
+									<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_handicappedSlot.visible">
+								    	<label class="col-md-2 col-form-label" for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
+								    	<div class="col-md-9">
+								    		<input id="handicappedSlot" type="number" class="form-control" name="sHandicappedslot" ng-model="sc.handicappedSlotOccupied" ng-pattern="onlyNumbers" ng-required="sc.handicappedSlotNumber > 0" ng-disabled="sc.handicappedSlotNumber <= 0" min="0" ng-max="sc.handicappedSlotNumber - sc.unusuableSlotNumber" >
+								    	</div>
+								    	<div class="col-md-1">
+								    		<strong>/ {{ sc.handicappedSlotNumber }}</strong>
+								    	</div>
+								    	<div class="col-md-12 field-error" ng-show="form.sHandicappedslot.$error.pattern">{{ 'log_street_occupied_handicapped_error_pattern' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sHandicappedslot.$error.required">{{ 'log_street_occupied_handicapped_error_required' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sHandicappedslot.$error.min">{{ 'log_street_occupied_handicapped_error_min' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sHandicappedslot.$error.max">{{ 'log_street_occupied_handicapped_error_max' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_reservedSlot.visible">
+								    	<label class="col-md-2 col-form-label" for="reservedSlot">{{ 'street_reserved_slot' | i18n }}</label>
+								    	<div class="col-md-9">
+								    		<input id="reservedSlot" type="number" class="form-control" name="sReservedslot" ng-model="sc.reservedSlotOccupied" ng-pattern="onlyNumbers" ng-required="sc.reservedSlotNumber > 0" ng-disabled="sc.reservedSlotNumber <= 0" min="0" ng-max="sc.reservedSlotNumber - sc.unusuableSlotNumber" >
+								    	</div>
+								    	<div class="col-md-1">
+								    		<strong>/ {{ sc.reservedSlotNumber }}</strong>
+								    	</div>
+								    	<div class="col-md-12 field-error" ng-show="form.sReservedslot.$error.pattern">{{ 'log_street_occupied_reserved_error_pattern' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sReservedslot.$error.required">{{ 'log_street_occupied_reserved_error_required' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sReservedslot.$error.min">{{ 'log_street_occupied_reserved_error_min' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sReservedslot.$error.max">{{ 'log_street_occupied_reserved_error_max' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_timedSlot.visible">
+								    	<label class="col-md-2 col-form-label" for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
+								    	<div class="col-md-9">
+								    		<input id="timedSlot" type="number" class="form-control" name="sTimedslot" ng-model="sc.timedParkSlotOccupied" ng-pattern="onlyNumbers" ng-required="sc.timedParkSlotNumber > 0" ng-disabled="sc.timedParkSlotNumber <= 0" min="0" ng-max="sc.timedParkSlotNumber - sc.unusuableSlotNumber" >
+								    	</div>
+								    	<div class="col-md-1">
+								    		<strong>/ {{ sc.timedParkSlotNumber }}</strong>
+								    	</div>
+								    	<div class="col-md-12 field-error" ng-show="form.sTimedslot.$error.pattern">{{ 'log_street_occupied_timed_error_pattern' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sTimedslot.$error.required">{{ 'log_street_occupied_timed_error_required' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sTimedslot.$error.min">{{ 'log_street_occupied_timed_error_min' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sTimedslot.$error.max">{{ 'log_street_occupied_timed_error_max' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_paidSlot.visible">
+								    	<label class="col-md-2 col-form-label" for="paidSlot">{{ 'street_paidpark_slot' | i18n }}</label>
+								    	<div class="col-md-9">
+								    		<input id="paidSlot" type="number" class="form-control" name="sPaidslot" ng-model="sc.paidSlotOccupied" ng-pattern="onlyNumbers" ng-required="sc.paidSlotNumber > 0" ng-disabled="sc.paidSlotNumber <= 0" min="0" ng-max="sc.paidSlotNumber - sc.unusuableSlotNumber" >
+								    	</div>
+								    	<div class="col-md-1">
+								    		<strong>/ {{ sc.paidSlotNumber }}</strong>
+								    	</div>
+								    	<div class="col-md-12 field-error" ng-show="form.sPaidslot.$error.pattern">{{ 'log_street_occupied_paid_error_pattern' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sPaiddslot.$error.required">{{ 'log_street_occupied_paid_error_required' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sPaiddslot.$error.min">{{ 'log_street_occupied_paid_error_min' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sPaiddslot.$error.max">{{ 'log_street_occupied_paid_error_max' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlot.visible">
+								    	<label class="col-md-2 col-form-label" for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
+								    	<div class="col-md-9">
+								    		<input id="freeparkSlot" type="number" class="form-control" name="sFreeparkslot" ng-model="sc.freeParkSlotOccupied" ng-pattern="onlyNumbers" ng-required="sc.freeParkSlotNumber > 0" ng-disabled="sc.freeParkSlotNumber <= 0" min="0" ng-max="sc.freeParkSlotNumber - sc.unusuableSlotNumber" >
+								    	</div>
+								    	<div class="col-md-1">
+								    		<strong>/ {{ sc.freeParkSlotNumber }}</strong>
+								    	</div>
+								    	<div class="col-md-12 field-error" ng-show="form.sFreeparkslot.$error.pattern">{{ 'log_street_occupied_free_error_pattern' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sFreeparkslot.$error.required">{{ 'log_street_occupied_free_error_required' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sFreeparkslot.$error.min">{{ 'log_street_occupied_free_error_min' | i18n }}</div>
+								    	<div class="col-md-12 field-error" ng-show="!isInit && form.sFreeparkslot.$error.max">{{ 'log_street_occupied_free_error_max' | i18n }}</div>
+								   	</div>
+									<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlotSign.visible">
+									    <label class="col-md-2 col-form-label" for="freeparkSlotSigned">{{ 'street_freepark_slot_signed' | i18n }}</label>
+									    <div class="col-md-9">
+									    	<input id="freeparkSlotSigned" type="number" class="form-control" name="sFreeparkslotSigned" ng-model="sc.freeParkSlotSignOccupied" ng-pattern="onlyNumbers" ng-required="sc.freeParkSlotSignNumber > 0" ng-disabled="sc.freeParkSlotSignNumber <= 0" min="0" ng-max="sc.freeParkSlotSignNumber - sc.unusuableSlotNumber" >
+									    </div>
+									    <div class="col-md-1">
+								    		<strong>/ {{ sc.freeParkSlotSignNumber }}</strong>
+								    	</div>
+									    <div class="col-md-12 field-error" ng-show="form.sFreeparkslotSigned.$error.pattern">{{ 'log_street_occupied_free_signed_error_pattern' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'log_street_occupied_free_signed_error_required' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.min">{{ 'log_street_occupied_free_signed_error_min' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.max">{{ 'log_street_occupied_free_signed_error_max' | i18n }}</div>
+									</div>
+									<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_rechargeableSlot.visible">
+									    <label class="col-md-2 col-form-label" for="rechargeableSlot">{{ 'street_rechargeable_slot' | i18n }}</label>
+									    <div class="col-md-9">
+									    	<input id="rechargeableSlot" type="number" class="form-control" name="sRechargeableslot" ng-model="sc.rechargeableSlotOccupied" ng-pattern="onlyNumbers" ng-required="sc.rechargeableSlotNumber > 0" ng-disabled="sc.rechargeableSlotNumber <= 0" min="0" ng-max="sc.rechargeableSlotNumber - sc.unusuableSlotNumber" >
+									    </div>
+									    <div class="col-md-1">
+								    		<strong>/ {{ sc.rechargeableSlotNumber }}</strong>
+								    	</div>
+									    <div class="col-md-12 field-error" ng-show="form.sRechargeableslot.$error.pattern">{{ 'log_street_occupied_rechargeable_error_pattern' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sRechargeableslot.$error.required">{{ 'log_street_occupied_rechargeable_error_required' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sRechargeableslot.$error.min">{{ 'log_street_occupied_rechargeable_error_min' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sRechargeableslot.$error.max">{{ 'log_street_occupied_rechargeable_error_max' | i18n }}</div>
+									</div>
+									<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_loadingUnloadingSlot.visible">
+									    <label class="col-md-2 col-form-label" for="loadingUnloadingSlot">{{ 'street_loading_unloading_slot' | i18n }}</label>
+									    <div class="col-md-9">
+									    	<input id="loadingUnloadingSlot" type="number" class="form-control" name="sLoadingunloadingslot" ng-model="sc.loadingUnloadingSlotOccupied" ng-pattern="onlyNumbers" ng-required="sc.loadingUnloadingSlotNumber > 0" ng-disabled="sc.loadingUnloadingSlotNumber <= 0" min="0" ng-max="sc.loadingUnloadingSlotNumber - sc.unusuabledSlotNumber" >
+									    </div>
+									    <div class="col-md-1">
+								    		<strong>/ {{ sc.loadingUnloadingSlotNumber }}</strong>
+								    	</div>
+									    <div class="col-md-12 field-error" ng-show="form.sLoadingunloadingslot.$error.pattern">{{ 'log_street_occupied_loadingUnloading_error_pattern' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sLoadingunloadingslot.$error.required">{{ 'log_street_occupied_loadingUnloading_error_required' | i18n }}</div>
+										<div class="col-md-12 field-error" ng-show="!isInit && form.sLoadingunloadingslot.$error.min">{{ 'log_street_occupied_loadingUnloading_error_min' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sLoadingunloadingslot.$error.max">{{ 'log_street_occupied_loadingUnloading_error_max' | i18n }}</div>
+									</div>
+									<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_pinkSlot.visible">
+									    <label class="col-md-2 col-form-label" for="pinkSlot">{{ 'street_pink_slot' | i18n }}</label>
+									    <div class="col-md-9">
+									    	<input id="pinkSlot" type="number" class="form-control" name="sPinkslot" ng-model="sc.pinkSlotOccupied" ng-pattern="onlyNumbers" ng-required="sc.pinkSlotNumber > 0" ng-disabled="sc.pinkSlotNumber <= 0" min="0" ng-max="sc.pinkSlotNumber - sc.unusuabledSlotNumber" >
+									    </div>
+									    <div class="col-md-1">
+								    		<strong>/ {{ sc.pinkSlotNumber }}</strong>
+								    	</div>
+									    <div class="col-md-12 field-error" ng-show="form.sPinkslot.$error.pattern">{{ 'log_street_occupied_pink_error_pattern' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sPinkslot.$error.required">{{ 'log_street_occupied_pink_error_required' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sPinkslot.$error.min">{{ 'log_street_occupied_pink_error_min' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sPinkslot.$error.max">{{ 'log_street_occupied_pink_error_max' | i18n }}</div>
+									</div>
+									<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_carSharingSlot.visible">
+									    <label class="col-md-2 col-form-label" for="carSharingSlot">{{ 'street_car_sharing_slot' | i18n }}</label>
+									    <div class="col-md-9">
+									    	<input id="carSharingSlot" type="number" class="form-control" name="sCarsharingslot" ng-model="sc.carSharingSlotNumber" ng-pattern="onlyNumbers" ng-required="sc.carSharingSlotNumber > 0" ng-disabled="sc.carSharingSlotNumber <= 0" min="0" ng-max="sc.carSharingSlotNumber - sc.unusuabledSlotNumber" >
+									    </div>
+									    <div class="col-md-1">
+								    		<strong>/ {{ sc.carSharingSlotNumber }}</strong>
+								    	</div>
+									    <div class="col-md-12 field-error" ng-show="form.sCarsharingslot.$error.pattern">{{ 'log_street_occupied_car_sharing_error_pattern' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sCarsharingslot.$error.required">{{ 'log_street_occupied_car_sharing_error_required' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sCarsharingslot.$error.min">{{ 'log_street_occupied_car_sharing_error_min' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sCarsharingslot.$error.max">{{ 'log_street_occupied_car_sharing_error_max' | i18n }}</div>
+									</div>
+									<div class="form-group row" ng-show="manageVehicleTypesPs(sc.vehicleType).s_unusuableSlot.visible">
+									    <label class="col-md-2 col-form-label" for="unusuabledSlot">{{ 'street_unusuable_slot' | i18n }}</label>
+									    <div class="col-md-9">
+									    	<input id="unusuabledSlot" type="number" class="form-control" name="sUnusuabledSlot" ng-model="sc.unusuableSlotNumber" ng-pattern="onlyNumbers" min="0" ng-max="getRemainingSlots(sc)" >
+									    </div>
+									    <div class="col-md-1">
+								    	</div>
+									    <div class="col-md-12 field-error" ng-show="form.sUnusuabledSlot.$error.pattern">{{ 'log_street_unavailable_error_pattern' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sUnusuabledSlot.$error.min">{{ 'log_street_unavailable_error_min' | i18n }}</div>
+									    <div class="col-md-12 field-error" ng-show="!isInit && form.sUnusuabledSlot.$error.max">{{ 'log_street_unavailable_error_max' | i18n }}</div>
+									</div>
+									<!-- <div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_activeType.visible">
+									    <label for="activeType">{{ 'street_active_vehicle_type' | i18n }}
+									    	<input id="activeType" type="checkbox" name="nsActivetype" ng-model="sc.vehicleTypeActive" >
+									    </label>
+									</div> -->
+							   	</div>
+	  						</div>
+	  					</div>
+					<!-- <div ng-show="parkLoadedAndSelected">
 					   	<label class="group-label"  for="totalSlot">{{ 'parking_slots' | i18n }}</label>
 					   	<div class="panel panel-default" width="90%">
 					   		<div class="panel-body">
@@ -331,7 +540,7 @@
 				   					</tr>
 					   				<tr>
 				   						<td><strong>{{ 'parking_unavailable_slot' | i18n }}</strong></td>
-				   						<td></td><!-- {{ myParkingDetails.slotsUnavailable }} -->
+				   						<td></td>{{ myParkingDetails.slotsUnavailable }}
 				   						<td></td>
 				   						<td><input id="unavailableSlots" type="number" class="form-control" name="pUnavalableSlots" ng-pattern="onlyNumbers" ng-model="myParkingDetails.slotsUnavailable" placeholder="{{ 'park_unavailableslot_placeholder' | i18n }}" min="0" ng-change="checkCorrectParkSlots(myParkingDetails)"></td>
 				   					</tr>
@@ -355,7 +564,7 @@
 				   					</tr>
 					   			</table>
 					   	</div>
-				</div>
+				</div> -->
 				<div class="alert alert-danger" ng-show="showUpdatingPErrorMessage">{{ 'err_in_log_parking_inserting' | i18n }}</div>
 				<div class="alert alert-success" ng-show="showUpdatingPSuccessMessage">{{ 'succ_in_log_parking_inserting' | i18n }}</div>
 		   		<table width="97%">			

@@ -317,9 +317,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	var all_logs_tab_obj = {};
 		   	$scope.showedObjects = sharedDataService.getVisibleObjList();
 		   	for(var i = 0; i < $scope.showedObjects.length; i++){
-		   		//if($scope.showedObjects[i].id == 'Area'){
-		   		//	$scope.loadAreaAttributes($scope.showedObjects[i].attributes);
-		   		//}
 		   		if($scope.showedObjects[i].id == 'Street'){
 		   			$scope.loadStreetAttributes($scope.showedObjects[i].attributes);
 		   		}
@@ -636,6 +633,11 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    var corrConfigurationType = initializeService.getSlotConfigurationByType(type);
 	    return corrConfigurationType;
 	};
+	
+	$scope.manageVehicleTypesPs = function(type){
+    	var corrConfigurationType = initializeService.getSlotConfigurationByTypePs(type);
+    	return corrConfigurationType;
+    };
 	
 	// Method used to translate the vehicle type in the correct i18n key
     $scope.getVehicleKey = function(car_type){
@@ -1054,8 +1056,11 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.allPmProfit = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
+		var params = {
+			agencyId: agencyId	
+		};
 		
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters", null, $scope.authHeaders, null);
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters", params, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
 	    	angular.copy(result, $scope.allPmProfit);
 	    	//for(var i = 0; i < $scope.allPmProfit.length; i ++){
@@ -1077,9 +1082,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getParkDetailData = function(park){
 		$scope.myParkingDetails = park;
-		if($scope.myParkingDetails.slotsHandicapped == null){
+		$scope.inithializeVehicleTypeList(park.slotsConfiguration, 1);
+		/*if($scope.myParkingDetails.slotsHandicapped == null){
 			$scope.myParkingDetails.slotsHandicapped = 0;
-		}
+		}*/
 		//$scope.myParkingDetails.slotsPaying = $scope.myParkingDetails.slotsTotal - $scope.myParkingDetails.slotsHandicapped;
 		$scope.initParkTimeValues(1);
 		$scope.parkLoadedAndSelected = true;
@@ -1200,6 +1206,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				    	if(result == "OK"){
 				    		$scope.showUpdatingSErrorMessage = false;
 				    		$scope.showUpdatingSSuccessMessage = true;
+				    		loadLogs();	// to update log list after new log insertion
 				    	} else {
 				    		$scope.showUpdatingSErrorMessage = true;
 				    		$scope.showUpdatingSSuccessMessage = false;
@@ -1237,13 +1244,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						name: myParkingDetails.name, 
 						description: myParkingDetails.description,
 						updateTime: $scope.getLogMillis(myParkingDetails.loghour, myParkingDetails.logtime), 
-						user: parseInt(myParkingDetails.user), 
-						slotsTotal: parseInt(myParkingDetails.slotsTotal), 
+						user: parseInt(myParkingDetails.user),
+						/*slotsTotal: parseInt(myParkingDetails.slotsTotal), 
 						slotsPaying: parseInt(myParkingDetails.slotsPaying),
 						slotsOccupiedOnPaying: parseInt(myParkingDetails.slotsOccupiedOnPaying),	// I consider this value as the occupied on paying
 						slotsHandicapped: parseInt(myParkingDetails.slotsHandicapped),
 						slotsOccupiedOnHandicapped: parseInt(myParkingDetails.slotsOccupiedOnHandicapped),
-						slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), 
+						slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), */
+						slotsConfiguration: myParkingDetails.slotsConfiguration,
 						lastChange:myParkingDetails.lastChange
 					};
 					
@@ -1260,6 +1268,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				    	if(result == "OK"){
 				    		$scope.showUpdatingPErrorMessage = false;
 				    		$scope.showUpdatingPSuccessMessage = true;
+				    		loadLogs();	// to update log list after new log insertion
 				    	} else {
 				    		$scope.showUpdatingPErrorMessage = true;
 				    		$scope.showUpdatingPSuccessMessage = false;
@@ -1319,6 +1328,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				    	if(result == "OK"){
 				    		$scope.showUpdatingPErrorMessage = false;
 				    		$scope.showUpdatingPSuccessMessage = true;
+				    		loadLogs();	// to update log list after new log insertion
 				    	} else {
 				    		$scope.showUpdatingPErrorMessage = true;
 				    		$scope.showUpdatingPSuccessMessage = false;
@@ -1375,6 +1385,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			    	if(result == "OK"){
 			    		$scope.showUpdatingPMErrorMessage = false;
 			    		$scope.showUpdatingPMSuccessMessage = true;
+			    		loadLogs();	// to update log list after new log insertion
 			    	} else {
 			    		$scope.showUpdatingPMErrorMessage = true;
 			    		$scope.showUpdatingPMSuccessMessage = false;
@@ -1778,34 +1789,36 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    			//$scope.uploader.uploadAll();
 	    			
 	    			// Case months value
-	    			var out_obj = angular.element(out);
-	    	    	
-	    			var method = 'POST';
-	    	    	var fileVal = {	
-	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
-	    	        };
-	    	    	var params = {
-	    				isSysLog: true,
-	    				agencyId: agencyId,
-	    				period : null
-	    			};
-	    	                	
-	    	        var value = JSON.stringify(fileVal);
-	    	        if($scope.showLog) console.log("Json value " + value);
-	    	                	
-	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets/fileupload/" + user, params, $scope.authHeaders, value);	
-	    	        $scope.progress += 25;
-	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
-	    	        myDataPromise.then(function(result){
-	    	           if(result != null && result != ""){	// I have to check if it is correct
-	    	        	   console.log("Occupancy street file upload result: " + result);
-	    	        	   //$scope.provvClass = result.userClassList;
-	    	        	   //$scope.setLoadedPracticeVisible();
-	    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
-	    	        	   $scope.progress = 100;
-	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
-	    	           }
-	    	        });
+	    			//var out_obj = angular.element(out);
+	    			var out_obj = (out) ? out.textContent : "";
+	    			if(out_obj != ""){
+		    			var method = 'POST';
+		    	    	var fileVal = {	
+		    	    		logData: out_obj //(out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+		    	        };
+		    	    	var params = {
+		    				isSysLog: true,
+		    				agencyId: agencyId,
+		    				period : null
+		    			};
+		    	                	
+		    	        var value = JSON.stringify(fileVal);
+		    	        if($scope.showLog) console.log("Json value " + value);
+		    	                	
+		    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets/fileupload/" + user, params, $scope.authHeaders, value);	
+		    	        $scope.progress += 25;
+		    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
+		    	        myDataPromise.then(function(result){
+		    	           if(result != null && result != ""){	// I have to check if it is correct
+		    	        	   console.log("Occupancy street file upload result: " + result);
+		    	        	   //$scope.provvClass = result.userClassList;
+		    	        	   //$scope.setLoadedPracticeVisible();
+		    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
+		    	        	   $scope.progress = 100;
+		    	        	   $rootScope.$broadcast('dialogs.wait.complete');
+		    	           }
+		    	        });
+	    			}
 	    			break;	    			
 	    		default: break;	
 	    	}	    	
@@ -1860,6 +1873,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	        };
 	    	    	var params = {
 	    				isSysLog: true,
+	    				agencyId: agencyId,
 	    				period : null
 	    			};
 	    	                	

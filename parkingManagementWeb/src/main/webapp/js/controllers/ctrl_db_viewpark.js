@@ -9,13 +9,14 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	$scope.vehicleType = 'Car';
 	var date = new Date();
 	$scope.years = [];
-	$scope.year = "";
+	//$scope.year = "";
 	$scope.dayOptions = {value:'custom'};//{value:'wd'};
 	$scope.hourOptions = {value:'custom'};//{value:'morning'};
 	
 	for (var i = 0; i < 5; i++) {
 		$scope.years.push('' + date.getFullYear()-i);
 	}
+	$scope.year = $scope.years[0];
 	var initialMonth = (date.getMonth() == 0 ? date.getMonth()+1 : date.getMonth());
 	var endMonth = (date.getMonth()+1);
 	$scope.monthSliderValue = "1;12";//"" + initialMonth +";"+endMonth + "";

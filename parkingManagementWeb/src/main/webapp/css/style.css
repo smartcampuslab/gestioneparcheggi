@@ -399,6 +399,20 @@ td.detailsCompressTableDiagram {
     text-align: center;
     vertical-align: middle;
 }
+td.detailsLogTableSX {
+    width: 30%;
+    height: 20px;
+    font-weight: bold;
+    text-align: left;
+    vertical-align: middle;
+}
+td.detailsLogTableDX {
+    width: 70%;
+    height: 20px;
+    font-weight: normal;
+    text-align: left;
+    vertical-align: middle;
+}
 th.myCenter {
     text-align: center;
 }
