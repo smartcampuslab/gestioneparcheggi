@@ -315,7 +315,9 @@
 							<div class="panel-heading">
 		    					<table width="100%">
 								<tr>
-									<td width="40%"></td>
+									<td width="40%">
+										<input id="insertSLog" type="checkbox" name="insertStLog" ng-model="sc.updateData">
+									</td>
 									<td width="20%" align="center"><h3 class="panel-title">{{ getVehicleKey(sc.vehicleType) | i18n }}</h3></td>
 									<td width="30%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed($index)" ng-click="showVehicleSlotsPanel($index)"></span></td>
 									<td width="10%" align="right"></td>

@@ -126,11 +126,11 @@ public class GeoObjectManager {
 		return park;
 	}
 	
-	public ParkStruct getParkingStructureByName(String name, String appId) throws Exception{
+	public ParkStruct getParkingStructureByName(String name, String appId, String agencyId) throws Exception{
 		ParkStruct pstruct = null;
 		boolean find = false;
 		//return 
-		List<ParkStruct> all = searchParkingStructures((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<ParkStruct> all = searchParkingStructures((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
 		for(int i = 0; i < all.size() && !find; i++){
 			ParkStruct ps = all.get(i);
 			if(ps.getName().compareToIgnoreCase(name) == 0){
@@ -412,13 +412,13 @@ public class GeoObjectManager {
 		return listaObj; //find(query, cls);
 	}
 	
-	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
-		return searchParkingStructures(circle, inCriteria, 0, 0);//circle,
+	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria, String agencyId) throws Exception { //Circle circle
+		return searchParkingStructures(circle, inCriteria, 0, 0, agencyId);//circle,
 	}	
 	
-	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle	
+	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria, int limit, int skip, String agencyId) throws Exception { //Circle circle	
 		List<ParkStruct> listaObj = new ArrayList<ParkStruct>();
-		List<ParkingStructureBean> myParkingStructures = storageManager.getAllParkingStructure(inCriteria.get("agency").toString());
+		List<ParkingStructureBean> myParkingStructures = storageManager.getAllParkingStructureByAgencyId(inCriteria.get("agency").toString(), agencyId);
 		
 		for(int i = 0; i < myParkingStructures.size(); i++){
 			ParkStruct ps = castPStructBeanToParkStruct(myParkingStructures.get(i));
@@ -613,7 +613,7 @@ public class GeoObjectManager {
 		return ps;
 	}	
 	
-	public ArrayList<PSOccupancyData> classStringToOPSObjArray(String data) throws Exception{
+	public ArrayList<PSOccupancyData> classStringToOPSObjArray(String data, String agency) throws Exception {
     	logger.debug(String.format("Map Object data: %s", data));
     	
     	ArrayList<PSOccupancyData> correctData = new ArrayList<PSOccupancyData>();
@@ -621,7 +621,9 @@ public class GeoObjectManager {
     	String[] allRecords = data.split("\n");
     	String year = "";
     	FilterPeriod period = new FilterPeriod();
+    	String vehicleType = "Car";
     	
+    	List<String> slotsKeys = null;
     	for(int i = 0; i < allRecords.length; i++){
     		String[] att_and_vals = allRecords[i].split(",");
     		if(att_and_vals != null && att_and_vals.length > 0){
@@ -630,25 +632,100 @@ public class GeoObjectManager {
 	        			year = att_and_vals[1];
 	        	    	period.setYear(year);
 	        		} else {
-	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
-	        				PSOccupancyData tmpPSOcc = new PSOccupancyData();
-	        				tmpPSOcc.setpName(cleanField(att_and_vals[0]));
-	        				tmpPSOcc.setpAddress(cleanField(att_and_vals[1]));
-	        				tmpPSOcc.setPeriod(period);
-	        				
-	        				// here I load the vals
-	        				List<String> occSlots = loadRicursive(att_and_vals, 0, OCCUPANCY_PS_CELLS_OFFSET);
-	        				List<String> hSlots = loadRicursive(att_and_vals, 1, OCCUPANCY_PS_CELLS_OFFSET);
-	        				List<String> ndSlots = loadRicursive(att_and_vals, 2, OCCUPANCY_PS_CELLS_OFFSET);
-	        				tmpPSOcc.setOccSlots(occSlots);
-	        				tmpPSOcc.setHSlots(hSlots);
-	        				tmpPSOcc.setNdSlots(ndSlots);
-	        				
-	        				logger.error(String.format("Corrected Object: %s", tmpPSOcc.toString()));
-	        				correctData.add(tmpPSOcc);
+	        			if(att_and_vals[0].compareTo("Tipo Veicolo") == 0){
+	        				vehicleType = retrieveVehicleTypeByDesc(att_and_vals[1], agency);
+	        			} else {
+		        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+		        				PSOccupancyData tmpPSOcc = new PSOccupancyData();
+		        				tmpPSOcc.setpName(cleanField(att_and_vals[0]));
+		        				tmpPSOcc.setpAddress(cleanField(att_and_vals[1]));
+		        				tmpPSOcc.setPeriod(period);
+		        				
+		        				List<String> lcSlots = initEmptyList();
+		        				List<String> lsSlots = initEmptyList();
+		        				List<String> pSlots = initEmptyList();
+		        				List<String> doSlots = initEmptyList();
+		        				List<String> hSlots = initEmptyList();
+		        				List<String> rSlots = initEmptyList();
+		        				List<String> eSlots = initEmptyList();
+		        				List<String> c_sSlots = initEmptyList();
+		        				List<String> roSlots = initEmptyList();
+		        				List<String> csSlots = initEmptyList();
+		        				List<String> ndSlots = initEmptyList();
+		        				// here I load the vals
+		        				if(slotsKeys.contains(LC)){
+		        					lcSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LC), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(LS)){
+		        					lsSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(P)){
+		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(DO)){
+		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(H)){
+		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(R)){
+		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(P)){
+		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(DO)){
+		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(H)){
+		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(R)){
+		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(E)){
+		        					eSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(CeS)){
+		        					c_sSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CeS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(RO)){
+		        					roSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(RO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(CS)){
+		        					csSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(ND)){
+		        					ndSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(ND), slotsKeys.size() + 1);
+		        				}
+		        				tmpPSOcc.setVehicleType(vehicleType);
+		        				tmpPSOcc.setOccLC(lcSlots);
+		        				tmpPSOcc.setOccLS(lsSlots);
+		        				tmpPSOcc.setOccP(pSlots);
+		        				tmpPSOcc.setOccDO(doSlots);
+		        				tmpPSOcc.setOccH(hSlots);
+		        				tmpPSOcc.setOccR(rSlots);
+		        				tmpPSOcc.setOccE(eSlots);
+		        				tmpPSOcc.setOccC_S(c_sSlots);
+		        				tmpPSOcc.setOccRO(roSlots);
+		        				tmpPSOcc.setOccCS(csSlots);
+		        				tmpPSOcc.setSlotsND(ndSlots);
+		        				
+		        				logger.error(String.format("Corrected Object: %s", tmpPSOcc.toString()));
+		        				correctData.add(tmpPSOcc);
+		        			}
 	        			}
-	        		}
-	    		}
+	        		} 
+	    		} else {
+        			// here I retrieve the slots configuration
+	    			slotsKeys = new ArrayList<String>();
+	    			for(int j = 4; j < att_and_vals.length; j++){
+	    				if(att_and_vals[j].compareTo(OCC) == 0){
+	    					break;
+	    				}
+	    				slotsKeys.add(att_and_vals[j]);
+	    			}
+        		}
     		}
     	}
     	return correctData;
@@ -715,49 +792,49 @@ public class GeoObjectManager {
 		        				List<String> ndSlots = initEmptyList();
 		        				// here I load the vals
 		        				if(slotsKeys.contains(LC)){
-		        					lcSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LC), OCCUPANCY_CELLS_OFFSET);
+		        					lcSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LC), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(LS)){
-		        					lsSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LS), OCCUPANCY_CELLS_OFFSET);
+		        					lsSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(P)){
-		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), OCCUPANCY_CELLS_OFFSET);
+		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(DO)){
-		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), OCCUPANCY_CELLS_OFFSET);
+		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(H)){
-		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), OCCUPANCY_CELLS_OFFSET);
+		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(R)){
-		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), OCCUPANCY_CELLS_OFFSET);
+		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(P)){
-		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), OCCUPANCY_CELLS_OFFSET);
+		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(DO)){
-		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), OCCUPANCY_CELLS_OFFSET);
+		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(H)){
-		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), OCCUPANCY_CELLS_OFFSET);
+		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(R)){
-		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), OCCUPANCY_CELLS_OFFSET);
+		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(E)){
-		        					eSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(E), OCCUPANCY_CELLS_OFFSET);
+		        					eSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(CeS)){
-		        					c_sSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CeS), OCCUPANCY_CELLS_OFFSET);
+		        					c_sSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CeS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(RO)){
-		        					roSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(RO), OCCUPANCY_CELLS_OFFSET);
+		        					roSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(RO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(CS)){
-		        					csSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CS), OCCUPANCY_CELLS_OFFSET);
+		        					csSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(ND)){
-		        					ndSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(ND), OCCUPANCY_CELLS_OFFSET);
+		        					ndSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(ND), slotsKeys.size() + 1);
 		        				}
 		        				tmpSOcc.setVehicleType(vehicleType);
 		        				tmpSOcc.setOccLC(lcSlots);

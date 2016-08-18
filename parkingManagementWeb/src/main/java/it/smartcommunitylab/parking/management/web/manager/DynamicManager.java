@@ -523,7 +523,7 @@ public class DynamicManager {
 					temp.setUnusuableSlotNumber(s.getSlotsUnavailable());*/
 					
 					temp.setLastChange(timestamp);
-					mongodb.save(area);
+					//mongodb.save(area);
 					
 					DataLogBean dl = new DataLogBean();
 					dl.setObjId(s.getId());
@@ -578,8 +578,8 @@ public class DynamicManager {
 		// Update Stat report
 		int[] total = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
 		int[] occupied = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
-		double statValue = findOccupationRate(total, occupied, 0, 0, 1, vs.getUnusuableSlotNumber());
-		int unavailableSlots = vs.getUnusuableSlotNumber();
+		double statValue = findOccupationRate(total, occupied, 0, 0, 1, retrieveSlots(vs.getUnusuableSlotNumber()));
+		int unavailableSlots = retrieveSlots(vs.getUnusuableSlotNumber());
 		String vehicleType = "@" + vs.getVehicleType();
 		if(period == null || period.length == 0){
 			if(p_type != -1){
@@ -764,7 +764,7 @@ public class DynamicManager {
 			}
 		}
 		// this data can be present in the park with only a park type too
-		if(vs.getUnusuableSlotNumber() != -1){
+		if(retrieveSlots(vs.getUnusuableSlotNumber()) != -1 && retrieveSlots(vs.getUnusuableSlotNumber()) > 0){
 			double unusualbedSlotVal = vs.getUnusuableSlotNumber();
 			if(period == null || period.length == 0){
 				if(p_type != -1){
@@ -959,7 +959,7 @@ public class DynamicManager {
 		entity.setUnusuableSlotNumber(p.getSlotsUnavailable());*/
 		entity.setLastChange(timestamp);
 		
-		mongodb.save(entity);
+		//mongodb.save(entity);
 		
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId(p.getId());
@@ -1078,8 +1078,8 @@ public class DynamicManager {
 		// Update Stat report
 		int[] total = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
 		int[] occupied = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
-		double statValue = findOccupationRate(total, occupied, 0, 0, 1, vs.getUnusuableSlotNumber());
-		int unavailableSlots = vs.getUnusuableSlotNumber();
+		double statValue = findOccupationRate(total, occupied, 0, 0, 1, retrieveSlots(vs.getUnusuableSlotNumber()));
+		int unavailableSlots = retrieveSlots(vs.getUnusuableSlotNumber());
 		String vehicleType = "@" + vs.getVehicleType();
 		if(period == null || period.length == 0){
 			if(p_type != -1){
@@ -1092,7 +1092,7 @@ public class DynamicManager {
 		}
 		// Here I have to difference the type of the park: total, free, paying and timed - MULTIPARKOCC
 		if(countElements(total) > 1){	// Here I check if there are more than one element of park type
-			if(vs.getFreeParkSlotNumber() != 0){
+			if(retrieveSlots(vs.getFreeParkSlotNumber()) != 0){
 				double freeOccValue = findOccupationRate(null, null, vs.getFreeParkSlotNumber(), vs.getFreeParkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1109,7 +1109,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getFreeParkSlotSignNumber() != 0){
+			if(retrieveSlots(vs.getFreeParkSlotSignNumber()) != 0){
 				double freeSignOccValue = findOccupationRate(null, null, vs.getFreeParkSlotSignNumber(), vs.getFreeParkSlotSignOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1126,7 +1126,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getPaidSlotNumber() != 0){
+			if(retrieveSlots(vs.getPaidSlotNumber()) != 0){
 				double payingOccValue = findOccupationRate(null, null, vs.getPaidSlotNumber(), vs.getPaidSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1143,7 +1143,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getTimedParkSlotNumber() != 0){
+			if(retrieveSlots(vs.getTimedParkSlotNumber()) != 0){
 				double timedOccValue = findOccupationRate(null, null, vs.getTimedParkSlotNumber(), vs.getTimedParkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1160,7 +1160,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getHandicappedSlotNumber() != 0){
+			if(retrieveSlots(vs.getHandicappedSlotNumber()) != 0){
 				double handicappedOccValue = findOccupationRate(null, null, vs.getHandicappedSlotNumber(), vs.getHandicappedSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1177,7 +1177,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getReservedSlotNumber() != 0){
+			if(retrieveSlots(vs.getReservedSlotNumber()) != 0){
 				double reservedOccValue = findOccupationRate(null, null, vs.getReservedSlotNumber(), vs.getReservedSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1194,7 +1194,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getRechargeableSlotNumber() != 0){
+			if(retrieveSlots(vs.getRechargeableSlotNumber()) != 0){
 				double rechargeableOccValue = findOccupationRate(null, null, vs.getRechargeableSlotNumber(), vs.getRechargeableSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1211,7 +1211,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getLoadingUnloadingSlotNumber() != 0){
+			if(retrieveSlots(vs.getLoadingUnloadingSlotNumber()) != 0){
 				double loadingUnloadingOccValue = findOccupationRate(null, null, vs.getLoadingUnloadingSlotNumber(), vs.getLoadingUnloadingSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1228,7 +1228,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getPinkSlotNumber() != 0){
+			if(retrieveSlots(vs.getPinkSlotNumber()) != 0){
 				double pinkOccValue = findOccupationRate(null, null, vs.getPinkSlotNumber(), vs.getPinkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1245,7 +1245,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(vs.getCarSharingSlotNumber() != 0){
+			if(retrieveSlots(vs.getCarSharingSlotNumber()) != 0){
 				double carSharingOccValue = findOccupationRate(null, null, vs.getCarSharingSlotNumber(), vs.getCarSharingSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1264,7 +1264,7 @@ public class DynamicManager {
 			}
 		}
 		// this data can be present in the park with only a park type too
-		if(vs.getUnusuableSlotNumber() != -1){
+		if(retrieveSlots(vs.getUnusuableSlotNumber()) != -1 && retrieveSlots(vs.getUnusuableSlotNumber()) > 0){
 			double unusualbedSlotVal = vs.getUnusuableSlotNumber();
 			if(period == null || period.length == 0){
 				if(p_type != -1){

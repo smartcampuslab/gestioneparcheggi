@@ -282,11 +282,131 @@ public class ObjectController  {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
-			List<PSOccupancyData> allData = dataService.classStringToOPSObjArray(datas);
+			List<PSOccupancyData> allData = dataService.classStringToOPSObjArray(datas, agency);
 			for(PSOccupancyData p : allData){
 				Parking park = dataService.getParkingByName(p.getpName(), agency, agencyId);
 				if(park != null){
-					List<String> slotsOcc = p.getOccSlots();
+					List<String> slotsLC = p.getOccLC();
+					List<String> slotsLS = p.getOccLS();
+					List<String> slotsP = p.getOccP();
+					List<String> slotsDO = p.getOccDO();
+					List<String> slotsH = p.getOccH();
+					List<String> slotsR = p.getOccR();
+					List<String> slotsE = p.getOccE();
+					List<String> slotsC_S = p.getOccC_S();
+					List<String> slotsRO = p.getOccRO();
+					List<String> slotsCS = p.getOccCS();
+					List<String> slotsND = p.getSlotsND();
+					
+					for(int i = 0; i < slotsLC.size(); i++){
+						boolean skipUpdate = true;
+						int slotOccLc = -1;
+						int slotOccLs = -1;
+						int slotOccP = -1;
+						int slotOccDO = -1;
+						int slotOccH = -1;
+						int slotOccR = -1;
+						int slotOccE = -1;
+						int slotOccC_S = -1;
+						int slotOccRO = -1;
+						int slotOccCS = -1;
+						int slotNumND = -1;
+						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("-1") != 0){
+							slotOccLc = Integer.parseInt(slotsLC.get(i));
+						}
+						if(slotsLS.get(i).compareTo("") != 0 && slotsLS.get(i).compareTo("-1") != 0){
+							slotOccLs = Integer.parseInt(slotsLS.get(i));
+						}
+						if(slotsP.get(i).compareTo("") != 0 && slotsP.get(i).compareTo("-1") != 0){
+							slotOccP = Integer.parseInt(slotsP.get(i));
+						}
+						if(slotsDO.get(i).compareTo("") != 0 && slotsDO.get(i).compareTo("-1") != 0){
+							slotOccDO = Integer.parseInt(slotsDO.get(i));
+						}
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
+							slotOccH = Integer.parseInt(slotsH.get(i));
+						}
+						if(slotsR.get(i).compareTo("") != 0 && slotsR.get(i).compareTo("-1") != 0){
+							slotOccR = Integer.parseInt(slotsR.get(i));
+						}
+						if(slotsE.get(i).compareTo("") != 0 && slotsE.get(i).compareTo("-1") != 0){
+							slotOccE = Integer.parseInt(slotsE.get(i));
+						}
+						if(slotsC_S.get(i).compareTo("") != 0 && slotsC_S.get(i).compareTo("-1") != 0){
+							slotOccC_S = Integer.parseInt(slotsC_S.get(i));
+						}
+						if(slotsRO.get(i).compareTo("") != 0 && slotsRO.get(i).compareTo("-1") != 0){
+							slotOccRO = Integer.parseInt(slotsRO.get(i));
+						}
+						if(slotsCS.get(i).compareTo("") != 0 && slotsCS.get(i).compareTo("-1") != 0){
+							slotOccCS = Integer.parseInt(slotsCS.get(i));
+						}
+						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
+							slotNumND = Integer.parseInt(slotsND.get(i));
+						}
+						List<VehicleSlot> sc = park.getSlotsConfiguration();
+						for(VehicleSlot vs : sc){
+							if(vs.getVehicleType().compareTo(p.getVehicleType()) == 0){
+								if(slotOccLc != -1){
+									vs.setFreeParkSlotSignOccupied(slotOccLc);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccLs != -1){
+									vs.setFreeParkSlotOccupied(slotOccLs);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccP != -1){
+									vs.setPaidSlotOccupied(slotOccP);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccDO != -1){
+									vs.setTimedParkSlotOccupied(slotOccDO);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccH != -1){
+									vs.setHandicappedSlotOccupied(slotOccH);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccR != -1){
+									vs.setReservedSlotOccupied(slotOccR);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccE != -1){
+									vs.setRechargeableSlotOccupied(slotOccE);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccC_S != -1){
+									vs.setLoadingUnloadingSlotOccupied(slotOccC_S);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccRO != -1){
+									vs.setPinkSlotOccupied(slotOccRO);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccCS != -1){
+									vs.setCarSharingSlotOccupied(slotOccCS);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotNumND != -1){
+									vs.setUnusuableSlotNumber(slotNumND);
+									skipUpdate = false;
+								} else {
+								}
+								break;
+							}
+						}
+						park.setSlotsConfiguration(sc);
+					/*List<String> slotsOcc = p.getOccSlots();
 					List<String> slotsH = p.getHSlots();
 					List<String> slotsND = p.getNdSlots();
 					for(int i = 0; i < slotsOcc.size(); i++){
@@ -304,7 +424,7 @@ public class ObjectController  {
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
 						//TODO manage new vehicleSlotsConfiguration
-						/*if(slotsOccOnPaying != -1){
+						if(slotsOccOnPaying != -1){
 							park.setSlotsOccupiedOnPaying(slotsOccOnPaying);
 							skipUpdate = false;
 						} else {
@@ -708,14 +828,14 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PSProfitData> allData = dataService.classStringToPPSObjArray(datas);
 			for(PSProfitData p : allData){
-				ParkStruct parkStruct = dataService.getParkingStructureByName(p.getpName(), agency);
+				ParkStruct parkStruct = dataService.getParkingStructureByName(p.getpName(), agency, agencyId);
 				if(parkStruct != null){
 					List<String> tickets = p.getTickets();
 					List<String> profits = p.getProfitVals();
@@ -737,8 +857,6 @@ public class ObjectController  {
 				}
 			}
 			logger.debug("ended file uplodad flux");
-			
-			
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();

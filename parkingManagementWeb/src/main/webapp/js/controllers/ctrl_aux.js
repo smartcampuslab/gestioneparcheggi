@@ -683,6 +683,44 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	}
     };
     
+    $scope.initDefaultValuesForSlots = function(slotsConfiguration){
+    	for(var i = 0; i < slotsConfiguration.length; i++){
+    		slotsConfiguration[i].updateData = true;
+    		if(slotsConfiguration[i].handicappedSlotNumber > 0){
+    			slotsConfiguration[i].handicappedSlotOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].reservedSlotNumber > 0){
+    			slotsConfiguration[i].reservedSlotOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].timedParkSlotNumber > 0){
+    			slotsConfiguration[i].timedParkSlotOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].paidSlotNumber > 0){
+    			slotsConfiguration[i].paidSlotOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].freeParkSlotNumber > 0){
+    			slotsConfiguration[i].freeParkSlotOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].freeParkSlotSignNumber > 0){
+    			slotsConfiguration[i].freeParkSlotSignOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].rechargeableSlotNumber > 0){
+    			slotsConfiguration[i].rechargeableSlotOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].loadingUnloadingSlotNumber > 0){
+    			slotsConfiguration[i].loadingUnloadingSlotOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].pinkSlotNumber > 0){
+    			slotsConfiguration[i].pinkSlotOccupied = 0;
+    		}
+    		if(slotsConfiguration[i].carSharingSlotNumber > 0){
+    			slotsConfiguration[i].carSharingSlotOccupied = 0;
+    		}
+    		slotsConfiguration[i].unusuableSlotNumber = 0;
+    	}
+    	return slotsConfiguration;
+    }
+    
     $scope.showVehicleSlotsPanel = function(index){
     	vehicleTypesList[index].show = true;
     };
@@ -1072,6 +1110,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getDetailData = function(street){
 		$scope.myStreetDetails = street;
+		$scope.myStreetDetails.slotsConfiguration = $scope.initDefaultValuesForSlots(street.slotsConfiguration);
 		$scope.inithializeVehicleTypeList(street.slotsConfiguration, 0);
 		$scope.initTimeValues();
 		$scope.streetLoadedAndSelected = true;
@@ -1082,6 +1121,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.getParkDetailData = function(park){
 		$scope.myParkingDetails = park;
+		$scope.myParkingDetails.slotsConfiguration = $scope.initDefaultValuesForSlots(park.slotsConfiguration);
 		$scope.inithializeVehicleTypeList(park.slotsConfiguration, 1);
 		/*if($scope.myParkingDetails.slotsHandicapped == null){
 			$scope.myParkingDetails.slotsHandicapped = 0;
@@ -1143,6 +1183,44 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		}
 	};
 	
+	// Method used to correct the slotsConfiguration list to be aligned with back-end model objects
+	$scope.correctSlotConfiguration = function(slotsConfiguration){
+		var correctedSlotsConf = [];
+		for(var i = 0; i < slotsConfiguration.length; i++){
+			if(slotsConfiguration[i].updateData){
+				var corrSlotConf = {
+					carSharingSlotNumber : slotsConfiguration[i].carSharingSlotNumber,
+					carSharingSlotOccupied : slotsConfiguration[i].carSharingSlotOccupied,
+					freeParkSlotNumber : slotsConfiguration[i].freeParkSlotNumber,
+					freeParkSlotOccupied : slotsConfiguration[i].freeParkSlotOccupied,
+					freeParkSlotSignNumber : slotsConfiguration[i].freeParkSlotSignNumber,
+					freeParkSlotSignOccupied : slotsConfiguration[i].freeParkSlotSignOccupied,
+					handicappedSlotNumber : slotsConfiguration[i].handicappedSlotNumber,
+					handicappedSlotOccupied : slotsConfiguration[i].handicappedSlotOccupied,
+					loadingUnloadingSlotNumber : slotsConfiguration[i].loadingUnloadingSlotNumber,
+					loadingUnloadingSlotOccupied : slotsConfiguration[i].loadingUnloadingSlotOccupied,
+					paidSlotNumber : slotsConfiguration[i].paidSlotNumber,
+					paidSlotOccupied : slotsConfiguration[i].paidSlotOccupied,
+					pinkSlotNumber : slotsConfiguration[i].pinkSlotNumber,
+					pinkSlotOccupied : slotsConfiguration[i].pinkSlotOccupied,
+					rechargeableSlotNumber : slotsConfiguration[i].rechargeableSlotNumber,
+					rechargeableSlotOccupied : slotsConfiguration[i].rechargeableSlotOccupied,
+					reservedSlotNumber : slotsConfiguration[i].reservedSlotNumber,
+					reservedSlotOccupied : slotsConfiguration[i].reservedSlotOccupied,
+					slotNumber : slotsConfiguration[i].slotNumber,
+					slotOccupied : slotsConfiguration[i].slotOccupied,
+					timedParkSlotNumber : slotsConfiguration[i].timedParkSlotNumber,
+					timedParkSlotOccupied : slotsConfiguration[i].timedParkSlotOccupied,
+					unusuableSlotNumber : slotsConfiguration[i].unusuableSlotNumber,
+					vehicleType : slotsConfiguration[i].vehicleType,
+					vehicleTypeActive : slotsConfiguration[i].vehicleTypeActive	
+				};
+				correctedSlotsConf.push(corrSlotConf);
+			}
+		}
+		return correctedSlotsConf;
+	};
+	
 	// Method insertStreetLog: used to insert in the db (table dataLogBean) a new street log
 	$scope.insertStreetLog = function(form, myStreetDetails){
 		$scope.showUpdatingSErrorMessage = false;
@@ -1155,6 +1233,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			var periodTo = (myStreetDetails.logPeriodTo != null) ? new Date(myStreetDetails.logPeriodTo) : null;
 			if(periodFrom != null)periodFrom.setHours(myStreetDetails.startTimePeriod.getHours(), myStreetDetails.startTimePeriod.getMinutes(), 0, 0);
 			if(periodTo != null)periodTo.setHours(myStreetDetails.endTimePeriod.getHours(), myStreetDetails.endTimePeriod.getMinutes(), 0, 0);
+			var correctedSlotsConf = $scope.correctSlotConfiguration(myStreetDetails.slotsConfiguration);
 			
 			if($scope.checkCorrectPeriodDates(periodFrom, periodTo)){
 				if(form.$invalid){
@@ -1185,7 +1264,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						slotsReserved: parseInt(myStreetDetails.slotsReserved), 
 						slotsOccupiedOnReserved: parseInt(myStreetDetails.slotsOccupiedOnReserved),
 						slotsUnavailable: parseInt(myStreetDetails.slotsUnavailable),*/ 
-						slotsConfiguration: myStreetDetails.slotsConfiguration,
+						slotsConfiguration: correctedSlotsConf,
 						polyline: myStreetDetails.polyline, 
 						areaId: myStreetDetails.areaId,
 						version: myStreetDetails.version,
@@ -1228,6 +1307,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			var periodTo = (myParkingDetails.logPeriodTo != null) ? new Date(myParkingDetails.logPeriodTo) : null;
 			if(periodFrom != null)periodFrom.setHours(myParkingDetails.startTimePeriod.getHours(), myParkingDetails.startTimePeriod.getMinutes(), 0, 0);
 			if(periodTo != null)periodTo.setHours(myParkingDetails.endTimePeriod.getHours(), myParkingDetails.endTimePeriod.getMinutes(), 0, 0);
+			var correctedSlotsConf = $scope.correctSlotConfiguration(myParkingDetails.slotsConfiguration);
 			
 			if($scope.checkCorrectPeriodDates(periodFrom, periodTo)){
 				if(form.$invalid){
@@ -1251,7 +1331,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						slotsHandicapped: parseInt(myParkingDetails.slotsHandicapped),
 						slotsOccupiedOnHandicapped: parseInt(myParkingDetails.slotsOccupiedOnHandicapped),
 						slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), */
-						slotsConfiguration: myParkingDetails.slotsConfiguration,
+						slotsConfiguration: correctedSlotsConf,
 						lastChange:myParkingDetails.lastChange
 					};
 					
@@ -1780,6 +1860,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	var user = "999";
     	$scope.progress = 25;
  		$dialogs.wait($scope.getLoadingText(), $scope.progress, $scope.getLoadingTitle());
+ 		var out_obj = (out) ? out.textContent : "";
  		//cat = 10;// for test to skip the web service call
  		if(cat == 1){
     		// Case street occupancy log
@@ -1790,15 +1871,15 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    			
 	    			// Case months value
 	    			//var out_obj = angular.element(out);
-	    			var out_obj = (out) ? out.textContent : "";
+	    			
 	    			if(out_obj != ""){
 		    			var method = 'POST';
 		    	    	var fileVal = {	
 		    	    		logData: out_obj //(out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
 		    	        };
 		    	    	var params = {
+		    	    		agencyId: agencyId,	
 		    				isSysLog: true,
-		    				agencyId: agencyId,
 		    				period : null
 		    			};
 		    	                	
@@ -1828,34 +1909,34 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	switch(type){
 	    		case 1:
 	    			// Case months value
-	    			var out_obj = angular.element(out);
-	    	    	
-	    			var method = 'POST';
-	    	    	var fileVal = {	
-	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
-	    	        };
-	    	    	var params = {
-	    				isSysLog: true,
-	    				agencyId: agencyId,
-	    				period : null
-	    			};
-	    	                	
-	    	        var value = JSON.stringify(fileVal);
-	    	        if($scope.showLog) console.log("Json value " + value);
-	    	                	
-	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings/fileupload/" + user, params, $scope.authHeaders, value);	
-	    	        $scope.progress += 25;
-	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
-	    	        myDataPromise.then(function(result){
-	    	           if(result != null && result != ""){	// I have to check if it is correct
-	    	        	   console.log("Occupancy struct file upload result: " + result);
-	    	        	   //$scope.provvClass = result.userClassList;
-	    	        	   //$scope.setLoadedPracticeVisible();
-	    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
-	    	        	   $scope.progress = 100;
-	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
-	    	           }
-	    	        });
+	    			if(out_obj != ""){
+		    			var method = 'POST';
+		    	    	var fileVal = {	
+		    	    		logData: out_obj //(out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+		    	        };
+		    	    	var params = {
+		    	    		agencyId: agencyId,	
+		    				isSysLog: true,
+		    				period : null
+		    			};
+		    	                	
+		    	        var value = JSON.stringify(fileVal);
+		    	        if($scope.showLog) console.log("Json value " + value);
+		    	                	
+		    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings/fileupload/" + user, params, $scope.authHeaders, value);	
+		    	        $scope.progress += 25;
+		    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
+		    	        myDataPromise.then(function(result){
+		    	           if(result != null && result != ""){	// I have to check if it is correct
+		    	        	   console.log("Occupancy struct file upload result: " + result);
+		    	        	   //$scope.provvClass = result.userClassList;
+		    	        	   //$scope.setLoadedPracticeVisible();
+		    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
+		    	        	   $scope.progress = 100;
+		    	        	   $rootScope.$broadcast('dialogs.wait.complete');
+		    	           }
+		    	        });
+	    			}
 	    			break;	    			
 	    		default: break;	
 	    	}	    	
@@ -1865,34 +1946,34 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	switch(type){
 	    		case 1:
 	    			// Case months value
-	    			var out_obj = angular.element(out);
-	    	    	
-	    			var method = 'POST';
-	    	    	var fileVal = {	
-	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
-	    	        };
-	    	    	var params = {
-	    				isSysLog: true,
-	    				agencyId: agencyId,
-	    				period : null
-	    			};
-	    	                	
-	    	        var value = JSON.stringify(fileVal);
-	    	        if($scope.showLog) console.log("Json value " + value);
-	    	                	
-	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters/fileupload/" + user, params, $scope.authHeaders, value);	
-	    	        $scope.progress += 25;
-	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
-	    	        myDataPromise.then(function(result){
-	    	           if(result != null && result != ""){	// I have to check if it is correct
-	    	        	   console.log("Profit pm file upload result: " + result);
-	    	        	   //$scope.provvClass = result.userClassList;
-	    	        	   //$scope.setLoadedPracticeVisible();
-	    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
-	    	        	   $scope.progress = 100;
-	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
-	    	           }
-	    	        });
+	    			if(out_obj != ""){
+		    			var method = 'POST';
+		    	    	var fileVal = {	
+		    	    		logData: out_obj //(out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+		    	        };
+		    	    	var params = {
+		    	    		agencyId: agencyId,	
+		    				isSysLog: true,
+		    				period : null
+		    			};
+		    	                	
+		    	        var value = JSON.stringify(fileVal);
+		    	        if($scope.showLog) console.log("Json value " + value);
+		    	                	
+		    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters/fileupload/" + user, params, $scope.authHeaders, value);	
+		    	        $scope.progress += 25;
+		    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
+		    	        myDataPromise.then(function(result){
+		    	           if(result != null && result != ""){	// I have to check if it is correct
+		    	        	   console.log("Profit pm file upload result: " + result);
+		    	        	   //$scope.provvClass = result.userClassList;
+		    	        	   //$scope.setLoadedPracticeVisible();
+		    	        	   //$scope.ctUpdateProvv(1, "UPLOADED");
+		    	        	   $scope.progress = 100;
+		    	        	   $rootScope.$broadcast('dialogs.wait.complete');
+		    	           }
+		    	        });
+	    			}
 	    			break;	    			
 	    		default: break;	
 	    	}	    	
@@ -1902,30 +1983,31 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	    	switch(type){
 	    		case 1:
 	    			// Case months value
-	    			var out_obj = angular.element(out);
-	    	    	
+	    			if(out_obj != ""){
 	    			var method = 'POST';
-	    	    	var fileVal = {	
-	    	    		logData: (out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
-	    	        };
-	    	    	var params = {
-	    				isSysLog: true,
-	    				period : null
-	    			};
-	    	                	
-	    	        var value = JSON.stringify(fileVal);
-	    	        if($scope.showLog) console.log("Json value " + value);
-	    	                	
-	    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkstructprofit/fileupload/" + user, params, $scope.authHeaders, value);	
-	    	        $scope.progress += 25;
-	    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
-	    	        myDataPromise.then(function(result){
-	    	           if(result != null && result != ""){	// I have to check if it is correct
-	    	        	   console.log("Profit ps file upload result: " + result);
-	    	        	   $scope.progress = 100;
-	    	        	   $rootScope.$broadcast('dialogs.wait.complete');
-	    	           }
-	    	        });
+		    	    	var fileVal = {	
+		    	    		logData: out_obj //(out_obj.context.innerText != null) ? out_obj.context.innerText : out_obj.context.innerHTML
+		    	        };
+		    	    	var params = {
+		    	    		agencyId: agencyId,
+		    				isSysLog: true,
+		    				period : null
+		    			};
+		    	                	
+		    	        var value = JSON.stringify(fileVal);
+		    	        if($scope.showLog) console.log("Json value " + value);
+		    	                	
+		    	        var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkstructprofit/fileupload/" + user, params, $scope.authHeaders, value);	
+		    	        $scope.progress += 25;
+		    	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
+		    	        myDataPromise.then(function(result){
+		    	           if(result != null && result != ""){	// I have to check if it is correct
+		    	        	   console.log("Profit ps file upload result: " + result);
+		    	        	   $scope.progress = 100;
+		    	        	   $rootScope.$broadcast('dialogs.wait.complete');
+		    	           }
+		    	        });
+	    			}
 	    			break;	    			
 	    		default: break;	
 	    	}

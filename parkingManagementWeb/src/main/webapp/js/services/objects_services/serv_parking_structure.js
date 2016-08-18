@@ -155,7 +155,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			if(ps.slotsConfiguration){
 				for(var i = 0; i < ps.slotsConfiguration.length; i++){
 					var sc = ps.slotsConfiguration[i];
-					var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.unusuableSlotNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
+					var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);// + sharedDataService.initIfNull(sc.unusuableSlotNumber)
 					ps.slotsConfiguration[i].slotNumber = calculatedTotSlots;
 					if(sc.vehicleTypeActive){
 						psSlots += calculatedTotSlots;
@@ -248,7 +248,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 		if(ps.slotsConfiguration){
 			for(var i = 0; i < ps.slotsConfiguration.length; i++){
 				var sc = ps.slotsConfiguration[i];
-				var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.unusuableSlotNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
+				var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);// + sharedDataService.initIfNull(sc.unusuableSlotNumber)
 				ps.slotsConfiguration[i].slotNumber = calculatedTotSlots;
 				if(sc.vehicleTypeActive){
 					psSlots += calculatedTotSlots;
