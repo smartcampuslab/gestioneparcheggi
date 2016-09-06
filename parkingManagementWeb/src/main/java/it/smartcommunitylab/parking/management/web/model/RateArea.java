@@ -17,7 +17,9 @@ package it.smartcommunitylab.parking.management.web.model;
 
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RateArea {
 	private String id;
@@ -34,9 +36,18 @@ public class RateArea {
 	private Integer slotNumber;	// used in supply csv creation
 
 	private List<Street> streets;
+	private Map<String,Street> n_streets = new HashMap<String, Street>();
 	private List<ParkingMeter> parkingMeters;
 	private List<String> zones;	// id of the related zones
 	private List<String> agencyId;	// relation to agency object
+
+	public Map<String, Street> getN_streets() {
+		return n_streets;
+	}
+
+	public void setN_streets(Map<String, Street> n_streets) {
+		this.n_streets = n_streets;
+	}
 
 	public String getId() {
 		return id;

@@ -92,7 +92,6 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	public Map<StatKey, StatValue> findLastValue(String objectId, String appId,
 			String type, Map<String, Object> params, int[] years, byte[] months, byte[] days, byte[] hours) 
 	{
-		//logger.info(String.format("objectId: %s, appId: %s, type: %s", objectId, appId, type));
 		return findStats(objectId, appId, type, params, years, months, days, hours);
 	}
 
@@ -106,10 +105,9 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	}
 
 	public void updateStats(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp) {
-		StatValue stat = new StatValue(1, value, value, timestamp); //value,
+		StatValue stat = new StatValue(1, value, value, timestamp);
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(timestamp);
-		//boolean isHoliday = isHoliday(c, appId);
 		boolean isHoliday = isAHoliday(c, appId);
 		int month = c.get(Calendar.MONTH);
 		int dow = c.get(Calendar.DAY_OF_WEEK);

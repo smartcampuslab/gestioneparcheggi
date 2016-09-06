@@ -45,6 +45,7 @@ import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
 
 import java.security.AccessControlException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
@@ -680,19 +681,54 @@ public class StorageManager {
 			if(area.getAgencyId().contains(agencyId)){
 				Agency ag = agencyDataSetup.getAgencyById(agencyId);
 				if(ag.getStreet() >= UPDATE_VAL){
-					if (area.getStreets() != null) {
+					if(area.getN_streets() != null){
+						Street temp = area.getN_streets().get(sb.getId());
+						if(temp != null){
+							List<Point> points = new ArrayList<Point>();
+							Line line = new Line();
+							temp.setSlotNumber(sb.getSlotNumber());
+							/*temp.setFreeParkSlotNumber(sb.getFreeParkSlotNumber());
+							temp.setFreeParkSlotSignNumber(sb.getFreeParkSlotSignNumber());
+							temp.setUnusuableSlotNumber(sb.getUnusuableSlotNumber());
+							temp.setHandicappedSlotNumber(sb.getHandicappedSlotNumber());
+							temp.setReservedSlotNumber(sb.getReservedSlotNumber());
+							temp.setPaidSlotNumber(sb.getPaidSlotNumber());
+							temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());*/
+							List<VehicleSlotBean> editedSlotsConfBean = sb.getSlotsConfiguration();
+							temp.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, null));
+							
+							temp.setStreetReference(sb.getStreetReference());
+							temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());
+							if(temp.getGeometry() != null && temp.getGeometry().getPoints() != null && temp.getGeometry().getPoints().size() > 0){
+								temp.getGeometry().getPoints().clear();
+							}
+							if(sb.getGeometry() != null){
+								for (PointBean pb : sb.getGeometry().getPoints()) {
+									points.add(ModelConverter.convert(pb, Point.class));
+									//temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
+								}
+							}
+							line.setPoints(points);
+							temp.setGeometry(line);
+							temp.setZones(sb.getZones());
+							temp.setParkingMeters(sb.getParkingMeters());
+							temp.setRateAreaId(sb.getRateAreaId());
+							mongodb.save(area);
+						}
+					}
+					/*if (area.getStreets() != null) {
 						for (Street temp : area.getStreets()) {
 							if (temp.getId().equals(sb.getId())) {
 								List<Point> points = new ArrayList<Point>();
 								Line line = new Line();
 								temp.setSlotNumber(sb.getSlotNumber());
-								/*temp.setFreeParkSlotNumber(sb.getFreeParkSlotNumber());
+								temp.setFreeParkSlotNumber(sb.getFreeParkSlotNumber());
 								temp.setFreeParkSlotSignNumber(sb.getFreeParkSlotSignNumber());
 								temp.setUnusuableSlotNumber(sb.getUnusuableSlotNumber());
 								temp.setHandicappedSlotNumber(sb.getHandicappedSlotNumber());
 								temp.setReservedSlotNumber(sb.getReservedSlotNumber());
 								temp.setPaidSlotNumber(sb.getPaidSlotNumber());
-								temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());*/
+								temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());
 								List<VehicleSlotBean> editedSlotsConfBean = sb.getSlotsConfiguration();
 								temp.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, null));
 								
@@ -717,7 +753,7 @@ public class StorageManager {
 								break;
 							}
 						}
-					}
+					}*/
 				} else {
 					throw new AccessControlException("no update permission for street object");
 				}
@@ -788,11 +824,18 @@ public class StorageManager {
 				RateArea area = findById(s.getRateAreaId(), RateArea.class);
 				if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
 					if(area.getAgencyId().contains(agencyId)){
-						if (area.getStreets() == null) {
-							area.setStreets(new ArrayList<Street>());
+						// new
+						if(area.getN_streets() == null) {
+							area.setN_streets(new HashMap<String, Street>());
 						}
+						street = processId(street, Street.class);
+						area.getN_streets().put(street.getId(), street);
+						// old
+						//if (area.getStreets() == null) {
+						//	area.setStreets(new ArrayList<Street>());
+						//}
 						// TODO check if via is already present
-						area.getStreets().add(processId(street, Street.class));
+						//area.getStreets().add(processId(street, Street.class));
 						mongodb.save(area);
 						s.setId(street.getId());
 						
