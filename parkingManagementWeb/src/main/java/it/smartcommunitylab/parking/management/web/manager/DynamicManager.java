@@ -1858,6 +1858,71 @@ public class DynamicManager {
 		return s;
 	}
 	
+	public ParkingStructureBean mergeOccupationRateForParking(String objectId, ParkingStructureBean p, String appId, String type, int valueType, String vehicleType, Map<StatKey, StatValue> statsVals){
+		String pId = getCorrectId(p.getId(), "parking", appId);
+		double occRate = -1;
+		boolean averageOcc = false;
+		int[] totalAverageSlot = null;
+		int[] usedAverageSlot = null;
+		int totalAverageUnusuabled = 0;
+		try {
+			List<VehicleSlotBean> vehicleSlotList = p.getSlotsConfiguration();
+			VehicleSlotBean vs = null;
+			if(vehicleSlotList != null && !vehicleSlotList.isEmpty()){
+				for(int i = 0; i < vehicleSlotList.size(); i++){
+					VehicleSlotBean tmp_vs = vehicleSlotList.get(i);
+					if(tmp_vs.getVehicleType().compareTo(vehicleType) == 0){
+						averageOcc = false;
+						vehicleType = "@" + vehicleType;
+						vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, pId, appId, type, valueType, vehicleType, statsVals);
+						if(rilevationPresent(vs)){
+							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
+							occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
+							if(occRate > 100){
+								occRate = 100;
+							}
+							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
+						}
+						break;
+					} else if(vehicleType == null || vehicleType.compareTo("ALL") == 0 || vehicleType.compareTo("") == 0){
+						vehicleType = "@" + tmp_vs.getVehicleType();
+						vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, pId, appId, type, valueType, vehicleType, statsVals);
+						if(rilevationPresent(vs)){
+							averageOcc = true;
+							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
+							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
+							if(totalAverageSlot == null){
+								totalAverageSlot = totalSlot;
+							} else {
+								totalAverageSlot = mergeIntArray(totalSlot, totalAverageSlot);
+							}
+							if(usedAverageSlot == null){
+								usedAverageSlot = totalUsed;
+							} else {
+								usedAverageSlot = mergeIntArray(totalUsed, usedAverageSlot);
+							}
+							totalAverageUnusuabled += vs.getUnusuableSlotNumber();
+						}
+					}	
+				}
+			}
+			if(averageOcc){
+				// Here I calculate the average occRate from all vehicles type slots occupancy
+				occRate = findOccupationRate(totalAverageSlot, usedAverageSlot, 0, 0, 1, totalAverageUnusuabled);
+				if(occRate > 100){
+					occRate = 100;
+				}
+			}
+			p.setSlotsConfiguration(vehicleSlotList);
+			p.setOccupancyRate(occRate);
+		} catch (NullPointerException ex){
+			//logger.error("Error in slots configuration reading " + ex.getMessage());
+		}
+		return p;
+	}
+	
 	public StreetBean getOccupationRateFromStreet(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
 		StopWatch watch = new Log4JStopWatch();
 		logger.info("Start Time for street (" + objectId + "): " + watch.getStartTime());
@@ -3689,74 +3754,21 @@ public class DynamicManager {
 	
 	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
 		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
+		Map<StatKey, StatValue> statsVals = null;
+		if(valueType == 1){
+			// last
+			statsVals =  getOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
+		} else {
+			// average
+			statsVals =  getAverageOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
+		}
+		logger.info("Parking Structure list size : " + parkings.size());
+		logger.info("Stats map size : " + statsVals.size());
+		
 		List<ParkingStructureBean> corrParkings = new ArrayList<ParkingStructureBean>();
 		for(ParkingStructureBean p : parkings){
-			ParkingStructureBean corrPark = getOccupationRateFromParking(p.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
-			/*double occRate = 0;
-			double paidOccRate = 0;
-			double handicappedOccRate = 0;
-			int paidSlotParks = 0;
-			int handicappedParks = 0;
-			int unusuabledParks = 0;
-			int paidSlotParks_occ = 0;
-			int handicappedParks_occ = 0;
-			if(p.getPayingSlotNumber() != null){
-				paidSlotParks = p.getPayingSlotNumber();
-			}
-			if(p.getHandicappedSlotNumber() != null){
-				handicappedParks = p.getHandicappedSlotNumber();
-			}
-			pId = getCorrectId(p.getId(), "parking", appId);
-			int[] parks = {paidSlotParks, handicappedParks};
-			int multipark = countElements(parks);
-			if(valueType == 1){
-				occRate = getOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
-				if(multipark > 1){
-					paidOccRate = getOccupationRateFromObject(pId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
-					handicappedOccRate = getOccupationRateFromObject(pId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
-				}
-				unusuabledParks = (int)getOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
-			} else {
-				occRate = getAverageOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
-				if(multipark > 1){
-					paidOccRate = getAverageOccupationRateFromObject(pId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
-					handicappedOccRate = getAverageOccupationRateFromObject(pId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
-				}
-				unusuabledParks = (int)getAverageOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
-			}
-			if(occRate > 100){
-				occRate = 100;
-			}
-			p.setOccupancyRate(occRate);
-			if(unusuabledParks > 0){
-				p.setUnusuableSlotNumber(unusuabledParks);
-			}
-			if(p.getPayingSlotNumber() != null && p.getPayingSlotNumber() > 0){
-				int paidSlotNumber = p.getPayingSlotNumber();
-				if(unusuabledParks > 0){
-					paidSlotNumber = paidSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					paidSlotParks_occ = (int)Math.ceil(paidSlotNumber * paidOccRate / 100);
-				} else {
-					paidSlotParks_occ = (int)Math.ceil(paidSlotNumber * occRate / 100);
-				}
-				p.setPayingSlotOccupied(paidSlotParks_occ);
-			}
-			if(p.getHandicappedSlotNumber() != null && p.getHandicappedSlotNumber() > 0){
-				int handicappedSlotNumber = p.getHandicappedSlotNumber();
-				if(unusuabledParks > 0){
-					handicappedSlotNumber = handicappedSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					handicappedParks_occ = (int)Math.ceil(handicappedSlotNumber * handicappedOccRate / 100);
-				} else {
-					handicappedParks_occ = (int)Math.ceil(handicappedSlotNumber * occRate / 100);
-				}
-				p.setHandicappedSlotOccupied(handicappedParks_occ);
-			}*/
+			//ParkingStructureBean corrPark = getOccupationRateFromParking(p.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
+			ParkingStructureBean corrPark = mergeOccupationRateForParking(p.getId(), p, appId, type, valueType, vehicleType, statsVals);
 			corrParkings.add(corrPark);
 		}
 		return corrParkings;
@@ -3943,88 +3955,24 @@ public class DynamicManager {
 	 */
 	public List<CompactParkingStructureBean> getOccupationChangesFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
 		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
+		Map<StatKey, StatValue> statsVals = null;
+		if(valueType == 1){
+			// last
+			statsVals =  getOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
+		} else {
+			// average
+			statsVals =  getAverageOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
+		}
 		List<CompactParkingStructureBean> correctedParkings = new ArrayList<CompactParkingStructureBean>();
 		for(ParkingStructureBean p : parkings){
-			ParkingStructureBean corrPark = getOccupationRateFromParking(p.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
+			//ParkingStructureBean corrPark = getOccupationRateFromParking(p.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
+			ParkingStructureBean corrPark = mergeOccupationRateForParking(p.getId(), p, appId, type, valueType, vehicleType, statsVals);
 			CompactParkingStructureBean cp = new CompactParkingStructureBean();
-			
 			cp.setId(p.getId());
 			cp.setSlotNumber(p.getSlotNumber());
 			cp.setSlotsConfiguration(corrPark.getSlotsConfiguration());
 			cp.setOccupancyRate(corrPark.getOccupancyRate());
 			
-			/*double occRate = 0;
-			double paidOccRate = 0;
-			double handicappedOccRate = 0;
-			int paidSlotParks = 0;
-			int handicappedParks = 0;
-			int unusuabledParks = 0;
-			int paidSlotParks_occ = 0;
-			int handicappedParks_occ = 0;
-			if(p.getPayingSlotNumber() != null){
-				paidSlotParks = p.getPayingSlotNumber();
-			}
-			if(p.getHandicappedSlotNumber() != null){
-				handicappedParks = p.getHandicappedSlotNumber();
-			}
-			pId = getCorrectId(p.getId(), "parking", appId);
-			int[] parks = {paidSlotParks, handicappedParks};
-			int multipark = countElements(parks);
-			if(valueType == 1){
-				occRate = getOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
-				if(multipark > 1){
-					paidOccRate = getOccupationRateFromObject(pId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
-					handicappedOccRate = getOccupationRateFromObject(pId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
-				}
-				unusuabledParks = (int)getOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
-			} else {
-				occRate = getAverageOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
-				if(multipark > 1){
-					paidOccRate = getAverageOccupationRateFromObject(pId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
-					handicappedOccRate = getAverageOccupationRateFromObject(pId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
-				}
-				unusuabledParks = (int)getAverageOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
-			}
-//			if(valueType == 1){
-//				occRate = getOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
-//				unusuabledParks = (int)getOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
-//			} else {
-//				occRate = getAverageOccupationRateFromObject(pId, appId, type, params, years, months, dayType, days, hours);
-//				unusuabledParks = (int)getAverageOccupationRateFromObject(pId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
-//			}
-			cp.setId(p.getId());
-			cp.setOccupancyRate(occRate);
-			cp.setSlotNumber(p.getSlotNumber());
-			cp.setPayingSlotNumber(p.getPayingSlotNumber());
-			if(unusuabledParks > 0){
-				cp.setUnusuableSlotNumber(unusuabledParks);
-			}
-			if(p.getPayingSlotNumber() != null && p.getPayingSlotNumber() > 0){
-				int paidSlotNumber = p.getPayingSlotNumber();
-				if(unusuabledParks > 0){
-					paidSlotNumber = paidSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					paidSlotParks_occ = (int)Math.ceil(paidSlotNumber * paidOccRate / 100);
-				} else {
-					paidSlotParks_occ = (int)Math.ceil(paidSlotNumber * occRate / 100);
-				}
-				cp.setPayingSlotOccupied(paidSlotParks_occ);
-			}
-			if(p.getHandicappedSlotNumber() != null && p.getHandicappedSlotNumber() > 0){
-				int handicappedSlotNumber = p.getHandicappedSlotNumber();
-				if(unusuabledParks > 0){
-					handicappedSlotNumber = handicappedSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					handicappedParks_occ = (int)Math.ceil(handicappedSlotNumber * handicappedOccRate / 100);
-				} else {
-					handicappedParks_occ = (int)Math.ceil(handicappedSlotNumber * occRate / 100);
-				}
-				cp.setHandicappedSlotOccupied(handicappedParks_occ);
-			}*/
 			correctedParkings.add(cp);
 		}
 
