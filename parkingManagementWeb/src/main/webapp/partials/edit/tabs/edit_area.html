@@ -285,7 +285,7 @@
 								ng-repeat="area in filtered = (areaWS | filter:nameFilter | filter: agencyAreaFilter) | orderBy:'name' | startFrom:currentPageA*maxAreas | limitTo:maxAreas">
 								<tr>
 									<td align="left">
-										<span ng-show="isMyAgency(area.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+										<span ng-show="isMyAgency(area.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
 									</td>
 									<td align="left">
 										<span ng-show="aconf.a_name.visible">{{area.name}}</span>

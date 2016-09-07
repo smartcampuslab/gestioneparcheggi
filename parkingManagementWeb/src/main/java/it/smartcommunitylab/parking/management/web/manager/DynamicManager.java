@@ -221,7 +221,11 @@ public class DynamicManager {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 
 		if (area.getStreets() != null) {
-			for (Street tmp : area.getStreets()) {
+			//for (Street tmp : area.getStreets()) {
+			Map<String, Street> streets = area.getStreets();
+			for (Map.Entry<String, Street> entry : streets.entrySet())
+			{
+			    Street tmp = entry.getValue();
 				StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
 				s.setRateAreaId(ab.getId());
 				s.setColor(area.getColor());
@@ -253,7 +257,11 @@ public class DynamicManager {
 		
 		for(RateArea area : areas){
 			if (area.getStreets() != null) {
-				for (Street tmp : area.getStreets()) {
+				//for (Street tmp : area.getStreets()) {
+				Map<String, Street> streets = area.getStreets();
+				for (Map.Entry<String, Street> entry : streets.entrySet())
+				{
+				    Street tmp = entry.getValue();
 					List<String> zones = tmp.getZones();
 					StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
 					for(String zona : zones){
@@ -288,7 +296,11 @@ public class DynamicManager {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		
 		if (area.getStreets() != null) {
-			for (Street tmp : area.getStreets()) {
+			//for (Street tmp : area.getStreets()) {
+			Map<String, Street> streets = area.getStreets();
+			for (Map.Entry<String, Street> entry : streets.entrySet())
+			{
+			    Street tmp = entry.getValue();
 				List<String> zones = tmp.getZones();
 				StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
 				for(String zona : zones){
@@ -313,21 +325,14 @@ public class DynamicManager {
 	public StreetBean findStreet(String streetId, String appId) {
 		// for street
 		String sId = "n_streets." + streetId;
-		//Criteria crit = new Criteria();
-		//crit.and("id_app").is(appId);
-		//crit.and(sId + "._id").is(new ObjectId(streetId));
-		//Query query = new Query(crit);
-		//query.fields().include(sId);
-		//RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
-		
 		Criteria crit_street = new Criteria();
 		crit_street.and("_id").is(new ObjectId(streetId));
 		Criteria crit = new Criteria();
 		crit.and("id_app").is(appId);
-		crit.and("n_streets." + streetId).exists(true);
+		crit.and(sId).exists(true);
 		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
 		
-		Map<String, Street> tempStreets = ra.getN_streets();
+		Map<String, Street> tempStreets = ra.getStreets();
 		Street s = null;
 		if(tempStreets != null && !tempStreets.isEmpty()){
 			s = tempStreets.get(streetId);
@@ -338,11 +343,11 @@ public class DynamicManager {
 		Criteria crit = new Criteria();
 		crit.and("id_app").is(appId);
 		crit.and("streets").elemMatch(crit_street);
-		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);*/
-		//Street s = new Street();
-		//s.setId(streetId);
-		//int index = ra.getStreets().indexOf(s);
-		/*if (index != -1) {
+		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
+		Street s = new Street();
+		s.setId(streetId);
+		int index = ra.getStreets().indexOf(s);
+		if (index != -1) {
 			Street st = ra.getStreets().get(index);
 			StreetBean result = ModelConverter.toStreetBean(ra, st);
 			return result;
@@ -351,32 +356,15 @@ public class DynamicManager {
 			StreetBean result = ModelConverter.toStreetBean(ra, s);
 			return result;
 		}
-		
-		/*List<RateArea> aree = mongodb.findAll(RateArea.class);
-		Street s = new Street();
-		for (RateArea area : aree) {
-			if (area.getStreets() != null) {
-				s.setId(streetId);
-				int index = area.getStreets().indexOf(s);
-				if (index != -1) {
-					Street st = area.getStreets().get(index);
-					StreetBean result = ModelConverter.toStreetBean(area, st);
-					return result;
-				}
-			}
-		}*/
 		return null;
 	}
 	
-	public StreetBean findStreet(String parkingMeterId, Long timestamp) {
+	public StreetBean findStreet(String streetId, Long timestamp) {
 		List<RateArea> aree = mongodb.findAll(RateArea.class);
-		Street s = new Street();
 		for (RateArea area : aree) {
 			if (area.getStreets() != null) {
-				s.setId(parkingMeterId);
-				int index = area.getStreets().indexOf(s);
-				if (index != -1) {
-					Street st = area.getStreets().get(index);
+				Street st = area.getStreets().get(streetId);
+				if (st != null) {
 					if(timestamp == null){
 						StreetBean result = ModelConverter.toStreetBean(area, st);
 						return result;
@@ -397,8 +385,12 @@ public class DynamicManager {
 		List<RateArea> aree = mongodb.findAll(RateArea.class);
 		for (RateArea area : aree) {
 			if (area.getStreets() != null) {
-				List<Street> streets = area.getStreets();
-				for(Street street : streets){
+				//List<Street> streets = area.getStreets();
+				//for(Street street : streets){
+				Map<String, Street> streets = area.getStreets();
+				for (Map.Entry<String, Street> entry : streets.entrySet())
+				{
+				    Street street = entry.getValue();
 					if(street.getStreetReference().compareTo(referencedStreet) == 0){
 						if(street.getLastChange() != null && street.getLastChange() >= timestamp){
 							StreetBean s = ModelConverter.toStreetBean(area, street);
@@ -415,7 +407,11 @@ public class DynamicManager {
 	public StreetBean editStreet(StreetBean vb, Long timestamp) throws DatabaseException {
 		RateArea area = mongodb.findById(vb.getRateAreaId(), RateArea.class);
 		if (area.getStreets() != null) {
-			for (Street temp : area.getStreets()) {
+			//for (Street temp : area.getStreets()) {
+			Map<String, Street> streets = area.getStreets();
+			for (Map.Entry<String, Street> entry : streets.entrySet())
+			{
+			    Street temp = entry.getValue();
 				if (temp.getId().equals(vb.getId())) {
 					// Dynamic data
 					/*temp.setFreeParkSlotOccupied(vb.getFreeParkSlotOccupied());
@@ -525,19 +521,26 @@ public class DynamicManager {
 			area = mongodb.findById(s.getAreaId(), RateArea.class);
 		} else {
 			List<RateArea> aree = mongodb.findAll(RateArea.class);
-			Street myS = new Street();
+			//Street myS = new Street();
 			for (RateArea a : aree) {
 				if (a.getStreets() != null) {
-					myS.setId(asId);
-					int index = a.getStreets().indexOf(s);
-					if (index != -1) {
+					//myS.setId(asId);
+					//int index = a.getStreets().indexOf(s);
+					//if (index != -1) {
+					//	area = a;
+					//}
+					if(a.getStreets().containsKey(s.getId())){
 						area = a;
 					}
 				}
 			}
 		}
 		if (area.getStreets() != null) {
-			for (Street temp : area.getStreets()) {
+			//for (Street temp : area.getStreets()) {
+			Map<String, Street> streets = area.getStreets();
+			for (Map.Entry<String, Street> entry : streets.entrySet())
+			{
+			    Street temp = entry.getValue();
 				if (temp.getId().equals(asId)) {
 					// Dynamic data
 					List<VehicleSlot> editedSlotsConf = s.getSlotsConfiguration();
@@ -1778,10 +1781,19 @@ public class DynamicManager {
 		return merged;
 	}
 	
+	/**
+	 * Method mergeOccupationRateForStreet: used to merge street data with the relative occupancy data (if present)
+	 * @param objectId: street id;
+	 * @param s: street complete object;
+	 * @param appId: app id to use in occupation query
+	 * @param type: object type to use in occupation query (street.class)
+	 * @param valueType: occupation value type: last value or average
+	 * @param vehicleType: type of vehicle to read in slots configuration
+	 * @param statsVals: map of stat vals
+	 * @return: complete StreetBean object with occupation data
+	 */
 	public StreetBean mergeOccupationRateForStreet(String objectId, StreetBean s, String appId, String type, int valueType, String vehicleType, Map<StatKey, StatValue> statsVals){
-		//StreetBean s = findStreet(objectId, appId);
 		String sId = getCorrectId(objectId, "street", appId);
-		
 		double occRate = -1;
 		boolean averageOcc = false;
 		int[] totalAverageSlot = null;
@@ -1827,15 +1839,13 @@ public class DynamicManager {
 								usedAverageSlot = mergeIntArray(totalUsed, usedAverageSlot);
 							}
 							totalAverageUnusuabled += vs.getUnusuableSlotNumber();
-							//averageOccRate = averageOccRate + findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
 						}
 					}
 				}
 			}
 			if(averageOcc){
-				occRate = findOccupationRate(totalAverageSlot, usedAverageSlot, 0, 0, 1, totalAverageUnusuabled);
 				// Here I calculate the average occRate from all vehicles type slots occupancy
-				//occRate = averageOccRate / vehicleSlotList.size();
+				occRate = findOccupationRate(totalAverageSlot, usedAverageSlot, 0, 0, 1, totalAverageUnusuabled);
 				if(occRate > 100){
 					occRate = 100;
 				}
@@ -2003,10 +2013,14 @@ public class DynamicManager {
 	private double retrieveCorrectOccupancyFromStatValue(String sId, String appId, String type, int valueType, Map<StatKey, StatValue> statsVals){
 		StatKey myKey = new StatKey(sId, appId, type);
 		StatValue sv = statsVals.get(myKey);
-		if(valueType == 1){
-			return sv.getLastValue();
-		} else {
-			return sv.getAggregateValue();
+		if(sv != null){
+			if(valueType == 1){
+				return sv.getLastValue();
+			} else {
+				return sv.getAggregateValue();
+			}
+		} else {	// no rilevation
+			return -1.0;
 		}
 	};
 	
@@ -3661,9 +3675,9 @@ public class DynamicManager {
 			statsVals =  getAverageOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
 		}
 		logger.info("Streets list size : " + streets.size());
+		logger.info("Stats map size : " + statsVals.size());
 		List<StreetBean> corrStreets = new ArrayList<StreetBean>();
 		for(StreetBean s : streets){
-			// TODO: change this algorithm to simplify in this way: Only a ws call for occupation and merge the lists;
 			StreetBean corrStreet = mergeOccupationRateForStreet(s.getId(), s, appId, type, valueType, vehicleType, statsVals);
 			//StreetBean corrStreet = getOccupationRateFromStreet(s.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
 			corrStreets.add(corrStreet);
@@ -3891,166 +3905,25 @@ public class DynamicManager {
 	 */
 	public List<CompactStreetBean> getOccupationChangesFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
 		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
+		Map<StatKey, StatValue> statsVals = null;
+		if(valueType == 1){
+			// last
+			statsVals =  getOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
+		} else {
+			// average
+			statsVals =  getAverageOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
+		}
 		List<CompactStreetBean> corrStreets = new ArrayList<CompactStreetBean>();
-		//String sId = "";
 		for(StreetBean s : streets){
 			CompactStreetBean cs = new CompactStreetBean();
-			//sId = getCorrectId(s.getId(), "street", appId);
-			StreetBean corrStreet = getOccupationRateFromStreet(s.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
+			StreetBean corrStreet = mergeOccupationRateForStreet(s.getId(), s, appId, type, valueType, vehicleType, statsVals);
+			//StreetBean corrStreet = getOccupationRateFromStreet(s.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
 			cs.setId(s.getId());
 			cs.setSlotNumber(s.getSlotNumber());
 			cs.setSlotsConfiguration(corrStreet.getSlotsConfiguration());
 			cs.setOccupancyRate(corrStreet.getOccupancyRate());
-			
-			/*double occRate = 0;
-			double freeOccRate = 0;
-			double freeOccSignedRate = 0;
-			double paidOccRate = 0;
-			double timedOccRate = 0;
-			double handicappedOccRate = 0;
-			double reservedOccRate = 0;
-			int freeParks = 0;
-			int freeSignParks = 0;
-			int paidSlotParks = 0;
-			int timedParks = 0;
-			int handicappedParks = 0;
-			int reservedParks = 0;
-			int unusuabledParks = 0;
-			
-			if(s.getFreeParkSlotNumber() != null){
-				freeParks = s.getFreeParkSlotNumber();
-			}
-			if(s.getFreeParkSlotSignNumber() != null){
-				freeSignParks = s.getFreeParkSlotSignNumber();
-			}
-			if(s.getPaidSlotNumber() != null){
-				paidSlotParks = s.getPaidSlotNumber();
-			}
-			if(s.getTimedParkSlotNumber() != null){
-				timedParks = s.getTimedParkSlotNumber();
-			}
-			if(s.getHandicappedSlotNumber() != null){
-				handicappedParks = s.getHandicappedSlotNumber();
-			}
-			if(s.getReservedSlotNumber() != null){
-				reservedParks = s.getReservedSlotNumber();
-			}
-			int[] parks = {freeParks, freeSignParks, paidSlotParks, timedParks, handicappedParks, reservedParks};
-			int multipark = countElements(parks);
-			if(valueType == 1){
-				occRate = getOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
-				if(multipark > 1){
-					freeOccRate = getOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
-					freeOccSignedRate = getOccupationRateFromObject(sId, appId, type + freeSlotSignedType, params, years, months, dayType, days, hours);
-					paidOccRate = getOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
-					timedOccRate = getOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
-					handicappedOccRate = getOccupationRateFromObject(sId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
-					reservedOccRate = getOccupationRateFromObject(sId, appId, type + reservedSlotType, params, years, months, dayType, days, hours);
-				}
-				unusuabledParks = (int)getOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
-			} else {
-				occRate = getAverageOccupationRateFromObject(sId, appId, type, params, years, months, dayType, days, hours);
-				if(multipark > 1){
-					freeOccRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotType, params, years, months, dayType, days, hours);
-					freeOccSignedRate = getAverageOccupationRateFromObject(sId, appId, type + freeSlotSignedType, params, years, months, dayType, days, hours);
-					paidOccRate = getAverageOccupationRateFromObject(sId, appId, type + paidSlotType, params, years, months, dayType, days, hours);
-					timedOccRate = getAverageOccupationRateFromObject(sId, appId, type + timedSlotType, params, years, months, dayType, days, hours);
-					handicappedOccRate = getAverageOccupationRateFromObject(sId, appId, type + handicappedSlotType, params, years, months, dayType, days, hours);
-					reservedOccRate = getAverageOccupationRateFromObject(sId, appId, type + reservedSlotType, params, years, months, dayType, days, hours);
-				}
-				unusuabledParks = (int)getAverageOccupationRateFromObject(sId, appId, type + unusuabledSlotType, params, years, months, dayType, days, hours);
-			}
-			cs.setId(s.getId());
-			cs.setSlotNumber(s.getSlotNumber());
-			if(occRate > 100){
-				occRate = 100;
-			}
-			cs.setOccupancyRate(occRate);
-			if(unusuabledParks > 0){
-				cs.setUnusuableSlotNumber(unusuabledParks);
-			}
-			// Here I have to retrieve other specific occupancyRate(for free/paid/timed parks) - MULTIPARKOCC
-			if(s.getFreeParkSlotNumber() != null && s.getFreeParkSlotNumber() > 0){
-				cs.setFreeParkSlotNumber(s.getFreeParkSlotNumber());
-				int freeSlotNumber = s.getFreeParkSlotNumber();
-				if(unusuabledParks > 0){
-					freeSlotNumber = freeSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					cs.setFreeParkSlotOccupied((int)Math.round(freeSlotNumber * freeOccRate / 100));
-				} else {
-					cs.setFreeParkSlotOccupied((int)Math.round(freeSlotNumber * occRate / 100));
-				}
-			}
-			if(s.getFreeParkSlotSignNumber() != null && s.getFreeParkSlotSignNumber() > 0){
-				cs.setFreeParkSlotSignNumber(s.getFreeParkSlotSignNumber());
-				int freeSlotSignNumber = s.getFreeParkSlotSignNumber();
-				if(unusuabledParks > 0){
-					freeSlotSignNumber = freeSlotSignNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					cs.setFreeParkSlotSignOccupied((int)Math.round(freeSlotSignNumber * freeOccSignedRate / 100));
-				} else {
-					cs.setFreeParkSlotSignOccupied((int)Math.round(freeSlotSignNumber * occRate / 100));
-				}
-			}
-			if(s.getPaidSlotNumber() != null && s.getPaidSlotNumber() > 0){
-				cs.setPaidSlotNumber(s.getPaidSlotNumber());
-				int paidSlotNumber = s.getPaidSlotNumber();
-				if(unusuabledParks > 0){
-					paidSlotNumber = paidSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					cs.setPaidSlotOccupied((int)Math.round(paidSlotNumber * paidOccRate / 100));
-				} else {
-					cs.setPaidSlotOccupied((int)Math.round(paidSlotNumber * occRate / 100));
-				}
-			}
-			if(s.getTimedParkSlotNumber() != null && s.getTimedParkSlotNumber() > 0){
-				cs.setTimedParkSlotNumber(s.getTimedParkSlotNumber());
-				int timedParkSlotNumber = s.getTimedParkSlotNumber();
-				if(unusuabledParks > 0){
-					timedParkSlotNumber = timedParkSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					cs.setTimedParkSlotOccupied((int)Math.round(timedParkSlotNumber * timedOccRate / 100));
-				} else {
-					cs.setTimedParkSlotOccupied((int)Math.round(timedParkSlotNumber * occRate / 100));
-				}
-			}
-			if(s.getHandicappedSlotNumber() != null && s.getHandicappedSlotNumber() > 0){
-				cs.setHandicappedSlotNumber(s.getHandicappedSlotNumber());
-				int handicappedSlotNumber = s.getHandicappedSlotNumber();
-				if(unusuabledParks > 0){
-					handicappedSlotNumber = handicappedSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					cs.setHandicappedSlotOccupied((int)Math.round(handicappedSlotNumber * handicappedOccRate / 100));
-				} else {
-					cs.setHandicappedSlotOccupied((int)Math.round(handicappedSlotNumber * occRate / 100));
-				}
-			}
-			if(s.getReservedSlotNumber() != null && s.getReservedSlotNumber() > 0){
-				cs.setReservedSlotNumber(s.getReservedSlotNumber());
-				int reservedSlotNumber = s.getReservedSlotNumber();
-				if(unusuabledParks > 0){
-					reservedSlotNumber = reservedSlotNumber - unusuabledParks;
-					unusuabledParks = 0;
-				}
-				if(multipark > 1){
-					cs.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * reservedOccRate / 100));
-				} else {
-					cs.setReservedSlotOccupied((int)Math.round(reservedSlotNumber * occRate / 100));
-				}
-			}*/
 			corrStreets.add(cs);
 		}
-
 		return corrStreets;
 	}
 	

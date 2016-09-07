@@ -30,8 +30,8 @@ import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -94,7 +94,11 @@ public class ZipCsvExporter implements Exporter {
 		String result = "AREA_APPARTENENZA,STRADA_RIFERIMENTO, NUMERO_POSTI,NUMERO_POSTI_DISABILI,NUMERO_POSTI_DISCO_ORARIO,NUMERO_POSTI_SOSTA_LIBERA,PARCHEGGIO_PER_ABBONATI,GEOMETRIA\n";
 		for (RateArea area : areaList) {
 			if (area.getStreets() != null) {
-				for (Street via : area.getStreets()) {
+				//for (Street via : area.getStreets()) {
+				Map<String, Street> streets = area.getStreets();
+				for (Map.Entry<String, Street> entry : streets.entrySet())
+				{
+					Street via = entry.getValue();
 					result += "\"" + area.getName() + "\"" + CSV_SEPARATOR
 							+ "\"" + via.getStreetReference() + "\""
 							+ CSV_SEPARATOR + via.getSlotNumber()

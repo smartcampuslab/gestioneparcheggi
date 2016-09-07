@@ -495,7 +495,7 @@
 								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter | filter:agencyPStructFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
 								<tr>
 									<td align="left">
-										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
 									</td>
 									<td align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
 									<td align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
@@ -515,7 +515,7 @@
 								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter | filter:agencyPStructFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
 								<tr>
 									<td align="left">
-										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
 									</td>
 									<td align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
 									<td align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>

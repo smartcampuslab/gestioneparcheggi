@@ -469,7 +469,7 @@
 								ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter | filter:agencyStreetFilter) | orderBy:['name', 'area.name'] | startFrom:currentPageS*maxStreets | limitTo:maxStreets">
 								<tr>
 									<td align="left">
-										<span ng-show="isMyAgency(street.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+										<span ng-show="isMyAgency(street.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
 									</td>
 									<td align="left" ng-show="sconf.s_streetRef.visible">{{street.streetReference}}</td>
 									<td align="left" ng-show="sconf.s_slotNum.visible">{{street.slotNumber}}</td>

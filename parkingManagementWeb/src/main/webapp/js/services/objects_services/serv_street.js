@@ -127,7 +127,8 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 				rateAreaId: area.id,
 				zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 				parkingMeters: sharedDataService.correctMyPmsForStreet(pms),
-				geometry: gMapService.correctMyGeometryPolyline(editPolyline)
+				geometry: gMapService.correctMyGeometryPolyline(editPolyline),
+				agencyId: street.agencyId
 			};
 		} else {
 			data = {

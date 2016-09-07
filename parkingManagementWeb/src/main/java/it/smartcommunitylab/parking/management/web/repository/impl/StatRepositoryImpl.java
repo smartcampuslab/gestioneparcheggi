@@ -28,6 +28,7 @@ import it.smartcommunitylab.parking.management.web.security.ObjectsSpecialHolida
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -1236,7 +1237,8 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			boolean we,
 			byte[] hours) 
 	{
-		Criteria res = new Criteria("key.appId").is(appId).and("key.type").is(type);
+		//Criteria res = new Criteria("key.appId").is(appId).and("key.type").is(type);
+		Criteria res = new Criteria("key.appId").is(appId).and("key.type").regex(type + ".*");	// new management of type: contains instead of is
 		if (params != null && !params.isEmpty()) {
 			for (String key : params.keySet())
 				res.and("parameters."+key).is(params.get(key));
@@ -1317,9 +1319,18 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			//logger.info(String.format("key %s, value %s", key.toString(), value.toString()));
 			map.put(key, value.merge(map.get(key)));
 		}
-		for (StatKey key : map.keySet()) {
-			if (map.get(key).empty()) map.remove(key);
+		for (Iterator<StatKey> iterator = map.keySet().iterator(); iterator.hasNext();) {
+			StatKey key = iterator.next();
+		    if (map.get(key).empty()) {
+		        // Remove the current element from the iterator and the list.
+		        iterator.remove();
+		    }
 		}
+		/*if(map != null && !map.isEmpty()){
+			for (StatKey key : map.keySet()) {
+				if (map.get(key).empty()) map.remove(key);
+			}
+		}*/
 		return map;
 	}
 	

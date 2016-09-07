@@ -35,18 +35,18 @@ public class RateArea {
 	private List<Polygon> geometry;
 	private Integer slotNumber;	// used in supply csv creation
 
-	private List<Street> streets;
-	private Map<String,Street> n_streets = new HashMap<String, Street>();
+	//private List<Street> streets;
+	private Map<String,Street> streets = new HashMap<String, Street>();
 	private List<ParkingMeter> parkingMeters;
 	private List<String> zones;	// id of the related zones
 	private List<String> agencyId;	// relation to agency object
 
-	public Map<String, Street> getN_streets() {
-		return n_streets;
+	public Map<String, Street> getStreets() {
+		return streets;
 	}
 
-	public void setN_streets(Map<String, Street> n_streets) {
-		this.n_streets = n_streets;
+	public void setStreets(Map<String, Street> streets) {
+		this.streets = streets;
 	}
 
 	public String getId() {
@@ -105,14 +105,6 @@ public class RateArea {
 		this.note = note;
 	}
 
-	public List<Street> getStreets() {
-		return streets;
-	}
-
-	public void setStreets(List<Street> streets) {
-		this.streets = streets;
-	}
-
 	public List<ParkingMeter> getParkingMeters() {
 		return parkingMeters;
 	}
@@ -144,15 +136,7 @@ public class RateArea {
 	public void setSlotNumber(Integer slotNumber) {
 		this.slotNumber = slotNumber;
 	}
-
-//	public String getMunicipality() {
-//		return municipality;
-//	}
-//
-//	public void setMunicipality(String municipality) {
-//		this.municipality = municipality;
-//	}
-
+	
 	public List<String> getZones() {
 		return zones;
 	}

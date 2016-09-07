@@ -341,7 +341,7 @@
 										ng-repeat="pmeter in filtered = (pmeterWS | filter:noteFilter | filter:pmAreaFilter | filter:pmStatusFilter | filter:agencyPMeterFilter) | orderBy:'code' | startFrom:currentPagePm*maxPmeters | limitTo:maxPmeters">
 										<tr><!--  ng-show="pmeter.status!='ACTIVE' && pmStatusFilter!='ACTIVE'" -->
 											<td align="left">
-												<span ng-show="isMyAgency(pmeter.agencyId)"><i class="glyphicon glyphicon-home"></i></span>
+												<span ng-show="isMyAgency(pmeter.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
 											</td>
 											<td align="left"><span ng-show="pmconf.pm_code.visible">{{pmeter.code}}</span></td>
 											<td align="left"><span ng-show="pmconf.pm_note.visible">{{pmeter.note}}</span></td>

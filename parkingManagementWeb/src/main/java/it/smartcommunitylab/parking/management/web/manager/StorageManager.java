@@ -508,7 +508,6 @@ public class StorageManager {
 	
 	public List<StreetBean> getAllStreets(String appId, String municipality) {
 		List<StreetBean> result = new ArrayList<StreetBean>();
-		//for (RateAreaBean temp : getAllArea(appId, municipality)) {
 		for (RateAreaBean temp : getAllArea(appId)) {	
 			if(temp != null && appId.compareTo("all") == 0){
 				result.addAll(getAllStreets(temp, "all"));
@@ -516,7 +515,6 @@ public class StorageManager {
 				result.addAll(getAllStreets(temp, appId));
 			}
 		}
-
 		return result;
 	}
 
@@ -528,9 +526,12 @@ public class StorageManager {
 	public List<StreetBean> getAllStreets(RateAreaBean ab, String appId) {
 		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
 		List<StreetBean> result = new ArrayList<StreetBean>();
-
 		if (area.getStreets() != null) {
-			for (Street tmp : area.getStreets()) {
+			//for (Street tmp : area.getStreets()) {
+			Map<String, Street> streets = area.getStreets();
+			for (Map.Entry<String, Street> entry : streets.entrySet())
+			{
+			    Street tmp = entry.getValue();
 				if(tmp != null && appId.compareTo("all") == 0){
 					StreetBean s = ModelConverter.toStreetBean(area, tmp);
 					s.setRateAreaId(ab.getId());
@@ -559,7 +560,11 @@ public class StorageManager {
 		
 		for(RateArea area : areas){
 			if (area.getStreets() != null) {
-				for (Street tmp : area.getStreets()) {
+				//for (Street tmp : area.getStreets()) {
+				Map<String, Street> streets = area.getStreets();
+				for (Map.Entry<String, Street> entry : streets.entrySet())
+				{
+				    Street tmp = entry.getValue();
 					if(tmp != null && tmp.getId_app().compareTo(appId) == 0){
 						List<String> myZones = tmp.getZones();
 						StreetBean s = ModelConverter.toStreetBean(area, tmp);
@@ -587,7 +592,11 @@ public class StorageManager {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		
 		if (area.getStreets() != null) {
-			for (Street tmp : area.getStreets()) {
+			//for (Street tmp : area.getStreets()) {
+			Map<String, Street> streets = area.getStreets();
+			for (Map.Entry<String, Street> entry : streets.entrySet())
+			{
+			    Street tmp = entry.getValue();
 				if(tmp != null && tmp.getId_app().compareTo(appId) == 0){
 					List<String> zones = tmp.getZones();
 					StreetBean s = ModelConverter.convert(tmp, StreetBean.class);
@@ -603,7 +612,6 @@ public class StorageManager {
 		return result;
 	}
 	
-	// Street Methods
 	public List<StreetBean> getAllStreetsByAgencyId(String appId, String agencyId) {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
@@ -621,33 +629,44 @@ public class StorageManager {
 		return result;
 	}
 
-	public StreetBean findStreet(String streetId) {
+	public StreetBean findStreet(String streetId, String appId) {
+		String sId = "n_streets." + streetId;
 		Criteria crit_street = new Criteria();
 		crit_street.and("_id").is(new ObjectId(streetId));
 		Criteria crit = new Criteria();
-		crit.and("streets").elemMatch(crit_street);
-		RateArea ra = mongodb.findOne(new Query(crit), RateArea.class);
-		Street s = new Street();
-		s.setId(streetId);
-		int index = ra.getStreets().indexOf(s);
-		if (index != -1) {
-			Street st = ra.getStreets().get(index);
-			StreetBean result = ModelConverter.toStreetBean(ra, st);
+		crit.and("id_app").is(appId);
+		crit.and(sId).exists(true);
+		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
+		
+		Map<String, Street> tempStreets = ra.getStreets();
+		Street s = null;
+		if(tempStreets != null && !tempStreets.isEmpty()){
+			s = tempStreets.get(streetId);
+		}
+		if(s != null){
+			StreetBean result = ModelConverter.toStreetBean(ra, s);
 			return result;
 		}
-		/*List<RateArea> aree = mongodb.findAll(RateArea.class);
-		Street s = new Street();
-		for (RateArea area : aree) {
-			if (area.getStreets() != null) {
-				s.setId(streetId);
-				int index = area.getStreets().indexOf(s);
-				if (index != -1) {
-					Street st = area.getStreets().get(index);
-					StreetBean result = ModelConverter.toStreetBean(area, st);
-					return result;
-				}
-			}
-		}*/
+		return null;
+	}
+	
+	public StreetBean findStreet(String streetId) {
+		String sId = "n_streets." + streetId;
+		Criteria crit_street = new Criteria();
+		crit_street.and("_id").is(new ObjectId(streetId));
+		Criteria crit = new Criteria();
+		crit.and(sId).exists(true);
+		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
+		
+		Map<String, Street> tempStreets = ra.getStreets();
+		Street s = null;
+		if(tempStreets != null && !tempStreets.isEmpty()){
+			s = tempStreets.get(streetId);
+		}
+		if(s != null){
+			StreetBean result = ModelConverter.toStreetBean(ra, s);
+			return result;
+		}
 		return null;
 	}
 	
@@ -661,14 +680,24 @@ public class StorageManager {
 		List<RateArea> aree = mongodb.findAll(RateArea.class);
 		for (RateArea area : aree) {
 			if (area.getStreets() != null) {
-				List<Street> streets = area.getStreets();
-				for(Street street : streets){
-					if(street.getStreetReference().compareToIgnoreCase(referencedStreet) == 0){
+				//List<Street> streets = area.getStreets();
+				Map<String, Street> streets = area.getStreets();
+				for (Map.Entry<String, Street> entry : streets.entrySet())
+				{
+				    Street street = entry.getValue();
+				    if(street.getStreetReference().compareToIgnoreCase(referencedStreet) == 0){
 						StreetBean s = ModelConverter.toStreetBean(area, street);
 						logger.info(String.format("Street found: %s", s.toString() ));
 						result.add(s);
 					}
 				}
+				/*for(Street street : streets){
+					if(street.getStreetReference().compareToIgnoreCase(referencedStreet) == 0){
+						StreetBean s = ModelConverter.toStreetBean(area, street);
+						logger.info(String.format("Street found: %s", s.toString() ));
+						result.add(s);
+					}
+				}*/
 			}
 		}
 		return result;
@@ -681,8 +710,8 @@ public class StorageManager {
 			if(area.getAgencyId().contains(agencyId)){
 				Agency ag = agencyDataSetup.getAgencyById(agencyId);
 				if(ag.getStreet() >= UPDATE_VAL){
-					if(area.getN_streets() != null){
-						Street temp = area.getN_streets().get(sb.getId());
+					if(area.getStreets() != null){
+						Street temp = area.getStreets().get(sb.getId());
 						if(temp != null){
 							List<Point> points = new ArrayList<Point>();
 							Line line = new Line();
@@ -705,7 +734,6 @@ public class StorageManager {
 							if(sb.getGeometry() != null){
 								for (PointBean pb : sb.getGeometry().getPoints()) {
 									points.add(ModelConverter.convert(pb, Point.class));
-									//temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
 								}
 							}
 							line.setPoints(points);
@@ -713,47 +741,10 @@ public class StorageManager {
 							temp.setZones(sb.getZones());
 							temp.setParkingMeters(sb.getParkingMeters());
 							temp.setRateAreaId(sb.getRateAreaId());
+							temp.setAgencyId(sb.getAgencyId());
 							mongodb.save(area);
 						}
 					}
-					/*if (area.getStreets() != null) {
-						for (Street temp : area.getStreets()) {
-							if (temp.getId().equals(sb.getId())) {
-								List<Point> points = new ArrayList<Point>();
-								Line line = new Line();
-								temp.setSlotNumber(sb.getSlotNumber());
-								temp.setFreeParkSlotNumber(sb.getFreeParkSlotNumber());
-								temp.setFreeParkSlotSignNumber(sb.getFreeParkSlotSignNumber());
-								temp.setUnusuableSlotNumber(sb.getUnusuableSlotNumber());
-								temp.setHandicappedSlotNumber(sb.getHandicappedSlotNumber());
-								temp.setReservedSlotNumber(sb.getReservedSlotNumber());
-								temp.setPaidSlotNumber(sb.getPaidSlotNumber());
-								temp.setTimedParkSlotNumber(sb.getTimedParkSlotNumber());
-								List<VehicleSlotBean> editedSlotsConfBean = sb.getSlotsConfiguration();
-								temp.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, null));
-								
-								temp.setStreetReference(sb.getStreetReference());
-								temp.setSubscritionAllowedPark(sb.isSubscritionAllowedPark());
-								if(temp.getGeometry() != null && temp.getGeometry().getPoints() != null && temp.getGeometry().getPoints().size() > 0){
-									temp.getGeometry().getPoints().clear();
-								}
-								if(sb.getGeometry() != null){
-									for (PointBean pb : sb.getGeometry().getPoints()) {
-										points.add(ModelConverter.convert(pb, Point.class));
-										//temp.getGeometry().getPoints().add(ModelConverter.convert(pb, Point.class));
-									}
-								}
-								line.setPoints(points);
-								temp.setGeometry(line);
-								temp.setZones(sb.getZones());
-								temp.setParkingMeters(sb.getParkingMeters());
-								temp.setRateAreaId(sb.getRateAreaId());
-								mongodb.save(area);
-								founded = true;
-								break;
-							}
-						}
-					}*/
 				} else {
 					throw new AccessControlException("no update permission for street object");
 				}
@@ -780,8 +771,8 @@ public class StorageManager {
 			if(area.getAgencyId().contains(agencyId)){
 				Agency ag = agencyDataSetup.getAgencyById(agencyId);
 				if(ag.getStreet() >= UPDATE_VAL){
-					Street s = ModelConverter.convert(findStreet(streetId), Street.class);
-					result = area.getStreets() != null && area.getStreets().remove(s);
+					//Street s = ModelConverter.convert(findStreet(streetId, appId), Street.class);
+					result = area.getStreets() != null && (area.getStreets().remove(streetId) != null);
 					if (result) {
 						mongodb.save(area);
 						logger.debug(String.format("Success removing via %s of area %s", streetId, areaId));
@@ -825,11 +816,11 @@ public class StorageManager {
 				if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
 					if(area.getAgencyId().contains(agencyId)){
 						// new
-						if(area.getN_streets() == null) {
-							area.setN_streets(new HashMap<String, Street>());
+						if(area.getStreets() == null) {
+							area.setStreets(new HashMap<String, Street>());
 						}
 						street = processId(street, Street.class);
-						area.getN_streets().put(street.getId(), street);
+						area.getStreets().put(street.getId(), street);
 						// old
 						//if (area.getStreets() == null) {
 						//	area.setStreets(new ArrayList<Street>());
