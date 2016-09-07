@@ -2306,4 +2306,169 @@
 }, {
 	"key": "link_create_title",
 	"value": "Aggiungi tariffa"
+}, {
+	"key": "impact_valuation",
+	"value": "VALUTAZIONE IMPATTO"
+}, {
+	"key": "impact_capacity",
+	"value": "Capacita'"
+}, {
+	"key": "impact_capacity_placeholder",
+	"value": "Posti totali in struttura"
+}, {
+	"key": "impact_capacity_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore numerico"
+}, {
+	"key": "impact_capacity_error_required",
+	"value": "Campo 'capacita' struttura' obbligatorio"
+}, {
+	"key": "impact_transport_service",
+	"value": "Servizi di trasporto"
+}, {
+	"key": "impact_shuttle_service",
+	"value": "Bus navetta"
+}, {
+	"key": "impact_urban_bus_service",
+	"value": "Autobus urbani"
+}, {
+	"key": "impact_metro_service",
+	"value": "Metro"
+}, {
+	"key": "impact_taxi_service",
+	"value": "Taxi"
+}, {
+	"key": "impact_intercepted_traffic",
+	"value": "Flusso traffico intercettato (auto/ora)"
+}, {
+	"key": "impact_intercepted_traffic_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore numerico"
+}, {
+	"key": "impact_intercepted_traffic_error_required",
+	"value": "Campo 'flusso traffico' obbligatorio"
+}, {
+	"key": "impact_empty_field_list",
+	"value": "Campi mancanti per il calcolo dell'impatto"
+}, {
+	"key": "impact_load_value",
+	"value": "Calcola"
+}, {
+	"key": "impact_use_request",
+	"value": "Richiesta utilizzo (%)"
+}, {
+	"key": "impact_use_request_placeholder",
+	"value": "Richiesta utilizzo (valore percentuale)"
+}, {
+	"key": "impact_use_request_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore numerico"
+}, {
+	"key": "impact_use_request_error_required",
+	"value": "Campo 'richiesta utilizzo' obbligatorio"
+}, {
+	"key": "impact_use_max_request",
+	"value": "Richiesta massima (posti)"
+}, {
+	"key": "impact_use_max_request_placeholder",
+	"value": "Richiesta massima (numero posti)"
+}, {
+	"key": "impact_use_max_request_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore numerico"
+}, {
+	"key": "impact_use_max_request_error_required",
+	"value": "Campo 'richiesta massima' obbligatorio"
+}, {
+	"key": "impact_new_users",
+	"value": "Nuovi utilizzatori"
+}, {
+	"key": "impact_new_users_placeholder",
+	"value": "Numero possibili nuovi utilizzatori"
+}, {
+	"key": "impact_new_users_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore numerico"
+}, {
+	"key": "impact_new_users_error_required",
+	"value": "Campo 'nuovi utilizzatori' obbligatorio"
+}, {
+	"key": "impact_peak_hour_rate",
+	"value": "Indice ora di punta"
+}, {
+	"key": "impact_peak_hour_rate_placeholder",
+	"value": "Indice ora di punta"
+}, {
+	"key": "impact_peak_hour_rate_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore decimale"
+}, {
+	"key": "impact_peak_hour_rate_error_required",
+	"value": "Campo 'indice ora di punta' obbligatorio"
+}, {
+	"key": "impact_co2_coefficient",
+	"value": "Coefficiente unitario C02 (g/km)"
+}, {
+	"key": "impact_co2_coefficient_placeholder",
+	"value": "Coefficiente unitario CO2 (g/km)"
+}, {
+	"key": "impact_co2_coefficient_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore decimale"
+}, {
+	"key": "impact_co2_coefficient_error_required",
+	"value": "Campo 'coefficiente unitario CO2' obbligatorio"
+}, {
+	"key": "impact_city_center_distance",
+	"value": "Distanza con centro citta'"
+}, {
+	"key": "impact_city_center_distance_placeholder",
+	"value": "Distanza tra struttura e centro citta' (km)"
+}, {
+	"key": "impact_city_center_distance_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore decimale (es 1.234)"
+}, {
+	"key": "impact_city_center_distance_error_required",
+	"value": "Campo 'distanza con centro citta' obbligatorio"
+}, {
+	"key": "impact_not_traveled_km",
+	"value": "Km risparmiati"
+}, {
+	"key": "impact_not_traveled_km_placeholder",
+	"value": "Km non viaggiati (verso il centro citta' e ritorno)"
+}, {
+	"key": "impact_not_traveled_km_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore decimale (es 1.234)"
+}, {
+	"key": "impact_not_traveled_km_error_required",
+	"value": "Campo 'km risparmiati' obbligatorio"
+}, {
+	"key": "impact_co2_saved",
+	"value": "CO2 evitata (g)"
+}, {
+	"key": "impact_co2_saved_placeholder",
+	"value": "Inserire la CO2 evitata"
+}, {
+	"key": "impact_co2_saved_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore numerico"
+}, {
+	"key": "impact_co2_saved_error_required",
+	"value": "Campo 'CO2 evitata' obbligatorio"
+}, {
+	"key": "impact_center_occupancy_rate",
+	"value": "Occupazione media attuale parcheggi Rovereto centro (%)"
+}, {
+	"key": "impact_center_occupancy_rate_placeholder",
+	"value": "Occupazione media parcheggi centro"
+}, {
+	"key": "impact_center_occupancy_rate_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore numerico"
+}, {
+	"key": "impact_center_occupancy_rate_error_required",
+	"value": "Campo 'occupazione media attuale' obbligatorio"
+}, {
+	"key": "impact_new_occupancy_rate",
+	"value": "Nuova Occupazione media parcheggi Rovereto centro (%)"
+}, {
+	"key": "impact_new_occupancy_rate_placeholder",
+	"value": "Nuova occupazione media parcheggi centro"
+}, {
+	"key": "impact_new_occupancy_rate_error_incorrect",
+	"value": "Valore non corretto. Inserire un valore numerico"
+}, {
+	"key": "impact_new_occupancy_rate_error_required",
+	"value": "Campo 'nuova occupazione media' obbligatorio"
 }]

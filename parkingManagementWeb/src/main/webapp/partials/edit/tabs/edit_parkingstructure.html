@@ -717,17 +717,17 @@
 					   		<div class="field-error" ng-show="!isInit && form.psZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div ng-if="psconf.ps_streetlife.visible">
-							<label>VALUTAZIONE IMPATTO</label>
+							<label>{{ 'impact_valuation' | i18n }}</label>
 						   	<div class="subpanel panel panel-default" width="95%">
 						   		<div class="panel-body">
 								   	<div class="form-group" ng-show="false">
-								    	<label for="sl_capacity">Capacita'</label>
-								    	<input id="sl_capacity" type="text" class="form-control" name="pSLCapacity" ng-model="parkingStructure.slotNumber" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Posti totali in struttura" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLCapacity.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLCapacity.$error.required">Campo 'capacita' struttura' obbligatorio</div>
+								    	<label for="sl_capacity">{{ 'impact_capacity' | i18n }}</label>
+								    	<input id="sl_capacity" type="text" class="form-control" name="pSLCapacity" ng-model="parkingStructure.slotNumber" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_capacity_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLCapacity.$error.pattern">{{ 'impact_capacity_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLCapacity.$error.required">{{ 'impact_capacity_error_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group" ng-init="getRideServices()">
-								    	<label for="totalSlot">Servizi di trasporto</label>
+								    	<label for="totalSlot">{{ 'impact_transport_service' | i18n }}</label>
 					   					<div class="subpanel panel panel-default" width="95%">
 					   						<div class="form-group">
 							   					<label for="rideservices_bikesharing">Bike sharing</label>
@@ -736,15 +736,15 @@
 										    	</select>
 									    	</div>
 									    	<div class="form-group">
-						   						<label for="rideservices_shuttlebus">Bus navetta</label>
+						   						<label for="rideservices_shuttlebus">{{ 'impact_shuttle_service' | i18n }}</label>
 										    	<select id="rideservices_shuttlebus" name="rs_shuttlebus" class="form-control" ng-options="rs2 as rs2.description for rs2 in rideservices2" ng-model="parkingStructure.rideservice2" ng-required="psconf.ps_streetlife.required" ng-change="calculatePercentageAndMaximumDemand(parkingStructure.rideservice1, parkingStructure.rideservice2, parkingStructure.rideservice3, parkingStructure.metropresent, parkingStructure.taxipresent)">
-										    		<option value="">Bus navetta</option>
+										    		<option value="">{{ 'impact_shuttle_service' | i18n }}</option>
 										    	</select>
 									    	</div>
 									    	<div class="form-group">
-										    	<label for="rideservices_urbantransport">Autobus urbani</label>
+										    	<label for="rideservices_urbantransport">{{ 'impact_urban_bus_service' | i18n }}</label>
 										    	<select id="rideservices_urbantransport" name="rs_urbantransport" class="form-control" ng-options="rs3 as rs3.description for rs3 in rideservices3" ng-model="parkingStructure.rideservice3" ng-required="psconf.ps_streetlife.required" ng-change="calculatePercentageAndMaximumDemand(parkingStructure.rideservice1, parkingStructure.rideservice2, parkingStructure.rideservice3, parkingStructure.metropresent, parkingStructure.taxipresent)">
-										    		<option value="">Autobus urbani</option>
+										    		<option value="">{{ 'impact_urban_bus_service' | i18n }}</option>
 										    	</select>
 									    	</div>
 									    	<div class="form-group">
@@ -758,36 +758,36 @@
 					   					</div>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_flow">Flusso traffico intercettato (auto/ora)</label>
-								    	<input id="sl_flow" type="text" class="form-control" name="pSLFlow" ng-model="parkingStructure.flow" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Flusso di traffico intercettato (auto/ora)" ng-change="getParkDemand(parkingStructure, myGeometry)" ><!-- ng-blur="getParkDemand(parkingStructure, myGeometry)" -->
-								    	<div class="field-error" ng-show="!isInit && form.pSLFlow.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLFlow.$error.required">Campo 'flusso traffico' obbligatorio</div>
+								    	<label for="sl_flow">{{ 'impact_intercepted_traffic' | i18n }}</label>
+								    	<input id="sl_flow" type="text" class="form-control" name="pSLFlow" ng-model="parkingStructure.flow" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_intercepted_traffic' | i18n }}" ng-change="getParkDemand(parkingStructure, myGeometry)" ><!-- ng-blur="getParkDemand(parkingStructure, myGeometry)" -->
+								    	<div class="field-error" ng-show="!isInit && form.pSLFlow.$error.pattern">{{ 'impact_intercepted_traffic_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLFlow.$error.required">{{ 'impact_intercepted_traffic_error_required' | i18n }}</div>
 								   	</div>
 								   	<!-- <div class="row" align="right">
 								   		<button type="button" class="btn btn-primary" ng-click="getParkDemand(parkingStructure, myGeometry)">Calcola1</button>
 								   	</div> -->
 								   	
-								   	<div class="field-error" ng-show="showMissingFields">Campi mancanti per il calcolo dell'impatto: {{ missingFields }}</div>
+								   	<div class="field-error" ng-show="showMissingFields">{{ 'impact_empty_field_list' | i18n }}: {{ missingFields }}</div>
 								   	<div class="row" align="right">
-								   		<button type="button" class="btn btn-primary" ng-click="getParkDemand(parkingStructure, myGeometry);calculateImpactEvaluation(parkingStructure)">Calcola</button>
+								   		<button type="button" class="btn btn-primary" ng-click="getParkDemand(parkingStructure, myGeometry);calculateImpactEvaluation(parkingStructure)">{{ 'impact_load_value' | i18n }}</button>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_percentageDemand">Richiesta utilizzo (%)</label>
-								    	<input id="sl_percentageDemand" type="text" class="form-control" name="pSLPercentageDemand" ng-model="parkingStructure.percentageDemand" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Richiesta utilizzo (valore percentuale)" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLPercentageDemand.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLPercentageDemand.$error.required">Campo 'richiesta utilizzo' obbligatorio</div>
+								    	<label for="sl_percentageDemand">{{ 'impact_use_request' | i18n }}</label>
+								    	<input id="sl_percentageDemand" type="text" class="form-control" name="pSLPercentageDemand" ng-model="parkingStructure.percentageDemand" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_use_request_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLPercentageDemand.$error.pattern">{{ 'impact_use_request_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLPercentageDemand.$error.required">{{ 'impact_use_request_error_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_maximumDemand">Richiesta massima (posti)</label>
-								    	<input id="sl_maximumDemand" type="text" class="form-control" name="pSLMaximumDemand" ng-model="parkingStructure.maximumDemand" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Richiesta massima (numero posti)" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLMaximumDemand.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLMaximumDemand.$error.required">Campo 'richiesta massima' obbligatorio</div>
+								    	<label for="sl_maximumDemand">{{ 'impact_use_max_request' | i18n }}</label>
+								    	<input id="sl_maximumDemand" type="text" class="form-control" name="pSLMaximumDemand" ng-model="parkingStructure.maximumDemand" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_use_max_request_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLMaximumDemand.$error.pattern">{{ 'impact_use_max_request_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLMaximumDemand.$error.required">{{ 'impact_use_max_request_error_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_newParkingUsers">Nuovi utilizzatori</label>
-								    	<input id="sl_newParkingUsers" type="text" class="form-control" name="pSLNewParkingUsers" ng-model="parkingStructure.newParkingUsers" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Numero possibili nuovi utilizzatori" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLNewParkingUsers.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLNewParkingUsers.$error.required">Campo 'nuovi utilizzatori' obbligatorio</div>
+								    	<label for="sl_newParkingUsers">{{ 'impact_new_users' | i18n }}</label>
+								    	<input id="sl_newParkingUsers" type="text" class="form-control" name="pSLNewParkingUsers" ng-model="parkingStructure.newParkingUsers" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_new_users_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLNewParkingUsers.$error.pattern">{{ 'impact_new_users_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLNewParkingUsers.$error.required">{{ 'impact_new_users_error_required' | i18n }}</div>
 								   	</div>
 						   	<!-- 		</div>
 						   </div>	
@@ -795,16 +795,16 @@
 						   	<div class="subpanel panel panel-default" width="95%">
 						   		<div class="panel-body"> -->
 								   	<div class="form-group">
-								    	<label for="sl_peakHourRate">Indice ora di punta</label>
-								    	<input id="sl_peakHourRate" type="text" class="form-control" name="pSLPeakHourRate" ng-model="parkingStructure.peakHourRate" ng-pattern="decimalNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Indice ora di punta" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLPeakHourRate.$error.pattern">Valore non corretto. Inserire un valore decimale</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLPeakHourRate.$error.required">Campo 'indice ora di punta' obbligatorio</div>
+								    	<label for="sl_peakHourRate">{{ 'impact_peak_hour_rate' | i18n }}</label>
+								    	<input id="sl_peakHourRate" type="text" class="form-control" name="pSLPeakHourRate" ng-model="parkingStructure.peakHourRate" ng-pattern="decimalNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_peak_hour_rate_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLPeakHourRate.$error.pattern">{{ 'impact_peak_hour_rate_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLPeakHourRate.$error.required">{{ 'impact_peak_hour_rate_error_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_co2Coefficient">Coefficiente unitario CO2 (g/km)</label>
-								    	<input id="sl_co2Coefficient" type="text" class="form-control" name="pSLCo2Coefficient" ng-model="parkingStructure.co2Coefficient" ng-pattern="decimalNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Coefficiente unitario CO2 (g/km)" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLCo2Coefficient.$error.pattern">Valore non corretto. Inserire un valore decimale</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLCo2Coefficient.$error.required">Campo 'coefficiente unitario CO2' obbligatorio</div>
+								    	<label for="sl_co2Coefficient">{{ 'impact_co2_coefficient' | i18n }}</label>
+								    	<input id="sl_co2Coefficient" type="text" class="form-control" name="pSLCo2Coefficient" ng-model="parkingStructure.co2Coefficient" ng-pattern="decimalNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_co2_coefficient_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLCo2Coefficient.$error.pattern">{{ 'impact_co2_coefficient_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLCo2Coefficient.$error.required">{{ 'impact_co2_coefficient_error_required' | i18n }}</div>
 								   	</div>
 								   	<!-- <div class="form-group">
 								    	<label for="sl_cityCenter">Cento citt&agrave; (lat,lon)</label>
@@ -813,34 +813,34 @@
 								    	<div class="field-error" ng-show="!isInit && form.pSLMaximumDemand.$error.required">Campo 'richiesta massima' obbligatorio</div>
 								   	</div> -->
 								   	<div class="form-group">
-								    	<label for="sl_cityCenterDistance">Distanza con Cento citt&agrave; (km)</label>
-								    	<input id="sl_cityCenterDistance" type="text" class="form-control" name="pSLCityCenterDistance" ng-model="parkingStructure.cityCenterDistance" ng-pattern="kmDistance" ng-required="psconf.ps_streetlife.required" placeholder="Distanza tra struttura e centro citta' (km)" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLCityCenterDistance.$error.pattern">Valore non corretto. Inserire un valore decimale (es 1.234)</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLCityCenterDistance.$error.required">Campo 'distanza con centro citt&agrave;' obbligatorio</div>
+								    	<label for="sl_cityCenterDistance">{{ 'impact_city_center_distance' | i18n }}</label>
+								    	<input id="sl_cityCenterDistance" type="text" class="form-control" name="pSLCityCenterDistance" ng-model="parkingStructure.cityCenterDistance" ng-pattern="kmDistance" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_city_center_distance_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLCityCenterDistance.$error.pattern">{{ 'impact_city_center_distance_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLCityCenterDistance.$error.required">{{ 'impact_city_center_distance_error_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_notTraveledKm">Km risparmiati</label>
-								    	<input id="sl_notTraveledKm" type="text" class="form-control" name="pSLNotTraveledKm" ng-model="parkingStructure.notTraveledKm" ng-pattern="kmDistance" ng-required="psconf.ps_streetlife.required" placeholder="Km non viaggiati (verso il centro citta' e ritorno)" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLNotTraveledKm.$error.pattern">Valore non corretto. Inserire un valore decimale (es 1.234)</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLNotTraveledKm.$error.required">Campo 'km risparmiati' obbligatorio</div>
+								    	<label for="sl_notTraveledKm">{{ 'impact_not_traveled_km' | i18n }}</label>
+								    	<input id="sl_notTraveledKm" type="text" class="form-control" name="pSLNotTraveledKm" ng-model="parkingStructure.notTraveledKm" ng-pattern="kmDistance" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_not_traveled_km_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLNotTraveledKm.$error.pattern">{{ 'impact_not_traveled_km_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLNotTraveledKm.$error.required">{{ 'impact_not_traveled_km_error_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_co2Saved">CO2 evitata (g)</label>
-								    	<input id="sl_co2Saved" type="text" class="form-control" name="pSLCo2Saved" ng-model="parkingStructure.co2Saved" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Inserire la CO2 evitata" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLCo2Saved.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLCo2Saved.$error.required">Campo 'CO2 evitata' obbligatorio</div>
+								    	<label for="sl_co2Saved">{{ 'impact_co2_saved' | i18n }}</label>
+								    	<input id="sl_co2Saved" type="text" class="form-control" name="pSLCo2Saved" ng-model="parkingStructure.co2Saved" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_co2_saved_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLCo2Saved.$error.pattern">{{ 'impact_co2_saved_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLCo2Saved.$error.required">{{ 'impact_co2_saved_error_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_centerAverateOccupancyRate">Occupazione media attuale parcheggi Rovereto centro (%)</label>
-								    	<input id="sl_centerAverateOccupancyRate" type="text" class="form-control" name="pSLCenterAverateOccupancyRate" ng-model="parkingStructure.centerAverateOccupancyRate" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Occupazione media parcheggi centro" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLCenterAverateOccupancyRate.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLCenterAverateOccupancyRate.$error.required">Campo 'occupazione media attuale' obbligatorio</div>
+								    	<label for="sl_centerAverateOccupancyRate">{{ 'impact_center_occupancy_rate' | i18n }}</label>
+								    	<input id="sl_centerAverateOccupancyRate" type="text" class="form-control" name="pSLCenterAverateOccupancyRate" ng-model="parkingStructure.centerAverateOccupancyRate" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_center_occupancy_rate_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLCenterAverateOccupancyRate.$error.pattern">{{ 'impact_center_occupancy_rate_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLCenterAverateOccupancyRate.$error.required">{{ 'impact_center_occupancy_rate_error_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group">
-								    	<label for="sl_newAverateOccupancyRate">Nuova Occupazione media parcheggi Rovereto centro (%)</label>
-								    	<input id="sl_newAverateOccupancyRate" type="text" class="form-control" name="pSLNewAverateOccupancyRate" ng-model="parkingStructure.newAverateOccupancyRate" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="Nuova occupazione media parcheggi centro" >
-								    	<div class="field-error" ng-show="!isInit && form.pSLNewAverateOccupancyRate.$error.pattern">Valore non corretto. Inserire un valore numerico</div>
-								    	<div class="field-error" ng-show="!isInit && form.pSLNewAverateOccupancyRate.$error.required">Campo 'nuova occupazione media' obbligatorio</div>
+								    	<label for="sl_newAverateOccupancyRate">{{ 'impact_new_occupancy_rate' | i18n }}</label>
+								    	<input id="sl_newAverateOccupancyRate" type="text" class="form-control" name="pSLNewAverateOccupancyRate" ng-model="parkingStructure.newAverateOccupancyRate" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_new_occupancy_rate_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="!isInit && form.pSLNewAverateOccupancyRate.$error.pattern">{{ 'impact_new_occupancy_rate_error_incorrect' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.pSLNewAverateOccupancyRate.$error.required">{{ 'impact_new_occupancy_rate_error_required' | i18n }}</div>
 								   	</div>
 						   	</div>
 						</div>

@@ -2306,4 +2306,169 @@
 }, {
 	"key": "link_create_title",
 	"value": "New fee"
+}, {
+	"key": "impact_valuation",
+	"value": "IMPACT ASSESSMENT"
+}, {
+	"key": "impact_capacity",
+	"value": "Capacity"
+}, {
+	"key": "impact_capacity_placeholder",
+	"value": "Total slots in structure"
+}, {
+	"key": "impact_capacity_error_incorrect",
+	"value": "Incorrect value. Insert a numerical value"
+}, {
+	"key": "impact_capacity_error_required",
+	"value": "Field 'capacity' is required"
+}, {
+	"key": "impact_transport_service",
+	"value": "Transport services"
+}, {
+	"key": "impact_shuttle_service",
+	"value": "Shuttle bus"
+}, {
+	"key": "impact_urban_bus_service",
+	"value": "City bus"
+}, {
+	"key": "impact_metro_service",
+	"value": "Metro"
+}, {
+	"key": "impact_taxi_service",
+	"value": "Taxi"
+}, {
+	"key": "impact_intercepted_traffic",
+	"value": "Intercepted traffic flow (car/h)"
+}, {
+	"key": "impact_intercepted_traffic_error_incorrect",
+	"value": "Incorrect value. Insert a numerical value"
+}, {
+	"key": "impact_intercepted_traffic_error_required",
+	"value": "Field 'traffic flow' is required"
+}, {
+	"key": "impact_empty_field_list",
+	"value": "Missing fields for impact calculating"
+}, {
+	"key": "impact_load_value",
+	"value": "Calculate"
+}, {
+	"key": "impact_use_request",
+	"value": "Percentage demand (%)"
+}, {
+	"key": "impact_use_request_placeholder",
+	"value": "Percentage demand"
+}, {
+	"key": "impact_use_request_error_incorrect",
+	"value": "Incorrect value. Insert a numerical value"
+}, {
+	"key": "impact_use_request_error_required",
+	"value": "Field 'percentage demand' is required"
+}, {
+	"key": "impact_use_max_request",
+	"value": "Maximum demand (slots)"
+}, {
+	"key": "impact_use_max_request_placeholder",
+	"value": "Maximum demand (slots number)"
+}, {
+	"key": "impact_use_max_request_error_incorrect",
+	"value": "Incorrect value. Insert a numerical value"
+}, {
+	"key": "impact_use_max_request_error_required",
+	"value": "Field 'maximum demand' is required"
+}, {
+	"key": "impact_new_users",
+	"value": "New parking users"
+}, {
+	"key": "impact_new_users_placeholder",
+	"value": "New parking users"
+}, {
+	"key": "impact_new_users_error_incorrect",
+	"value": "Incorrect value. Insert a numerical value"
+}, {
+	"key": "impact_new_users_error_required",
+	"value": "Field 'new parking users' is required"
+}, {
+	"key": "impact_peak_hour_rate",
+	"value": "Peak hour rate"
+}, {
+	"key": "impact_peak_hour_rate_placeholder",
+	"value": "Peak hour rate"
+}, {
+	"key": "impact_peak_hour_rate_error_incorrect",
+	"value": "Incorrect value. Insert a decimal value"
+}, {
+	"key": "impact_peak_hour_rate_error_required",
+	"value": "Field 'peak hour rate' is required"
+}, {
+	"key": "impact_co2_coefficient",
+	"value": "CO2 coefficient (g/km)"
+}, {
+	"key": "impact_co2_coefficient_placeholder",
+	"value": "CO2 coefficient (g/km)"
+}, {
+	"key": "impact_co2_coefficient_error_incorrect",
+	"value": "Incorrect value. Insert a decimal value"
+}, {
+	"key": "impact_co2_coefficient_error_required",
+	"value": "Field 'CO2 coefficient' is required"
+}, {
+	"key": "impact_city_center_distance",
+	"value": "City center distance"
+}, {
+	"key": "impact_city_center_distance_placeholder",
+	"value": "City center distance from structure (km)"
+}, {
+	"key": "impact_city_center_distance_error_incorrect",
+	"value": "Incorrect value. Insert a decimal value (ex 1.234)"
+}, {
+	"key": "impact_city_center_distance_error_required",
+	"value": "Field 'city center distance' is required"
+}, {
+	"key": "impact_not_traveled_km",
+	"value": "Not traveled km"
+}, {
+	"key": "impact_not_traveled_km_placeholder",
+	"value": "Not traveled km (to and from city center)"
+}, {
+	"key": "impact_not_traveled_km_error_incorrect",
+	"value": "Incorrect value. Insert a decimal value (ex 1.234)"
+}, {
+	"key": "impact_not_traveled_km_error_required",
+	"value": "Field 'not traveled km' is required"
+}, {
+	"key": "impact_co2_saved",
+	"value": "Saved CO2 (g)"
+}, {
+	"key": "impact_co2_saved_placeholder",
+	"value": "Saved CO2 "
+}, {
+	"key": "impact_co2_saved_error_incorrect",
+	"value": "Incorrect value. Insert a numerical value"
+}, {
+	"key": "impact_co2_saved_error_required",
+	"value": "Field 'saved CO2' is required"
+}, {
+	"key": "impact_center_occupancy_rate",
+	"value": "Center average occupancy rate (%)"
+}, {
+	"key": "impact_center_occupancy_rate_placeholder",
+	"value": "Center average occupancy rate"
+}, {
+	"key": "impact_center_occupancy_rate_error_incorrect",
+	"value": "Incorrect value. Insert a numerical value"
+}, {
+	"key": "impact_center_occupancy_rate_error_required",
+	"value": "Field 'center average occupancy rate' is required"
+}, {
+	"key": "impact_new_occupancy_rate",
+	"value": "New average occupancy rate (%)"
+}, {
+	"key": "impact_new_occupancy_rate_placeholder",
+	"value": "New average occupancy rate"
+}, {
+	"key": "impact_new_occupancy_rate_error_incorrect",
+	"value": "Incorrect value. Insert a numerical value"
+}, {
+	"key": "impact_new_occupancy_rate_error_required",
+	"value": "Field 'new average occupancy rate' is required"
 }]
