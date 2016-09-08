@@ -786,21 +786,23 @@ pm.service('sharedDataService', function(){
 					//myZones.push(zone);
 					if(occStreetList[i].zones[j] == z_id){
 						found = true;
-						for(var j = 0; j < occStreetList[i].slotsConfiguration.length; j++){
-							var tmpSlotConf = occStreetList[i].slotsConfiguration[j];
-							if(vehicleType){
-								if(tmpSlotConf.vehicleType == vehicleType){
-									var slotConf = this.cleanStreetNullValue(tmpSlotConf);// NB: I have to use the average occupancy value and not the data stored in db
+						if(occStreetList[i].slotsConfiguration){
+							for(var j = 0; j < occStreetList[i].slotsConfiguration.length; j++){
+								var tmpSlotConf = occStreetList[i].slotsConfiguration[j];
+								if(vehicleType){
+									if(tmpSlotConf.vehicleType == vehicleType){
+										var slotConf = this.cleanStreetNullValue(tmpSlotConf);// NB: I have to use the average occupancy value and not the data stored in db
+										var tmp_occ = this.getTotalOccupiedSlots(slotConf);
+										totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
+										occupiedSlots += tmp_occ;
+										break;
+									}
+								} else {
+									var slotConf = this.cleanStreetNullValue(occStreetList[i].slotsConfiguration[j]);// NB: I have to use the average occupancy value and not the data stored in db
 									var tmp_occ = this.getTotalOccupiedSlots(slotConf);
 									totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
 									occupiedSlots += tmp_occ;
-									break;
 								}
-							} else {
-								var slotConf = this.cleanStreetNullValue(occStreetList[i].slotsConfiguration[j]);// NB: I have to use the average occupancy value and not the data stored in db
-								var tmp_occ = this.getTotalOccupiedSlots(slotConf);
-								totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
-								occupiedSlots += tmp_occ;
 							}
 						}
 					}
@@ -818,21 +820,23 @@ pm.service('sharedDataService', function(){
 		if(occStreetList != null && occStreetList.length > 0){
 			for(var i = 0; i < occStreetList.length; i++){
 				if(occStreetList[i].rateAreaId == a_id){
-					for(var j = 0; j < occStreetList[i].slotsConfiguration.length; j++){
-						var tmpSlotConf = occStreetList[i].slotsConfiguration[j];
-						if(vehicleType){
-							if(tmpSlotConf.vehicleType == vehicleType){
-								var slotConf = this.cleanStreetNullValue(tmpSlotConf);// NB: I have to use the average occupancy value and not the data stored in db
+					if(occStreetList[i].slotsConfiguration){
+						for(var j = 0; j < occStreetList[i].slotsConfiguration.length; j++){
+							var tmpSlotConf = occStreetList[i].slotsConfiguration[j];
+							if(vehicleType){
+								if(tmpSlotConf.vehicleType == vehicleType){
+									var slotConf = this.cleanStreetNullValue(tmpSlotConf);// NB: I have to use the average occupancy value and not the data stored in db
+									var tmp_occ = this.getTotalOccupiedSlots(slotConf);
+									totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
+									occupiedSlots += tmp_occ;
+									break;
+								}
+							} else {
+								var slotConf = this.cleanStreetNullValue(occStreetList[i].slotsConfiguration[j]);// NB: I have to use the average occupancy value and not the data stored in db
 								var tmp_occ = this.getTotalOccupiedSlots(slotConf);
 								totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
 								occupiedSlots += tmp_occ;
-								break;
 							}
-						} else {
-							var slotConf = this.cleanStreetNullValue(occStreetList[i].slotsConfiguration[j]);// NB: I have to use the average occupancy value and not the data stored in db
-							var tmp_occ = this.getTotalOccupiedSlots(slotConf);
-							totalSlots += (slotConf.slotNumber - slotConf.unusuableSlotNumber);
-							occupiedSlots += tmp_occ;
 						}
 					}
 				}
@@ -1414,6 +1418,37 @@ pm.service('sharedDataService', function(){
 			value = 0;
 		}
 		return parseInt(value);
+	};
+	
+	this.configureSlotsForObject = function(sc){
+		var myScConf = {
+			carSharingSlotNumber: this.initIfNull(sc.carSharingSlotNumber),
+			carSharingSlotOccupied: this.initIfNull(sc.carSharingSlotOccupied),
+			freeParkSlotNumber: this.initIfNull(sc.freeParkSlotNumber),
+			freeParkSlotOccupied: this.initIfNull(sc.freeParkSlotOccupied),
+			freeParkSlotSignNumber: this.initIfNull(sc.freeParkSlotSignNumber),
+			freeParkSlotSignOccupied: this.initIfNull(sc.freeParkSlotSignNumber),
+			handicappedSlotNumber: this.initIfNull(sc.handicappedSlotNumber),
+			handicappedSlotOccupied: this.initIfNull(sc.handicappedSlotOccupied),
+			loadingUnloadingSlotNumber: this.initIfNull(sc.loadingUnloadingSlotNumber),
+			loadingUnloadingSlotOccupied: this.initIfNull(sc.loadingUnloadingSlotOccupied),
+			paidSlotNumber: this.initIfNull(sc.paidSlotNumber),
+			paidSlotOccupied: this.initIfNull(sc.paidSlotOccupied),
+			pinkSlotNumber: this.initIfNull(sc.pinkSlotNumber),
+			pinkSlotOccupied: this.initIfNull(sc.pinkSlotOccupied),
+			rechargeableSlotNumber: this.initIfNull(sc.rechargeableSlotNumber),
+			rechargeableSlotOccupied: this.initIfNull(sc.rechargeableSlotOccupied),
+			reservedSlotNumber: this.initIfNull(sc.reservedSlotNumber),
+			reservedSlotOccupied: this.initIfNull(sc.reservedSlotOccupied),
+			slotNumber: this.initIfNull(sc.slotNumber),
+			slotOccupied: this.initIfNull(sc.slotOccupied),
+			timedParkSlotNumber: this.initIfNull(sc.timedParkSlotNumber),
+			timedParkSlotOccupied: this.initIfNull(sc.timedParkSlotOccupied),
+			unusuableSlotNumber: this.initIfNull(sc.unusuableSlotNumber),
+			vehicleType: sc.vehicleType,
+			vehicleTypeActive: sc.vehicleTypeActive
+		};
+		return myScConf;
 	};
 	
 	this.getAreaFilter = function(){

@@ -407,7 +407,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	if(showPs)parktabs.push(ps_tab_obj);
 	    	if(showPm)parktabs.push(pm_tab_obj);
 	    	if(showBp)parktabs.push(bp_tab_obj);
-	    	agencyId = sharedDataService.getConfUserAgency().id;
+	    	$scope.agencyId = agencyId = sharedDataService.getConfUserAgency().id;
 	    	$scope.areaPermissions = sharedDataService.getAgencyPermissionsForObject("area");
 	    	$scope.zonePermissions = sharedDataService.getAgencyPermissionsForObject("zone");
 	    	$scope.streetPermissions = sharedDataService.getAgencyPermissionsForObject("street");

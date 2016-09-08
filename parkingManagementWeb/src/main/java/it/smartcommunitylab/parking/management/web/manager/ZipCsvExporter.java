@@ -166,7 +166,11 @@ public class ZipCsvExporter implements Exporter {
 		String result = "AREA_APPARTENZA,CODICE,NOTE,STATO,GEOMETRIA\n";
 		for (RateArea area : areaList) {
 			if (area.getParkingMeters() != null) {
-				for (ParkingMeter p : area.getParkingMeters()) {
+				//for (ParkingMeter p : area.getParkingMeters()) {
+				Map<String, ParkingMeter> pms = area.getParkingMeters();
+				for (Map.Entry<String, ParkingMeter> entry : pms.entrySet())
+				{
+					ParkingMeter p = entry.getValue();
 					result += "\"" + area.getName() + "\"" + CSV_SEPARATOR
 							+ "\"" + p.getCode() + "\"" + CSV_SEPARATOR + "\""
 							+ p.getNote() + "\"" + CSV_SEPARATOR + "\""

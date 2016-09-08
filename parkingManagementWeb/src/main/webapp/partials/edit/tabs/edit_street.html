@@ -813,8 +813,8 @@
 								    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
 								   	</div>
 								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible">
-								    	<label for="timedSlot">{{ 'street_paidpark_slot' | i18n }}</label>
-								    	<input id="timedSlot" type="text" class="form-control" name="sPaidslot" ng-model="sc.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
+								    	<label for="paidSlot">{{ 'street_paidpark_slot' | i18n }}</label>
+								    	<input id="paidSlot" type="text" class="form-control" name="sPaidslot" ng-model="sc.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
 								    	<div class="field-error" ng-show="form.sPaidslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 								    	<div class="field-error" ng-show="!isInit && form.sPaiddslot.$error.required">{{ 'street_paidpark_slots_err_required' | i18n }}</div>
 								   	</div>
@@ -974,41 +974,41 @@
 						</div>
 					 	<div class="form-group" ng-show="isEditing && sconf.s_areaId.visible">
 					    	<label for="area">{{ 'street_area_name' | i18n }}</label>
-					    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea | orderBy: 'name'" ng-model="myArea" ng-required="isEditing && sconf.s_areaId.required" ng-change="getAreaPM(myArea)">
+					    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea | filter:{ agencyId : agencyId } | orderBy: 'name'" ng-model="myArea" ng-required="isEditing && sconf.s_areaId.required" ng-change="getAreaPM(myArea)">
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones0.visible">
 					    	<label for="zone0">{{ zone0_label | i18n }}</label>
-					    	<select id="zone0" name="sZone0" class="form-control" ng-options="m as m.label for m in sZones0 | orderBy: 'label'" ng-model="myZone0" ng-required="sconf.s_zones0.required">
+					    	<select id="zone0" name="sZone0" class="form-control" ng-options="m as m.label for m in sZones0 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone0" ng-required="sconf.s_zones0.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone0.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones1.visible">
 					    	<label for="zone1">{{ zone1_label | i18n }}</label>
-					    	<select id="zone1" name="sZone1" class="form-control" ng-options="m as m.label for m in sZones1 | orderBy: 'label'" ng-model="myZone1" ng-required="sconf.s_zones1.required">
+					    	<select id="zone1" name="sZone1" class="form-control" ng-options="m as m.label for m in sZones1 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone1" ng-required="sconf.s_zones1.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone1.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones2.visible">
 					    	<label for="zone2">{{ zone2_label | i18n }}</label>
-					    	<select id="zone2" name="sZone2" class="form-control" ng-options="m as m.label for m in sZones2 | orderBy: 'label'" ng-model="myZone2" ng-required="sconf.s_zones2.required">
+					    	<select id="zone2" name="sZone2" class="form-control" ng-options="m as m.label for m in sZones2 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone2" ng-required="sconf.s_zones2.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone2.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones3.visible">
 					    	<label for="zone3">{{ zone3_label | i18n }}</label>
-					    	<select id="zone3" name="sZone3" class="form-control" ng-options="m as m.label for m in sZones3 | orderBy: 'label'" ng-model="myZone3" ng-required="sconf.s_zones3.required">
+					    	<select id="zone3" name="sZone3" class="form-control" ng-options="m as m.label for m in sZones3 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone3" ng-required="sconf.s_zones3.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone3.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones4.visible">
 					    	<label for="zone4">{{ zone4_label | i18n }}</label>
-					    	<select id="zone4" name="sZone4" class="form-control" ng-options="m as m.label for m in sZones4 | orderBy: 'label'" ng-model="myZone4" ng-required="sconf.s_zones4.required">
+					    	<select id="zone4" name="sZone4" class="form-control" ng-options="m as m.label for m in sZones4 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone4" ng-required="sconf.s_zones4.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
@@ -1026,7 +1026,7 @@
 								<span class="caret"></span>
 		 						</button>
 						    	<ul class="dropdown-menu scrollable-menu" role="menu" aria-labelledby="dropdownPm1">
-						    		<li ng-repeat="p in myPms | orderBy:['code']"><input type="checkbox" id="{{ p.id }}" name="pms" ng-model=p.selected value="{{ p.code }}" /><span> - </span><label for="{{ p.id }}">{{ p.code }} {{ p.note }}</label></li>
+						    		<li ng-repeat="p in myPms | filter:{ agencyId : agencyId } | orderBy:['code']"><input type="checkbox" id="{{ p.id }}" name="pms" ng-model=p.selected value="{{ p.code }}" /><span> - </span><label for="{{ p.id }}">{{ p.code }} {{ p.note }}</label></li>
 						    	</ul>
 					    	</div>
 					    	<div class="field-error" ng-show="!isInit && form.sPm.$error.required">{{ 'street_pm_select_err_required' | i18n }}</div>

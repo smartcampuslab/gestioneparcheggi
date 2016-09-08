@@ -143,10 +143,14 @@ public class DynamicManager {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 
 		if (area.getParkingMeters() != null) {
-			for (ParkingMeter tmp : area.getParkingMeters()) {
+			//for (ParkingMeter tmp : area.getParkingMeters()) {
+			Map<String, ParkingMeter> pms = area.getParkingMeters();
+			for (Map.Entry<String, ParkingMeter> entry : pms.entrySet())
+			{
+				ParkingMeter tmp = entry.getValue();
 				if(tmp.getId_app() != null && tmp.getId_app().compareTo(appId) == 0){
 				ParkingMeterBean p = ModelConverter.convert(tmp,
-						ParkingMeterBean.class);
+					ParkingMeterBean.class);
 					p.setAreaId(ab.getId());
 					p.setColor(area.getColor());
 					result.add(p);
@@ -157,9 +161,22 @@ public class DynamicManager {
 	}
 	
 	public ParkingMeterBean findParkingMeter(String parcometroId, String appId) {
-		Criteria crit_pm = new Criteria();
-		crit_pm.and("_id").is(new ObjectId(parcometroId));
+		String pId = "parkingMeters." + parcometroId;
 		Criteria crit = new Criteria();
+		crit.and("id_app").is(appId);
+		crit.and(pId).exists(true);
+		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
+		Map<String, ParkingMeter> tempParkings = ra.getParkingMeters();
+		ParkingMeter p = null;
+		if(tempParkings != null && !tempParkings.isEmpty()){
+			p = tempParkings.get(parcometroId);
+		}
+		if(p != null){
+			ParkingMeterBean result = ModelConverter.convert(p, ParkingMeterBean.class);
+			result.setAreaId(ra.getId());
+			return result;
+		}
+		/*Criteria crit = new Criteria();
 		crit.and("id_app").is(appId);
 		crit.and("parkingMeters").elemMatch(crit_pm);
 		RateArea ra = mongodb.findOne(new Query(crit), RateArea.class);
@@ -170,20 +187,6 @@ public class DynamicManager {
 			ParkingMeterBean result = ModelConverter.convert(ra.getParkingMeters().get(index), ParkingMeterBean.class);
 			result.setAreaId(ra.getId());
 			return result;
-		}
-		/*List<RateArea> aree = mongodb.findAll(RateArea.class);
-		ParkingMeter p = new ParkingMeter();
-		for (RateArea area : aree) {
-			if (area.getParkingMeters() != null) {
-				p.setId(parcometroId);
-				int index = area.getParkingMeters().indexOf(p);
-				if (index != -1) {
-					ParkingMeterBean result = ModelConverter.convert(area
-							.getParkingMeters().get(index), ParkingMeterBean.class);
-					result.setAreaId(area.getId());
-					return result;
-				}
-			}
 		}*/
 		return null;
 	}
@@ -324,9 +327,7 @@ public class DynamicManager {
 
 	public StreetBean findStreet(String streetId, String appId) {
 		// for street
-		String sId = "n_streets." + streetId;
-		Criteria crit_street = new Criteria();
-		crit_street.and("_id").is(new ObjectId(streetId));
+		String sId = "streets." + streetId;
 		Criteria crit = new Criteria();
 		crit.and("id_app").is(appId);
 		crit.and(sId).exists(true);
@@ -484,9 +485,15 @@ public class DynamicManager {
 	 * @return Object RateAreaBean found
 	 */
 	public RateAreaBean getAreaById(String areaId, String appId) {
-		RateArea a = mongodb.findById(areaId, RateArea.class);
+		Criteria crit = new Criteria();
+		crit.and("id_app").in(appId);
+		crit.and("_id").is(new ObjectId(areaId));
+		RateArea a = mongodb.findOne(Query.query(crit), RateArea.class);
 		RateAreaBean ra = ModelConverter.convert(a, RateAreaBean.class);
 		return ra;
+		/*RateArea a = mongodb.findById(areaId, RateArea.class);
+		RateAreaBean ra = ModelConverter.convert(a, RateAreaBean.class);
+		return ra;*/
 	}
 	
 	/**
@@ -498,7 +505,11 @@ public class DynamicManager {
 		List<RateArea> aree = mongodb.findAll(RateArea.class);
 		for (RateArea area : aree) {
 			if (area.getParkingMeters() != null && area.getId_app().compareTo(appId) == 0) {
-				for(ParkingMeter pm : area.getParkingMeters()){
+				//for(ParkingMeter pm : area.getParkingMeters()){
+				Map<String, ParkingMeter> pms = area.getParkingMeters();
+				for (Map.Entry<String, ParkingMeter> entry : pms.entrySet())
+				{
+					ParkingMeter pm = entry.getValue();	
 					if(pm.getCode() == code){
 						ParkingMeterBean result = ModelConverter.convert(pm, ParkingMeterBean.class);
 						result.setAreaId(area.getId());
@@ -1632,8 +1643,12 @@ public class DynamicManager {
 			res = repo.findLastValue(objectId, appId, type, params, years, months, days, hours);
 		}
 		if(!res.isEmpty()){
-			//logger.info(String.format("Occupation Rate Last Value = %f", res.get(key).getLastValue()));
-			return res.get(key).getLastValue();
+			StatValue sv = res.get(key);
+			if(sv != null){
+				return sv.getLastValue();
+			} else {
+				return -1.0;
+			}
 		} else {
 			return -1.0;
 		}
@@ -1662,12 +1677,28 @@ public class DynamicManager {
 			res = repo.findStats(objectId, appId, type, params, years, months, days, hours);
 		}
 		if(!res.isEmpty()){
-			//logger.info(String.format("Occupation Rate Aggregate Value = %f", res.get(key).getAggregateValue()));
-			//return res.get(key).getLastValue();
-			return res.get(key).getAggregateValue();
+			StatValue sv = res.get(key);
+			if(sv != null){
+				return sv.getAggregateValue();
+			} else {
+				return -1.0;
+			}
 		} else {
 			return -1.0;
 		}
+	}
+	
+	// Method getLastProfitFromObjects: retrieve all profit data (last) filtered considering input parameters
+	public Map<StatKey, StatValue> getProfitFromObjects(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours){
+		Map<StatKey, StatValue> res = null;
+		if(dayType != null && dayType.compareTo("wd") == 0){
+			res = repo.findStatsWD(null, appId, type, params, years, months, hours);
+		} else if(dayType != null && dayType.compareTo("we") == 0){
+			res = repo.findStatsWE(null, appId, type, params, years, months, hours);
+		} else {
+			res = repo.findStats(null, appId, type, params, years, months, days, hours);
+		}
+		return res;
 	}
 	
 	/**
@@ -1693,7 +1724,12 @@ public class DynamicManager {
 			res = repo.findStats(objectId, appId, type, params, years, months, days, hours);
 		}
 		if(!res.isEmpty()){
-			return res.get(key).getLastValue();
+			StatValue sv = res.get(key);
+			if(sv != null){
+				return sv.getLastValue();
+			} else {
+				return -1.0;
+			}
 		} else {
 			return -1.0;
 		}
@@ -1723,9 +1759,12 @@ public class DynamicManager {
 		}
 		if(!res.isEmpty()){
 			StatValue val = res.get(key);
-			double sum = val.getCount() * val.getAggregateValue(); 
-			return sum;
-			//return res.get(key).getSumValue();
+			if(val != null){
+				double sum = val.getCount() * val.getAggregateValue(); 
+				return sum;
+			} else {
+				return -1.0;
+			}
 		} else {
 			return -1.0;
 		}
@@ -1925,9 +1964,9 @@ public class DynamicManager {
 	
 	public StreetBean getOccupationRateFromStreet(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
 		StopWatch watch = new Log4JStopWatch();
-		logger.info("Start Time for street (" + objectId + "): " + watch.getStartTime());
+		logger.debug("Start Time for street (" + objectId + "): " + watch.getStartTime());
 		StreetBean s = findStreet(objectId, appId);
-		logger.info("Elapsed Time to find street (" + objectId + "): "+ watch.getElapsedTime());
+		logger.debug("Elapsed Time to find street (" + objectId + "): "+ watch.getElapsedTime());
 		String sId = getCorrectId(objectId, "street", appId);
 		double occRate = -1;
 		boolean averageOcc = false;
@@ -2083,6 +2122,21 @@ public class DynamicManager {
 				return sv.getLastValue();
 			} else {
 				return sv.getAggregateValue();
+			}
+		} else {	// no rilevation
+			return -1.0;
+		}
+	};
+	
+	private double retrieveCorrectProfitFromStatValue(String pId, String appId, String type, int valueType, Map<StatKey, StatValue> statsVals){
+		StatKey myKey = new StatKey(pId, appId, type);
+		StatValue sv = statsVals.get(myKey);
+		if(sv != null){
+			if(valueType == 1){
+				return sv.getLastValue();
+			} else {
+				double sum = sv.getCount() * sv.getAggregateValue(); 
+				return sum;
 			}
 		} else {	// no rilevation
 			return -1.0;
@@ -2987,14 +3041,14 @@ public class DynamicManager {
 	
 	public String[][] getHistorycalProfitDataFromArea(String objectId, String appId, String type, int verticalVal, int orizontalVal, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, int objType, int lang){
 		String[][] profMatrix = null;
-		
-		RateArea a = mongodb.findById(objectId, RateArea.class);
-		List<ParkingMeter> pms = a.getParkingMeters();
+		RateAreaBean ar = getAreaById(objectId, appId);
+		//RateArea a = mongodb.findById(objectId, RateArea.class);
+		List<ParkingMeterBean> pms = getAllParkingMeters(ar, appId);	//a.getParkingMeters();
 		if(pms != null && pms.size() > 0){
-			ParkingMeterBean pmb = findParkingMeter(pms.get(0).getId(), appId);
+			ParkingMeterBean pmb = pms.get(0);	//findParkingMeter(pms.get(0).getId(), appId);
 			profMatrix = getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang);
 			for(int i = 1; i < pms.size(); i++){
-				pmb = findParkingMeter(pms.get(i).getId(), appId);
+				pmb = pms.get(i);	//findParkingMeter(pms.get(i).getId(), appId);
 				profMatrix = mergeMatrix(profMatrix, getHistorycalDataFromObject(pmb.getId(), appId, type, verticalVal, orizontalVal, params, years, months, dayType, days, hours, valueType, objType, lang));
 			}
 		}
@@ -3729,7 +3783,7 @@ public class DynamicManager {
 		// Perf4J part
 		BasicConfigurator.configure();
 		StopWatch watch = new Log4JStopWatch(); 
-		logger.info("Occupation Street Start Time : "+watch.getStartTime());
+		logger.debug("Occupation Street Start Time : "+watch.getStartTime());
 		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
 		Map<StatKey, StatValue> statsVals = null;
 		if(valueType == 1){
@@ -3739,16 +3793,16 @@ public class DynamicManager {
 			// average
 			statsVals =  getAverageOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
 		}
-		logger.info("Streets list size : " + streets.size());
-		logger.info("Stats map size : " + statsVals.size());
+		logger.debug("Streets list size : " + streets.size());
+		logger.debug("Stats map size : " + statsVals.size());
 		List<StreetBean> corrStreets = new ArrayList<StreetBean>();
 		for(StreetBean s : streets){
 			StreetBean corrStreet = mergeOccupationRateForStreet(s.getId(), s, appId, type, valueType, vehicleType, statsVals);
 			//StreetBean corrStreet = getOccupationRateFromStreet(s.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
 			corrStreets.add(corrStreet);
 		}
-		logger.info("Occupation Street Elapsed Time : "+ watch.getElapsedTime());  
-		logger.info("Occupation Street Stop Time : "+watch.stop());
+		logger.debug("Occupation Street Elapsed Time : "+ watch.getElapsedTime());  
+		logger.debug("Occupation Street Stop Time : "+watch.stop());
 		return corrStreets;
 	}
 	
@@ -3762,8 +3816,8 @@ public class DynamicManager {
 			// average
 			statsVals =  getAverageOccupationRateFromObjects(appId, type, params, years, months, dayType, days, hours);
 		}
-		logger.info("Parking Structure list size : " + parkings.size());
-		logger.info("Stats map size : " + statsVals.size());
+		logger.debug("Parking Structure list size : " + parkings.size());
+		logger.debug("Stats map size : " + statsVals.size());
 		
 		List<ParkingStructureBean> corrParkings = new ArrayList<ParkingStructureBean>();
 		for(ParkingStructureBean p : parkings){
@@ -3789,18 +3843,22 @@ public class DynamicManager {
 	 */
 	public List<ParkingMeterBean> getProfitFromAllParkingMeters(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		List<ParkingMeterBean> parkingmeters = getAllParkingMeters(appId);
+		Map<StatKey, StatValue> statsVals = getProfitFromObjects(appId, type, params, years, months, dayType, days, hours);
 		String pId = "";
 		for(ParkingMeterBean pm : parkingmeters){
 			double profitVal = 0;
 			int ticketsNum = 0;
 			pId = getCorrectId(pm.getId(), "parkingmeter", appId);
-			if(valueType == 1){
+			//TODO: check if the sum of data is considered
+			profitVal = retrieveCorrectProfitFromStatValue(pId, appId, type + profit, valueType, statsVals);
+			ticketsNum = (int)retrieveCorrectProfitFromStatValue(pId, appId, type + tickets, valueType, statsVals);
+			/*if(valueType == 1){
 				profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
 			} else {
 				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
-			}
+			}*/
 			pm.setProfit(profitVal);
 			pm.setTickets(ticketsNum);
 		}
@@ -3827,18 +3885,21 @@ public class DynamicManager {
 	
 	public List<ParkingStructureBean> getProfitFromAllParkStructs(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
 		List<ParkingStructureBean> parkstructs = getAllParkingStructureInAppId(null, appId);
+		Map<StatKey, StatValue> statsVals = getProfitFromObjects(appId, type, params, years, months, dayType, days, hours);
 		String pId = "";
 		for(ParkingStructureBean p : parkstructs){
 			double profitVal = 0;
 			int ticketsNum = 0;
 			pId = getCorrectId(p.getId(), "parkstruct", appId);
-			if(valueType == 1){
+			profitVal = retrieveCorrectProfitFromStatValue(pId, appId, type + profit, valueType, statsVals);
+			ticketsNum = (int)retrieveCorrectProfitFromStatValue(pId, appId, type + tickets, valueType, statsVals);
+			/*if(valueType == 1){
 				profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
 			} else {
 				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
-			}
+			}*/
 			p.setProfit(profitVal);
 			p.setTickets(ticketsNum);
 		}

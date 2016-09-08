@@ -37,7 +37,8 @@ public class RateArea {
 
 	//private List<Street> streets;
 	private Map<String,Street> streets = new HashMap<String, Street>();
-	private List<ParkingMeter> parkingMeters;
+	//private List<ParkingMeter> parkingMeters;
+	private Map<String,ParkingMeter> parkingMeters = new HashMap<String, ParkingMeter>();
 	private List<String> zones;	// id of the related zones
 	private List<String> agencyId;	// relation to agency object
 
@@ -80,9 +81,17 @@ public class RateArea {
 	public void setTimeSlot(String timeSlot) {
 		this.timeSlot = timeSlot;
 	}*/
-
+	
 	public String getSmsCode() {
 		return smsCode;
+	}
+
+	public Map<String, ParkingMeter> getParkingMeters() {
+		return parkingMeters;
+	}
+
+	public void setParkingMeters(Map<String, ParkingMeter> parkingMeters) {
+		this.parkingMeters = parkingMeters;
 	}
 
 	public void setSmsCode(String smsCode) {
@@ -105,13 +114,13 @@ public class RateArea {
 		this.note = note;
 	}
 
-	public List<ParkingMeter> getParkingMeters() {
+	/*public List<ParkingMeter> getParkingMeters() {
 		return parkingMeters;
 	}
 
 	public void setParkingMeters(List<ParkingMeter> parkingMeters) {
 		this.parkingMeters = parkingMeters;
-	}
+	}*/
 
 	public String getName() {
 		return name;

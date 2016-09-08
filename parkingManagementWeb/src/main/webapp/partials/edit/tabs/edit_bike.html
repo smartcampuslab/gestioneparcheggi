@@ -398,35 +398,35 @@
 							   	</div>
 							 	<div class="form-group" ng-show="bpconf.bp_zones0.visible">
 							    	<label for="zone0">{{ zone0_label | i18n }}</label>
-							    	<select id="zone0" name="bpZone0" class="form-control" ng-options="m as m.label for m in bpZones0 | orderBy: 'label'" ng-model="myBpZone0" ng-required="bpconf.bp_zones0.required">
+							    	<select id="zone0" name="bpZone0" class="form-control" ng-options="m as m.label for m in bpZones0 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone0" ng-required="bpconf.bp_zones0.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone0.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
 								<div class="form-group" ng-show="bpconf.bp_zones1.visible">
 							    	<label for="zone1">{{ zone1_label | i18n }}</label>
-							    	<select id="zone1" name="bpZone1" class="form-control" ng-options="m as m.label for m in bpZones1 | orderBy: 'label'" ng-model="myBpZone1" ng-required="bpconf.bp_zones1.required">
+							    	<select id="zone1" name="bpZone1" class="form-control" ng-options="m as m.label for m in bpZones1 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone1" ng-required="bpconf.bp_zones1.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone1.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
 								<div class="form-group" ng-show="bpconf.bp_zones2.visible">
 							    	<label for="zone2">{{ zone2_label | i18n }}</label>
-							    	<select id="zone2" name="bpZone2" class="form-control" ng-options="m as m.label for m in bpZones2 | orderBy: 'label'" ng-model="myBpZone2" ng-required="bpconf.bp_zones2.required">
+							    	<select id="zone2" name="bpZone2" class="form-control" ng-options="m as m.label for m in bpZones2 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone2" ng-required="bpconf.bp_zones2.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone2.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
 								<div class="form-group" ng-show="bpconf.pb_zones3.visible">
 							    	<label for="zone3">{{ zone3_label | i18n }}</label>
-							    	<select id="zone3" name="bpZone3" class="form-control" ng-options="m as m.label for m in bpZones3 | orderBy: 'label'" ng-model="myBpZone3" ng-required="bpconf.bp_zones3.required">
+							    	<select id="zone3" name="bpZone3" class="form-control" ng-options="m as m.label for m in bpZones3 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone3" ng-required="bpconf.bp_zones3.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone3.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
 								<div class="form-group" ng-show="bpconf.bp_zones4.visible">
 							    	<label for="zone4">{{ zone4_label | i18n }}</label>
-							    	<select id="zone4" name="bpZone4" class="form-control" ng-options="m as m.label for m in bpZones4 | orderBy: 'label'" ng-model="myBpZone4" ng-required="bpconf.bp_zones4.required">
+							    	<select id="zone4" name="bpZone4" class="form-control" ng-options="m as m.label for m in bpZones4 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone4" ng-required="bpconf.bp_zones4.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>

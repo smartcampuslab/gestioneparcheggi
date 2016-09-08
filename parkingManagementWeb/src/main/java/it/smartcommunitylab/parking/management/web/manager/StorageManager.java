@@ -209,29 +209,19 @@ public class StorageManager {
 		return result;
 	}
 	
-	/*public List<RateAreaBean> getAllArea(String appId, String municipality) {
-		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
-		//logger.error(String.format("Area app id: %s", appId));
-		for (RateArea a : mongodb.findAll(RateArea.class)) {
-			if(a != null && appId.compareTo("all") == 0 ){
-				if(municipality.compareTo("all") == 0){
-					result.add(ModelConverter.convert(a, RateAreaBean.class));
-				} else if(a.getMunicipality().compareTo(municipality) == 0){
-					result.add(ModelConverter.convert(a, RateAreaBean.class));
-				}
-			} else if(a != null && a.getId_app().compareTo(appId) == 0){
-				if(municipality.compareTo("all") == 0){
-					result.add(ModelConverter.convert(a, RateAreaBean.class));
-				} else if(a.getMunicipality().compareTo(municipality) == 0){
-					result.add(ModelConverter.convert(a, RateAreaBean.class));
-				}
-			}
-		}
-		return result;
-	}	*/
+	private RateArea getAreaObjectById(String areaId, String appId) {
+		Criteria crit = new Criteria();
+		crit.and("id_app").in(appId);
+		crit.and("_id").is(new ObjectId(areaId));
+		RateArea a = mongodb.findOne(Query.query(crit), RateArea.class);
+		return a;
+	}
 	
 	public RateAreaBean getAreaById(String areaId, String appId) {
-		RateArea a = mongodb.findById(areaId, RateArea.class);
+		Criteria crit = new Criteria();
+		crit.and("id_app").in(appId);
+		crit.and("_id").is(new ObjectId(areaId));
+		RateArea a = mongodb.findOne(Query.query(crit), RateArea.class);
 		RateAreaBean ra = ModelConverter.convert(a, RateAreaBean.class);
 		return ra;
 	}
@@ -311,7 +301,11 @@ public class StorageManager {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 
 		if (area.getParkingMeters() != null) {
-			for (ParkingMeter tmp : area.getParkingMeters()) {
+			//for (ParkingMeter tmp : area.getParkingMeters()) {
+			Map<String, ParkingMeter> pms = area.getParkingMeters();
+			for (Map.Entry<String, ParkingMeter> entry : pms.entrySet())
+			{
+				ParkingMeter tmp = entry.getValue();
 				if(tmp.getId_app() != null && tmp.getId_app().compareTo(appId) == 0){
 				ParkingMeterBean p = ModelConverter.convert(tmp,
 						ParkingMeterBean.class);
@@ -326,28 +320,28 @@ public class StorageManager {
 	
 	public List<ParkingMeterBean> getAllParkingMeters(String appId, String municipality) {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
-
 		//for (RateAreaBean temp : getAllArea(appId, municipality)) {
 		for (RateAreaBean temp : getAllArea(appId)) {
 			if(temp != null && temp.getId_app().compareTo(appId) == 0){
 				result.addAll(getAllParkingMeters(temp, appId));
 			}
 		}
-
 		return result;
 	}
 	
-	public ParkingMeterBean findParkingMeter(String parcometroId) {
-		Criteria crit_pm = new Criteria();
-		crit_pm.and("_id").is(new ObjectId(parcometroId));
+	public ParkingMeterBean findParkingMeter(String parcometroId, String appId) {
+		String pId = "parkingMeters." + parcometroId;
 		Criteria crit = new Criteria();
-		crit.and("parkingMeters").elemMatch(crit_pm);
-		RateArea ra = mongodb.findOne(new Query(crit), RateArea.class);
-		ParkingMeter p = new ParkingMeter();
-		p.setId(parcometroId);
-		int index = ra.getParkingMeters().indexOf(p);
-		if (index != -1) {
-			ParkingMeterBean result = ModelConverter.convert(ra.getParkingMeters().get(index), ParkingMeterBean.class);
+		crit.and("id_app").is(appId);
+		crit.and(pId).exists(true);
+		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
+		Map<String, ParkingMeter> tempParkings = ra.getParkingMeters();
+		ParkingMeter p = null;
+		if(tempParkings != null && !tempParkings.isEmpty()){
+			p = tempParkings.get(parcometroId);
+		}
+		if(p != null){
+			ParkingMeterBean result = ModelConverter.convert(p, ParkingMeterBean.class);
 			result.setAreaId(ra.getId());
 			return result;
 		}
@@ -377,7 +371,11 @@ public class StorageManager {
 		List<RateArea> aree = mongodb.findAll(RateArea.class);
 		for (RateArea area : aree) {
 			if (area.getParkingMeters() != null) {
-				for(ParkingMeter pm : area.getParkingMeters()){
+				//for(ParkingMeter pm : area.getParkingMeters()){
+				Map<String, ParkingMeter> pms = area.getParkingMeters();
+				for (Map.Entry<String, ParkingMeter> entry : pms.entrySet())
+				{
+					ParkingMeter pm = entry.getValue();	
 					if(pm.getCode().compareTo(code) == 0){
 						ParkingMeterBean result = ModelConverter.convert(pm, ParkingMeterBean.class);
 						result.setAreaId(area.getId());
@@ -390,16 +388,14 @@ public class StorageManager {
 	}
 
 	public boolean removeParkingMeter(String areaId, String parcometroId, String appId, String agencyId) {
-		RateArea area = mongodb.findById(areaId, RateArea.class);
+		RateArea area = getAreaObjectById(areaId, appId);	//mongodb.findById(areaId, RateArea.class);
 		boolean result = false;
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
 			if(area.getAgencyId().contains(agencyId)){
 				Agency ag = agencyDataSetup.getAgencyById(agencyId);
 				if(ag.getParkingmeter() >= UPDATE_VAL){
-					ParkingMeter p = new ParkingMeter();
-					p.setId(parcometroId);
 					result = area.getParkingMeters() != null
-							&& area.getParkingMeters().remove(p);
+							&& (area.getParkingMeters().remove(parcometroId) != null);
 					if (result) {
 						mongodb.save(area);
 						logger.debug(String.format(
@@ -429,7 +425,18 @@ public class StorageManager {
 				Agency ag = agencyDataSetup.getAgencyById(agencyId);
 				if(ag.getParkingmeter() >= UPDATE_VAL){
 					if (area.getParkingMeters() != null) {
-						for (ParkingMeter temp : area.getParkingMeters()) {
+						ParkingMeter temp = area.getParkingMeters().get(pb.getId());
+						if(temp != null){
+							temp.setCode(pb.getCode());
+							temp.setNote(pb.getNote());
+							temp.setStatus(pb.getStatus());
+							temp.getGeometry().setLat(pb.getGeometry().getLat());
+							temp.getGeometry().setLng(pb.getGeometry().getLng());
+							if(pb.getZones() != null)temp.setZones(pb.getZones());
+							mongodb.save(area);
+							founded = true;
+						}
+						/*for (ParkingMeter temp : area.getParkingMeters()) {
 							if (temp.getId().equals(pb.getId())) {
 								temp.setCode(pb.getCode());
 								temp.setNote(pb.getNote());
@@ -441,7 +448,7 @@ public class StorageManager {
 								founded = true;
 								break;
 							}
-						}
+						}*/
 					}
 				} else {
 					throw new AccessControlException("no update permission for parkingmeter object");
@@ -452,7 +459,7 @@ public class StorageManager {
 		}
 		
 		if (!founded) {
-			ParkingMeterBean todel = findParkingMeter(pb.getId());
+			ParkingMeterBean todel = findParkingMeter(pb.getId(), appId);
 			if (todel != null) {
 				removeParkingMeter(todel.getAreaId(), pb.getId(), appId, agencyId);
 			}
@@ -472,10 +479,11 @@ public class StorageManager {
 				if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
 					if(area.getAgencyId().contains(agencyId)){
 						if (area.getParkingMeters() == null) {
-							area.setParkingMeters(new ArrayList<ParkingMeter>());
+							area.setParkingMeters(new HashMap<String, ParkingMeter>());
 						}
 						// TODO check if parcometro is already present
-						area.getParkingMeters().add(parcometro);
+						//area.getParkingMeters().add(parcometro);
+						area.getParkingMeters().put(parcometro.getId(), parcometro);
 						mongodb.save(area);
 						p.setId(parcometro.getId());
 					} else {
@@ -630,14 +638,11 @@ public class StorageManager {
 	}
 
 	public StreetBean findStreet(String streetId, String appId) {
-		String sId = "n_streets." + streetId;
-		Criteria crit_street = new Criteria();
-		crit_street.and("_id").is(new ObjectId(streetId));
+		String sId = "streets." + streetId;
 		Criteria crit = new Criteria();
 		crit.and("id_app").is(appId);
 		crit.and(sId).exists(true);
 		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
-		
 		Map<String, Street> tempStreets = ra.getStreets();
 		Street s = null;
 		if(tempStreets != null && !tempStreets.isEmpty()){
@@ -651,7 +656,7 @@ public class StorageManager {
 	}
 	
 	public StreetBean findStreet(String streetId) {
-		String sId = "n_streets." + streetId;
+		String sId = "streets." + streetId;
 		Criteria crit_street = new Criteria();
 		crit_street.and("_id").is(new ObjectId(streetId));
 		Criteria crit = new Criteria();
@@ -704,7 +709,7 @@ public class StorageManager {
 	}
 
 	public StreetBean editStreet(StreetBean sb, String appId, String agencyId) throws DatabaseException {
-		RateArea area = mongodb.findById(sb.getRateAreaId(), RateArea.class);
+		RateArea area = getAreaObjectById(sb.getRateAreaId(), appId);	//mongodb.findById(sb.getRateAreaId(), RateArea.class);
 		boolean founded = false;
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
 			if(area.getAgencyId().contains(agencyId)){
@@ -765,7 +770,7 @@ public class StorageManager {
 	}
 
 	public boolean removeStreet(String areaId, String streetId, String appId, String agencyId) {
-		RateArea area = mongodb.findById(areaId, RateArea.class);
+		RateArea area = getAreaObjectById(areaId, appId);	//mongodb.findById(areaId, RateArea.class);
 		boolean result = false;
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
 			if(area.getAgencyId().contains(agencyId)){

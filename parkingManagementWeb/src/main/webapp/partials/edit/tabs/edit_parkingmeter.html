@@ -565,42 +565,42 @@
 					   	</div>
 					   	<div class="form-group" ng-show="pmconf.pm_rateArea.visible">
 					    	<label for="area">{{ 'pm_area_name' | i18n }}</label>
-					    	<select id="area" name="pArea" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myArea" ng-required="pmconf.pm_rateArea.required">
+					    	<select id="area" name="pArea" class="form-control" ng-options="a as a.name for a in allArea | filter:{ agencyId : agencyId }" ng-model="myArea" ng-required="pmconf.pm_rateArea.required">
 					    		<option value="">{{ 'pm_area_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.pArea.$error.required">{{ 'parkingmeter_area_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="pmconf.pm_zones0.visible">
 					    	<label for="zone0">{{ zone0_label | i18n }}</label>
-					    	<select id="zone0" name="pmZone0" class="form-control" ng-options="m as m.label for m in pmZones0 | orderBy: 'label'" ng-model="myPmZone0" ng-required="pmconf.pm_zones0.required">
+					    	<select id="zone0" name="pmZone0" class="form-control" ng-options="m as m.label for m in pmZones0 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myPmZone0" ng-required="pmconf.pm_zones0.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.pmZone0.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="pmconf.pm_zones1.visible">
 					    	<label for="zone1">{{ zone1_label | i18n }}</label>
-					    	<select id="zone1" name="pmZone1" class="form-control" ng-options="m as m.label for m in pmZones1 | orderBy: 'label'" ng-model="myPmZone1" ng-required="pmconf.pm_zones1.required">
+					    	<select id="zone1" name="pmZone1" class="form-control" ng-options="m as m.label for m in pmZones1 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myPmZone1" ng-required="pmconf.pm_zones1.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.pmZone1.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="pmconf.pm_zones2.visible">
 					    	<label for="zone2">{{ zone2_label | i18n }}</label>
-					    	<select id="zone2" name="pmZone2" class="form-control" ng-options="m as m.label for m in pmZones2 | orderBy: 'label'" ng-model="myPmZone2" ng-required="pmconf.pm_zones2.required">
+					    	<select id="zone2" name="pmZone2" class="form-control" ng-options="m as m.label for m in pmZones2 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myPmZone2" ng-required="pmconf.pm_zones2.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.pmZone2.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="pmconf.pm_zones3.visible">
 					    	<label for="zone3">{{ zone3_label | i18n }}</label>
-					    	<select id="zone3" name="pmZone3" class="form-control" ng-options="m as m.label for m in pmZones3 | orderBy: 'label'" ng-model="myPmZone3" ng-required="pmconf.pm_zones3.required">
+					    	<select id="zone3" name="pmZone3" class="form-control" ng-options="m as m.label for m in pmZones3 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myPmZone3" ng-required="pmconf.pm_zones3.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.pmZone3.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="pmconf.pm_zones4.visible">
 					    	<label for="zone4">{{ zone4_label | i18n }}</label>
-					    	<select id="zone4" name="pmZone4" class="form-control" ng-options="m as m.label for m in pmZones4 | orderBy: 'label'" ng-model="myPmZone4" ng-required="pmconf.pm_zones4.required">
+					    	<select id="zone4" name="pmZone4" class="form-control" ng-options="m as m.label for m in pmZones4 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myPmZone4" ng-required="pmconf.pm_zones4.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.pmZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
