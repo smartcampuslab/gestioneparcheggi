@@ -3073,9 +3073,9 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
       		object = street;
       	}
       	// for Total slot
-    	var dataTot = [ "Liberi", object.slotNumber - object.unusuableSlotNumber - object.slotOccupied ];
+    	var dataTot = [ "Liberi", object.slotNumber - object.slotOccupied ];	// - object.unusuableSlotNumber
     	var dataOcc = [ "Occupati", object.slotOccupied ];
-    	var dataTot_eng = [ "Free", object.slotNumber - object.unusuableSlotNumber - object.slotOccupied ];
+    	var dataTot_eng = [ "Free", object.slotNumber - object.slotOccupied ];	// - object.unusuableSlotNumber
     	var dataOcc_eng = [ "Occupied", object.slotOccupied ];
     	this.chartStreetOccupancy.data.push(dataTot);
     	this.chartStreetOccupancy.data.push(dataOcc);

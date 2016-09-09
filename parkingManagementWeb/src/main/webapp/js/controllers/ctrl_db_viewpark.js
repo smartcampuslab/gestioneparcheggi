@@ -13,6 +13,10 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	$scope.dayOptions = {value:'custom'};//{value:'wd'};
 	$scope.hourOptions = {value:'custom'};//{value:'morning'};
 	
+	// moved here to correct update search problem
+	//$scope.dashboard_topics = "parkSupply";
+	//$scope.dashboard_topics_list = "parkSupply";
+	
 	for (var i = 0; i < 5; i++) {
 		$scope.years.push('' + date.getFullYear()-i);
 	}
@@ -153,6 +157,12 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 	$scope.updateHour = function(value){	//, type
 		$scope.hourSliderValue = value;
 		$scope.updateSearch();
+	};
+	
+	// NB: not reachable in viewpark.html
+	$scope.updateSearchAndDashboardView = function(type){
+		$scope.updateSearch();
+		$scope.changeDashboardView(type, false, $scope.dashboard_topics, $scope.dashboard_topics_list);
 	};
 	
 	$scope.updateSearch = function(){	//type
@@ -1794,7 +1804,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 			$scope.dashboard_topics = $scope.dashboard_topics_list;
 			$scope.clearAllSpaceFilter(1);
-			$scope.changeDashboardView(1, true);
+			$scope.changeDashboardView(1, true, $scope.dashboard_topics, $scope.dashboard_topics_list);
 		} else {
 			// case of list
 			if($scope.dashboard_space.rate_area){
@@ -1818,7 +1828,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			}
 			$scope.dashboard_topics_list = $scope.dashboard_topics;
 			$scope.clearAllSpaceFilter(2);
-			$scope.changeDashboardView(2, true);
+			$scope.changeDashboardView(2, true, $scope.dashboard_topics, $scope.dashboard_topics_list);
 			// Here I init all the objects
 			if($scope.streetWS && $scope.streetWS.length > 0){
 				$scope.streetWS = $scope.initAreasForStreetsObjects($scope.streetWS);	// when I switch to list view I update the street list with the area data
@@ -1890,7 +1900,9 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.showTimeCostLists = false;
 	
 	
-	$scope.changeDashboardView = function(type, autoInit){
+	$scope.changeDashboardView = function(type, autoInit, dashboard_topics, dashboard_topics_list){
+		$scope.dashboard_topics = dashboard_topics;
+		$scope.dashboard_topics_list = dashboard_topics_list;
 		$scope.closeAllLegend();
 		if(type == 1){
 			if(autoInit){
@@ -3684,7 +3696,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.getAllOccupancyStreets = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		$scope.streetMapReady = false;
 		var allStreet = [];
-		var myDataPromise = streetService.getOccupancyStreetsFromDb(year, month, weekday, dayType, hour, valueType);
+		var myDataPromise = (isFirst) ? streetService.getStreetsFromDb(true) : streetService.getOccupancyStreetsFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allStreet){
 		    gMapService.updateLoadingMapState();
 		    $scope.myTmpZoneOccupation = [];
@@ -3768,7 +3780,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.getAllProfitPM = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		$scope.streetMapReady = false;
 		var markers = [];
-		var myDataPromise = parkingMeterService.getProfitPMFromDb(year, month, weekday, dayType, hour, valueType);
+		var myDataPromise = (isFirst) ? parkingMeterService.getParkingMetersFromDb(true) : parkingMeterService.getProfitPMFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allPMs){
 		    $scope.parkingMeterWS = $scope.initPMObjectsLight(allPMs);	//MB_lightWS
 		    
@@ -3931,7 +3943,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var markers = [];
 		var allPSs = [];
 		
-		var myDataPromise = structureService.getProfitParksFromDb(year, month, weekday, dayType, hour, valueType);
+		var myDataPromise = (isFirst) ? structureService.getParkingStructuresFromDb(true) : structureService.getProfitParksFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allPSs){
 		    $scope.profitStructWS = $scope.mergeParkDbData($scope.pstructWS, allPSs);
 		    angular.copy( $scope.profitStructWS, $scope.allDataStructWS);
@@ -3961,7 +3973,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.getAllOccupancyParks = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		var allParks = [];
 		var markers = [];
-		var myDataPromise = structureService.getOccupancyParksFromDb(year, month, weekday, dayType, hour, valueType);
+		var myDataPromise = (isFirst) ? structureService.getParkingStructuresFromDb(true) : structureService.getOccupancyParksFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allParks){
 		    gMapService.updateLoadingMapState();
 		    $scope.actualParks = allParks;
@@ -4454,10 +4466,10 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		if($scope.dashboard_space.microzone_part){	// I check if the street check is selected
 		    if($scope.dashboard_topics == "parkSupply"){
 		    	$scope.hideStreetPolylines(1);
-		   		$scope.mapStreets = $scope.initStreetsOnMap(streets, true, 1, false)[0];
+		   		$scope.mapStreets = gMapService.initStreetsOnMap(streets, true, 1, false)[0];
 		   	} else {
 		   		$scope.hideStreetPolylines(4);
-		   		$scope.timeCostStreets = $scope.initStreetsOnMap(streets, true, 4, false)[0];
+		   		$scope.timeCostStreets = gMapService.initStreetsOnMap(streets, true, 4, false)[0];
 		    }
 		}
 	};
