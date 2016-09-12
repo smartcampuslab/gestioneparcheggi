@@ -100,6 +100,12 @@ public class DashboardController {
 		markerIconStorage = new MarkerIconStorage();
 	}
 
+	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/session")
+	public @ResponseBody
+	String checkSession() {
+		return "OK";
+	}
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/{appId}/street")
 	public @ResponseBody
 	List<StreetBean> getAllStreets(@PathVariable String appId) {

@@ -63,6 +63,7 @@
 <script src="lib/shim.js" type="text/javascript"></script>
 <script src="lib/xls.js" type="text/javascript"></script>
 <script src="lib/angular-base64.min.js"></script>
+<!-- <script src="lib/angular-cookies.min.js"> -->
 
 <script src="lib/lodash.js"></script>
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
@@ -90,6 +91,26 @@ var conf_vehicle_type_list="<%=request.getAttribute("vehicle_type_list")%>";
 var conf_agency="<%=request.getAttribute("user_agency")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
 var ctx="<%=request.getContextPath()%>";
+
+function getJSessionId(){
+    var jsId = document.cookie.match(/JSESSIONID=[^;]+/);
+    if(jsId != null) {
+        if (jsId instanceof Array)
+            jsId = jsId[0].substring(11);
+        else
+            jsId = jsId.substring(11);
+    }
+    return jsId;
+}
+
+/* (function(){
+	var JSESSION = getJSessionId();
+    if(JSESSION == null){
+    	window.alert("Session expired");
+    }
+    setTimeout(arguments.callee, 5000);
+})(); */
+
 </script>
   
 </head>

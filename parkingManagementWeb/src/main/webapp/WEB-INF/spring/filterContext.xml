@@ -67,19 +67,25 @@
 	<!-- Dashboard Rest WS security configuration -->
 	<sec:http pattern="/dashboard/rest/**" use-expressions="false"
 	    authentication-manager-ref="mongoAuthenticationManager">
-    	<sec:http-basic />
+    	<!-- <sec:http-basic /> -->
+    	<sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     	<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
-    	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession" />
-		<!-- <sec:form-login login-page="/login" /> -->
+    	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession">
+		     <sec:concurrency-control expired-url="/login" />
+		</sec:session-management>
+		<sec:form-login login-page="/login.jsp" />
 	</sec:http>
 	
 	<!-- Rest WS security configuration -->
 	<sec:http pattern="/rest/**" use-expressions="false"
 	    authentication-manager-ref="mongoAuthenticationManager">
-    	<sec:http-basic />
+    	<!-- <sec:http-basic /> -->
+    	<sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     	<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"/>
-    	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession" />
-    	<!-- <sec:form-login login-page="/login" /> -->
+    	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession">
+		     <sec:concurrency-control expired-url="/login" />
+		</sec:session-management>
+    	<sec:form-login login-page="/login.jsp" />
 	</sec:http>
 	
 	<!-- App login configuration -->
@@ -89,12 +95,13 @@
 		<sec:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<sec:intercept-url pattern="/j_spring_security_check" access="IS_AUTHENTICATED_ANONYMOUSLY" />
 		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" /><!-- hasAnyRole('ROLE_ADMIN') -->
-		<sec:session-management invalid-session-url="/login?error=true" session-fixation-protection="newSession" />
+		<sec:session-management invalid-session-url="/error.html" session-fixation-protection="newSession">
+		     <sec:concurrency-control expired-url="/error.html" />
+		</sec:session-management>
 		<sec:form-login login-page="/login" default-target-url="/home" always-use-default-target="true"
 		    login-processing-url="/login.do" username-parameter="j_username" password-parameter="j_password" 
 		     authentication-failure-url="/login?error=true"  />
 		<sec:logout logout-url="/logout" invalidate-session="true" delete-cookies="true" logout-success-url="/login" />
-		
 	</sec:http>
 	
 	<context:property-placeholder location="classpath:tm.properties" />

@@ -2,7 +2,7 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('utilsService', function(){
+pm.service('utilsService', [ 'sharedDataService', 'invokeDashboardWSService' ,function( sharedDataService, invokeDashboardWSService ){
 	
 	// Method correctAreaObjectForWS: used to covert the areaWS list in a List of RateArea objects to invoke the specific WS
 	this.correctAreaObjectForWS = function(list){
@@ -652,4 +652,13 @@ pm.service('utilsService', function(){
 		return stringValues;
 	}
 	
-});
+	this.checkSessionActive = function(){
+		var method = 'GET';
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "session", null, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(result){
+			console.log("check session result " + result)
+		});
+		return myDataPromise;
+	};
+	
+}]);

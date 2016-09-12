@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','utilsService','getMyMessages','$timeout',
-    function($scope, $http, $route, $window, $routeParams, $rootScope, localize, $locale,  $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, utilsService, getMyMessages, $timeout) {
+pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','utilsService','getMyMessages','$timeout',
+    function($scope, $http, $route, $window, $cookies, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, utilsService, getMyMessages, $timeout, $interval) {
     
     $scope.setFrameOpened = function(value){
     	$rootScope.frameOpened = value;
@@ -287,24 +287,26 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     var correctStringToList = function(stringList){
     	// appId=tn, description=posti per automobile, name=Car, language_key=car_vehicle, userName=trento1
     	var list = [];
-    	var subList = stringList.substring(1, stringList.length - 1);
-    	var elements = subList.split("},");
-    	for(var i = 0; i < elements.length; i++){
-    		var allAttribute = elements[i].split(", ");
-    		var appId = allAttribute[0].split("=")[1];
-    		var description = allAttribute[1].split("=")[1];
-    		var name = allAttribute[2].split("=")[1];
-    		var language = allAttribute[3].split("=")[1];
-    		var userName = allAttribute[4].split("=")[1];
-    		var corrVehicleType = {
-    			appId: appId,
-    			description: description,
-    			name: name,
-    			language_key: language,
-    			userName: userName,
-    			visible: false
-    		};
-    		list.push(corrVehicleType);
+    	if(stringList && stringList != "null"){
+	    	var subList = stringList.substring(1, stringList.length - 1);
+	    	var elements = subList.split("},");
+	    	for(var i = 0; i < elements.length; i++){
+	    		var allAttribute = elements[i].split(", ");
+	    		var appId = allAttribute[0].split("=")[1];
+	    		var description = allAttribute[1].split("=")[1];
+	    		var name = allAttribute[2].split("=")[1];
+	    		var language = allAttribute[3].split("=")[1];
+	    		var userName = allAttribute[4].split("=")[1];
+	    		var corrVehicleType = {
+	    			appId: appId,
+	    			description: description,
+	    			name: name,
+	    			language_key: language,
+	    			userName: userName,
+	    			visible: false
+	    		};
+	    		list.push(corrVehicleType);
+	    	}
     	}
     	return list;
     }
@@ -410,34 +412,36 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     };
     
     $scope.loadConfObject = function(data){
-    	var zoneTypes = [];
-    	var cleanedData = $scope.correctStringToJsonString("{list\":" + data + "}");
-    	var objList = JSON.parse(cleanedData);
-    	var visibleObjList = objList.list;
-    	for(var i = 0; i < visibleObjList.length; i++){
-    		if(visibleObjList[i].id.indexOf("Zone") > -1){
-    			var zone_type = {
-    				value: visibleObjList[i].type,
-    				label: visibleObjList[i].title
-    			};
-    			zoneTypes.push(zone_type);
-    		}
+    	if(data && data != "null"){
+	    	var zoneTypes = [];
+	    	var cleanedData = $scope.correctStringToJsonString("{list\":" + data + "}");
+	    	var objList = JSON.parse(cleanedData);
+	    	var visibleObjList = objList.list;
+	    	for(var i = 0; i < visibleObjList.length; i++){
+	    		if(visibleObjList[i].id.indexOf("Zone") > -1){
+	    			var zone_type = {
+	    				value: visibleObjList[i].type,
+	    				label: visibleObjList[i].title
+	    			};
+	    			zoneTypes.push(zone_type);
+	    		}
+	    	}
+	    	//var allObjs = data.split("}]}");
+	    	//for(var i = 0; i < allObjs.length - 1; i++){
+	    	//	var objFields = allObjs[i].split(", attributes=[{");
+	    	//	var ids = objFields[0].split("=");
+	    	//	var showedObj = {
+	    	//			id : ids[1],
+	    	//			attributes: $scope.correctAtributes(objFields[1])
+	    	//	};
+	    	//	visibleObjList.push(showedObj);
+	    	//}
+	    	sharedDataService.setZoneTypeList(zoneTypes);
+	    	sharedDataService.setVisibleObjList(visibleObjList);
+	    	initializeService.setVisibleObjList(visibleObjList);
+	    	initializeService.initComponents();						// new method
+	    	initializeService.correctWidgetFiltersAndElements();	// new method
     	}
-    	//var allObjs = data.split("}]}");
-    	//for(var i = 0; i < allObjs.length - 1; i++){
-    	//	var objFields = allObjs[i].split(", attributes=[{");
-    	//	var ids = objFields[0].split("=");
-    	//	var showedObj = {
-    	//			id : ids[1],
-    	//			attributes: $scope.correctAtributes(objFields[1])
-    	//	};
-    	//	visibleObjList.push(showedObj);
-    	//}
-    	sharedDataService.setZoneTypeList(zoneTypes);
-    	sharedDataService.setVisibleObjList(visibleObjList);
-    	initializeService.setVisibleObjList(visibleObjList);
-    	initializeService.initComponents();						// new method
-    	initializeService.correctWidgetFiltersAndElements();	// new method
     };
     
     $scope.correctAtributes = function(data){
@@ -476,8 +480,8 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$routeParams'
     };
     
     $scope.loadConfObject(object_to_show);
-	
 	$scope.initComponents = function(){
+		//$scope.checkJSESSIONID();
 	    $scope.showedObjects = sharedDataService.getVisibleObjList();
 	    $scope.showBikeMenuLink = false;
 	    $scope.showDashboardMenuLink = false;

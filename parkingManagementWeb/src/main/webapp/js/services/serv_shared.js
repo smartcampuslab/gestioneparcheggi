@@ -1966,3 +1966,18 @@ pm.factory('invokePdfServiceProxy', function($http, $q) {
 	};
 	return {getProxy : getProxy};
 });
+pm.factory('checkSession', function($http, $q, $interval, invokeDashboardWSService, sharedDataService) {
+	var timeIntervalMillis = 5000;
+	
+	var checkSessionActive = function(){
+		//$interval();
+		var method = 'GET';
+		var myDataPromise = invokeDashboardWSService.getProxy(method, "session", null, sharedDataService.getAuthHeaders(), null);
+		myDataPromise.then(function(result){
+			console.log("check session result " + result)
+		});
+		return myDataPromise;
+	};
+	
+	return {checkSessionActive : checkSessionActive};
+});
