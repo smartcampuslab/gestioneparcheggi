@@ -3700,6 +3700,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var allStreet = [];
 		var myDataPromise = (isFirst) ? streetService.getStreetsFromDb(true) : streetService.getOccupancyStreetsFromDb(year, month, weekday, dayType, hour, valueType);
 		myDataPromise.then(function(allStreet){
+			sharedDataService.setSharedLocalStreets(allStreet);
 		    gMapService.updateLoadingMapState();
 		    $scope.myTmpZoneOccupation = [];
 		    //$scope.streetWS = $scope.initStreetsObjects(allStreet);
@@ -3949,7 +3950,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		myDataPromise.then(function(allPSs){
 		    $scope.profitStructWS = $scope.mergeParkDbData($scope.pstructWS, allPSs);
 		    angular.copy( $scope.profitStructWS, $scope.allDataStructWS);
-		    
 			if(showPs){
 				for (var i = 0; i <  $scope.allDataStructWS.length; i++) {
 			    	markers.push(gMapService.createMarkers(i, $scope.allDataStructWS[i], 6));	//MB_lightWS
@@ -3980,7 +3980,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		    gMapService.updateLoadingMapState();
 		    $scope.actualParks = allParks;
 		    $scope.pstructWS = allParks;
-		    
+		    sharedDataService.setSharedLocalPs(allParks);
 		    // to correct null values in parking slots
 		    /*for(var i = 0; i < $scope.pstructWS.length; i++){
 		    	if($scope.pstructWS[i].unusuableSlotNumber == null || $scope.pstructWS[i].unusuableSlotNumber == ""){
@@ -4497,6 +4497,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		var allBikePoints = [];
 		var myBikePromise = bikePointService.getBikePointsFromDbDashboard();
 		myBikePromise.then(function(allBikePoints){
+			sharedDataService.setSharedLocalBps(allBikePoints);
 			if(showBp){
 	    		for (var i = 0; i <  allBikePoints.length; i++) {
 		    		markers.push(gMapService.createMarkers(i, allBikePoints[i], 3));	//MB_lightWS

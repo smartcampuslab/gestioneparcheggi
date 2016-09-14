@@ -785,8 +785,14 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
     	// area loading
    		if(localArea == null || localArea.length == 0){
-   			//$scope.getAreasFromDb();
    			$scope.getAllAreas();
+   		} else {
+   			$scope.areaWS = localArea;
+   			if($scope.vAreaMap){
+   				var toHide = $scope.vAreaMap.shapes;
+   				$scope.vAreaMap.shapes = gMapService.hideAllAreas(localArea, toHide);
+   			}
+			$scope.polygons = gMapService.getAreaPolygons();
    		}
    		// street loading
    		//if($scope.streetWS == null || $scope.streetWS.length == 0){
@@ -794,8 +800,16 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	//}
        	if(tab.index == 1){
        		// area loading
-       		//$scope.getAreasFromDb();
-       		$scope.getAllAreas();
+       		if(localArea == null || localArea.length == 0){
+       			$scope.getAllAreas();
+       		} else {
+       			$scope.areaWS = localArea;
+       			if($scope.vAreaMap){
+       				var toHide = $scope.vAreaMap.shapes;
+       				$scope.vAreaMap.shapes = gMapService.hideAllAreas(localArea, toHide);
+       			}
+    			$scope.polygons = gMapService.getAreaPolygons();
+       		}
        	}
        	if(tab.index >= 2 && tab.index <= 6){
        		// zones case
@@ -806,24 +820,80 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        	}
        	if(tab.index == 7){
        		// street case
-       		var pms = sharedDataService.getSharedLocalPms;
+       		var pms = sharedDataService.getSharedLocalPms();
        		if(pms == null || pms.length == 0){
        			$scope.getAllParkingMeters();
+       		} else {
+       			$scope.pmeterWS = sharedDataService.getSharedLocalPms();
+    	    	$scope.initFiltersForPM();
+    	    	if(showPm)$scope.resizeMap("viewPm");
+    	    	$scope.parkingMetersMarkers = gMapService.getParkingMetersMarkers();
+    	    	$scope.pmMapReady = true;
        		}
-       		$scope.getAllStreets();
+       		var s = sharedDataService.getSharedLocalStreets();
+       		if(s == null || s.length == 0){
+       			$scope.getAllStreets();
+       		} else {
+       			$scope.streetWS = gMapService.initAllStreetObjects(s);
+    	    	if(showStreets) {
+    	    		gMapService.setStreetPolylines(gMapService.initStreetsOnMap($scope.streetWS, true, 1, false)[0]);
+    	    		$scope.resizeMap("viewStreet");
+    	    		if($scope.vStreetMap){
+    	    			var toHide = $scope.vStreetMap.shapes;
+    	    			$scope.vStreetMap.shapes = gMapService.hideAllStreets(s, toHide);
+    	    		}
+    				$scope.geoStreets = gMapService.getStreetPolylines();
+    	    	}
+    	    	$scope.allAreaFilter = sharedDataService.getAreaFilter();
+    			$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
+       		}
        	}
        	if(tab.index == 8){
        		// parking structure case
-       		$scope.getAllParkingStructures();
+       		var ps = sharedDataService.getSharedLocalPs();
+       		if(ps == null || ps.length == 0){
+       			$scope.getAllParkingStructures();
+       		} else {
+       			$scope.pstructWS = ps;
+    			if(showPs){
+    				var pMarkers = gMapService.getParkingStructuresMarkers();
+    				$scope.parkingStructureMarkers = (pMarkers) ? pMarkers : [];
+    				$scope.resizeMap("viewPs");
+    			}
+       		}
        	}
        	if(tab.index == 9){
        		// parking meters case
-       		if($scope.streetWS == null || $scope.streetWS.length == 0){
+       		var s = sharedDataService.getSharedLocalStreets();
+       		if(s == null || s.length == 0){
 	    		$scope.getAllStreets();
+	    	} else {
+	    		$scope.streetWS = gMapService.initAllStreetObjects(s);
+    	    	if(showStreets) {
+    	    		gMapService.setStreetPolylines(gMapService.initStreetsOnMap($scope.streetWS, true, 1, false)[0]);
+    	    		$scope.resizeMap("viewStreet");
+    	    		if($scope.vStreetMap){
+    	    			var toHide = $scope.vStreetMap.shapes;
+    	    			$scope.vStreetMap.shapes = gMapService.hideAllStreets(s, toHide);
+    	    		}
+    				$scope.geoStreets = gMapService.getStreetPolylines();
+    	    	}
+    	    	$scope.allAreaFilter = sharedDataService.getAreaFilter();
+    			$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
 	    	}
-       		$scope.getAllParkingMeters();
+       		var pms = sharedDataService.getSharedLocalPms();
+       		if(pms == null || pms.length == 0){
+       			$scope.getAllParkingMeters();
+       		} else {
+       			$scope.pmeterWS = sharedDataService.getSharedLocalPms();
+    	    	$scope.initFiltersForPM();
+    	    	if(showPm)$scope.resizeMap("viewPm");
+    	    	$scope.parkingMetersMarkers = gMapService.getParkingMetersMarkers();
+    	    	$scope.pmMapReady = true;
+       		}
        	}
        	if(tab.index == 10){
+       		// bike points case
        		$scope.getAllBikePoints();
        	}
     };  

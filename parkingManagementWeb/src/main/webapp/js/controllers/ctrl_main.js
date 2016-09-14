@@ -514,7 +514,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
 	    }
 	    if($scope.showDashboardMenuLink == false){
 	    	$scope.setHomeParkActive();
-			//window.location.href = "home";
 	    }
     };
     

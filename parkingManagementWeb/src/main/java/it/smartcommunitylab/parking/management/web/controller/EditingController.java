@@ -101,13 +101,6 @@ public class EditingController {
 	StreetBean getStreetById(@PathVariable("appId") String appId, @PathVariable("streetId") String streetId) {
 		return storage.findStreet(streetId);
 	}
-	
-	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/street")
-	public @ResponseBody
-	List<StreetBean> getAllStreetsNS(@PathVariable("appId") String appId) {
-		return storage.getAllStreets(appId);
-	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingmeter")
 	public @ResponseBody
@@ -126,13 +119,6 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/parkingmeter")
 	public @ResponseBody
 	List<ParkingMeterBean> getAllParkingMetersByAppId(@PathVariable("appId") String appId) {
-		return storage.getAllParkingMeters(appId);
-	}
-	
-	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingmeter")
-	public @ResponseBody
-	List<ParkingMeterBean> getAllParkingMetersNS(@PathVariable("appId") String appId) {
 		return storage.getAllParkingMeters(appId);
 	}
 
@@ -191,13 +177,6 @@ public class EditingController {
 			return storage.getAllArea(appId);
 		}
 	}
-	
-	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area")
-	public @ResponseBody
-	List<RateAreaBean> getAllRateAreaNS(@PathVariable("appId") String appId) {
-		return storage.getAllArea(appId);
-	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/area/{aid}")
 	public @ResponseBody
@@ -224,19 +203,6 @@ public class EditingController {
 	List<ZoneBean> getAllZoneByAppId(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
 		//return storage.getAllZone(appId);
 		//logger.info("Zone type " + type);
-		if(type == null || type.compareTo("") == 0){
-			return storage.getAllZone("all");
-		} else {
-			return storage.getZoneByType(type, appId);
-		}
-	}
-	
-	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/{zType}")
-	public @ResponseBody
-	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
-		logger.debug("passed params: " + appId + ", " + type);
-		//return storage.getAllZone(appId);
 		if(type == null || type.compareTo("") == 0){
 			return storage.getAllZone("all");
 		} else {
@@ -279,13 +245,6 @@ public class EditingController {
 	List<BikePointBean> getAllBikePointsByAllId(@PathVariable("appId") String appId) {
 		return storage.getAllBikePoints(appId);
 	}
-	
-	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/bikepoint")
-	public @ResponseBody
-	List<BikePointBean> getAllBikePointsNS(@PathVariable("appId") String appId) {
-		return storage.getAllBikePoints(appId);
-	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/bikepoint/{pbid}")
 	public @ResponseBody
@@ -320,13 +279,6 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/parkingstructure")
 	public @ResponseBody
 	List<ParkingStructureBean> getAllParkingStructure(@PathVariable("appId") String appId) {
-		return storage.getAllParkingStructure(appId);
-	}
-	
-	// Method without security
-	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingstructure")
-	public @ResponseBody
-	List<ParkingStructureBean> getAllParkingStructureNS(@PathVariable("appId") String appId) {
 		return storage.getAllParkingStructure(appId);
 	}
 
@@ -403,5 +355,92 @@ public class EditingController {
 		response.getOutputStream().write(icon);
 		response.getOutputStream().flush();
 	}
+	
+	// Not secured method (open read-only)
+	
+	// Method open to get all streets
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/street")
+	public @ResponseBody
+	List<StreetBean> getAllStreetsNS(@PathVariable("appId") String appId) {
+		return storage.getAllStreets(appId);
+	}
+		
+	// Method open to get a single street
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/street/{streetId}")
+	public @ResponseBody
+	StreetBean getStreetByIdNS(@PathVariable("appId") String appId, @PathVariable("streetId") String streetId) {
+		return storage.findStreet(streetId);
+	}
+	
+	// Method open to get all parkingMeters
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingmeter")
+	public @ResponseBody
+	List<ParkingMeterBean> getAllParkingMetersNS(@PathVariable("appId") String appId) {
+		return storage.getAllParkingMeters(appId);
+	}
+	
+	// Method open to get all area objects
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area")
+	public @ResponseBody
+	List<RateAreaBean> getAllRateAreaNS(@PathVariable("appId") String appId) {
+		return storage.getAllArea(appId);
+	}
+		
+	// Method open to get a single area object
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area/{aid}")
+	public @ResponseBody
+	RateAreaBean getRateAreaNS(@PathVariable("appId") String appId,
+			@PathVariable("aid") String aid,
+			@RequestBody RateAreaBean area) throws NotFoundException {
+		return storage.getAreaById(aid, appId);
+	}
+	
+	// Method open to get all zones
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone")
+	public @ResponseBody
+	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId) {
+		return storage.getAllZone(appId);
+	}
+	
+	// Method open to get all zones
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/{zType}")
+	public @ResponseBody
+	List<ZoneBean> getAllZoneByTypeNS(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
+		logger.debug("passed params: " + appId + ", " + type);
+		if(type == null || type.compareTo("") == 0){
+			return storage.getAllZone("all");
+		} else {
+			return storage.getZoneByType(type, appId);
+		}
+	}
+	
+	// Method open to get all bike points
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/bikepoint")
+	public @ResponseBody
+	List<BikePointBean> getAllBikePointsNS(@PathVariable("appId") String appId) {
+		return storage.getAllBikePoints(appId);
+	}
+	
+	// Method open to get a single bike point
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/bikepoint/{pbid}")
+	public @ResponseBody
+	BikePointBean getBikePointNS(@PathVariable("appId") String appId,
+			@PathVariable("pbid") String pbid) throws NotFoundException {
+		return storage.getBikePointById(pbid, appId);
+	}
+	
+	// Method open to retrieve all parking structure
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingstructure")
+	public @ResponseBody
+	List<ParkingStructureBean> getAllParkingStructureNS(@PathVariable("appId") String appId) {
+		return storage.getAllParkingStructure(appId);
+	}
+	
+	// Method open to retrieve all parking structure
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingstructure/{psId}")
+	public @ResponseBody
+	ParkingStructureBean getParkingStructureNS(@PathVariable("appId") String appId, @PathVariable("psId") String psId) {
+		return storage.getParkingStructureById(psId, appId);
+	}	
 
 }

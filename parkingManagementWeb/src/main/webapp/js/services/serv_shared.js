@@ -48,6 +48,7 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 	this.base64 = '';
 	
 	this.sharedLocalAreas = [];
+	this.sharedLocalStreets = [];
 	this.sharedLocalZones0 = [];
 	this.sharedLocalZones1 = [];
 	this.sharedLocalZones2 = [];
@@ -55,6 +56,7 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 	this.sharedLocalZones4 = [];
 	this.sharedLocalMicroZones = [];
 	this.sharedLocalPms = [];
+	this.sharedLocalPs = [];
 	this.sharedLocalBps = [];
 	
 	this.allFamilyUpdated = false;
@@ -653,6 +655,14 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 		this.sharedLocalAreas = list;
 	};
 	
+	this.getSharedLocalStreets = function(){
+		return this.sharedLocalStreets;
+	};
+	
+	this.setSharedLocalStreets = function(list){
+		this.sharedLocalStreets = list;
+	};
+	
 	// Zones
 	this.getSharedLocalZones0 = function(){
 		return this.sharedLocalZones0;
@@ -700,6 +710,14 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 	
 	this.setSharedLocalPms = function(list){
 		this.sharedLocalPms = list;
+	};
+	
+	this.getSharedLocalPs = function(){
+		return this.sharedLocalPs;
+	};
+	
+	this.setSharedLocalPs = function(list){
+		this.sharedLocalPs = list;
 	};
 	
 	this.getSharedLocalBps = function(){
@@ -1616,11 +1634,15 @@ pm.factory('invokeWSService', function($http, $q, $window, sharedDataService) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-					sharedDataService.sessionTimeOutNotifier();
+				if(typeof data === 'string'){
+					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+						sharedDataService.sessionTimeOutNotifier();
+					} else {
+						deferred.resolve(data);
+					}
 				} else {
 					deferred.resolve(data);
-				}
+				} 
 			}).error(function(data) {
 				var status = data.status;
 			    if (status == 401) {
@@ -1659,8 +1681,12 @@ pm.factory('invokeWSService', function($http, $q, $window, sharedDataService) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-					sharedDataService.sessionTimeOutNotifier();
+				if(typeof data === 'string'){
+					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+						sharedDataService.sessionTimeOutNotifier();
+					} else {
+						deferred.resolve(data);
+					}
 				} else {
 					deferred.resolve(data);
 				}
@@ -1736,8 +1762,12 @@ pm.factory('invokeDashboardWSService', function($http, $q, sharedDataService) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-					sharedDataService.sessionTimeOutNotifier();
+				if(typeof data === 'string'){
+					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+						sharedDataService.sessionTimeOutNotifier();
+					} else {
+						deferred.resolve(data);
+					}
 				} else {
 					deferred.resolve(data);
 				}
@@ -1752,8 +1782,12 @@ pm.factory('invokeDashboardWSService', function($http, $q, sharedDataService) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-					sharedDataService.sessionTimeOutNotifier();
+				if(typeof data === 'string'){
+					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+						sharedDataService.sessionTimeOutNotifier();
+					} else {
+						deferred.resolve(data);
+					}
 				} else {
 					deferred.resolve(data);
 				}
@@ -1768,8 +1802,12 @@ pm.factory('invokeDashboardWSService', function($http, $q, sharedDataService) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-					sharedDataService.sessionTimeOutNotifier();
+				if(typeof data === 'string'){
+					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+						sharedDataService.sessionTimeOutNotifier();
+					} else {
+						deferred.resolve(data);
+					}
 				} else {
 					deferred.resolve(data);
 				}
@@ -1794,8 +1832,12 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 				data : data
 			}).success(function(data) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
-				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-					sharedDataService.sessionTimeOutNotifier();
+				if(typeof data === 'string'){
+					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+						sharedDataService.sessionTimeOutNotifier();
+					} else {
+						deferred.resolve(data);
+					}
 				} else {
 					deferred.resolve(data);
 				}
@@ -1812,8 +1854,12 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 				data : data
 			}).success(function(data) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
-				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-					sharedDataService.sessionTimeOutNotifier();
+				if(typeof data === 'string'){
+					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+						sharedDataService.sessionTimeOutNotifier();
+					} else {
+						deferred.resolve(data);
+					}
 				} else {
 					deferred.resolve(data);
 				}
@@ -1830,8 +1876,12 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 				data : data
 			}).success(function(data) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
-				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-					sharedDataService.sessionTimeOutNotifier();
+				if(typeof data === 'string'){
+					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+						sharedDataService.sessionTimeOutNotifier();
+					} else {
+						deferred.resolve(data);
+					}
 				} else {
 					deferred.resolve(data);
 				}
@@ -2007,8 +2057,12 @@ pm.factory('invokePdfServiceProxy', function($http, $q, sharedDataService) {
 			data : data
 		}).success(function(data) {
 			//console.log("Returned data ok: " + JSON.stringify(data));
-			if(data.indexOf(sharedDataService.getErrConstant()) != -1){
-				sharedDataService.sessionTimeOutNotifier();
+			if(typeof data === 'string'){
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			} else {
 				deferred.resolve(data);
 			}

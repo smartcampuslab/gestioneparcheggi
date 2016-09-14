@@ -1017,6 +1017,24 @@ public class StorageManager {
 		}
 		return result;
 	}
+	
+	/**
+	 * Method getBikePointById: return the specific bike point with the correct id
+	 * @param bpId: id of the BikePoints to find;
+	 * @return BikePointBean found;
+	 */
+	public BikePointBean getBikePointById(String bpId, String appId) {
+		BikePointBean result = null;
+		Criteria crit = new Criteria();
+		crit.and("_id").is(new ObjectId(bpId));
+		crit.and("id_app").is(appId);
+		BikePoint bp = null;
+		bp = mongodb.findOne(Query.query(crit), BikePoint.class);
+		if(bp != null){
+			result = ModelConverter.convert(bp, BikePointBean.class);
+		}
+		return result;
+	}
 
 	public ParkingStructureBean save(ParkingStructureBean entityBean, String appId, String agencyId) {
 		ParkingStructure entity = ModelConverter.convert(entityBean, ParkingStructure.class);
@@ -1079,6 +1097,18 @@ public class StorageManager {
 	
 	public ParkingStructureBean findParkingStructure(String id) throws NotFoundException {
 		ParkingStructure entity = findById(id,ParkingStructure.class);
+		ParkingStructureBean ps = null;
+		if(entity != null){
+			ps = ModelConverter.convert(entity, ParkingStructureBean.class);
+		}
+		return ps;
+	}
+	
+	public ParkingStructureBean getParkingStructureById(String id, String appId) {
+		Criteria crit = new Criteria();
+		crit.and("_id").is(new ObjectId(id));
+		crit.and("id_app").is(appId);
+		ParkingStructure entity = mongodb.findOne(Query.query(crit),ParkingStructure.class);
 		ParkingStructureBean ps = null;
 		if(entity != null){
 			ps = ModelConverter.convert(entity, ParkingStructureBean.class);
