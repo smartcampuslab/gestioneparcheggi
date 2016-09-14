@@ -6962,17 +6962,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 
 	//------------------------------ end of legend part -------------------------------------
 	
-	$scope.checkJSESSIONID = function(){
+	//$scope.checkJSESSIONID = function(){
     	//var x = document.cookies;
     	//var globals = $cookies['JSESSIONID'];	//('JSESSIONID') || {};
-    	var myDataPromise = utilsService.checkSessionActive();
-    	myDataPromise.then(function(result){
-			if(result != "OK"){
-				console.log("Popup for invalid session!");
-			}
-		});
-    };
-    $interval($scope.checkJSESSIONID(), 5000);
+    //	var myDataPromise = utilsService.checkSessionActive();
+    //	myDataPromise.then(function(result){
+	//		if(result != "OK"){
+	//			console.log("Popup for invalid session!");
+	//		}
+	//	});
+    //};
+    //$interval($scope.checkJSESSIONID(), 5000);
 	
 
 }]);

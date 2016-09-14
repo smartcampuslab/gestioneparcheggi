@@ -2,13 +2,18 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('sharedDataService', function(){
+pm.service('sharedDataService', function($window, $dialogs, $timeout){
 	
 	// This section is shared between all the controllers
 	// Shared field description
 	this.usedLanguage = 'ita';
 	this.name = '';
 	this.surname = '';
+	this.ERRCONSTANT = "<title>MetroParco - Login</title>";
+	
+	this.getErrConstant = function(){
+		return this.ERRCONSTANT;
+	}
 	
     this.authHeaders = {
         'Accept': 'application/json;charset=UTF-8'
@@ -1550,6 +1555,18 @@ pm.service('sharedDataService', function(){
 		return myPayment;
 	};
 	
+	//Useful method to redirect to login and show session timeout modal
+	this.sessionTimeOutNotifier = function(){
+		if(this.getUsedLanguage() == 'ita'){
+			$dialogs.notify("Errore sessione scaduta", "La sessione e' scaduta. Verrai riportato alla pagina di login");
+		} else {
+			$dialogs.notify("Error session expired", "Your session is expired. You will redirect to login page");
+		}
+		$timeout(function(){ 
+			$window.location.href = "/metroparco/error";
+		}, 2000);
+	};
+	
 	// ----- End of part for functions shared between controllers  -------------------------------------
 });
 
@@ -1587,7 +1604,7 @@ pm.factory('getMyMessages', function($http, $q) {
 });
 
 // Proxy Methods section
-pm.factory('invokeWSService', function($http, $q) {
+pm.factory('invokeWSService', function($http, $q, $window, sharedDataService) {
 	var url = 'rest/';
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
@@ -1599,15 +1616,17 @@ pm.factory('invokeWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				var status = data.status;
 			    if (status == 401) {
-			      //AuthFactory.clearUser();
-			      window.location = "/login";
+			      $window.location = "/metroparco/error";
 			      return;
 			    }
-				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else if(method == 'GET' && params != null){
@@ -1618,11 +1637,14 @@ pm.factory('invokeWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				var status = data.status;
 			    if (status == 401) {
-			      //AuthFactory.clearUser();
 			      window.location = "/login";
 			      return;
 			    }
@@ -1637,7 +1659,11 @@ pm.factory('invokeWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
@@ -1698,7 +1724,7 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 	};
 	return {getProxy : getProxy};
 });
-pm.factory('invokeDashboardWSService', function($http, $q) {
+pm.factory('invokeDashboardWSService', function($http, $q, sharedDataService) {
 	var url = 'dashboard/rest/';
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
@@ -1710,7 +1736,11 @@ pm.factory('invokeDashboardWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				deferred.resolve(data);
 			});
@@ -1722,7 +1752,11 @@ pm.factory('invokeDashboardWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				deferred.resolve(data);
 			});
@@ -1734,7 +1768,11 @@ pm.factory('invokeDashboardWSService', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				deferred.resolve(data);
 			});
@@ -1743,7 +1781,7 @@ pm.factory('invokeDashboardWSService', function($http, $q) {
 	};
 	return {getProxy : getProxy};
 });
-pm.factory('invokeAuxWSService', function($http, $q) {
+pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 	var url = 'auxiliary/rest/';
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
@@ -1756,7 +1794,11 @@ pm.factory('invokeAuxWSService', function($http, $q) {
 				data : data
 			}).success(function(data) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
@@ -1770,7 +1812,11 @@ pm.factory('invokeAuxWSService', function($http, $q) {
 				data : data
 			}).success(function(data) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
@@ -1784,7 +1830,11 @@ pm.factory('invokeAuxWSService', function($http, $q) {
 				data : data
 			}).success(function(data) {
 				//console.log("Returned data ok: " + JSON.stringify(data));
-				deferred.resolve(data);
+				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+					sharedDataService.sessionTimeOutNotifier();
+				} else {
+					deferred.resolve(data);
+				}
 			}).error(function(data) {
 				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
@@ -1945,7 +1995,7 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 	};
 	return {getProxy : getProxy};
 });
-pm.factory('invokePdfServiceProxy', function($http, $q) {
+pm.factory('invokePdfServiceProxy', function($http, $q, sharedDataService) {
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
 		
@@ -1957,7 +2007,11 @@ pm.factory('invokePdfServiceProxy', function($http, $q) {
 			data : data
 		}).success(function(data) {
 			//console.log("Returned data ok: " + JSON.stringify(data));
-			deferred.resolve(data);
+			if(data.indexOf(sharedDataService.getErrConstant()) != -1){
+				sharedDataService.sessionTimeOutNotifier();
+			} else {
+				deferred.resolve(data);
+			}
 		}).error(function(data) {
 			console.log("Returned data FAIL: " + JSON.stringify(data));
 			deferred.resolve(data);
@@ -1967,16 +2021,17 @@ pm.factory('invokePdfServiceProxy', function($http, $q) {
 	return {getProxy : getProxy};
 });
 pm.factory('checkSession', function($http, $q, $interval, invokeDashboardWSService, sharedDataService) {
-	var timeIntervalMillis = 5000;
+	var timeIntervalMillis = 10000;
 	
 	var checkSessionActive = function(){
-		//$interval();
-		var method = 'GET';
-		var myDataPromise = invokeDashboardWSService.getProxy(method, "session", null, sharedDataService.getAuthHeaders(), null);
-		myDataPromise.then(function(result){
-			console.log("check session result " + result)
-		});
-		return myDataPromise;
+		$interval(function() {
+			var method = 'GET';
+			var myDataPromise = invokeDashboardWSService.getProxy(method, "session", null, sharedDataService.getAuthHeaders(), null);
+			myDataPromise.then(function(result){
+				console.log("check session result " + result)
+			});
+			return myDataPromise;
+		}, timeIntervalMillis);
 	};
 	
 	return {checkSessionActive : checkSessionActive};

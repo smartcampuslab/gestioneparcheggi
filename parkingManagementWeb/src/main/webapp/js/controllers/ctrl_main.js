@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','utilsService','getMyMessages','$timeout',
-    function($scope, $http, $route, $window, $cookies, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, utilsService, getMyMessages, $timeout, $interval) {
+pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','utilsService','getMyMessages','$timeout', 'checkSession',
+    function($scope, $http, $route, $window, $cookies, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, utilsService, getMyMessages, $timeout, checkSession) {
     
     $scope.setFrameOpened = function(value){
     	$rootScope.frameOpened = value;
@@ -479,9 +479,15 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
     	return corrAttribList;
     };
     
+    //$scope.checkJSESSIONID = function(){
+    //	var Jsess = $cookies['JSESSIONID'];
+    //	console.log("JSESSIONID " + Jsess);
+    //};
+    
     $scope.loadConfObject(object_to_show);
 	$scope.initComponents = function(){
 		//$scope.checkJSESSIONID();
+		//checkSession.checkSessionActive();
 	    $scope.showedObjects = sharedDataService.getVisibleObjList();
 	    $scope.showBikeMenuLink = false;
 	    $scope.showDashboardMenuLink = false;

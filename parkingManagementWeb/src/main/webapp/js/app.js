@@ -34,6 +34,11 @@ pm.config(['$routeProvider', '$locationProvider',
     		controller: 'MainCtrl',
     		controllerAs: 'main'
     	})
+    	.when('/error', {
+    		templateUrl: 'partials/error/error.html',
+    		controller: 'MainCtrl',
+    		controllerAs: 'main'
+    	})
     	.when('/dashboard/home', {
     		templateUrl: 'partials/dashboard/viewpark.html',
     		controller: 'ViewDashboardCtrlPark',

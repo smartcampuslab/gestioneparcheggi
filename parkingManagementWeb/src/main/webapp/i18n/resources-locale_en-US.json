@@ -1020,7 +1020,7 @@
     "description": "Campo posizione in mappa area"
 }, {
     "key": "area_sms",
-    "value": "Telepark service - area code",
+    "value": "SMS payment",
     "description": "Campo codice sms telepark area"
 }, {
     "key": "area_note",
