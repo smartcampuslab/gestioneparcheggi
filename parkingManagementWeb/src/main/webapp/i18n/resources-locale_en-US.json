@@ -976,7 +976,7 @@
     "description": "Campo posizione in mappa area"
 }, {
     "key": "area_sms",
-    "value": "SMS payment - area code",
+    "value": "phone payment - area code",
     "description": "Campo codice sms telepark area"
 }, {
     "key": "area_note",
