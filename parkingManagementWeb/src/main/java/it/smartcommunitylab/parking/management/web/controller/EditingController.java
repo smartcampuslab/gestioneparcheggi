@@ -379,6 +379,13 @@ public class EditingController {
 		return storage.getAllParkingMeters(appId);
 	}
 	
+	// Method open to get all parkingMeters
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingmeter/{pmId}")
+	public @ResponseBody
+	ParkingMeterBean getParkingMetersNS(@PathVariable("appId") String appId, @PathVariable("pmId") String pmId) {
+		return storage.findParkingMeter(pmId, appId);
+	}
+	
 	// Method open to get all area objects
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area")
 	public @ResponseBody
@@ -390,8 +397,7 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area/{aid}")
 	public @ResponseBody
 	RateAreaBean getRateAreaNS(@PathVariable("appId") String appId,
-			@PathVariable("aid") String aid,
-			@RequestBody RateAreaBean area) throws NotFoundException {
+			@PathVariable("aid") String aid) throws NotFoundException {
 		return storage.getAreaById(aid, appId);
 	}
 	
@@ -402,7 +408,14 @@ public class EditingController {
 		return storage.getAllZone(appId);
 	}
 	
-	// Method open to get all zones
+	// Method open to get a single zone
+	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/id/{zId}")
+	public @ResponseBody
+	ZoneBean getZoneNS(@PathVariable("appId") String appId, @PathVariable("zId") String zId) {
+		return storage.findZoneById(zId, appId);
+	}
+	
+	// Method open to get all zones of a specific type
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/{zType}")
 	public @ResponseBody
 	List<ZoneBean> getAllZoneByTypeNS(@PathVariable("appId") String appId, @PathVariable("zType") String type) {

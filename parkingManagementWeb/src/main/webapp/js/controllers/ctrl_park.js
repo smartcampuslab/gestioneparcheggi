@@ -787,28 +787,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
    		if(localArea == null || localArea.length == 0){
    			$scope.getAllAreas();
    		} else {
-   			$scope.areaWS = localArea;
-   			if($scope.vAreaMap){
-   				var toHide = $scope.vAreaMap.shapes;
-   				$scope.vAreaMap.shapes = gMapService.hideAllAreas(localArea, toHide);
-   			}
-			$scope.polygons = gMapService.getAreaPolygons();
+   			//$scope.areaWS = localArea;
+   			//if($scope.vAreaMap){
+   			//	var toHide = $scope.vAreaMap.shapes;
+   			//	$scope.vAreaMap.shapes = gMapService.hideAllAreas(localArea, toHide);
+   			//}
+			//$scope.polygons = gMapService.getAreaPolygons();
    		}
-   		// street loading
-   		//if($scope.streetWS == null || $scope.streetWS.length == 0){
-    	//	$scope.getStreetsFromDb();
-    	//}
+  
        	if(tab.index == 1){
        		// area loading
        		if(localArea == null || localArea.length == 0){
        			$scope.getAllAreas();
        		} else {
        			$scope.areaWS = localArea;
-       			if($scope.vAreaMap){
-       				var toHide = $scope.vAreaMap.shapes;
-       				$scope.vAreaMap.shapes = gMapService.hideAllAreas(localArea, toHide);
-       			}
-    			$scope.polygons = gMapService.getAreaPolygons();
+       			$scope.polygons = gMapService.getAreaPolygons();
        		}
        	}
        	if(tab.index >= 2 && tab.index <= 6){

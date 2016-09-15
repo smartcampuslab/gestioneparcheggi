@@ -345,20 +345,6 @@ public class StorageManager {
 			result.setAreaId(ra.getId());
 			return result;
 		}
-		/*List<RateArea> aree = mongodb.findAll(RateArea.class);
-		ParkingMeter p = new ParkingMeter();
-		for (RateArea area : aree) {
-			if (area.getParkingMeters() != null) {
-				p.setId(parcometroId);
-				int index = area.getParkingMeters().indexOf(p);
-				if (index != -1) {
-					ParkingMeterBean result = ModelConverter.convert(area
-							.getParkingMeters().get(index), ParkingMeterBean.class);
-					result.setAreaId(area.getId());
-					return result;
-				}
-			}
-		}*/
 		return null;
 	}
 	
@@ -657,8 +643,6 @@ public class StorageManager {
 	
 	public StreetBean findStreet(String streetId) {
 		String sId = "streets." + streetId;
-		Criteria crit_street = new Criteria();
-		crit_street.and("_id").is(new ObjectId(streetId));
 		Criteria crit = new Criteria();
 		crit.and(sId).exists(true);
 		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
@@ -1314,20 +1298,21 @@ public class StorageManager {
 	}
 	
 	/**
-	 * Method findZoneById: get a list of zone having a specific name
-	 * @param name: name of the zone to search
-	 * @return List of ZoneBean found
+	 * Method findZoneById: get a specific zone having the searched id
+	 * @param zId: id of the zone to search
+	 * @param appId: app id of the zone to search
+	 * @return specific ZoneBean found
 	 */
 	public ZoneBean findZoneById(String zId, String appId) {
-		List<ZoneBean> result = new ArrayList<ZoneBean>();
-		for (Zone z : mongodb.findAll(Zone.class)) {
-			if(z != null && z.getId_app().compareTo(appId) == 0){
-				if(z.getId().compareTo(zId) == 0){
-					result.add(ModelConverter.convert(z, ZoneBean.class));
-				}
-			}
-		}	
-		return result.get(0);
+		Criteria crit = new Criteria();
+		crit.and("_id").is(new ObjectId(zId));
+		crit.and("id_app").is(appId);
+		Zone z = mongodb.findOne(Query.query(crit), Zone.class);
+		ZoneBean result = null;
+		if(z != null){
+			result = ModelConverter.convert(z, ZoneBean.class);
+		}
+		return result;
 	}	
 
 	public ZoneBean editZone(ZoneBean z, String appId, String agencyId) throws NotFoundException {

@@ -1,5 +1,5 @@
 agencies:
-  - id: prova789
+  - id: tn_mob_091516
     name: Agency tn
     description: Agency id per trentino mobilita'
     area: 3
@@ -8,7 +8,7 @@ agencies:
     structure: 3
     parkingmeter: 3
     bike: 3
-  - id: prova123
+  - id: rv_amr_091616
     name: Agency rv
     description: Agency id per amr rovereto
     area: 3

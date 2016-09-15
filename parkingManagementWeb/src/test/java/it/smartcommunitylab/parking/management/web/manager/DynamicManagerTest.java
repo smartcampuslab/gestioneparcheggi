@@ -28,9 +28,12 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -54,7 +57,10 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class DynamicManagerTest {
 	
 	private static final String appId="rv";
+	private static final String agencyId = "prova123";
 	private static final String appIdTn="comune_tn";
+	private static final String agencyIdTn="prova789";
+	private static final String vehicleType = "Car";
 	private static final int min = 0;
 	private static final int max = 5;
 	private static final long MILLISINYEAR = 31556952000L;
@@ -349,88 +355,126 @@ public class DynamicManagerTest {
 //		
 //	}
 	
-//	@Test
-//	public void loadOldLogTn() throws Exception {
-//	
-//		List<StreetLog> myOldStreets = dynManager.getOldLogs();
-//		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appIdTn));
-//		for(int i = 0; i < myOldStreets.size(); i++){
-//			//System.err.println(myOldStreets.get(i).getValue());
-//			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
-//			
-//			//manager.setAppId(appId);
-//			boolean found = false;
-//			for(int j = 0; (j < myStreets.size()) && !found; j++){
-//				if(myStreets.get(j).getName().compareTo(street.getString("name")) == 0){
-//					found = true;
-//					Street s = myStreets.get(j);
-//					System.out.println("Street founded " + s.toJSON());
-//					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
-//					//s.setId(sId);
-//					Random random = new Random();
-//					//int offset = random.nextInt(max - min + 1) + min; // NB: use offset to create test data
-//					int offset = 0;
-//					int freeSlots = street.getInt("slotsFree");
-//					int slotsPaying = street.getInt("slotsPaying");
-//					int slotsTimed = street.getInt("slotsTimed");
-//					int total = freeSlots + slotsPaying + slotsTimed;
-//					int occupiedOnFree = street.getInt("slotsOccupiedOnFree") + offset;
-//					if(occupiedOnFree >= freeSlots){
-//						occupiedOnFree = freeSlots;
-//					}
-//					int occupiedOnPaying = street.getInt("slotsOccupiedOnPaying") + offset;
-//					if(occupiedOnPaying >= slotsPaying){
-//						occupiedOnPaying = slotsPaying;
-//					}
-//					int occupiedOnTimed = street.getInt("slotsOccupiedOnTimed") + offset;
-//					if(occupiedOnTimed >= slotsTimed){
-//						occupiedOnTimed = slotsTimed;
-//					}
-//					int unavailableSlot = street.getInt("slotsUnavailable") + offset;
-//					int occTot = occupiedOnFree + occupiedOnPaying + occupiedOnTimed;
-//					int free = total - occTot;
-//					if(unavailableSlot > free){
-//						unavailableSlot = free;
-//					}
-//					long updateTime = myOldStreets.get(i).getTime();// + MILLISINYEAR;	//2013 + 1 anno
-//					
-//					//s.setSlotsFree(freeSlots);
-//					if(s.getSlotsFree() > 0){
-//						s.setSlotsOccupiedOnFree(occupiedOnFree);
-//					} else {
-//						s.setSlotsOccupiedOnFreeSigned(occupiedOnFree);
-//					}
-//					//s.setSlotsPaying(slotsPaying);
-//					s.setSlotsOccupiedOnPaying(occupiedOnPaying);
-//					//s.setSlotsTimed(slotsTimed);
-//					s.setSlotsOccupiedOnTimed(occupiedOnTimed);
-//					if(unavailableSlot > 0){
-//						System.out.println("unavailableSlots " + unavailableSlot);
-//					}
-//					s.setSlotsUnavailable(unavailableSlot);
-//					s.setUpdateTime(updateTime);
-//					s.setUser(999);
-//					try {
-//						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, "999", true, null, -1);
-//						System.out.println("Street updated " + s.toJSON());
-//					} catch (DatabaseException e) {
-//						// TODO Auto-generated catch block
-//						e.printStackTrace();
-//					}
-//				}
-//			}
-//			
-//		}
-//		
-//		Assert.assertTrue(myOldStreets.size() > 0);
-//		
-//	}
+	@Test
+	public void loadOldLogTn() throws Exception {
+	
+		List<StreetLog> myOldStreets = dynManager.getOldLogs();
+		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appIdTn), agencyIdTn);
+		for(int i = 0; i < myOldStreets.size(); i++){
+			//System.err.println(myOldStreets.get(i).getValue());
+			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
+			
+			//manager.setAppId(appId);
+			boolean found = false;
+			for(int j = 0; (j < myStreets.size()) && !found; j++){
+				if(myStreets.get(j).getName().compareTo(street.getString("name")) == 0){
+					found = true;
+					Street s = myStreets.get(j);
+					System.out.println("Street founded " + s.toJSON());
+					//String sId = dynManager.getCorrectId(s.getId(), "street", "rv");
+					//s.setId(sId);
+					Random random = new Random();
+					//int offset = random.nextInt(max - min + 1) + min; // NB: use offset to create test data
+					int offset = 0;
+					int freeSlots = street.getInt("slotsFree");
+					int slotsPaying = street.getInt("slotsPaying");
+					int slotsTimed = street.getInt("slotsTimed");
+					int total = freeSlots + slotsPaying + slotsTimed;
+					int occupiedOnFree = street.getInt("slotsOccupiedOnFree") + offset;
+					if(occupiedOnFree >= freeSlots){
+						occupiedOnFree = freeSlots;
+					}
+					int occupiedOnPaying = street.getInt("slotsOccupiedOnPaying") + offset;
+					if(occupiedOnPaying >= slotsPaying){
+						occupiedOnPaying = slotsPaying;
+					}
+					int occupiedOnTimed = street.getInt("slotsOccupiedOnTimed") + offset;
+					if(occupiedOnTimed >= slotsTimed){
+						occupiedOnTimed = slotsTimed;
+					}
+					int unavailableSlot = street.getInt("slotsUnavailable") + offset;
+					int occTot = occupiedOnFree + occupiedOnPaying + occupiedOnTimed;
+					int free = total - occTot;
+					if(unavailableSlot > free){
+						unavailableSlot = free;
+					}
+					long updateTime = myOldStreets.get(i).getTime();// + MILLISINYEAR;	//2013 + 1 anno
+					
+					// new VehicleSlot management
+					VehicleSlot vs = null;
+					boolean find = false;
+					int sind = 0;
+					if(s.getSlotsConfiguration() != null && !s.getSlotsConfiguration().isEmpty()){
+						for(sind = 0; (sind < s.getSlotsConfiguration().size()) && !find; sind++){
+							if(s.getSlotsConfiguration().get(sind).getVehicleType().compareTo(vehicleType) == 0){
+								vs = s.getSlotsConfiguration().get(sind);
+								find = true;
+							}
+						}
+					}
+					if(vs == null){
+						vs = new VehicleSlot();
+						vs.setFreeParkSlotSignNumber(freeSlots);
+						vs.setPaidSlotNumber(slotsPaying);
+						vs.setTimedParkSlotNumber(slotsTimed);
+					}
+					vs.setVehicleType(vehicleType);
+					vs.setVehicleTypeActive(true);					
+					if(occupiedOnFree > 0){
+						vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+					}
+					if(occupiedOnPaying > 0){
+						vs.setPaidSlotOccupied(occupiedOnPaying);
+					}
+					if(occupiedOnTimed > 0){
+						vs.setTimedParkSlotOccupied(occupiedOnTimed);
+					}
+					vs.setUnusuableSlotNumber(unavailableSlot);
+					//s.setSlotsFree(freeSlots);
+					//if(s.getSlotsFree() > 0){
+					//	s.setSlotsOccupiedOnFree(occupiedOnFree);
+					//} else {
+					//	s.setSlotsOccupiedOnFreeSigned(occupiedOnFree);
+					//}
+					//s.setSlotsPaying(slotsPaying);
+					//s.setSlotsOccupiedOnPaying(occupiedOnPaying);
+					//s.setSlotsTimed(slotsTimed);
+					//s.setSlotsOccupiedOnTimed(occupiedOnTimed);
+					//if(unavailableSlot > 0){
+					//	System.out.println("unavailableSlots " + unavailableSlot);
+					//}
+					//s.setSlotsUnavailable(unavailableSlot);
+					if(!find){
+						List<VehicleSlot> slotConf = new ArrayList<VehicleSlot>();
+						slotConf.add(vs);
+						s.setSlotsConfiguration(slotConf);
+					} else {
+						s.getSlotsConfiguration().set(sind - 1, vs);
+					}
+					
+					s.setUpdateTime(updateTime);
+					s.setUser(999);
+					try {
+						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, "999", true, null, -1);
+						System.out.println("Street updated " + s.toJSON());
+					} catch (DatabaseException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+			}
+			
+		}
+		
+		Assert.assertTrue(myOldStreets.size() > 0);
+		
+	}
 	
 	@Test
 	public void loadOldLogRv() throws Exception {
 	
 		List<StreetLog> myOldStreets = dynManager.getOldLogs();
-		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
 		for(int i = 0; i < myOldStreets.size(); i++){
 			//System.err.println(myOldStreets.get(i).getValue());
 			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
@@ -471,7 +515,36 @@ public class DynamicManagerTest {
 					}
 					long updateTime = myOldStreets.get(i).getTime();// + MILLISINYEAR;	//2013 + 1 anno
 					
-					//TODO: update to support new VehicleSlot management
+					// new VehicleSlot management
+					VehicleSlot vs = null;
+					boolean find = false;
+					int sind = 0;
+					if(s.getSlotsConfiguration() != null && !s.getSlotsConfiguration().isEmpty()){
+						for(sind = 0; (sind < s.getSlotsConfiguration().size()) && !find; sind++){
+							if(s.getSlotsConfiguration().get(sind).getVehicleType().compareTo(vehicleType) == 0){
+								vs = s.getSlotsConfiguration().get(sind);
+								find = true;
+							}
+						}
+					}
+					if(vs == null){
+						vs = new VehicleSlot();
+						vs.setFreeParkSlotSignNumber(freeSlots);
+						vs.setPaidSlotNumber(slotsPaying);
+						vs.setTimedParkSlotNumber(slotsTimed);
+					}
+					vs.setVehicleType(vehicleType);
+					vs.setVehicleTypeActive(true);					
+					if(occupiedOnFree > 0){
+						vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+					}
+					if(occupiedOnPaying > 0){
+						vs.setPaidSlotOccupied(occupiedOnPaying);
+					}
+					if(occupiedOnTimed > 0){
+						vs.setTimedParkSlotOccupied(occupiedOnTimed);
+					}
+					vs.setUnusuableSlotNumber(unavailableSlot);
 					/*//s.setSlotsFree(freeSlots);
 					s.setSlotsOccupiedOnFree(occupiedOnFree);
 					//s.setSlotsPaying(slotsPaying);
@@ -482,6 +555,13 @@ public class DynamicManagerTest {
 						System.out.println("unavailableSlots " + unavailableSlot);
 					}
 					s.setSlotsUnavailable(unavailableSlot);*/
+					if(!find){
+						List<VehicleSlot> slotConf = new ArrayList<VehicleSlot>();
+						slotConf.add(vs);
+						s.setSlotsConfiguration(slotConf);
+					} else {
+						s.getSlotsConfiguration().set(sind - 1, vs);
+					}
 					
 					s.setUpdateTime(updateTime);
 					s.setUser(999);
@@ -544,7 +624,7 @@ public class DynamicManagerTest {
 	@Test
 	public void loadOldLogParkSquareRv() throws Exception {
 		List<ParkingLog> myOldParks = dynManager.getOldParkLogs();
-		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
 		for(int i = 0; i < myOldParks.size(); i++){
 			//System.err.println(myOldStreets.get(i).getValue());
 			JSONObject park = new JSONObject(myOldParks.get(i).getValue());
@@ -580,7 +660,36 @@ public class DynamicManagerTest {
 						}
 						long updateTime = myOldParks.get(i).getTime();// + MILLISINYEAR;	//2013 + 1 anno
 						
-						//TODO: update to support new VehicleSlot management
+						// new VehicleSlot management
+						VehicleSlot vs = null;
+						boolean find = false;
+						int sind = 0;
+						if(s.getSlotsConfiguration() != null && !s.getSlotsConfiguration().isEmpty()){
+							for(sind = 0; (sind < s.getSlotsConfiguration().size()) && !find; sind++){
+								if(s.getSlotsConfiguration().get(sind).getVehicleType().compareTo(vehicleType) == 0){
+									vs = s.getSlotsConfiguration().get(sind);
+									find = true;
+								}
+							}
+						}
+						if(vs == null){
+							vs = new VehicleSlot();
+							vs.setFreeParkSlotSignNumber(freeSlots);
+							vs.setPaidSlotNumber(slotsPaying);
+							vs.setTimedParkSlotNumber(slotsTimed);
+						}
+						vs.setVehicleType(vehicleType);
+						vs.setVehicleTypeActive(true);					
+						if(occupiedOnFree > 0){
+							vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+						}
+						if(occupiedOnPaying > 0){
+							vs.setPaidSlotOccupied(occupiedOnPaying);
+						}
+						if(occupiedOnTimed > 0){
+							vs.setTimedParkSlotOccupied(occupiedOnTimed);
+						}
+						vs.setUnusuableSlotNumber(unavailableSlot);
 						/*//s.setSlotsFree(freeSlots);
 						s.setSlotsOccupiedOnFree(occupiedOnFree);
 						//s.setSlotsPaying(slotsPaying);
@@ -591,6 +700,14 @@ public class DynamicManagerTest {
 						//	System.out.println("unavailableSlots " + unavailableSlot);
 						//}
 						s.setSlotsUnavailable(unavailableSlot);*/
+						if(!find){
+							List<VehicleSlot> slotConf = new ArrayList<VehicleSlot>();
+							slotConf.add(vs);
+							s.setSlotsConfiguration(slotConf);
+						} else {
+							s.getSlotsConfiguration().set(sind - 1, vs);
+						}
+						
 						s.setUpdateTime(updateTime);
 						s.setUser(999);
 						try {
@@ -631,7 +748,36 @@ public class DynamicManagerTest {
 						}
 						long updateTime = myOldParks.get(i).getTime();// + MILLISINYEAR;	//2013 + 1 anno
 						
-						//TODO: update to support new VehicleSlot management
+						// new VehicleSlot management
+						VehicleSlot vs = null;
+						boolean find = false;
+						int sind = 0;
+						if(s.getSlotsConfiguration() != null && !s.getSlotsConfiguration().isEmpty()){
+							for(sind = 0; (sind < s.getSlotsConfiguration().size()) && !find; sind++){
+								if(s.getSlotsConfiguration().get(sind).getVehicleType().compareTo(vehicleType) == 0){
+									vs = s.getSlotsConfiguration().get(sind);
+									find = true;
+								}
+							}
+						}
+						if(vs == null){
+							vs = new VehicleSlot();
+							vs.setFreeParkSlotSignNumber(freeSlots);
+							vs.setPaidSlotNumber(slotsPaying);
+							vs.setTimedParkSlotNumber(slotsTimed);
+						}
+						vs.setVehicleType(vehicleType);
+						vs.setVehicleTypeActive(true);					
+						if(occupiedOnFree > 0){
+							vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+						}
+						if(occupiedOnPaying > 0){
+							vs.setPaidSlotOccupied(occupiedOnPaying);
+						}
+						if(occupiedOnTimed > 0){
+							vs.setTimedParkSlotOccupied(occupiedOnTimed);
+						}
+						vs.setUnusuableSlotNumber(unavailableSlot);
 						/*//s.setSlotsFree(freeSlots);
 						s.setSlotsOccupiedOnFree(occupiedOnFree);
 						//s.setSlotsPaying(slotsPaying);
@@ -642,6 +788,14 @@ public class DynamicManagerTest {
 						//	System.out.println("unavailableSlots " + unavailableSlot);
 						//}
 						s.setSlotsUnavailable(unavailableSlot);*/
+						if(!find){
+							List<VehicleSlot> slotConf = new ArrayList<VehicleSlot>();
+							slotConf.add(vs);
+							s.setSlotsConfiguration(slotConf);
+						} else {
+							s.getSlotsConfiguration().set(sind - 1, vs);
+						}
+						
 						s.setUpdateTime(updateTime);
 						s.setUser(999);
 						try {

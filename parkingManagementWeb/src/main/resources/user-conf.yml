@@ -6,7 +6,7 @@ users:
     name: Comune
     surname: Rovereto
     mail: info@comune.rovereto.tn.it
-    agency: prova123
+    agency: rv_amr_091616
   - id: ComuneRovereto2
     username: rovereto
     password: rovereto
@@ -22,7 +22,7 @@ users:
     name: Trentino
     surname: Mobilita
     mail: info@trentinomobilita.it
-    agency: prova789
+    agency: tn_mob_091516
   - id: ComuneTrento
     username: comunetrentotest
     password: metroCTT$16
