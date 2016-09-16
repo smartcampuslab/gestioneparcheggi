@@ -419,6 +419,7 @@ public class StorageManager {
 							temp.getGeometry().setLat(pb.getGeometry().getLat());
 							temp.getGeometry().setLng(pb.getGeometry().getLng());
 							if(pb.getZones() != null)temp.setZones(pb.getZones());
+							area.getParkingMeters().put(temp.getId(), temp);	// to update the object
 							mongodb.save(area);
 							founded = true;
 						}
@@ -731,6 +732,7 @@ public class StorageManager {
 							temp.setParkingMeters(sb.getParkingMeters());
 							temp.setRateAreaId(sb.getRateAreaId());
 							temp.setAgencyId(sb.getAgencyId());
+							area.getStreets().put(temp.getId(), temp);	// update the street in the map
 							mongodb.save(area);
 						}
 					}

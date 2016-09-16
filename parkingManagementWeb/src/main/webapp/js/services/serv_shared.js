@@ -1474,6 +1474,28 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 		return myScConf;
 	};
 	
+	//Used to solve the problem of occupancy update when a street is updated in data management:
+	//now I update only the static data (not occupancy)
+	this.configureSlotsForObjectNotDynamic = function(sc){
+		var myScConf = {
+			carSharingSlotNumber: this.initIfNull(sc.carSharingSlotNumber),
+			freeParkSlotNumber: this.initIfNull(sc.freeParkSlotNumber),
+			freeParkSlotSignNumber: this.initIfNull(sc.freeParkSlotSignNumber),
+			handicappedSlotNumber: this.initIfNull(sc.handicappedSlotNumber),
+			loadingUnloadingSlotNumber: this.initIfNull(sc.loadingUnloadingSlotNumber),
+			paidSlotNumber: this.initIfNull(sc.paidSlotNumber),
+			pinkSlotNumber: this.initIfNull(sc.pinkSlotNumber),
+			rechargeableSlotNumber: this.initIfNull(sc.rechargeableSlotNumber),
+			reservedSlotNumber: this.initIfNull(sc.reservedSlotNumber),
+			slotNumber: this.initIfNull(sc.slotNumber),
+			timedParkSlotNumber: this.initIfNull(sc.timedParkSlotNumber),
+			unusuableSlotNumber: this.initIfNull(sc.unusuableSlotNumber),
+			vehicleType: sc.vehicleType,
+			vehicleTypeActive: sc.vehicleTypeActive
+		};
+		return myScConf;
+	};
+	
 	this.getAreaFilter = function(){
 		var allAreaFilter = [];
 		angular.copy(this.getSharedLocalAreas(), allAreaFilter);
@@ -2075,17 +2097,17 @@ pm.factory('invokePdfServiceProxy', function($http, $q, sharedDataService) {
 	return {getProxy : getProxy};
 });
 pm.factory('checkSession', function($http, $q, $interval, invokeDashboardWSService, sharedDataService) {
-	var timeIntervalMillis = 10000;
+	//var timeIntervalMillis = 10000;
 	
 	var checkSessionActive = function(){
-		$interval(function() {
+		//$interval(function() {
 			var method = 'GET';
 			var myDataPromise = invokeDashboardWSService.getProxy(method, "session", null, sharedDataService.getAuthHeaders(), null);
 			myDataPromise.then(function(result){
 				console.log("check session result " + result)
 			});
 			return myDataPromise;
-		}, timeIntervalMillis);
+		//}, timeIntervalMillis);
 	};
 	
 	return {checkSessionActive : checkSessionActive};

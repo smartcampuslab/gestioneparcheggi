@@ -30,7 +30,72 @@ vehicleTypes:
     description: posti per camper
     language_key: camper_vehicle
   - name: Car
+    appId: comune_tn
+    userName: comunetrentotest
+    description: posti per automobile
+    language_key: car_vehicle
+  - name: Moto
+    appId: comune_tn
+    userName: comunetrentotest
+    description: posti per moto
+    language_key: moto_vehicle
+  - name: Taxi
+    appId: comune_tn
+    userName: comunetrentotest
+    description: posti per taxi
+    language_key: taxi_vehicle
+  - name: Bus
+    appId: comune_tn
+    userName: comunetrentotest
+    description: posti per autobus
+    language_key: autobus_vehicle
+  - name: Rack
+    appId: comune_tn
+    userName: comunetrentotest
+    description: posti per bici
+    language_key: bike_vehicle
+  - name: Camper
+    appId: comune_tn
+    userName: comunetrentotest
+    description: posti per camper
+    language_key: camper_vehicle
+  - name: Car
+    appId: tn
+    userName: comunetrento
+    description: posti per automobile
+    language_key: car_vehicle
+  - name: Moto
+    appId: tn
+    userName: comunetrento
+    description: posti per moto
+    language_key: moto_vehicle
+  - name: Taxi
+    appId: tn
+    userName: comunetrento
+    description: posti per taxi
+    language_key: taxi_vehicle
+  - name: Bus
+    appId: tn
+    userName: comunetrento
+    description: posti per autobus
+    language_key: autobus_vehicle
+  - name: Rack
+    appId: tn
+    userName: comunetrento
+    description: posti per bici
+    language_key: bike_vehicle
+  - name: Camper
+    appId: tn
+    userName: comunetrento
+    description: posti per camper
+    language_key: camper_vehicle
+  - name: Car
     appId: rv
     userName: rovereto1
+    description: posti per automobile
+    language_key: car_vehicle
+  - name: Car
+    appId: rvtest
+    userName: roveretotest
     description: posti per automobile
     language_key: car_vehicle

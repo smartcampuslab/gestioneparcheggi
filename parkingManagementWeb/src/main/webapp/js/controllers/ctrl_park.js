@@ -1914,6 +1914,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			if(result != null && result != ""){
 	    		//$scope.getAreasFromDb();
 	    		$scope.getAllAreas();
+	    		$scope.getAllStreets();	// here I recall the getAllStreet and getAllParkingMeters functions to refresh lists
+	    		$scope.getAllParkingMeters();
 	    	} else {
 	    		$scope.showDeletingAErrorMessage = true;
 	    	}
