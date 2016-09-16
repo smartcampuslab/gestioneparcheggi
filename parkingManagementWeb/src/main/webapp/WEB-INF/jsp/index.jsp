@@ -63,7 +63,6 @@
 <script src="lib/shim.js" type="text/javascript"></script>
 <script src="lib/xls.js" type="text/javascript"></script>
 <script src="lib/angular-base64.min.js"></script>
-<script src="lib/angular-cookies.js">
 
 <script src="lib/lodash.js"></script>
 <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
