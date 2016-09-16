@@ -83,6 +83,8 @@ var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
 var conf_ps_managers="<%=request.getAttribute("ps_managers")%>";
 var conf_elements="<%=request.getAttribute("elements")%>";
 var conf_filters="<%=request.getAttribute("filters")%>";
+var conf_vehicle_type_list="<%=request.getAttribute("vehicle_type_list")%>";
+var conf_agency="<%=request.getAttribute("user_agency")%>";
 <%-- Prevent the backspace key from navigating back. --%>
 $(document).unbind('keydown').bind('keydown', function (event) {
     var doPrevent = false;
