@@ -1021,7 +1021,7 @@
 }, {
     "key": "area_sms",
     "value": "pagam. telefonico - cod. area",
-    "description": "Campo codice sms telepark area"
+    "description": "Campo codice telefonico pagamento area"
 }, {
     "key": "area_note",
     "value": "note",
