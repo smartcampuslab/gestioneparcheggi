@@ -200,6 +200,28 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		$scope.widget_url_params = $scope.setWidgetUrlParameters();
     };
     
+    // Method used to translate the vehicle type in the correct i18n key
+    $scope.getVehicleKey = function(car_type){
+    	var corr_type_key = "car_vehicle";
+    	var vehicleTypes = initializeService.getSlotsTypes();
+    	for(var i = 0; i < vehicleTypes.length; i++){
+    		if(vehicleTypes[i].name == car_type){
+    			corr_type_key = vehicleTypes[i].language_key;
+    		}
+    	}
+    	return corr_type_key;
+    };
+    
+    $scope.manageVehicleTypes = function(type){
+    	var corrConfigurationType = initializeService.getSlotConfigurationByType(type);
+    	return corrConfigurationType;
+    };
+    
+    $scope.manageVehicleTypesPs = function(type){
+    	var corrConfigurationType = initializeService.getSlotConfigurationByTypePs(type);
+    	return corrConfigurationType;
+    };
+    
     $scope.setWidgetUrlParameters = function(){
     	var parameters = "?elements=";
     	if($scope.isAreaVisible()){

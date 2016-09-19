@@ -1604,7 +1604,7 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 		}
 		$timeout(function(){ 
 			$window.location.href = "/metroparco/error";
-		}, 2000);
+		}, 6000);
 	};
 	
 	// ----- End of part for functions shared between controllers  -------------------------------------
@@ -1692,7 +1692,6 @@ pm.factory('invokeWSService', function($http, $q, $window, sharedDataService) {
 			      window.location = "/login";
 			      return;
 			    }
-				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else {
@@ -1733,10 +1732,8 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else if(method == 'GET' && params != null){
@@ -1747,10 +1744,8 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else {
@@ -1761,10 +1756,8 @@ pm.factory('invokeWSServiceNS', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
-				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		}
@@ -1853,7 +1846,6 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				if(typeof data === 'string'){
 					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
 						sharedDataService.sessionTimeOutNotifier();
@@ -1864,7 +1856,6 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 					deferred.resolve(data);
 				}
 			}).error(function(data) {
-				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else if(method == 'GET' && params != null){
@@ -1875,7 +1866,6 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				if(typeof data === 'string'){
 					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
 						sharedDataService.sessionTimeOutNotifier();
@@ -1886,7 +1876,6 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 					deferred.resolve(data);
 				}
 			}).error(function(data) {
-				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		} else {
@@ -1897,7 +1886,6 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				if(typeof data === 'string'){
 					if(data.indexOf(sharedDataService.getErrConstant()) != -1){
 						sharedDataService.sessionTimeOutNotifier();
@@ -1908,7 +1896,6 @@ pm.factory('invokeAuxWSService', function($http, $q, sharedDataService) {
 					deferred.resolve(data);
 				}
 			}).error(function(data) {
-				//console.log("Returned data FAIL: " + JSON.stringify(data));
 				deferred.resolve(data);
 			});
 		}
@@ -1928,7 +1915,6 @@ pm.factory('invokeDashboardWSServiceNS', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -1942,7 +1928,6 @@ pm.factory('invokeDashboardWSServiceNS', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -1956,7 +1941,6 @@ pm.factory('invokeDashboardWSServiceNS', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -1970,7 +1954,6 @@ pm.factory('invokeDashboardWSServiceNS', function($http, $q) {
 pm.factory('invokeWSServiceProxy', function($http, $q) {
 	var getProxy = function(method, funcName, params, headers, data){
 		var deferred = $q.defer();
-		
 		//var url = 'http://localhost:8080/service.epu/';
 		//var urlWS = url + funcName;
 		var urlWS = funcName;
@@ -1982,8 +1965,6 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 			};
 			urlWS = urlWS.substring(0, urlWS.length - 1); // I remove the last '&'
 		}
-		//console.log("Proxy Service: url completo " + urlWS);
-		
 		if(method == 'GET' && params != null){
 			$http({
 				method : method,
@@ -1993,7 +1974,6 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				},
 				headers : headers
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -2008,7 +1988,6 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				},
 				headers : headers
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -2024,7 +2003,6 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -2040,7 +2018,6 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				headers : headers,
 				data : data
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -2055,7 +2032,6 @@ pm.factory('invokeWSServiceProxy', function($http, $q) {
 				},
 				headers : headers
 			}).success(function(data) {
-				//console.log("Returned data ok: " + JSON.stringify(data));
 				deferred.resolve(data);
 			}).error(function(data) {
 				console.log("Returned data FAIL: " + JSON.stringify(data));
@@ -2078,7 +2054,6 @@ pm.factory('invokePdfServiceProxy', function($http, $q, sharedDataService) {
 			headers : headers,
 			data : data
 		}).success(function(data) {
-			//console.log("Returned data ok: " + JSON.stringify(data));
 			if(typeof data === 'string'){
 				if(data.indexOf(sharedDataService.getErrConstant()) != -1){
 					sharedDataService.sessionTimeOutNotifier();
@@ -2095,20 +2070,4 @@ pm.factory('invokePdfServiceProxy', function($http, $q, sharedDataService) {
 		return deferred.promise;
 	};
 	return {getProxy : getProxy};
-});
-pm.factory('checkSession', function($http, $q, $interval, invokeDashboardWSService, sharedDataService) {
-	//var timeIntervalMillis = 10000;
-	
-	var checkSessionActive = function(){
-		//$interval(function() {
-			var method = 'GET';
-			var myDataPromise = invokeDashboardWSService.getProxy(method, "session", null, sharedDataService.getAuthHeaders(), null);
-			myDataPromise.then(function(result){
-				console.log("check session result " + result)
-			});
-			return myDataPromise;
-		//}, timeIntervalMillis);
-	};
-	
-	return {checkSessionActive : checkSessionActive};
 });

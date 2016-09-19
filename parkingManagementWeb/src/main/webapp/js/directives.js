@@ -79,115 +79,37 @@ pm.directive('mypopovercreate', function ($compile,$templateCache) {
 	    }
 	};
 });
-pm.directive('mypopoverpay', function ($compile,$templateCache) {
+pm.directive('mySessionCheck', ['$interval', 'dateFilter', 'utilsService',
+                                function($interval, dateFilter, utilsService) {
+    // return the directive link function. (compile function not needed)
+    return function(scope, element, attrs) {
+      var format,  // date format
+          stopCheck; // so that we can cancel the time updates
 
-	var getTemplate = function (contentType) {
-	    var template = '';
-	    switch (contentType) {
-	        case 'user':
-	            template = $templateCache.get("templatePay.html");
-	            break;
-	    }
-	    return template;
-	};
-	return {
-	    restrict: "A",
-	    link: function (scope, element, attrs) {
-	        var popOverContent;
-	      
-	        popOverContent = getTemplate("user");                  
-	        
-	        var options = {
-	            content: popOverContent,
-	            placement: "top",
-	            html: true,
-	            date: scope.date
-	        };
-	        $(element).popover(options);
-	    }
-	};
-});
-pm.directive('mypopovercons', function ($compile,$templateCache) {
+      // used to update the UI
+      function updateCheck() {
+        element.text(dateFilter(new Date(), format));
+        utilsService.checkSessionActive();
+        //var sessionOk = utilsService.checkSessionActive();
+        //sessionOk.then(function(result){
+        //})
+      }
 
-	var getTemplate = function (contentType) {
-	    var template = '';
-	    switch (contentType) {
-	        case 'user':
-	            template = $templateCache.get("templateCons.html");
-	            break;
-	    }
-	    return template;
-	};
-	return {
-	    restrict: "A",
-	    link: function (scope, element, attrs) {
-	        var popOverContent;
-	      
-	        popOverContent = getTemplate("user");                  
-	        
-	        var options = {
-	            content: popOverContent,
-	            placement: "top",
-	            html: true,
-	            date: scope.date
-	        };
-	        $(element).popover(options);
-	    }
-	};
-});
-pm.directive('mypopoverclassprovv', function ($compile,$templateCache) {
+      // watch the expression, and update the UI on change.
+      scope.$watch(attrs.myCurrentTime, function(value) {
+        format = value;
+        updateCheck();
+      });
 
-	var getTemplate = function (contentType) {
-	    var template = '';
-	    switch (contentType) {
-	        case 'user':
-	            template = $templateCache.get("templateClassProvv.html");
-	            break;
-	    }
-	    return template;
-	};
-	return {
-	    restrict: "A",
-	    link: function (scope, element, attrs) {
-	        var popOverContent;
-	      
-	        popOverContent = getTemplate("user");                  
-	        
-	        var options = {
-	            content: popOverContent,
-	            placement: "top",
-	            html: true,
-	            date: scope.date
-	        };
-	        $(element).popover(options);
-	    }
-	};
-});
-pm.directive('mypopoverclassfinal', function ($compile,$templateCache) {
+      stopCheck = $interval(updateCheck, 30000);	// half minute
 
-	var getTemplate = function (contentType) {
-	    var template = '';
-	    switch (contentType) {
-	        case 'user':
-	            template = $templateCache.get("templateClassFinal.html");
-	            break;
-	    }
-	    return template;
-	};
-	return {
-	    restrict: "A",
-	    link: function (scope, element, attrs) {
-	        var popOverContent;
-	      
-	        popOverContent = getTemplate("user");                  
-	        
-	        var options = {
-	            content: popOverContent,
-	            placement: "top",
-	            html: true,
-	            date: scope.date
-	        };
-	        $(element).popover(options);
-	    }
-	};
-});
+      // listen on DOM destroy (removal) event, and cancel the next UI update
+      // to prevent updating time after the DOM element was removed.
+      element.on('$destroy', function() {
+        $interval.cancel(stopCheck);
+      });
+    }
+  }]);
+
+
+

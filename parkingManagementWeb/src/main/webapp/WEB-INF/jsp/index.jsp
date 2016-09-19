@@ -115,6 +115,7 @@ function getJSessionId(){
 </head>
 <body>
 	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()"><!-- ng-init="setItalianLanguage()" -->
+    <div my-session-check> </div>
     <div id="my-big-menu" class="navbar navbar-fixed-top navbar-inverse" role="navigation">
       <div class="container-fluid" style="margin-left:160px; margin-right:160px">
         <div class="collapse navbar-collapse">

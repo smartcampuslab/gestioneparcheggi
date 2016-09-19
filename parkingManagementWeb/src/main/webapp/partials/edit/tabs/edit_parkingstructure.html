@@ -134,7 +134,7 @@
 															<td width="45%"><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
 															<td width="55%">{{ ps.data.slotNumber }}</td>
 														</tr>
-														<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in ps.data.slotsConfiguration">
+														<tr ng-show="psconf.ps_slotNumber.visible" ng-repeat="sc in ps.data.slotsConfiguration">
 												    		<td colspan="2" ng-show="sc.vehicleTypeActive">
 												    			<table frame="box" width="100%" >
 												    				<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_slotNum.visible">

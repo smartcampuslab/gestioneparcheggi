@@ -282,8 +282,8 @@ pm.controller('TimeFilterCtrl',['$scope', '$route', '$rootScope','$filter', 'loc
 
 }]);
 
-pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'initializeService', 'utilsService', 'gMapService', 'areaService', 'zoneService', 'bikePointService', 'parkingMeterService', 'structureService', 'streetService', '$timeout', '$q', '$interval', 
-                               function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, initializeService, utilsService, gMapService, areaService, zoneService, bikePointService, parkingMeterService, structureService, streetService, $timeout, $q, $interval, $location, $filter) {
+pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$dialogs', 'sharedDataService', 'initializeService', 'utilsService', 'gMapService', 'areaService', 'zoneService', 'bikePointService', 'parkingMeterService', 'structureService', 'streetService', '$timeout', '$q', 
+                               function($scope, $http, $route, $routeParams, $rootScope, localize, $dialogs, sharedDataService, initializeService, utilsService, gMapService, areaService, zoneService, bikePointService, parkingMeterService, structureService, streetService, $timeout, $q, $location, $filter) {
 
 	$scope.disableThemes = false;	//Used to disable/enable themes buttons selection
 	$scope.showLogs = false;
@@ -6962,19 +6962,6 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	};
 
 	//------------------------------ end of legend part -------------------------------------
-	
-	//$scope.checkJSESSIONID = function(){
-    	//var x = document.cookies;
-    	//var globals = $cookies['JSESSIONID'];	//('JSESSIONID') || {};
-    //	var myDataPromise = utilsService.checkSessionActive();
-    //	myDataPromise.then(function(result){
-	//		if(result != "OK"){
-	//			console.log("Popup for invalid session!");
-	//		}
-	//	});
-    //};
-    //$interval($scope.checkJSESSIONID(), 5000);
-	
 
 }]);
 
