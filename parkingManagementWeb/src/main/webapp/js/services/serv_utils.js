@@ -2,7 +2,7 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('utilsService', [ 'sharedDataService', 'invokeDashboardWSService' ,function( sharedDataService, invokeDashboardWSService ){
+pm.service('utilsService', [ 'sharedDataService', 'invokeDashboardWSService', 'invokeDashboardWSServiceNS' ,function( sharedDataService, invokeDashboardWSService, invokeDashboardWSServiceNS ){
 	
 	// Method correctAreaObjectForWS: used to covert the areaWS list in a List of RateArea objects to invoke the specific WS
 	this.correctAreaObjectForWS = function(list){

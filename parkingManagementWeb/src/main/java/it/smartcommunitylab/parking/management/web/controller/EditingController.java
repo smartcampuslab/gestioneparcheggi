@@ -44,7 +44,11 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
+
 @Controller
+@Api(value = "Metroparco", description = "Metroparco objects API")
 public class EditingController {
 
 	@Autowired
@@ -360,6 +364,7 @@ public class EditingController {
 	
 	// Method open to get all streets
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/street")
+	@ApiOperation(value = "Get Streets", notes = "Returns streets park items")
 	public @ResponseBody
 	List<StreetBean> getAllStreetsNS(@PathVariable("appId") String appId) {
 		return storage.getAllStreets(appId);
@@ -367,6 +372,7 @@ public class EditingController {
 		
 	// Method open to get a single street
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/street/{streetId}")
+	@ApiOperation(value = "Get Street", notes = "Returns a single street park item")
 	public @ResponseBody
 	StreetBean getStreetByIdNS(@PathVariable("appId") String appId, @PathVariable("streetId") String streetId) {
 		return storage.findStreet(streetId);
@@ -374,6 +380,7 @@ public class EditingController {
 	
 	// Method open to get all parkingMeters
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingmeter")
+	@ApiOperation(value = "Get ParkingMeters", notes = "Returns parking meter items")
 	public @ResponseBody
 	List<ParkingMeterBean> getAllParkingMetersNS(@PathVariable("appId") String appId) {
 		return storage.getAllParkingMeters(appId);
@@ -381,6 +388,7 @@ public class EditingController {
 	
 	// Method open to get all parkingMeters
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingmeter/{pmId}")
+	@ApiOperation(value = "Get ParkingMeter", notes = "Returns a single parking meter item")
 	public @ResponseBody
 	ParkingMeterBean getParkingMetersNS(@PathVariable("appId") String appId, @PathVariable("pmId") String pmId) {
 		return storage.findParkingMeter(pmId, appId);
@@ -388,6 +396,7 @@ public class EditingController {
 	
 	// Method open to get all area objects
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area")
+	@ApiOperation(value = "Get Areas", notes = "Returns area items")
 	public @ResponseBody
 	List<RateAreaBean> getAllRateAreaNS(@PathVariable("appId") String appId) {
 		return storage.getAllArea(appId);
@@ -395,6 +404,7 @@ public class EditingController {
 		
 	// Method open to get a single area object
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area/{aid}")
+	@ApiOperation(value = "Get Area", notes = "Return a single area item")
 	public @ResponseBody
 	RateAreaBean getRateAreaNS(@PathVariable("appId") String appId,
 			@PathVariable("aid") String aid) throws NotFoundException {
@@ -403,6 +413,7 @@ public class EditingController {
 	
 	// Method open to get all zones
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone")
+	@ApiOperation(value = "Get Zones", notes = "Return zone items")
 	public @ResponseBody
 	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId) {
 		return storage.getAllZone(appId);
@@ -410,6 +421,7 @@ public class EditingController {
 	
 	// Method open to get a single zone
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/id/{zId}")
+	@ApiOperation(value = "Get Zone", notes = "Return a single zone item")
 	public @ResponseBody
 	ZoneBean getZoneNS(@PathVariable("appId") String appId, @PathVariable("zId") String zId) {
 		return storage.findZoneById(zId, appId);
@@ -417,6 +429,7 @@ public class EditingController {
 	
 	// Method open to get all zones of a specific type
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/{zType}")
+	@ApiOperation(value = "Get Zones by type", notes = "Return zone items of specific type")
 	public @ResponseBody
 	List<ZoneBean> getAllZoneByTypeNS(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
 		logger.debug("passed params: " + appId + ", " + type);
@@ -429,6 +442,7 @@ public class EditingController {
 	
 	// Method open to get all bike points
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/bikepoint")
+	@ApiOperation(value = "Get Bikepoints", notes = "Return bike point items")
 	public @ResponseBody
 	List<BikePointBean> getAllBikePointsNS(@PathVariable("appId") String appId) {
 		return storage.getAllBikePoints(appId);
@@ -436,6 +450,7 @@ public class EditingController {
 	
 	// Method open to get a single bike point
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/bikepoint/{pbid}")
+	@ApiOperation(value = "Get Bikepoint", notes = "Return a single bike point item")
 	public @ResponseBody
 	BikePointBean getBikePointNS(@PathVariable("appId") String appId,
 			@PathVariable("pbid") String pbid) throws NotFoundException {
@@ -444,6 +459,7 @@ public class EditingController {
 	
 	// Method open to retrieve all parking structure
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingstructure")
+	@ApiOperation(value = "Get Parkingstructures", notes = "Return parking structure items")
 	public @ResponseBody
 	List<ParkingStructureBean> getAllParkingStructureNS(@PathVariable("appId") String appId) {
 		return storage.getAllParkingStructure(appId);
@@ -451,6 +467,7 @@ public class EditingController {
 	
 	// Method open to retrieve all parking structure
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingstructure/{psId}")
+	@ApiOperation(value = "Get Parkingstructure", notes = "Return a single parking structure item")
 	public @ResponseBody
 	ParkingStructureBean getParkingStructureNS(@PathVariable("appId") String appId, @PathVariable("psId") String psId) {
 		return storage.getParkingStructureById(psId, appId);
