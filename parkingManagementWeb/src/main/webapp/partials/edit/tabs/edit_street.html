@@ -7,36 +7,67 @@
      				<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
 						<div ng-non-bindable="">
 							<div id="siteNotice"></div>
-						    <h4 id="firstHeading" class="firstHeading"><span ng-show="sconf.s_streetRef.visible">{{ s.data.streetReference }}</span></h4>
+						    <h4 id="firstHeading" class="firstHeading">
+						    	<span ng-show="sconf.s_streetRef.visible">{{ s.data.streetReference }}</span>
+						    </h4>
 							<div id="bodyContent">
 							    <table>
-							        <tr ng-show="sconf.s_slotNum.visible">
+							    	<tr ng-show="sconf.s_slotNum.visible">
 							        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
 							        	<td>&nbsp;{{ s.data.slotNumber }}</td>
 							   		</tr>
-									<tr ng-show="sconf.s_handicappedSlot.visible">
-							    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_reservedSlot.visible">
-							    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.reservedSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_paidSlot.visible">
-							    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.paidSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_timedSlot.visible">
-							    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_freeSlot.visible">
-							    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_unusuableSlot.visible">
-							    		<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
+							    	<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in s.data.slotsConfiguration">
+							    		<td colspan="2" ng-show="sc.vehicleTypeActive">
+							    			<table frame="box" width="100%" >
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+							    					<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+							    				</tr>
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+										        	<td width="70%"><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
+										        	<td width="30%">&nbsp;{{ sc.slotNumber }}</td>
+										   		</tr>
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+										    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+										    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.reservedSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+										    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.paidSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+										    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+										    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+										    		<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+										    		<td><strong>{{ 'street_rechargeable_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.rechargeableSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+										    		<td><strong>{{ 'street_loading_unloading_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+										    		<td><strong>{{ 'street_pink_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.pinkSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+										    		<td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
+										    	</tr>
+							    			</table>
+							    		</td>	
 							    	</tr>
 							    	<tr ng-show="sconf.s_subscrition.visible">
 							    		<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
@@ -51,7 +82,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="p in s.pms track by p.code">
+												<tr ng-repeat="p in s.data.pms track by p.code">
 													<td width="30%">{{ p.code }}</td>
 													<td width="70%">{{ p.note }}</td>
 												</tr>
@@ -64,7 +95,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z0 in s.zones0 track by z0.id">
+												<tr ng-repeat="z0 in s.data.zones0 track by z0.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 													<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 												</tr>
@@ -77,7 +108,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z1 in s.zones1 track by z1.id">
+												<tr ng-repeat="z1 in s.data.zones1 track by z1.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 													<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 												</tr>
@@ -90,7 +121,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z2 in s.zones2 track by z2.id">
+												<tr ng-repeat="z2 in s.data.zones2 track by z2.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 													<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 												</tr>
@@ -103,7 +134,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z3 in s.zones3 track by z3.id">
+												<tr ng-repeat="z3 in s.data.zones3 track by z3.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 													<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 												</tr>
@@ -116,7 +147,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z4 in s.zones4 track by z4.id">
+												<tr ng-repeat="z4 in s.data.zones4 track by z4.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 													<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 												</tr>
@@ -131,29 +162,49 @@
 													<table width="100%">
 														<tr>
 															<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-															<td width="55%">{{ s.area.name }}</td>
+															<td width="55%">{{ s.data.area.name }}</td>
 														</tr>
 														<tr>	
 															<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-															<td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+															<!-- <td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+															<td>
+																<div ng-repeat="r in s.data.area.validityPeriod">
+																	<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+																	<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+																	<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+																	<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+																	<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+																</div>
+															</td>
 														</tr>
-														<tr>	
+														<!-- <tr>	
 															<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 															<td>{{ s.area.timeSlot }}</td>
-														</tr>
+														</tr> -->
 														<tr>	
 															<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-															<td>{{ s.area.smsCode }}</td>
+															<td>{{ s.data.area.smsCode }}</td>
 														</tr>
 														<tr>	
 															<td><strong>{{ 'area_color' | i18n }}</strong></td>
-															<td><span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span></td>
+															<td><span class="colorBox" ng-style="{'background-color': correctColor(s.data.area.color)}"></span></td>
 														</tr>
 													</table>
 												</div>
 											</div>	
 							        	</td>
 							        </tr>
+							        <tr>
+										<td colspan="2" align="right">
+											<hr/>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" class="info_window_buttons">
+											<a href ng-show="(streetPermissions >= 2) && isMyAgency(s.data.agencyId)" type="button" class="btn btn-primary" ng-click="setSEdit(s.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a href ng-show="(streetPermissions >= 3) && isMyAgency(s.data.agencyId)" type="button" class="btn btn-danger" ng-click="setSRemove(s.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+										</td>
+									</tr>
 							    </table>
 							</div>
 						</div>
@@ -165,40 +216,67 @@
      				<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
 						<div ng-non-bindable="">
 							<div id="siteNotice"></div>
-						    <h4 id="firstHeading" class="firstHeading"><span ng-show="sconf.s_streetRef.visible">{{ s.data.streetReference }}</span></h4>
+						    <h4 id="firstHeading" class="firstHeading">
+						    	<span ng-show="sconf.s_streetRef.visible">{{ s.data.streetReference }}</span>
+						    </h4>
 							<div id="bodyContent">
 							    <table>
 							        <tr ng-show="sconf.s_slotNum.visible">
 							        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
 							        	<td>&nbsp;{{ s.data.slotNumber }}</td>
 							   		</tr>
-									<tr ng-show="sconf.s_handicappedSlot.visible">
-							    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.handicappedSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_reservedSlot.visible">
-							    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.reservedSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_paidSlot.visible">
-							    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.paidSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_timedSlot.visible">
-							    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.timedParkSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_freeSlot.visible">
-							    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.freeParkSlotNumber }}</td>
-							    	</tr>
-							    	<tr ng-show="sconf.s_freeSlotSign.visible">	
-										<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
-										<td>&nbsp;{{  s.data.freeParkSlotSignNumber }}</td>
-									</tr>
-							    	<tr ng-show="sconf.s_unusuableSlot.visible">
-							    		<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
-							    		<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
+									<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in s.data.slotsConfiguration">
+							    		<td colspan="2" ng-show="sc.vehicleTypeActive">
+							    			<table frame="box" width="100%" >
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+							    					<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+							    				</tr>
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+										        	<td width="70%"><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
+										        	<td width="30%">&nbsp;{{ sc.slotNumber }}</td>
+										   		</tr>
+							    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+										    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+										    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.reservedSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+										    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.paidSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+										    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+										    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+										    		<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+										    		<td><strong>{{ 'street_rechargeable_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.rechargeableSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+										    		<td><strong>{{ 'street_loading_unloading_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+										    		<td><strong>{{ 'street_pink_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.pinkSlotNumber }}</td>
+										    	</tr>
+										    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+										    		<td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
+										    		<td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
+										    	</tr>
+							    			</table>
+							    		</td>	
 							    	</tr>
 							    	<tr ng-show="sconf.s_subscrition.visible">
 							    		<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
@@ -213,7 +291,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="p in s.pms track by p.code">
+												<tr ng-repeat="p in s.data.pms track by p.code">
 													<td width="30%">{{ p.code }}</td>
 													<td width="70%">{{ p.note }}</td>
 												</tr>
@@ -226,7 +304,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z0 in s.zones0 track by z0.id">
+												<tr ng-repeat="z0 in s.data.zones0 track by z0.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 													<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 												</tr>
@@ -239,7 +317,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z1 in s.zones1 track by z1.id">
+												<tr ng-repeat="z1 in s.data.zones1 track by z1.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 													<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 												</tr>
@@ -252,7 +330,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z2 in s.zones2 track by z2.id">
+												<tr ng-repeat="z2 in s.data.zones2 track by z2.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 													<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 												</tr>
@@ -265,7 +343,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z3 in s.zones3 track by z3.id">
+												<tr ng-repeat="z3 in s.data.zones3 track by z3.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 													<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 												</tr>
@@ -278,7 +356,7 @@
 										</td>
 										<td>
 											<table width="100%">
-												<tr ng-repeat="z4 in s.zones4 track by z4.id">
+												<tr ng-repeat="z4 in s.data.zones4 track by z4.id">
 													<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 													<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 												</tr>
@@ -293,29 +371,49 @@
 													<table width="100%">
 														<tr>
 															<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-															<td width="55%">{{ s.area.name }}</td>
+															<td width="55%">{{ s.data.area.name }}</td>
 														</tr>
 														<tr>	
 															<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-															<td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
+															<!-- <td>{{ s.area.fee | euroVal }} {{ 'euro_hour' | i18n }}</td> -->
+															<td>
+																<div ng-repeat="r in s.data.area.validityPeriod">
+																	<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+																	<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+																	<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+																	<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+																	<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+																</div>
+															</td>
 														</tr>
-														<tr>	
+														<!-- <tr>	
 															<td><strong>{{ 'area_time' | i18n }}:</strong></td>
 															<td>{{ s.area.timeSlot }}</td>
-														</tr>
+														</tr> -->
 														<tr>	
 															<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-															<td>{{ s.area.smsCode }}</td>
+															<td>{{ s.data.area.smsCode }}</td>
 														</tr>
 														<tr>	
 															<td><strong>{{ 'area_color' | i18n }}</strong></td>
-															<td><span class="colorBox" ng-style="{'background-color': correctColor(s.area.color)}"></span></td>
+															<td><span class="colorBox" ng-style="{'background-color': correctColor(s.data.area.color)}"></span></td>
 														</tr>
 													</table>
 												</div>
 											</div>	
 							        	</td>
 							        </tr>
+							        <tr>
+										<td colspan="2" align="right">
+											<hr/>
+										</td>
+									</tr>
+									<tr>
+										<td colspan="2" class="info_window_buttons">
+											<a href ng-show="(streetPermissions >= 2) && isMyAgency(s.data.agencyId)" type="button" class="btn btn-primary" ng-click="setSEdit(s.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+											<a href ng-show="(streetPermissions >= 3) && isMyAgency(s.data.agencyId)" type="button" class="btn btn-danger" ng-click="setSRemove(s.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
+										</td>
+									</tr>
 							    </table>
 							</div>
 						</div>
@@ -329,7 +427,7 @@
 					<table width="100%">
 						<tr>
 							<td align="left"><h5 class="panel-title">{{ 'street_list' | i18n }}</h5></td>
-							<td align="right"><button type="button" class="btn btn-success" ng-click="setSEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+							<td align="right"><button ng-show="streetPermissions >= 3" type="button" class="btn btn-success" ng-click="setSEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
 						</tr>
 					</table>
 				</div>
@@ -338,14 +436,23 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="streetWS.length != 0">
-								<th width="35%" ng-show="sconf.s_streetRef.visible">{{ 'street_name' | i18n }}&nbsp;
+								<th width="5%">
+									<a href ng-click="showAgencySFilter();currentPageS=0" ng-show="!showAgencyStreetFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="agencyStreetFilter=null;hideAgencySFilter()" ng-show="showAgencyStreetFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+									<div ng-show="showAgencyStreetFilter">
+						    			<select id="f_agency_street" class="form-control" ng-model="agencyStreetFilter">
+						    				<option ng-repeat="a in allAgencyFilter" value="{{a.id}}" >{{ a.name }}</option>
+						    			</select>
+						    		</div>
+								</th>
+								<th width="30%" ng-show="sconf.s_streetRef.visible">{{ 'street_name' | i18n }}&nbsp;
 									<a href ng-click="showStreetNameFilter();currentPageS = 0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showStreetFilter">
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageS = 0" />
 						    		</div>
 								</th>
-								<th width="15%" ng-show="sconf.s_slotNum.visible">{{ 'street_slots' | i18n }}</th>
+								<th width="5%" ng-show="sconf.s_slotNum.visible">{{ 'street_slots' | i18n }}</th>
 								<th width="30%" colspan="2" ng-show="sconf.s_areaId.visible">
 									{{ 'street_area_name' | i18n }}&nbsp;
 									<a href ng-click="showAreaFilter();currentPageS=0" ng-show="!showAreaStreetFilter" alt="{{ 'filter_area_title' | i18n }}" title="{{ 'filter_area_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -354,22 +461,24 @@
 						    			<select id="f_street_area" class="form-control" ng-model="streetAreaFilter">
 						    				<option ng-repeat="a in allAreaFilter" value="{{a.id}}" ng-style="{'color': correctColor(a.color)}" >{{ a.name }}</option><!-- ng-style="{'background-color': correctColor(a.color)}" -->
 						    			</select>
-						    		</div>	
+						    		</div>
 						    	</th>
-								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
+								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
-								ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter) | orderBy:['name', 'area_name'] | startFrom:currentPageS*maxStreets | limitTo:maxStreets">
-					<!-- 							ng-repeat="practice in practices | filter:q | orderBy:'-openingDate' | startFrom:currentPageS*maxPractices | limitTo:maxPractices"> -->
+								ng-repeat="street in filtered = (streetWS | filter:nameFilter | filter:streetAreaFilter | filter:agencyStreetFilter) | orderBy:['name', 'area.name'] | startFrom:currentPageS*maxStreets | limitTo:maxStreets">
 								<tr>
-									<td width="35%" align="left" ng-show="sconf.s_streetRef.visible">{{street.streetReference}}</td>
-									<td width="15%" align="left" ng-show="sconf.s_slotNum.visible">{{street.slotNumber}}</td>
-									<td width="5%" align="center" ng-show="sconf.s_areaId.visible"><div class="colorBox" ng-style="{'background-color': correctColor(street.area_color)}"></div></td><!-- {{area.color}} -->
-									<td width="25%" align="center" ng-show="sconf.s_areaId.visible">{{street.area_name}}</td>
-									<td width="20%" align="center">
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-										<a href type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+									<td align="left">
+										<span ng-show="isMyAgency(street.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
+									</td>
+									<td align="left" ng-show="sconf.s_streetRef.visible">{{street.streetReference}}</td>
+									<td align="left" ng-show="sconf.s_slotNum.visible">{{street.slotNumber}}</td>
+									<td align="center" ng-show="sconf.s_areaId.visible"><div class="colorBox" ng-style="{'background-color': correctColor(street.area.color)}"></div></td>
+									<td align="center" ng-show="sconf.s_areaId.visible">{{street.area.name}}</td>
+									<td align="center">
+										<a href ng-show="(streetPermissions >= 1) || !isMyAgency(street.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setSDetails(street)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+										<a href ng-show="(streetPermissions >= 2) && isMyAgency(street.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setSEdit(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+										<a href ng-show="(streetPermissions >= 2) && isMyAgency(street.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setSRemove(street)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 									</td>
 								</tr>
 							</tbody>
@@ -403,7 +512,64 @@
 							<td class="detailsViewStreetSX">{{ 'street_totalslot' | i18n }}:</td>
 							<td class="detailsViewStreetDX">{{ viewStreet.slotNumber }}</td>
 						</tr>
-						<tr ng-show="sconf.s_handicappedSlot.visible">	
+						<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in viewStreet.slotsConfiguration">
+							<td colspan="2" ng-show="sc.vehicleTypeActive" >
+								<table frame="box" width="100%">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+							    		<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+							    	</tr>
+							    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+							        	<td class="detailsViewStreetSX">{{ 'street_totalslot' | i18n }}:</td>
+						        		<td class="detailsViewStreetDX">&nbsp;{{ sc.slotNumber }}</td>
+							   		</tr>
+							    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.handicappedSlotNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_reserved_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.reservedSlotNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_paidpark_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.paidSlotNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.timedParkSlotNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_freepark_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.freeParkSlotNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+										<td class="detailsViewStreetSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_rechargeable_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.rechargeableSlotNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible.s_freeSlot.visible && sc.pinkSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_pink_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.pinkSlotNumber }}</td>
+									</tr>
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible.s_freeSlot.visible && sc.carSharingSlotNumber">
+										<td class="detailsViewStreetSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.carSharingSlotNumber }}</td>
+									</tr>
+									<!-- <tr ng-show="sconf.s_unusuableSlot.visible">
+										<td class="detailsViewStreetSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+										<td class="detailsViewStreetDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
+									</tr> -->
+							    </table>
+							</td>	
+						</tr>
+						<!-- <tr ng-show="sconf.s_handicappedSlot.visible">	
 							<td class="detailsViewStreetSX">{{ 'street_handicapped_slot' | i18n }}:</td>
 							<td class="detailsViewStreetDX">{{ viewStreet.handicappedSlotNumber }}</td>
 						</tr>
@@ -430,7 +596,7 @@
 						<tr ng-show="sconf.s_unusuableSlot.visible">	
 							<td class="detailsViewStreetSX">{{ 'street_unusuable_slot' | i18n }}:</td>
 							<td class="detailsViewStreetDX">{{ viewStreet.unusuableSlotNumber }}</td>
-						</tr>
+						</tr> -->
 						<tr ng-show="sconf.s_subscrition.visible">	
 							<td class="detailsViewStreetSX">{{ 'street_subscription_allowed' | i18n }}:</td>
 							<td class="detailsViewStreetDX">
@@ -448,7 +614,7 @@
 							</td>
 							<td class="detailsViewStreetDX">
 								<table width="100%">
-									<tr ng-repeat="p in viewStreet.myPms track by p.code">
+									<tr ng-repeat="p in viewStreet.pms track by p.code">
 										<td width="15%">{{ p.code }}</td>
 										<td width="85%">{{ p.note }}</td>
 									</tr>
@@ -461,7 +627,7 @@
 							</td>
 							<td class="detailsViewStreetDX">
 								<table width="100%">
-									<tr ng-repeat="z0 in viewStreet.myZones0 track by z0.id">
+									<tr ng-repeat="z0 in viewStreet.zones0 track by z0.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 										<td width="85%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 									</tr>
@@ -474,7 +640,7 @@
 							</td>
 							<td class="detailsViewStreetDX">
 								<table width="100%">
-									<tr ng-repeat="z1 in viewStreet.myZones1 track by z1.id">
+									<tr ng-repeat="z1 in viewStreet.zones1 track by z1.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 										<td width="85%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 									</tr>
@@ -487,7 +653,7 @@
 							</td>
 							<td class="detailsViewStreetDX">
 								<table width="100%">
-									<tr ng-repeat="z2 in viewStreet.myZones2 track by z2.id">
+									<tr ng-repeat="z2 in viewStreet.zones2 track by z2.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 										<td width="85%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 									</tr>
@@ -500,7 +666,7 @@
 							</td>
 							<td class="detailsViewStreetDX">
 								<table width="100%">
-									<tr ng-repeat="z3 in viewStreet.myZones3 track by z3.id">
+									<tr ng-repeat="z3 in viewStreet.zones3 track by z3.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 										<td width="85%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 									</tr>
@@ -513,7 +679,7 @@
 							</td>
 							<td class="detailsViewStreetDX">
 								<table width="100%">
-									<tr ng-repeat="z4 in viewStreet.myZones4 track by z4.id">
+									<tr ng-repeat="z4 in viewStreet.zones4 track by z4.id">
 										<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 										<td width="85%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 									</tr>
@@ -532,23 +698,27 @@
 						</tr>
 						<tr ng-show="sconf.s_areaId.visible">
 							<td class="detailsViewStreetSX">{{ 'area_name' | i18n }}:</td>
-							<td class="detailsViewStreetDX">{{ myArea.name }}</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.area.name }}</td>
 						</tr>
 						<tr ng-show="sconf.s_areaId.visible">	
 							<td class="detailsViewStreetSX">{{ 'area_rate' | i18n }}:</td>
-							<td class="detailsViewStreetDX">{{ myArea.fee | euroVal }} {{ 'euro_hour' | i18n }}</td>
-						</tr>
-						<tr ng-show="sconf.s_areaId.visible">	
-							<td class="detailsViewStreetSX">{{ 'area_time' | i18n }}:</td>
-							<td class="detailsViewStreetDX">{{ myArea.timeSlot }}</td>
+							<td class="detailsViewStreetDX">
+								<div ng-repeat="r in viewStreet.area.validityPeriod">
+									<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+									<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+									<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+									<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+									<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+								</div>
+							</td>	
 						</tr>
 						<tr ng-show="sconf.s_areaId.visible">	
 							<td class="detailsViewStreetSX">{{ 'area_sms' | i18n }}:</td>
-							<td class="detailsViewStreetDX">{{ myArea.smsCode }}</td>
+							<td class="detailsViewStreetDX">{{ viewStreet.area.smsCode }}</td>
 						</tr>
 						<tr ng-show="sconf.s_areaId.visible">	
 							<td class="detailsViewStreetSX">{{ 'area_color' | i18n }}</td>
-							<td class="detailsViewStreetDX"><span class="colorBox" ng-style="{'background-color': correctColor(myArea.color)}"></span></td>
+							<td class="detailsViewStreetDX"><span class="colorBox" ng-style="{'background-color': correctColor(viewStreet.area.color)}"></span></td>
 						</tr>
 			   		</table>
 			   		<hr>
@@ -559,7 +729,7 @@
 								<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
 							<td width="15%" align="right">
-								<button type="button" class="btn btn-primary btn-lg" ng-click="setSEdit(viewStreet)">{{ 'text_btn_edit' | i18n  }}</button>
+								<button ng-show="(streetPermissions >= 2) && isMyAgency(viewStreet.agencyId)" type="button" class="btn btn-primary btn-lg" ng-click="setSEdit(viewStreet)">{{ 'text_btn_edit' | i18n  }}</button>
 							</td>
 						</tr>
 					</table>
@@ -575,7 +745,7 @@
 			  		<div class="panel-body">
 			  			<div class="form-group" ng-show="!isEditing && sconf.s_areaId.visible">
 					    	<label for="area1">{{ 'street_area_name' | i18n }}</label>
-					    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea" ng-model="myNewArea" ng-required="!isEditing && sconf.s_areaId.required" ng-change="getAreaPM(myNewArea)">
+					    	<select id="area1" name="sAreaN" class="form-control" ng-options="a as a.name for a in allArea | filter:{ agencyId : agencyId } | orderBy: 'name'" ng-model="myNewArea" ng-required="!isEditing && sconf.s_areaId.required" ng-change="getAreaPM(myNewArea)">
 					    		<option value="">{{ 'street_area_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sAreaN.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
@@ -598,59 +768,201 @@
 					    	<input id="address" type="text" class="form-control" name="sAddress" ng-model="eStreet.streetReference" ng-required="sconf.s_streetRef.required" placeholder="{{ 'street_address_placeholder' | i18n }}" >
 					   		<div class="field-error" ng-show="!isInit && form.sAddress.$error.required">{{ 'street_reference_err_required' | i18n }}</div>
 					   	</div>
-					   	<label for="totalSlot">{{ 'street_slots' | i18n }}</label>
-					   	<div class="panel panel-default subpanel" width="95%">
-					   		<div class="panel-body">
-<!-- 							   	<div class="form-group" ng-show="sconf.s_slotNum.visible"> -->
-<!-- 							    	<label for="totalSlot">{{ 'street_totalslot' | i18n }}</label> -->
-<!-- 							    	<input id="totalSlot" type="text" class="form-control" name="sTotalslot" ng-model="eStreet.slotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_slotNum.required" placeholder="{{ 'street_totalslot_placeholder' | i18n }}" > -->
-<!-- 							    	<div class="field-error" ng-show="!isInit && form.sTotalslot.$error.required">{{ 'street_slots_err_required' | i18n }}</div> -->
-<!-- 							    	<div class="field-error" ng-show="!isInit && form.sTotalslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div> -->
-<!-- 							   	</div> -->
-								<div class="form-group" ng-show="sconf.s_handicappedSlot.visible">
-							    	<label for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
-							    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="eStreet.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
+					   	
+					   	<!-- New Part for Vehicle Slots START -->
+					   	<!-- <div class="form-group" ng-show="sconf.s_handicappedSlot.visible">
+						   	<label for="vehicleType">{{ 'vehicle_type' | i18n }}</label>
+						   	<select class="form-control" id="vehicleType" name="sVehicleType" ng-model="newVehicleList">
+      							<option ng-repeat="nvs in newVehicleList" ng-value="nvs">{{ nvs.language_key | i18n }}</option>
+    						</select>
+    						<select class="form-control" id="vehicleType" name="sVehicleType" ng-model="newSlotsConf.vehicleType" ng-change="reloadConfigurationSlots(newSlotsConf)"
+						      ng-options="nvs.language_key for nvs in newVehicleList">
+						    </select>
+						  	<div class="field-error" ng-show="!isInit && form.sVehicleType.$error.required">{{ 'street_vehicle_type_err_required' | i18n }}</div>
+						</div> -->
+					   	<label>{{ 'street_slots' | i18n }}</label>
+					   	<div class="panel panel-default" ng-repeat="sc in eStreet.slotsConfiguration track by $index" >
+							<div class="panel-heading">
+		    					<table width="100%">
+								<tr>
+									<td width="40%"></td>
+									<td width="20%" align="center"><h3 class="panel-title">{{ getVehicleKey(sc.vehicleType) | i18n }}</h3></td>
+									<td width="30%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed($index)" ng-click="showVehicleSlotsPanel($index)"></span></td>
+									<td width="10%" align="right"><span class="glyphicon glyphicon-trash" ng-click="deleteVehicleTypeSlots(sc, 0)"></span></td>
+								</tr>
+								</table>
+		  					</div>
+		  					<div class="well" ng-show="vehicle_slots_panel_showed($index)"><!-- class="panel-body" -->
+							   	<div class="panel-body">
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible">
+								    	<label for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
+								    	<input id="handicappedSlot" type="text" class="form-control" name="sHandicappedslot" ng-model="sc.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.sHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible">
+								    	<label for="reservedSlot">{{ 'street_reserved_slot' | i18n }}</label>
+								    	<input id="reservedSlot" type="text" class="form-control" name="sReservedslot" ng-model="sc.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible">
+								    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
+								    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="sc.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_timedSlot.required" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible">
+								    	<label for="paidSlot">{{ 'street_paidpark_slot' | i18n }}</label>
+								    	<input id="paidSlot" type="text" class="form-control" name="sPaidslot" ng-model="sc.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sPaidslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.sPaiddslot.$error.required">{{ 'street_paidpark_slots_err_required' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible">
+								    	<label for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
+								    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="sc.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
+								   	</div>
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible">
+									    <label for="freeparkSlotSigned">{{ 'street_freepark_slot_signed' | i18n }}</label>
+									    <input id="freeparkSlotSigned" type="text" class="form-control" name="sFreeparkslotSigned" ng-model="sc.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible">
+									    <label for="rechargeableSlot">{{ 'street_rechargeable_slot' | i18n }}</label>
+									    <input id="rechargeableSlot" type="text" class="form-control" name="sRechargeableslot" ng-model="sc.rechargeableSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.required" placeholder="{{ 'street_rechargeableslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sRechargeableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.sRechargeableslot.$error.required">{{ 'street_rechargeable_slots_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible">
+									    <label for="loadingUnloadingSlot">{{ 'street_loading_unloading_slot' | i18n }}</label>
+									    <input id="loadingUnloadingSlot" type="text" class="form-control" name="sLoadingunloadingslot" ng-model="sc.loadingUnloadingSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.required" placeholder="{{ 'street_loadingunloadingslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sLoadingunloadingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.sLoadingunloadingslot.$error.required">{{ 'street_loading_unloading_slots_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible">
+									    <label for="pinkSlot">{{ 'street_pink_slot' | i18n }}</label>
+									    <input id="pinkSlot" type="text" class="form-control" name="sPinkslot" ng-model="sc.pinkSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_pinkSlot.required" placeholder="{{ 'street_pinkslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sPinkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.sPinkslot.$error.required">{{ 'street_pink_slots_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible">
+									    <label for="carSharingSlot">{{ 'street_car_sharing_slot' | i18n }}</label>
+									    <input id="carSharingSlot" type="text" class="form-control" name="sCarsharingslot" ng-model="sc.carSharingSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.required" placeholder="{{ 'street_carsharingslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.sCarsharingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.sCarsharingslot.$error.required">{{ 'street_car_sharing_slots_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="manageVehicleTypes(sc.vehicleType).s_activeType.visible">
+									    <label for="activeType">{{ 'street_active_vehicle_type' | i18n }}
+									    	<input id="activeType" type="checkbox" name="nsActivetype" ng-model="sc.vehicleTypeActive" >
+									    </label>
+									</div>
 							   	</div>
-							   	<div class="form-group" ng-show="sconf.s_reservedSlot.visible">
-							    	<label for="reservedSlot">{{ 'street_reserved_slot' | i18n }}</label>
-							    	<input id="reservedSlot" type="text" class="form-control" name="sReservedslot" ng-model="eStreet.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.sReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
+	  						</div>
+	  					</div>
+	  					<div class="panel panel-default" ng-show="newVehicleList && newVehicleList.length > 0" >
+							<div class="panel-heading">
+		    					<table width="100%">
+								<tr>
+									<td width="40%"></td>
+									<td width="20%" align="center"><h3 class="panel-title">{{ 'add_new_vehicle_slots' | i18n }}</h3></td>
+									<td width="40%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed_new()" ng-click="hideVehicleSlotsPanelNew()"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed_new()" ng-click="showVehicleSlotsPanelNew()"></span></td>
+								</tr>
+								</table>
+		  					</div>
+		  					<div class="well" ng-show="vehicle_slots_panel_showed_new()"><!-- class="panel-body" -->
+							   	<div class="panel-body">
+						   			<div class="form-group" ng-show="sconf.s_slotNum.visible">
+								    	<label for="svehicleType">{{ 'vehicle_type' | i18n }}</label>
+								    	<select class="form-control" id="svehicleType" name="sVehicleType" ng-model="newSlotsConf.vehicleType" ng-change="showHideSlotsByVehicle(newSlotsConf.vehicleType, 0)">
+      										<option value="">{{ 'vehicle_type_placeholder' | i18n }}</option>
+      										<option ng-repeat="nvs in newVehicleList track by $index" ng-value="nvs.name">{{ nvs.language_key | i18n }}</option>
+    									</select>
+    									<!-- <select class="form-control" id="vehicleType" name="sVehicleType" ng-model="newSlotsConf.vehicleType"
+									      ng-options="nvs.name as nvs.language_key for nvs in newVehicleList">
+									    </select> -->
+								    	<div class="field-error" ng-show="(!isInit && form.sVehicleType.$error.required) || showErrorTypeReq">{{ 'street_vehicle_type_err_required' | i18n }}</div>
+								   	</div>
+									<div class="form-group" ng-show="newVSC.s_handicappedSlot.visible">
+								    	<label for="handicappedSlot">{{ 'street_handicapped_slot' | i18n }}</label>
+								    	<input id="handicappedSlot" type="text" class="form-control" name="nsHandicappedslot" ng-model="newSlotsConf.handicappedSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_handicappedSlot.required" placeholder="{{ 'street_handicappedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsHandicappedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsHandicappedslot.$error.required">{{ 'street_handicapped_slots_err_required' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group" ng-show="newVSC.s_reservedSlot.visible">
+								    	<label for="reservedSlot">{{ 'street_reserved_slot' | i18n }}</label>
+								    	<input id="reservedSlot" type="text" class="form-control" name="nsReservedslot" ng-model="newSlotsConf.reservedSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_reservedSlot.required" placeholder="{{ 'street_reservedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsReservedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsReservedslot.$error.required">{{ 'street_reserved_slots_err_required' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group" ng-show="newVSC.s_timedSlot.visible">
+								    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
+								    	<input id="timedSlot" type="text" class="form-control" name="nsTimedslot" ng-model="newSlotsConf.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_timedSlot.required" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group" ng-show="newVSC.s_paidSlot.visible">
+								    	<label for="timedSlot">{{ 'street_paidpark_slot' | i18n }}</label>
+								    	<input id="timedSlot" type="text" class="form-control" name="nsPaidslot" ng-model="newSlotsConf.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsPaidslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsPaiddslot.$error.required">{{ 'street_paidpark_slots_err_required' | i18n }}</div>
+								   	</div>
+								   	<div class="form-group" ng-show="newVSC.s_freeSlot.visible">
+								    	<label for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
+								    	<input id="freeparkSlot" type="text" class="form-control" name="nsFreeparkslot" ng-model="newSlotsConf.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
+								    	<div class="field-error" ng-show="form.nsFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+								    	<div class="field-error" ng-show="!isInit && form.nsFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
+								   	</div>
+									<div class="form-group" ng-show="newVSC.s_freeSlotSign.visible">
+									    <label for="freeparkSlotSigned">{{ 'street_freepark_slot_signed' | i18n }}</label>
+									    <input id="freeparkSlotSigned" type="text" class="form-control" name="nsFreeparkslotSigned" ng-model="newSlotsConf.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="newVSC.s_rechargeableSlot.visible">
+									    <label for="rechargeableSlot">{{ 'street_rechargeable_slot' | i18n }}</label>
+									    <input id="rechargeableSlot" type="text" class="form-control" name="nsRechargeableslot" ng-model="newSlotsConf.rechargeableSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_rechargeableSlot.required" placeholder="{{ 'street_rechargeableslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsRechargeableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsRechargeableslot.$error.required">{{ 'street_rechargeable_slots_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="newVSC.s_loadingUnloadingSlot.visible">
+									    <label for="loadingUnloadingSlot">{{ 'street_loading_unloading_slot' | i18n }}</label>
+									    <input id="loadingUnloadingSlot" type="text" class="form-control" name="nsLoadingunloadingslot" ng-model="newSlotsConf.loadingUnloadingSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_loadingUnloadingSlot.required" placeholder="{{ 'street_loadingunloadingslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsLoadingunloadingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsLoadingunloadingslot.$error.required">{{ 'street_loading_unloading_slots_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="newVSC.s_pinkSlot.visible">
+									    <label for="pinkSlot">{{ 'street_pink_slot' | i18n }}</label>
+									    <input id="pinkSlot" type="text" class="form-control" name="nsPinkslot" ng-model="newSlotsConf.pinkSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_pinkSlot.required" placeholder="{{ 'street_pinkslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsPinkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsPinkslot.$error.required">{{ 'street_pink_slots_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="newVSC.s_carSharingSlot.visible">
+									    <label for="carSharingSlot">{{ 'street_car_sharing_slot' | i18n }}</label>
+									    <input id="carSharingSlot" type="text" class="form-control" name="nsCarsharingslot" ng-model="newSlotsConf.carSharingSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_carSharingSlot.required" placeholder="{{ 'street_carsharingslot_placeholder' | i18n }}" >
+									    <div class="field-error" ng-show="form.nsCarsharingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+									    <div class="field-error" ng-show="!isInit && form.nsCarsharingslot.$error.required">{{ 'street_car_sharing_slots_err_required' | i18n }}</div>
+									</div>
+									<div class="form-group" ng-show="newVSC.s_activeType.visible">
+									    <label for="activeType">{{ 'street_active_vehicle_type' | i18n }}
+									    	<input id="activeType" type="checkbox" name="nsActivetype" ng-model="newSlotsConf.vehicleTypeActive" >
+									    </label>
+									</div>
+									<table width="100%">
+										<tr>
+											<td width="80%"></td>
+											<td width="20%" align="right">
+												<button type="button" class="btn btn-primary" ng-click="addNewConfigurationSlots(newSlotsConf, 0)">{{ 'ok_button' | i18n  }}</button>
+											</td>
+										</tr>
+									</table>
 							   	</div>
-							   	<div class="form-group" ng-show="sconf.s_timedSlot.visible">
-							    	<label for="timedSlot">{{ 'street_timedpark_slot' | i18n }}</label>
-							    	<input id="timedSlot" type="text" class="form-control" name="sTimedslot" ng-model="eStreet.timedParkSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_timedSlot.required" placeholder="{{ 'street_timedslot_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.sTimedslot.$error.required">{{ 'street_timedpark_slots_err_required' | i18n }}</div>
-							   	</div>
-							   	<div class="form-group" ng-show="sconf.s_paidSlot.visible">
-							    	<label for="timedSlot">{{ 'street_paidpark_slot' | i18n }}</label>
-							    	<input id="timedSlot" type="text" class="form-control" name="sPaidslot" ng-model="eStreet.paidSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_paidSlot.required" placeholder="{{ 'street_paidslot_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.sPaidslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.sPaiddslot.$error.required">{{ 'street_paidpark_slots_err_required' | i18n }}</div>
-							   	</div>
-							   	<div class="form-group" ng-show="sconf.s_freeSlot.visible">
-							    	<label for="freeparkSlot">{{ 'street_freepark_slot' | i18n }}</label>
-							    	<input id="freeparkSlot" type="text" class="form-control" name="sFreeparkslot" ng-model="eStreet.freeParkSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlot.required" placeholder="{{ 'street_freeparkslot_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslot.$error.required">{{ 'street_freepark_slots_err_required' | i18n }}</div>
-							   	</div>
-							   	<div class="form-group" ng-show="sconf.s_freeSlotSign.visible">
-							    	<label for="freeparkSlotSigned">{{ 'street_freepark_slot_signed' | i18n }}</label>
-							    	<input id="freeparkSlotSigned" type="text" class="form-control" name="sFreeparkslotSigned" ng-model="eStreet.freeParkSlotSignNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_freeSlotSign.required" placeholder="{{ 'street_freeparkslotsign_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.sFreeparkslotSigned.$error.required">{{ 'street_freepark_slots_sign_err_required' | i18n }}</div>
-							   	</div>
-							   	<div class="form-group" ng-show="sconf.s_unusuableSlot.visible">
-							    	<label for="unusuableSlot">{{ 'street_unusuable_slot' | i18n }}</label>
-							    	<input id="unusuableSlot" type="text" class="form-control" name="sUnusuableslot" ng-model="eStreet.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="sconf.s_unusuableSlot.required" placeholder="{{ 'street_unusuableslot_placeholder' | i18n }}" >
-							    	<div class="field-error" ng-show="!isInit && form.sUnusuableslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
-							    	<div class="field-error" ng-show="!isInit && form.sUnusuableslot.$error.required">{{ 'street_unusuable_slots_err_required' | i18n }}</div>
-							   	</div>
-					   		</div>
-					   	</div>
+	  						</div>
+	  					</div>
+					   	
+					   	<!-- New Part for Vehicle Slots END  -->
 					   	<div class="form-group" ng-show="sconf.s_subscrition.visible">
 					    	<label for="subscription">{{ 'street_subscription_allowed' | i18n }}</label>
 					    	<select ng-if="isUsedItaLang()" id="subscription" name="sSubscription" class="form-control" ng-options="s.value as s.desc for s in subscriptions" ng-model="eStreet.subscritionAllowedPark">
@@ -662,41 +974,41 @@
 						</div>
 					 	<div class="form-group" ng-show="isEditing && sconf.s_areaId.visible">
 					    	<label for="area">{{ 'street_area_name' | i18n }}</label>
-					    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea | orderBy: 'name'" ng-model="myArea" ng-required="isEditing && sconf.s_areaId.required" ng-change="getAreaPM(myArea)">
+					    	<select id="area" name="sArea" class="form-control" ng-options="a as a.name for a in allArea | filter:{ agencyId : agencyId } | orderBy: 'name'" ng-model="myArea" ng-required="isEditing && sconf.s_areaId.required" ng-change="getAreaPM(myArea)">
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sArea.$error.required">{{ 'street_area_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones0.visible">
 					    	<label for="zone0">{{ zone0_label | i18n }}</label>
-					    	<select id="zone0" name="sZone0" class="form-control" ng-options="m as m.label for m in sZones0 | orderBy: 'label'" ng-model="myZone0" ng-required="sconf.s_zones0.required">
+					    	<select id="zone0" name="sZone0" class="form-control" ng-options="m as m.label for m in sZones0 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone0" ng-required="sconf.s_zones0.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone0.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones1.visible">
 					    	<label for="zone1">{{ zone1_label | i18n }}</label>
-					    	<select id="zone1" name="sZone1" class="form-control" ng-options="m as m.label for m in sZones1 | orderBy: 'label'" ng-model="myZone1" ng-required="sconf.s_zones1.required">
+					    	<select id="zone1" name="sZone1" class="form-control" ng-options="m as m.label for m in sZones1 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone1" ng-required="sconf.s_zones1.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone1.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones2.visible">
 					    	<label for="zone2">{{ zone2_label | i18n }}</label>
-					    	<select id="zone2" name="sZone2" class="form-control" ng-options="m as m.label for m in sZones2 | orderBy: 'label'" ng-model="myZone2" ng-required="sconf.s_zones2.required">
+					    	<select id="zone2" name="sZone2" class="form-control" ng-options="m as m.label for m in sZones2 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone2" ng-required="sconf.s_zones2.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone2.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones3.visible">
 					    	<label for="zone3">{{ zone3_label | i18n }}</label>
-					    	<select id="zone3" name="sZone3" class="form-control" ng-options="m as m.label for m in sZones3 | orderBy: 'label'" ng-model="myZone3" ng-required="sconf.s_zones3.required">
+					    	<select id="zone3" name="sZone3" class="form-control" ng-options="m as m.label for m in sZones3 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone3" ng-required="sconf.s_zones3.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone3.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="sconf.s_zones4.visible">
 					    	<label for="zone4">{{ zone4_label | i18n }}</label>
-					    	<select id="zone4" name="sZone4" class="form-control" ng-options="m as m.label for m in sZones4 | orderBy: 'label'" ng-model="myZone4" ng-required="sconf.s_zones4.required">
+					    	<select id="zone4" name="sZone4" class="form-control" ng-options="m as m.label for m in sZones4 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myZone4" ng-required="sconf.s_zones4.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.sZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
@@ -714,7 +1026,7 @@
 								<span class="caret"></span>
 		 						</button>
 						    	<ul class="dropdown-menu scrollable-menu" role="menu" aria-labelledby="dropdownPm1">
-						    		<li ng-repeat="p in myPms | orderBy:['code']"><input type="checkbox" id="{{ p.id }}" name="pms" ng-model=p.selected value="{{ p.code }}" /><span> - </span><label for="{{ p.id }}">{{ p.code }} {{ p.note }}</label></li>
+						    		<li ng-repeat="p in myPms | filter:{ agencyId : agencyId } | orderBy:['code']"><input type="checkbox" id="{{ p.id }}" name="pms" ng-model=p.selected value="{{ p.code }}" /><span> - </span><label for="{{ p.id }}">{{ p.code }} {{ p.note }}</label></li>
 						    	</ul>
 					    	</div>
 					    	<div class="field-error" ng-show="!isInit && form.sPm.$error.required">{{ 'street_pm_select_err_required' | i18n }}</div>

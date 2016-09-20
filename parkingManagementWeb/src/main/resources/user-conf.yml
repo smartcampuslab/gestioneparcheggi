@@ -6,31 +6,36 @@ users:
     name: Comune
     surname: Rovereto
     mail: info@comune.rovereto.tn.it
-  - id: ComuneRovereto2
-    username: rovereto
-    password: rovereto
-    appId: rv
-    name: Comune
-    surname: Rovereto
-    mail: info@comune.rovereto.tn.it
-  - id: ComuneTrento
+    agency: rv_amr_091616
+  - id: TrentinoMobilita
     username: trento1
     password: metroTN$15
     appId: tn
-    name: Comune
-    surname: Trento
-    mail: info@comune.trento.tn.it
+    name: Trentino
+    surname: Mobilita
+    mail: info@trentinomobilita.it
+    agency: tn_mob_091516
   - id: ComuneTrento
-    username: trentosc
-    password: trentoSC&15
+    username: comunetrento
+    password: metroCT$16
     appId: tn
     name: Comune
     surname: Trento
     mail: info@comune.trento.tn.it
+    agency: tn_cit_091516
   - id: RoveretoTest
     username: roveretotest
     password: metroRVtest
     appId: rvtest
     name: Test
     surname: Rovereto
-    mail: info@comune.rovereto.tn.it    
+    mail: info@comune.rovereto.tn.it
+    agency: rv_tes_091616
+  - id: TrentoTest
+    username: comunetrentotest
+    password: metroCTT$16
+    appId: comune_tn
+    name: Comune
+    surname: Trento
+    mail: info@comune.trento.tn.it
+    agency: tn_tes_091516

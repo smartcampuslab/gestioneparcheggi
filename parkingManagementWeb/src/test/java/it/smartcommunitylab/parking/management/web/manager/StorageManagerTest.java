@@ -127,30 +127,30 @@ public class StorageManagerTest {
 		area.setId_app(appId);
 		area.setName("Pasubio");
 		area.setColor("29ea30");
-		area.setFee(new Float(0.50));
-		area.setTimeSlot("08:00 - 18:00");
+		//area.setFee(new Float(0.50));
+		//area.setTimeSlot("08:00 - 18:00");
 		area.setSmsCode("567");
 		area.setGeometry(areaGeo);
-		area = manager.save(area,appId);
+		area = manager.save(area,appId, "prova123");
 		
 		RateAreaBean area2 = new RateAreaBean();
 		area2.setId_app(appId);
 		area2.setName("Vittoria");
 		area2.setColor("2b46ab");
-		area2.setFee(new Float(1.00));
-		area2.setTimeSlot("10:00 - 14:00");
+		//area2.setFee(new Float(1.00));
+		//area2.setTimeSlot("10:00 - 14:00");
 		area2.setSmsCode("1234");
 		area2.setGeometry(areaGeo2);
-		area2 = manager.save(area2,appId);
+		area2 = manager.save(area2,appId, "prova123");
 		
 		RateAreaBean area3 = new RateAreaBean();
 		area3.setId_app(appId);
 		area3.setName("ZTL");
 		area3.setColor("e52f70");
-		area3.setFee(new Float(1.50));
-		area3.setTimeSlot("08:00 - 20:00");
+		//area3.setFee(new Float(1.50));
+		//area3.setTimeSlot("08:00 - 20:00");
 		area3.setSmsCode("1235");
-		area3 = manager.save(area3,appId);
+		area3 = manager.save(area3,appId, "prova123");
 		
 		// Geo Zone creation
 		PolygonBean polz1 = new PolygonBean();
@@ -183,7 +183,7 @@ public class StorageManagerTest {
 		z.setSubmacro("B");
 		z.setColor("33cc66");
 		z.setGeometry(polz1);
-		z = manager.save(z,appId);
+		z = manager.save(z,appId, "prova123");
 		
 		PolygonBean polz2 = new PolygonBean();
 		PointBean pbz21 = new PointBean();
@@ -215,7 +215,7 @@ public class StorageManagerTest {
 		z2.setSubmacro("A");
 		z2.setColor("990033");
 		z2.setGeometry(polz2);
-		z2 = manager.save(z2,appId);
+		z2 = manager.save(z2,appId, "prova123");
 		
 		PolygonBean polz3 = new PolygonBean();
 		PointBean pbz31 = new PointBean();
@@ -243,7 +243,7 @@ public class StorageManagerTest {
 		z3.setSubmacro("A");
 		z3.setColor("ffddee");
 		z3.setGeometry(polz3);
-		z3 = manager.save(z3,appId);
+		z3 = manager.save(z3,appId, "prova123");
 		
 		// Streets Creation
 		PointBean pbes1 = new PointBean();
@@ -274,12 +274,12 @@ public class StorageManagerTest {
 		s.setStreetReference("Via Unione");
 		s.setId_app(appId);
 		s.setSlotNumber(16);
-		s.setFreeParkSlotNumber(0);
+		/*s.setFreeParkSlotNumber(0);
 		s.setFreeParkSlotSignNumber(0);
 		s.setPaidSlotNumber(10);
 		s.setTimedParkSlotNumber(5);
 		s.setHandicappedSlotNumber(1);
-		s.setFreeParkSlotNumber(0);
+		s.setFreeParkSlotNumber(0);*/
 		s.setSubscritionAllowedPark(false);
 		s.setColor(area.getColor());
 		s.setRateAreaId(area.getId());
@@ -292,12 +292,12 @@ public class StorageManagerTest {
 		s2.setStreetReference("Via Monte Nero");
 		s2.setId_app(appId);
 		s2.setSlotNumber(8);
-		s2.setFreeParkSlotNumber(0);
+		/*s2.setFreeParkSlotNumber(0);
 		s2.setFreeParkSlotSignNumber(1);
 		s2.setPaidSlotNumber(3);
 		s2.setTimedParkSlotNumber(3);
 		s2.setHandicappedSlotNumber(1);
-		s2.setFreeParkSlotNumber(0);
+		s2.setFreeParkSlotNumber(0);*/
 		s2.setSubscritionAllowedPark(false);
 		s2.setColor(area.getColor());
 		s2.setRateAreaId(area.getId());
@@ -307,12 +307,12 @@ public class StorageManagerTest {
 		s3.setStreetReference("Viale della Vittoria");
 		s3.setId_app(appId);
 		s3.setSlotNumber(9);
-		s3.setFreeParkSlotNumber(2);
+		/*s3.setFreeParkSlotNumber(2);
 		s3.setFreeParkSlotSignNumber(3);
 		s3.setPaidSlotNumber(3);
 		s3.setTimedParkSlotNumber(0);
 		s3.setHandicappedSlotNumber(1);
-		s3.setFreeParkSlotNumber(0);
+		s3.setFreeParkSlotNumber(0);*/
 		s3.setSubscritionAllowedPark(true);
 		s3.setColor(area2.getColor());
 		s3.setRateAreaId(area2.getId());
@@ -324,12 +324,12 @@ public class StorageManagerTest {
 		s4.setStreetReference("Via Macerie1");
 		s4.setId_app(appId);
 		s4.setSlotNumber(19);
-		s4.setFreeParkSlotNumber(0);
+		/*s4.setFreeParkSlotNumber(0);
 		s4.setFreeParkSlotSignNumber(0);
 		s4.setPaidSlotNumber(15);
 		s4.setTimedParkSlotNumber(3);
 		s4.setHandicappedSlotNumber(1);
-		s4.setFreeParkSlotNumber(0);
+		s4.setFreeParkSlotNumber(0);*/
 		s4.setSubscritionAllowedPark(true);
 		s4.setColor(area3.getColor());
 		s4.setRateAreaId(area3.getId());
@@ -342,12 +342,12 @@ public class StorageManagerTest {
 		s5.setStreetReference("Via Macerie2");
 		s5.setId_app(appId);
 		s5.setSlotNumber(7);
-		s5.setFreeParkSlotNumber(2);
+		/*s5.setFreeParkSlotNumber(2);
 		s5.setFreeParkSlotSignNumber(0);
 		s5.setPaidSlotNumber(3);
 		s5.setTimedParkSlotNumber(1);
 		s5.setHandicappedSlotNumber(1);
-		s5.setFreeParkSlotNumber(0);
+		s5.setFreeParkSlotNumber(0);*/
 		s5.setSubscritionAllowedPark(false);
 		s5.setColor(area3.getColor());
 		s5.setRateAreaId(area3.getId());
@@ -466,10 +466,8 @@ public class StorageManagerTest {
 		ps.setManagementMode("Libera");
 		ps.setStreetReference("Via della Vittoria 23");
 		ps.setSlotNumber(240);
-		ps.setHandicappedSlotNumber(10);
-		ps.setUnusuableSlotNumber(5);
-		ps.setTimeSlot("05:00 - 00:00");
-		ps.setFee_note("2 euro/ora");
+		/*ps.setHandicappedSlotNumber(10);
+		ps.setUnusuableSlotNumber(5);*/
 		ps.setPhoneNumber("0464112233");
 		PointBean g11 = new PointBean();
 		g11.setLat(45.887509);
@@ -486,10 +484,8 @@ public class StorageManagerTest {
 		ps2.setManagementMode("Libera");
 		ps2.setStreetReference("Via Stazione 1");
 		ps2.setSlotNumber(200);
-		ps2.setHandicappedSlotNumber(10);
-		ps2.setUnusuableSlotNumber(5);
-		ps2.setTimeSlot("05:00 - 23:45");
-		ps2.setFee_note("2,5 euro/ora");
+		/*ps2.setHandicappedSlotNumber(10);
+		ps2.setUnusuableSlotNumber(5);*/
 		ps2.setPhoneNumber("0464511233");	
 		PointBean g12 = new PointBean();
 		g12.setLat(45.891057);
@@ -532,26 +528,26 @@ public class StorageManagerTest {
 		pb3.setGeometry(geo3);
 		
 		try {
-			manager.save(s,appId);
-			manager.save(s2,appId);
-			manager.save(s3,appId);
-			manager.save(s4,appId);
-			manager.save(s5,appId);
-			manager.save(p,appId);
-			manager.save(p2,appId);
-			manager.save(p3,appId);
-			manager.save(p4,appId);
-			manager.save(p5,appId);
-			manager.save(p6,appId);
-			manager.save(p7,appId);
-			manager.save(p8,appId);
-			manager.save(p9,appId);
-			manager.save(p10,appId);
-			manager.save(ps,appId);
-			manager.save(ps2,appId);
-			manager.save(pb,appId);
-			manager.save(pb2,appId);
-			manager.save(pb3,appId);
+			manager.save(s,appId, "prova123");
+			manager.save(s2,appId, "prova123");
+			manager.save(s3,appId, "prova123");
+			manager.save(s4,appId, "prova123");
+			manager.save(s5,appId, "prova123");
+			manager.save(p,appId, "prova123");
+			manager.save(p2,appId, "prova123");
+			manager.save(p3,appId, "prova123");
+			manager.save(p4,appId, "prova123");
+			manager.save(p5,appId, "prova123");
+			manager.save(p6,appId, "prova123");
+			manager.save(p7,appId,"prova123");
+			manager.save(p8,appId, "prova123");
+			manager.save(p9,appId, "prova123");
+			manager.save(p10,appId, "prova123");
+			manager.save(ps,appId, "prova123");
+			manager.save(ps2,appId, "prova123");
+			manager.save(pb,appId, "prova123");
+			manager.save(pb2,appId, "prova123");
+			manager.save(pb3,appId, "prova123");
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -636,11 +632,11 @@ public class StorageManagerTest {
 		area.setId_app(appIdTn);
 		area.setName("Area di 2a corona - zona blu");
 		area.setColor("2032e4");
-		area.setFee(new Float(1.00));
-		area.setTimeSlot("08:00 - 19:30");
+		//area.setFee(new Float(1.00));
+		//area.setTimeSlot("08:00 - 19:30");
 		area.setSmsCode("726");
 		area.setGeometry(areaGeo);
-		area = manager.save(area, appIdTn);
+		area = manager.save(area, appIdTn, "prova789");
 		
 		// Geo Zone creation
 		PolygonBean polz1 = new PolygonBean();
@@ -674,7 +670,7 @@ public class StorageManagerTest {
 		z.setColor("e3e427");
 		z.setType("zona tm trento");
 		z.setGeometry(polz1);
-		z = manager.save(z,appIdTn);
+		z = manager.save(z,appIdTn, "prova789");
 		
 		
 		// Streets Creation
@@ -698,12 +694,12 @@ public class StorageManagerTest {
 		s.setStreetReference("Malvasia nord");
 		s.setId_app(appIdTn);
 		s.setSlotNumber(15);
-		s.setFreeParkSlotNumber(0);
+		/*s.setFreeParkSlotNumber(0);
 		s.setFreeParkSlotSignNumber(0);
 		s.setPaidSlotNumber(0);
 		s.setTimedParkSlotNumber(0);
 		s.setHandicappedSlotNumber(0);
-		s.setFreeParkSlotNumber(0);
+		s.setFreeParkSlotNumber(0);*/
 		s.setSubscritionAllowedPark(false);
 		s.setColor(area.getColor());
 		s.setRateAreaId(area.getId());
@@ -728,12 +724,12 @@ public class StorageManagerTest {
 		s2.setStreetReference("Brennero Centro");
 		s2.setId_app(appIdTn);
 		s2.setSlotNumber(18);
-		s2.setFreeParkSlotNumber(0);
+		/*s2.setFreeParkSlotNumber(0);
 		s2.setFreeParkSlotSignNumber(0);
 		s2.setPaidSlotNumber(0);
 		s2.setTimedParkSlotNumber(3);
 		s2.setHandicappedSlotNumber(0);
-		s2.setFreeParkSlotNumber(0);
+		s2.setFreeParkSlotNumber(0);*/
 		s2.setSubscritionAllowedPark(false);
 		s2.setColor(area.getColor());
 		s2.setRateAreaId(area.getId());
@@ -805,14 +801,14 @@ public class StorageManagerTest {
 		pb3.setGeometry(geo3);
 		
 		try {
-			manager.save(s,appIdTn);
-			manager.save(s2,appIdTn);
-			manager.save(p,appIdTn);
-			manager.save(p2,appIdTn);
-			manager.save(p3,appIdTn);
-			manager.save(pb,appIdTn);
-			manager.save(pb2,appIdTn);
-			manager.save(pb3,appIdTn);
+			manager.save(s,appIdTn, "prova789");
+			manager.save(s2,appIdTn, "prova789");
+			manager.save(p,appIdTn, "prova789");
+			manager.save(p2,appIdTn, "prova789");
+			manager.save(p3,appIdTn, "prova789");
+			manager.save(pb,appIdTn, "prova789");
+			manager.save(pb2,appIdTn, "prova789");
+			manager.save(pb3,appIdTn, "prova789");
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -853,27 +849,27 @@ public class StorageManagerTest {
 		
 		List<ZoneBean> zones = manager.getAllZone(appIdTn);
 		for(ZoneBean z : zones){
-			manager.removeZone(z.getId(),appIdTn);
+			manager.removeZone(z.getId(),appIdTn, "prova789");
 		}
 		
-		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appIdTn);
+		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appIdTn, "prova789");
 		for(ParkingMeterBean pm : parkingMeters){
-			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn);
+			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn, "prova789");
 		}
 		
 		List<ParkingStructureBean> parkingStructs = manager.getAllParkingStructure(appIdTn);
 		for(ParkingStructureBean ps : parkingStructs){
-			manager.removeParkingStructure(ps.getId(),appIdTn);
+			manager.removeParkingStructure(ps.getId(),appIdTn, "prova789");
 		}
 		
 		List<BikePointBean> bikePoints = manager.getAllBikePoints(appIdTn);
 		for(BikePointBean bp : bikePoints){
-			manager.removeBikePoint(bp.getId(),appIdTn);
+			manager.removeBikePoint(bp.getId(),appIdTn, "prova789");
 		}
 		
 		List<RateAreaBean> areas = manager.getAllArea(appIdTn);
 		for(RateAreaBean area : areas){
-			manager.removeArea(area.getId(),appIdTn);
+			manager.removeArea(area.getId(),appIdTn, "prova789");
 		}
 		
 		Assert.assertTrue(manager.getAllArea(appIdTn).size() == 0);
@@ -894,22 +890,22 @@ public class StorageManagerTest {
 		
 		List<ZoneBean> zones = manager.getAllZone(appIdTn);
 		for(ZoneBean z : zones){
-			manager.removeZone(z.getId(),appIdTn);
+			manager.removeZone(z.getId(),appIdTn, "prova789");
 		}
 		
 		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appIdTn);
 		for(ParkingMeterBean pm : parkingMeters){
-			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn);
+			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn, "prova789");
 		}
 		
 		List<BikePointBean> bikePoints = manager.getAllBikePoints(appIdTn);
 		for(BikePointBean bp : bikePoints){
-			manager.removeBikePoint(bp.getId(),appIdTn);
+			manager.removeBikePoint(bp.getId(),appIdTn, "prova789");
 		}
 		
 		List<RateAreaBean> areas = manager.getAllArea(appIdTn);
 		for(RateAreaBean area : areas){
-			manager.removeArea(area.getId(),appIdTn);
+			manager.removeArea(area.getId(),appIdTn, "prova789");
 		}
 		
 		Assert.assertTrue(manager.getAllArea(appIdTn).size() == 0);

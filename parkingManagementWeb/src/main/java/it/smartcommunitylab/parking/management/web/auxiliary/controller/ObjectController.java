@@ -15,8 +15,11 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -34,6 +37,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
@@ -47,8 +51,14 @@ import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.CSVManager;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
+
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 
 @Controller
 public class ObjectController  {
@@ -191,30 +201,30 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/streets") 
-	public @ResponseBody List<Street> getStreets(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.info("I'm in get all street - auxiliary app!!!");
+	public @ResponseBody List<Street> getStreets(@PathVariable String agency, @RequestParam(required=true) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+		logger.debug("I'm in get all street - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
-			return dataService.getStreets(agency, lat, lon, radius);
+			return dataService.getStreets(agency, lat, lon, radius, agencyId);
 		} 
-		return dataService.getStreets(agency);
+		return dataService.getStreets(agency, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkings") 
-	public @ResponseBody List<Parking> getParkings(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.info("I'm in get all parkings - auxiliary app!!!");
+	public @ResponseBody List<Parking> getParkings(@PathVariable String agency, @RequestParam(required=true) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+		logger.debug("I'm in get all parkings - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
-			return dataService.getParkings(agency, lat, lon, radius);
+			return dataService.getParkings(agency, lat, lon, radius, agencyId);
 		} 
-		return dataService.getParkings(agency);
+		return dataService.getParkings(agency, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/parkingmeters") 
-	public @ResponseBody List<ParkMeter> getParkingMeters(@PathVariable String agency, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
-		logger.info("I'm in get all parkingmeters - auxiliary app!!!");
+	public @ResponseBody List<ParkMeter> getParkingMeters(@PathVariable String agency, @RequestParam(required=true) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+		logger.debug("I'm in get all parkingmeters - auxiliary app!!!");
 		if (lat != null && lon != null && radius != null) {
-			return dataService.getParkingMeters(agency, lat, lon, radius);
+			return dataService.getParkingMeters(agency, lat, lon, radius, agencyId);
 		} 
-		return dataService.getParkingMeters(agency);
+		return dataService.getParkingMeters(agency, agencyId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
@@ -223,7 +233,6 @@ public class ObjectController  {
 			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -234,12 +243,11 @@ public class ObjectController  {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
 			if(period != null){
-				logger.error("Inserted period = " + period[0] + "-" + period[1] );
+				logger.debug("Inserted period = " + period[0] + "-" + period[1] );
 			}
 			dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -252,7 +260,6 @@ public class ObjectController  {
 			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -265,90 +272,31 @@ public class ObjectController  {
 			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data,  @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			logger.info("started file uplodad flux");
+			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
-			List<PSOccupancyData> allData = dataService.classStringToOPSObjArray(datas);
+			List<PSOccupancyData> allData = dataService.classStringToOPSObjArray(datas, agency);
 			for(PSOccupancyData p : allData){
-				Parking park = dataService.getParkingByName(p.getpName(), agency);
+				Parking park = dataService.getParkingByName(p.getpName(), agency, agencyId);
 				if(park != null){
-					List<String> slotsOcc = p.getOccSlots();
-					List<String> slotsH = p.getHSlots();
-					List<String> slotsND = p.getNdSlots();
-					for(int i = 0; i < slotsOcc.size(); i++){
-						boolean skipUpdate = true;
-						int slotsOccOnPaying = -1;
-						int slotsOccOnHandicapped = -1;
-						int slotNumND = -1;
-						if(slotsOcc.get(i).compareTo("") != 0 && slotsOcc.get(i).compareTo("-1") != 0){
-							slotsOccOnPaying = Integer.parseInt(slotsOcc.get(i));
-						}
-						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
-							slotsOccOnHandicapped = Integer.parseInt(slotsH.get(i));
-						}
-						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
-							slotNumND = Integer.parseInt(slotsND.get(i));
-						}
-						if(slotsOccOnPaying != -1){
-							park.setSlotsOccupiedOnPaying(slotsOccOnPaying);
-							skipUpdate = false;
-						} else {
-							park.setSlotsOccupiedOnPaying(0);
-						}
-						if(slotsOccOnHandicapped != -1){
-							park.setSlotsOccupiedOnHandicapped(slotsOccOnHandicapped);
-							skipUpdate = false;
-						} else {
-							park.setSlotsOccupiedOnHandicapped(0);
-						}
-						if(slotNumND != -1){
-							park.setSlotsUnavailable(slotNumND);
-							skipUpdate = false;
-						} else {
-							park.setSlotsUnavailable(-1);
-						}
-						if(!skipUpdate){
-							int year = Integer.parseInt(p.getPeriod().getYear());
-							period = null;
-							park.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingData(park, agency, userId, isSysLog, period, MONTH_PERIOD);
-						}
-					}
-				}
-			}
-			//dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period);
-			return "OK";
-		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "KO";
-		}
-	}	
-	
-	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
-	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
-		try {
-			logger.info("started file uplodad flux");
-			String datas = data.get("logData").toString();
-			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas);
-			for(SOccupancyData s : allData){
-				Street street = dataService.getStreetByName(s.getsName(),agency);
-				if (street != null){
-					List<String> slotsLC = s.getOccLC();
-					List<String> slotsLS = s.getOccLS();
-					List<String> slotsP = s.getOccP();
-					List<String> slotsDO = s.getOccDO();
-					List<String> slotsH = s.getOccH();
-					List<String> slotsR = s.getOccR();
-					List<String> slotsND = s.getSlotsND();
+					List<String> slotsLC = p.getOccLC();
+					List<String> slotsLS = p.getOccLS();
+					List<String> slotsP = p.getOccP();
+					List<String> slotsDO = p.getOccDO();
+					List<String> slotsH = p.getOccH();
+					List<String> slotsR = p.getOccR();
+					List<String> slotsE = p.getOccE();
+					List<String> slotsC_S = p.getOccC_S();
+					List<String> slotsRO = p.getOccRO();
+					List<String> slotsCS = p.getOccCS();
+					List<String> slotsND = p.getSlotsND();
 					
 					for(int i = 0; i < slotsLC.size(); i++){
 						boolean skipUpdate = true;
@@ -358,6 +306,10 @@ public class ObjectController  {
 						int slotOccDO = -1;
 						int slotOccH = -1;
 						int slotOccR = -1;
+						int slotOccE = -1;
+						int slotOccC_S = -1;
+						int slotOccRO = -1;
+						int slotOccCS = -1;
 						int slotNumND = -1;
 						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("-1") != 0){
 							slotOccLc = Integer.parseInt(slotsLC.get(i));
@@ -377,10 +329,267 @@ public class ObjectController  {
 						if(slotsR.get(i).compareTo("") != 0 && slotsR.get(i).compareTo("-1") != 0){
 							slotOccR = Integer.parseInt(slotsR.get(i));
 						}
+						if(slotsE.get(i).compareTo("") != 0 && slotsE.get(i).compareTo("-1") != 0){
+							slotOccE = Integer.parseInt(slotsE.get(i));
+						}
+						if(slotsC_S.get(i).compareTo("") != 0 && slotsC_S.get(i).compareTo("-1") != 0){
+							slotOccC_S = Integer.parseInt(slotsC_S.get(i));
+						}
+						if(slotsRO.get(i).compareTo("") != 0 && slotsRO.get(i).compareTo("-1") != 0){
+							slotOccRO = Integer.parseInt(slotsRO.get(i));
+						}
+						if(slotsCS.get(i).compareTo("") != 0 && slotsCS.get(i).compareTo("-1") != 0){
+							slotOccCS = Integer.parseInt(slotsCS.get(i));
+						}
 						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
-						if(slotOccLc != -1){
+						List<VehicleSlot> sc = park.getSlotsConfiguration();
+						for(VehicleSlot vs : sc){
+							if(vs.getVehicleType().compareTo(p.getVehicleType()) == 0){
+								if(slotOccLc != -1){
+									vs.setFreeParkSlotSignOccupied(slotOccLc);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccLs != -1){
+									vs.setFreeParkSlotOccupied(slotOccLs);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccP != -1){
+									vs.setPaidSlotOccupied(slotOccP);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccDO != -1){
+									vs.setTimedParkSlotOccupied(slotOccDO);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccH != -1){
+									vs.setHandicappedSlotOccupied(slotOccH);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccR != -1){
+									vs.setReservedSlotOccupied(slotOccR);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccE != -1){
+									vs.setRechargeableSlotOccupied(slotOccE);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccC_S != -1){
+									vs.setLoadingUnloadingSlotOccupied(slotOccC_S);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccRO != -1){
+									vs.setPinkSlotOccupied(slotOccRO);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccCS != -1){
+									vs.setCarSharingSlotOccupied(slotOccCS);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotNumND != -1){
+									vs.setUnusuableSlotNumber(slotNumND);
+									skipUpdate = false;
+								} else {
+								}
+								break;
+							}
+						}
+						park.setSlotsConfiguration(sc);
+					/*List<String> slotsOcc = p.getOccSlots();
+					List<String> slotsH = p.getHSlots();
+					List<String> slotsND = p.getNdSlots();
+					for(int i = 0; i < slotsOcc.size(); i++){
+						boolean skipUpdate = true;
+						int slotsOccOnPaying = -1;
+						int slotsOccOnHandicapped = -1;
+						int slotNumND = -1;
+						if(slotsOcc.get(i).compareTo("") != 0 && slotsOcc.get(i).compareTo("-1") != 0){
+							slotsOccOnPaying = Integer.parseInt(slotsOcc.get(i));
+						}
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
+							slotsOccOnHandicapped = Integer.parseInt(slotsH.get(i));
+						}
+						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
+							slotNumND = Integer.parseInt(slotsND.get(i));
+						}
+						//TODO manage new vehicleSlotsConfiguration
+						if(slotsOccOnPaying != -1){
+							park.setSlotsOccupiedOnPaying(slotsOccOnPaying);
+							skipUpdate = false;
+						} else {
+							park.setSlotsOccupiedOnPaying(0);
+						}
+						if(slotsOccOnHandicapped != -1){
+							park.setSlotsOccupiedOnHandicapped(slotsOccOnHandicapped);
+							skipUpdate = false;
+						} else {
+							park.setSlotsOccupiedOnHandicapped(0);
+						}
+						if(slotNumND != -1){
+							park.setSlotsUnavailable(slotNumND);
+							skipUpdate = false;
+						} else {
+							park.setSlotsUnavailable(-1);
+						}*/
+						if(!skipUpdate){
+							int year = Integer.parseInt(p.getPeriod().getYear());
+							period = null;
+							park.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+							dataService.updateDynamicParkingData(park, agency, userId, isSysLog, period, MONTH_PERIOD);
+						}
+					}
+				}
+			}
+			//dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period);
+			return "OK";
+		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
+			e.printStackTrace();
+			return "KO";
+		}
+	}	
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
+	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId,  @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+		try {
+			logger.debug("started file uplodad flux");
+			String datas = data.get("logData").toString();
+			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas, agency);
+			for(SOccupancyData s : allData){
+				Street street = dataService.getStreetByName(s.getsName(),agency, agencyId);
+				if (street != null){
+					List<String> slotsLC = s.getOccLC();
+					List<String> slotsLS = s.getOccLS();
+					List<String> slotsP = s.getOccP();
+					List<String> slotsDO = s.getOccDO();
+					List<String> slotsH = s.getOccH();
+					List<String> slotsR = s.getOccR();
+					List<String> slotsE = s.getOccE();
+					List<String> slotsC_S = s.getOccC_S();
+					List<String> slotsRO = s.getOccRO();
+					List<String> slotsCS = s.getOccCS();
+					List<String> slotsND = s.getSlotsND();
+					
+					for(int i = 0; i < slotsLC.size(); i++){
+						boolean skipUpdate = true;
+						int slotOccLc = -1;
+						int slotOccLs = -1;
+						int slotOccP = -1;
+						int slotOccDO = -1;
+						int slotOccH = -1;
+						int slotOccR = -1;
+						int slotOccE = -1;
+						int slotOccC_S = -1;
+						int slotOccRO = -1;
+						int slotOccCS = -1;
+						int slotNumND = -1;
+						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("-1") != 0){
+							slotOccLc = Integer.parseInt(slotsLC.get(i));
+						}
+						if(slotsLS.get(i).compareTo("") != 0 && slotsLS.get(i).compareTo("-1") != 0){
+							slotOccLs = Integer.parseInt(slotsLS.get(i));
+						}
+						if(slotsP.get(i).compareTo("") != 0 && slotsP.get(i).compareTo("-1") != 0){
+							slotOccP = Integer.parseInt(slotsP.get(i));
+						}
+						if(slotsDO.get(i).compareTo("") != 0 && slotsDO.get(i).compareTo("-1") != 0){
+							slotOccDO = Integer.parseInt(slotsDO.get(i));
+						}
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
+							slotOccH = Integer.parseInt(slotsH.get(i));
+						}
+						if(slotsR.get(i).compareTo("") != 0 && slotsR.get(i).compareTo("-1") != 0){
+							slotOccR = Integer.parseInt(slotsR.get(i));
+						}
+						if(slotsE.get(i).compareTo("") != 0 && slotsE.get(i).compareTo("-1") != 0){
+							slotOccE = Integer.parseInt(slotsE.get(i));
+						}
+						if(slotsC_S.get(i).compareTo("") != 0 && slotsC_S.get(i).compareTo("-1") != 0){
+							slotOccC_S = Integer.parseInt(slotsC_S.get(i));
+						}
+						if(slotsRO.get(i).compareTo("") != 0 && slotsRO.get(i).compareTo("-1") != 0){
+							slotOccRO = Integer.parseInt(slotsRO.get(i));
+						}
+						if(slotsCS.get(i).compareTo("") != 0 && slotsCS.get(i).compareTo("-1") != 0){
+							slotOccCS = Integer.parseInt(slotsCS.get(i));
+						}
+						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
+							slotNumND = Integer.parseInt(slotsND.get(i));
+						}
+						List<VehicleSlot> sc = street.getSlotsConfiguration();
+						for(VehicleSlot vs : sc){
+							if(vs.getVehicleType().compareTo(s.getVehicleType()) == 0){
+								if(slotOccLc != -1){
+									vs.setFreeParkSlotSignOccupied(slotOccLc);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccLs != -1){
+									vs.setFreeParkSlotOccupied(slotOccLs);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccP != -1){
+									vs.setPaidSlotOccupied(slotOccP);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccDO != -1){
+									vs.setTimedParkSlotOccupied(slotOccDO);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccH != -1){
+									vs.setHandicappedSlotOccupied(slotOccH);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccR != -1){
+									vs.setReservedSlotOccupied(slotOccR);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccE != -1){
+									vs.setRechargeableSlotOccupied(slotOccE);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccC_S != -1){
+									vs.setLoadingUnloadingSlotOccupied(slotOccC_S);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccRO != -1){
+									vs.setPinkSlotOccupied(slotOccRO);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotOccCS != -1){
+									vs.setCarSharingSlotOccupied(slotOccCS);
+									skipUpdate = false;
+								} else {
+								}
+								if(slotNumND != -1){
+									vs.setUnusuableSlotNumber(slotNumND);
+									skipUpdate = false;
+								} else {
+								}
+								break;
+							}
+						}
+						street.setSlotsConfiguration(sc);
+						//TODO manage new vehicleSlotsConfiguration
+						/*if(slotOccLc != -1){
 							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
 							skipUpdate = false;
 						} else {
@@ -421,7 +630,7 @@ public class ObjectController  {
 							skipUpdate = false;
 						} else {
 							street.setSlotsUnavailable(-1);
-						}
+						}*/
 						int year = Integer.parseInt(s.getPeriod().getYear());
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
@@ -431,75 +640,202 @@ public class ObjectController  {
 					}	
 				}
 			}
-			logger.info("ended file uplodad flux");
+			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
+			e.printStackTrace();
+			return "KO";
+		}
+	}
+	
+	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload2/{userId:.*}") 
+	public @ResponseBody String updateStreetListWithFile(@RequestParam("tData") MultipartFile data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+		try {
+			
+			File convFile = new File(data.getOriginalFilename());
+			data.transferTo(convFile);
+			
+			FileInputStream file = new FileInputStream(convFile);
+			HSSFWorkbook workbook = new HSSFWorkbook(file);
+			HSSFSheet sheet = workbook.getSheetAt(0);
+			
+			//Iterate through each rows one by one
+            Iterator<Row> rowIterator = sheet.iterator();
+            while (rowIterator.hasNext())
+            {
+                Row row = rowIterator.next();
+                //For each row, iterate through all the columns
+                Iterator<Cell> cellIterator = row.cellIterator();
+
+                while (cellIterator.hasNext())
+                {
+                    Cell cell = cellIterator.next();
+                    //Check the cell type and format accordingly
+                    switch (cell.getCellType())
+                    {
+                        case Cell.CELL_TYPE_NUMERIC:
+                            System.out.print(cell.getNumericCellValue() + "t");
+                            break;
+                        case Cell.CELL_TYPE_STRING:
+                            System.out.print(cell.getStringCellValue() + "t");
+                            break;
+                    }
+                }
+                System.out.println("");
+            }
+            file.close();
+
+			
+			logger.debug("started file uplodad flux");
+			String datas = null; //data.get("logData").toString();
+			List<SOccupancyData> allData = dataService.classStringToOSObjArray(datas, agency);
+			
+			for(SOccupancyData s : allData){
+				Street street = dataService.getStreetByName(s.getsName(),agency, agencyId);
+				if (street != null){
+					List<String> slotsLC = s.getOccLC();
+					List<String> slotsLS = s.getOccLS();
+					List<String> slotsP = s.getOccP();
+					List<String> slotsDO = s.getOccDO();
+					List<String> slotsH = s.getOccH();
+					List<String> slotsR = s.getOccR();
+					List<String> slotsND = s.getSlotsND();
+					
+					for(int i = 0; i < slotsLC.size(); i++){
+						boolean skipUpdate = true;
+						int slotOccLc = -1;
+						int slotOccLs = -1;
+						int slotOccP = -1;
+						int slotOccDO = -1;
+						int slotOccH = -1;
+						int slotOccR = -1;
+						int slotNumND = -1;
+						if(slotsLC.get(i).compareTo("") != 0 && slotsLC.get(i).compareTo("-1") != 0){
+							slotOccLc = Integer.parseInt(slotsLC.get(i));
+						}
+						if(slotsLS.get(i).compareTo("") != 0 && slotsLS.get(i).compareTo("-1") != 0){
+							slotOccLs = Integer.parseInt(slotsLS.get(i));
+						}
+						if(slotsP.get(i).compareTo("") != 0 && slotsP.get(i).compareTo("-1") != 0){
+							slotOccP = Integer.parseInt(slotsP.get(i));
+						}
+						if(slotsDO.get(i).compareTo("") != 0 && slotsDO.get(i).compareTo("-1") != 0){
+							slotOccDO = Integer.parseInt(slotsDO.get(i));
+						}
+						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
+							slotOccH = Integer.parseInt(slotsH.get(i));
+						}
+						if(slotsR.get(i).compareTo("") != 0 && slotsR.get(i).compareTo("-1") != 0){
+							slotOccR = Integer.parseInt(slotsR.get(i));
+						}
+						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
+							slotNumND = Integer.parseInt(slotsND.get(i));
+						}
+						//TODO manage new vehicleSlotsConfiguration
+						/*if(slotOccLc != -1){
+							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnFreeSigned(0);
+						}
+						if(slotOccLs != -1){
+							street.setSlotsOccupiedOnFree(slotOccLs);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnFree(0);
+						}
+						if(slotOccP != -1){
+							street.setSlotsOccupiedOnPaying(slotOccP);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnPaying(0);
+						}
+						if(slotOccDO != -1){
+							street.setSlotsOccupiedOnTimed(slotOccDO);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnTimed(0);
+						}
+						if(slotOccH != -1){
+							street.setSlotsOccupiedOnHandicapped(slotOccH);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnHandicapped(0);
+						}
+						if(slotOccR != -1){
+							street.setSlotsOccupiedOnReserved(slotOccR);
+							skipUpdate = false;
+						} else {
+							street.setSlotsOccupiedOnReserved(0);
+						}
+						if(slotNumND != -1){
+							street.setSlotsUnavailable(slotNumND);
+							skipUpdate = false;
+						} else {
+							street.setSlotsUnavailable(-1);
+						}*/
+						int year = Integer.parseInt(s.getPeriod().getYear());
+						period = null;
+						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+						if(!skipUpdate){
+							dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, MONTH_PERIOD);
+						}
+					}	
+				}
+			}
+			logger.debug("ended file uplodad flux");
+			return "OK";
+		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
 			return "KO";
 		}
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) String type, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			logger.info("started file uplodad flux");
+			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PMProfitData> allData = dataService.classStringToPPMObjArray(datas);
 			for(PMProfitData p : allData){
-				ParkMeter parking = dataService.getParkingMeterFromCode(agency, p.getpCode());
+				ParkMeter parking = dataService.getParkingMeterFromCode(agency, p.getpCode(), agencyId);
 				if(parking != null){
 					List<String> tickets = p.getTickets();
 					List<String> profits = p.getProfitVals();
-					int p_type = (type != null) ? Integer.parseInt(type) : 1;	// 1 year value, 2 month value
 					for(int i = 0; i < profits.size(); i++){
 						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
 							int profit = (int)(Double.parseDouble(profits.get(i)) * 100);
+							int ticket = Integer.parseInt(tickets.get(i));
 							parking.setProfit(profit);
-							if(tickets.size() > 0){
-								int ticket = Integer.parseInt(tickets.get(i));
-								parking.setTickets(ticket);
-							}
+							parking.setTickets(ticket);
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							//period = dataService.getPeriodFromYearAndMonth(year, i);
-							switch(p_type){
-								case 1: 
-									parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-									dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
-									break;
-								case 2: 
-									int month = Integer.parseInt(p.getPeriod().getMonth()[0]);
-									parking.setUpdateTime(dataService.getTimeStampFromYearMonthDay(year, month, i+1));
-									dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, DOW_PERIOD);
-									break;
-								default: break;	
-							}
-							
+							parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+							dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
 						}
 					}
 				} else {
 					logger.error("parkingmeter with code: " + p.getpCode() + " not found in db");
 				}
 			}
-			logger.info("ended file uplodad flux");
+			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			
-			logger.info("started file uplodad flux");
+			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
 			List<PSProfitData> allData = dataService.classStringToPPSObjArray(datas);
 			for(PSProfitData p : allData){
-				ParkStruct parkStruct = dataService.getParkingStructureByName(p.getpName(), agency);
+				ParkStruct parkStruct = dataService.getParkingStructureByName(p.getpName(), agency, agencyId);
 				if(parkStruct != null){
 					List<String> tickets = p.getTickets();
 					List<String> profits = p.getProfitVals();
@@ -520,12 +856,9 @@ public class ObjectController  {
 					logger.error("parkingstructure with name: " + p.getpName() + " not found in db");
 				}
 			}
-			logger.info("ended file uplodad flux");
-			
-			
+			logger.debug("ended file uplodad flux");
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 			return "KO";
 		}
@@ -540,10 +873,10 @@ public class ObjectController  {
 		String createdFile = "";
 		//byte[] return_data = null;
 		String path = request.getSession().getServletContext().getRealPath("/csv/");
-		logger.info("Current path: " + path);
+		logger.debug("Current path: " + path);
 		
 		JSONArray logList = new JSONArray(data);
-		logger.info("log list size: " + logList.length());
+		logger.debug("log list size: " + logList.length());
 	   	
 	    for(int i = 0; i < logList.length(); i++){
 	    	JSONObject log = logList.getJSONObject(i);

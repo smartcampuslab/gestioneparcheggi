@@ -30,8 +30,8 @@ import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.text.DecimalFormat;
 import java.util.List;
+import java.util.Map;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -94,13 +94,18 @@ public class ZipCsvExporter implements Exporter {
 		String result = "AREA_APPARTENENZA,STRADA_RIFERIMENTO, NUMERO_POSTI,NUMERO_POSTI_DISABILI,NUMERO_POSTI_DISCO_ORARIO,NUMERO_POSTI_SOSTA_LIBERA,PARCHEGGIO_PER_ABBONATI,GEOMETRIA\n";
 		for (RateArea area : areaList) {
 			if (area.getStreets() != null) {
-				for (Street via : area.getStreets()) {
+				//for (Street via : area.getStreets()) {
+				Map<String, Street> streets = area.getStreets();
+				for (Map.Entry<String, Street> entry : streets.entrySet())
+				{
+					Street via = entry.getValue();
 					result += "\"" + area.getName() + "\"" + CSV_SEPARATOR
 							+ "\"" + via.getStreetReference() + "\""
 							+ CSV_SEPARATOR + via.getSlotNumber()
-							+ CSV_SEPARATOR + via.getHandicappedSlotNumber()
+							// TODO: manage vehicle type slots correctly
+							/*+ CSV_SEPARATOR + via.getHandicappedSlotNumber()
 							+ CSV_SEPARATOR + via.getTimedParkSlotNumber()
-							+ CSV_SEPARATOR + via.getFreeParkSlotNumber()
+							+ CSV_SEPARATOR + via.getFreeParkSlotNumber()*/
 							+ CSV_SEPARATOR + via.isSubscritionAllowedPark()
 							+ CSV_SEPARATOR + geoToCsv(via.getGeometry())
 							+ "\n";
@@ -130,15 +135,15 @@ public class ZipCsvExporter implements Exporter {
 			result += "\"" + element.getName() + "\"" + CSV_SEPARATOR + "\""
 					+ element.getStreetReference() + "\"" + CSV_SEPARATOR
 					+ "\"" + element.getManagementMode() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getSlotNumber() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getTimeSlot() + "\"" + CSV_SEPARATOR;
+					+ "\"" + element.getSlotNumber() + "\"" + CSV_SEPARATOR;
+					//+ "\"" + element.getTimeSlot() + "\"" + CSV_SEPARATOR;
 			result += "\"";
 			for (PaymentMode p : element.getPaymentMode()) {
 				result += p + " ";
 			}
 			result += "\"" + CSV_SEPARATOR;
 			result += "\"" + element.getPhoneNumber() + "\"" + CSV_SEPARATOR
-					+ "\"" + element.getFee_val() + "\"" + CSV_SEPARATOR
+					//+ "\"" + element.getFee_val() + "\"" + CSV_SEPARATOR
 					+ geoToCsv(element.getGeometry()) + "\n";
 		}
 		return result;
@@ -161,7 +166,11 @@ public class ZipCsvExporter implements Exporter {
 		String result = "AREA_APPARTENZA,CODICE,NOTE,STATO,GEOMETRIA\n";
 		for (RateArea area : areaList) {
 			if (area.getParkingMeters() != null) {
-				for (ParkingMeter p : area.getParkingMeters()) {
+				//for (ParkingMeter p : area.getParkingMeters()) {
+				Map<String, ParkingMeter> pms = area.getParkingMeters();
+				for (Map.Entry<String, ParkingMeter> entry : pms.entrySet())
+				{
+					ParkingMeter p = entry.getValue();
 					result += "\"" + area.getName() + "\"" + CSV_SEPARATOR
 							+ "\"" + p.getCode() + "\"" + CSV_SEPARATOR + "\""
 							+ p.getNote() + "\"" + CSV_SEPARATOR + "\""
@@ -202,8 +211,8 @@ public class ZipCsvExporter implements Exporter {
 		String result = "NOME,COSTO,FASCIE,CODICE_SMS,COLORE\n";
 		for (RateArea area : areaList) {
 			result += "\"" + area.getName() + "\"" + CSV_SEPARATOR
-					+ new DecimalFormat("#0.00").format(area.getFee())
-					+ CSV_SEPARATOR + "\"" + area.getTimeSlot() + "\""
+					/*+ new DecimalFormat("#0.00").format(area.getFee())
+					+ CSV_SEPARATOR + "\"" + area.getTimeSlot() + "\""*/
 					+ CSV_SEPARATOR + "\"" + area.getSmsCode() + "\""
 					+ CSV_SEPARATOR + "\"" + "#" + area.getColor() + "\""
 					+ "\n";

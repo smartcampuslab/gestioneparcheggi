@@ -23,15 +23,14 @@ public class RateAreaBean implements Serializable {
 	private String id;
 	private String id_app;
 	private String name;
-	private Float fee;
-	private String timeSlot;
+	private List<RatePeriodBean> validityPeriod;
 	private String smsCode;
 	private String color;
 	private String note;
-	private String municipality;
 	private List<PolygonBean> geometry;
 	private List<String> zones;	//List with the id of the associated zone
-
+	private List<String> agencyId;	// relation to agency object
+	
 	public String getId() {
 		return id;
 	}
@@ -54,22 +53,6 @@ public class RateAreaBean implements Serializable {
 
 	public void setColor(String color) {
 		this.color = color;
-	}
-
-	public Float getFee() {
-		return fee;
-	}
-
-	public void setFee(Float fee) {
-		this.fee = fee;
-	}
-
-	public String getTimeSlot() {
-		return timeSlot;
-	}
-
-	public void setTimeSlot(String timeSlot) {
-		this.timeSlot = timeSlot;
 	}
 
 	public String getSmsCode() {
@@ -104,20 +87,28 @@ public class RateAreaBean implements Serializable {
 		this.note = note;
 	}
 
-	public String getMunicipality() {
-		return municipality;
-	}
-
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
-	}
-
 	public List<String> getZones() {
 		return zones;
 	}
 
 	public void setZones(List<String> zones) {
 		this.zones = zones;
+	}
+
+	public List<RatePeriodBean> getValidityPeriod() {
+		return validityPeriod;
+	}
+
+	public void setValidityPeriod(List<RatePeriodBean> validityPeriod) {
+		this.validityPeriod = validityPeriod;
+	}
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
 	}
 
 }

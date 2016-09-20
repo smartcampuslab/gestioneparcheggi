@@ -17,24 +17,38 @@ package it.smartcommunitylab.parking.management.web.model;
 
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RateArea {
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String name;
-	private Float fee;
-	private String timeSlot;
+	//private Float fee;
+	//private String timeSlot;
+	private List<RatePeriod> validityPeriod;
 	private String smsCode;
 	private String color;
 	private String note;
-	private String municipality;
+	//private String municipality;
 	private List<Polygon> geometry;
 	private Integer slotNumber;	// used in supply csv creation
 
-	private List<Street> streets;
-	private List<ParkingMeter> parkingMeters;
+	//private List<Street> streets;
+	private Map<String,Street> streets = new HashMap<String, Street>();
+	//private List<ParkingMeter> parkingMeters;
+	private Map<String,ParkingMeter> parkingMeters = new HashMap<String, ParkingMeter>();
 	private List<String> zones;	// id of the related zones
+	private List<String> agencyId;	// relation to agency object
+
+	public Map<String, Street> getStreets() {
+		return streets;
+	}
+
+	public void setStreets(Map<String, Street> streets) {
+		this.streets = streets;
+	}
 
 	public String getId() {
 		return id;
@@ -52,7 +66,7 @@ public class RateArea {
 		this.id_app = id_app;
 	}
 
-	public Float getFee() {
+	/*public Float getFee() {
 		return fee;
 	}
 
@@ -66,10 +80,18 @@ public class RateArea {
 
 	public void setTimeSlot(String timeSlot) {
 		this.timeSlot = timeSlot;
-	}
-
+	}*/
+	
 	public String getSmsCode() {
 		return smsCode;
+	}
+
+	public Map<String, ParkingMeter> getParkingMeters() {
+		return parkingMeters;
+	}
+
+	public void setParkingMeters(Map<String, ParkingMeter> parkingMeters) {
+		this.parkingMeters = parkingMeters;
 	}
 
 	public void setSmsCode(String smsCode) {
@@ -92,21 +114,13 @@ public class RateArea {
 		this.note = note;
 	}
 
-	public List<Street> getStreets() {
-		return streets;
-	}
-
-	public void setStreets(List<Street> streets) {
-		this.streets = streets;
-	}
-
-	public List<ParkingMeter> getParkingMeters() {
+	/*public List<ParkingMeter> getParkingMeters() {
 		return parkingMeters;
 	}
 
 	public void setParkingMeters(List<ParkingMeter> parkingMeters) {
 		this.parkingMeters = parkingMeters;
-	}
+	}*/
 
 	public String getName() {
 		return name;
@@ -131,21 +145,84 @@ public class RateArea {
 	public void setSlotNumber(Integer slotNumber) {
 		this.slotNumber = slotNumber;
 	}
-
-	public String getMunicipality() {
-		return municipality;
-	}
-
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
-	}
-
+	
 	public List<String> getZones() {
 		return zones;
 	}
 
 	public void setZones(List<String> zones) {
 		this.zones = zones;
+	}
+
+	public List<RatePeriod> getValidityPeriod() {
+		return validityPeriod;
+	}
+
+	public void setValidityPeriod(List<RatePeriod> validityPeriod) {
+		this.validityPeriod = validityPeriod;
+	}
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
+	}
+
+	public String feePeriodsSummary(){
+		String DATA_SEPARATOR = " / ";
+		String PERIOD_SEPARATOR = " // ";
+		String pSumm = "";
+		for(int i = 0; i < this.validityPeriod.size(); i++){
+			float euro_val = validityPeriod.get(i).getRateValue() / 100F;
+			if(validityPeriod.get(i).isHoliday()) {
+				pSumm += String.format("%.2f", euro_val) + " euro/h"
+						+ DATA_SEPARATOR + validityPeriod.get(i).getFrom() 
+						+ "-" + validityPeriod.get(i).getTo()
+						+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
+						+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
+						+ DATA_SEPARATOR + "Festivo"
+						+ PERIOD_SEPARATOR;
+			} else {
+				pSumm += String.format("%.2f", euro_val) + " euro/h"
+						+ DATA_SEPARATOR + validityPeriod.get(i).getFrom() 
+						+ "-" + validityPeriod.get(i).getTo()
+						+ DATA_SEPARATOR + correctDaysValues(validityPeriod.get(i).getWeekDays())
+						+ DATA_SEPARATOR + validityPeriod.get(i).getTimeSlot()
+						+ PERIOD_SEPARATOR;
+			}
+		}
+		return pSumm.substring(0, pSumm.length() - 1);
+	}
+	
+	public String correctDaysValues(List<String> weekDays){
+		String stringValues = "";
+		for(String wd : weekDays){
+			if(wd.compareTo("MO") == 0){
+				stringValues += "LU ";
+			}
+			if(wd.compareTo("TU") == 0){
+				stringValues += "MA ";
+			}
+			if(wd.compareTo("WE") == 0){
+				stringValues += "ME ";
+			}
+			if(wd.compareTo("TH") == 0){
+				stringValues += "GI ";
+			}
+			if(wd.compareTo("FR") == 0){
+				stringValues += "VE ";
+			}
+			if(wd.compareTo("SA") == 0){
+				stringValues += "SA ";
+			}
+			if(wd.compareTo("SU") == 0){
+				stringValues += "DO ";
+			}
+		}
+		stringValues.substring(0, stringValues.length()-1);
+		return stringValues;
 	}
 
 }

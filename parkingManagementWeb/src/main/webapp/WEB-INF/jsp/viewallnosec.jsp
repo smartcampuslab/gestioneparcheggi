@@ -45,6 +45,14 @@
 <script src="../js/services/serv.js"></script>
 <script src="../js/services/serv_shared.js"></script>
 <script src="../js/services/serv_initialize.js"></script>
+<script src="../js/services/serv_utils.js"></script>
+<script src="../js/services/serv_maps.js"></script>
+<script src="../js/services/objects_services/serv_area.js"></script>
+<script src="../js/services/objects_services/serv_street.js"></script>
+<script src="../js/services/objects_services/serv_zone.js"></script>
+<script src="../js/services/objects_services/serv_parking_structure.js"></script>
+<script src="../js/services/objects_services/serv_parking_meter.js"></script>
+<script src="../js/services/objects_services/serv_bike_point.js"></script>
 <script src="../js/directives.js"></script>
 
 <script src="../lib/lodash.js"></script>
@@ -75,6 +83,8 @@ var conf_microzone_type="<%=request.getAttribute("microzone_type")%>";
 var conf_ps_managers="<%=request.getAttribute("ps_managers")%>";
 var conf_elements="<%=request.getAttribute("elements")%>";
 var conf_filters="<%=request.getAttribute("filters")%>";
+var conf_vehicle_type_list="<%=request.getAttribute("vehicle_type_list")%>";
+var conf_agency="<%=request.getAttribute("user_agency")%>";
 <%-- Prevent the backspace key from navigating back. --%>
 $(document).unbind('keydown').bind('keydown', function (event) {
     var doPrevent = false;

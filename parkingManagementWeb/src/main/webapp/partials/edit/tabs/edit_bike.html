@@ -6,7 +6,9 @@
 							<info-window id="bp" visible-on-marker="{{ bp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bpconf.bp_name.visible">{{ bp.data.name }}</span></h4>
+						          	<h4 id="firstHeading" class="firstHeading">
+						          		<span ng-show="bpconf.bp_name.visible">{{ bp.data.name }}</span>
+						          	</h4>
 							        <div id="bodyContent">
 							        	<table>
 											<tr ng-show="bpconf.bp_slotNumber.visible">
@@ -23,7 +25,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in bp.zones0 track by z0.id">
+														<tr ng-repeat="z0 in bp.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -36,7 +38,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in bp.zones1 track by z1.id">
+														<tr ng-repeat="z1 in bp.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -49,7 +51,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in bp.zones2 track by z2.id">
+														<tr ng-repeat="z2 in bp.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -62,7 +64,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in bp.zones3 track by z3.id">
+														<tr ng-repeat="z3 in bp.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -75,11 +77,22 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in bp.zones4 track by z4.id">
+														<tr ng-repeat="z4 in bp.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
 													</table>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" align="right">
+													<hr/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="info_window_buttons">
+													<a href ng-show="(bikePermissions >= 2) && isMyAgency(bp.data.agencyId)" type="button" class="btn btn-primary" ng-click="setBpEdit(bp.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+													<a href ng-show="(bikePermissions >= 3) && isMyAgency(bp.data.agencyId)" type="button" class="btn btn-danger" ng-click="setBpRemove(bp.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 												</td>
 											</tr>
 							        	</table>
@@ -91,7 +104,9 @@
 							<info-window id="sbp" visible-on-marker="{{ sbp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bpconf.bp_name.visible">{{ sbp.data.name }}</span></h4>
+						          	<h4 id="firstHeading" class="firstHeading">
+						          		<span ng-show="bpconf.bp_name.visible">{{ sbp.data.name }}</span>
+						          	</h4>
 							        <div id="bodyContent">
 							        	<table>
 											<tr ng-show="bpconf.bp_slotNumber.visible">
@@ -108,7 +123,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z0 in sbp.zones0 track by z0.id">
+														<tr ng-repeat="z0 in sbp.data.zones0 track by z0.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 														</tr>
@@ -121,7 +136,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z1 in sbp.zones1 track by z1.id">
+														<tr ng-repeat="z1 in sbp.data.zones1 track by z1.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 														</tr>
@@ -134,7 +149,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z2 in sbp.zones2 track by z2.id">
+														<tr ng-repeat="z2 in sbp.data.zones2 track by z2.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 														</tr>
@@ -147,7 +162,7 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z3 in sbp.zones3 track by z3.id">
+														<tr ng-repeat="z3 in sbp.data.zones3 track by z3.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 														</tr>
@@ -160,11 +175,22 @@
 												</td>
 												<td>
 													<table width="100%">
-														<tr ng-repeat="z4 in sbp.zones4 track by z4.id">
+														<tr ng-repeat="z4 in sbp.data.zones4 track by z4.id">
 															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 														</tr>
 													</table>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" align="right">
+													<hr/>
+												</td>
+											</tr>
+											<tr>
+												<td colspan="2" class="info_window_buttons">
+													<a href ng-show="(bikePermissions >= 2) && isMyAgency(bp.data.agencyId)" type="button" class="btn btn-primary" ng-click="setBpEdit(sbp.data)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}">{{ 'btn_edit_text' | i18n }}</a>&nbsp;
+													<a href ng-show="(bikePermissions >= 3) && isMyAgency(bp.data.agencyId)" type="button" class="btn btn-danger" ng-click="setBpRemove(sbp.data)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}">{{ 'btn_delete_text' | i18n }}</a>
 												</td>
 											</tr>
 							        	</table>
@@ -180,7 +206,7 @@
 									<table width="100%">
 										<tr>
 											<td align="left"><h5 class="panel-title">{{ 'bp_list' | i18n }}</h5></td>
-											<td align="right"><button type="button" class="btn btn-success" ng-click="setBpEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+											<td align="right"><button ng-show="bikePermissions >= 3" type="button" class="btn btn-success" ng-click="setBpEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
 										</tr>
 									</table>
 <!-- 									<h5 class="panel-title">{{ 'bp_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-info btn-xs" ng-click="setBpEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
@@ -190,6 +216,15 @@
 									<div class="tablewrapper">
 										<table class="table table-striped" style="width: 100%">
 											<tr ng-show="bpointWS.length != 0">
+												<th width="5%">
+													<a href ng-click="showAgencyBPFilter();currentPageBp=0" ng-show="!showAgencyBPointFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+													<a href ng-click="agencyBPointFilter=null;hideAgencyBPFilter()" ng-show="showAgencyBPointFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
+													<div ng-show="showAgencyBPointFilter">
+										    			<select id="f_agency_pmeter" class="form-control" ng-model="agencyBPointFilter">
+										    				<option ng-repeat="a in allAgencyFilter" value="{{a.id}}" >{{ a.name }}</option>
+										    			</select>
+										    		</div>
+												</th>
 												<th width="43%">
 													<span ng-show="bpconf.bp_name.visible">{{ 'bp_name' | i18n }}</span>&nbsp;
 													<a href ng-click="showBpNameFilter();currentPageBp=0" ng-show="!showBpFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
@@ -198,34 +233,37 @@
 										    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageBp = 0" />
 										    		</div>
 												</th>
-												<th width="22%" class="myCenter"><span ng-show="bpconf.bp_slotNumber.visible">{{ 'bp_slots' | i18n }}</span></th>
-												<th width="15%" class="myCenter"><span ng-show="bpconf.bp_bikeNumber.visible">{{ 'bp_bikes' | i18n }}</span></th>
-												<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
+												<th width="16%" class="myCenter"><span ng-show="bpconf.bp_slotNumber.visible">{{ 'bp_slots' | i18n }}</span></th>
+												<th width="11%" class="myCenter"><span ng-show="bpconf.bp_bikeNumber.visible">{{ 'bp_bikes' | i18n }}</span></th>
+												<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
 											</tr>
 											<tbody class="animate-repeat"
-												ng-repeat="bpoint in filtered = (bpointWS | filter:nameFilter) | orderBy:'name' | startFrom:currentPageBp*maxBPoints | limitTo:maxBPoints">
+												ng-repeat="bpoint in filtered = (bpointWS | filter:nameFilter | filter:agencyBPointFilter) | orderBy:'name' | startFrom:currentPageBp*maxBPoints | limitTo:maxBPoints">
 												<tr>
-													<td width="43%" align="left"><span ng-show="bpconf.bp_name.visible">{{bpoint.name}}</span></td>
-													<td width="22%" align="center"><span ng-show="bpconf.bp_slotNumber.visible">{{bpoint.slotNumber}}</span></td>
-													<td width="15%" align="center"><span ng-show="bpconf.bp_bikeNumber.visible">{{bpoint.bikeNumber}}</span></td>
-													<td width="20%" align="center">
-														<a href type="button" class="btn btn-primary btn-xs" ng-click="setBpDetails(bpoint)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
-														<a href type="button" class="btn btn-primary btn-xs" ng-click="setBpEdit(bpoint)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
-														<a href type="button" class="btn btn-primary btn-xs" ng-click="setBpRemove(bpoint)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
+													<td align="left">
+														<span ng-show="isMyAgency(bpoint.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
+													</td>
+													<td align="left"><span ng-show="bpconf.bp_name.visible">{{bpoint.name}}</span></td>
+													<td align="center"><span ng-show="bpconf.bp_slotNumber.visible">{{bpoint.slotNumber}}</span></td>
+													<td align="center"><span ng-show="bpconf.bp_bikeNumber.visible">{{bpoint.bikeNumber}}</span></td>
+													<td align="center">
+														<a href ng-show="(bikePermissions >= 1) || isMyAgency(bpoint.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setBpDetails(bpoint)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>&nbsp;
+														<a href ng-show="(bikePermissions >= 2) && isMyAgency(bpoint.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setBpEdit(bpoint)"  alt="{{ 'link_edit_title' | i18n }}" title="{{ 'link_edit_title' | i18n }}"><i class="glyphicon glyphicon-pencil"></i></a>&nbsp;
+														<a href ng-show="(bikePermissions >= 3) && isMyAgency(bpoint.agencyId)" type="button" class="btn btn-primary btn-xs" ng-click="setBpRemove(bpoint)" alt="{{ 'link_remove_title' | i18n }}" title="{{ 'link_remove_title' | i18n }}"><i class="glyphicon glyphicon-trash"></i></a>
 													</td>
 												</tr>
 											</tbody>
 											<tr ng-show="bpointWS.length == 0">
-												<td colspan="5"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
+												<td colspan="4"><strong>{{ 'no_ps_in_lists' | i18n }}</strong></td>
 											</tr>
 										</table>
 									</div>
 									<button class="btn btn-default"
 											ng-disabled="currentPageBp == 0"
 											ng-click="currentPageBp=currentPageBp-1">{{ 'previous_label' | i18n }}</button>
-										{{currentPageBp+1}}/{{numberOfPages(6)}}
+										{{currentPageBp+1}}/{{numberOfPages(6, filtered)}}
 									<button class="btn btn-default"
-											ng-disabled="currentPageBp >= bpointWS.length/maxBPoints - 1"
+											ng-disabled="currentPageBp >= filtered.length/maxBPoints - 1"
 											ng-click="currentPageBp=currentPageBp+1">{{ 'next_label' | i18n }}</button>
 								</div>
 							</div>
@@ -259,7 +297,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z0 in bikePoint.myZones0 track by z0.id">
+											<tr ng-repeat="z0 in bikePoint.zones0 track by z0.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
 												<td width="85%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
 											</tr>
@@ -272,7 +310,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z1 in bikePoint.myZones1 track by z1.id">
+											<tr ng-repeat="z1 in bikePoint.zones1 track by z1.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
 												<td width="85%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
 											</tr>
@@ -285,7 +323,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z2 in bikePoint.myZones2 track by z2.id">
+											<tr ng-repeat="z2 in bikePoint.zones2 track by z2.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
 												<td width="85%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
 											</tr>
@@ -298,7 +336,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z3 in bikePoint.myZones3 track by z3.id">
+											<tr ng-repeat="z3 in bikePoint.zones3 track by z3.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
 												<td width="85%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
 											</tr>
@@ -311,7 +349,7 @@
 									</td>
 									<td class="detailsViewBikeDX">
 										<table width="100%">
-											<tr ng-repeat="z4 in bikePoint.myZones4 track by z4.id">
+											<tr ng-repeat="z4 in bikePoint.zones4 track by z4.id">
 												<td width="15%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
 												<td width="85%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
 											</tr>
@@ -327,7 +365,7 @@
 										<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>	
 									</td>
 									<td width="15%" align="center">
-										<button type="button" class="btn btn-primary btn-lg" ng-click="setBpEdit(bikePoint)">{{ 'text_btn_edit' | i18n  }}</button>
+										<button ng-show="(bikePermissions >= 2) && isMyAgency(bikePoint.agencyId)" type="button" class="btn btn-primary btn-lg" ng-click="setBpEdit(bikePoint)">{{ 'text_btn_edit' | i18n  }}</button>
 									</td>
 								</tr>
 							</table>
@@ -360,35 +398,35 @@
 							   	</div>
 							 	<div class="form-group" ng-show="bpconf.bp_zones0.visible">
 							    	<label for="zone0">{{ zone0_label | i18n }}</label>
-							    	<select id="zone0" name="bpZone0" class="form-control" ng-options="m as m.label for m in bpZones0 | orderBy: 'label'" ng-model="myBpZone0" ng-required="bpconf.bp_zones0.required">
+							    	<select id="zone0" name="bpZone0" class="form-control" ng-options="m as m.label for m in bpZones0 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone0" ng-required="bpconf.bp_zones0.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone0.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
 								<div class="form-group" ng-show="bpconf.bp_zones1.visible">
 							    	<label for="zone1">{{ zone1_label | i18n }}</label>
-							    	<select id="zone1" name="bpZone1" class="form-control" ng-options="m as m.label for m in bpZones1 | orderBy: 'label'" ng-model="myBpZone1" ng-required="bpconf.bp_zones1.required">
+							    	<select id="zone1" name="bpZone1" class="form-control" ng-options="m as m.label for m in bpZones1 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone1" ng-required="bpconf.bp_zones1.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone1.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
 								<div class="form-group" ng-show="bpconf.bp_zones2.visible">
 							    	<label for="zone2">{{ zone2_label | i18n }}</label>
-							    	<select id="zone2" name="bpZone2" class="form-control" ng-options="m as m.label for m in bpZones2 | orderBy: 'label'" ng-model="myBpZone2" ng-required="bpconf.bp_zones2.required">
+							    	<select id="zone2" name="bpZone2" class="form-control" ng-options="m as m.label for m in bpZones2 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone2" ng-required="bpconf.bp_zones2.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone2.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
 								<div class="form-group" ng-show="bpconf.pb_zones3.visible">
 							    	<label for="zone3">{{ zone3_label | i18n }}</label>
-							    	<select id="zone3" name="bpZone3" class="form-control" ng-options="m as m.label for m in bpZones3 | orderBy: 'label'" ng-model="myBpZone3" ng-required="bpconf.bp_zones3.required">
+							    	<select id="zone3" name="bpZone3" class="form-control" ng-options="m as m.label for m in bpZones3 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone3" ng-required="bpconf.bp_zones3.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone3.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
 								<div class="form-group" ng-show="bpconf.bp_zones4.visible">
 							    	<label for="zone4">{{ zone4_label | i18n }}</label>
-							    	<select id="zone4" name="bpZone4" class="form-control" ng-options="m as m.label for m in bpZones4 | orderBy: 'label'" ng-model="myBpZone4" ng-required="bpconf.bp_zones4.required">
+							    	<select id="zone4" name="bpZone4" class="form-control" ng-options="m as m.label for m in bpZones4 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myBpZone4" ng-required="bpconf.bp_zones4.required">
 							    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
@@ -416,8 +454,8 @@
 							   			<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
 							   		</td>
 							   		<td width="7%" align="right">
-							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(0, bikePoint, form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, bikePoint, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 							   		</td>
 								</tr>
 								<tr>

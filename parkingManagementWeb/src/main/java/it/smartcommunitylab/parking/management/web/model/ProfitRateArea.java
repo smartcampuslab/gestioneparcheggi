@@ -15,93 +15,19 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
-import java.util.List;
-
-public class ProfitRateArea {
-	private String id;
-	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
-	private String name;
-	private Float fee;
-	private String timeSlot;
-	private String smsCode;
-	private String color;
-	private String note;
-	private Integer slotNumber;
+public class ProfitRateArea extends RateArea {
+//	private String id;
+//	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
+//	private String name;
+//	private Float fee;
+//	private String timeSlot;
+//	private String smsCode;
+//	private String color;
+//	private String note;
+//	private Integer slotNumber;
+//	private List<String> zones;
 	private Integer profit;
 	private Integer tickets;
-	private List<String> zones;
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getId_app() {
-		return id_app;
-	}
-
-	public void setId_app(String id_app) {
-		this.id_app = id_app;
-	}
-
-	public Float getFee() {
-		return fee;
-	}
-
-	public void setFee(Float fee) {
-		this.fee = fee;
-	}
-
-	public String getTimeSlot() {
-		return timeSlot;
-	}
-
-	public void setTimeSlot(String timeSlot) {
-		this.timeSlot = timeSlot;
-	}
-
-	public String getSmsCode() {
-		return smsCode;
-	}
-
-	public void setSmsCode(String smsCode) {
-		this.smsCode = smsCode;
-	}
-
-	public String getColor() {
-		return color;
-	}
-
-	public void setColor(String color) {
-		this.color = color;
-	}
-
-	public String getNote() {
-		return note;
-	}
-
-	public void setNote(String note) {
-		this.note = note;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Integer getSlotNumber() {
-		return slotNumber;
-	}
-
-	public void setSlotNumber(Integer slotNumber) {
-		this.slotNumber = slotNumber;
-	}
 
 	public Integer getProfit() {
 		return profit;
@@ -117,14 +43,6 @@ public class ProfitRateArea {
 
 	public void setTickets(Integer tickets) {
 		this.tickets = tickets;
-	}
-
-	public List<String> getZones() {
-		return zones;
-	}
-
-	public void setZones(List<String> zones) {
-		this.zones = zones;
 	}
 
 }

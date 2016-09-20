@@ -28,6 +28,7 @@ import it.smartcommunitylab.parking.management.web.security.ObjectsSpecialHolida
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -92,7 +93,6 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	public Map<StatKey, StatValue> findLastValue(String objectId, String appId,
 			String type, Map<String, Object> params, int[] years, byte[] months, byte[] days, byte[] hours) 
 	{
-		//logger.info(String.format("objectId: %s, appId: %s, type: %s", objectId, appId, type));
 		return findStats(objectId, appId, type, params, years, months, days, hours);
 	}
 
@@ -106,10 +106,9 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	}
 
 	public void updateStats(String objectId, String appId, String type, Map<String, Object> params, double value, long timestamp) {
-		StatValue stat = new StatValue(1, value, value, timestamp); //value,
+		StatValue stat = new StatValue(1, value, value, timestamp);
 		Calendar c = Calendar.getInstance();
 		c.setTimeInMillis(timestamp);
-		//boolean isHoliday = isHoliday(c, appId);
 		boolean isHoliday = isAHoliday(c, appId);
 		int month = c.get(Calendar.MONTH);
 		int dow = c.get(Calendar.DAY_OF_WEEK);
@@ -1238,7 +1237,8 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			boolean we,
 			byte[] hours) 
 	{
-		Criteria res = new Criteria("key.appId").is(appId).and("key.type").is(type);
+		//Criteria res = new Criteria("key.appId").is(appId).and("key.type").is(type);
+		Criteria res = new Criteria("key.appId").is(appId).and("key.type").regex(type + ".*");	// new management of type: contains instead of is
 		if (params != null && !params.isEmpty()) {
 			for (String key : params.keySet())
 				res.and("parameters."+key).is(params.get(key));
@@ -1319,9 +1319,18 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			//logger.info(String.format("key %s, value %s", key.toString(), value.toString()));
 			map.put(key, value.merge(map.get(key)));
 		}
-		for (StatKey key : map.keySet()) {
-			if (map.get(key).empty()) map.remove(key);
+		for (Iterator<StatKey> iterator = map.keySet().iterator(); iterator.hasNext();) {
+			StatKey key = iterator.next();
+		    if (map.get(key).empty()) {
+		        // Remove the current element from the iterator and the list.
+		        iterator.remove();
+		    }
 		}
+		/*if(map != null && !map.isEmpty()){
+			for (StatKey key : map.keySet()) {
+				if (map.get(key).empty()) map.remove(key);
+			}
+		}*/
 		return map;
 	}
 	

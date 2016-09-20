@@ -3,8 +3,8 @@
 /* Controllers */
 var pmControllers = angular.module('pmControllers');
 
-pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','getMyMessages','$timeout',
-    function($scope, $http, $route, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, getMyMessages, $timeout) {
+pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$routeParams', '$rootScope', 'localize', '$locale', '$dialogs', 'sharedDataService', '$filter', 'invokeWSService', 'invokeDashboardWSService', 'invokeWSServiceProxy','invokePdfServiceProxy','initializeService','utilsService','getMyMessages','$timeout',
+    function($scope, $http, $route, $window, $cookies, $routeParams, $rootScope, localize, $locale, $dialogs, sharedDataService, $filter, invokeWSService, invokeDashboardWSService, invokeWSServiceProxy, invokePdfServiceProxy, initializeService, utilsService, getMyMessages, $timeout) {
     
     $scope.setFrameOpened = function(value){
     	$rootScope.frameOpened = value;
@@ -19,6 +19,21 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     $scope.setNextButtonViewLabel = function(value){
     	$rootScope.buttonNextViewLabel = value;
     };
+    
+    $window.onresize = function() {
+        changeTemplate();
+        $scope.$apply();
+    };
+    changeTemplate();
+
+    function changeTemplate() {
+        var screenWidth = $window.innerWidth;
+        if (screenWidth >= 1170) {
+        	$scope.tabletWiew = false;
+        } else {
+        	$scope.tabletWiew = true;
+        }	
+    }
 
     $scope.$route = $route;
     //$scope.$location = $location;
@@ -31,7 +46,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
                   			
     //$scope.citizenId = userId;
     $scope.user_token = token;
-    //$scope.user_token = "";
                   			
     // new elements for view
     $scope.currentView;
@@ -51,28 +65,16 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	$scope.used_lang = "i18n/angular-locale_en-EN.js";
     	itaLanguage = "";
     	engLanguage = "active";
-    	//$scope.setUserLocale("en-US");
-    	//$locale.id = "en-US";
     	localize.setLanguage('en-US');
     	sharedDataService.setUsedLanguage('eng');
-    	//var myDataMsg = getMyMessages.promiseToHaveData('eng');
-    	//myDataMsg.then(function(result){
-    	//	sharedDataService.inithializeAllMessages(result);
-    	//});
     };
     
     $scope.setItalianLanguage = function(){
     	$scope.used_lang = "i18n/angular-locale_it-IT.js";
     	itaLanguage = "active";
     	engLanguage = "";
-    	//$scope.setUserLocale("it-IT");
-    	//$locale.id = "it-IT";
     	localize.setLanguage('it-IT');
     	sharedDataService.setUsedLanguage('ita');
-    	//var myDataMsg = getMyMessages.promiseToHaveData('ita');
-    	//myDataMsg.then(function(result){
-    	//    sharedDataService.inithializeAllMessages(result);
-    	//});
     };
     
     if(sharedDataService.getUsedLanguage() == 'ita'){
@@ -87,10 +89,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	} else if (lan == "en-US"){
     		lan_uri = 'i18n/angular-locale_en-EN.js';
     	}
-//    	$http.get(lan_uri).then(function(results){
-//    		console.log("Risultato get locale " + results);
-//    		angular.copy(results.data, $locale);
-//    	});
     	$http.get(lan_uri)
     		.success(function(results){
     			console.log("Success get locale " + results);
@@ -267,26 +265,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
          'Authorization': $scope.getToken(),
          'Accept': 'application/json;charset=UTF-8'
     };
-                  		    
-    // ------------------- User section ------------------
-    //$scope.retrieveUserData = function() {
-    	//$scope.getUser();				// retrieve user data
-    	//$scope.getUserUeNationality();	// retrieve the user ue/extraue Nationality
-    //};
-    
-//    $scope.user;
-//    $scope.getUser = function() {
-//    	console.log("user id " + $scope.citizenId );
-//    	$http({
-//        	method : 'GET',
-//        	url : 'rest/citizen/user/' + $scope.citizenId,
-//        	params : {},
-//            headers : $scope.authHeaders
-//        }).success(function(data) {
-//        	$scope.user = data;
-//        }).error(function(data) {
-//        });
-//    };
     
     // For user shared data
     if(user_name != null && user_surname != null){
@@ -306,6 +284,97 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	return tmp;
     };
     
+    var correctStringToList = function(stringList){
+    	// appId=tn, description=posti per automobile, name=Car, language_key=car_vehicle, userName=trento1
+    	var list = [];
+    	if(stringList && stringList != "null"){
+	    	var subList = stringList.substring(1, stringList.length - 1);
+	    	var elements = subList.split("},");
+	    	for(var i = 0; i < elements.length; i++){
+	    		var allAttribute = elements[i].split(", ");
+	    		var appId = allAttribute[0].split("=")[1];
+	    		var description = allAttribute[1].split("=")[1];
+	    		var name = allAttribute[2].split("=")[1];
+	    		var language = allAttribute[3].split("=")[1];
+	    		var userName = allAttribute[4].split("=")[1];
+	    		var corrVehicleType = {
+	    			appId: appId,
+	    			description: description,
+	    			name: name,
+	    			language_key: language,
+	    			userName: userName,
+	    			visible: false
+	    		};
+	    		list.push(corrVehicleType);
+	    	}
+    	}
+    	return list;
+    }
+    
+    var correctStringToAgecyData = function(stringAg){
+    	// id=prova789, structure=2, bike=2, area=3, description=Agency id per trentino mobilita', street=2, name=Agency tn, zone=1, parkingmeter=2
+    	var data = {};
+    	var substringAg = stringAg.substring(1, stringAg.length - 1);
+    		var allAttribute = substringAg.split(", ");
+    		var id;
+    		var name;
+    		var description;
+    		var area;
+    		var zone;
+    		var street;
+    		var structure;
+    		var parkingmeter;
+    		var bike;
+    		for(var i = 0; i < allAttribute.length; i++){
+    			if(allAttribute[i].indexOf("id=") !== -1){
+    				id = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("name=") !== -1){
+    				name = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("description=") !== -1){
+    				description = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("area=") !== -1){
+    				area = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("zone=") !== -1){
+    				zone = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("street=") !== -1){
+    				street = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("structure=") !== -1){
+    				structure = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("parkingmeter=") !== -1){
+    				parkingmeter = allAttribute[i].split("=")[1];
+    			}
+    			if(allAttribute[i].indexOf("bike=") !== -1){
+    				bike = allAttribute[i].split("=")[1];
+    			}
+    		}
+    		data = {
+    			id: id,
+    			name: name,
+    			description: description,
+    			area: area,
+    			zone: zone,
+    			street: street,
+    			structure: structure,
+    			parkingmeter: parkingmeter,
+    			bike: bike
+    		};
+    	return data;
+    }
+    
+    // for agency id
+    if(conf_agency && conf_agency != ''){
+    	//var tmp_ags = conf_agency_list.substring(1, conf_agency_list.length - 1);
+    	//var user_agencies = tmp_ags.split(",");
+    	sharedDataService.setConfUserAgency(correctStringToAgecyData(conf_agency));
+    }
+    
     sharedDataService.setConfAppId(conf_app_id);
     sharedDataService.setConfMapCenter(conf_map_center);
     if(conf_map_recenter && conf_map_recenter != "null"){
@@ -322,6 +391,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     sharedDataService.setPsManagerVals(ps_manager_vals);
     $scope.widget_filters = initializeService.setWidgetFilters(conf_filters);
     $scope.widget_show_elements = initializeService.setWidgetElements(conf_elements);
+    $scope.slots_vehicle_types = initializeService.setSlotsTypes(correctStringToList(conf_vehicle_type_list));
     initializeService.setConfAppId(conf_app_id);
     initializeService.setConfWidgetUrl(conf_widget_url);
     $scope.show_vt_footer = (conf_app_id == 'tn')?true:false;
@@ -342,34 +412,36 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     };
     
     $scope.loadConfObject = function(data){
-    	var zoneTypes = [];
-    	var cleanedData = $scope.correctStringToJsonString("{list\":" + data + "}");
-    	var objList = JSON.parse(cleanedData);
-    	var visibleObjList = objList.list;
-    	for(var i = 0; i < visibleObjList.length; i++){
-    		if(visibleObjList[i].id.indexOf("Zone") > -1){
-    			var zone_type = {
-    				value: visibleObjList[i].type,
-    				label: visibleObjList[i].title
-    			};
-    			zoneTypes.push(zone_type);
-    		}
+    	if(data && data != "null"){
+	    	var zoneTypes = [];
+	    	var cleanedData = $scope.correctStringToJsonString("{list\":" + data + "}");
+	    	var objList = JSON.parse(cleanedData);
+	    	var visibleObjList = objList.list;
+	    	for(var i = 0; i < visibleObjList.length; i++){
+	    		if(visibleObjList[i].id.indexOf("Zone") > -1){
+	    			var zone_type = {
+	    				value: visibleObjList[i].type,
+	    				label: visibleObjList[i].title
+	    			};
+	    			zoneTypes.push(zone_type);
+	    		}
+	    	}
+	    	//var allObjs = data.split("}]}");
+	    	//for(var i = 0; i < allObjs.length - 1; i++){
+	    	//	var objFields = allObjs[i].split(", attributes=[{");
+	    	//	var ids = objFields[0].split("=");
+	    	//	var showedObj = {
+	    	//			id : ids[1],
+	    	//			attributes: $scope.correctAtributes(objFields[1])
+	    	//	};
+	    	//	visibleObjList.push(showedObj);
+	    	//}
+	    	sharedDataService.setZoneTypeList(zoneTypes);
+	    	sharedDataService.setVisibleObjList(visibleObjList);
+	    	initializeService.setVisibleObjList(visibleObjList);
+	    	initializeService.initComponents();						// new method
+	    	initializeService.correctWidgetFiltersAndElements();	// new method
     	}
-    	//var allObjs = data.split("}]}");
-    	//for(var i = 0; i < allObjs.length - 1; i++){
-    	//	var objFields = allObjs[i].split(", attributes=[{");
-    	//	var ids = objFields[0].split("=");
-    	//	var showedObj = {
-    	//			id : ids[1],
-    	//			attributes: $scope.correctAtributes(objFields[1])
-    	//	};
-    	//	visibleObjList.push(showedObj);
-    	//}
-    	sharedDataService.setZoneTypeList(zoneTypes);
-    	sharedDataService.setVisibleObjList(visibleObjList);
-    	initializeService.setVisibleObjList(visibleObjList);
-    	initializeService.initComponents();						// new method
-    	initializeService.correctWidgetFiltersAndElements();	// new method
     };
     
     $scope.correctAtributes = function(data){
@@ -407,9 +479,15 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
     	return corrAttribList;
     };
     
+    //$scope.checkJSESSIONID = function(){
+    //	var Jsess = document.cookie;
+    	//var Jsess = $cookies['JSESSIONID'];
+    //	console.log("JSESSIONID " + Jsess);
+    //};
+    
     $scope.loadConfObject(object_to_show);
-	
 	$scope.initComponents = function(){
+		//$scope.checkJSESSIONID();
 	    $scope.showedObjects = sharedDataService.getVisibleObjList();
 	    $scope.showBikeMenuLink = false;
 	    $scope.showDashboardMenuLink = false;
@@ -436,7 +514,6 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$routeParams', '$rootSco
 	    }
 	    if($scope.showDashboardMenuLink == false){
 	    	$scope.setHomeParkActive();
-			//window.location.href = "home";
 	    }
     };
     

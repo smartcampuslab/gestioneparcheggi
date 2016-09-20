@@ -15,16 +15,21 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
+import java.util.List;
+
 public class CompactParkingStructureBean {
 
 	private String id;
 	private Integer slotNumber;
-	private Integer payingSlotNumber;
+	private List<VehicleSlotBean> slotsConfiguration;
+	/*private Integer payingSlotNumber;
 	private Integer payingSlotOccupied;
 	private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
-	private Integer unusuableSlotNumber;
+	private Integer unusuableSlotNumber;*/
 	private double occupancyRate;	// I use it only in the bean and not in the db object
+	private double profit;			// in eurocent
+	private int tickets;			// number of tickets
 	
 	public Integer getSlotNumber() {
 		return slotNumber;
@@ -33,8 +38,24 @@ public class CompactParkingStructureBean {
 	public void setSlotNumber(Integer slotNumber) {
 		this.slotNumber = slotNumber;
 	}
+	
+	public String getId() {
+		return id;
+	}
 
-	public Integer getHandicappedSlotNumber() {
+	public void setId(String id) {
+		this.id = id;
+	}
+	
+	public double getOccupancyRate() {
+		return occupancyRate;
+	}
+
+	public void setOccupancyRate(double occupancyRate) {
+		this.occupancyRate = occupancyRate;
+	}
+	
+	/*public Integer getHandicappedSlotNumber() {
 		return handicappedSlotNumber;
 	}
 
@@ -58,22 +79,6 @@ public class CompactParkingStructureBean {
 		this.unusuableSlotNumber = unusuableSlotNumber;
 	}
 
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-	
-	public double getOccupancyRate() {
-		return occupancyRate;
-	}
-
-	public void setOccupancyRate(double occupancyRate) {
-		this.occupancyRate = occupancyRate;
-	}
-
 	public Integer getPayingSlotNumber() {
 		return payingSlotNumber;
 	}
@@ -88,17 +93,41 @@ public class CompactParkingStructureBean {
 
 	public void setPayingSlotOccupied(Integer payingSlotOccupied) {
 		this.payingSlotOccupied = payingSlotOccupied;
+	}*/
+
+	public List<VehicleSlotBean> getSlotsConfiguration() {
+		return slotsConfiguration;
+	}
+
+	public void setSlotsConfiguration(List<VehicleSlotBean> slotsConfiguration) {
+		this.slotsConfiguration = slotsConfiguration;
+	}
+
+	public double getProfit() {
+		return profit;
+	}
+
+	public int getTickets() {
+		return tickets;
+	}
+
+	public void setProfit(double profit) {
+		this.profit = profit;
+	}
+
+	public void setTickets(int tickets) {
+		this.tickets = tickets;
 	}
 
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
+		/*json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
 		json += "\"payingSlotOccupied\":\"" + getPayingSlotOccupied() + "\",";
 		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\"";
 		json += "}";
 		return json;

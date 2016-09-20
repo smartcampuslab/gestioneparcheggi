@@ -48,10 +48,6 @@
 		pattern="/rest/nosec/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/dashboard/rest/nosec/**" security="none" />
-<!-- 	<http xmlns="http://www.springframework.org/schema/security" -->
-<!-- 		pattern="/rest/appid/**" security="none" /> -->
-<!-- 	<http xmlns="http://www.springframework.org/schema/security" -->
-<!-- 		pattern="/dashboard/rest/appid/**" security="none" /> -->
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/csv/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
@@ -65,33 +61,43 @@
 <!-- 	</sec:http> -->
 
 	<!-- Dashboard Rest WS security configuration -->
-	<sec:http pattern="/dashboard/rest/**" use-expressions="true"
+	<sec:http pattern="/dashboard/rest/**" use-expressions="false"
 	    authentication-manager-ref="mongoAuthenticationManager">
-    	<sec:http-basic />
-    	<sec:intercept-url pattern="/**" access="isFullyAuthenticated()"/>
+    	<!-- <sec:http-basic /> -->
+    	<sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    	<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+    	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession">
+		     <sec:concurrency-control expired-url="/login" />
+		</sec:session-management>
+		<sec:form-login login-page="/login.jsp" />
 	</sec:http>
 	
 	<!-- Rest WS security configuration -->
-	<sec:http pattern="/rest/**" use-expressions="true"
+	<sec:http pattern="/rest/**" use-expressions="false"
 	    authentication-manager-ref="mongoAuthenticationManager">
-    	<sec:http-basic />
-    	<sec:intercept-url pattern="/**" access="isFullyAuthenticated()"/>
+    	<!-- <sec:http-basic /> -->
+    	<sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    	<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"/>
+    	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession">
+		     <sec:concurrency-control expired-url="/login" />
+		</sec:session-management>
+    	<sec:form-login login-page="/login.jsp" />
 	</sec:http>
 	
 	<!-- App login configuration -->
-	<sec:http pattern="/**" use-expressions="true"
+	<sec:http pattern="/**" use-expressions="false"
 	    auto-config="false" authentication-manager-ref="mongoAuthenticationManager"><!-- authentication-manager-ref="mongoAuthenticationManager" -->
-		<sec:http-basic />
-		<sec:intercept-url pattern="/login" access="permitAll" />
-		<sec:intercept-url pattern="/logout" access="permitAll" />
-		<sec:intercept-url pattern="/j_spring_security_check" access="permitAll" />
-		<sec:intercept-url pattern="/**" access="hasAnyRole('ROLE_ADMIN')" />
-		
+		<sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/logout" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/j_spring_security_check" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" /><!-- hasAnyRole('ROLE_ADMIN') -->
+		<sec:session-management invalid-session-url="/error.html" session-fixation-protection="newSession">
+		     <sec:concurrency-control expired-url="/error.html" />
+		</sec:session-management>
 		<sec:form-login login-page="/login" default-target-url="/home" always-use-default-target="true"
 		    login-processing-url="/login.do" username-parameter="j_username" password-parameter="j_password" 
 		     authentication-failure-url="/login?error=true"  />
 		<sec:logout logout-url="/logout" invalidate-session="true" delete-cookies="true" logout-success-url="/login" />
-		
 	</sec:http>
 	
 	<context:property-placeholder location="classpath:tm.properties" />
@@ -104,36 +110,11 @@
 	</sec:authentication-manager>
 	
     <context:component-scan base-package="it.smartcommunitylab.parking.management.web.security" />
-	
-	<!-- MyWeb Portal login configuration -->
-<!-- 	<sec:http pattern="/**" disable-url-rewriting="true" auto-config="false"> -->
-<!-- 	    <sec:intercept-url pattern="/prelogin" access="IS_AUTHENTICATED_ANONYMOUSLY" /> -->
-<!-- 	    <sec:intercept-url pattern="/cookie_info" access="IS_AUTHENTICATED_ANONYMOUSLY" /> -->
-<!-- 	    <sec:intercept-url pattern="/ifindex" access="IS_AUTHENTICATED_ANONYMOUSLY" /> -->
-<!-- 	    <sec:intercept-url pattern="/adc_login" access="IS_AUTHENTICATED_ANONYMOUSLY" /> -->
-<!-- 		<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" /> -->
-<!-- 		<sec:session-management invalid-session-url="/prelogin" session-fixation-protection="newSession" /> -->
-<!-- 		<sec:form-login login-page="/prelogin" /> -->
-<!-- 		<sec:logout invalidate-session="true" logout-url="/logout" -->
-<!-- 			delete-cookies="true" -->
-<!-- 			logout-success-url="/prelogin" /> -->
-<!-- 	</sec:http> -->
 
-	<!-- ParkingManagement Portal authentication manager with OAUTH2 -->
-<!-- 	<bean id="forbEntryPoint" -->
-<!-- 		class="org.springframework.security.web.authentication.Http403ForbiddenEntryPoint"> -->
-<!-- 	</bean> -->
-
-<!-- 	<bean id="authTokenFilter" class="eu.trentorise.smartcampus.aac.conf.OAuthTokenFilter"> -->
-<!-- 		<property name="authenticationManager" ref="authenticationManager" /> -->
-<!-- 	</bean> -->
-
-<!-- 	<sec:authentication-manager alias="authenticationManager"> -->
-<!-- 		<sec:authentication-provider ref="preauthAuthProvider" /> -->
-<!-- 	</sec:authentication-manager> -->
-	
-<!-- 	<bean id="preauthAuthProvider" -->
-<!-- 		class="eu.trentorise.smartcampus.aac.conf.OAuthAuthenticationProvider"> -->
-<!-- 	</bean> -->
-
+	<bean id="apiListingResourceJSON" 
+	    class="io.swagger.jaxrs.listing.ApiListingResource">
+	</bean>	
+    <bean id="apiDeclarationProvider" 
+        class="io.swagger.jaxrs.listing.SwaggerSerializers" scope="singleton">
+	</bean>
 </beans>

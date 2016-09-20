@@ -18,35 +18,39 @@ package it.smartcommunitylab.parking.management.web.model;
 import java.util.List;
 
 import it.smartcommunitylab.parking.management.web.model.geo.Line;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 public class Street {
-	private String id;
+	protected String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private String streetReference;
+	private List<VehicleSlot> slotsConfiguration;	// Slot configuration for each vehicle type
 	private Integer slotNumber;
-	private Integer handicappedSlotNumber;	// off_h
-	private Integer handicappedSlotOccupied;
+	/*private Integer handicappedSlotNumber;	// off_h
 	private Integer reservedSlotNumber;	// off_rs
-	private Integer reservedSlotOccupied;
 	private Integer timedParkSlotNumber;	// off_do
-	private Integer timedParkSlotOccupied;
 	private Integer freeParkSlotNumber;		// off_ls
-	private Integer freeParkSlotOccupied;
 	private Integer freeParkSlotSignNumber;	// off_lc
-	private Integer freeParkSlotSignOccupied;
 	private Integer paidSlotNumber;			// off_p
-	private Integer paidSlotOccupied;
 	private Integer unusuableSlotNumber;	// off_in
+	// Dynamic data (for occupancy report only - used in DynamicManager)
+	private Integer handicappedSlotOccupied;
+	private Integer reservedSlotOccupied;
+	private Integer timedParkSlotOccupied;
+	private Integer freeParkSlotOccupied;
+	private Integer freeParkSlotSignOccupied;
+	private Integer paidSlotOccupied;*/
+	
 	private boolean subscritionAllowedPark;
 	private String rateAreaId;				// I need this field in data log
 	private Line geometry;
-	//private List<Zone> zones;
 	private List<String> zones;
 	private List<String> parkingMeters;
 	private Long lastChange;
 	private String color;
 	private String area_name;
 	private String area_color;
+	private List<String> agencyId;	// relation to agency object
 
 	public String getId() {
 		return id;
@@ -70,6 +74,14 @@ public class Street {
 
 	public void setStreetReference(String streetReference) {
 		this.streetReference = streetReference;
+	}
+
+	public List<VehicleSlot> getSlotsConfiguration() {
+		return slotsConfiguration;
+	}
+
+	public void setSlotsConfiguration(List<VehicleSlot> slotsConfiguration) {
+		this.slotsConfiguration = slotsConfiguration;
 	}
 
 	public Integer getSlotNumber() {
@@ -98,7 +110,7 @@ public class Street {
 		return v != null && this.id != null && v.getId().equals(this.id);
 	}
 
-	public Integer getHandicappedSlotOccupied() {
+	/*public Integer getHandicappedSlotOccupied() {
 		return handicappedSlotOccupied;
 	}
 
@@ -200,7 +212,7 @@ public class Street {
 
 	public void setFreeParkSlotNumber(Integer freeParkSlotNumber) {
 		this.freeParkSlotNumber = freeParkSlotNumber;
-	}
+	}*/
 
 	public boolean isSubscritionAllowedPark() {
 		return subscritionAllowedPark;
@@ -217,18 +229,10 @@ public class Street {
 	public void setRateAreaId(String rateAreaId) {
 		this.rateAreaId = rateAreaId;
 	}
-
-//	public List<Zone> getZones() {
-//		return zones;
-//	}
 	
 	public List<String> getZones() {
 		return zones;
 	}
-
-//	public void setZones(List<Zone> zones) {
-//		this.zones = zones;
-//	}
 	
 	public void setZones(List<String> zones) {
 		this.zones = zones;
@@ -274,6 +278,14 @@ public class Street {
 		this.color = color;
 	}
 
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -281,7 +293,7 @@ public class Street {
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
+		/*json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
 		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";
 		json += "\"freeParkSlotSignNumber\":\"" + getFreeParkSlotSignNumber() + "\",";
 		json += "\"freeParkSlotSignOccupied\":\"" + getFreeParkSlotSignOccupied() + "\",";
@@ -293,7 +305,7 @@ public class Street {
 		json += "\"timedParkSlotOccupied\":\"" + getTimedParkSlotOccupied() + "\",";
 		json += "\"paidSlotNumber\":\"" + getPaidSlotNumber() + "\",";
 		json += "\"paidSlotOccupied\":\"" + getPaidSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"subscritionAllowedPark\":\"" + isSubscritionAllowedPark() + "\",";
 		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";
 		json += "\"lastChange\":\"" + getLastChange() + "\",";

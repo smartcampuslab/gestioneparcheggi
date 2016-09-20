@@ -35,6 +35,18 @@
         class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
         <property name="maxUploadSize" value="10485760" /> <!-- 10 Mb -->
     </bean>
+    
+    <bean id="beanConfig" class="io.swagger.jaxrs.config.BeanConfig">
+        <property name="title" value="Swagger Sample App"/>
+        <property name="version" value="1.0.0" />
+        <property name="schemes" value="http" />
+        <property name="host" value="localhost:8080" />
+        <property name="basePath" value="metroparco/rest/nosec/*"/>
+        <property name="resourcePackage" value="io.swagger.resources"/>
+        <property name="scan" value="true"/>
+    </bean>
+    
+    
 
     
 </beans>

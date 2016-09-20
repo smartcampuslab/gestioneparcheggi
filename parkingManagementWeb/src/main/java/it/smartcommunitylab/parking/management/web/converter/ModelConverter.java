@@ -17,9 +17,11 @@ package it.smartcommunitylab.parking.management.web.converter;
 
 import it.smartcommunitylab.parking.management.web.bean.LineBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentMode;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.Street;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -88,35 +90,89 @@ public class ModelConverter {
 		sb.setId_app(s.getId_app());
 		sb.setStreetReference(s.getStreetReference());
 		sb.setSlotNumber(s.getSlotNumber());
-		sb.setFreeParkSlotNumber(s.getFreeParkSlotNumber());
-		sb.setFreeParkSlotOccupied(s.getFreeParkSlotOccupied());
+		/*sb.setFreeParkSlotNumber(s.getFreeParkSlotNumber());
 		sb.setFreeParkSlotSignNumber(s.getFreeParkSlotSignNumber());
-		sb.setFreeParkSlotSignOccupied(s.getFreeParkSlotSignOccupied());
 		sb.setHandicappedSlotNumber(s.getHandicappedSlotNumber());
-		sb.setHandicappedSlotOccupied(s.getHandicappedSlotOccupied());
 		sb.setReservedSlotNumber(s.getReservedSlotNumber());
-		sb.setReservedSlotOccupied(s.getReservedSlotOccupied());
 		sb.setPaidSlotNumber(s.getPaidSlotNumber());
-		sb.setPaidSlotOccupied(s.getPaidSlotOccupied());
 		sb.setTimedParkSlotNumber(s.getTimedParkSlotNumber());
-		sb.setTimedParkSlotOccupied(s.getTimedParkSlotOccupied());
-		sb.setUnusuableSlotNumber(s.getUnusuableSlotNumber());
+		sb.setUnusuableSlotNumber(s.getUnusuableSlotNumber());*/
 		sb.setLastChange(s.getLastChange());
-		sb.setRateAreaId(s.getRateAreaId());
+		sb.setRateAreaId(area.getId());
 		//sb.setRateAreaId(area.getId());
 		sb.setColor(area.getColor());
 		sb.setGeometry(convert(s.getGeometry(), LineBean.class));
-		sb.setSubscritionAllowedPark(s.isSubscritionAllowedPark());
-		//List<Zone> zones = s.getZones();
-		//List<ZoneBean> zoneBeans = new ArrayList<ZoneBean>();
-		//for(Zone z : zones){
-		//	ZoneBean zon = convert(z, ZoneBean.class);
-		//	zoneBeans.add(zon);
-		//}
-		//sb.setZoneBeans(zoneBeans);
 		sb.setZones(s.getZones());
 		sb.setParkingMeters(s.getParkingMeters());
+		if(s.getAgencyId() != null && !s.getAgencyId().isEmpty()){
+			sb.setAgencyId(s.getAgencyId());
+		}
+		try {
+			sb.setSlotsConfiguration(toVehicleSlotBeanList(s.getSlotsConfiguration()));
+		} catch (NullPointerException ex){
+			sb.setSlotsConfiguration(new ArrayList<VehicleSlotBean>()); // here I associate an empty list
+		}
 		return sb;
+	}
+	
+	public static List<VehicleSlotBean> toVehicleSlotBeanList(List<VehicleSlot> vehicleSlots){
+		List<VehicleSlotBean> corrVehicleSlotList = new ArrayList<VehicleSlotBean>();
+		for(VehicleSlot vehicleTypeSlots : vehicleSlots){
+			VehicleSlotBean vehicleTypeSlotsBean = convert(vehicleTypeSlots, VehicleSlotBean.class);
+			corrVehicleSlotList.add(vehicleTypeSlotsBean);
+		}
+		return corrVehicleSlotList;
+	}
+	
+	public static List<VehicleSlot> toVehicleSlotList(List<VehicleSlotBean> vehicleSlotsBean, List<VehicleSlot> oldVehicleSlot){
+		List<VehicleSlot> corrVehicleSlots = oldVehicleSlot;
+		if(oldVehicleSlot == null || oldVehicleSlot.isEmpty()){
+			corrVehicleSlots = new ArrayList<VehicleSlot>();
+			for(VehicleSlotBean vehicleTypeSlotsBean : vehicleSlotsBean){
+				VehicleSlot vehicleTypeSlots = convert(vehicleTypeSlotsBean, VehicleSlot.class);
+				corrVehicleSlots.add(vehicleTypeSlots);
+			}
+		} else {
+			for(int i = 0; i < vehicleSlotsBean.size(); i++){
+				VehicleSlotBean vehicleSlotBean = vehicleSlotsBean.get(i);
+				VehicleSlot corrVehicleSlot = ModelConverter.convert(vehicleSlotBean, VehicleSlot.class);
+				boolean find = false;
+				for(int j = 0; (j < corrVehicleSlots.size() && !find); j++){
+					VehicleSlot vehicleSlot = corrVehicleSlots.get(j);
+					if(vehicleSlot.getVehicleType().compareTo(corrVehicleSlot.getVehicleType()) == 0){
+						corrVehicleSlots.set(j, corrVehicleSlot);	// update the specific vehicleTypeSlots
+						find = true;
+					}
+				}
+				if(!find){
+					corrVehicleSlots.add(corrVehicleSlot);			// insert the new vehicleTypeSlots
+				}
+			}
+		}
+		return corrVehicleSlots;
+	}
+	
+	public static List<VehicleSlot> frmoListtoVehicleSlotList(List<VehicleSlot> vehicleSlots, List<VehicleSlot> oldVehicleSlot){
+		List<VehicleSlot> corrVehicleSlots = oldVehicleSlot;
+		if(oldVehicleSlot == null || oldVehicleSlot.isEmpty()){
+			corrVehicleSlots = vehicleSlots;
+		} else {
+			for(int i = 0; i < vehicleSlots.size(); i++){
+				VehicleSlot newVehicleSlot = vehicleSlots.get(i);
+				boolean find = false;
+				for(int j = 0; (j < corrVehicleSlots.size() && !find); j++){
+					VehicleSlot vehicleSlot = corrVehicleSlots.get(j);
+					if(vehicleSlot.getVehicleType().compareTo(newVehicleSlot.getVehicleType()) == 0){
+						corrVehicleSlots.set(j, newVehicleSlot);	// update the specific vehicleTypeSlots
+						find = true;
+					}
+				}
+				if(!find){
+					corrVehicleSlots.add(newVehicleSlot);			// insert the new vehicleTypeSlots
+				}
+			}
+		}
+		return corrVehicleSlots;
 	}
 	
 //	public static LastGeoObjectVersion toLastGeoObject(LastGeoObjectVersionBean lastGeoBean){

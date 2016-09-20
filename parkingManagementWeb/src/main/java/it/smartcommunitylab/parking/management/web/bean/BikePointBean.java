@@ -20,13 +20,13 @@ import java.util.List;
 public class BikePointBean {
 	private String id;
 	private String id_app;
-	private String municipality;
 	private String name;
 	private Integer bikeNumber;
 	private Integer slotNumber;
 	private PointBean geometry;
 	private Long lastChange;
 	private List<String> zones;
+	private List<String> agencyId;	// relation to agency object
 
 	public String getId() {
 		return id;
@@ -83,14 +83,6 @@ public class BikePointBean {
 	public void setLastChange(Long lastChange) {
 		this.lastChange = lastChange;
 	}
-	
-	public String getMunicipality() {
-		return municipality;
-	}
-
-	public void setMunicipality(String municipality) {
-		this.municipality = municipality;
-	}
 
 	public List<String> getZones() {
 		return zones;
@@ -100,11 +92,18 @@ public class BikePointBean {
 		this.zones = zones;
 	}
 
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
+	}
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"id_app\":\"" + getId_app() + "\",";
-		json += "\"municipality\":\"" + getMunicipality() + "\",";
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";

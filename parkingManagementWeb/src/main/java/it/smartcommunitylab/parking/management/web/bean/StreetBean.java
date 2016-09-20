@@ -22,7 +22,9 @@ public class StreetBean {
 	private String id_app;
 	private String streetReference;
 	private Integer slotNumber;
-	private Integer handicappedSlotNumber;
+	private List<VehicleSlotBean> slotsConfiguration;
+	
+	/*private Integer handicappedSlotNumber;
 	private Integer handicappedSlotOccupied;
 	private Integer reservedSlotNumber;
 	private Integer reservedSlotOccupied;
@@ -34,17 +36,18 @@ public class StreetBean {
 	private Integer freeParkSlotSignOccupied;
 	private Integer paidSlotNumber;
 	private Integer paidSlotOccupied;
-	private Integer unusuableSlotNumber;
+	private Integer unusuableSlotNumber;*/
+	
 	private boolean subscritionAllowedPark;
 	private String rateAreaId;
 	private LineBean geometry;
 	private String color;
-	//private List<ZoneBean> zones;	//List with the id of the associated zone
 	private List<String> zones;	//List with the id of the associated zone
 	private List<String> parkingMeters;	//List with the id of the associated pms (optional)
 	private Long lastChange;
 	private double occupancyRate;	// I use it only in the bean and not in the db object
-
+	private List<String> agencyId;	// relation to agency object
+	
 	public String getId() {
 		return id;
 	}
@@ -59,6 +62,14 @@ public class StreetBean {
 
 	public void setStreetReference(String streetReference) {
 		this.streetReference = streetReference;
+	}
+
+	public List<VehicleSlotBean> getSlotsConfiguration() {
+		return slotsConfiguration;
+	}
+
+	public void setSlotsConfiguration(List<VehicleSlotBean> slotsConfiguration) {
+		this.slotsConfiguration = slotsConfiguration;
 	}
 
 	public Integer getSlotNumber() {
@@ -93,7 +104,55 @@ public class StreetBean {
 		this.color = color;
 	}
 
-	public Integer getHandicappedSlotNumber() {
+	public boolean isSubscritionAllowedPark() {
+		return subscritionAllowedPark;
+	}
+
+	public void setSubscritionAllowedPark(boolean subscritionAllowedPark) {
+		this.subscritionAllowedPark = subscritionAllowedPark;
+	}
+
+	public String getId_app() {
+		return id_app;
+	}
+	
+	public List<String> getZones(){
+		return zones;
+	}
+
+	public List<String> getParkingMeters() {
+		return parkingMeters;
+	}
+
+	public Long getLastChange() {
+		return lastChange;
+	}
+
+	public void setId_app(String id_app) {
+		this.id_app = id_app;
+	}
+	
+	public void setZones(List<String> zones) {
+		this.zones = zones;
+	}
+
+	public void setParkingMeters(List<String> parkingMeters) {
+		this.parkingMeters = parkingMeters;
+	}
+
+	public void setLastChange(Long lastChange) {
+		this.lastChange = lastChange;
+	}
+	
+	public double getOccupancyRate() {
+		return occupancyRate;
+	}
+
+	public void setOccupancyRate(double occupancyRate) {
+		this.occupancyRate = occupancyRate;
+	}
+
+	/*public Integer getHandicappedSlotNumber() {
 		return handicappedSlotNumber;
 	}
 
@@ -115,18 +174,6 @@ public class StreetBean {
 
 	public void setFreeParkSlotNumber(Integer freeParkSlotNumber) {
 		this.freeParkSlotNumber = freeParkSlotNumber;
-	}
-
-	public boolean isSubscritionAllowedPark() {
-		return subscritionAllowedPark;
-	}
-
-	public void setSubscritionAllowedPark(boolean subscritionAllowedPark) {
-		this.subscritionAllowedPark = subscritionAllowedPark;
-	}
-
-	public String getId_app() {
-		return id_app;
 	}
 
 	public Integer getHandicappedSlotOccupied() {
@@ -165,25 +212,6 @@ public class StreetBean {
 		return paidSlotOccupied;
 	}
 
-	//public List<ZoneBean> getZoneBeans() {
-	//	return zones;
-	//}
-	public List<String> getZones(){
-		return zones;
-	}
-
-	public List<String> getParkingMeters() {
-		return parkingMeters;
-	}
-
-	public Long getLastChange() {
-		return lastChange;
-	}
-
-	public void setId_app(String id_app) {
-		this.id_app = id_app;
-	}
-
 	public void setHandicappedSlotOccupied(Integer handicappedSlotOccupied) {
 		this.handicappedSlotOccupied = handicappedSlotOccupied;
 	}
@@ -219,22 +247,6 @@ public class StreetBean {
 	public void setPaidSlotOccupied(Integer paidSlotOccupied) {
 		this.paidSlotOccupied = paidSlotOccupied;
 	}
-
-	//public void setZoneBeans(List<ZoneBean> zones) {
-	//	this.zones = zones;
-	//}
-	
-	public void setZones(List<String> zones) {
-		this.zones = zones;
-	}
-
-	public void setParkingMeters(List<String> parkingMeters) {
-		this.parkingMeters = parkingMeters;
-	}
-
-	public void setLastChange(Long lastChange) {
-		this.lastChange = lastChange;
-	}
 	
 	public Integer getUnusuableSlotNumber() {
 		return unusuableSlotNumber;
@@ -242,39 +254,21 @@ public class StreetBean {
 
 	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
 		this.unusuableSlotNumber = unusuableSlotNumber;
-	}
-	
-	public double getOccupancyRate() {
-		return occupancyRate;
+	}*/
+
+	public List<String> getAgencyId() {
+		return agencyId;
 	}
 
-	public void setOccupancyRate(double occupancyRate) {
-		this.occupancyRate = occupancyRate;
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
 	}
-
-//	public List<Zone> getZoneBeanToZone(){
-//		List<Zone> zons = new ArrayList<Zone>();
-//		if(this.zones != null){
-//			for(int i = 0; i < this.zones.size(); i++){
-//				Zone z = new Zone();
-//				z.setId(this.zones.get(i).getId());
-//				z.setId_app(this.zones.get(i).getId_app());
-//				z.setName(this.zones.get(i).getName());
-//				z.setNote(this.zones.get(i).getNote());
-//				z.setColor(this.zones.get(i).getColor());
-//				z.setSubmacro(this.zones.get(i).getSubmacro());
-//				z.setGeometry(this.zones.get(i).getGeometryObj());
-//				zons.add(z);
-//			}
-//		}
-//		return zons;
-//	}
 
 	@Override
 	public String toString() {
 		return "StreetBean [id=" + id + ", id_app=" + id_app
-				+ ", streetReference=" + streetReference + ", slotNumber="
-				+ slotNumber + ", handicappedSlotNumber="
+				+ ", streetReference=" + streetReference + ", slotNumber=" + slotNumber
+				/*+ ", handicappedSlotNumber="
 				+ handicappedSlotNumber + ", handicappedSlotOccupied="
 				+ handicappedSlotOccupied+ ", reservedSlotNumber="
 						+ reservedSlotNumber + ", reservedSlotOccupied="
@@ -286,13 +280,13 @@ public class StreetBean {
 				+ freeParkSlotSignNumber + ", freeParkSlotSignOccupied="
 				+ freeParkSlotSignOccupied + ", paidSlotNumber="
 				+ paidSlotNumber + ", paidSlotOccupied=" + paidSlotOccupied
-				+ ", unusuableSlotNumber=" + unusuableSlotNumber
+				+ ", unusuableSlotNumber=" + unusuableSlotNumber*/
 				+ ", subscritionAllowedPark=" + subscritionAllowedPark
 				+ ", rateAreaId=" + rateAreaId + ", geometry=" + geometry
 				+ ", color=" + color + ", zones=" + zones + ", parkingMeters="
 				+ parkingMeters + ", lastChange=" + lastChange + ", occupancyRate=" + occupancyRate + "]";
 	}
-	
+
 	public String toJSON(){
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -300,7 +294,7 @@ public class StreetBean {
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
+		/*json += "\"freeParkSlotNumber\":\"" + getFreeParkSlotNumber() + "\",";
 		json += "\"freeParkSlotOccupied\":\"" + getFreeParkSlotOccupied() + "\",";
 		json += "\"freeParkSlotSignNumber\":\"" + getFreeParkSlotSignNumber() + "\",";
 		json += "\"freeParkSlotSignOccupied\":\"" + getFreeParkSlotSignOccupied() + "\",";
@@ -310,7 +304,7 @@ public class StreetBean {
 		json += "\"timedParkSlotOccupied\":\"" + getTimedParkSlotOccupied() + "\",";
 		json += "\"paidSlotNumber\":\"" + getPaidSlotNumber() + "\",";
 		json += "\"paidSlotOccupied\":\"" + getPaidSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";
+		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"subscritionAllowedPark\":\"" + isSubscritionAllowedPark() + "\",";
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"rateAreaId\":\"" + getRateAreaId() + "\",";

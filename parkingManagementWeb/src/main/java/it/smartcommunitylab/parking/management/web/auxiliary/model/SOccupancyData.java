@@ -7,12 +7,17 @@ public class SOccupancyData {
 	private String sName;
 	private String sArea;
 	private FilterPeriod period;
+	private String vehicleType;
 	private List<String> occLC;
 	private List<String> occLS;
 	private List<String> occP;
 	private List<String> occDO;
 	private List<String> occH;
 	private List<String> occR;
+	private List<String> occE;
+	private List<String> occC_S;
+	private List<String> occRO;
+	private List<String> occCS;
 	private List<String> slotsND;
 	
 	public String getsName() {
@@ -99,29 +104,73 @@ public class SOccupancyData {
 		this.slotsND = slotsND;
 	}
 
-	public SOccupancyData(String sName, String sArea, FilterPeriod period,
-			List<String> occLC, List<String> occLS, List<String> occP,
-			List<String> occDO, List<String> occH, List<String> occR,
-			List<String> slotsND) {
+	public String getVehicleType() {
+		return vehicleType;
+	}
+
+	public List<String> getOccE() {
+		return occE;
+	}
+
+	public List<String> getOccC_S() {
+		return occC_S;
+	}
+
+	public List<String> getOccRO() {
+		return occRO;
+	}
+
+	public List<String> getOccCS() {
+		return occCS;
+	}
+
+	public void setVehicleType(String vehicleType) {
+		this.vehicleType = vehicleType;
+	}
+
+	public void setOccE(List<String> occE) {
+		this.occE = occE;
+	}
+
+	public void setOccC_S(List<String> occC_S) {
+		this.occC_S = occC_S;
+	}
+
+	public void setOccRO(List<String> occRO) {
+		this.occRO = occRO;
+	}
+
+	public void setOccCS(List<String> occCS) {
+		this.occCS = occCS;
+	}
+
+	public SOccupancyData(String sName, String sArea, FilterPeriod period, String vehicleType, List<String> occLC,
+			List<String> occLS, List<String> occP, List<String> occDO, List<String> occH, List<String> occR,
+			List<String> occE, List<String> occC_S, List<String> occRO, List<String> occCS, List<String> slotsND) {
 		super();
 		this.sName = sName;
 		this.sArea = sArea;
 		this.period = period;
+		this.vehicleType = vehicleType;
 		this.occLC = occLC;
 		this.occLS = occLS;
 		this.occP = occP;
 		this.occDO = occDO;
 		this.occH = occH;
 		this.occR = occR;
+		this.occE = occE;
+		this.occC_S = occC_S;
+		this.occRO = occRO;
+		this.occCS = occCS;
 		this.slotsND = slotsND;
 	}
 
 	@Override
 	public String toString() {
-		return "SOccupancyData [sName=" + sName + ", sArea=" + sArea
-				+ ", period=" + period + ", occLC=" + occLC + ", occLS="
-				+ occLS + ", occP=" + occP + ", occDO=" + occDO + ", occH="
-				+ occH + ", occR=" + occR + ", slotsND=" + slotsND + "]";
+		return "SOccupancyData [sName=" + sName + ", sArea=" + sArea + ", period=" + period + ", vehicleType="
+				+ vehicleType + ", occLC=" + occLC + ", occLS=" + occLS + ", occP=" + occP + ", occDO=" + occDO
+				+ ", occH=" + occH + ", occR=" + occR + ", occE=" + occE + ", occC_S=" + occC_S + ", occRO=" + occRO
+				+ ", occCS=" + occCS + ", slotsND=" + slotsND + "]";
 	}
 
 }

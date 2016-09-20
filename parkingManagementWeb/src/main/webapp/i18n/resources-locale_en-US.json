@@ -307,6 +307,14 @@
     "value": "Status",
     "description": "Label stato parcometro"
 }, {
+    "key": "pm_state_active",
+    "value": "Active",
+    "description": "Label stato parcometro attivo"
+}, {
+    "key": "pm_state_disabled",
+    "value": "Disabled",
+    "description": "Label stato parcometro disattivo"
+}, {
     "key": "pm_geometry",
     "value": "Position",
     "description": "Label geometry parcometro"
@@ -380,7 +388,7 @@
     "description": "Label capienza struttura"
 }, {
     "key": "ps_paying_slot",
-    "value": "Standard slots",
+    "value": "Paying slots",
     "description": "Label posti a pagamento in struttura"
 }, {
     "key": "ps_handicapped_slot",
@@ -643,6 +651,22 @@
     "value": "Paid slots",
     "description": "Label campo posti a pagamento per oggetto strada"
 }, {
+    "key": "street_rechargeable_slot",
+    "value": "Rechargeable car slots",
+    "description": "Label campo posti ricaricabili per oggetto strada"
+}, {
+    "key": "street_loading_unloading_slot",
+    "value": "Loading-unloading slots",
+    "description": "Label campo posti carico scarico per oggetto strada"
+}, {
+    "key": "street_pink_slot",
+    "value": "Pink slots",
+    "description": "Label campo posti rosa per oggetto strada"
+}, {
+    "key": "street_car_sharing_slot",
+    "value": "Car sharing slots",
+    "description": "Label campo posti car sharing per oggetto strada"
+}, {
     "key": "street_totalslot",
     "value": "Total slot number",
     "description": "Label campo posti totali per oggetto strada"
@@ -683,6 +707,10 @@
     "value": "'Total slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
+    "key": "street_vehicle_type_err_required",
+    "value": "'Vehicle type' field is mandatory.",
+    "description": "Messaggio errore campo tipo veicolo in strada obbligatorio"
+}, {
     "key": "street_handicapped_slots_err_required",
     "value": "'Handicapped slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
@@ -705,6 +733,22 @@
 }, {
     "key": "street_freepark_slots_sign_err_required",
     "value": "'Signed free park slots' field is mandatory.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_rechargeable_slots_err_required",
+    "value": "'Rechargeable park slots' field is mandatory.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_loading_unloading_slots_err_required",
+    "value": "'Loading-unloading slots' field is mandatory.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_pink_slots_err_required",
+    "value": "'Pink slots' field is mandatory.",
+    "description": "Messaggio errore campo posti in strada obbligatorio"
+}, {
+    "key": "street_car_sharing_slots_err_required",
+    "value": "'Car sharing park slots' field is mandatory.",
     "description": "Messaggio errore campo posti in strada obbligatorio"
 }, {
     "key": "street_unusuable_slots_err_required",
@@ -836,8 +880,8 @@
     "description": "Campo posizione in mappa area"
 }, {
     "key": "area_sms",
-    "value": "Telepark service - area code",
-    "description": "Campo codice sms telepark area"
+    "value": "phone payment - area code",
+    "description": "Campo codice telefonico pagamento area"
 }, {
     "key": "area_note",
     "value": "notes",
@@ -860,7 +904,7 @@
     "description": "Errore Campo tariffa area non corretto"
 }, {
     "key": "area_openingtime_err_pattern",
-    "value": "'Area hours' field is not correct. Insert a time period in 'hh:mm - hh:mm' format",
+    "value": "'Area hours' field is not correct. Insert a time period in 'hh:mm - hh:mm' format. For more periods use '/' separator",
     "description": "Errore Campo orario area non corretto"
 }, {
     "key": "area_openingtime_err_required",
@@ -908,11 +952,11 @@
     "description": "Testo placeholder campo nome area"
 }, {
     "key": "area_fee_placeholder",
-    "value": "Insert the area hour fee value (euro/hour) in the decimal format (es: 0,50)",
+    "value": "euro/hour (es: 0,50)",
     "description": "Testo placeholder campo tariffa oraria area"
 }, {
     "key": "area_time_placeholder",
-    "value": "Insert the area period value (from - to) in the 'hh:mm' format",
+    "value": "hh:mm - hh:mm/hh:mm - hh:mm",
     "description": "Testo placeholder campo orario area"
 }, {
     "key": "area_sms_placeholder",
@@ -938,6 +982,10 @@
     "key": "street_address_placeholder",
     "value": "Insert the street referenced address",
     "description": "Testo placeholder campo indirizzo via"
+}, {
+    "key": "vehicle_type_placeholder",
+    "value": "Insert slot vehicle type",
+    "description": "Testo placeholder campo tipo veicolo per posti in via"
 }, {
     "key": "street_totalslot_placeholder",
     "value": "Insert the total slot number of the street",
@@ -966,6 +1014,22 @@
     "key": "street_freeparkslotsign_placeholder",
     "value": "Insert the free park signed slots number",
     "description": "Testo placeholder campo posti gratuiti con segnaletica in via"
+}, {
+    "key": "street_rechargeableslot_placeholder",
+    "value": "Insert the rechargeable slots number",
+    "description": "Testo placeholder campo posti ricarica auto elettrica in via"
+}, {
+    "key": "street_loadingunloadingslot_placeholder",
+    "value": "Insert the loading-unloading slots number",
+    "description": "Testo placeholder campo posti carico-scarico in via"
+}, {
+    "key": "street_pinkslot_placeholder",
+    "value": "Insert the pink slots number",
+    "description": "Testo placeholder campo posti rosa in via"
+}, {
+    "key": "street_carsharingslot_placeholder",
+    "value": "Insert the car sharing slots number",
+    "description": "Testo placeholder campo posti car sharing in via"
 }, {
     "key": "street_unusuableslot_placeholder",
     "value": "Insert the unusalbe slots number",
@@ -1139,8 +1203,12 @@
     "value": "Choose the bike point position (click on map)",
     "description": "Testo placeholder campo posizione punto bici"
 }, {
+    "key": "btn_add_new_polygon",
+    "value": "New polygon",
+    "description": "Label pulsante aggiungi nuovo poligono in area edit"
+}, {
     "key": "btn_remove_all_polygons",
-    "value": "Delete poligons",
+    "value": "Delete polygons",
     "description": "Label pulsante cancella poligoni in area edit"
 }, {
     "key": "btn_remove_last_polygons",
@@ -1344,15 +1412,15 @@
     "description": "Testo pulsante aggiungi in edit parcheggi"
 }, {
     "key": "info_1",
-    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped, ND: not available",
+    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped, E: eletrics rechargeable, C/S: loading/unloading, RO: pink, CS: car sharing, ND: not available",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_2",
-    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped",
+    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped, E: eletrics rechargeable, C/S: loading/unloading, RO: pink, CS: car sharing",
     "description": "Testo pannello informativo per occupazione parcheggi"
 }, {
     "key": "info_3",
-    "value": "S: standard, H: handicapped",
+    "value": "LC: free with signposting, LS: free without signposting, P: paid, DO: timed, R: reserved, H: handicapped, E: eletrics rechargeable, C/S: loading/unloading, RO: pink, CS: car sharing, ND: not available",
     "description": "Testo pannello informativo per occupazione parcheggi in struttura"
 }, {
     "key": "info_close",
@@ -1787,6 +1855,70 @@
 	"value": "'Occupied slots on free signed' field value is not correct. Insert a numeric value",
 	"description": "Messaggio campo posti gratuiti con segnaletica non corretto in creazione log via"
 }, {
+	"key": "log_street_occupied_rechargeable_error_pattern",
+	"value": "'Occupied slots on rechargeable' field value is not correct. Insert a numeric value",
+	"description": "Messaggio campo posti ricaricabili occupati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_rechargeable_error_required",
+	"value": "'Occupied slots on rechargeable' field value is required. Insert a numeric value",
+	"description": "Messaggio campo posti ricaricabili obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_rechargeable_error_min",
+	"value": "'Occupied slots on rechargeable' field value is not correct. Insert a bigger value",
+	"description": "Messaggio errore campo posti ricaricabili non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_rechargeable_error_max",
+	"value": "'Occupied slots on rechargeable' field value is not correct. Insert a smaller value",
+	"description": "Messaggio errore campo posti ricaricabili non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_loadingUnloading_error_pattern",
+	"value": "'Occupied slots on loading-unloading' field value is not correct. Insert a numeric value",
+	"description": "Messaggio campo posti carico-scarico occupati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_loadingUnloading_error_required",
+	"value": "'Occupied slots on loading-unloading' field value is required. Insert a numeric value",
+	"description": "Messaggio campo posti carico-scarico obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_loadingUnloading_error_min",
+	"value": "'Occupied slots on loading-unloading' field value is not correct. Insert a smaller value",
+	"description": "Messaggio errore campo posti carico-scarico non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_loadingUnloading_error_max",
+	"value": "'Occupied slots on loading-unloading' field value is not correct. Insert a bigger value",
+	"description": "Messaggio errore campo posti carico-scarico non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_pink_error_pattern",
+	"value": "'Occupied slots on pink' field value is not correct. Insert a numeric value",
+	"description": "Messaggio campo posti rosa occupati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_pink_error_required",
+	"value": "'Occupied slots on pink' field value is required. Insert a numeric value",
+	"description": "Messaggio campo posti rosa obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_pink_error_min",
+	"value": "'Occupied slots on pink' field value is not correct. Insert a smaller value",
+	"description": "Messaggio errore campo posti rosa non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_pink_error_max",
+	"value": "'Occupied slots on pink' field value is not correct. Insert a bigger value",
+	"description": "Messaggio errore campo posti rosa non corretto in creazione log via per valore troppo grande"
+}, {
+	"key": "log_street_occupied_car_sharing_error_pattern",
+	"value": "'Occupied slots on car-sharing' field value is not correct. Insert a numeric value",
+	"description": "Messaggio campo posti auto-condivisa occupati non corretto in creazione log via"
+}, {
+	"key": "log_street_occupied_car_sharing_error_required",
+	"value": "'Occupied slots on car-sharing' field value is required. Insert a numeric value",
+	"description": "Messaggio campo posti auto-condivisa obbligatorio in creazione log via"
+}, {
+	"key": "log_street_occupied_car_sharing_error_min",
+	"value": "'Occupied slots on car-sharing' field value is not correct. Insert a smaller value",
+	"description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo piccolo"
+}, {
+	"key": "log_street_occupied_car_sharing_error_max",
+	"value": "'Occupied slots on car-sharing' field value is not correct. Insert a bigger value",
+	"description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo grande"
+}, {
 	"key": "log_street_occupied_free_signed_error_required",
 	"value": "'Occupied slots on free signed' field value is mandatory. Insert a numeric value",
 	"description": "Messaggio campo posti gratuiti con segnaletica obbligatorio in creazione log via"
@@ -1796,15 +1928,15 @@
 	"description": "Messaggio campo posti riservati obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_handicapped_error_pattern",
-	"value": "'Occupied slots on handicapped' field value is not correct. Insert a numeric value",
+	"value": "'Occupied slots on handicapped' field value is not correct. Insert a numeric value.",
 	"description": "Messaggio campo posti per disabili non corretto in creazione log via"
 }, {
 	"key": "log_street_occupied_handicapped_error_required",
-	"value": "'Occupied slots on handicapped' field value is mandatory. Insert a numeric value",
+	"value": "'Occupied slots on handicapped' field value is mandatory. Insert a numeric value.",
 	"description": "Messaggio campo posti per disabili obbligatorio in creazione log via"
 }, {
 	"key": "log_street_unavailable_error_pattern",
-	"value": "'Unusable slots' field value is not correct. Insert a numeric value",
+	"value": "'Unusable slots' field value is not correct. Insert a numeric value.",
 	"description": "Messaggio campo posti inutilizzabili non corretto in creazione log via"
 }, {
 	"key": "log_street_unavailable_error_min",
@@ -2471,4 +2603,49 @@
 }, {
 	"key": "impact_new_occupancy_rate_error_required",
 	"value": "Field 'new average occupancy rate' is required"
+}, {
+    "key": "btn_delete_text",
+    "value": "Delete"
+}, {
+    "key": "btn_edit_text",
+    "value": "Edit"
+}, {
+    "key": "vehicle_type_label",
+    "value": "Vehicle type"
+}, {
+    "key": "all_vehicle_types",
+    "value": "All"
+}, {
+    "key": "car_vehicle",
+    "value": "Auto"
+}, {
+    "key": "moto_vehicle",
+    "value": "Motorcycle"
+}, {
+    "key": "taxi_vehicle",
+    "value": "Taxi"
+}, {
+    "key": "autobus_vehicle",
+    "value": "Bus"
+}, {
+    "key": "bike_vehicle",
+    "value": "Bike rack"
+}, {
+    "key": "camper_vehicle",
+    "value": "Camper"
+}, {
+	"key": "add_new_vehicle_slots",
+	"value": "Add new vehicle slots"
+}, {
+	"key": "vehicle_type",
+	"value": "Vehicle Type"
+}, {
+	"key": "street_active_vehicle_type",
+	"value": "Active"
+}, {
+	"key": "ps_abutting_park",
+	"value": "Park with bus service"
+}, {
+	"key": "filter_agency_title",
+	"value": "Filter for agencyId"
 }]

@@ -23,13 +23,14 @@ public class BikePoint {
 
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
-	private String municipality;
+	//private String municipality;
 	private String name;
 	private Integer bikeNumber;
 	private Integer slotNumber;
 	private Point geometry;
 	private Long lastChange;
 	private List<String> zones;
+	private List<String> agencyId;	// relation to agency object
 
 	public String getId() {
 		return id;
@@ -87,13 +88,13 @@ public class BikePoint {
 		this.lastChange = lastChange;
 	}
 	
-	public String getMunicipality() {
+	/*public String getMunicipality() {
 		return municipality;
 	}
 
 	public void setMunicipality(String municipality) {
 		this.municipality = municipality;
-	}
+	}*/
 
 	public List<String> getZones() {
 		return zones;
@@ -101,6 +102,14 @@ public class BikePoint {
 
 	public void setZones(List<String> zones) {
 		this.zones = zones;
+	}
+
+	public List<String> getAgencyId() {
+		return agencyId;
+	}
+
+	public void setAgencyId(List<String> agencyId) {
+		this.agencyId = agencyId;
 	}
 
 	public String toJSON(){
@@ -111,7 +120,7 @@ public class BikePoint {
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
 		json += "\"bikeNumber\":\"" + getBikeNumber() + "\",";
-		json += "\"municipality\":\"" + getMunicipality() + "\",";
+		//json += "\"municipality\":\"" + getMunicipality() + "\",";
 		json += "\"lastChange\":\"" + getLastChange() + "\"";
 		json += "}";
 		return json;

@@ -17,6 +17,9 @@ package it.smartcommunitylab.parking.management.web.auxiliary.model;
 
 import java.io.Serializable;
 import java.util.Arrays;
+import java.util.List;
+
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 public class Street implements Serializable {
 
@@ -33,40 +36,42 @@ public class Street implements Serializable {
 	private Long version;
 	private Integer user;
 	
-	/**
-	 * parcheggi gratuiti totali/occupati
-	 */
-	private int slotsFree;
-	private int slotsOccupiedOnFree;
-	/**
-	 * parcheggi gratuiti con segnaletica totali/occupati
-	 */
-	private int slotsFreeSigned;
-	private int slotsOccupiedOnFreeSigned;
-	/**
-	 * parcheggi liberi totali/occupati
-	 */
-	private int slotsUnavailable;
-	/**
-	 * parcheggi a pagamento totali/occupati
-	 */
-	private int slotsPaying;
-	private int slotsOccupiedOnPaying;
-	/**
-	 * parcheggi a disco orario totali/occupati
-	 */
-	private int slotsTimed;
-	private int slotsOccupiedOnTimed;
-	/**
-	 * parcheggi per disabili totali/occupati
-	 */
-	private int slotsHandicapped;
-	private int slotsOccupiedOnHandicapped;
-	/**
-	 * parcheggi riservati totali/occupati
-	 */
-	private int slotsReserved;
-	private int slotsOccupiedOnReserved;
+//	/**
+//	 * parcheggi gratuiti totali/occupati
+//	 */
+//	private int slotsFree;
+//	private int slotsOccupiedOnFree;
+//	/**
+//	 * parcheggi gratuiti con segnaletica totali/occupati
+//	 */
+//	private int slotsFreeSigned;
+//	private int slotsOccupiedOnFreeSigned;
+//	/**
+//	 * parcheggi liberi totali/occupati
+//	 */
+//	private int slotsUnavailable;
+//	/**
+//	 * parcheggi a pagamento totali/occupati
+//	 */
+//	private int slotsPaying;
+//	private int slotsOccupiedOnPaying;
+//	/**
+//	 * parcheggi a disco orario totali/occupati
+//	 */
+//	private int slotsTimed;
+//	private int slotsOccupiedOnTimed;
+//	/**
+//	 * parcheggi per disabili totali/occupati
+//	 */
+//	private int slotsHandicapped;
+//	private int slotsOccupiedOnHandicapped;
+//	/**
+//	 * parcheggi riservati totali/occupati
+//	 */
+//	private int slotsReserved;
+//	private int slotsOccupiedOnReserved;
+	
+	private List<VehicleSlot> slotsConfiguration;	// Slot configuration for each vehicle type
 
 	private String polyline;
 	
@@ -74,50 +79,110 @@ public class Street implements Serializable {
 	
 	private String areaId;
 	
-	public int getSlotsOccupiedOnFree() {
-		return slotsOccupiedOnFree;
-	}
-
-	public void setSlotsOccupiedOnFree(int slotsOccupiedOnFree) {
-		this.slotsOccupiedOnFree = slotsOccupiedOnFree;
-	}
-
-	public int getSlotsOccupiedOnPaying() {
-		return slotsOccupiedOnPaying;
-	}
-
-	public void setSlotsOccupiedOnPaying(int slotsOccupiedOnPaying) {
-		this.slotsOccupiedOnPaying = slotsOccupiedOnPaying;
-	}
-
-	public int getSlotsOccupiedOnTimed() {
-		return slotsOccupiedOnTimed;
-	}
-
-	public void setSlotsOccupiedOnTimed(int slotsOccupiedOnTimed) {
-		this.slotsOccupiedOnTimed = slotsOccupiedOnTimed;
-	}
-
-	public void setSlotsUnavailable(int slotsUnavailable) {
-		this.slotsUnavailable = slotsUnavailable;
-	}
-
-	public int getSlotsFree() {
-		return slotsFree;
-	}
-
-	public int getSlotsUnavailable() {
-		return slotsUnavailable;
-	}
-
-	public int getSlotsPaying() {
-		return slotsPaying;
-	}
-
-	public int getSlotsTimed() {
-		return slotsTimed;
-	}
-
+//	public int getSlotsOccupiedOnFree() {
+//		return slotsOccupiedOnFree;
+//	}
+//
+//	public void setSlotsOccupiedOnFree(int slotsOccupiedOnFree) {
+//		this.slotsOccupiedOnFree = slotsOccupiedOnFree;
+//	}
+//
+//	public int getSlotsOccupiedOnPaying() {
+//		return slotsOccupiedOnPaying;
+//	}
+//
+//	public void setSlotsOccupiedOnPaying(int slotsOccupiedOnPaying) {
+//		this.slotsOccupiedOnPaying = slotsOccupiedOnPaying;
+//	}
+//
+//	public int getSlotsOccupiedOnTimed() {
+//		return slotsOccupiedOnTimed;
+//	}
+//
+//	public void setSlotsOccupiedOnTimed(int slotsOccupiedOnTimed) {
+//		this.slotsOccupiedOnTimed = slotsOccupiedOnTimed;
+//	}
+//
+//	public void setSlotsUnavailable(int slotsUnavailable) {
+//		this.slotsUnavailable = slotsUnavailable;
+//	}
+//
+//	public int getSlotsFree() {
+//		return slotsFree;
+//	}
+//
+//	public int getSlotsUnavailable() {
+//		return slotsUnavailable;
+//	}
+//
+//	public int getSlotsPaying() {
+//		return slotsPaying;
+//	}
+//
+//	public int getSlotsTimed() {
+//		return slotsTimed;
+//	}
+//
+//	public void setSlotsFree(int slotsFree) {
+//		this.slotsFree = slotsFree;
+//	}
+//
+//	public void setSlotsPaying(int slotsPaying) {
+//		this.slotsPaying = slotsPaying;
+//	}
+//
+//	public void setSlotsTimed(int slotsTimed) {
+//		this.slotsTimed = slotsTimed;
+//	}
+//
+//	public int getSlotsHandicapped() {
+//		return slotsHandicapped;
+//	}
+//
+//	public int getSlotsOccupiedOnHandicapped() {
+//		return slotsOccupiedOnHandicapped;
+//	}
+//
+//	public void setSlotsHandicapped(int slotsHandicapped) {
+//		this.slotsHandicapped = slotsHandicapped;
+//	}
+//
+//	public void setSlotsOccupiedOnHandicapped(int slotsOccupiedOnHandicapped) {
+//		this.slotsOccupiedOnHandicapped = slotsOccupiedOnHandicapped;
+//	}
+//
+//	public int getSlotsFreeSigned() {
+//		return slotsFreeSigned;
+//	}
+//
+//	public int getSlotsOccupiedOnFreeSigned() {
+//		return slotsOccupiedOnFreeSigned;
+//	}
+//
+//	public int getSlotsReserved() {
+//		return slotsReserved;
+//	}
+//
+//	public int getSlotsOccupiedOnReserved() {
+//		return slotsOccupiedOnReserved;
+//	}
+//
+//	public void setSlotsFreeSigned(int slotsFreeSigned) {
+//		this.slotsFreeSigned = slotsFreeSigned;
+//	}
+//
+//	public void setSlotsOccupiedOnFreeSigned(int slotsOccupiedOnFreeSigned) {
+//		this.slotsOccupiedOnFreeSigned = slotsOccupiedOnFreeSigned;
+//	}
+//
+//	public void setSlotsReserved(int slotsReserved) {
+//		this.slotsReserved = slotsReserved;
+//	}
+//
+//	public void setSlotsOccupiedOnReserved(int slotsOccupiedOnReserved) {
+//		this.slotsOccupiedOnReserved = slotsOccupiedOnReserved;
+//	}
+	
 	public LastChange getLastChange() {
 		return lastChange;
 	}
@@ -132,66 +197,6 @@ public class Street implements Serializable {
 
 	public void setPolyline(String polyline) {
 		this.polyline = polyline;
-	}
-
-	public void setSlotsFree(int slotsFree) {
-		this.slotsFree = slotsFree;
-	}
-
-	public void setSlotsPaying(int slotsPaying) {
-		this.slotsPaying = slotsPaying;
-	}
-
-	public void setSlotsTimed(int slotsTimed) {
-		this.slotsTimed = slotsTimed;
-	}
-
-	public int getSlotsHandicapped() {
-		return slotsHandicapped;
-	}
-
-	public int getSlotsOccupiedOnHandicapped() {
-		return slotsOccupiedOnHandicapped;
-	}
-
-	public void setSlotsHandicapped(int slotsHandicapped) {
-		this.slotsHandicapped = slotsHandicapped;
-	}
-
-	public void setSlotsOccupiedOnHandicapped(int slotsOccupiedOnHandicapped) {
-		this.slotsOccupiedOnHandicapped = slotsOccupiedOnHandicapped;
-	}
-
-	public int getSlotsFreeSigned() {
-		return slotsFreeSigned;
-	}
-
-	public int getSlotsOccupiedOnFreeSigned() {
-		return slotsOccupiedOnFreeSigned;
-	}
-
-	public int getSlotsReserved() {
-		return slotsReserved;
-	}
-
-	public int getSlotsOccupiedOnReserved() {
-		return slotsOccupiedOnReserved;
-	}
-
-	public void setSlotsFreeSigned(int slotsFreeSigned) {
-		this.slotsFreeSigned = slotsFreeSigned;
-	}
-
-	public void setSlotsOccupiedOnFreeSigned(int slotsOccupiedOnFreeSigned) {
-		this.slotsOccupiedOnFreeSigned = slotsOccupiedOnFreeSigned;
-	}
-
-	public void setSlotsReserved(int slotsReserved) {
-		this.slotsReserved = slotsReserved;
-	}
-
-	public void setSlotsOccupiedOnReserved(int slotsOccupiedOnReserved) {
-		this.slotsOccupiedOnReserved = slotsOccupiedOnReserved;
 	}
 
 	public String getAreaId() {
@@ -266,12 +271,21 @@ public class Street implements Serializable {
 		this.user = user;
 	}
 
+	public List<VehicleSlot> getSlotsConfiguration() {
+		return slotsConfiguration;
+	}
+
+	public void setSlotsConfiguration(List<VehicleSlot> slotsConfiguration) {
+		this.slotsConfiguration = slotsConfiguration;
+	}
+
 	@Override
 	public String toString() {
 		return "Street [id=" + id + ", agency=" + agency + ", position="
 				+ Arrays.toString(position) + ", name=" + name
 				+ ", description=" + description + ", updateTime=" + updateTime
-				+ ", version=" + version + ", user=" + user + ", slotsFree="
+				+ ", version=" + version + ", user=" + user
+				/*+ ", slotsFree="
 				+ slotsFree + ", slotsOccupiedOnFree=" + slotsOccupiedOnFree
 				+ ", slotsFreeSigned=" + slotsFreeSigned
 				+ ", slotsOccupiedOnFreeSigned=" + slotsOccupiedOnFreeSigned
@@ -282,7 +296,7 @@ public class Street implements Serializable {
 				+ ", slotsHandicapped=" + slotsHandicapped
 				+ ", slotsOccupiedOnHandicapped=" + slotsOccupiedOnHandicapped
 				+ ", slotsReserved=" + slotsReserved
-				+ ", slotsOccupiedOnReserved=" + slotsOccupiedOnReserved
+				+ ", slotsOccupiedOnReserved=" + slotsOccupiedOnReserved*/
 				+ ", polyline=" + polyline + ", lastChange=" + lastChange
 				+ ", areaId=" + areaId + "]";
 	}
@@ -302,7 +316,7 @@ public class Street implements Serializable {
 		}
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"description\":\"" + getDescription() + "\",";
-		json += "\"slotsFree\":" + getSlotsFree() + ",";
+		/*json += "\"slotsFree\":" + getSlotsFree() + ",";
 		json += "\"slotsOccupiedOnFree\":" + getSlotsOccupiedOnFree() + ",";
 		json += "\"slotsFreeSigned\":" + getSlotsFreeSigned() + ",";
 		json += "\"slotsOccupiedOnFreeSigned\":" + getSlotsOccupiedOnFreeSigned() + ",";
@@ -314,7 +328,7 @@ public class Street implements Serializable {
 		json += "\"slotsOccupiedOnHandicapped\":" + getSlotsOccupiedOnHandicapped() + ",";
 		json += "\"slotsReserved\":" + getSlotsReserved() + ",";
 		json += "\"slotsOccupiedOnReserved\":" + getSlotsOccupiedOnReserved() + ",";		
-		json += "\"slotsUnavailable\":" + getSlotsUnavailable() + ",";
+		json += "\"slotsUnavailable\":" + getSlotsUnavailable() + ",";*/
 		json += "\"lastChange\":" + getLastChange() + ",";
 		json += "\"polyline\":\"" + getPolyline() + "\",";
 		json += "\"areaId\":\"" + getAreaId() + "\"";

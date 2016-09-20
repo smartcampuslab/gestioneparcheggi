@@ -1,0 +1,46 @@
+agencies:
+  - id: tn_mob_091516
+    name: Agency tn mob
+    description: Agency id per trentino mobilita'
+    area: 3
+    zone: 3
+    street: 3
+    structure: 3
+    parkingmeter: 3
+    bike: 3
+  - id: tn_cit_091516
+    name: Agency tn city
+    description: Agency id per comune trento
+    area: 3
+    zone: 3
+    street: 3
+    structure: 3
+    parkingmeter: 3
+    bike: 3    
+  - id: rv_amr_091616
+    name: Agency rv amr
+    description: Agency id per amr rovereto
+    area: 3
+    zone: 3
+    street: 3
+    structure: 3
+    parkingmeter: 3
+    bike: 3
+  - id: tn_tes_091516
+    name: Agency tn test
+    description: Agency id per trento test
+    area: 3
+    zone: 3
+    street: 3
+    structure: 3
+    parkingmeter: 3
+    bike: 3    
+  - id: rv_tes_091616
+    name: Agency rv test
+    description: Agency id per amr rovereto
+    area: 3
+    zone: 3
+    street: 3
+    structure: 3
+    parkingmeter: 3
+    bike: 3

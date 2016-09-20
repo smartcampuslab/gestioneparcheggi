@@ -30,19 +30,20 @@ import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
 import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
-import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
+import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -70,37 +71,51 @@ public class GeoObjectManager {
 	private DataLogRepositoryDao dataLogRepo;
 	@Autowired
 	private MongoTemplate mongodb;
+	@Autowired
+	private VehicleTypeDataSetup vehicleTypeDataSetup;
 	
 	private static final Logger logger = Logger.getLogger(GeoObjectManager.class);
 	private static final int OCCUPANCY_CELLS_OFFSET = 8;
 	private static final int OCCUPANCY_PS_CELLS_OFFSET = 4;
 	private static final int OCCUPANCY_CELLS_FIRSTVAL = 4;
+	private static final String OCC = "Occupazione";
+	private static final String LC = "LC";
+	private static final String LS = "LS";
+	private static final String P = "P";
+	private static final String DO = "DO";
+	private static final String R = "R";
+	private static final String H = "H";
+	private static final String E = "E";
+	private static final String CeS = "C/S";
+	private static final String RO = "RO";
+	private static final String CS = "CS";
+	private static final String ND = "ND";
 	
-	public List<Parking> getParkings(String agency) throws Exception { 
-		return searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
+	public List<Parking> getParkings(String agency, String agencyId) throws Exception { 
+		return searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", agency), agencyId); //(Circle)null,
 	}
 	
-	public List<Parking> getParkings(String agency, double lat, double lon, double radius) throws Exception {
-		return searchParkings(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+	public List<Parking> getParkings(String agency, double lat, double lon, double radius, String agencyId) throws Exception {
+		return searchParkings(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
-	public List<Street> getStreets(String agency) throws Exception {
-		return searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null, 
+	public List<Street> getStreets(String agency, String agencyId) throws Exception {
+		return searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", agency), agencyId); //(Circle)null, 
 	}
 	
-	public List<Street> getStreets(String agency, double lat, double lon, double radius) throws Exception {
-		return searchStreets(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+	public List<Street> getStreets(String agency, double lat, double lon, double radius, String agencyId) throws Exception {
+		return searchStreets(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
-	public List<ParkMeter> getParkingMeters(String agency) throws Exception { 
-		return searchParkingMeters((Circle)null, Collections.<String,Object>singletonMap("agency", agency)); //(Circle)null,
+	public List<ParkMeter> getParkingMeters(String agency, String agencyId) throws Exception { 
+		return searchParkingMeters((Circle)null, Collections.<String,Object>singletonMap("agency", agency), agencyId); //(Circle)null,
 	}
 	
-	public ParkMeter getParkingMeterFromCode(String agency, String code) throws Exception { 
+	public ParkMeter getParkingMeterFromCode(String agency, String code, String agencyId) throws Exception { 
 		ParkMeter park = null;
 		boolean find = false;
 		//return 
-		List<ParkMeter> all = searchParkingMeters((Circle)null, Collections.<String,Object>singletonMap("agency", agency));
+		List<ParkMeter> all = searchParkingMeters((Circle)null, Collections.<String,Object>singletonMap("agency", agency), agencyId);
 		for(int i = 0; i < all.size() && !find; i++){
 			ParkMeter p = all.get(i);
 			if(p.getCode().compareTo(code) == 0){
@@ -111,11 +126,11 @@ public class GeoObjectManager {
 		return park;
 	}
 	
-	public ParkStruct getParkingStructureByName(String name, String appId) throws Exception{
+	public ParkStruct getParkingStructureByName(String name, String appId, String agencyId) throws Exception{
 		ParkStruct pstruct = null;
 		boolean find = false;
 		//return 
-		List<ParkStruct> all = searchParkingStructures((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<ParkStruct> all = searchParkingStructures((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
 		for(int i = 0; i < all.size() && !find; i++){
 			ParkStruct ps = all.get(i);
 			if(ps.getName().compareToIgnoreCase(name) == 0){
@@ -126,11 +141,11 @@ public class GeoObjectManager {
 		return pstruct;
 	}
 	
-	public Street getStreetByName(String name, String appId) throws Exception{
+	public Street getStreetByName(String name, String appId, String agencyId) throws Exception{
 		Street street = null;
 		boolean find = false;
 		//return 
-		List<Street> all = searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<Street> all = searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
 		for(int i = 0; i < all.size() && !find; i++){
 			Street s = all.get(i);
 			if(s.getName().compareToIgnoreCase(name) == 0){
@@ -141,11 +156,11 @@ public class GeoObjectManager {
 		return street;
 	}
 	
-	public Parking getParkingByName(String name, String appId) throws Exception{
+	public Parking getParkingByName(String name, String appId, String agencyId) throws Exception{
 		Parking park = null;
 		boolean find = false;
 		//return 
-		List<Parking> all = searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", appId));
+		List<Parking> all = searchParkings((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
 		for(int i = 0; i < all.size() && !find; i++){
 			Parking pk = all.get(i);
 			if(pk.getName().compareToIgnoreCase(name) == 0){
@@ -156,8 +171,8 @@ public class GeoObjectManager {
 		return park;
 	}	
 	
-	public List<ParkMeter> getParkingMeters(String agency, double lat, double lon, double radius) throws Exception {
-		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency)); //new Circle(lat, lon, radius),
+	public List<ParkMeter> getParkingMeters(String agency, double lat, double lon, double radius, String agencyId) throws Exception {
+		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
 	public void updateDynamicStreetData(Street s, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
@@ -310,11 +325,11 @@ public class GeoObjectManager {
 	
 	// -------------------- Methods from geoStorage ---------------------------
 	
-	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
-		return searchStreets(circle, inCriteria, 0, 0);//circle,
+	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria, String agencyId) throws Exception { //Circle circle
+		return searchStreets(circle, inCriteria, 0, 0, agencyId);//circle,
 	}
 	
-	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle
+	public List<Street> searchStreets(Circle circle, Map<String, Object> inCriteria, int limit, int skip, String agencyId) throws Exception { //Circle circle
 		//Criteria criteria = createSearchCriteria(type, circle, inCriteria); //circle,
 		//Query query = Query.query(criteria);
 		//if (limit > 0) query.limit(limit);
@@ -322,15 +337,15 @@ public class GeoObjectManager {
 
 		List<Street> listaObj = new ArrayList<Street>();
 		//storageManager.setAppId(inCriteria.get("agency").toString());
-		List<StreetBean> myStreets = storageManager.getAllStreets(inCriteria.get("agency").toString());
+		List<StreetBean> myStreets = storageManager.getAllStreetsByAgencyId(inCriteria.get("agency").toString(), agencyId);
 		for(int i = 0; i < myStreets.size(); i++){
 			Street s = castPMStreetBeanToStreet(myStreets.get(i));
 			if(circle != null){
 				// here I have to create a specific filter for position distances from circle center and distances < radius
-				logger.error(String.format("Circle params: lat:%s, lng:%s, radius:%s", circle.getCenter().getX(), circle.getCenter().getY(), circle.getRadius()));
-				logger.error(String.format("Streets: lat:%s, lng:%s", s.getPosition()[0], s.getPosition()[1]));
+				logger.debug(String.format("Circle params: lat:%s, lng:%s, radius:%s", circle.getCenter().getX(), circle.getCenter().getY(), circle.getRadius()));
+				logger.debug(String.format("Streets: lat:%s, lng:%s", s.getPosition()[0], s.getPosition()[1]));
 				double dist = distance(circle.getCenter().getX(), circle.getCenter().getY(), s.getPosition()[0], s.getPosition()[1],'K');
-				logger.error(String.format("distance: %s", dist));
+				logger.debug(String.format("distance: %s", dist));
 				if(dist  <= circle.getRadius()){
 					listaObj.add(s);
 				}
@@ -338,16 +353,16 @@ public class GeoObjectManager {
 				listaObj.add(s);
 			}
 		}
-		logger.error(String.format("Streets found: %s", listaObj.size()));
+		logger.debug(String.format("Streets found: %s", listaObj.size()));
 		
 		return listaObj; //find(query, cls);
 	}
 	
-	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
-		return searchParkings(circle, inCriteria, 0, 0);//circle,
+	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria , String agencyId) throws Exception { //Circle circle
+		return searchParkings(circle, inCriteria, 0, 0, agencyId);//circle,
 	}
 	
-	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle
+	public List<Parking> searchParkings(Circle circle, Map<String, Object> inCriteria, int limit, int skip, String agencyId) throws Exception { //Circle circle
 //		Criteria criteria = createSearchCriteria(type, circle, inCriteria); //circle,
 //		Query query = Query.query(criteria);
 //		if (limit > 0) query.limit(limit);
@@ -357,7 +372,7 @@ public class GeoObjectManager {
 		
 		List<Parking> listaObj = new ArrayList<Parking>();
 		//storageManager.setAppId(inCriteria.get("agency").toString());
-		List<ParkingStructureBean> myStructures = storageManager.getAllParkingStructure(inCriteria.get("agency").toString());
+		List<ParkingStructureBean> myStructures = storageManager.getAllParkingStructureByAgencyId(inCriteria.get("agency").toString(), agencyId);
 		
 		for(int i = 0; i < myStructures.size(); i++){
 			Parking p = castPMStructureBeanToParking(myStructures.get(i));
@@ -374,14 +389,14 @@ public class GeoObjectManager {
 		return listaObj; //find(query, cls);
 	}
 	
-	public List<ParkMeter> searchParkingMeters(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
-		return searchParkingMeters(circle, inCriteria, 0, 0);//circle,
+	public List<ParkMeter> searchParkingMeters(Circle circle, Map<String, Object> inCriteria, String agencyId) throws Exception { //Circle circle
+		return searchParkingMeters(circle, inCriteria, 0, 0, agencyId);//circle,
 	}
 	
-	public List<ParkMeter> searchParkingMeters(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle	
+	public List<ParkMeter> searchParkingMeters(Circle circle, Map<String, Object> inCriteria, int limit, int skip, String agencyId) throws Exception { //Circle circle	
 		//logger.error(String.format("Search Parking limit %s, skip %s, query %s, class %s", limit, skip, query.getHint(), type));
 		List<ParkMeter> listaObj = new ArrayList<ParkMeter>();
-		List<ParkingMeterBean> myParkingMeters = storageManager.getAllParkingMeters(inCriteria.get("agency").toString());
+		List<ParkingMeterBean> myParkingMeters = storageManager.getAllParkingMetersByAgencyId(inCriteria.get("agency").toString(), agencyId);
 		
 		for(int i = 0; i < myParkingMeters.size(); i++){
 			ParkMeter pm = castPMeterBeanToParkingMeter(myParkingMeters.get(i));
@@ -397,13 +412,13 @@ public class GeoObjectManager {
 		return listaObj; //find(query, cls);
 	}
 	
-	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria) throws Exception { //Circle circle
-		return searchParkingStructures(circle, inCriteria, 0, 0);//circle,
+	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria, String agencyId) throws Exception { //Circle circle
+		return searchParkingStructures(circle, inCriteria, 0, 0, agencyId);//circle,
 	}	
 	
-	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria, int limit, int skip) throws Exception { //Circle circle	
+	public List<ParkStruct> searchParkingStructures(Circle circle, Map<String, Object> inCriteria, int limit, int skip, String agencyId) throws Exception { //Circle circle	
 		List<ParkStruct> listaObj = new ArrayList<ParkStruct>();
-		List<ParkingStructureBean> myParkingStructures = storageManager.getAllParkingStructure(inCriteria.get("agency").toString());
+		List<ParkingStructureBean> myParkingStructures = storageManager.getAllParkingStructureByAgencyId(inCriteria.get("agency").toString(), agencyId);
 		
 		for(int i = 0; i < myParkingStructures.size(); i++){
 			ParkStruct ps = castPStructBeanToParkStruct(myParkingStructures.get(i));
@@ -453,25 +468,19 @@ public class GeoObjectManager {
 	
 	@SuppressWarnings("unused")
 	private Street castStreetJSONToObject(String value){
-		logger.error(String.format("Street to be casted : %s", value));
+		logger.debug(String.format("Street to be casted : %s", value));
 		JSONObject jsonStreet = new JSONObject(value);
 
 		Street s = new Street();
 		s.setId(jsonStreet.getString("id"));
 		s.setAgency(jsonStreet.getString("agency"));
-		s.setSlotsFree(Integer.valueOf(jsonStreet.getInt("slotsFree")));
+		// TODO update slots uploading from json
+		/*s.setSlotsFree(Integer.valueOf(jsonStreet.getInt("slotsFree")));
 		s.setSlotsPaying(Integer.valueOf(jsonStreet.getInt("slotsPaying")));
-		s.setSlotsTimed(Integer.valueOf(jsonStreet.getInt("slotsTimed")));
+		s.setSlotsTimed(Integer.valueOf(jsonStreet.getInt("slotsTimed")));*/
+		
 		s.setName(jsonStreet.getString("name"));
 		s.setPolyline(jsonStreet.getString("polyline"));
-		//String pos = jsonStreet.getString("position");
-		//if(pos != null && pos.length() > 0){
-		//	String[] pos_string = pos.split(",");
-		//	double[] pos_double = new double[2];
-		//	pos_double[0] = Double.valueOf(pos_string[0]);
-		//	pos_double[1] = Double.valueOf(pos_string[1]);
-		//	s.setPosition(pos_double);
-		//}
 		JSONArray pos = jsonStreet.getJSONArray("position");//getString("position");
 		if(pos != null && pos.length() > 0){
 			//String[] pos_string = pos.split(",");
@@ -520,7 +529,10 @@ public class GeoObjectManager {
 //				s.setSlotsFree(street.getFreeParkSlotSignNumber());
 //			}
 //		}
-		if(street.getFreeParkSlotNumber() != null){
+		List<VehicleSlotBean> editedSlotsConfBean = street.getSlotsConfiguration();
+		s.setSlotsConfiguration(ModelConverter.toVehicleSlotList(editedSlotsConfBean, s.getSlotsConfiguration()));
+		
+		/*if(street.getFreeParkSlotNumber() != null){
 			s.setSlotsFree(street.getFreeParkSlotNumber());
 		}
 		if(street.getFreeParkSlotSignNumber() != null){
@@ -537,7 +549,7 @@ public class GeoObjectManager {
 		}
 		if(street.getReservedSlotNumber() != null){
 			s.setSlotsReserved(street.getReservedSlotNumber());
-		}
+		}*/
 		s.setName(street.getStreetReference());
 		if(street.getGeometry()!= null && street.getGeometry().getPoints() != null && street.getGeometry().getPoints().size() > 0){
 			s.setPolyline(PolylineEncoder.encode(street.getGeometry().getPoints()));
@@ -556,17 +568,20 @@ public class GeoObjectManager {
 		p.setId("parking@" + park.getId_app() + "@" + park.getId());
 		p.setAgency(park.getId_app());
 		p.setSlotsTotal(park.getSlotNumber());
-		if(park.getPayingSlotNumber() != null){
+		// TODO update slots uploading from json
+		/*if(park.getPayingSlotNumber() != null){
 			p.setSlotsPaying(park.getPayingSlotNumber());
 		}
 		if(park.getHandicappedSlotNumber() != null){
 			p.setSlotsHandicapped(park.getHandicappedSlotNumber());
-		}
+		}*/
+		p.setSlotsConfiguration(ModelConverter.toVehicleSlotList(park.getSlotsConfiguration(), null));
 		p.setName(park.getName());
 		if(park.getGeometry()!= null){
 			p.setPosition(new double[]{park.getGeometry().getLat(), park.getGeometry().getLng()});
 		}
-		p.setDescription(park.getFee_val() + ", " + park.getManagementMode());
+		String desc = (park.getValidityPeriod() != null && !park.getValidityPeriod().isEmpty()) ? park.feePeriodsSummary() : "Nessuna tariffa";
+		p.setDescription(desc + ", " + park.getManagementMode());
 		return p;
 	}
 	
@@ -598,15 +613,17 @@ public class GeoObjectManager {
 		return ps;
 	}	
 	
-	public ArrayList<PSOccupancyData> classStringToOPSObjArray(String data) throws Exception{
-    	logger.info(String.format("Map Object data: %s", data));
+	public ArrayList<PSOccupancyData> classStringToOPSObjArray(String data, String agency) throws Exception {
+    	logger.debug(String.format("Map Object data: %s", data));
     	
     	ArrayList<PSOccupancyData> correctData = new ArrayList<PSOccupancyData>();
     	
     	String[] allRecords = data.split("\n");
     	String year = "";
     	FilterPeriod period = new FilterPeriod();
+    	String vehicleType = "Car";
     	
+    	List<String> slotsKeys = null;
     	for(int i = 0; i < allRecords.length; i++){
     		String[] att_and_vals = allRecords[i].split(",");
     		if(att_and_vals != null && att_and_vals.length > 0){
@@ -615,39 +632,136 @@ public class GeoObjectManager {
 	        			year = att_and_vals[1];
 	        	    	period.setYear(year);
 	        		} else {
-	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
-	        				PSOccupancyData tmpPSOcc = new PSOccupancyData();
-	        				tmpPSOcc.setpName(cleanField(att_and_vals[0]));
-	        				tmpPSOcc.setpAddress(cleanField(att_and_vals[1]));
-	        				tmpPSOcc.setPeriod(period);
-	        				
-	        				// here I load the vals
-	        				List<String> occSlots = loadRicursive(att_and_vals, 0, OCCUPANCY_PS_CELLS_OFFSET);
-	        				List<String> hSlots = loadRicursive(att_and_vals, 1, OCCUPANCY_PS_CELLS_OFFSET);
-	        				List<String> ndSlots = loadRicursive(att_and_vals, 2, OCCUPANCY_PS_CELLS_OFFSET);
-	        				tmpPSOcc.setOccSlots(occSlots);
-	        				tmpPSOcc.setHSlots(hSlots);
-	        				tmpPSOcc.setNdSlots(ndSlots);
-	        				
-	        				logger.error(String.format("Corrected Object: %s", tmpPSOcc.toString()));
-	        				correctData.add(tmpPSOcc);
+	        			if(att_and_vals[0].compareTo("Tipo Veicolo") == 0){
+	        				vehicleType = retrieveVehicleTypeByDesc(att_and_vals[1], agency);
+	        			} else {
+		        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+		        				PSOccupancyData tmpPSOcc = new PSOccupancyData();
+		        				tmpPSOcc.setpName(cleanField(att_and_vals[0]));
+		        				tmpPSOcc.setpAddress(cleanField(att_and_vals[1]));
+		        				tmpPSOcc.setPeriod(period);
+		        				
+		        				List<String> lcSlots = initEmptyList();
+		        				List<String> lsSlots = initEmptyList();
+		        				List<String> pSlots = initEmptyList();
+		        				List<String> doSlots = initEmptyList();
+		        				List<String> hSlots = initEmptyList();
+		        				List<String> rSlots = initEmptyList();
+		        				List<String> eSlots = initEmptyList();
+		        				List<String> c_sSlots = initEmptyList();
+		        				List<String> roSlots = initEmptyList();
+		        				List<String> csSlots = initEmptyList();
+		        				List<String> ndSlots = initEmptyList();
+		        				// here I load the vals
+		        				if(slotsKeys.contains(LC)){
+		        					lcSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LC), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(LS)){
+		        					lsSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(P)){
+		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(DO)){
+		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(H)){
+		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(R)){
+		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(P)){
+		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(DO)){
+		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(H)){
+		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(R)){
+		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(E)){
+		        					eSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(CeS)){
+		        					c_sSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CeS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(RO)){
+		        					roSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(RO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(CS)){
+		        					csSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(ND)){
+		        					ndSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(ND), slotsKeys.size() + 1);
+		        				}
+		        				tmpPSOcc.setVehicleType(vehicleType);
+		        				tmpPSOcc.setOccLC(lcSlots);
+		        				tmpPSOcc.setOccLS(lsSlots);
+		        				tmpPSOcc.setOccP(pSlots);
+		        				tmpPSOcc.setOccDO(doSlots);
+		        				tmpPSOcc.setOccH(hSlots);
+		        				tmpPSOcc.setOccR(rSlots);
+		        				tmpPSOcc.setOccE(eSlots);
+		        				tmpPSOcc.setOccC_S(c_sSlots);
+		        				tmpPSOcc.setOccRO(roSlots);
+		        				tmpPSOcc.setOccCS(csSlots);
+		        				tmpPSOcc.setSlotsND(ndSlots);
+		        				
+		        				logger.error(String.format("Corrected Object: %s", tmpPSOcc.toString()));
+		        				correctData.add(tmpPSOcc);
+		        			}
 	        			}
-	        		}
-	    		}
+	        		} 
+	    		} else {
+        			// here I retrieve the slots configuration
+	    			slotsKeys = new ArrayList<String>();
+	    			for(int j = 4; j < att_and_vals.length; j++){
+	    				if(att_and_vals[j].compareTo(OCC) == 0){
+	    					break;
+	    				}
+	    				slotsKeys.add(att_and_vals[j]);
+	    			}
+        		}
     		}
     	}
     	return correctData;
-    }	
+    }
 	
-	public ArrayList<SOccupancyData> classStringToOSObjArray(String data) throws Exception{
-    	logger.info(String.format("Map Object data: %s", data));
-    	
+	// Method used to retrieve the vehicle name key from the type specified in the xls file
+	private String retrieveVehicleTypeByDesc(String desc, String agency){
+		String myType = "";
+		List<VehicleType> allVehicles = vehicleTypeDataSetup.findVehicleTypeByAppId(agency);
+		for(VehicleType vt : allVehicles){
+			if(vt.getDescription().contains(desc.toLowerCase())){
+				myType = vt.getName();
+				break;
+			}
+		}
+		return myType;
+	}
+	
+	private List<String> initEmptyList(){
+		List<String> corrList = new ArrayList<String>();
+		for(int i = 0; i < 12; i++){
+			corrList.add("-1");
+		}
+		return corrList;
+	}
+	
+	public ArrayList<SOccupancyData> classStringToOSObjArray(String data, String agency) throws Exception{
+    	logger.debug(String.format("Map Object data: %s", data));
     	ArrayList<SOccupancyData> correctData = new ArrayList<SOccupancyData>();
     	
     	String[] allRecords = data.split("\n");
     	String year = "";
     	FilterPeriod period = new FilterPeriod();
+    	String vehicleType = "Car";
     	
+    	List<String> slotsKeys = null;
     	for(int i = 0; i < allRecords.length; i++){
     		String[] att_and_vals = allRecords[i].split(",");
     		if(att_and_vals != null && att_and_vals.length > 0){
@@ -656,32 +770,99 @@ public class GeoObjectManager {
 	        			year = att_and_vals[1];
 	        	    	period.setYear(year);
 	        		} else {
-	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
-	        				SOccupancyData tmpSOcc = new SOccupancyData();
-	        				tmpSOcc.setsName(cleanField(att_and_vals[0]));
-	        				tmpSOcc.setsArea(cleanField(att_and_vals[1]));
-	        				tmpSOcc.setPeriod(period);
-	        				
-	        				// here I load the vals
-	        				List<String> lcSlots = loadRicursive(att_and_vals, 0, OCCUPANCY_CELLS_OFFSET);
-	        				List<String> lsSlots = loadRicursive(att_and_vals, 1, OCCUPANCY_CELLS_OFFSET);
-	        				List<String> pSlots = loadRicursive(att_and_vals, 2, OCCUPANCY_CELLS_OFFSET);
-	        				List<String> doSlots = loadRicursive(att_and_vals, 3, OCCUPANCY_CELLS_OFFSET);
-	        				List<String> hSlots = loadRicursive(att_and_vals, 4, OCCUPANCY_CELLS_OFFSET);
-	        				List<String> rSlots = loadRicursive(att_and_vals, 5, OCCUPANCY_CELLS_OFFSET);
-	        				List<String> ndSlots = loadRicursive(att_and_vals, 6, OCCUPANCY_CELLS_OFFSET);
-	        				tmpSOcc.setOccLC(lcSlots);
-	        				tmpSOcc.setOccLS(lsSlots);
-	        				tmpSOcc.setOccP(pSlots);
-	        				tmpSOcc.setOccDO(doSlots);
-	        				tmpSOcc.setOccH(hSlots);
-	        				tmpSOcc.setOccR(rSlots);
-	        				tmpSOcc.setSlotsND(ndSlots);
-	        				
-	        				logger.error(String.format("Corrected Object: %s", tmpSOcc.toString()));
-	        				correctData.add(tmpSOcc);
+	        			if(att_and_vals[0].compareTo("Tipo Veicolo") == 0){
+	        				vehicleType = retrieveVehicleTypeByDesc(att_and_vals[1], agency);
+	        			} else {
+		        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+		        				SOccupancyData tmpSOcc = new SOccupancyData();
+		        				tmpSOcc.setsName(cleanField(att_and_vals[0]));
+		        				tmpSOcc.setsArea(cleanField(att_and_vals[1]));
+		        				tmpSOcc.setPeriod(period);
+		        				
+		        				List<String> lcSlots = initEmptyList();
+		        				List<String> lsSlots = initEmptyList();
+		        				List<String> pSlots = initEmptyList();
+		        				List<String> doSlots = initEmptyList();
+		        				List<String> hSlots = initEmptyList();
+		        				List<String> rSlots = initEmptyList();
+		        				List<String> eSlots = initEmptyList();
+		        				List<String> c_sSlots = initEmptyList();
+		        				List<String> roSlots = initEmptyList();
+		        				List<String> csSlots = initEmptyList();
+		        				List<String> ndSlots = initEmptyList();
+		        				// here I load the vals
+		        				if(slotsKeys.contains(LC)){
+		        					lcSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LC), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(LS)){
+		        					lsSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(P)){
+		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(DO)){
+		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(H)){
+		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(R)){
+		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(P)){
+		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(DO)){
+		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(H)){
+		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(R)){
+		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(E)){
+		        					eSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(CeS)){
+		        					c_sSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CeS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(RO)){
+		        					roSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(RO), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(CS)){
+		        					csSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CS), slotsKeys.size() + 1);
+		        				}
+		        				if(slotsKeys.contains(ND)){
+		        					ndSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(ND), slotsKeys.size() + 1);
+		        				}
+		        				tmpSOcc.setVehicleType(vehicleType);
+		        				tmpSOcc.setOccLC(lcSlots);
+		        				tmpSOcc.setOccLS(lsSlots);
+		        				tmpSOcc.setOccP(pSlots);
+		        				tmpSOcc.setOccDO(doSlots);
+		        				tmpSOcc.setOccH(hSlots);
+		        				tmpSOcc.setOccR(rSlots);
+		        				tmpSOcc.setOccE(eSlots);
+		        				tmpSOcc.setOccC_S(c_sSlots);
+		        				tmpSOcc.setOccRO(roSlots);
+		        				tmpSOcc.setOccCS(csSlots);
+		        				tmpSOcc.setSlotsND(ndSlots);
+		        				
+		        				logger.error(String.format("Corrected Object: %s", tmpSOcc.toString()));
+		        				correctData.add(tmpSOcc);
+		        			}
 	        			}
 	        		}
+	    		} else {
+	    			// here I retrieve the slots configuration
+	    			slotsKeys = new ArrayList<String>();
+	    			for(int j = 4; j < att_and_vals.length; j++){
+	    				if(att_and_vals[j].compareTo(OCC) == 0){
+	    					break;
+	    				}
+	    				slotsKeys.add(att_and_vals[j]);
+	    			}
 	    		}
     		}
     	}
@@ -689,7 +870,7 @@ public class GeoObjectManager {
     }	
 
     public ArrayList<PMProfitData> classStringToPPMObjArray(String data) throws Exception{
-    	logger.info(String.format("Map Object data: %s", data));
+    	logger.debug(String.format("Map Object data: %s", data));
     	
     	ArrayList<PMProfitData> correctData = new ArrayList<PMProfitData>();
     	
@@ -700,6 +881,7 @@ public class GeoObjectManager {
     	int lastProfVal = 14;	// default month table last value
     	
     	for(int i = 0; i < allRecords.length; i++){
+    		//TODO: here I have to check the data list and understand if the value are in horizontal mode or in vertical mode
     		String[] att_and_vals = allRecords[i].split(",");
     		if(att_and_vals != null && att_and_vals.length > 0){
 	    		if(att_and_vals[0].compareTo("Parcom") != 0){	// to skip header records
@@ -712,24 +894,26 @@ public class GeoObjectManager {
 	        			months[0] = month;
 	        	    	period.setMonth(months);	// I store the month value in the first array position
 	        		} else {
-	        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
-	        				PMProfitData tmpPProfit = new PMProfitData();
-	        				tmpPProfit.setpCode(cleanCodeField(att_and_vals[0]));
-	        				tmpPProfit.setpNote(cleanField(att_and_vals[1]));
-	        				tmpPProfit.setPeriod(period);
-	    			
-	        				// here I load the vals
-	        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, lastProfVal);				// 14 are tot values
-	        				String[] tickets = new String[0];
-	        				if(att_and_vals.length > lastProfVal + 1){
-	        					tickets = Arrays.copyOfRange(att_and_vals, lastProfVal + 1, att_and_vals.length - 1);	// 27 are tot values
-	        				}
-	        				tmpPProfit.setProfitVals(cleanStringArray(vals));
-	        				tmpPProfit.setTickets(cleanStringArray(tickets));
-	        				
-	        				logger.error(String.format("Corrected Object: %s", tmpPProfit.toString()));
-	        				correctData.add(tmpPProfit);
-	        			}
+	        			//if(att_and_vals[0].contains("park")){
+	        				// vertical mode
+	        			//} else {
+	        				// horizontal mode
+		        			if(att_and_vals.length > 2 && att_and_vals[0].compareTo("") != 0){
+		        				PMProfitData tmpPProfit = new PMProfitData();
+		        				tmpPProfit.setpCode(cleanField(att_and_vals[0]));
+		        				tmpPProfit.setpNote(cleanField(att_and_vals[1]));
+		        				tmpPProfit.setPeriod(period);
+		    			
+		        				// here I load the vals
+		        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
+		        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+		        				tmpPProfit.setProfitVals(cleanStringArray(vals));
+		        				tmpPProfit.setTickets(cleanStringArray(tickets));
+		        				
+		        				logger.error(String.format("Corrected Object: %s", tmpPProfit.toString()));
+		        				correctData.add(tmpPProfit);
+		        			}
+	        			//}
 	        		}
 	    		} else {
 	    			lastProfVal = calculateLastProfValue(att_and_vals);
@@ -750,7 +934,7 @@ public class GeoObjectManager {
     }
     
     public ArrayList<PSProfitData> classStringToPPSObjArray(String data) throws Exception{
-    	logger.info(String.format("Map Object data: %s", data));
+    	logger.debug(String.format("Map Object data: %s", data));
     	
     	ArrayList<PSProfitData> correctData = new ArrayList<PSProfitData>();
     	

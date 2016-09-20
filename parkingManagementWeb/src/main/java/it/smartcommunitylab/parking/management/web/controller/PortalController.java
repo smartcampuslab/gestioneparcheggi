@@ -15,14 +15,16 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.controller;
 
+import it.smartcommunitylab.parking.management.web.model.Agency;
 //import eu.trentorise.smartcampus.aac.AACException;
 import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
 import it.smartcommunitylab.parking.management.web.model.UserSetting;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.security.MongoUserDetailsService;
+import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
+import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.security.Principal;
-import java.util.Collections;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -31,13 +33,6 @@ import javax.servlet.http.HttpServletRequest;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.preauth.PreAuthenticatedAuthenticationToken;
-import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -57,6 +52,12 @@ public class PortalController extends SCController{
 	
 	@Autowired
 	private MongoUserDetailsService mongoUserDetailsService;
+	
+	@Autowired
+	private VehicleTypeDataSetup vehicleTypeDataSetup;
+	
+	@Autowired
+	private AgencyDataSetup agencyDataSetup;
 	
 	@Autowired
 	@Value("${smartcommunity.parkingmanagement.url}")
@@ -85,6 +86,7 @@ public class PortalController extends SCController{
 	private static final Logger logger = Logger.getLogger(PortalController.class);
 	
 	
+	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.GET, value = "/home")
 	public ModelAndView index_console(ModelMap model, Principal principal) {
 		String name = principal.getName();
@@ -99,6 +101,7 @@ public class PortalController extends SCController{
 		UserSetting user = mongoUserDetailsService.getUserDetails(name);
 		logger.debug("I am in home redirect. User id: " + name);
 		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetails(user.getUsername());
+		String userAgency = user.getAgency();
 		model.addAttribute("user_name", user.getUsername());
 		model.addAttribute("user_surname", objectToShow.getId());
 		model.addAttribute("no_sec", "false");
@@ -111,6 +114,10 @@ public class PortalController extends SCController{
 		model.addAttribute("ps_managers", psManagers);
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
 		logger.debug("I am in get root console. object_showed: " + objectToShow.getShowObjectsMap());
+		List<Map> myVehicleType = vehicleTypeDataSetup.getVehicleTypesMap(vehicleTypeDataSetup.findVehicleTypesByAppIdAndUsername(objectToShow.getAppId(), user.getUsername()));
+		model.addAttribute("vehicle_type_list", myVehicleType);
+		Map userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(userAgency));
+		model.addAttribute("user_agency", userAgencyData);
 		return new ModelAndView("index", model);
 	}
 	
@@ -150,12 +157,6 @@ public class PortalController extends SCController{
 		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
 		model.addAttribute("elements", p_elements);
 		model.addAttribute("filters", p_filters);
-//		model.addAttribute("show_area", view_rv_area);
-//		model.addAttribute("show_street", view_rv_street);
-//		model.addAttribute("show_pm", view_rv_pm);
-//		model.addAttribute("show_ps", view_rv_ps);
-//		model.addAttribute("show_bp", view_rv_bp);
-//		model.addAttribute("show_zone", view_rv_zone);
 		logger.debug(String.format("I am in get viewAll %s", appId));
 		return new ModelAndView("viewallnosec");
 	}

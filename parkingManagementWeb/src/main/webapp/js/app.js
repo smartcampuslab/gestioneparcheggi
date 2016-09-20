@@ -24,13 +24,18 @@ var pm = angular.module('pm', [
 pm.config(['$routeProvider', '$locationProvider',
     function($routeProvider, $locationProvider) {
   	$routeProvider
-  		.when('/', {
+  		/*.when('/', {
+    		templateUrl: 'partials/home.html',
+    		controller: 'MainCtrl',
+    		controllerAs: 'main'
+    	})*/
+    	.when('/home', {
     		templateUrl: 'partials/home.html',
     		controller: 'MainCtrl',
     		controllerAs: 'main'
     	})
-    	.when('/home', {
-    		templateUrl: 'partials/home.html',
+    	.when('/error', {
+    		templateUrl: 'partials/error/error.html',
     		controller: 'MainCtrl',
     		controllerAs: 'main'
     	})
@@ -85,7 +90,7 @@ pm.config(['$routeProvider', '$locationProvider',
     		controllerAs: 'aux_ctrl'
     	})
     	.otherwise({
-    		redirectTo:'/'
+    		redirectTo:'/home'
     	});
   			
   	$locationProvider.html5Mode(true);

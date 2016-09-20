@@ -9,12 +9,14 @@ pm.service('initializeService', function(){
 	this.conf_visible_obj_list = [];
 	this.conf_show_area;
 	this.conf_show_street;
+	this.conf_slots_conf_street = [];
 	this.conf_show_pm;
 	this.conf_show_ps;
 	this.conf_show_bp;
 	this.conf_show_zone;
 	this.widget_filters;
 	this.widget_elements;
+	this.slot_types;
 	this.showWidgetArea = false;
 	this.showWidgetStreet = false;
 	this.showWidgetPs = false;
@@ -73,6 +75,21 @@ pm.service('initializeService', function(){
         s_zones3: null,
         s_zones4: null
     }
+	var slot_conf = {
+	    s_slotNum: null,
+	    s_handicappedSlot: null,
+	    s_reservedSlot: null,
+	    s_timedSlot: null,
+	    s_paidSlot: null,
+	    s_freeSlot: null,
+	    s_freeSlotSign: null,
+	    s_rechargeableSlot: null,
+	    s_loadingUnloadingSlot: null,
+	    s_pinkSlot: null,
+	    s_carSharingSlot: null,
+	    s_unusuableSlot: null,
+	}
+	this.street_slot_configuration = [];
 	this.pm_conf = {
     	pm_code: null,
     	pm_note: null,
@@ -99,6 +116,8 @@ pm.service('initializeService', function(){
     	ps_phoneNumber: null,
     	ps_geometry: null,
     	ps_streetlife: null,
+    	ps_abutting:null,
+    	ps_parkride: null,
     	ps_zones0: null,
     	ps_zones1: null,
     	ps_zones2: null,
@@ -106,6 +125,7 @@ pm.service('initializeService', function(){
     	ps_zones4: null,
     	ps_show_widget: null
     }
+	this.ps_slot_configuration = [];
 	this.zoneatt0 = {
     	zone_name: null,
     	zone_submacro: null,
@@ -224,6 +244,22 @@ pm.service('initializeService', function(){
 	this.zonePageList = [];
 	this.showOnlyActivePm = false;
 	
+	this.setStreetSlotConfiguration = function(value){
+		this.street_slot_configuration = value;
+	};
+	
+	this.getStreetSlotConfiguration = function(){
+		return this.street_slot_configuration;
+	};
+	
+	this.setPsSlotConfiguration = function(value){
+		this.ps_slot_configuration = value;
+	};
+	
+	this.getPsSlotConfiguration = function(){
+		return this.ps_slot_configuration;
+	};
+	
 	this.setConfAppId = function(app_id){
 		this.app_id = app_id;
 	};
@@ -255,6 +291,14 @@ pm.service('initializeService', function(){
 	this.getWidgetElements = function(){
 		return this.widget_elements;
 	};
+	
+	this.setSlotsTypes = function(slots){
+		this.slot_types = slots;
+	}
+	
+	this.getSlotsTypes = function(){
+		return this.slot_types;
+	}
 	
 	this.setVisibleObjList = function(value){
 		this.conf_visible_obj_list = value;
@@ -757,6 +801,54 @@ pm.service('initializeService', function(){
     	return this.street_conf;
     };
     
+    //Street Component settings
+    this.addStreetSlotsConf = function(attributes, type){
+    	var slot_conf = {};
+    	slot_conf.type = type;
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'slotNumber'){
+    			slot_conf.s_slotNum = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			slot_conf.s_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'reservedSlotNumber'){
+    			slot_conf.s_reservedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'timedParkSlotNumber'){
+    			slot_conf.s_timedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'paidSlotNumber'){
+    			slot_conf.s_paidSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotNumber'){
+    			slot_conf.s_freeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotSignNumber'){
+    			slot_conf.s_freeSlotSign = attributes[i];
+    		}
+    		if(attributes[i].code == 'rechargeableSlotNumber'){
+    			slot_conf.s_rechargeableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'loadingUnloadingSlotNumber'){
+    			slot_conf.s_loadingUnloadingSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'pinkSlotNumber'){
+    			slot_conf.s_pinkSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'carSharingSlotNumber'){
+    			slot_conf.s_carSharingSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			slot_conf.s_unusuableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'active'){
+    			slot_conf.s_activeType = attributes[i];
+    		}
+    	}
+    	this.street_slot_configuration.push(slot_conf);
+    };
+    
     //Pm Component settings
     this.loadPmAttributes = function(attributes){
     	for(var i = 0; i < attributes.length; i++){
@@ -861,6 +953,9 @@ pm.service('initializeService', function(){
     		}
     		if(attributes[i].code == 'viewInWidget'){
     			this.ps_conf.ps_show_widget = attributes[i];
+    		}	
+    		if(attributes[i].code == 'abutting'){
+    			this.ps_conf.ps_abutting = attributes[i];
     		}
     		if(attributes[i].code == 'geometry'){
     			this.ps_conf.ps_geometry = attributes[i];
@@ -906,6 +1001,54 @@ pm.service('initializeService', function(){
     		}
     	}
     	return this.ps_conf;
+    };
+    
+    //Street Component settings
+    this.addPsSlotsConf = function(attributes, type){
+    	var slot_conf = {};
+    	slot_conf.type = type;
+    	for(var i = 0; i < attributes.length; i++){
+    		if(attributes[i].code == 'slotNumber'){
+    			slot_conf.s_slotNum = attributes[i];
+    		}
+    		if(attributes[i].code == 'handicappedSlotNumber'){
+    			slot_conf.s_handicappedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'reservedSlotNumber'){
+    			slot_conf.s_reservedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'timedParkSlotNumber'){
+    			slot_conf.s_timedSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'paidSlotNumber'){
+    			slot_conf.s_paidSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotNumber'){
+    			slot_conf.s_freeSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'freeParkSlotSignNumber'){
+    			slot_conf.s_freeSlotSign = attributes[i];
+    		}
+    		if(attributes[i].code == 'rechargeableSlotNumber'){
+    			slot_conf.s_rechargeableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'loadingUnloadingSlotNumber'){
+    			slot_conf.s_loadingUnloadingSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'pinkSlotNumber'){
+    			slot_conf.s_pinkSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'carSharingSlotNumber'){
+    			slot_conf.s_carSharingSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'unusuableSlotNumber'){
+    			slot_conf.s_unusuableSlot = attributes[i];
+    		}
+    		if(attributes[i].code == 'active'){
+    			slot_conf.s_activeType = attributes[i];
+    		}
+    	}
+    	this.ps_slot_configuration.push(slot_conf);
     };
     
     //Zones0 Component settings
@@ -1273,6 +1416,7 @@ pm.service('initializeService', function(){
     };
     
     this.initComponents = function(){
+    	this.street_slot_configuration = [];
     	this.zonePageList = [];
 		var showedObjects = this.getVisibleObjList();
 		for(var i = 0; i < showedObjects.length; i++){
@@ -1282,11 +1426,17 @@ pm.service('initializeService', function(){
 	   		if(showedObjects[i].id == 'Street'){
 	   			this.loadStreetAttributes(showedObjects[i].attributes);
 	   		}
+	   		if(showedObjects[i].id == 'vehicleSlots'){
+	   			this.addStreetSlotsConf(showedObjects[i].attributes, showedObjects[i].type);
+	   		}
 	   		if(showedObjects[i].id == 'Pm'){
 	   			this.loadPmAttributes(showedObjects[i].attributes);
 	   		}
 	   		if(showedObjects[i].id == 'Ps'){
 	   			this.loadPsAttributes(showedObjects[i].attributes);
+	   		}
+	   		if(showedObjects[i].id == 'vehicleSlotsPS'){
+	   			this.addPsSlotsConf(showedObjects[i].attributes, showedObjects[i].type);
 	   		}
 	   		if(showedObjects[i].id == 'Bp'){
 	    		this.loadBikeAttributes(showedObjects[i].attributes);
@@ -1348,6 +1498,45 @@ pm.service('initializeService', function(){
 	   		}
 	   	}
     };
+    
+    this.getSlotConfigurationByType = function(type){
+    	for(var i = 0; i < this.street_slot_configuration.length; i++){
+    		if(this.street_slot_configuration[i].type == type){
+    			return this.street_slot_configuration[i];
+    		}
+    	}
+    };
+    
+    this.getSlotConfigurationByTypePs = function(type){
+    	for(var i = 0; i < this.ps_slot_configuration.length; i++){
+    		if(this.ps_slot_configuration[i].type == type){
+    			return this.ps_slot_configuration[i];
+    		}
+    	}
+    };
+    
+    this.getSlotsTypesByObject = function(type){
+    	var correctedTypes = [];
+    	if(this.slot_types){
+	    	if(type == 0){
+	    		// case street
+	    		for(var i = 0; i < this.slot_types.length; i++){
+	    			if(this.getSlotConfigurationByType(this.slot_types[i].name) != null){
+	    				correctedTypes.push(this.slot_types[i]);
+	    			}
+	    		}
+	    	} else {
+	    		// case ps
+	    		for(var i = 0; i < this.slot_types.length; i++){
+	    			if(this.getSlotConfigurationByTypePs(this.slot_types[i].name) != null){
+	    				correctedTypes.push(this.slot_types[i]);
+	    			}
+	    		}
+	    		
+	    	}
+    	}
+		return correctedTypes;
+	}
     
     this.correctWidgetFiltersAndElements = function(){
     	if(this.widget_elements && this.widget_elements != "null"){
@@ -1504,7 +1693,7 @@ pm.service('initializeService', function(){
     	zonePageData.type = type;
 		zonePageData.id = zoneid + 2;
 		zonePageData.att = att;
-		zonePageData.tab = tab
+		zonePageData.tab = tab;
     	return zonePageData;
     };
     

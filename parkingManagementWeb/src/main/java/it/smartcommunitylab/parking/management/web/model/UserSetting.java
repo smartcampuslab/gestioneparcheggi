@@ -16,6 +16,7 @@
 package it.smartcommunitylab.parking.management.web.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class UserSetting implements Serializable {
 	
@@ -27,6 +28,7 @@ public class UserSetting implements Serializable {
     private String name;
     private String surname;
     private String mail;
+    private String agency;
 
     
 	/**
@@ -102,6 +104,14 @@ public class UserSetting implements Serializable {
 
 	public void setMail(String mail) {
 		this.mail = mail;
+	}
+
+	public String getAgency() {
+		return agency;
+	}
+
+	public void setAgency(String agency) {
+		this.agency = agency;
 	}
 
 	@Override
