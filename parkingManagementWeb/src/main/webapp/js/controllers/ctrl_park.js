@@ -1820,133 +1820,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.updateTotalSlots = function(paid, handicapped){
 		$scope.parkingStructure.slotNumber = $scope.initIfNull(paid) + $scope.initIfNull(handicapped);
 	}
-
-	// Update ParkingStructure Object
-	$scope.updatePstruct = function(type, ps, form, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
-		if(!form.$valid){
-			$scope.isInit=false;
-		} else {
-			if(!$scope.checkCorrectPaymode(paymode, req)){
-				$scope.isInit=false;
-				$scope.setMyPaymentoErrMode(true);
-			} else {
-				$scope.isInit=true;
-				$scope.showUpdatingPSErrorMessage = false;
-				$scope.setMyPaymentoErrMode(false);
-				
-				var ps_manager = ps.manager;
-				if($scope.myManager){
-					ps_manager = $scope.MY_DEFAULT_MANAGER;
-				}
-				
-				var fee_eurocent = 0;
-				if(ps.fee_val != null){
-					if(ps.fee_val.indexOf(",") > -1){
-						ps.fee_val = ps.fee_val.replace(",", ".");
-					}
-					fee_eurocent = parseFloat(ps.fee_val) * 100;
-				}
-				fee_eurocent = Math.round(fee_eurocent);
-				
-				// openingPeriod
-				var openingPeriod = { period: [{from: "0:00", to: "23:59"}]};
-				if($scope.openingPeriods != null && $scope.openingPeriods.length > 0){
-					var cleanedPeriods = [];
-					for(var i = 0; i < $scope.openingPeriods.length; i++){
-						var cleanedPeriod = { from : $scope.openingPeriods[i].from, to: $scope.openingPeriods[i].to };
-						cleanedPeriods.push(cleanedPeriod);
-					}
-					openingPeriod = { 
-						period: cleanedPeriods	
-					};
-				}
-				
-				//var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber); // + $scope.initIfNull(ps.unusuableSlotNumber);
-				var psSlots = 0;
-				if(ps.slotsConfiguration){
-					for(var i = 0; i < ps.slotsConfiguration.length; i++){
-						var sc = ps.slotsConfiguration[i];
-						var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);// + sharedDataService.initIfNull(sc.unusuableSlotNumber)
-						ps.slotsConfiguration[i].slotNumber = calculatedTotSlots;
-						ps.slotsConfiguration[i] = sharedDataService.configureSlotsForObjectNotDynamic(ps.slotsConfiguration[i]);
-						if(sc.vehicleTypeActive){
-							psSlots += calculatedTotSlots;
-						}
-					}
-				}
-				
-				var id = ps.id;
-				var appId = sharedDataService.getConfAppId();
-				var params = {
-					agencyId: agencyId
-				};
-				var method = 'PUT';
-				
-				var algoritmData = {
-					rideServices: $scope.correctRideServices(ps.rideservice1, ps.rideservice2, ps.rideservice3, ps.metropresent, ps.taxipresent),
-					flow: (ps.flow)?parseInt(ps.flow):0,
-					percentageDemand: (ps.percentageDemand)?parseInt(ps.percentageDemand):0,
-					maximumDemand: (ps.maximumDemand)?parseInt(ps.maximumDemand):0,
-					newParkingUsers: (ps.newParkingUsers)?parseInt(ps.newParkingUsers):0,
-					peakHourRate: (ps.peakHourRate)?ps.peakHourRate + "":"",
-					co2Coefficient: (ps.co2Coefficient)?parseFloat(ps.co2Coefficient):179.91,
-					cityCenterDistance: (ps.cityCenterDistance)?parseFloat(ps.cityCenterDistance):0,
-					notTraveledKm: (ps.notTraveledKm)?parseFloat(ps.notTraveledKm):0,
-					co2Saved: (ps.co2Saved)?parseInt(ps.co2Saved):0,
-					centerAverateOccupancyRate: (ps.centerAverateOccupancyRate)?parseInt(ps.centerAverateOccupancyRate):0,
-					newAverateOccupancyRate: (ps.newAverateOccupancyRate)?parseInt(ps.newAverateOccupancyRate):0
-				};
-				
-				var data = {
-					id: ps.id,
-					id_app: ps.id_app,
-					name: ps.name,
-					streetReference: ps.streetReference,
-					fee_val: fee_eurocent,
-					fee_note: ps.fee_note,
-					timeSlot: ps.timeSlot,
-					openingTime: openingPeriod,
-					manager: ps_manager,
-					managementMode: ps.managementMode,
-					phoneNumber: ps.phoneNumber,
-					paymentMode: sharedDataService.correctMyPaymentMode(paymode),
-					slotNumber: psSlots,
-					slotsConfiguration: ps.slotsConfiguration,
-					/*payingSlotNumber: ps.payingSlotNumber,
-					handicappedSlotNumber: ps.handicappedSlotNumber,
-					unusuableSlotNumber: ps.unusuableSlotNumber,*/
-					geometry: gMapService.correctMyGeometry(geo),
-					zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
-					parkAndRide: ps.parkAndRide,
-					showInWidget: ps.showInWidget,
-					algoritmData: algoritmData
-				};
-				
-			    var value = JSON.stringify(data);
-			    if($scope.showLog) console.log("Parkingmeter data : " + value);
-				
-				var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + id, params, $scope.authHeaders, value);
-			    myDataPromise.then(function(result){
-			    	console.log("Updated parkingStructure: " + result);
-			    	if(result != null){ // == "OK"){
-			    		$scope.getAllParkingStructures();
-						$scope.editModePS = false;
-						$scope.myPsZone0 = null;
-			    		$scope.myPsZone1 = null;
-			    		$scope.myPsZone2 = null;
-			    		$scope.myPsZone3 = null;
-			    		$scope.myPsZone4 = null;
-						$scope.mySpecialPSMarkers = [];
-						//$scope.parkc.form.$setPristine();	// I reset the state of the form
-						form.$setPristine();
-			    	} else {
-			    		$scope.editModePS = true;
-			    		$scope.showUpdatingPSErrorMessage = true;
-			    	}
-			    });
-			}
-		}	
-	};
+	
 	
 	// Method initPSCityCenter; used to integrate the citycenter marker in the edit ps map and to calculate the distance between the center and the struct position
 	$scope.initPSCityCenter = function(){
@@ -1980,7 +1854,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.missingFields += "nome struttura, ";
 			}
 			if(!demandData.slotNumber){
-				$scope.missingFields += "posti in struttura, ";
+				if(demandData.slotsConfiguration && demandData.slotsConfiguration.length > 0){
+					var sc = demandData.slotsConfiguration[0];
+					var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);
+					demandData.slotNumber = calculatedTotSlots;
+				} else {
+					$scope.missingFields += "posti in struttura, ";
+				}
 			}
 			if(!position_geo){
 				$scope.missingFields += "posizione struttura, ";
@@ -3606,9 +3486,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		$scope.editModePS = false;
 	};
 	
-	// ParkingStructure
-	
-	
+	// Welive algoritm
 	$scope.initRideservicesFromAlgoritmData = function(rideServices){
 		var rideValues = rideServices.split(",");
 		var correctedRideServices = {
@@ -3805,6 +3683,130 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// Update ParkingStructure Object
+	$scope.updatePstruct = function(type, ps, form, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
+		var validityPeriod = [];
+		if(!form.$valid){
+			$scope.isInit=false;
+		} else {
+			if(!$scope.checkCorrectPaymode(paymode, req)){
+				$scope.isInit=false;
+				$scope.setMyPaymentoErrMode(true);
+			} else {
+				$scope.isInit=true;
+				$scope.showUpdatingPSErrorMessage = false;
+				$scope.setMyPaymentoErrMode(false);
+				
+				var ps_manager = ps.manager;
+				if($scope.myManager){
+					ps_manager = $scope.MY_DEFAULT_MANAGER;
+				}
+				
+				// validityPeriod
+				if(ps.validityPeriod){
+					for(var i = 0; i < ps.validityPeriod.length; i++){
+						var corrPeriod = {
+							from: ps.validityPeriod[i].from,
+							to: ps.validityPeriod[i].to,
+							weekDays: ps.validityPeriod[i].weekDays,
+							timeSlot: ps.validityPeriod[i].timeSlot,
+							rateValue: ps.validityPeriod[i].rateValue,
+							holiday: ps.validityPeriod[i].holiday,
+							note: ps.validityPeriod[i].note
+						};
+						validityPeriod.push(corrPeriod);
+					}
+				}
+				
+				//var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber); // + $scope.initIfNull(ps.unusuableSlotNumber);
+				var psSlots = 0;
+				if(ps.slotsConfiguration){
+					for(var i = 0; i < ps.slotsConfiguration.length; i++){
+						var sc = ps.slotsConfiguration[i];
+						var calculatedTotSlots = sharedDataService.initIfNull(sc.handicappedSlotNumber) + sharedDataService.initIfNull(sc.reservedSlotNumber) + sharedDataService.initIfNull(sc.paidSlotNumber) + sharedDataService.initIfNull(sc.timedParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotNumber) + sharedDataService.initIfNull(sc.freeParkSlotSignNumber) + sharedDataService.initIfNull(sc.rechargeableSlotNumber) + sharedDataService.initIfNull(sc.loadingUnloadingSlotNumber) + sharedDataService.initIfNull(sc.pinkSlotNumber) + sharedDataService.initIfNull(sc.carSharingSlotNumber);// + sharedDataService.initIfNull(sc.unusuableSlotNumber)
+						ps.slotsConfiguration[i].slotNumber = calculatedTotSlots;
+						ps.slotsConfiguration[i] = sharedDataService.configureSlotsForObjectNotDynamic(ps.slotsConfiguration[i]);
+						if(sc.vehicleTypeActive){
+							psSlots += calculatedTotSlots;
+						}
+					}
+				}
+				
+				var id = ps.id;
+				var appId = sharedDataService.getConfAppId();
+				var params = {
+					agencyId: agencyId
+				};
+				var method = 'PUT';
+				
+				var algoritmData = {
+					rideServices: $scope.correctRideServices(ps.rideservice1, ps.rideservice2, ps.rideservice3, ps.metropresent, ps.taxipresent),
+					flow: (ps.flow)?parseInt(ps.flow):0,
+					percentageDemand: (ps.percentageDemand)?parseInt(ps.percentageDemand):0,
+					maximumDemand: (ps.maximumDemand)?parseInt(ps.maximumDemand):0,
+					newParkingUsers: (ps.newParkingUsers)?parseInt(ps.newParkingUsers):0,
+					peakHourRate: (ps.peakHourRate)?ps.peakHourRate + "":"",
+					co2Coefficient: (ps.co2Coefficient)?parseFloat(ps.co2Coefficient):179.91,
+					cityCenterDistance: (ps.cityCenterDistance)?parseFloat(ps.cityCenterDistance):0,
+					notTraveledKm: (ps.notTraveledKm)?parseFloat(ps.notTraveledKm):0,
+					co2Saved: (ps.co2Saved)?parseInt(ps.co2Saved):0,
+					centerAverateOccupancyRate: (ps.centerAverateOccupancyRate)?parseInt(ps.centerAverateOccupancyRate):0,
+					newAverateOccupancyRate: (ps.newAverateOccupancyRate)?parseInt(ps.newAverateOccupancyRate):0
+				};
+				
+				var data = {
+					id: ps.id,
+					id_app: ps.id_app,
+					name: ps.name,
+					streetReference: ps.streetReference,
+					/*fee_val: fee_eurocent,
+					fee_note: ps.fee_note,
+					timeSlot: ps.timeSlot,
+					openingTime: openingPeriod,*/
+					validityPeriod: validityPeriod,
+					manager: ps_manager,
+					managementMode: ps.managementMode,
+					phoneNumber: ps.phoneNumber,
+					paymentMode: sharedDataService.correctMyPaymentMode(paymode),
+					slotNumber: psSlots,
+					slotsConfiguration: ps.slotsConfiguration,
+					/*payingSlotNumber: ps.payingSlotNumber,
+					handicappedSlotNumber: ps.handicappedSlotNumber,
+					unusuableSlotNumber: ps.unusuableSlotNumber,*/
+					geometry: gMapService.correctMyGeometry(geo),
+					zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
+					parkAndRide: ps.parkAndRide,
+					abuttingPark: ps.abuttingPark,
+					showInWidget: ps.showInWidget,
+					algoritmData: algoritmData
+				};
+				
+			    var value = JSON.stringify(data);
+			    if($scope.showLog) console.log("Parkingmeter data : " + value);
+				
+				var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + id, params, $scope.authHeaders, value);
+			    myDataPromise.then(function(result){
+			    	console.log("Updated parkingStructure: " + result);
+			    	if(result != null){ // == "OK"){
+			    		$scope.getAllParkingStructures();
+						$scope.editModePS = false;
+						$scope.myPsZone0 = null;
+			    		$scope.myPsZone1 = null;
+			    		$scope.myPsZone2 = null;
+			    		$scope.myPsZone3 = null;
+			    		$scope.myPsZone4 = null;
+						$scope.mySpecialPSMarkers = [];
+						//$scope.parkc.form.$setPristine();	// I reset the state of the form
+						form.$setPristine();
+			    	} else {
+			    		$scope.editModePS = true;
+			    		$scope.showUpdatingPSErrorMessage = true;
+			    	}
+			    });
+			}
+		}	
+	};
+	
+	// Update ParkingStructure Object
 	/*$scope.updatePstruct = function(type, ps, form, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
 		if(!form.$valid){
 			$scope.isInit=false;
@@ -3970,7 +3972,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    	
 				//var myPSPromise = structureService.createParkingStructureInDb(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, agencyId);
 				//myPSPromise.then(function(result){
-					console.log("Created parkingStructure: " + JSON.stringify(result));
+					//console.log("Created parkingStructure: " + JSON.stringify(result));
 			    	if(result != null && result != ""){
 			    		$scope.getAllParkingStructures();
 						$scope.editModePS = false;

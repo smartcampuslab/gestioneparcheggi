@@ -203,6 +203,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 				zones: ps.zones,
 				parkAndRide: ps.parkAndRide,
 				abuttingPark: ps.abuttingPark,
+				algoritmData: ps.algoritmData,
 				agencyId: ps.agencyId
 			};
 		}

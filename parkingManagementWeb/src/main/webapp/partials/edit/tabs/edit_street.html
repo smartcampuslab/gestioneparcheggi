@@ -554,11 +554,11 @@
 										<td class="detailsViewStreetSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
 									</tr>
-									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible.s_freeSlot.visible && sc.pinkSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_pink_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.pinkSlotNumber }}</td>
 									</tr>
-									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible.s_freeSlot.visible && sc.carSharingSlotNumber">
+									<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.carSharingSlotNumber }}</td>
 									</tr>
