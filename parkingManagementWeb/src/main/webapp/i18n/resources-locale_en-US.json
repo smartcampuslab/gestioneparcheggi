@@ -179,6 +179,126 @@
     "value": "No area found",
     "description": "Messaggio nessuna area in db"
 }, {
+    "key": "area_fee",
+    "value": "Hour rate",
+    "description": "Label per tariffa oraria in periodo validità area"
+}, {
+    "key": "area_period_label",
+    "value": "RATE PERIODS",
+    "description": "Label per periodo tariffa area"
+}, {
+    "key": "area_rate_period_startdate",
+    "value": "From",
+    "description": "Label per inizio validità periodo tariffa area"
+}, {
+    "key": "area_rate_period_enddate",
+    "value": "To",
+    "description": "Label per fine validità periodo tariffa area"
+}, {
+    "key": "area_rate_period_weekdays",
+    "value": "Weekday",
+    "description": "Label per giorno della settimana di validità tariffa area"
+}, {
+    "key": "area_rate_period_hours",
+    "value": "Hours",
+    "description": "Label per orario validità tariffa area"
+}, {
+    "key": "period_rate_day_title",
+    "value": "Daily rate",
+    "description": "Label per modalita tariffa (giorno o notte)"
+}, {
+    "key": "period_rate_night_title",
+    "value": "Night rate",
+    "description": "Label per modalita tariffa (giorno o notte)"
+}, {
+    "key": "area_rate_value",
+    "value": "Hours rate",
+    "description": "Label per tariffa oraria area"
+}, {
+    "key": "area_rate_note",
+    "value": "Note",
+    "description": "Label per note tariffa e periodo area"
+}, {
+    "key": "area_rate_is_holidays",
+    "value": "Holidays",
+    "description": "Label per note tariffa e periodo area"
+}, {
+    "key": "area_rate_is_day_or_night",
+    "value": "Day/night",
+    "description": "Label per giorno notte tariffa e periodo area"
+}, {
+    "key": "all_day_night_mode",
+    "value": "Day and night",
+    "description": "Testo per valore entrambi in modalita tariffa"
+}, {
+    "key": "day_mode",
+    "value": "Day",
+    "description": "Testo per valore giorno in modalita tariffa"
+}, {
+    "key": "night_mode",
+    "value": "Night",
+    "description": "Testo per valore notte in modalita tariffa"
+}, {
+    "key": "datepicker_button_today",
+    "value": "Today",
+    "description": "Testo pulsante oggi in datepicker"
+}, {
+    "key": "datepicker_button_canc",
+    "value": "Cancel",
+    "description": "Testo pulsante annulla in datepicker"
+}, {
+    "key": "datepicker_button_close",
+    "value": "Close",
+    "description": "Testo pulsante chiudi in datepicker"
+}, {
+    "key": "ok_button",
+    "value": "OK",
+    "description": "Testo pulsante ok"
+}, {
+    "key": "area_weekdays_err_required",
+    "value": "Weekdays are required. Select almost one day",
+    "description": "Testo messaggio errore giorni della settimana obbligatori"
+}, {
+    "key": "period_monday",
+    "value": "MO",
+    "description": "Sigla giorno settimana - lunedi"
+}, {
+    "key": "period_tuesday",
+    "value": "TU",
+    "description": "Sigla giorno settimana - martedi"
+}, {
+    "key": "period_wednesday",
+    "value": "WE",
+    "description": "Sigla giorno settimana - mercoledi"
+}, {
+    "key": "period_thursday",
+    "value": "TH",
+    "description": "Sigla giorno settimana - giovedi"
+}, {
+    "key": "period_friday",
+    "value": "FR",
+    "description": "Sigla giorno settimana - venerdi"
+}, {
+    "key": "period_saturday",
+    "value": "SA",
+    "description": "Sigla giorno settimana - sabato"
+}, {
+    "key": "period_sunday",
+    "value": "SU",
+    "description": "Sigla giorno settimana - domenica"
+}, {
+    "key": "area_rate_canc",
+    "value": "Delete",
+    "description": "Testo pulsante ok"
+}, {
+    "key": "area_rate_edit",
+    "value": "Edit",
+    "description": "Testo pulsante modifica periodo tariffa area"
+}, {
+    "key": "area_rate_period_note_placeholder",
+    "value": "Insert notes",
+    "description": "Testo placeholder note periodo tariffario"
+}, {
 	"key": "operations",
 	"value": "Actions",
 	"description": "Label operazioni"
@@ -290,6 +410,38 @@
     "key": "zone_color",
     "value": "Color",
     "description": "Intestazione colonna colore in tabella lista zone"
+}, {
+    "key": "area_add_period_rate_text",
+    "value": "Add period",
+    "description": "Testo alt btn aggiungi periodo"
+}, {
+    "key": "error_overlap_rate_period",
+    "value": "The inserted periods are overlapped. Insert corrected periods",
+    "description": "Testo errore periodi sovrapposti"
+}, {
+    "key": "no_value_inserted_period",
+    "value": "No period inserted",
+    "description": "Testo nessun periodo inserito in area rate"
+}, {
+    "key": "area_rate_period_insert_edit",
+    "value": "Insert/update period",
+    "description": "Testo inserisci modifica periodo"
+}, {
+    "key": "area_rate_period_startdate_error_required",
+    "value": "Starting period date is required",
+    "description": "Testo errore data inizio periodo obbligatoria"
+}, {
+    "key": "area_rate_period_startdate_error_pattern",
+    "value": "Starting period date format is incorrect. Insert a date in the dd/MM format",
+    "description": "Testo errore data inizio periodo non corretta"
+}, {
+    "key": "area_rate_period_enddate_error_required",
+    "value": "Ending period date is required",
+    "description": "Testo errore data fine periodo obbligatoria"
+}, {
+    "key": "area_rate_period_enddate_error_pattern",
+    "value": "Ending period date format is incorrect. Insert a date in the dd/MM format",
+    "description": "Testo errore data fine periodo non corretta"
 }, {
     "key": "zone_geometry_from_subelement",
     "value": "Sub-elements geometry",
