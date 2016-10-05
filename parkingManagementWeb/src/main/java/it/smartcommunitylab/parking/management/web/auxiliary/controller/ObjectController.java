@@ -87,57 +87,57 @@ public class ObjectController  {
 	} 
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/all") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgency(agency, skip, count);
+		return dataService.findAllLogsByAgency(agency, userAgency, skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/all/count") 
-	public @ResponseBody Long getAllTPLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgency(agency);
+	public @ResponseBody Long getAllTPLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgency(agency, userAgency);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPParkingLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPParkingLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgencyAndType(agency, Parking.class.getCanonicalName(), skip, count);
+		return dataService.findAllLogsByAgencyAndType(agency, userAgency, Parking.class.getCanonicalName(), skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings/count") 
-	public @ResponseBody Long getAllTPParkingLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgencyAndType(agency, Parking.class.getCanonicalName());
+	public @ResponseBody Long getAllTPParkingLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgencyAndType(agency,  userAgency, Parking.class.getCanonicalName());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkstructs") 
-	public @ResponseBody List<DataLogBeanTP> getAllParkStructsLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody List<DataLogBeanTP> getAllParkStructsLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgencyAndType(agency, ParkStruct.class.getCanonicalName(), skip, count);
+		return dataService.findAllLogsByAgencyAndType(agency, userAgency, ParkStruct.class.getCanonicalName(), skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkstructs/count") 
-	public @ResponseBody Long getAllTPParkStructsLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgencyAndType(agency, ParkStruct.class.getCanonicalName());
+	public @ResponseBody Long getAllTPParkStructsLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgencyAndType(agency, userAgency, ParkStruct.class.getCanonicalName());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkmeters") 
-	public @ResponseBody List<DataLogBeanTP> getAllParkMetersLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody List<DataLogBeanTP> getAllParkMetersLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgencyAndType(agency, ParkMeter.class.getCanonicalName(), skip, count);
+		return dataService.findAllLogsByAgencyAndType(agency, userAgency, ParkMeter.class.getCanonicalName(), skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkmeters/count") 
-	public @ResponseBody Long getAllParkMetersLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgencyAndType(agency, ParkMeter.class.getCanonicalName());
+	public @ResponseBody Long getAllParkMetersLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgencyAndType(agency, userAgency, ParkMeter.class.getCanonicalName());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgencyAndType(agency, Street.class.getCanonicalName(), skip, count);
+		return dataService.findAllLogsByAgencyAndType(agency, userAgency, Street.class.getCanonicalName(), skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets/count") 
-	public @ResponseBody Long getAllTPStreetLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgencyAndType(agency, Street.class.getCanonicalName());
+	public @ResponseBody Long getAllTPStreetLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgencyAndType(agency, userAgency, Street.class.getCanonicalName());
 	}
 
 //	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/all/{skip}") 
@@ -228,9 +228,9 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
-	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period, NO_PERIOD);
+			dataService.updateDynamicParkingData(parking, agency, userId, userAgencyId, isSysLog, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -239,13 +239,13 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/{id}/{userId:.*}") 
-	public @ResponseBody String updateStreet(@RequestBody Street street, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreet(@RequestBody Street street, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
 			if(period != null){
 				logger.debug("Inserted period = " + period[0] + "-" + period[1] );
 			}
-			dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, NO_PERIOD);
+			dataService.updateDynamicStreetData(street, agency, userId, userAgencyId, isSysLog, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -254,10 +254,10 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/{id}/{userId:.*}") 
-	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog, from, to, period, NO_PERIOD);
+			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, userAgencyId, isSysLog, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -266,10 +266,10 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/{id}/{userId:.*}") 
-	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period, NO_PERIOD);
+			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, userAgencyId, isSysLog, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -446,7 +446,7 @@ public class ObjectController  {
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							park.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingData(park, agency, userId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicParkingData(park, agency, userId, agencyId, isSysLog, period, MONTH_PERIOD);
 						}
 					}
 				}
@@ -460,7 +460,7 @@ public class ObjectController  {
 	}	
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
-	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId,  @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
@@ -635,7 +635,7 @@ public class ObjectController  {
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -778,7 +778,7 @@ public class ObjectController  {
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -805,14 +805,22 @@ public class ObjectController  {
 					for(int i = 0; i < profits.size(); i++){
 						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
 							int profit = (int)(Double.parseDouble(profits.get(i)) * 100);
-							int ticket = Integer.parseInt(tickets.get(i));
+							int ticket = -1;
+							if(tickets != null && tickets.size() > 0){
+								try {
+									String tik = tickets.get(i);
+									ticket = Integer.parseInt(tik);
+								} catch(NullPointerException ne){
+									logger.error("No ticket retrieve. " + ne.getMessage());
+								}
+							}
 							parking.setProfit(profit);
 							parking.setTickets(ticket);
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							//period = dataService.getPeriodFromYearAndMonth(year, i);
 							parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
+							dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, from, to, period, MONTH_PERIOD);
 						}
 					}
 				} else {
@@ -849,7 +857,7 @@ public class ObjectController  {
 							period = null;
 							//period = dataService.getPeriodFromYearAndMonth(year, i);
 							parkStruct.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
+							dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, agencyId, isSysLog, from, to, period, MONTH_PERIOD);
 						}
 					}
 				} else {

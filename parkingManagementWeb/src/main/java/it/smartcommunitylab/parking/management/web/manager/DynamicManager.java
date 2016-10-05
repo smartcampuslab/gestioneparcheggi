@@ -521,7 +521,7 @@ public class DynamicManager {
 		return null;
 	}	
 
-	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws DatabaseException {
+	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period, int p_type) throws DatabaseException {
 		String[] ids = s.getId().split("@");
 		String asId = ids[2];
 		s.setUpdateTime(timestamp);
@@ -579,6 +579,8 @@ public class DynamicManager {
 					}
 					dl.setAuthor(authorId);
 					dl.setAgency(agencyId);
+					dl.setUserAgencyId(userAgencyId);
+					
 					// set new fields ---------
 					Calendar cal = Calendar.getInstance();
 					cal.setTimeInMillis(timestamp);
@@ -986,7 +988,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingStructureAux: used to save a DataLogBean object for the new occupancy data in a parkingStructure
-	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws NotFoundException {
+	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period, int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -1015,6 +1017,7 @@ public class DynamicManager {
 		}
 		dl.setAuthor(authorId);
 		dl.setAgency(agencyId);
+		dl.setUserAgencyId(userAgencyId);
 		// set new fields ---------
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(timestamp);
@@ -1323,7 +1326,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkStructProfitAux: used to save a ProfitLogBean object for the new profit data in a parkingStructure
-	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog, long[] period,  int p_type) throws NotFoundException {
+	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period,  int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -1342,6 +1345,7 @@ public class DynamicManager {
 		}
 		pl.setAuthor(authorId);
 		pl.setAgency(agencyId);
+		pl.setUserAgencyId(userAgencyId);
 		// set new fields ---------
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(timestamp);
@@ -1381,7 +1385,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingMeterAux: used to save a ProfitLogBean object for the new profit data in a parkingMeter
-	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws NotFoundException {
+	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period, int p_type) throws NotFoundException {
 		String[] ids = pm.getId().split("@");
 		String pmId = ids[2];
 		pm.setUpdateTime(timestamp);
@@ -1403,6 +1407,7 @@ public class DynamicManager {
 		}
 		pl.setAuthor(authorId);
 		pl.setAgency(agencyId);
+		pl.setUserAgencyId(userAgencyId);
 		// set new fields ---------
 		Calendar cal = Calendar.getInstance();
 		cal.setTimeInMillis(timestamp);
@@ -4059,22 +4064,35 @@ public class DynamicManager {
 		}
 		return result;
 	}
-	public Long countTPAll(String agency, boolean deleted) {
-		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("deleted").is(false)), "dataLogBean");
+	public Long countTPAll(String agency, String userAgency, boolean deleted) {
+		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false)), "dataLogBean");
 	}
-	public Long countTPTyped(String agency, boolean deleted, String type) {
-		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("deleted").is(false).and("type").is(type)), "dataLogBean");
+	public Long countTPTyped(String agency, String userAgency, boolean deleted, String type) {
+		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false).and("type").is(type)), "dataLogBean");
 	}
 	public List<DataLogBeanTP> findTPAll(String agency, boolean deleted, int skip, int limit) {
 		Query query = Query.query(new Criteria("agency").is(agency).and("deleted").is(false));
 		query.limit(limit);
 		query.skip(skip);
 		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");
-		
+		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");	
+	}
+	public List<DataLogBeanTP> findTPAllByUserAgency(String agency, String userAgency, boolean deleted, int skip, int limit) {
+		Query query = Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false));
+		query.limit(limit);
+		query.skip(skip);
+		query.sort().on("time", Order.DESCENDING);
+		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");	
 	}
 	public List<DataLogBeanTP> findTPTyped(String agency, boolean deleted, String type, int skip, int limit) {
 		Query query = Query.query(new Criteria("agency").is(agency).and("deleted").is(false).and("type").is(type));
+		query.limit(limit);
+		query.skip(skip);
+		query.sort().on("time", Order.DESCENDING);
+		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");
+	}
+	public List<DataLogBeanTP> findTPTypedByUserAgency(String agency, String userAgency, boolean deleted, String type, int skip, int limit) {
+		Query query = Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false).and("type").is(type));
 		query.limit(limit);
 		query.skip(skip);
 		query.sort().on("time", Order.DESCENDING);

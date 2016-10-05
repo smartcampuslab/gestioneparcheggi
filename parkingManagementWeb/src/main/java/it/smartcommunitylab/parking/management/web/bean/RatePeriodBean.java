@@ -2,12 +2,15 @@ package it.smartcommunitylab.parking.management.web.bean;
 
 import java.util.List;
 
+import it.smartcommunitylab.parking.management.web.model.Period;
+
 public class RatePeriodBean {
 	
 	private String from;
 	private String to;
 	private List<String> weekDays;
 	private String timeSlot;
+	private List<Period> timeSlots;
 	private Integer rateValue;	// eurocent
 	private String note;
 	private String dayOrNight;
@@ -75,6 +78,14 @@ public class RatePeriodBean {
 
 	public void setDayOrNight(String dayOrNight) {
 		this.dayOrNight = dayOrNight;
+	}
+
+	public List<Period> getTimeSlots() {
+		return timeSlots;
+	}
+
+	public void setTimeSlots(List<Period> timeSlots) {
+		this.timeSlots = timeSlots;
 	}
 
 }

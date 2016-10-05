@@ -63,6 +63,13 @@ angular.module('pmFilters', []).filter('truncate', function() {
 		else
 			return Date.parse(data);
 	};
+}).filter('agencyCodeToName', function(sharedDataService) {
+	return function(data){
+		if(data=="")
+			return "";
+		else
+			return sharedDataService.getAgencyNameById(data);
+	};
 }).filter('boolToString', function() {
 	return function(input){
 		return input ? 'SI' : 'NO';

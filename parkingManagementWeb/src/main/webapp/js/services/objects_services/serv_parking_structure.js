@@ -139,11 +139,13 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 		if(type == 0){
 			if(ps.validityPeriod){
 				for(var i = 0; i < ps.validityPeriod.length; i++){
+					var tSlots = sharedDataService.correctTimeSlots(ps.validityPeriod[i].timeSlot);
 					var corrPeriod = {
 						from: ps.validityPeriod[i].from,
 						to: ps.validityPeriod[i].to,
 						weekDays: ps.validityPeriod[i].weekDays,
 						timeSlot: ps.validityPeriod[i].timeSlot,
+						timeSlots: tSlots,
 						rateValue: ps.validityPeriod[i].rateValue,
 						holiday: ps.validityPeriod[i].holiday,
 						note: ps.validityPeriod[i].note
@@ -231,11 +233,13 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 		var validityPeriod = [];
 		if(ps.validityPeriod){
 			for(var i = 0; i < ps.validityPeriod.length; i++){
+				var tSlots = sharedDataService.correctTimeSlots(ps.validityPeriod[i].timeSlot);
 				var corrPeriod = {
 					from: ps.validityPeriod[i].from,
 					to: ps.validityPeriod[i].to,
 					weekDays: ps.validityPeriod[i].weekDays,
 					timeSlot: ps.validityPeriod[i].timeSlot,
+					timeSlots: tSlots,
 					rateValue: ps.validityPeriod[i].rateValue,
 					holiday: ps.validityPeriod[i].holiday,
 					note: ps.validityPeriod[i].note

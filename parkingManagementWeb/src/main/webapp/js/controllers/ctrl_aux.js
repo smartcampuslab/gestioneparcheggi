@@ -307,7 +307,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     
     var agencyId;
     $scope.initComponents = function(){
-    	agencyId = sharedDataService.getConfUserAgency().id;
+    	$scope.agencyId = agencyId = sharedDataService.getConfUserAgency().id;
 	    if($scope.logtabs == null || $scope.logtabs.length == 0){
 	    	var logAuxTabs = [];
 	    	var street_occ_tab_obj = {};
@@ -774,13 +774,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     
     // load remote data
 	var loadData = function(path, skip, count){
-	    $scope.progress = 25;
+		agencyId = sharedDataService.getConfUserAgency().id;
+		$scope.progress = 25;
 		$dialogs.wait($scope.getLoadingText(), $scope.progress, $scope.getLoadingTitle());
 
 		$scope.isLoadingLogs = true;
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + path, {skip: skip, count: count}, $scope.authHeaders, null);
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + path, {userAgency: agencyId, skip: skip, count: count}, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			var partialLogs = result;
 			//$scope.globalLogs.concat(result);
@@ -795,6 +796,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					logPeriod: partialLogs[i].logPeriod,
 					author: partialLogs[i].author,
 					agency: partialLogs[i].agency,
+					userAgencyId: partialLogs[i].userAgencyId,
 			        deleted: partialLogs[i].deleted,
 			        year: partialLogs[i].year,
 			        month: partialLogs[i].month,
@@ -811,7 +813,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			$scope.progress += 25;
 	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
 	    	
-			invokeAuxWSService.getProxy(method, appId + path+"/count", null, $scope.authHeaders, null)
+			invokeAuxWSService.getProxy(method, appId + path+"/count", {userAgency: agencyId}, $scope.authHeaders, null)
 			.then(function(result) {
 				$scope.logtabs[$scope.tabIndex].count = result;
 				
@@ -905,6 +907,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						logPeriod: partialLogs[i].logPeriod,
 						author: partialLogs[i].author,
 						agency: partialLogs[i].agency,
+						userAgencyId: partialLogs[i].userAgencyId,
 				        deleted: partialLogs[i].deleted,
 				        year: partialLogs[i].year,
 				        month: partialLogs[i].month,
@@ -1223,6 +1226,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method insertStreetLog: used to insert in the db (table dataLogBean) a new street log
 	$scope.insertStreetLog = function(form, myStreetDetails){
+		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.showUpdatingSErrorMessage = false;
 		$scope.showUpdatingSSuccessMessage = false;
 		myStreetDetails.user = $scope.systemUserNumber;
@@ -1272,6 +1276,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					};
 					
 					var params = {
+						userAgencyId: agencyId,
 						isSysLog: true,
 						period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 					};
@@ -1298,6 +1303,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method insertParkingLog: used to insert in the db (table dataLogBean) a new parking log
 	$scope.insertParkingLog = function(form, myParkingDetails){
+		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
 		myParkingDetails.user = $scope.systemUserNumber;
@@ -1336,6 +1342,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					};
 					
 					var params = {
+						userAgencyId: agencyId,
 						isSysLog: true,
 						period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 					};
@@ -1361,6 +1368,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method insertParkingLog: used to insert in the db (table dataLogBean) a new parking log
 	$scope.insertParkingProfitLog = function(form, myParkingProfitDetails){
+		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
 		myParkingProfitDetails.user = $scope.systemUserNumber;
@@ -1396,6 +1404,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					};
 					
 					var params = {
+						userAgencyId: agencyId,
 						isSysLog: true,
 						period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 					};
@@ -1421,6 +1430,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method insertPmProfitLog: used to insert in the db (table dataLogBean) a new parkingmeter log
 	$scope.insertPmProfitLog = function(form, myPmProfitDetails){
+		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.showUpdatingPMErrorMessage = false;
 		$scope.showUpdatingPMSuccessMessage = false;
 		//if($scope.checkCorrectParkSlots(myParkingProfitDetails)){
@@ -1453,6 +1463,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					tickets: parseInt(myPmProfitDetails.tickets)
 				};
 				var params = {
+					userAgencyId: agencyId,
 					isSysLog: true,
 					period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 				};

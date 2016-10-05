@@ -8,7 +8,7 @@
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_object_code' | i18n }}</strong></td>
-				<td>{{ logDetails.value.code }} - {{ logDetails.value.note }}</td>
+				<td>{{ logDetails.value.code }}<span ng-show="logDetails.value.note"> - {{logDetails.value.note}}</span></td>
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_type' | i18n }}</strong></td>
@@ -48,7 +48,10 @@
 						</tr>
 						<tr>
 							<td width="30%"><strong>{{ 'ps_tickets' | i18n }}</strong></td>
-							<td>{{logDetails.value.tickets}}</td>
+							<td>
+								<span ng-show="logDetails.value.tickets != -1">{{logDetails.value.tickets}}</span>
+								<span ng-show="logDetails.value.tickets == -1">n.p.</span>
+							</td>
 						</tr>
 					</table>
 				</td>
@@ -109,7 +112,7 @@
 					<td width="30%" align="left">
 <!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsTotal: {{log.value.slotsTotal}}, slotsOccupied: {{log.value.slotsOccupiedOnTotal}}, slotsUnavailable: {{log.value.slotsUnavailable}}</span> -->
 <!-- 						<span ng-show="log.type != 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsFree: {{log.value.slotsFree}}, slotsOccupiedOnFree: {{log.value.slotsOccupiedOnFree}}, slotsPaying: {{log.value.slotsPaying}}, slotsOccupiedOnPaying: {{log.value.slotsOccupiedOnPaying}}, slotsTimed: {{log.value.slotsTimed}}, slotsOccupiedOnTimed: {{log.value.slotsOccupiedOnTimed}}, slotsHandicapped: {{log.value.slotsHandicapped}}</span> -->
-						{{log.value.code}} - {{log.value.note}}
+						{{log.value.code}}<span ng-show="log.value.note"> - {{log.value.note}}</span>
 					</td>
 					<td width="5%" align="center">
 						<a href type="button" class="btn btn-primary btn-xs" ng-click="viewDetails(2, log)" alt="{{ 'link_view_title' | i18n }}" title="{{ 'link_view_title' | i18n }}"><i class="glyphicon glyphicon-eye-open"></i></a>

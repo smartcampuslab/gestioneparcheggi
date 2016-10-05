@@ -19,7 +19,7 @@
 											<div ng-repeat="r in a.data.validityPeriod">
 												<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
 												<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
-												<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+												<span>{{ 'area_rate_period_hours' | i18n }}: {{ getCorrectTimeSlotsToString(r.timeSlots) }};</span>
 												<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
 												<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
 											</div>
@@ -258,7 +258,8 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="areaWS.length != 0">
-								<th width="3%">
+								<th width="15%">
+									<span ng-show="aconf.a_name.visible">{{ 'agency_title' | i18n }}</span>
 									<a href ng-click="showAgencyAFilter();currentPageA=0" ng-show="!showAgencyAreaFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="agencyAreaFilter=null;hideAgencyAFilter()" ng-show="showAgencyAreaFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showAgencyAreaFilter">
@@ -277,15 +278,16 @@
 								</th>
 								<!-- <th width="14%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
 								<th width="31%"><span ng-show="aconf.a_timeSlot.visible">{{ 'area_time' | i18n }}</span></th> -->
-								<th width="43%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
+								<th width="38%"><span ng-show="aconf.a_fee.visible">{{ 'area_rate' | i18n }}</span></th>
 								<th class="myCenter" width="4%"><span ng-show="aconf.a_color.visible">{{ 'area_color' | i18n }}</span></th>
-								<th class="myCenter" width="30%">{{ 'operations' | i18n }}</th>
+								<th class="myCenter" width="23%">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
 								ng-repeat="area in filtered = (areaWS | filter:nameFilter | filter: agencyAreaFilter) | orderBy:'name' | startFrom:currentPageA*maxAreas | limitTo:maxAreas">
 								<tr>
 									<td align="left">
 										<span ng-show="isMyAgency(area.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
+										<span ng-show="!isMyAgency(area.agencyId)">{{ area.agencyId | agencyCodeToName }}</span>
 									</td>
 									<td align="left">
 										<span ng-show="aconf.a_name.visible">{{area.name}}</span>
@@ -580,7 +582,7 @@
 											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
 										</td>
 										<td>
-											<ul class="no-margin" ng-repeat="t in getHourSlotsFromArray(r.timeSlot)">
+											<ul class="no-margin" ng-repeat="t in getHourSlotsFromTimePeriodArray(r.timeSlots)">
 												<li>{{ t }}</li>
 											</ul>
 										</td>
@@ -712,7 +714,7 @@
 								   			<td>{{ (r.to | date:'dd/MM') }}</td>
 											<td><span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span></td>
 											<td>
-												<ul class="no-margin" ng-repeat="t in getHourSlotsFromArray(r.timeSlot)">
+												<ul class="no-margin" ng-repeat="t in getHourSlotsFromTimePeriodArray(r.timeSlots)">
 													<li>{{ t }}</li>
 												</ul>
 											</td>
@@ -797,35 +799,35 @@
 					   	</div>
 					   	<div class="form-group" ng-show="aconf.a_zones0.visible">
 					    	<label for="zone0">{{ zone0_label | i18n }}</label>
-					    	<select id="zone0" name="aZone0" class="form-control" ng-options="m as m.label for m in aZones0 | orderBy: 'label'" ng-model="myAZone0" ng-required="aconf.a_zones0.required">
+					    	<select id="zone0" name="aZone0" class="form-control" ng-options="m as m.label for m in aZones0 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myAZone0" ng-required="aconf.a_zones0.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.aZone0.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="aconf.a_zones1.visible">
 					    	<label for="zone1">{{ zone1_label | i18n }}</label>
-					    	<select id="zone1" name="aZone1" class="form-control" ng-options="m as m.label for m in aZones1 | orderBy: 'label'" ng-model="myAZone1" ng-required="aconf.a_zones1.required">
+					    	<select id="zone1" name="aZone1" class="form-control" ng-options="m as m.label for m in aZones1 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myAZone1" ng-required="aconf.a_zones1.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.aZone1.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="aconf.a_zones2.visible">
 					    	<label for="zone2">{{ zone2_label | i18n }}</label>
-					    	<select id="zone2" name="aZone2" class="form-control" ng-options="m as m.label for m in aZones2 | orderBy: 'label'" ng-model="myAZone2" ng-required="aconf.a_zones2.required">
+					    	<select id="zone2" name="aZone2" class="form-control" ng-options="m as m.label for m in aZones2 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myAZone2" ng-required="aconf.a_zones2.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.aZone2.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="aconf.a_zones3.visible">
 					    	<label for="zone3">{{ zone3_label | i18n }}</label>
-					    	<select id="zone3" name="aZone3" class="form-control" ng-options="m as m.label for m in aZones3 | orderBy: 'label'" ng-model="myAZone3" ng-required="aconf.a_zones3.required">
+					    	<select id="zone3" name="aZone3" class="form-control" ng-options="m as m.label for m in aZones3 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myAZone3" ng-required="aconf.a_zones3.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.aZone3.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
 						<div class="form-group" ng-show="aconf.a_zones4.visible">
 					    	<label for="zone4">{{ zone4_label | i18n }}</label>
-					    	<select id="zone4" name="aZone4" class="form-control" ng-options="m as m.label for m in aZones4 | orderBy: 'label'" ng-model="myAZone4" ng-required="aconf.a_zones4.required">
+					    	<select id="zone4" name="aZone4" class="form-control" ng-options="m as m.label for m in aZones4 | filter:{ agencyId : agencyId } | orderBy: 'label'" ng-model="myAZone4" ng-required="aconf.a_zones4.required">
 					    		<option value="">{{ 'zone_select_placeholder' | i18n }}</option>
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.aZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>

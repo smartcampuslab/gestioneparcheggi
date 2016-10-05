@@ -72,11 +72,8 @@ public class Street implements Serializable {
 //	private int slotsOccupiedOnReserved;
 	
 	private List<VehicleSlot> slotsConfiguration;	// Slot configuration for each vehicle type
-
 	private String polyline;
-	
 	private LastChange lastChange;
-	
 	private String areaId;
 	
 //	public int getSlotsOccupiedOnFree() {

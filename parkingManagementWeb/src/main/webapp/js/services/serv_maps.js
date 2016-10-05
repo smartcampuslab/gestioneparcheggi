@@ -1607,7 +1607,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 		switch(type){
 			case 1 : 
 				myAreaPm = sharedDataService.getLocalAreaById(marker.areaId);
-				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+				myIcon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm != null) && (myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
 				cid = "c" + marker.id;
 				break;
 			case 2 : 

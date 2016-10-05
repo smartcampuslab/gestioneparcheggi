@@ -30,6 +30,7 @@ public class DataLogBeanTP {
 	private Long[] logPeriod;	// used in log with a time period
 	private String author;
 	private String agency;
+	private String userAgencyId;
 	private boolean deleted;
 	//new fields added in 12/5/2015 from MB
 	private String year;
@@ -185,6 +186,14 @@ public class DataLogBeanTP {
 
 	public void setLogPeriod(Long[] logPeriod) {
 		this.logPeriod = logPeriod;
+	}
+	
+	public String getUserAgencyId() {
+		return userAgencyId;
+	}
+
+	public void setUserAgencyId(String userAgencyId) {
+		this.userAgencyId = userAgencyId;
 	}
 
 	@Override

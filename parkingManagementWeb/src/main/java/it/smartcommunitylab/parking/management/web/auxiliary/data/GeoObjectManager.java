@@ -175,7 +175,7 @@ public class GeoObjectManager {
 		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
-	public void updateDynamicStreetData(Street s, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicStreetData(Street s, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(s.getUpdateTime() != null){
 			currTime = s.getUpdateTime();
@@ -184,18 +184,18 @@ public class GeoObjectManager {
 		//currTime = 1428271200000L; // Easter Monday 2015
 		//currTime = 1431813600000L; // A Sunday
 		//currTime = 1432543500000L;	// Today at 10.45 am
-		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, sysLog, period, p_type);
+		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, userAgencyId, sysLog, period, p_type);
 	}
 	
-	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, String userAgency, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, sysLog, period, p_type);
+		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, userAgency, sysLog, period, p_type);
 	}
 	
-	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, String userAgencyId, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -204,10 +204,10 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, sysLog, period, p_type);
+		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, userAgencyId, sysLog, period, p_type);
 	}
 	
-	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, String userAgency, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -216,7 +216,7 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, sysLog, period, p_type);
+		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, userAgency, sysLog, period, p_type);
 	}
 
 //	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
@@ -239,20 +239,21 @@ public class GeoObjectManager {
 		return dynamicManager.getLogsByAuthor(authorId, agency, count);
 	}
 	
-	public List<DataLogBeanTP> findAllLogsByAgency(String agency, Integer skip, Integer count){
-		return dynamicManager.findTPAll(agency, false, skip, count);
+	public List<DataLogBeanTP> findAllLogsByAgency(String agency, String userAgency, Integer skip, Integer count){
+		//return dynamicManager.findTPAll(agency, false, skip, count);
+		return dynamicManager.findTPAllByUserAgency(agency, userAgency, false, skip, count);
 	};
 
-	public Long countAllLogsByAgency(String agency) {
-		return dynamicManager.countTPAll(agency, false);
+	public Long countAllLogsByAgency(String agency, String userAgency) {
+		return dynamicManager.countTPAll(agency, userAgency, false);
 	}
 
-	public List<DataLogBeanTP> findAllLogsByAgencyAndType(String agency, String type, Integer skip, Integer count){
-		return dynamicManager.findTPTyped(agency, false, type, skip, count);
+	public List<DataLogBeanTP> findAllLogsByAgencyAndType(String agency, String userAgency, String type, Integer skip, Integer count){
+		return dynamicManager.findTPTypedByUserAgency(agency, userAgency, false, type, skip, count);
 	};
 
-	public Long countAllLogsByAgencyAndType(String agency, String type) {
-		return dynamicManager.countTPTyped(agency, false, type);
+	public Long countAllLogsByAgencyAndType(String agency, String userAgency, String type) {
+		return dynamicManager.countTPTyped(agency, userAgency, false, type);
 	}
 
 	public int countAllStreetLogs(String agency) {
@@ -899,9 +900,16 @@ public class GeoObjectManager {
 		    			
 		        				// here I load the vals
 		        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
-		        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+		        				String[] tickets = null;
+		        				try {
+		        					tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+		        				} catch(Exception ex){
+		        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
+		        				}
 		        				tmpPProfit.setProfitVals(cleanStringArray(vals));
-		        				tmpPProfit.setTickets(cleanStringArray(tickets));
+		        				if(tickets != null){
+		        					tmpPProfit.setTickets(cleanStringArray(tickets));
+		        				}
 		        				
 		        				logger.error(String.format("Corrected Object: %s", tmpPProfit.toString()));
 		        				correctData.add(tmpPProfit);

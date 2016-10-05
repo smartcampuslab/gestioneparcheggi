@@ -117,7 +117,9 @@ public class PortalController extends SCController{
 		List<Map> myVehicleType = vehicleTypeDataSetup.getVehicleTypesMap(vehicleTypeDataSetup.findVehicleTypesByAppIdAndUsername(objectToShow.getAppId(), user.getUsername()));
 		model.addAttribute("vehicle_type_list", myVehicleType);
 		Map userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(userAgency));
+		List<Map> allAgencyData = agencyDataSetup.getAllAgencyMaps();
 		model.addAttribute("user_agency", userAgencyData);
+		model.addAttribute("all_agencies", allAgencyData);
 		return new ModelAndView("index", model);
 	}
 	

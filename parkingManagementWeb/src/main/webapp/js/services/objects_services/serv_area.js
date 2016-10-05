@@ -62,11 +62,13 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 		if(type == 0){
 			if(area.validityPeriod){
 				for(var i = 0; i < area.validityPeriod.length; i++){
+					var tSlots = sharedDataService.correctTimeSlots(area.validityPeriod[i].timeSlot);
 					var corrPeriod = {
 						from: area.validityPeriod[i].from,
 						to: area.validityPeriod[i].to,
 						weekDays: area.validityPeriod[i].weekDays,
 						timeSlot: area.validityPeriod[i].timeSlot,
+						timeSlots: tSlots,
 						rateValue: area.validityPeriod[i].rateValue,
 						holiday: area.validityPeriod[i].holiday,
 						note: area.validityPeriod[i].note
@@ -133,11 +135,13 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 		var validityPeriod = [];
 		if(area.validityPeriod){
 			for(var i = 0; i < area.validityPeriod.length; i++){
+				var tSlots = sharedDataService.correctTimeSlots(area.validityPeriod[i].timeSlot);
 				var corrPeriod = {
 					from: area.validityPeriod[i].from,
 					to: area.validityPeriod[i].to,
 					weekDays: area.validityPeriod[i].weekDays,
 					timeSlot: area.validityPeriod[i].timeSlot,
+					timeSlots: tSlots,
 					rateValue: area.validityPeriod[i].rateValue,
 					holiday: area.validityPeriod[i].holiday,
 					note: area.validityPeriod[i].note

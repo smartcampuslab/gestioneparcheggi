@@ -447,7 +447,8 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="pstructWS.length != 0 && !tabletWiew">
-								<th width="5%">
+								<th width="15%">
+									<span ng-show="psconf.ps_name.visible">{{ 'agency_title' | i18n }}</span>
 									<a href ng-click="showAgencyPSFilter();currentPagePs=0" ng-show="!showAgencyPStructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="agencyPStructFilter=null;hideAgencyPSFilter()" ng-show="showAgencyPStructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showAgencyPStructFilter">
@@ -467,10 +468,11 @@
 								<th width="27%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 								<th width="5%" ng-show="psconf.ps_parkride.visible">{{ 'ps_park_and_ride_title' | i18n }}</th>
 								<th width="5%"><span ng-show="psconf.ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
-								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
+								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tr ng-show="pstructWS.length != 0 && tabletWiew">
-								<th width="5%">
+								<th width="15%">
+									<span ng-show="psconf.ps_name.visible">{{ 'agency_title' | i18n }}</span>
 									<a href ng-click="showAgencyPSFilter();currentPagePs=0" ng-show="!showAgencyPStructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="agencyPStructFilter=null;hideAgencyPSFilter()" ng-show="showAgencyPStructFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showAgencyPStructFilter">
@@ -489,13 +491,14 @@
 								</th>
 								<th width="27%"><span ng-show="psconf.ps_address.visible">{{ 'ps_address' | i18n }}</span></th>
 								<th width="10%"><span ng-show="psconf.ps_timeSlot.visible">{{ 'ps_slots' | i18n }}</span></th>
-								<th width="30%" class="myCenter">{{ 'operations' | i18n }}</th>
+								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody ng-if="!tabletWiew" class="animate-repeat"
 								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter | filter:agencyPStructFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
 								<tr>
 									<td align="left">
 										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
+										<span ng-show="!isMyAgency(pstruct.agencyId)">{{ pstruct.agencyId | agencyCodeToName }}</span>
 									</td>
 									<td align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
 									<td align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>

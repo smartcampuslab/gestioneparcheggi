@@ -325,6 +325,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
     		var structure;
     		var parkingmeter;
     		var bike;
+    		var dbref;
     		for(var i = 0; i < allAttribute.length; i++){
     			if(allAttribute[i].indexOf("id=") !== -1){
     				id = allAttribute[i].split("=")[1];
@@ -353,6 +354,9 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
     			if(allAttribute[i].indexOf("bike=") !== -1){
     				bike = allAttribute[i].split("=")[1];
     			}
+    			if(allAttribute[i].indexOf("dbref=") !== -1){
+    				dbref = allAttribute[i].split("=")[1];
+    			}
     		}
     		data = {
     			id: id,
@@ -363,7 +367,8 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
     			street: street,
     			structure: structure,
     			parkingmeter: parkingmeter,
-    			bike: bike
+    			bike: bike,
+    			dbref: dbref
     		};
     	return data;
     }
@@ -373,6 +378,16 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
     	//var tmp_ags = conf_agency_list.substring(1, conf_agency_list.length - 1);
     	//var user_agencies = tmp_ags.split(",");
     	sharedDataService.setConfUserAgency(correctStringToAgecyData(conf_agency));
+    }
+    
+    if(conf_all_agencies && conf_all_agencies != ''){
+    	var allAgencies = [];
+    	var allAgs = conf_all_agencies.split('}');
+    	for(var i = 0; i < allAgs.length - 1; i++){
+    		var corrAgency = correctStringToAgecyData(allAgs[i]);
+    		allAgencies.push(corrAgency);
+    	}
+    	sharedDataService.setAllAgencies(allAgencies);
     }
     
     sharedDataService.setConfAppId(conf_app_id);
