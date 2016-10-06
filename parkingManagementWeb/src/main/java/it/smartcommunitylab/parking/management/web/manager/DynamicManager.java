@@ -71,6 +71,7 @@ import org.springframework.stereotype.Service;
 public class DynamicManager {
 
 	private static final Logger logger = Logger.getLogger(DynamicManager.class);
+	private static final String ALL = "all";
 	private static final String freeSlotType = "@free";
 	private static final String freeSlotSignedType = "@freeSign";
 	private static final String paidSlotType = "@paid";
@@ -1836,133 +1837,140 @@ public class DynamicManager {
 	 * @param statsVals: map of stat vals
 	 * @return: complete StreetBean object with occupation data
 	 */
-	public StreetBean mergeOccupationRateForStreet(String objectId, StreetBean s, String appId, String type, int valueType, String vehicleType, Map<StatKey, StatValue> statsVals){
+	public StreetBean mergeOccupationRateForStreet(String objectId, StreetBean s, String appId, String type, int valueType, String vehicleType, Map<StatKey, StatValue> statsVals, String agencyId){
 		String sId = getCorrectId(objectId, "street", appId);
 		double occRate = -1;
 		boolean averageOcc = false;
 		int[] totalAverageSlot = null;
 		int[] usedAverageSlot = null;
 		int totalAverageUnusuabled = 0;
-		
-		try {
-			List<VehicleSlotBean> vehicleSlotList = s.getSlotsConfiguration();
-			VehicleSlotBean vs = null;
-			if(vehicleSlotList != null && !vehicleSlotList.isEmpty()){
-				for(int i = 0; i < vehicleSlotList.size(); i++){
-					VehicleSlotBean tmp_vs = vehicleSlotList.get(i);
-					if(tmp_vs.getVehicleType().compareTo(vehicleType) == 0){
-						averageOcc = false;
-						vehicleType = "@" + vehicleType;
-						vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, sId, appId, type, valueType, vehicleType, statsVals);
-						if(rilevationPresent(vs)){
-							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
-							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
-							occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
-							if(occRate > 100){
-								occRate = 100;
+		if(s.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
+			try {
+				List<VehicleSlotBean> vehicleSlotList = s.getSlotsConfiguration();
+				VehicleSlotBean vs = null;
+				if(vehicleSlotList != null && !vehicleSlotList.isEmpty()){
+					for(int i = 0; i < vehicleSlotList.size(); i++){
+						VehicleSlotBean tmp_vs = vehicleSlotList.get(i);
+						if(tmp_vs.getVehicleType().compareTo(vehicleType) == 0){
+							averageOcc = false;
+							vehicleType = "@" + vehicleType;
+							vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, sId, appId, type, valueType, vehicleType, statsVals);
+							if(rilevationPresent(vs)){
+								int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+								int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
+								occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
+								if(occRate > 100){
+									occRate = 100;
+								}
+								vehicleSlotList.set(i, vs);	// update specific vehicle type slots
 							}
-							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
-						}
-						break;
-					} else if(vehicleType == null || vehicleType.compareTo("") == 0 || vehicleType.compareTo("ALL") == 0){
-						String vType = "@" + tmp_vs.getVehicleType();
-						vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, sId, appId, type, valueType, vType, statsVals);
-						if(rilevationPresent(vs)){
-							averageOcc = true;
-							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
-							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
-							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
-							if(totalAverageSlot == null){
-								totalAverageSlot = totalSlot;
-							} else {
-								totalAverageSlot = mergeIntArray(totalSlot, totalAverageSlot);
+							break;
+						} else if(vehicleType == null || vehicleType.compareTo("") == 0 || vehicleType.compareTo("ALL") == 0){
+							String vType = "@" + tmp_vs.getVehicleType();
+							vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, sId, appId, type, valueType, vType, statsVals);
+							if(rilevationPresent(vs)){
+								averageOcc = true;
+								vehicleSlotList.set(i, vs);	// update specific vehicle type slots
+								int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+								int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
+								if(totalAverageSlot == null){
+									totalAverageSlot = totalSlot;
+								} else {
+									totalAverageSlot = mergeIntArray(totalSlot, totalAverageSlot);
+								}
+								if(usedAverageSlot == null){
+									usedAverageSlot = totalUsed;
+								} else {
+									usedAverageSlot = mergeIntArray(totalUsed, usedAverageSlot);
+								}
+								totalAverageUnusuabled += vs.getUnusuableSlotNumber();
 							}
-							if(usedAverageSlot == null){
-								usedAverageSlot = totalUsed;
-							} else {
-								usedAverageSlot = mergeIntArray(totalUsed, usedAverageSlot);
-							}
-							totalAverageUnusuabled += vs.getUnusuableSlotNumber();
 						}
 					}
 				}
-			}
-			if(averageOcc){
-				// Here I calculate the average occRate from all vehicles type slots occupancy
-				occRate = findOccupationRate(totalAverageSlot, usedAverageSlot, 0, 0, 1, totalAverageUnusuabled);
-				if(occRate > 100){
-					occRate = 100;
+				if(averageOcc){
+					// Here I calculate the average occRate from all vehicles type slots occupancy
+					occRate = findOccupationRate(totalAverageSlot, usedAverageSlot, 0, 0, 1, totalAverageUnusuabled);
+					if(occRate > 100){
+						occRate = 100;
+					}
 				}
+				s.setSlotsConfiguration(vehicleSlotList);
+				s.setOccupancyRate(occRate);
+			} catch (Exception ex){
+				logger.error("Error in slots configuration reading " + ex.getMessage());
 			}
-			s.setSlotsConfiguration(vehicleSlotList);
+		} else {
 			s.setOccupancyRate(occRate);
-		} catch (Exception ex){
-			logger.error("Error in slots configuration reading " + ex.getMessage());
 		}
 		return s;
 	}
 	
-	public ParkingStructureBean mergeOccupationRateForParking(String objectId, ParkingStructureBean p, String appId, String type, int valueType, String vehicleType, Map<StatKey, StatValue> statsVals){
+	public ParkingStructureBean mergeOccupationRateForParking(String objectId, ParkingStructureBean p, String appId, String type, int valueType, String vehicleType, Map<StatKey, StatValue> statsVals, String agencyId){
 		String pId = getCorrectId(p.getId(), "parking", appId);
 		double occRate = -1;
 		boolean averageOcc = false;
 		int[] totalAverageSlot = null;
 		int[] usedAverageSlot = null;
 		int totalAverageUnusuabled = 0;
-		try {
-			List<VehicleSlotBean> vehicleSlotList = p.getSlotsConfiguration();
-			VehicleSlotBean vs = null;
-			if(vehicleSlotList != null && !vehicleSlotList.isEmpty()){
-				for(int i = 0; i < vehicleSlotList.size(); i++){
-					VehicleSlotBean tmp_vs = vehicleSlotList.get(i);
-					if(tmp_vs.getVehicleType().compareTo(vehicleType) == 0){
-						averageOcc = false;
-						vehicleType = "@" + vehicleType;
-						vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, pId, appId, type, valueType, vehicleType, statsVals);
-						if(rilevationPresent(vs)){
-							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
-							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
-							occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
-							if(occRate > 100){
-								occRate = 100;
+		if(p.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
+			try {
+				List<VehicleSlotBean> vehicleSlotList = p.getSlotsConfiguration();
+				VehicleSlotBean vs = null;
+				if(vehicleSlotList != null && !vehicleSlotList.isEmpty()){
+					for(int i = 0; i < vehicleSlotList.size(); i++){
+						VehicleSlotBean tmp_vs = vehicleSlotList.get(i);
+						if(tmp_vs.getVehicleType().compareTo(vehicleType) == 0){
+							averageOcc = false;
+							vehicleType = "@" + vehicleType;
+							vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, pId, appId, type, valueType, vehicleType, statsVals);
+							if(rilevationPresent(vs)){
+								int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+								int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
+								occRate = findOccupationRate(totalSlot, totalUsed, 0, 0, 1, vs.getUnusuableSlotNumber());
+								if(occRate > 100){
+									occRate = 100;
+								}
+								vehicleSlotList.set(i, vs);	// update specific vehicle type slots
 							}
-							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
-						}
-						break;
-					} else if(vehicleType == null || vehicleType.compareTo("ALL") == 0 || vehicleType.compareTo("") == 0){
-						vehicleType = "@" + tmp_vs.getVehicleType();
-						vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, pId, appId, type, valueType, vehicleType, statsVals);
-						if(rilevationPresent(vs)){
-							averageOcc = true;
-							vehicleSlotList.set(i, vs);	// update specific vehicle type slots
-							int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
-							int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
-							if(totalAverageSlot == null){
-								totalAverageSlot = totalSlot;
-							} else {
-								totalAverageSlot = mergeIntArray(totalSlot, totalAverageSlot);
+							break;
+						} else if(vehicleType == null || vehicleType.compareTo("ALL") == 0 || vehicleType.compareTo("") == 0){
+							vehicleType = "@" + tmp_vs.getVehicleType();
+							vs = calculateAndUpdateSlotsFromStatValue(tmp_vs, pId, appId, type, valueType, vehicleType, statsVals);
+							if(rilevationPresent(vs)){
+								averageOcc = true;
+								vehicleSlotList.set(i, vs);	// update specific vehicle type slots
+								int[] totalSlot = {retrieveSlots(vs.getFreeParkSlotNumber()), retrieveSlots(vs.getFreeParkSlotSignNumber()), retrieveSlots(vs.getPaidSlotNumber()), retrieveSlots(vs.getTimedParkSlotNumber()), retrieveSlots(vs.getHandicappedSlotNumber()), retrieveSlots(vs.getReservedSlotNumber()), retrieveSlots(vs.getRechargeableSlotNumber()), retrieveSlots(vs.getLoadingUnloadingSlotNumber()), retrieveSlots(vs.getPinkSlotNumber()), retrieveSlots(vs.getCarSharingSlotNumber())};
+								int[] totalUsed = {retrieveSlots(vs.getFreeParkSlotOccupied()), retrieveSlots(vs.getFreeParkSlotSignOccupied()), retrieveSlots(vs.getPaidSlotOccupied()), retrieveSlots(vs.getTimedParkSlotOccupied()), retrieveSlots(vs.getHandicappedSlotOccupied()), retrieveSlots(vs.getReservedSlotOccupied()), retrieveSlots(vs.getRechargeableSlotOccupied()), retrieveSlots(vs.getLoadingUnloadingSlotOccupied()), retrieveSlots(vs.getPinkSlotOccupied()), retrieveSlots(vs.getCarSharingSlotOccupied())};
+								if(totalAverageSlot == null){
+									totalAverageSlot = totalSlot;
+								} else {
+									totalAverageSlot = mergeIntArray(totalSlot, totalAverageSlot);
+								}
+								if(usedAverageSlot == null){
+									usedAverageSlot = totalUsed;
+								} else {
+									usedAverageSlot = mergeIntArray(totalUsed, usedAverageSlot);
+								}
+								totalAverageUnusuabled += vs.getUnusuableSlotNumber();
 							}
-							if(usedAverageSlot == null){
-								usedAverageSlot = totalUsed;
-							} else {
-								usedAverageSlot = mergeIntArray(totalUsed, usedAverageSlot);
-							}
-							totalAverageUnusuabled += vs.getUnusuableSlotNumber();
-						}
-					}	
+						}	
+					}
 				}
-			}
-			if(averageOcc){
-				// Here I calculate the average occRate from all vehicles type slots occupancy
-				occRate = findOccupationRate(totalAverageSlot, usedAverageSlot, 0, 0, 1, totalAverageUnusuabled);
-				if(occRate > 100){
-					occRate = 100;
+				if(averageOcc){
+					// Here I calculate the average occRate from all vehicles type slots occupancy
+					occRate = findOccupationRate(totalAverageSlot, usedAverageSlot, 0, 0, 1, totalAverageUnusuabled);
+					if(occRate > 100){
+						occRate = 100;
+					}
 				}
+				p.setSlotsConfiguration(vehicleSlotList);
+				p.setOccupancyRate(occRate);
+			} catch (NullPointerException ex){
+				//logger.error("Error in slots configuration reading " + ex.getMessage());
 			}
-			p.setSlotsConfiguration(vehicleSlotList);
+		} else {
 			p.setOccupancyRate(occRate);
-		} catch (NullPointerException ex){
-			//logger.error("Error in slots configuration reading " + ex.getMessage());
 		}
 		return p;
 	}
@@ -3784,7 +3792,7 @@ public class DynamicManager {
 		return occMatrix;
 	}
 	
-	public List<StreetBean> getOccupationRateFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
+	public List<StreetBean> getOccupationRateFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType, String agencyId){
 		// Perf4J part
 		BasicConfigurator.configure();
 		StopWatch watch = new Log4JStopWatch(); 
@@ -3802,7 +3810,7 @@ public class DynamicManager {
 		logger.debug("Stats map size : " + statsVals.size());
 		List<StreetBean> corrStreets = new ArrayList<StreetBean>();
 		for(StreetBean s : streets){
-			StreetBean corrStreet = mergeOccupationRateForStreet(s.getId(), s, appId, type, valueType, vehicleType, statsVals);
+			StreetBean corrStreet = mergeOccupationRateForStreet(s.getId(), s, appId, type, valueType, vehicleType, statsVals, agencyId);
 			//StreetBean corrStreet = getOccupationRateFromStreet(s.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
 			corrStreets.add(corrStreet);
 		}
@@ -3811,7 +3819,7 @@ public class DynamicManager {
 		return corrStreets;
 	}
 	
-	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
+	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType, String agencyId){
 		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
 		Map<StatKey, StatValue> statsVals = null;
 		if(valueType == 1){
@@ -3827,7 +3835,7 @@ public class DynamicManager {
 		List<ParkingStructureBean> corrParkings = new ArrayList<ParkingStructureBean>();
 		for(ParkingStructureBean p : parkings){
 			//ParkingStructureBean corrPark = getOccupationRateFromParking(p.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
-			ParkingStructureBean corrPark = mergeOccupationRateForParking(p.getId(), p, appId, type, valueType, vehicleType, statsVals);
+			ParkingStructureBean corrPark = mergeOccupationRateForParking(p.getId(), p, appId, type, valueType, vehicleType, statsVals, agencyId);
 			corrParkings.add(corrPark);
 		}
 		return corrParkings;
@@ -3846,49 +3854,58 @@ public class DynamicManager {
 	 * @param valueType: type of searched value: last profit or profit sum
 	 * @return
 	 */
-	public List<ParkingMeterBean> getProfitFromAllParkingMeters(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+	public List<ParkingMeterBean> getProfitFromAllParkingMeters(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String agencyId){
 		List<ParkingMeterBean> parkingmeters = getAllParkingMeters(appId);
 		Map<StatKey, StatValue> statsVals = getProfitFromObjects(appId, type, params, years, months, dayType, days, hours);
 		String pId = "";
 		for(ParkingMeterBean pm : parkingmeters){
-			double profitVal = 0;
-			int ticketsNum = 0;
-			pId = getCorrectId(pm.getId(), "parkingmeter", appId);
-			//TODO: check if the sum of data is considered
-			profitVal = retrieveCorrectProfitFromStatValue(pId, appId, type + profit, valueType, statsVals);
-			ticketsNum = (int)retrieveCorrectProfitFromStatValue(pId, appId, type + tickets, valueType, statsVals);
-			/*if(valueType == 1){
+			if(pm.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
+				double profitVal = 0;
+				int ticketsNum = 0;
+				pId = getCorrectId(pm.getId(), "parkingmeter", appId);
+				//TODO: check if the sum of data is considered
+				profitVal = retrieveCorrectProfitFromStatValue(pId, appId, type + profit, valueType, statsVals);
+				ticketsNum = (int)retrieveCorrectProfitFromStatValue(pId, appId, type + tickets, valueType, statsVals);
+				/*if(valueType == 1){
+					profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+					ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+				} else {
+					profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+					ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+				}*/
+				pm.setProfit(profitVal);
+				pm.setTickets(ticketsNum);
+			} else {
+				pm.setProfit(-1.0);
+				pm.setTickets(-1);
+			}
+		}
+		return parkingmeters;
+	}
+	
+	public ParkingMeterBean getProfitFromParkingMeter(String parkMeterId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String agencyId){
+		ParkingMeterBean pm = new ParkingMeterBean();
+		double profitVal = 0;
+		int ticketsNum = 0;
+		String pId = getCorrectId(parkMeterId, "parkingmeter", appId);
+		if(pm.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
+			if(valueType == 1){
 				profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
 			} else {
 				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
-			}*/
+			}
 			pm.setProfit(profitVal);
 			pm.setTickets(ticketsNum);
-		}
-
-		return parkingmeters;
-	}
-	
-	public ParkingMeterBean getProfitFromParkingMeter(String parkMeterId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
-		ParkingMeterBean pm = new ParkingMeterBean();
-		double profitVal = 0;
-		int ticketsNum = 0;
-		String pId = getCorrectId(parkMeterId, "parkingmeter", appId);
-		if(valueType == 1){
-			profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
-			ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
 		} else {
-			profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
-			ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+			pm.setProfit(-1.0);
+			pm.setTickets(-1);
 		}
-		pm.setProfit(profitVal);
-		pm.setTickets(ticketsNum);
 		return pm;
 	}
 	
-	public List<ParkingStructureBean> getProfitFromAllParkStructs(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+	public List<ParkingStructureBean> getProfitFromAllParkStructs(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String agencyId){
 		List<ParkingStructureBean> parkstructs = getAllParkingStructureInAppId(null, appId);
 		Map<StatKey, StatValue> statsVals = getProfitFromObjects(appId, type, params, years, months, dayType, days, hours);
 		String pId = "";
@@ -3896,17 +3913,22 @@ public class DynamicManager {
 			double profitVal = 0;
 			int ticketsNum = 0;
 			pId = getCorrectId(p.getId(), "parkstruct", appId);
-			profitVal = retrieveCorrectProfitFromStatValue(pId, appId, type + profit, valueType, statsVals);
-			ticketsNum = (int)retrieveCorrectProfitFromStatValue(pId, appId, type + tickets, valueType, statsVals);
-			/*if(valueType == 1){
-				profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
-				ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+			if(p.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
+				profitVal = retrieveCorrectProfitFromStatValue(pId, appId, type + profit, valueType, statsVals);
+				ticketsNum = (int)retrieveCorrectProfitFromStatValue(pId, appId, type + tickets, valueType, statsVals);
+				/*if(valueType == 1){
+					profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+					ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+				} else {
+					profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+					ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+				}*/
+				p.setProfit(profitVal);
+				p.setTickets(ticketsNum);
 			} else {
-				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
-				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
-			}*/
-			p.setProfit(profitVal);
-			p.setTickets(ticketsNum);
+				p.setProfit(-1.0);
+				p.setTickets(-1);
+			}
 		}
 		return parkstructs;
 	}
@@ -3925,7 +3947,7 @@ public class DynamicManager {
 	 * @param valueType
 	 * @return
 	 */
-	public List<CompactParkingStructureBean> getProfitChangeFromAllParkStructs(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
+	public List<CompactParkingStructureBean> getProfitChangeFromAllParkStructs(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String agencyId){
 		List<ParkingStructureBean> parkstructs = getAllParkingStructureInAppId(null, appId);
 		List<CompactParkingStructureBean> correctedParkings = new ArrayList<CompactParkingStructureBean>();
 		String pId = "";
@@ -3934,6 +3956,33 @@ public class DynamicManager {
 			double profitVal = 0;
 			int ticketsNum = 0;
 			pId = getCorrectId(p.getId(), "parkstruct", appId);
+			if(p.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
+				if(valueType == 1){
+					profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+					ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+				} else {
+					profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
+					ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+				}
+				cp.setProfit(profitVal);
+				cp.setTickets(ticketsNum);
+			} else {
+				cp.setProfit(-1.0);
+				cp.setTickets(-1);
+			}
+			cp.setId(p.getId());
+			correctedParkings.add(cp);
+		}
+		return correctedParkings;
+	}
+	
+	public ParkingStructureBean getProfitFromParkStruct(String id, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String agencyId){
+		ParkingStructureBean p = new ParkingStructureBean();
+		String pId = "";
+		double profitVal = 0;
+		int ticketsNum = 0;
+		pId = getCorrectId(id, "parkstruct", appId);
+		if(p.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
 			if(valueType == 1){
 				profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
@@ -3941,29 +3990,12 @@ public class DynamicManager {
 				profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
 				ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
 			}
-			cp.setId(p.getId());
-			cp.setProfit(profitVal);
-			cp.setTickets(ticketsNum);
-			correctedParkings.add(cp);
-		}
-		return correctedParkings;
-	}
-	
-	public ParkingStructureBean getProfitFromParkStruct(String id, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType){
-		ParkingStructureBean p = new ParkingStructureBean();
-		String pId = "";
-		double profitVal = 0;
-		int ticketsNum = 0;
-		pId = getCorrectId(id, "parkstruct", appId);
-		if(valueType == 1){
-			profitVal = getLastProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
-			ticketsNum = (int)getLastProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+			p.setProfit(profitVal);
+			p.setTickets(ticketsNum);
 		} else {
-			profitVal = getSumProfitFromObject(pId, appId, type + profit, params, years, months, dayType, days, hours);
-			ticketsNum = (int)getSumProfitFromObject(pId, appId, type + tickets, params, years, months, dayType, days, hours);
+			p.setProfit(-1.0);
+			p.setTickets(-1);
 		}
-		p.setProfit(profitVal);
-		p.setTickets(ticketsNum);
 		return p;
 	}
 	
@@ -3981,7 +4013,7 @@ public class DynamicManager {
 	 * @param valueType: type of the filtered value (last value or aggregate value)
 	 * @return List of CompactStreetBean with the most useful data
 	 */
-	public List<CompactStreetBean> getOccupationChangesFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
+	public List<CompactStreetBean> getOccupationChangesFromAllStreets(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType, String agencyId){
 		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
 		Map<StatKey, StatValue> statsVals = null;
 		if(valueType == 1){
@@ -3994,7 +4026,7 @@ public class DynamicManager {
 		List<CompactStreetBean> corrStreets = new ArrayList<CompactStreetBean>();
 		for(StreetBean s : streets){
 			CompactStreetBean cs = new CompactStreetBean();
-			StreetBean corrStreet = mergeOccupationRateForStreet(s.getId(), s, appId, type, valueType, vehicleType, statsVals);
+			StreetBean corrStreet = mergeOccupationRateForStreet(s.getId(), s, appId, type, valueType, vehicleType, statsVals, agencyId);
 			//StreetBean corrStreet = getOccupationRateFromStreet(s.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
 			cs.setId(s.getId());
 			cs.setSlotNumber(s.getSlotNumber());
@@ -4019,7 +4051,7 @@ public class DynamicManager {
 	 * @param valueType: type of the filtered value (last value or aggregate value)
 	 * @return List of CompactParkingStructureBean with the most useful data
 	 */
-	public List<CompactParkingStructureBean> getOccupationChangesFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType){
+	public List<CompactParkingStructureBean> getOccupationChangesFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType, String agencyId){
 		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
 		Map<StatKey, StatValue> statsVals = null;
 		if(valueType == 1){
@@ -4032,7 +4064,7 @@ public class DynamicManager {
 		List<CompactParkingStructureBean> correctedParkings = new ArrayList<CompactParkingStructureBean>();
 		for(ParkingStructureBean p : parkings){
 			//ParkingStructureBean corrPark = getOccupationRateFromParking(p.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
-			ParkingStructureBean corrPark = mergeOccupationRateForParking(p.getId(), p, appId, type, valueType, vehicleType, statsVals);
+			ParkingStructureBean corrPark = mergeOccupationRateForParking(p.getId(), p, appId, type, valueType, vehicleType, statsVals, agencyId);
 			CompactParkingStructureBean cp = new CompactParkingStructureBean();
 			cp.setId(p.getId());
 			cp.setSlotNumber(p.getSlotNumber());

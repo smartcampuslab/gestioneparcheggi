@@ -48,7 +48,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// Method getProfitStructFromDb: used to retrieve te streets occupancy data from the db
-	this.getProfitParksFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getProfitParksFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
 		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
@@ -64,6 +64,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			dayType: dayType,
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params)); 	
@@ -74,7 +75,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// Occupancy Park retrieving method
-	this.getOccupancyParksFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getOccupancyParksFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
 		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
@@ -91,6 +92,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			vehicleType: sharedDataService.getVehicleType(),
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
@@ -101,7 +103,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// Method getOccupancyParksUpdatedFromDb: used to retrieve te parks occupancy data from the db
-	this.getOccupancyParksUpdatedFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getOccupancyParksUpdatedFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
 		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
@@ -117,6 +119,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			vehicleType: sharedDataService.getVehicleType(),
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));

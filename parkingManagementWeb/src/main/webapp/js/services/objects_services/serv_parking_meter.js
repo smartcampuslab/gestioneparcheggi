@@ -47,7 +47,7 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	    return myDataPromise;
 	};
 	
-	this.getProfitPMFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getProfitPMFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
 		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
@@ -63,6 +63,7 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 			dayType: dayType,
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));

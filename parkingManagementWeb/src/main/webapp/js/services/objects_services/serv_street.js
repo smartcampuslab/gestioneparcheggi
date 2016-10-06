@@ -33,7 +33,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	};
 	
 	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
-	this.getOccupancyStreetsFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getOccupancyStreetsFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		var allStreet = [];
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
@@ -49,6 +49,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			vehicleType: sharedDataService.getVehicleType(),
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));	
@@ -59,7 +60,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	};
 	
 	// Method getOccupancyStreetsUpdatesFromDb: used to retrieve te streets occupancy data from the db
-	this.getOccupancyStreetsUpdatesFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getOccupancyStreetsUpdatesFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
 		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
@@ -76,6 +77,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			vehicleType: sharedDataService.getVehicleType(),
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));
@@ -277,7 +279,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	};
 	
 	// Method getHistorycalOccupancyStreetFromDb: used to retrieve the historycal streets occupancy data from the db
-	this.getHistorycalOccupancyStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType){
+	this.getHistorycalOccupancyStreetFromDb = function(id, verticalVal, orizontalVal, year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var language = (sharedDataService.getUsedLanguage() == 'ita')?0:1;
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
@@ -296,6 +298,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 			valueType: valueType,
 			lang: language,
 			vehicleType: sharedDataService.getVehicleType(),
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params));	
