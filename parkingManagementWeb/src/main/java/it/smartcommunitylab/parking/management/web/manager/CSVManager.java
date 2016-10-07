@@ -807,6 +807,10 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Occupati Gratuiti");
 			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Gratuiti Con Segnaletica");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati Gratuiti Con Segnaletica");
+			writer.append(CSV_SEPARATOR);
 			writer.append("Posti a Pagamento");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Occupati a Pagamento");
@@ -818,6 +822,26 @@ public class CSVManager {
 			writer.append("Posti per Disabili");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Occupati per Disabili");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Car Sharing");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati Car Sharing");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Riservati");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati Riservati");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Rosa");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati Rosa");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti con Ricarica Elettrica");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati con Ricarica Elettrica");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Carico Scarico");
+			writer.append(CSV_SEPARATOR);
+			writer.append("Posti Occupati Carico Scarico");
 			writer.append(CSV_SEPARATOR);
 			writer.append("Posti Totali");
 			writer.append(CSV_SEPARATOR);
@@ -2314,7 +2338,7 @@ public class CSVManager {
 						s.length());
 			}
 			if (s.contains("slotsLoadingUnloading")) {
-				loadingUnloadingSlots = s.substring(s.indexOf("=") + 1, s.length());
+				loadingUnloadingSlots = s.substring(s.indexOf("=") + 1, s.length() - 1);
 			}
 			if (s.contains("slotsOccupiedOnLoadingUnloading")) {
 				occupiedLoadingUnloadingSlots = s.substring(s.indexOf("=") + 1,

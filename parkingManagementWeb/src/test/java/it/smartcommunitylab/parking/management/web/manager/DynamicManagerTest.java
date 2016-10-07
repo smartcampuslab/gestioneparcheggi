@@ -57,9 +57,9 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class DynamicManagerTest {
 	
 	private static final String appId="rv";
-	private static final String agencyId = "prova123";
 	private static final String appIdTn="comune_tn";
-	private static final String agencyIdTn="prova789";
+	private static final String userAgency="rv_amr_091616";
+	private static final String userAgencyTn="tn_mob_091516";
 	private static final String vehicleType = "Car";
 	private static final int min = 0;
 	private static final int max = 5;
@@ -359,7 +359,7 @@ public class DynamicManagerTest {
 	public void loadOldLogTn() throws Exception {
 	
 		List<StreetLog> myOldStreets = dynManager.getOldLogs();
-		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appIdTn), agencyIdTn);
+		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appIdTn), userAgencyTn);
 		for(int i = 0; i < myOldStreets.size(); i++){
 			//System.err.println(myOldStreets.get(i).getValue());
 			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
@@ -455,7 +455,7 @@ public class DynamicManagerTest {
 					s.setUpdateTime(updateTime);
 					s.setUser(999);
 					try {
-						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, "999", true, null, -1);
+						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, userAgencyTn, "999", true, null, -1);
 						System.out.println("Street updated " + s.toJSON());
 					} catch (DatabaseException e) {
 						// TODO Auto-generated catch block
@@ -474,7 +474,7 @@ public class DynamicManagerTest {
 	public void loadOldLogRv() throws Exception {
 	
 		List<StreetLog> myOldStreets = dynManager.getOldLogs();
-		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
+		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId), userAgency);
 		for(int i = 0; i < myOldStreets.size(); i++){
 			//System.err.println(myOldStreets.get(i).getValue());
 			JSONObject street = new JSONObject(myOldStreets.get(i).getValue());
@@ -534,15 +534,40 @@ public class DynamicManagerTest {
 						vs.setTimedParkSlotNumber(slotsTimed);
 					}
 					vs.setVehicleType(vehicleType);
-					vs.setVehicleTypeActive(true);					
-					if(occupiedOnFree > 0){
-						vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+					vs.setVehicleTypeActive(true);
+					// I force and initialize free occupancy to 0
+					vs.setFreeParkSlotOccupied(0);
+					vs.setFreeParkSlotSignOccupied(0);
+					if(freeSlots > 0){
+						if(vs.getFreeParkSlotNumber() != null && vs.getFreeParkSlotNumber() > 0){
+							vs.setFreeParkSlotOccupied(occupiedOnFree);
+						} else {
+							vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+						}
 					}
-					if(occupiedOnPaying > 0){
+					if(slotsPaying > 0){
 						vs.setPaidSlotOccupied(occupiedOnPaying);
 					}
-					if(occupiedOnTimed > 0){
+					if(slotsTimed > 0){
 						vs.setTimedParkSlotOccupied(occupiedOnTimed);
+					}
+					if(vs.getHandicappedSlotNumber()!= null && vs.getHandicappedSlotNumber() > 0){
+						vs.setHandicappedSlotOccupied(0);
+					}
+					if(vs.getReservedSlotNumber()!= null && vs.getReservedSlotNumber() > 0){
+						vs.setReservedSlotOccupied(0);
+					}
+					if(vs.getPinkSlotNumber()!= null && vs.getPinkSlotNumber() > 0){
+						vs.setPinkSlotOccupied(0);
+					}
+					if(vs.getRechargeableSlotNumber()!= null && vs.getRechargeableSlotNumber() > 0){
+						vs.setRechargeableSlotOccupied(0);
+					}
+					if(vs.getLoadingUnloadingSlotNumber()!= null && vs.getLoadingUnloadingSlotNumber() > 0){
+						vs.setLoadingUnloadingSlotOccupied(0);
+					}
+					if(vs.getCarSharingSlotNumber()!= null && vs.getCarSharingSlotNumber() > 0){
+						vs.setCarSharingSlotOccupied(0);
 					}
 					vs.setUnusuableSlotNumber(unavailableSlot);
 					/*//s.setSlotsFree(freeSlots);
@@ -566,8 +591,8 @@ public class DynamicManagerTest {
 					s.setUpdateTime(updateTime);
 					s.setUser(999);
 					try {
-						if(updateTime >= 1455145200000L){ //1446505200000L){	// to load only the recent updates
-							dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "999", true, null, -1);
+						if(updateTime >= 1456786800000L){ //1446505200000L){	// to load only the recent updates
+							dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "999", userAgency, true, null, -1);
 							System.out.println("Street updated " + s.toJSON());
 						}
 					} catch (DatabaseException e) {
@@ -624,7 +649,7 @@ public class DynamicManagerTest {
 	@Test
 	public void loadOldLogParkSquareRv() throws Exception {
 		List<ParkingLog> myOldParks = dynManager.getOldParkLogs();
-		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId), agencyId);
+		List<Street> myStreets = geoManager.searchStreets((Circle)null, Collections.<String,Object>singletonMap("agency", appId), userAgencyTn);
 		for(int i = 0; i < myOldParks.size(); i++){
 			//System.err.println(myOldStreets.get(i).getValue());
 			JSONObject park = new JSONObject(myOldParks.get(i).getValue());
@@ -679,15 +704,40 @@ public class DynamicManagerTest {
 							vs.setTimedParkSlotNumber(slotsTimed);
 						}
 						vs.setVehicleType(vehicleType);
-						vs.setVehicleTypeActive(true);					
-						if(occupiedOnFree > 0){
-							vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+						vs.setVehicleTypeActive(true);
+						// I force and initialize free occupancy to 0
+						vs.setFreeParkSlotOccupied(0);
+						vs.setFreeParkSlotSignOccupied(0);
+						if(freeSlots > 0){
+							if(vs.getFreeParkSlotNumber() != null && vs.getFreeParkSlotNumber() > 0){
+								vs.setFreeParkSlotOccupied(occupiedOnFree);
+							} else {
+								vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+							}
 						}
-						if(occupiedOnPaying > 0){
+						if(slotsPaying > 0){
 							vs.setPaidSlotOccupied(occupiedOnPaying);
 						}
-						if(occupiedOnTimed > 0){
+						if(slotsTimed > 0){
 							vs.setTimedParkSlotOccupied(occupiedOnTimed);
+						}
+						if(vs.getHandicappedSlotNumber()!= null && vs.getHandicappedSlotNumber() > 0){
+							vs.setHandicappedSlotOccupied(0);
+						}
+						if(vs.getReservedSlotNumber()!= null && vs.getReservedSlotNumber() > 0){
+							vs.setReservedSlotOccupied(0);
+						}
+						if(vs.getPinkSlotNumber()!= null && vs.getPinkSlotNumber() > 0){
+							vs.setPinkSlotOccupied(0);
+						}
+						if(vs.getRechargeableSlotNumber()!= null && vs.getRechargeableSlotNumber() > 0){
+							vs.setRechargeableSlotOccupied(0);
+						}
+						if(vs.getLoadingUnloadingSlotNumber()!= null && vs.getLoadingUnloadingSlotNumber() > 0){
+							vs.setLoadingUnloadingSlotOccupied(0);
+						}
+						if(vs.getCarSharingSlotNumber()!= null && vs.getCarSharingSlotNumber() > 0){
+							vs.setCarSharingSlotOccupied(0);
 						}
 						vs.setUnusuableSlotNumber(unavailableSlot);
 						/*//s.setSlotsFree(freeSlots);
@@ -711,10 +761,10 @@ public class DynamicManagerTest {
 						s.setUpdateTime(updateTime);
 						s.setUser(999);
 						try {
-							//if(updateTime >= 1446505200000L){	// to load only the recent updates
-								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "999", true, null, -1);
+							if(updateTime >= 1456786800000L){	// to load only the recent updates
+								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "999", userAgency, true, null, -1);
 								System.out.println("Street updated " + s.toJSON());
-							//}
+							}
 						} catch (DatabaseException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
@@ -767,15 +817,40 @@ public class DynamicManagerTest {
 							vs.setTimedParkSlotNumber(slotsTimed);
 						}
 						vs.setVehicleType(vehicleType);
-						vs.setVehicleTypeActive(true);					
-						if(occupiedOnFree > 0){
-							vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+						vs.setVehicleTypeActive(true);
+						// I force and initialize free occupancy to 0
+						vs.setFreeParkSlotOccupied(0);
+						vs.setFreeParkSlotSignOccupied(0);
+						if(freeSlots > 0){
+							if(vs.getFreeParkSlotNumber() != null && vs.getFreeParkSlotNumber() > 0){
+								vs.setFreeParkSlotOccupied(occupiedOnFree);
+							} else {
+								vs.setFreeParkSlotSignOccupied(occupiedOnFree);
+							}
 						}
-						if(occupiedOnPaying > 0){
+						if(slotsPaying > 0){
 							vs.setPaidSlotOccupied(occupiedOnPaying);
 						}
-						if(occupiedOnTimed > 0){
+						if(slotsTimed > 0){
 							vs.setTimedParkSlotOccupied(occupiedOnTimed);
+						}
+						if(vs.getHandicappedSlotNumber()!= null && vs.getHandicappedSlotNumber() > 0){
+							vs.setHandicappedSlotOccupied(0);
+						}
+						if(vs.getReservedSlotNumber()!= null && vs.getReservedSlotNumber() > 0){
+							vs.setReservedSlotOccupied(0);
+						}
+						if(vs.getPinkSlotNumber()!= null && vs.getPinkSlotNumber() > 0){
+							vs.setPinkSlotOccupied(0);
+						}
+						if(vs.getRechargeableSlotNumber()!= null && vs.getRechargeableSlotNumber() > 0){
+							vs.setRechargeableSlotOccupied(0);
+						}
+						if(vs.getLoadingUnloadingSlotNumber()!= null && vs.getLoadingUnloadingSlotNumber() > 0){
+							vs.setLoadingUnloadingSlotOccupied(0);
+						}
+						if(vs.getCarSharingSlotNumber()!= null && vs.getCarSharingSlotNumber() > 0){
+							vs.setCarSharingSlotOccupied(0);
 						}
 						vs.setUnusuableSlotNumber(unavailableSlot);
 						/*//s.setSlotsFree(freeSlots);
@@ -799,10 +874,10 @@ public class DynamicManagerTest {
 						s.setUpdateTime(updateTime);
 						s.setUser(999);
 						try {
-							//if(updateTime >= 1446505200000L){	// to load only the recent updates
-								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "999", true, null, -1);
+							if(updateTime >= 1456786800000L){	// to load only the recent updates
+								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "999", userAgency, true, null, -1);
 								System.out.println("Street updated " + s.toJSON());
-							//}
+							}
 						} catch (DatabaseException e) {
 							// TODO Auto-generated catch block
 							e.printStackTrace();
