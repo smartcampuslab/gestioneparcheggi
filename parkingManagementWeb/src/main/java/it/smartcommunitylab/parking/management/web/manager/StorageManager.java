@@ -193,7 +193,7 @@ public class StorageManager {
 	public List<RateAreaBean> getAllAreaByAgencyId(String appId, String agencyId) {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
-		if(ag.getArea() >= READ_VAL){
+		if(ag == null || ag.getArea() >= READ_VAL){
 			Criteria crit = new Criteria();
 			crit.and("agencyId").in(agencyId);
 			for (RateArea a : mongodb.find(Query.query(crit), RateArea.class)) {
@@ -610,7 +610,7 @@ public class StorageManager {
 	public List<StreetBean> getAllStreetsByAgencyId(String appId, String agencyId) {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
-		if(ag.getStreet() >= READ_VAL){
+		if(ag == null || ag.getStreet() >= READ_VAL){
 			for (RateAreaBean temp : getAllAreaByAgencyId(appId, agencyId)) {
 				if(temp != null && appId.compareTo("all") == 0){
 					result.addAll(getAllStreets(temp, "all"));

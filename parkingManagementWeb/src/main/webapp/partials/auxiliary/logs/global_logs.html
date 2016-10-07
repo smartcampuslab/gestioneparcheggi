@@ -55,7 +55,7 @@
 					    </tr>
 					    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.handicappedSlotOccupied }}/{{ sc.handicappedSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.handicappedSlotOccupied">{{ sc.handicappedSlotOccupied }}</span><span ng-show="!sc.handicappedSlotOccupied">0</span>/{{ sc.handicappedSlotNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_reserved_slot' | i18n }}:</td>
@@ -96,6 +96,35 @@
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
 							<td class="detailsLogTableDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr ng-show="logDetails.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">
+				<td colspan="2" ng-show="!logDetails.value.slotsConfiguration">
+					<table width="100%"><!-- frame="box" -->
+					    <tr>
+					    	<td colspan="2"><strong>{{ 'car_vehicle' | i18n }}</strong></td>
+					    </tr>
+					    <tr ng-show="logDetails.value.slotsHandicapped">
+							<td class="detailsLogTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsOccupiedOnHandicapped }}/{{ logDetails.value.slotsHandicapped }}</td>
+						</tr>
+					   	<tr ng-show="logDetails.value.slotsPaying">
+				    		<td class="detailsLogTableSX">{{ 'street_paidpark_slot' | i18n }}:</td>
+				    		<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsOccupiedOnPaying }}/{{ logDetails.value.slotsPaying }}</td>
+				    	</tr>
+						<tr ng-show="logDetails.value.slotsTimed">
+				    		<td class="detailsLogTableSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsOccupiedOnTimed }}/{{ logDetails.value.slotsTimed }}</td>
+						</tr>
+						<tr ng-show="logDetails.value.slotsFree">
+							<td class="detailsLogTableSX">{{ 'street_freepark_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsOccupiedOnFree }}/{{ logDetails.value.slotsFree }}</td>
+						</tr>
+						<tr ng-show="logDetails.value.slotsUnavailable">
+							<td class="detailsLogTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsUnavailable }}</td>
 						</tr>
 					</table>
 				</td>
@@ -122,7 +151,7 @@
 					    </tr>
 					    <tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.handicappedSlotOccupied }}/{{ sc.handicappedSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.handicappedSlotOccupied">{{ sc.handicappedSlotOccupied }}</span><span ng-show="!sc.handicappedSlotOccupied">0</span>/{{ sc.handicappedSlotNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_reserved_slot' | i18n }}:</td>
@@ -163,6 +192,35 @@
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
 							<td class="detailsLogTableDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr ng-show="logDetails.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Street'">
+				<td colspan="2" ng-show="!logDetails.value.slotsConfiguration">
+					<table width="100%"><!-- frame="box" -->
+					    <tr>
+					    	<td colspan="2"><strong>{{ 'car_vehicle' | i18n }}</strong></td>
+					    </tr>
+					    <tr ng-show="logDetails.value.slotsHandicapped">
+							<td class="detailsLogTableSX">{{ 'street_handicapped_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsOccupiedOnHandicapped }}/{{ logDetails.value.slotsHandicapped }}</td>
+						</tr>
+					   	<tr ng-show="logDetails.value.slotsPaying">
+				    		<td class="detailsLogTableSX">{{ 'street_paidpark_slot' | i18n }}:</td>
+				    		<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsOccupiedOnPaying }}/{{ logDetails.value.slotsPaying }}</td>
+				    	</tr>
+						<tr ng-show="logDetails.value.slotsTimed">
+				    		<td class="detailsLogTableSX">{{ 'street_timedpark_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsOccupiedOnTimed }}/{{ logDetails.value.slotsTimed }}</td>
+						</tr>
+						<tr ng-show="logDetails.value.slotsFree">
+							<td class="detailsLogTableSX">{{ 'street_freepark_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsOccupiedOnFree }}/{{ logDetails.value.slotsFree }}</td>
+						</tr>
+						<tr ng-show="logDetails.value.slotsUnavailable">
+							<td class="detailsLogTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
+							<td class="detailsLogTableDX">&nbsp;{{ logDetails.value.slotsUnavailable }}</td>
 						</tr>
 					</table>
 				</td>
@@ -300,7 +358,7 @@
 							    	{{ getVehicleKey(sc.vehicleType) | i18n }} - 
 							    </span>
 								<span ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
-									H:&nbsp;{{ sc.handicappedSlotOccupied }}/{{ sc.handicappedSlotNumber }}
+									H:&nbsp;<span ng-show="sc.handicappedSlotOccupied">{{ sc.handicappedSlotOccupied }}</span><span ng-show="!sc.handicappedSlotOccupied">0</span>/{{ sc.handicappedSlotNumber }}
 								</span>
 								<span ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
 									R:&nbsp;{{ sc.reservedSlotOccupied }}/{{ sc.reservedSlotNumber }}

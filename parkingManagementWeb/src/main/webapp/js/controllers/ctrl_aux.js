@@ -894,7 +894,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			$scope.isAllLogLoaded = false;
 			var method = 'GET';
 			var appId = sharedDataService.getConfAppId();
-			var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", {skip: 0, count: 1000}, $scope.authHeaders, null);
+			var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", {userAgency: agencyId, skip: 0, count: 1000}, $scope.authHeaders, null);
 			myDataPromise.then(function(result){
 				var partialLogs = result;//$scope.globalLogs.concat(result);
 				var corrLog = null;

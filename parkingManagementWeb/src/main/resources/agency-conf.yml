@@ -19,16 +19,6 @@ agencies:
     parkingmeter: 3
     bike: 3
     dbref: tn
-  - id: tn_cit_100316
-    name: Tn Com2
-    description: Agency id per comune trento
-    area: 2
-    zone: 2
-    street: 2
-    structure: 2
-    parkingmeter: 2
-    bike: 2
-    dbref: tn
   - id: rv_amr_091616
     name: Rv Amr
     description: Agency id per amr rovereto

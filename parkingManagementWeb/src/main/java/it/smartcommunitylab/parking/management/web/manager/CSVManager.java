@@ -47,6 +47,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -799,6 +800,8 @@ public class CSVManager {
 			writer.append(CSV_SEPARATOR);
 			writer.append("Periodo");
 			writer.append(CSV_SEPARATOR);
+			writer.append("Mezzo");
+			writer.append(CSV_SEPARATOR);
 			// writer.append("Valore");
 			writer.append("Posti Gratuiti");
 			writer.append(CSV_SEPARATOR);
@@ -858,7 +861,7 @@ public class CSVManager {
 				}
 				writer.append(periodVal);
 				writer.append(CSV_SEPARATOR);
-				writer.append(correctValue(l.getValue() + ""));
+				writer.append(correctValue(l.getValue()));
 				// writer.append(l.getValueToString());
 				writer.append(CSV_NEWLINE);
 			}
@@ -2203,17 +2206,46 @@ public class CSVManager {
 			logger.error("Error in historycal timecost struct csv creation: " + e1);
 		}
 		return "csv/" + name;	//ba
-	}	
+	}
+	
+	private int getTotalOccupiedSlots(VehicleSlot sc){
+		int tot = 0;
+		int occupiedCarSharingSlots = (sc.getCarSharingSlotOccupied() != null) ? sc.getCarSharingSlotOccupied() : 0;
+		int occupiedFreeSlots = (sc.getFreeParkSlotOccupied() != null) ? sc.getFreeParkSlotOccupied() : 0;
+		int occupiedFreeSlotsSigned = (sc.getFreeParkSlotSignOccupied() != null) ? sc.getFreeParkSlotSignOccupied() : 0;
+		int occupiedPayingSlots = (sc.getPaidSlotOccupied() != null) ? sc.getPaidSlotOccupied() : 0;
+		int occupiedTimedSlots = (sc.getTimedParkSlotOccupied() != null) ? sc.getTimedParkSlotOccupied() : 0;
+		int occupiedHandicappedSlots = (sc.getHandicappedSlotOccupied() != null) ? sc.getHandicappedSlotOccupied() : 0;
+		int occupiedReservedSlots = (sc.getReservedSlotOccupied() != null) ? sc.getReservedSlotOccupied() : 0;
+		int occupiedPinkSlots = (sc.getPinkSlotOccupied() != null) ? sc.getPinkSlotOccupied() : 0;
+		int occupiedRechargeableSlots = (sc.getRechargeableSlotOccupied() != null) ? sc.getRechargeableSlotOccupied() : 0;
+		int occupiedLoadingUnloadingSlots = (sc.getLoadingUnloadingSlotOccupied() != null) ? sc.getLoadingUnloadingSlotOccupied() : 0;
+		tot = occupiedCarSharingSlots + occupiedFreeSlots + occupiedFreeSlotsSigned + occupiedPayingSlots + occupiedTimedSlots + occupiedHandicappedSlots + occupiedReservedSlots + occupiedPinkSlots + occupiedRechargeableSlots + occupiedLoadingUnloadingSlots;
+		return tot;
+	}
 		
-	private String correctValue(String value) {
+	private String correctValue(Map<String, Object> value) {
+		String vehicleType = "Automobile";
+		String carSharingSlots = "0";
+		String occupiedCarSharingSlots = "0";
 		String freeSlots = "0";
 		String occupiedFreeSlots = "0";
+		String freeSlotsSigned = "0";
+		String occupiedFreeSlotsSigned = "0";
 		String payingSlots = "0";
 		String occupiedPayingSlots = "0";
 		String timedSlots = "0";
 		String occupiedTimedSlots = "0";
 		String handicappedSlots = "0";
 		String occupiedHandicappedSlots = "0";
+		String reservedSlots = "0";
+		String occupiedReservedSlots = "0";
+		String pinkSlots = "0";
+		String occupiedPinkSlots = "0";
+		String rechargeableSlots = "0";
+		String occupiedRechargeableSlots = "0";
+		String loadingUnloadingSlots = "0";
+		String occupiedLoadingUnloadingSlots = "0";
 		String totalSlots = "0";
 		String occupiedTotalSlots = "0";
 		String unavailableSlots = "0";
@@ -2223,10 +2255,20 @@ public class CSVManager {
 		// logger.error("Value in CSV: " + to_clean);
 		String completeVals[] = to_clean.split(",");
 		for (String s : completeVals) {
+	    	if (s.contains("vehicleType")) {
+				String vehicleTmp = s.substring(s.indexOf("=") + 1, s.length());
+	    		vehicleType = (vehicleTmp.compareTo("Car") == 0) ? "Automobile" : "Moto";
+			}
 			if (s.contains("slotsFree")) {
 				freeSlots = s.substring(s.indexOf("=") + 1, s.length());
 			}
 			if (s.contains("slotsOccupiedOnFree")) {
+				occupiedFreeSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsFreeSigned")) {
+				freeSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnFreeSigned")) {
 				occupiedFreeSlots = s.substring(s.indexOf("=") + 1, s.length());
 			}
 			if (s.contains("slotsPaying")) {
@@ -2250,6 +2292,41 @@ public class CSVManager {
 				occupiedHandicappedSlots = s.substring(s.indexOf("=") + 1,
 						s.length());
 			}
+			if (s.contains("slotsReserved")) {
+				reservedSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnReserved")) {
+				occupiedReservedSlots = s.substring(s.indexOf("=") + 1,
+						s.length());
+			}
+			if (s.contains("slotsRechargeable")) {
+				rechargeableSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnRechargeable")) {
+				occupiedRechargeableSlots = s.substring(s.indexOf("=") + 1,
+						s.length());
+			}
+			if (s.contains("slotsCarSharing")) {
+				carSharingSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnCarSharing")) {
+				occupiedCarSharingSlots = s.substring(s.indexOf("=") + 1,
+						s.length());
+			}
+			if (s.contains("slotsLoadingUnloading")) {
+				loadingUnloadingSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnLoadingUnloading")) {
+				occupiedLoadingUnloadingSlots = s.substring(s.indexOf("=") + 1,
+						s.length());
+			}
+			if (s.contains("slotsPink")) {
+				pinkSlots = s.substring(s.indexOf("=") + 1, s.length());
+			}
+			if (s.contains("slotsOccupiedOnPink")) {
+				occupiedPinkSlots = s.substring(s.indexOf("=") + 1,
+						s.length());
+			}
 			if (s.contains("slotsTotal")) {
 				totalSlots = s.substring(s.indexOf("=") + 1, s.length());
 			}
@@ -2270,11 +2347,17 @@ public class CSVManager {
 
 		// String cleaned = to_clean.replaceAll(",", " / ");
 		// cleaned = cleaned.substring(1, cleaned.length()-1);
-		String cleaned = freeSlots + "," + occupiedFreeSlots + ","
+		String cleaned = vehicleType + "," + freeSlots + "," + occupiedFreeSlots + ","
+				+ freeSlotsSigned + "," + occupiedFreeSlotsSigned + ","
 				+ payingSlots + "," + occupiedPayingSlots + "," + timedSlots
 				+ "," + occupiedTimedSlots + "," + handicappedSlots + ","
-				+ occupiedHandicappedSlots + "," + totalSlots + ","
-				+ occupiedTotalSlots + "," + unavailableSlots + ","
+				+ occupiedHandicappedSlots + ","
+				+ carSharingSlots + "," + occupiedCarSharingSlots + ","
+				+ reservedSlots + "," + occupiedReservedSlots + ","
+				+ pinkSlots + "," + occupiedPinkSlots + ","
+				+ rechargeableSlots + "," + occupiedRechargeableSlots + ","
+				+ loadingUnloadingSlots + "," + occupiedLoadingUnloadingSlots + ","
+				+ totalSlots + "," + occupiedTotalSlots + "," + unavailableSlots + ","
 				+ profit + "," + tickets;
 		return cleaned;
 	}

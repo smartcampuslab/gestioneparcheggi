@@ -875,7 +875,7 @@ public class ObjectController  {
 	// --------------------------------- Part for csv files creation ------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/globallogs/csv")
 	public @ResponseBody
-	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+	String createAllLogCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
 		ArrayList<DataLogBean> logAllData = new ArrayList<DataLogBean>();
 		
 		String createdFile = "";
@@ -920,15 +920,42 @@ public class ObjectController  {
 			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
 			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
 			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
-			    	log_value.put("slotsFree", (!value.isNull("slotsFree")) ? value.getInt("slotsFree") : 0);
-			    	log_value.put("slotsOccupiedOnFree", (!value.isNull("slotsOccupiedOnFree")) ? value.getInt("slotsOccupiedOnFree") : 0);
-			    	log_value.put("slotsTimed", (!value.isNull("slotsTimed")) ? value.getInt("slotsTimed") : 0);
-			    	log_value.put("slotsOccupiedOnTimed", (!value.isNull("slotsOccupiedOnTimed")) ? value.getInt("slotsOccupiedOnTimed") : 0);
-			    	log_value.put("slotsPaying", (!value.isNull("slotsPaying")) ? value.getInt("slotsPaying") : 0);
-			    	log_value.put("slotsOccupiedOnPaying", (!value.isNull("slotsOccupiedOnPaying")) ? value.getInt("slotsOccupiedOnPaying") : 0);
-			    	log_value.put("slotsHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
-			    	log_value.put("slotsOccupiedOnHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
-			    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	if(value.isNull("slotsConfiguration")){
+			    		log_value.put("slotsFree", (!value.isNull("slotsFree")) ? value.getInt("slotsFree") : 0);
+			    		log_value.put("slotsOccupiedOnFree", (!value.isNull("slotsOccupiedOnFree")) ? value.getInt("slotsOccupiedOnFree") : 0);
+			    		log_value.put("slotsTimed", (!value.isNull("slotsTimed")) ? value.getInt("slotsTimed") : 0);
+			    		log_value.put("slotsOccupiedOnTimed", (!value.isNull("slotsOccupiedOnTimed")) ? value.getInt("slotsOccupiedOnTimed") : 0);
+			    		log_value.put("slotsPaying", (!value.isNull("slotsPaying")) ? value.getInt("slotsPaying") : 0);
+			    		log_value.put("slotsOccupiedOnPaying", (!value.isNull("slotsOccupiedOnPaying")) ? value.getInt("slotsOccupiedOnPaying") : 0);
+			    		log_value.put("slotsHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
+			    		log_value.put("slotsOccupiedOnHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
+			    		log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	} else {
+			    		JSONArray slotsConf = value.getJSONArray("slotsConfiguration");
+			    		JSONObject slotConf = slotsConf.getJSONObject(0);
+			    		log_value.put("slotsFree", (!slotConf.isNull("freeParkSlotNumber")) ? slotConf.getInt("freeParkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnFree", (!slotConf.isNull("freeParkSlotOccupied")) ? slotConf.getInt("freeParkSlotOccupied") : 0);
+			    		log_value.put("slotsFreeSigned", (!slotConf.isNull("freeParkSlotSignNumber")) ? slotConf.getInt("freeParkSlotSignNumber") : 0);
+			    		log_value.put("slotsOccupiedOnFreeSigned", (!slotConf.isNull("freeParkSlotSignOccupied")) ? slotConf.getInt("freeParkSlotSignOccupied") : 0);
+			    		log_value.put("slotsTimed", (!slotConf.isNull("timedParkSlotNumber")) ? slotConf.getInt("timedParkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnTimed", (!slotConf.isNull("timedParkSlotOccupied")) ? slotConf.getInt("timedParkSlotOccupied") : 0);
+			    		log_value.put("slotsPaying", (!slotConf.isNull("paidSlotNumber")) ? slotConf.getInt("paidSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnPaying", (!slotConf.isNull("paidSlotOccupied")) ? slotConf.getInt("paidSlotOccupied") : 0);
+			    		log_value.put("slotsHandicapped", (!slotConf.isNull("handicappedSlotNumber")) ? slotConf.getInt("handicappedSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnHandicapped", (!slotConf.isNull("handicappedSlotOccupied")) ? slotConf.getInt("handicappedSlotOccupied") : 0);
+			    		log_value.put("slotsReserved", (!slotConf.isNull("reservedSlotNumber")) ? slotConf.getInt("reservedSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnReserved", (!slotConf.isNull("reservedSlotOccupied")) ? slotConf.getInt("reservedSlotOccupied") : 0);
+			    		log_value.put("slotsRechargeable", (!slotConf.isNull("rechargeableSlotNumber")) ? slotConf.getInt("rechargeableSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnRechargeable", (!slotConf.isNull("rechargeableSlotOccupied")) ? slotConf.getInt("rechargeableSlotOccupied") : 0);
+			    		log_value.put("slotsCarSharing", (!slotConf.isNull("carSharingSlotNumber")) ? slotConf.getInt("carSharingSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnCarSharing", (!slotConf.isNull("carSharingSlotOccupied")) ? slotConf.getInt("carSharingSlotOccupied") : 0);
+			    		log_value.put("slotsLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotNumber")) ? slotConf.getInt("loadingUnloadingSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotOccupied")) ? slotConf.getInt("loadingUnloadingSlotOccupied") : 0);
+			    		log_value.put("slotsPink", (!slotConf.isNull("pinkSlotNumber")) ? slotConf.getInt("pinkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnPink", (!slotConf.isNull("pinkSlotOccupied")) ? slotConf.getInt("pinkSlotOccupied") : 0);
+			    		log_value.put("slotsUnavailable", (!slotConf.isNull("unusuableSlotNumber")) ? slotConf.getInt("unusuableSlotNumber") : 0);
+			    		log_value.put("vehicleType", (!slotConf.isNull("vehicleType")) ? slotConf.getString("vehicleType") : "Car");
+			    	}
 			    	log_value.put("polyline", (!value.isNull("polyline")) ? value.getString("polyline") : "n.p.");
 			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
 			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
@@ -941,9 +968,36 @@ public class ObjectController  {
 			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
 			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
 			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
-			    	log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
-			    	log_value.put("slotsOccupiedOnTotal", (!value.isNull("slotsOccupiedOnTotal")) ? value.getInt("slotsOccupiedOnTotal") : 0);
-			    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	if(value.isNull("slotsConfiguration")){
+			    		log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
+			    		log_value.put("slotsOccupiedOnTotal", (!value.isNull("slotsOccupiedOnTotal")) ? value.getInt("slotsOccupiedOnTotal") : 0);
+			    		log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	} else {
+			    		JSONArray slotsConf = value.getJSONArray("slotsConfiguration");
+			    		JSONObject slotConf = slotsConf.getJSONObject(0);
+			    		log_value.put("slotsFree", (!slotConf.isNull("freeParkSlotNumber")) ? slotConf.getInt("freeParkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnFree", (!slotConf.isNull("freeParkSlotOccupied")) ? slotConf.getInt("freeParkSlotOccupied") : 0);
+			    		log_value.put("slotsFreeSigned", (!slotConf.isNull("freeParkSlotSignNumber")) ? slotConf.getInt("freeParkSlotSignNumber") : 0);
+			    		log_value.put("slotsOccupiedOnFreeSigned", (!slotConf.isNull("freeParkSlotSignOccupied")) ? slotConf.getInt("freeParkSlotSignOccupied") : 0);
+			    		log_value.put("slotsTimed", (!slotConf.isNull("timedParkSlotNumber")) ? slotConf.getInt("timedParkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnTimed", (!slotConf.isNull("timedParkSlotOccupied")) ? slotConf.getInt("timedParkSlotOccupied") : 0);
+			    		log_value.put("slotsPaying", (!slotConf.isNull("paidSlotNumber")) ? slotConf.getInt("paidSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnPaying", (!slotConf.isNull("paidSlotOccupied")) ? slotConf.getInt("paidSlotOccupied") : 0);
+			    		log_value.put("slotsHandicapped", (!slotConf.isNull("handicappedSlotNumber")) ? slotConf.getInt("handicappedSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnHandicapped", (!slotConf.isNull("handicappedSlotOccupied")) ? slotConf.getInt("handicappedSlotOccupied") : 0);
+			    		log_value.put("slotsReserved", (!slotConf.isNull("reservedSlotNumber")) ? slotConf.getInt("reservedSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnReserved", (!slotConf.isNull("reservedSlotOccupied")) ? slotConf.getInt("reservedSlotOccupied") : 0);
+			    		log_value.put("slotsRechargeable", (!slotConf.isNull("rechargeableSlotNumber")) ? slotConf.getInt("rechargeableSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnRechargeable", (!slotConf.isNull("rechargeableSlotOccupied")) ? slotConf.getInt("rechargeableSlotOccupied") : 0);
+			    		log_value.put("slotsCarSharing", (!slotConf.isNull("carSharingSlotNumber")) ? slotConf.getInt("carSharingSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnCarSharing", (!slotConf.isNull("carSharingSlotOccupied")) ? slotConf.getInt("carSharingSlotOccupied") : 0);
+			    		log_value.put("slotsLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotNumber")) ? slotConf.getInt("loadingUnloadingSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotOccupied")) ? slotConf.getInt("loadingUnloadingSlotOccupied") : 0);
+			    		log_value.put("slotsPink", (!slotConf.isNull("pinkSlotNumber")) ? slotConf.getInt("pinkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnPink", (!slotConf.isNull("pinkSlotOccupied")) ? slotConf.getInt("pinkSlotOccupied") : 0);
+			    		log_value.put("slotsUnavailable", (!slotConf.isNull("unusuableSlotNumber")) ? slotConf.getInt("unusuableSlotNumber") : 0);
+			    		log_value.put("vehicleType", (!slotConf.isNull("vehicleType")) ? slotConf.getString("vehicleType") : "Car");
+			    	}
 			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
 			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
 		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct") == 0){

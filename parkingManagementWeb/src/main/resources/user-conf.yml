@@ -30,7 +30,7 @@ users:
     name: Comune
     surname: Trento
     mail: info@comune.trento.tn.it
-    agency: tn_cit_100316    
+    agency: tn_cit_091516    
   - id: RoveretoTest
     username: roveretotest
     password: metroRVtest
