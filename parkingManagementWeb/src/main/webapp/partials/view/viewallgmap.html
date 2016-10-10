@@ -857,40 +857,47 @@
 					</map>
 				</div>
 				<div class="col-md-3">
-					<div class="panel panel-success" ng-if="filterForZone0 || filterForZone1 || filterForZone2 || filterForZone3 || filterForZone4">
+					<div class="panel panel-success" ng-if="filterForZone0 || filterForZone1 || filterForZone2 || filterForZone3 || filterForZone4 || filterForAgency">
 						<div class="panel-heading">
 							<h5 class="panel-title">{{ 'filter_block_title' | i18n }}</h5>
 						</div>
 						<div class="panel-body">
 							<div ng-if="filterForZone0">
 								<label for="zone0">{{ zone0_label | i18n }}</label>
-					    		<select id="zone0" name="fZone0" class="form-control" ng-options="m as m.label for m in fZones0 | orderBy: 'label'" ng-model="myFilterZone0" ng-change="filterAllData(myFilterZone0, 0)">
+					    		<select id="zone0" name="fZone0" class="form-control" ng-options="m as m.label for m in fZones0 | orderBy: 'label'" ng-model="myFilterZone0" ng-change="filterAllData(myFilterZone0, 0, agencyFilter)">
 					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
 					    		</select>
 							</div>
 							<div ng-if="filterForZone1">
 								<label for="zone1">{{ zone1_label | i18n }}</label>
-					    		<select id="zone1" name="fZone1" class="form-control" ng-options="m as m.label for m in fZones1 | orderBy: 'label'" ng-model="myFilterZone1" ng-change="filterAllData(myFilterZone1, 1)">
+					    		<select id="zone1" name="fZone1" class="form-control" ng-options="m as m.label for m in fZones1 | orderBy: 'label'" ng-model="myFilterZone1" ng-change="filterAllData(myFilterZone1, 1, agencyFilter)">
 					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
 					    		</select>
 							</div>
 							<div ng-if="filterForZone2">
 								<label for="zone2">{{ zone2_label | i18n }}</label>
-					    		<select id="zone2" name="fZone2" class="form-control" ng-options="m as m.label for m in fZones2 | orderBy: 'label'" ng-model="myFilterZone2" ng-change="filterAllData(myFilterZone2, 2)">
+					    		<select id="zone2" name="fZone2" class="form-control" ng-options="m as m.label for m in fZones2 | orderBy: 'label'" ng-model="myFilterZone2" ng-change="filterAllData(myFilterZone2, 2, agencyFilter)">
 					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
 					    		</select>
 							</div>
 							<div ng-if="filterForZone3">
 								<label for="zone3">{{ zone3_label | i18n }}</label>
-					    		<select id="zone3" name="sZone3" class="form-control" ng-options="m as m.label for m in fZones3 | orderBy: 'label'" ng-model="myFilterZone3" ng-change="filterAllData(myFilterZone3, 3)">
+					    		<select id="zone3" name="sZone3" class="form-control" ng-options="m as m.label for m in fZones3 | orderBy: 'label'" ng-model="myFilterZone3" ng-change="filterAllData(myFilterZone3, 3, agencyFilter)">
 					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
 					    		</select>
 							</div>
 							<div ng-if="filterForZone4">
 								<label for="zone4">{{ zone4_label | i18n }}</label>
-					    		<select id="zone4" name="sZone4" class="form-control" ng-options="m as m.label for m in fZones4 | orderBy: 'label'" ng-model="myFilterZone4" ng-change="filterAllData(myFilterZone4, 4)">
+					    		<select id="zone4" name="sZone4" class="form-control" ng-options="m as m.label for m in fZones4 | orderBy: 'label'" ng-model="myFilterZone4" ng-change="filterAllData(myFilterZone4, 4, agencyFilter)">
 					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
 					    		</select>
+							</div>
+							<div><br/></div>
+							<div ng-if="filterForAgency">
+								<label for="f_agency_area">{{ 'agency_title' | i18n }}</label>
+					    		<select id="f_agency_area" class="form-control" ng-model="agencyFilter" ng-change="filterAllData(myZoneFilter, myZoneIndex, agencyFilter)" >
+						    		<option ng-repeat="a in allAgencyFilter" value="{{a.id}}" >{{ a.name }}</option>
+						    	</select>
 							</div>
 						</div>
 					</div>

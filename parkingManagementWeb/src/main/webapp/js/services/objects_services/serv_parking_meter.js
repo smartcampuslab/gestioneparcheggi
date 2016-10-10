@@ -28,12 +28,18 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	};
 	
 	// PM get method without security
-    this.getParkingMetersFromDbNS = function(showPm){
+    this.getParkingMetersFromDbNS = function(showPm, agencyId){
 		var markers = [];
 		var allPmeters = [];
 		var method = 'GET';
+		var params = null;
+		if(agencyId != null && agencyId != ""){
+			params = {
+				agencyId: agencyId
+			}
+		}
 		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingmeter", null, sharedDataService.getAuthHeaders(), null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingmeter", params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allPmeters){
 	    	allPmeters = gMapService.initAllPMObjects(allPmeters);	// The only solution found to retrieve all data;
 	    	sharedDataService.setSharedLocalPms(allPmeters);
@@ -89,11 +95,13 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	
 	// PS update method
 	this.updatePmeterInDb = function(pm, area, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId){
+		var username = sharedDataService.getName();
 		var validityPeriod = [];
 		var id = pm.id;
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var method = 'PUT';
 		var data = {};
@@ -134,10 +142,12 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	
 	// PM create method
 	this.createParkingMeterInDb = function(pm, area, zone0, zone1, zone2, zone3, zone4, geometry, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var myAgencyList = []
 		if(agencyId){
@@ -166,10 +176,12 @@ pm.service('parkingMeterService',['$rootScope', 'invokeWSService', 'sharedDataSe
 	
 	// PM delete method
 	this.deleteParkingMeterInDb = function(pMeter, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingmeter/" + pMeter.areaId + "/"  + pMeter.id , params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){

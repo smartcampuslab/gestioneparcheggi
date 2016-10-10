@@ -28,12 +28,18 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// PS get method without security
-    this.getParkingStructuresFromDbNS = function(showPs){
+    this.getParkingStructuresFromDbNS = function(showPs, agencyId){
     	var markers = [];
     	var allPstructs = [];
 		var method = 'GET';
+		var params = null;
+		if(agencyId != null && agencyId != ""){
+			params = {
+				agencyId: agencyId
+			}
+		}
 		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", null, sharedDataService.getAuthHeaders(), null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allPstructs){
 	    	allPstructs = gMapService.initAllPSObjects(allPstructs);	// The only solution found to retrieve all data;
 	    	if(showPs){
@@ -131,11 +137,13 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// PS update method
 	this.updateParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type, agencyId){
+		var username = sharedDataService.getName();
 		var validityPeriod = [];
 		var id = ps.id;
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var method = 'PUT';
 		var data = {};
@@ -224,10 +232,12 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// PS create method
 	this.createParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var myAgencyList = []
 		if(agencyId){
@@ -297,10 +307,12 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// PS delete method
 	this.deleteParkingStructureInDb = function(ps, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + ps.id, params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){

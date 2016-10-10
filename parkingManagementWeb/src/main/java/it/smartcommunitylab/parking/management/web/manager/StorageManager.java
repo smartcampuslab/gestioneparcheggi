@@ -74,13 +74,14 @@ public class StorageManager {
 	private AgencyDataSetup agencyDataSetup;
 
 	// RateArea Methods
-	public RateAreaBean save(RateAreaBean a, String appId, String agencyId) {
+	public RateAreaBean save(RateAreaBean a, String appId, String agencyId, String username) {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getArea() >= CREATE_REM_VAL){
 			RateArea area = ModelConverter.convert(a, RateArea.class);
 			area = processId(area, RateArea.class);
 			area.setId_app(appId);
-			mongodb.save(area);	
+			mongodb.save(area);
+			logger.info("Rate area " + area.getId() + " created by user " + username);
 			a.setId(area.getId());
 		} else {
 			throw new AccessControlException("no create permission for area object");
@@ -127,7 +128,7 @@ public class StorageManager {
 		return a;
 	}*/
 	
-	public RateAreaBean editArea(RateAreaBean a, String appId, String agencyId) throws NotFoundException {
+	public RateAreaBean editArea(RateAreaBean a, String appId, String agencyId, String username) throws NotFoundException {
 		RateArea area = findById(a.getId(), RateArea.class);
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
 			if(area.getAgencyId().contains(agencyId)){
@@ -167,6 +168,7 @@ public class StorageManager {
 					//a.setAgencyId(area.getAgencyId());	Verify if it is usefull to uncomment or not
 
 					mongodb.save(area);
+					logger.info("Rate area " + area.getId() + " updated by user " + username);
 				} else {
 					throw new AccessControlException("no update permission for area object");
 				}
@@ -245,7 +247,7 @@ public class StorageManager {
 		return true;
 	}*/
 	
-	public boolean removeArea(String areaId, String appId, String agencyId) {
+	public boolean removeArea(String areaId, String appId, String agencyId, String username) {
 		boolean result = false;
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getArea() >= CREATE_REM_VAL){
@@ -264,6 +266,7 @@ public class StorageManager {
 				result = true;
 			}
 			mongodb.remove(Query.query(crit), RateArea.class);
+			logger.info("Rate area " + areaId + " deleted by user " + username);
 		} else {
 			throw new AccessControlException("no remove permission for area object");
 		}
@@ -373,7 +376,7 @@ public class StorageManager {
 		return null;
 	}
 
-	public boolean removeParkingMeter(String areaId, String parcometroId, String appId, String agencyId) {
+	public boolean removeParkingMeter(String areaId, String parcometroId, String appId, String agencyId, String username) {
 		RateArea area = getAreaObjectById(areaId, appId);	//mongodb.findById(areaId, RateArea.class);
 		boolean result = false;
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
@@ -387,6 +390,7 @@ public class StorageManager {
 						logger.debug(String.format(
 								"Success removing parcometro %s of area %s", parcometroId,
 								areaId));
+						logger.info("Parking meter " + parcometroId + " deleted by user " + username);
 					} else {
 						logger.warn(String.format(
 								"Failure removing parcometro %s of area %s", parcometroId,
@@ -402,7 +406,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public ParkingMeterBean editParkingMeter(ParkingMeterBean pb, String appId, String agencyId)
+	public ParkingMeterBean editParkingMeter(ParkingMeterBean pb, String appId, String agencyId, String username)
 			throws DatabaseException {
 		RateArea area = mongodb.findById(pb.getAreaId(), RateArea.class);
 		boolean founded = false;
@@ -422,6 +426,7 @@ public class StorageManager {
 							area.getParkingMeters().put(temp.getId(), temp);	// to update the object
 							mongodb.save(area);
 							founded = true;
+							logger.info("Parking meter " + temp.getId() + " updated by user " + username);
 						}
 						/*for (ParkingMeter temp : area.getParkingMeters()) {
 							if (temp.getId().equals(pb.getId())) {
@@ -448,14 +453,14 @@ public class StorageManager {
 		if (!founded) {
 			ParkingMeterBean todel = findParkingMeter(pb.getId(), appId);
 			if (todel != null) {
-				removeParkingMeter(todel.getAreaId(), pb.getId(), appId, agencyId);
+				removeParkingMeter(todel.getAreaId(), pb.getId(), appId, agencyId, username);
 			}
-			pb = save(pb, appId, agencyId);
+			pb = save(pb, appId, agencyId, username);
 		}
 		return pb;
 	}
 
-	public ParkingMeterBean save(ParkingMeterBean p, String appId, String agencyId) throws DatabaseException {
+	public ParkingMeterBean save(ParkingMeterBean p, String appId, String agencyId, String username) throws DatabaseException {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getParkingmeter() >= UPDATE_VAL){
 			ParkingMeter parcometro = ModelConverter.convert(p, ParkingMeter.class);
@@ -473,6 +478,7 @@ public class StorageManager {
 						area.getParkingMeters().put(parcometro.getId(), parcometro);
 						mongodb.save(area);
 						p.setId(parcometro.getId());
+						logger.info("Parking meter " + p.getId() + " created by user " + username);
 					} else {
 						throw new AccessControlException("no create permission for parkingmeter object");
 					}
@@ -693,7 +699,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public StreetBean editStreet(StreetBean sb, String appId, String agencyId) throws DatabaseException {
+	public StreetBean editStreet(StreetBean sb, String appId, String agencyId, String username) throws DatabaseException {
 		RateArea area = getAreaObjectById(sb.getRateAreaId(), appId);	//mongodb.findById(sb.getRateAreaId(), RateArea.class);
 		boolean founded = false;
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
@@ -734,6 +740,8 @@ public class StorageManager {
 							temp.setAgencyId(sb.getAgencyId());
 							area.getStreets().put(temp.getId(), temp);	// update the street in the map
 							mongodb.save(area);
+							founded = true;
+							logger.info("Street " + temp.getId() + " updated by user " + username);
 						}
 					}
 				} else {
@@ -747,15 +755,15 @@ public class StorageManager {
 		if (!founded) {
 			StreetBean todel = findStreet(sb.getId());
 			if (todel != null) {
-				removeStreet(todel.getRateAreaId(), sb.getId(), appId, agencyId);
+				removeStreet(todel.getRateAreaId(), sb.getId(), appId, agencyId, username);
 			}
-			sb = save(sb, appId, agencyId);
+			sb = save(sb, appId, agencyId, username);
 		}
 
 		return sb;
 	}
 
-	public boolean removeStreet(String areaId, String streetId, String appId, String agencyId) {
+	public boolean removeStreet(String areaId, String streetId, String appId, String agencyId, String username) {
 		RateArea area = getAreaObjectById(areaId, appId);	//mongodb.findById(areaId, RateArea.class);
 		boolean result = false;
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
@@ -778,6 +786,7 @@ public class StorageManager {
 						//dl.setVersion(getLastVersion(dl.getObjId()));
 						dl.setDeleted(true);
 						mongodb.save(dl);
+						logger.info("Street " + streetId + " deleted by user " + username);
 					} else {
 						logger.warn(String.format("Failure removing via %s of area %s", streetId, areaId));
 					}
@@ -791,7 +800,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public StreetBean save(StreetBean s, String appId, String agencyId) throws DatabaseException {
+	public StreetBean save(StreetBean s, String appId, String agencyId, String username) throws DatabaseException {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getStreet() >= UPDATE_VAL){
 			Street street = ModelConverter.convert(s, Street.class);
@@ -820,6 +829,7 @@ public class StorageManager {
 						//area.getStreets().add(processId(street, Street.class));
 						mongodb.save(area);
 						s.setId(street.getId());
+						logger.info("Street " + street.getId() + " created by user " + username);
 						
 						DataLogBean dl = new DataLogBean();
 						dl.setObjId("@" + s.getId_app() + "@street@" + s.getId());
@@ -846,7 +856,7 @@ public class StorageManager {
 	}
 
 	// BikePoint Methods
-	public BikePointBean editBikePoint(BikePointBean pb, String appId, String agencyId)
+	public BikePointBean editBikePoint(BikePointBean pb, String appId, String agencyId, String username)
 			throws NotFoundException {
 		BikePoint bici = findById(pb.getId(), BikePoint.class);
 		if(bici.getAgencyId() != null && !bici.getAgencyId().isEmpty()){
@@ -861,6 +871,7 @@ public class StorageManager {
 					bici.getGeometry().setLng(pb.getGeometry().getLng());
 					if(pb.getZones() != null)bici.setZones(pb.getZones());
 					mongodb.save(bici);
+					logger.info("Bike point " + bici.getId() + " updated by user " + username);
 				} else {
 					throw new AccessControlException("no update permission for bike point object");
 				}
@@ -871,7 +882,7 @@ public class StorageManager {
 		return pb;
 	}
 	
-	public boolean removeBikePoint(String puntobiciId, String appId, String agencyId) {
+	public boolean removeBikePoint(String puntobiciId, String appId, String agencyId, String username) {
 		boolean result = false;
 		Criteria crit = new Criteria();
 		crit.and("id").is(puntobiciId);
@@ -891,6 +902,7 @@ public class StorageManager {
 					
 					mongodb.remove(Query.query(crit), BikePoint.class);
 					result = true;
+					logger.info("Bike point " + bp.getId() + " removed by user " + username);
 				} else {
 					throw new AccessControlException("no delete permission for bike point object");
 				}
@@ -901,7 +913,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public BikePointBean save(BikePointBean bp, String appId, String agencyId) {
+	public BikePointBean save(BikePointBean bp, String appId, String agencyId, String username) {
 		BikePoint puntoBici = ModelConverter.convert(bp, BikePoint.class);
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getBike() >= CREATE_REM_VAL){
@@ -909,6 +921,7 @@ public class StorageManager {
 		puntoBici.setId_app(appId);
 		mongodb.save(puntoBici);
 		bp.setId(puntoBici.getId());
+		logger.info("Bike point " + bp.getId() + " created by user " + username);
 		
 		DataLogBean dl = new DataLogBean();
 		dl.setObjId("@" + bp.getId_app() + "@bikePoint@" + bp.getId());
@@ -1022,7 +1035,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public ParkingStructureBean save(ParkingStructureBean entityBean, String appId, String agencyId) {
+	public ParkingStructureBean save(ParkingStructureBean entityBean, String appId, String agencyId, String username) {
 		ParkingStructure entity = ModelConverter.convert(entityBean, ParkingStructure.class);
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getStructure() >= CREATE_REM_VAL){
@@ -1033,6 +1046,7 @@ public class StorageManager {
 			if(entityBean.getSlotsConfiguration() != null && !entityBean.getSlotsConfiguration().isEmpty()){
 				entity.setSlotsConfiguration(ModelConverter.toVehicleSlotList(entityBean.getSlotsConfiguration(), null));
 			}
+			logger.info("Parking structure " + entity.getId() + " created by user " + username);
 			
 			DataLogBean dl = new DataLogBean();
 			dl.setObjId("@" + entity.getId_app() + "@parkingStructure@" + entity.getId());
@@ -1119,7 +1133,7 @@ public class StorageManager {
 		return result;
 	}
 
-	public ParkingStructureBean editParkingStructure(ParkingStructureBean entityBean, String appId, String agencyId) throws NotFoundException {
+	public ParkingStructureBean editParkingStructure(ParkingStructureBean entityBean, String appId, String agencyId, String username) throws NotFoundException {
 		ParkingStructure entity = findById(entityBean.getId(), ParkingStructure.class);
 		if(entity.getAgencyId() != null && !entity.getAgencyId().isEmpty()){
 			if(entity.getAgencyId().contains(agencyId)){
@@ -1157,6 +1171,7 @@ public class StorageManager {
 					entity.setAbuttingPark(entityBean.isAbuttingPark());
 					if(entityBean.getZones()!=null)entity.setZones(entityBean.getZones());
 					mongodb.save(entity);
+					logger.info("Parking structure " + entity.getId() + " updated by user " + username);
 				} else {
 					throw new AccessControlException("no update permission for structure object");
 				}
@@ -1168,7 +1183,7 @@ public class StorageManager {
 	}
 	
 	// ParkingStructure Methods
-	public boolean removeParkingStructure(String id, String appId, String agencyId) {
+	public boolean removeParkingStructure(String id, String appId, String agencyId, String username) {
 		boolean result = false;
 		Criteria crit = new Criteria();
 		crit.and("id").is(id);
@@ -1185,9 +1200,9 @@ public class StorageManager {
 					dl.setAuthor("999");
 					dl.setDeleted(true);
 					mongodb.save(dl);
-			
 					mongodb.remove(Query.query(crit), ParkingStructure.class);
 					result = true;
+					logger.info("Parking structure " + ps.getId() + " deleted by user " + username);
 				} else {
 					throw new AccessControlException("no delete permission for structure object");
 				}
@@ -1199,7 +1214,7 @@ public class StorageManager {
 	}
 	
 	// Zone Methods
-	public ZoneBean save(ZoneBean z, String appId, String agencyId) {
+	public ZoneBean save(ZoneBean z, String appId, String agencyId, String username) {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getZone() >= CREATE_REM_VAL){
 			Zone zona = ModelConverter.convert(z, Zone.class);
@@ -1207,6 +1222,7 @@ public class StorageManager {
 			zona.setId_app(appId);
 			mongodb.save(zona);
 			z.setId(zona.getId());
+			logger.info("Zone " + z.getId() + " created by user " + username);
 		} else {
 			throw new AccessControlException("no create permission for zone object");
 		}
@@ -1300,6 +1316,30 @@ public class StorageManager {
 	}
 	
 	/**
+	 * Method getZoneByType: method used to get the zones of a specific type
+	 * @param type: type to find;
+	 * @param appId: agency id of the zone;
+	 * @return list of ZoneBean object of a specific type and agency
+	 */
+	public List<ZoneBean> getZoneByTypeAndAgencyId(String type, String appId, String agencyId) {
+		List<ZoneBean> result = new ArrayList<ZoneBean>();
+		Criteria crit = new Criteria();
+		crit.and("agencyId").in(agencyId);
+		for (Zone z : mongodb.find(Query.query(crit), Zone.class)) {
+			if(z != null && appId.compareTo("all") == 0){
+				if(z.getType().compareToIgnoreCase(type) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
+			} else if(z != null && z.getId_app().compareTo(appId) == 0){
+				if(z.getType().compareToIgnoreCase(type) == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				}
+			}
+		}	
+		return result;
+	}
+	
+	/**
 	 * Method findZoneById: get a specific zone having the searched id
 	 * @param zId: id of the zone to search
 	 * @param appId: app id of the zone to search
@@ -1317,7 +1357,7 @@ public class StorageManager {
 		return result;
 	}	
 
-	public ZoneBean editZone(ZoneBean z, String appId, String agencyId) throws NotFoundException {
+	public ZoneBean editZone(ZoneBean z, String appId, String agencyId, String username) throws NotFoundException {
 		Zone zona = findById(z.getId(), Zone.class);
 		if(zona.getAgencyId() != null && !zona.getAgencyId().isEmpty()){
 			if(zona.getAgencyId().contains(agencyId)){
@@ -1359,6 +1399,7 @@ public class StorageManager {
 						}
 					}
 					mongodb.save(zona);
+					logger.info("Zone " + z.getId() + " updated by user " + username);
 				} else {
 					throw new AccessControlException("no update permission for zone object");
 				}
@@ -1369,7 +1410,7 @@ public class StorageManager {
 		return z;
 	}
 
-	public boolean removeZone(String zonaId, String appId, String agencyId) {
+	public boolean removeZone(String zonaId, String appId, String agencyId, String username) {
 		boolean result = false;
 		Criteria crit = new Criteria();
 		crit.and("id").is(zonaId);
@@ -1387,7 +1428,7 @@ public class StorageManager {
 						    	logger.debug(String.format("Finded zona: %s", value));
 						    	iterator.remove();
 						    	try {
-									editStreet(s, appId, agencyId);
+									editStreet(s, appId, agencyId, username);
 								} catch (DatabaseException e) {
 									logger.error(String.format("Error in update street: %s", e.getMessage()));
 								}
@@ -1396,6 +1437,7 @@ public class StorageManager {
 					}
 					mongodb.remove(Query.query(crit), Zone.class);
 					result = true;
+					logger.info("Zone " + zonaId + " deleted by user " + username);
 				} else {
 					throw new AccessControlException("no delete permission for zone object");
 				}

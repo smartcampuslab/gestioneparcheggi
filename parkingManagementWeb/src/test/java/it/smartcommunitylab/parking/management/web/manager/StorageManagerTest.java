@@ -131,7 +131,7 @@ public class StorageManagerTest {
 		//area.setTimeSlot("08:00 - 18:00");
 		area.setSmsCode("567");
 		area.setGeometry(areaGeo);
-		area = manager.save(area,appId, "prova123");
+		area = manager.save(area,appId, "prova123", "userTest");
 		
 		RateAreaBean area2 = new RateAreaBean();
 		area2.setId_app(appId);
@@ -141,7 +141,7 @@ public class StorageManagerTest {
 		//area2.setTimeSlot("10:00 - 14:00");
 		area2.setSmsCode("1234");
 		area2.setGeometry(areaGeo2);
-		area2 = manager.save(area2,appId, "prova123");
+		area2 = manager.save(area2,appId, "prova123", "userTest");
 		
 		RateAreaBean area3 = new RateAreaBean();
 		area3.setId_app(appId);
@@ -150,7 +150,7 @@ public class StorageManagerTest {
 		//area3.setFee(new Float(1.50));
 		//area3.setTimeSlot("08:00 - 20:00");
 		area3.setSmsCode("1235");
-		area3 = manager.save(area3,appId, "prova123");
+		area3 = manager.save(area3,appId, "prova123", "userTest");
 		
 		// Geo Zone creation
 		PolygonBean polz1 = new PolygonBean();
@@ -183,7 +183,7 @@ public class StorageManagerTest {
 		z.setSubmacro("B");
 		z.setColor("33cc66");
 		z.setGeometry(polz1);
-		z = manager.save(z,appId, "prova123");
+		z = manager.save(z,appId, "prova123", "userTest");
 		
 		PolygonBean polz2 = new PolygonBean();
 		PointBean pbz21 = new PointBean();
@@ -215,7 +215,7 @@ public class StorageManagerTest {
 		z2.setSubmacro("A");
 		z2.setColor("990033");
 		z2.setGeometry(polz2);
-		z2 = manager.save(z2,appId, "prova123");
+		z2 = manager.save(z2,appId, "prova123", "userTest");
 		
 		PolygonBean polz3 = new PolygonBean();
 		PointBean pbz31 = new PointBean();
@@ -243,7 +243,7 @@ public class StorageManagerTest {
 		z3.setSubmacro("A");
 		z3.setColor("ffddee");
 		z3.setGeometry(polz3);
-		z3 = manager.save(z3,appId, "prova123");
+		z3 = manager.save(z3,appId, "prova123", "userTest");
 		
 		// Streets Creation
 		PointBean pbes1 = new PointBean();
@@ -528,26 +528,26 @@ public class StorageManagerTest {
 		pb3.setGeometry(geo3);
 		
 		try {
-			manager.save(s,appId, "prova123");
-			manager.save(s2,appId, "prova123");
-			manager.save(s3,appId, "prova123");
-			manager.save(s4,appId, "prova123");
-			manager.save(s5,appId, "prova123");
-			manager.save(p,appId, "prova123");
-			manager.save(p2,appId, "prova123");
-			manager.save(p3,appId, "prova123");
-			manager.save(p4,appId, "prova123");
-			manager.save(p5,appId, "prova123");
-			manager.save(p6,appId, "prova123");
-			manager.save(p7,appId,"prova123");
-			manager.save(p8,appId, "prova123");
-			manager.save(p9,appId, "prova123");
-			manager.save(p10,appId, "prova123");
-			manager.save(ps,appId, "prova123");
-			manager.save(ps2,appId, "prova123");
-			manager.save(pb,appId, "prova123");
-			manager.save(pb2,appId, "prova123");
-			manager.save(pb3,appId, "prova123");
+			manager.save(s,appId, "prova123", "userTest");
+			manager.save(s2,appId, "prova123", "userTest");
+			manager.save(s3,appId, "prova123", "userTest");
+			manager.save(s4,appId, "prova123", "userTest");
+			manager.save(s5,appId, "prova123", "userTest");
+			manager.save(p,appId, "prova123", "userTest");
+			manager.save(p2,appId, "prova123", "userTest");
+			manager.save(p3,appId, "prova123", "userTest");
+			manager.save(p4,appId, "prova123", "userTest");
+			manager.save(p5,appId, "prova123", "userTest");
+			manager.save(p6,appId, "prova123", "userTest");
+			manager.save(p7,appId,"prova123", "userTest");
+			manager.save(p8,appId, "prova123", "userTest");
+			manager.save(p9,appId, "prova123", "userTest");
+			manager.save(p10,appId, "prova123", "userTest");
+			manager.save(ps,appId, "prova123", "userTest");
+			manager.save(ps2,appId, "prova123", "userTest");
+			manager.save(pb,appId, "prova123", "userTest");
+			manager.save(pb2,appId, "prova123", "userTest");
+			manager.save(pb3,appId, "prova123", "userTest");
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -636,7 +636,7 @@ public class StorageManagerTest {
 		//area.setTimeSlot("08:00 - 19:30");
 		area.setSmsCode("726");
 		area.setGeometry(areaGeo);
-		area = manager.save(area, appIdTn, "prova789");
+		area = manager.save(area, appIdTn, "prova789", "userTest");
 		
 		// Geo Zone creation
 		PolygonBean polz1 = new PolygonBean();
@@ -670,7 +670,7 @@ public class StorageManagerTest {
 		z.setColor("e3e427");
 		z.setType("zona tm trento");
 		z.setGeometry(polz1);
-		z = manager.save(z,appIdTn, "prova789");
+		z = manager.save(z,appIdTn, "prova789", "userTest");
 		
 		
 		// Streets Creation
@@ -801,14 +801,14 @@ public class StorageManagerTest {
 		pb3.setGeometry(geo3);
 		
 		try {
-			manager.save(s,appIdTn, "prova789");
-			manager.save(s2,appIdTn, "prova789");
-			manager.save(p,appIdTn, "prova789");
-			manager.save(p2,appIdTn, "prova789");
-			manager.save(p3,appIdTn, "prova789");
-			manager.save(pb,appIdTn, "prova789");
-			manager.save(pb2,appIdTn, "prova789");
-			manager.save(pb3,appIdTn, "prova789");
+			manager.save(s,appIdTn, "prova789", "userTest");
+			manager.save(s2,appIdTn, "prova789", "userTest");
+			manager.save(p,appIdTn, "prova789", "userTest");
+			manager.save(p2,appIdTn, "prova789", "userTest");
+			manager.save(p3,appIdTn, "prova789", "userTest");
+			manager.save(pb,appIdTn, "prova789", "userTest");
+			manager.save(pb2,appIdTn, "prova789", "userTest");
+			manager.save(pb3,appIdTn, "prova789", "userTest");
 		} catch (DatabaseException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -849,27 +849,27 @@ public class StorageManagerTest {
 		
 		List<ZoneBean> zones = manager.getAllZone(appIdTn);
 		for(ZoneBean z : zones){
-			manager.removeZone(z.getId(),appIdTn, "prova789");
+			manager.removeZone(z.getId(),appIdTn, "prova789", "userTest");
 		}
 		
 		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appIdTn, "prova789");
 		for(ParkingMeterBean pm : parkingMeters){
-			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn, "prova789");
+			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn, "prova789", "userTest");
 		}
 		
 		List<ParkingStructureBean> parkingStructs = manager.getAllParkingStructure(appIdTn);
 		for(ParkingStructureBean ps : parkingStructs){
-			manager.removeParkingStructure(ps.getId(),appIdTn, "prova789");
+			manager.removeParkingStructure(ps.getId(),appIdTn, "prova789", "userTest");
 		}
 		
 		List<BikePointBean> bikePoints = manager.getAllBikePoints(appIdTn);
 		for(BikePointBean bp : bikePoints){
-			manager.removeBikePoint(bp.getId(),appIdTn, "prova789");
+			manager.removeBikePoint(bp.getId(),appIdTn, "prova789", "userTest");
 		}
 		
 		List<RateAreaBean> areas = manager.getAllArea(appIdTn);
 		for(RateAreaBean area : areas){
-			manager.removeArea(area.getId(),appIdTn, "prova789");
+			manager.removeArea(area.getId(),appIdTn, "prova789", "userTest");
 		}
 		
 		Assert.assertTrue(manager.getAllArea(appIdTn).size() == 0);
@@ -890,22 +890,22 @@ public class StorageManagerTest {
 		
 		List<ZoneBean> zones = manager.getAllZone(appIdTn);
 		for(ZoneBean z : zones){
-			manager.removeZone(z.getId(),appIdTn, "prova789");
+			manager.removeZone(z.getId(),appIdTn, "prova789", "userTest");
 		}
 		
 		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appIdTn);
 		for(ParkingMeterBean pm : parkingMeters){
-			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn, "prova789");
+			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn, "prova789", "userTest");
 		}
 		
 		List<BikePointBean> bikePoints = manager.getAllBikePoints(appIdTn);
 		for(BikePointBean bp : bikePoints){
-			manager.removeBikePoint(bp.getId(),appIdTn, "prova789");
+			manager.removeBikePoint(bp.getId(),appIdTn, "prova789", "userTest");
 		}
 		
 		List<RateAreaBean> areas = manager.getAllArea(appIdTn);
 		for(RateAreaBean area : areas){
-			manager.removeArea(area.getId(),appIdTn, "prova789");
+			manager.removeArea(area.getId(),appIdTn, "prova789", "userTest");
 		}
 		
 		Assert.assertTrue(manager.getAllArea(appIdTn).size() == 0);

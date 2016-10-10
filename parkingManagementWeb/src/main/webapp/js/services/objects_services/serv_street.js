@@ -21,11 +21,17 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	};
 	
 	// Streets get method without security
-    this.getStreetsFromDbNS = function(showStreets){
+    this.getStreetsFromDbNS = function(showStreets, agencyId){
 		var allStreet = [];
 		var method = 'GET';
+		var params = null;
+		if(agencyId != null && agencyId != ""){
+			params = {
+				agencyId: agencyId
+			}
+		}
 		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/street", null, sharedDataService.getAuthHeaders(), null);
+		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/street", params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allStreet){
 	    	gMapService.setOccupancyStreet(allStreet);
 	    });
@@ -90,6 +96,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	
 	// Street update method
 	this.updateStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, editPolyline, type, agencyId){
+		var username = sharedDataService.getName();
 		var streetSlots = 0;
 		if(street.slotsConfiguration){
 			for(var i = 0; i < street.slotsConfiguration.length; i++){
@@ -106,7 +113,8 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 		var id = street.id;
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var method = 'PUT';
 		
@@ -168,6 +176,7 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	
 	// Street create method
 	this.createStreetInDb = function(street, area, zone0, zone1, zone2, zone3, zone4, pms, createPolyline, agencyId){
+		var username = sharedDataService.getName();
 		//var calculatedTotSlots = sharedDataService.initIfNull(street.handicappedSlotNumber) + sharedDataService.initIfNull(street.reservedSlotNumber) + sharedDataService.initIfNull(street.paidSlotNumber) + sharedDataService.initIfNull(street.timedParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotNumber) + sharedDataService.initIfNull(street.freeParkSlotSignNumber) + sharedDataService.initIfNull(street.unusuableSlotNumber);
 		var streetSlots = 0;
 		if(street.slotsConfiguration){
@@ -185,7 +194,8 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var myAgencyList = []
 		if(agencyId){
@@ -223,10 +233,12 @@ pm.service('streetService',['$rootScope', 'invokeWSService', 'sharedDataService'
 	
 	// Street delete method
 	this.deleteStreetInDb = function(street, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var myDataPromise = invokeWSService.getProxy(method, appId + "/street/" + street.rateAreaId + "/" + street.id , params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){

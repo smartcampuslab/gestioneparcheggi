@@ -1226,6 +1226,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method insertStreetLog: used to insert in the db (table dataLogBean) a new street log
 	$scope.insertStreetLog = function(form, myStreetDetails){
+		var username = sharedDataService.getName();
 		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.showUpdatingSErrorMessage = false;
 		$scope.showUpdatingSSuccessMessage = false;
@@ -1278,6 +1279,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					var params = {
 						userAgencyId: agencyId,
 						isSysLog: true,
+						username: username,
 						period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 					};
 					var value = JSON.stringify(streetLogDet);
@@ -1303,6 +1305,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method insertParkingLog: used to insert in the db (table dataLogBean) a new parking log
 	$scope.insertParkingLog = function(form, myParkingDetails){
+		var username = sharedDataService.getName();
 		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
@@ -1344,6 +1347,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					var params = {
 						userAgencyId: agencyId,
 						isSysLog: true,
+						username: username,
 						period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 					};
 					var value = JSON.stringify(parkingLogDet);
@@ -1368,6 +1372,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method insertParkingLog: used to insert in the db (table dataLogBean) a new parking log
 	$scope.insertParkingProfitLog = function(form, myParkingProfitDetails){
+		var username = sharedDataService.getName();
 		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.showUpdatingPErrorMessage = false;
 		$scope.showUpdatingPSuccessMessage = false;
@@ -1406,6 +1411,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					var params = {
 						userAgencyId: agencyId,
 						isSysLog: true,
+						username: username,
 						period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 					};
 					var value = JSON.stringify(parkingLogDet);
@@ -1430,6 +1436,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	// Method insertPmProfitLog: used to insert in the db (table dataLogBean) a new parkingmeter log
 	$scope.insertPmProfitLog = function(form, myPmProfitDetails){
+		var username = sharedDataService.getName();
 		agencyId = sharedDataService.getConfUserAgency().id;
 		$scope.showUpdatingPMErrorMessage = false;
 		$scope.showUpdatingPMSuccessMessage = false;
@@ -1465,6 +1472,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 				var params = {
 					userAgencyId: agencyId,
 					isSysLog: true,
+					username: username,
 					period: (periodFrom != null && periodTo != null) ? [periodFrom.getTime(), periodTo.getTime()] : null
 				};
 				var value = JSON.stringify(parkingMeterLogDet);
@@ -1866,6 +1874,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     
     // Method loadLogData: used to load the log data in the DB mongo
     $scope.loadLogData = function(cat, type){
+    	var username = sharedDataService.getName();
     	var appId = sharedDataService.getConfAppId();
     	agencyId = sharedDataService.getConfUserAgency().id;
     	var user = "999";
@@ -1891,6 +1900,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		    	    	var params = {
 		    	    		agencyId: agencyId,	
 		    				isSysLog: true,
+		    				username: username,
 		    				period : null
 		    			};
 		    	                	
@@ -1928,6 +1938,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		    	    	var params = {
 		    	    		agencyId: agencyId,	
 		    				isSysLog: true,
+		    				username: username,
 		    				period : null
 		    			};
 		    	                	
@@ -1965,6 +1976,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		    	    	var params = {
 		    	    		agencyId: agencyId,	
 		    				isSysLog: true,
+		    				username: username,
 		    				period : null
 		    			};
 		    	                	
@@ -2002,6 +2014,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		    	    	var params = {
 		    	    		agencyId: agencyId,
 		    				isSysLog: true,
+		    				username: username,
 		    				period : null
 		    			};
 		    	                	

@@ -519,6 +519,13 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
 	    			$scope.showDashboardMenuLink = false;
 	    		}
 	    	}
+	    	if($scope.showedObjects[i].id == 'Agency'){
+	    		if($scope.showedObjects[i].attributes[0].visible){
+	    			initializeService.setFilterAgency(true);
+	    		} else {
+	    			initializeService.setFilterAgency(false);
+	    		}
+	    	}
 	    	if($scope.showedObjects[i].id == 'Flux'){
 	    		if($scope.showedObjects[i].attributes[0].visible){
 	    			$scope.showAuxMenuLink = true;

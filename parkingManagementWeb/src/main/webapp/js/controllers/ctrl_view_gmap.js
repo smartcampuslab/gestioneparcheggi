@@ -153,6 +153,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     	return initializeService.isFilterZone4();
     };
     
+    $scope.isFilterAgency = function(){
+    	return initializeService.isFilterAgency();
+    };
+    
     $scope.getUsedLang = function(){
     	return sharedDataService.getUsedLanguage();
     };
@@ -165,6 +169,28 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     	return ($scope.getUsedLang() == 'eng');
     };
     
+    var agencyId;
+    $scope.agencyId = agencyId = sharedDataService.getConfUserAgency().id;
+	$scope.agencyFilter = "";		// default value
+	var appId = sharedDataService.getConfAppId();
+	var agenciesConf = sharedDataService.getAgenciesByDbId(appId);
+	$scope.allAgencyFilter = [{
+		id: "",
+		name: "Tutto"
+	},{
+		id: agencyId,
+		name: "Miei dati"
+	}];
+	for(var i = 0; i < agenciesConf.length; i ++){
+		if(agenciesConf[i].id != agencyId){
+			var tmpAgency = {
+				id: agenciesConf[i].id,
+				name: agenciesConf[i].name
+			};
+			$scope.allAgencyFilter.push(tmpAgency);
+		}
+	}
+	
     $scope.initComponents = function(){
     	$scope.aconf = initializeService.getAreaConfData();
     	$scope.sconf = initializeService.getStreetConfData();
@@ -186,6 +212,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     	$scope.filterForZone2 = $scope.isFilterZone2();
     	$scope.filterForZone3 = $scope.isFilterZone3();
     	$scope.filterForZone4 = $scope.isFilterZone4();
+    	$scope.filterForAgency = $scope.isFilterAgency();
     	$scope.checkArea = initializeService.isWidgetAreaChecked();
 		$scope.checkStreets = initializeService.isWidgetStreetChecked();
 		$scope.checkPm = initializeService.isWidgetPmChecked();
@@ -378,15 +405,29 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
     	}
     };
     
-    $scope.updateWidgetUrlFilters = function(zone, indx){
+    $scope.updateWidgetUrlFilters = function(zone, indx, agency){
     	var filters = "&filters="
-    	if(zone != null){
-    		var zone_name = zone.name;
-    		if(zone.name.indexOf(" ") > -1){
-    			zone_name = zone.name.replace(new RegExp(" ", 'g'), "%20");
+    	if(zone != null || agency != null){
+    		if(zone != null){
+    			var zone_name = zone.name;
+    			if(zone.name.indexOf(" ") > -1){
+    				zone_name = zone.name.replace(new RegExp(" ", 'g'), "%20");
+    			}
+    			filters += "zona" + indx + ":" + zone_name;
+    			widget_url_filters = filters;
+    		} else {
+    			widget_url_filters = "";
     		}
-    		filters += "zona" + indx + ":" + zone_name;
-    		widget_url_filters = filters;
+    		if(agency != null && agency != ""){
+    			if(zone != null)filters += ",";
+    			var agency_id = agency;
+    			filters += "agency:" + agency_id;
+    			widget_url_filters = filters;
+    		} else {
+    			if(agency == ""){
+    				widget_url_filters = "";
+    			}
+    		}
     	} else {
     		widget_url_filters = "";
     	}
@@ -1408,8 +1449,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		return myPms;
 	};*/
 	
-	$scope.filterAllData = function(zone, indx){
-		$scope.widget_url_params_and_filters = $scope.updateWidgetUrlFilters(zone, indx);
+	$scope.filterAllData = function(zone, indx, agency){
+		$scope.myZoneFilter = zone;
+		$scope.myZoneIndex = indx;
+		$scope.widget_url_params_and_filters = $scope.updateWidgetUrlFilters(zone, indx, agency);
 		var zones = [];
 		switch(indx){
 			case 0: 
@@ -1477,7 +1520,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 					break;
 			}
 		}
-		$scope.initWs(zones);
+		$scope.initWs(zones, agency);
 	};
 	
 	$scope.getFiltersFromParamRequest = function(){
@@ -1501,7 +1544,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		}
 	};
 	
-	$scope.initWs = function(fzones){
+	$scope.initWs = function(fzones, agency){
 		$scope.initComponents();
 	   	$scope.initPage();
 		if(!$scope.getFiltersFromParamRequest()){
@@ -1515,9 +1558,9 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			}
 			if(zones_id.length == 0)zones_id = null;
 			$scope.hideAllMapElements();
-			var streetCall = $scope.getAllStreets(true, zones_id);
-			streetCall.then(function(resutl){
-				$scope.checkAndInitSharedZones(zones_id);
+			var streetCall = $scope.getAllStreets(true, zones_id, agency);
+			streetCall.then(function(result){
+				$scope.checkAndInitSharedZones(zones_id, agency);
 			});
 			// call a function for shared zones
 			$scope.parkingMetersMarkers = [];
@@ -1527,36 +1570,36 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		}
 	};
 	
-	$scope.checkAndInitSharedZones = function(fzones){
+	$scope.checkAndInitSharedZones = function(fzones, agency){
 		var zonePageDataList = initializeService.getZonePagesDataList()
 		var lastIndex = zonePageDataList.length - 1;
 		for(var i = 0; i < zonePageDataList.length; i++){
 			var ztabid = i + 2;
 			var type = $scope.getCorrectZoneTypeFromId(ztabid);
-	    	$scope.getAllZones(type, i, lastIndex, fzones);
+	    	$scope.getAllZones(type, i, lastIndex, fzones, agency);
 		}
 	};
 	
-	$scope.callMyDbFunctionStack = function(fzones){
-		var areaOk = $scope.getAllAreas(fzones);	//$scope.getAreasFromDb(fzones);
+	$scope.callMyDbFunctionStack = function(fzones, agency){
+		var areaOk = $scope.getAllAreas(fzones, agency);	//$scope.getAreasFromDb(fzones);
 		areaOk.then(function(result){
-			return $scope.getAllParkingMeters(fzones);
+			return $scope.getAllParkingMeters(fzones, agency);
 		}).then(function(result){
-			return $scope.getAllParkingStructures(fzones);
+			return $scope.getAllParkingStructures(fzones, agency);
 		}).then(function(result){
-			return $scope.getAllBikePoints(fzones);
+			return $scope.getAllBikePoints(fzones, agency);
 		}).then(function(resutl){
 			if(firstStreetCall){
-	    		$scope.getAllStreets(false, fzones);
+	    		$scope.getAllStreets(false, fzones, agency);
 	    	}
 	    	$scope.initFilters();
 		});
 	};
 	
 	// Retrieve all Areas Method
-    $scope.getAllAreas = function(fzones){
+    $scope.getAllAreas = function(fzones, agency){
 		$scope.polygons = [];
-		var promiseAreas = areaService.getAreasFromDbNS($scope.isAreaVisible());
+		var promiseAreas = areaService.getAreasFromDbNS($scope.isAreaVisible(), agency);
 		promiseAreas.then(function(allAreas){
 			$scope.areaWS = $scope.filterAreas(allAreas, fzones);
 			if($scope.checkArea){
@@ -1568,11 +1611,11 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
 	
 	// Retrieve all Streets Method
-	$scope.getAllStreets = function(first, fzones){
+	$scope.getAllStreets = function(first, fzones, agency){
 		var allStreet = [];
 		$scope.mapStreetSelectedMarkers = [];
 		$scope.geoStreets = [];
-		var promiseStreets = streetService.getStreetsFromDbNS($scope.isStreetVisible());
+		var promiseStreets = streetService.getStreetsFromDbNS($scope.isStreetVisible(), agency);
 		promiseStreets.then(function(result){
 			allStreet = $scope.filterStreets(result, fzones);
 			$scope.streetWS = gMapService.initAllStreetObjects(allStreet);
@@ -1590,10 +1633,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
 	
 	// Retrieve all PM objects from db
-	$scope.getAllParkingMeters = function(fzones){
+	$scope.getAllParkingMeters = function(fzones, agency){
 		var markers = [];
 		var allParkingMeters = [];
-		var myDataPromise = parkingMeterService.getParkingMetersFromDbNS($scope.isPmVisible());
+		var myDataPromise = parkingMeterService.getParkingMetersFromDbNS($scope.isPmVisible(), agency);
 	    myDataPromise.then(function(allParkingMeters){
 	    	allParkingMeters = gMapService.initAllPMObjects(allParkingMeters);	// The only solution found to retrieve all data;
 	    	var filteredParkingMeters = $scope.filterPms(allParkingMeters, fzones);
@@ -1614,10 +1657,10 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
 	
 	// Retrieve all PS objects from db
-	$scope.getAllParkingStructures = function(fzones){
+	$scope.getAllParkingStructures = function(fzones, agency){
 		var markers = [];
 		var allParkingStructures = [];
-		var myDataPromise = structureService.getParkingStructuresFromDbNS($scope.isPsVisible());
+		var myDataPromise = structureService.getParkingStructuresFromDbNS($scope.isPsVisible(), agency);
 		myDataPromise.then(function(result){
 			allParkingStructures = $scope.filterPss(result, fzones);
 			allParkingStructures = gMapService.initAllPSObjects(allParkingStructures);
@@ -1637,12 +1680,12 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 	};
 	
 	// Retrieve all BP objects from DB
-	$scope.getAllBikePoints = function(fzones){
+	$scope.getAllBikePoints = function(fzones, agency){
 		var allBikePoints = [];
 		var markers = [];
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = bikePointService.getBikePointsFromDbNS($scope.isBpVisible());
+		var myDataPromise = bikePointService.getBikePointsFromDbNS($scope.isBpVisible(), agency);
 		myDataPromise.then(function(result){
 			allBikePoints = $scope.filterBps(result, fzones);
 			allBikePoints = gMapService.initAllBPObjects(allBikePoints);
@@ -1662,9 +1705,9 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		return myDataPromise;
 	};
 	
-	$scope.getAllZones = function(z_type, tindex, lastindex, fzones){
+	$scope.getAllZones = function(z_type, tindex, lastindex, fzones, agency){
 		$scope.zoneWS = [];	// clear zones;
-		var myZonePromise = zoneService.getZonesFromDbNS(z_type);
+		var myZonePromise = zoneService.getZonesFromDbNS(z_type, agency);
 		myZonePromise.then(function(result){
 			switch(tindex){
 				case 0:
@@ -1710,7 +1753,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		    	default:break;	
 			}
 			if(tindex == lastindex){
-	    		$scope.callMyDbFunctionStack(fzones);
+	    		$scope.callMyDbFunctionStack(fzones, agency);
 	    	}
 			
 		});

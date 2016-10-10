@@ -522,7 +522,7 @@ public class DynamicManager {
 		return null;
 	}	
 
-	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period, int p_type) throws DatabaseException {
+	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws DatabaseException {
 		String[] ids = s.getId().split("@");
 		String asId = ids[2];
 		s.setUpdateTime(timestamp);
@@ -602,10 +602,9 @@ public class DynamicManager {
 					dl.setValue(map);
 					JSONObject tmpVal = new JSONObject(map);
 					dl.setValueString(tmpVal.toString(4));
-					logger.info(String.format("Value String: %s", tmpVal.toString()));
-					//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
+					logger.debug(String.format("Value String: %s", tmpVal.toString()));
 					mongodb.save(dl);
-					logger.error(String.format("Updated street: %s", temp.toString()));
+					logger.info(String.format("Updated street %s occupacy by user %s", temp.toString(), username));
 					// Here I have to cicle to all the vehicle Type Slots
 					List<VehicleSlot> slotsConfiguration = temp.getSlotsConfiguration();
 					
@@ -989,7 +988,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingStructureAux: used to save a DataLogBean object for the new occupancy data in a parkingStructure
-	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period, int p_type) throws NotFoundException {
+	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -1048,7 +1047,7 @@ public class DynamicManager {
 		dl.setValueString(tmpVal.toString(4));
 		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 		mongodb.save(dl);
-		
+		logger.info(String.format("Updated parking structure %s occupacy by user %s", p.getId(), username));
 		// Here I have to cicle to all the vehicle Type Slots
 		List<VehicleSlot> slotsConfiguration = p.getSlotsConfiguration();
 		
@@ -1327,7 +1326,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkStructProfitAux: used to save a ProfitLogBean object for the new profit data in a parkingStructure
-	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period,  int p_type) throws NotFoundException {
+	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period,  int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
@@ -1368,6 +1367,7 @@ public class DynamicManager {
 		pl.setValueString(tmpVal.toString(4));
 		//DataLog dlog = ModelConverter.convert(dl, DataLog.class);
 		mongodb.save(pl);
+		logger.info(String.format("Updated parking structure %s profit by user %s", pl.getId(), username));
 		// Update Stat report
 		int profitVal = p.getProfit();
 		int ticketsVal = p.getTickets();
@@ -1386,7 +1386,7 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingMeterAux: used to save a ProfitLogBean object for the new profit data in a parkingMeter
-	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period, int p_type) throws NotFoundException {
+	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws NotFoundException {
 		String[] ids = pm.getId().split("@");
 		String pmId = ids[2];
 		pm.setUpdateTime(timestamp);
@@ -1437,6 +1437,7 @@ public class DynamicManager {
 		JSONObject tmpVal = new JSONObject(map);
 		pl.setValueString(tmpVal.toString(4));
 		mongodb.save(pl);
+		logger.info(String.format("Updated parking meter %s profit by user %s", pm.getId(), username));
 		// Update Profit Stat report
 		//int[] total = {p.getSlotsTotal()};
 		//int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};

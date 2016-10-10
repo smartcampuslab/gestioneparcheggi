@@ -228,9 +228,10 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
-	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParking(@RequestBody Parking parking, 
+			@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			dataService.updateDynamicParkingData(parking, agency, userId, userAgencyId, isSysLog, period, NO_PERIOD);
+			dataService.updateDynamicParkingData(parking, agency, userId, userAgencyId, isSysLog, username, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -239,13 +240,14 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/{id}/{userId:.*}") 
-	public @ResponseBody String updateStreet(@RequestBody Street street, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreet(@RequestBody Street street, 
+			@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
 			if(period != null){
 				logger.debug("Inserted period = " + period[0] + "-" + period[1] );
 			}
-			dataService.updateDynamicStreetData(street, agency, userId, userAgencyId, isSysLog, period, NO_PERIOD);
+			dataService.updateDynamicStreetData(street, agency, userId, userAgencyId, isSysLog, username, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -254,10 +256,10 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/{id}/{userId:.*}") 
-	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, userAgencyId, isSysLog, from, to, period, NO_PERIOD);
+			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, userAgencyId, isSysLog, username, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -266,10 +268,11 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/{id}/{userId:.*}") 
-	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, 
+			@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, userAgencyId, isSysLog, from, to, period, NO_PERIOD);
+			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, userAgencyId, isSysLog, username, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -278,7 +281,8 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data, 
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
@@ -446,7 +450,7 @@ public class ObjectController  {
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							park.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingData(park, agency, userId, agencyId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicParkingData(park, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
 						}
 					}
 				}
@@ -460,7 +464,8 @@ public class ObjectController  {
 	}	
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
-	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, 
+			@RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
@@ -635,7 +640,7 @@ public class ObjectController  {
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -649,7 +654,7 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload2/{userId:.*}") 
-	public @ResponseBody String updateStreetListWithFile(@RequestParam("tData") MultipartFile data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreetListWithFile(@RequestParam("tData") MultipartFile data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			
 			File convFile = new File(data.getOriginalFilename());
@@ -778,7 +783,7 @@ public class ObjectController  {
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -792,7 +797,8 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, 
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
@@ -820,7 +826,7 @@ public class ObjectController  {
 							period = null;
 							//period = dataService.getPeriodFromYearAndMonth(year, i);
 							parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, from, to, period, MONTH_PERIOD);
+							dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, from, to, period, MONTH_PERIOD);
 						}
 					}
 				} else {
@@ -836,7 +842,8 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, 
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			
 			logger.debug("started file uplodad flux");
@@ -857,7 +864,7 @@ public class ObjectController  {
 							period = null;
 							//period = dataService.getPeriodFromYearAndMonth(year, i);
 							parkStruct.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, agencyId, isSysLog, from, to, period, MONTH_PERIOD);
+							dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, agencyId, isSysLog, username, from, to, period, MONTH_PERIOD);
 						}
 					}
 				} else {

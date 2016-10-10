@@ -175,7 +175,7 @@ public class GeoObjectManager {
 		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
-	public void updateDynamicStreetData(Street s, String agencyId, String authorId, String userAgencyId, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicStreetData(Street s, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(s.getUpdateTime() != null){
 			currTime = s.getUpdateTime();
@@ -184,18 +184,18 @@ public class GeoObjectManager {
 		//currTime = 1428271200000L; // Easter Monday 2015
 		//currTime = 1431813600000L; // A Sunday
 		//currTime = 1432543500000L;	// Today at 10.45 am
-		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, userAgencyId, sysLog, period, p_type);
+		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, userAgencyId, sysLog, username, period, p_type);
 	}
 	
-	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, String userAgency, boolean sysLog, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, String userAgency, boolean sysLog, String username, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, userAgency, sysLog, period, p_type);
+		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, userAgency, sysLog, username, period, p_type);
 	}
 	
-	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, String userAgencyId, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -204,10 +204,10 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, userAgencyId, sysLog, period, p_type);
+		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, userAgencyId, sysLog, username, period, p_type);
 	}
 	
-	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, String userAgency, boolean sysLog, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, String userAgency, boolean sysLog, String username, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -216,7 +216,7 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, userAgency, sysLog, period, p_type);
+		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, userAgency, sysLog, username, period, p_type);
 	}
 
 //	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
@@ -899,7 +899,7 @@ public class GeoObjectManager {
 		        				tmpPProfit.setPeriod(period);
 		    			
 		        				// here I load the vals
-		        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
+		        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);						// 14 are tot values
 		        				String[] tickets = null;
 		        				try {
 		        					tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values

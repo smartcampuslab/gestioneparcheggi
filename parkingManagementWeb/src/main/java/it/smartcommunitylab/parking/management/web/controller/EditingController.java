@@ -67,25 +67,37 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/street")
 	public @ResponseBody
 	StreetBean createStreet(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId,
-			@RequestBody StreetBean street) throws DatabaseException {
-		return storage.save(street, appId, agencyId);
+			@RequestParam(required=false) String username, @RequestBody StreetBean street) throws DatabaseException {
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.save(street, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/street/{aid}/{sid}")
 	public @ResponseBody
 	boolean deleteStreet(@PathVariable("appId") String appId, @PathVariable("aid") String aid,
 			@PathVariable("sid") String sid, 
-			@RequestParam(required=true) String agencyId) throws DatabaseException {
-		return storage.removeStreet(aid, sid, appId, agencyId);
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username) throws DatabaseException {
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.removeStreet(aid, sid, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/street/{sid}")
 	public @ResponseBody
 	StreetBean editStreet(@PathVariable("appId") String appId,
 			@PathVariable("sid") String vid, @RequestBody StreetBean street, 
-			@RequestParam(required=true) String agencyId)
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username)
 			throws DatabaseException {
-		return storage.editStreet(street, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.editStreet(street, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/street")
@@ -108,10 +120,14 @@ public class EditingController {
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingmeter")
 	public @ResponseBody
-	ParkingMeterBean createParkingMeter(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId,
+	ParkingMeterBean createParkingMeter(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, @RequestParam(required=false) String username,
 			@RequestBody ParkingMeterBean parkingMeter)
 			throws DatabaseException {
-		return storage.save(parkingMeter, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.save(parkingMeter, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingmeter")
@@ -130,31 +146,39 @@ public class EditingController {
 	public @ResponseBody
 	boolean deleteParkingMeter(@PathVariable("appId") String appId,
 			@PathVariable("aid") String aid, @PathVariable("pid") String pid,
-			@RequestParam(required=true) String agencyId) {
-		return storage.removeParkingMeter(aid, pid, appId, agencyId);
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username) {
+		return storage.removeParkingMeter(aid, pid, appId, agencyId, username);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/parkingmeter/{pid}")
 	public @ResponseBody
 	ParkingMeterBean editParkingMeter(@PathVariable("appId") String appId, @PathVariable("pid") String pid,
-			@RequestParam(required=true) String agencyId,
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username,
 			@RequestBody ParkingMeterBean parkingMeter) throws DatabaseException {
-		return storage.editParkingMeter(parkingMeter, appId, agencyId);
+		return storage.editParkingMeter(parkingMeter, appId, agencyId, username);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/area")
 	public @ResponseBody
-	RateAreaBean createRateArea(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, 
+	RateAreaBean createRateArea(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, @RequestParam(required=false) String username, 
 			@RequestBody RateAreaBean area) {
-		return storage.save(area, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.save(area, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/area/{aid}")
 	public @ResponseBody
 	RateAreaBean editRateArea(@PathVariable("appId") String appId,
-			@PathVariable("aid") String aid,  @RequestParam(required=true) String agencyId, 
+			@PathVariable("aid") String aid,  @RequestParam(required=true) String agencyId, @RequestParam(required=false) String username, 
 			@RequestBody RateAreaBean area) throws NotFoundException {
-		return storage.editArea(area, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.editArea(area, appId, agencyId, user_name);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/area/{aid}")
@@ -185,15 +209,23 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/area/{aid}")
 	public @ResponseBody
 	boolean deleteRateArea(@PathVariable("appId") String appId, @PathVariable("aid") String aid,
-			@RequestParam(required=true) String agencyId) {
-		return storage.removeArea(aid, appId, agencyId);
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username) {
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.removeArea(aid, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/zone")
 	public @ResponseBody
-	ZoneBean createZone(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, 
+	ZoneBean createZone(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, @RequestParam(required=false) String username, 
 			@RequestBody ZoneBean zone) throws DatabaseException {
-		return storage.save(zone, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.save(zone, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/zone")
@@ -218,24 +250,35 @@ public class EditingController {
 	public @ResponseBody
 	ZoneBean editZone(@PathVariable("appId") String appId,
 			@PathVariable("zid") String zid, @RequestParam(required=true) String agencyId, 
-			@RequestBody ZoneBean zone) throws NotFoundException {
-		System.out.println(String.format("Zone to edit id:%s; name:%s; submacro:%s", zone.getId(), zone.getName(), zone.getSubmacro()));
-		return storage.editZone(zone, appId, agencyId);
+			@RequestParam(required=false) String username, @RequestBody ZoneBean zone) throws NotFoundException {
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.editZone(zone, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/zone/{zid}")
 	public @ResponseBody
 	boolean deleteZone(@PathVariable("appId") String appId, @PathVariable("zid") String zid, 
-			@RequestParam(required=true) String agencyId) {
-		return storage.removeZone(zid, appId, agencyId);
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username) {
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.removeZone(zid, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/bikepoint")
 	public @ResponseBody
-	BikePointBean createBikePoint(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId,
+	BikePointBean createBikePoint(@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, @RequestParam(required=false) String username,
 			@RequestBody BikePointBean puntobici)
 			throws DatabaseException {
-		return storage.save(puntobici, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.save(puntobici, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/bikepoint")
@@ -253,25 +296,37 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/bikepoint/{pbid}")
 	public @ResponseBody
 	boolean deleteBikePoint(@PathVariable("appId") String appId, @PathVariable("pbid") String pbid, 
-			@RequestParam(required=true) String agencyId) {
-		return storage.removeBikePoint(pbid, appId, agencyId);
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username) {
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.removeBikePoint(pbid, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/bikepoint/{pbid}")
 	public @ResponseBody
 	BikePointBean editBikePoint(@PathVariable("appId") String appId, @PathVariable("pbid") String pbid,
-			@RequestParam(required=true) String agencyId, 
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username, 
 			@RequestBody BikePointBean bici) throws NotFoundException {
-		return storage.editBikePoint(bici, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.editBikePoint(bici, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingstructure")
 	public @ResponseBody
 	ParkingStructureBean createParkingStructure(
-			@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, 
+			@PathVariable("appId") String appId, @RequestParam(required=true) String agencyId, @RequestParam(required=false) String username, 
 			@RequestBody ParkingStructureBean entityBean)
 			throws DatabaseException {
-		return storage.save(entityBean, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.save(entityBean, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/parkingstructure")
@@ -289,17 +344,26 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.DELETE, value = "/rest/{appId}/parkingstructure/{id}")
 	public @ResponseBody
 	boolean deleteParkingStructure(@PathVariable("appId") String appId, @PathVariable String id, 
-			@RequestParam(required=true) String agencyId) {
-		return storage.removeParkingStructure(id, appId, agencyId);
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username) {
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.removeParkingStructure(id, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/rest/{appId}/parkingstructure/{id}")
 	public @ResponseBody
 	ParkingStructureBean editParkingStructure(@PathVariable("appId") String appId,
 			@PathVariable String id, @RequestParam(required=true) String agencyId, 
+			@RequestParam(required=false) String username,
 			@RequestBody ParkingStructureBean entityBean)
 			throws NotFoundException {
-		return storage.editParkingStructure(entityBean, appId, agencyId);
+		String user_name = "unknown";
+		if(username != null && username.compareTo("") != 0){
+			user_name = username;
+		}
+		return storage.editParkingStructure(entityBean, appId, agencyId, user_name);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/data")
@@ -366,8 +430,12 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/street")
 	@ApiOperation(value = "Get Streets", notes = "Returns streets park items")
 	public @ResponseBody
-	List<StreetBean> getAllStreetsNS(@PathVariable("appId") String appId) {
-		return storage.getAllStreets(appId);
+	List<StreetBean> getAllStreetsNS(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+		if(agencyId == null){
+			return storage.getAllStreets(appId);
+		} else {
+			return storage.getAllStreetsByAgencyId(appId, agencyId);
+		}
 	}
 		
 	// Method open to get a single street
@@ -382,8 +450,12 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingmeter")
 	@ApiOperation(value = "Get ParkingMeters", notes = "Returns parking meter items")
 	public @ResponseBody
-	List<ParkingMeterBean> getAllParkingMetersNS(@PathVariable("appId") String appId) {
-		return storage.getAllParkingMeters(appId);
+	List<ParkingMeterBean> getAllParkingMetersNS(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+		if(agencyId == null){
+			return storage.getAllParkingMeters(appId);
+		} else {
+			return storage.getAllParkingMetersByAgencyId(appId, agencyId);
+		}
 	}
 	
 	// Method open to get all parkingMeters
@@ -398,8 +470,12 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/area")
 	@ApiOperation(value = "Get Areas", notes = "Returns area items")
 	public @ResponseBody
-	List<RateAreaBean> getAllRateAreaNS(@PathVariable("appId") String appId) {
-		return storage.getAllArea(appId);
+	List<RateAreaBean> getAllRateAreaNS(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+		if(agencyId == null){
+			return storage.getAllArea(appId);
+		} else {
+			return storage.getAllAreaByAgencyId(appId, agencyId);
+		}
 	}
 		
 	// Method open to get a single area object
@@ -415,8 +491,12 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone")
 	@ApiOperation(value = "Get Zones", notes = "Return zone items")
 	public @ResponseBody
-	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId) {
-		return storage.getAllZone(appId);
+	List<ZoneBean> getAllZoneNS(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+		if(agencyId == null){
+			return storage.getAllZone(appId);
+		} else {
+			return storage.getAllZoneByAgencyId(appId, agencyId);
+		}
 	}
 	
 	// Method open to get a single zone
@@ -431,12 +511,20 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/zone/{zType}")
 	@ApiOperation(value = "Get Zones by type", notes = "Return zone items of specific type")
 	public @ResponseBody
-	List<ZoneBean> getAllZoneByTypeNS(@PathVariable("appId") String appId, @PathVariable("zType") String type) {
+	List<ZoneBean> getAllZoneByTypeNS(@PathVariable("appId") String appId, @PathVariable("zType") String type, @RequestParam(required=false) String agencyId) {
 		logger.debug("passed params: " + appId + ", " + type);
 		if(type == null || type.compareTo("") == 0){
-			return storage.getAllZone("all");
+			if(agencyId == null){
+				return storage.getAllZone("all");
+			} else {
+				return storage.getAllZoneByAgencyId(appId, agencyId);
+			}
 		} else {
-			return storage.getZoneByType(type, appId);
+			if(agencyId == null){
+				return storage.getZoneByType(type, appId);
+			} else {
+				return storage.getZoneByTypeAndAgencyId(type, appId, agencyId);
+			}
 		}
 	}
 	
@@ -444,8 +532,12 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/bikepoint")
 	@ApiOperation(value = "Get Bikepoints", notes = "Return bike point items")
 	public @ResponseBody
-	List<BikePointBean> getAllBikePointsNS(@PathVariable("appId") String appId) {
-		return storage.getAllBikePoints(appId);
+	List<BikePointBean> getAllBikePointsNS(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+		if(agencyId == null){
+			return storage.getAllBikePoints(appId);
+		} else {
+			return storage.getAllBikePointsByAgencyId(appId, agencyId);
+		}
 	}
 	
 	// Method open to get a single bike point
@@ -461,8 +553,12 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/nosec/{appId}/parkingstructure")
 	@ApiOperation(value = "Get Parkingstructures", notes = "Return parking structure items")
 	public @ResponseBody
-	List<ParkingStructureBean> getAllParkingStructureNS(@PathVariable("appId") String appId) {
-		return storage.getAllParkingStructure(appId);
+	List<ParkingStructureBean> getAllParkingStructureNS(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+		if(agencyId == null){
+			return storage.getAllParkingStructure(appId);
+		} else {
+			return storage.getAllParkingStructureByAgencyId(appId, agencyId);
+		}
 	}
 	
 	// Method open to retrieve all parking structure

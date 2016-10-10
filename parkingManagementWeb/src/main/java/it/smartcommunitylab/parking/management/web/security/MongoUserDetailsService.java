@@ -72,7 +72,6 @@ private org.springframework.security.core.userdetails.User userdetails;
      			   			getAuthorities(role));
         }
         
-        
 //            userdetails = new User(user.getUsername(), 
 //            					   user.getPassword(),
 //    		        			   enabled,

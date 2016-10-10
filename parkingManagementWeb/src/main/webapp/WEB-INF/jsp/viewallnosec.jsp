@@ -85,6 +85,7 @@ var conf_elements="<%=request.getAttribute("elements")%>";
 var conf_filters="<%=request.getAttribute("filters")%>";
 var conf_vehicle_type_list="<%=request.getAttribute("vehicle_type_list")%>";
 var conf_agency="<%=request.getAttribute("user_agency")%>";
+var conf_all_agencies="<%=request.getAttribute("all_agencies")%>";
 <%-- Prevent the backspace key from navigating back. --%>
 $(document).unbind('keydown').bind('keydown', function (event) {
     var doPrevent = false;
