@@ -823,13 +823,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	// area loading
    		if(localArea == null || localArea.length == 0){
    			$scope.getAllAreas();
-   		} else {
-   			//$scope.areaWS = localArea;
-   			//if($scope.vAreaMap){
-   			//	var toHide = $scope.vAreaMap.shapes;
-   			//	$scope.vAreaMap.shapes = gMapService.hideAllAreas(localArea, toHide);
-   			//}
-			//$scope.polygons = gMapService.getAreaPolygons();
+   			localArea = sharedDataService.getSharedLocalAreas();
    		}
   
        	if(tab.index == 1){
@@ -838,7 +832,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        			$scope.getAllAreas();
        		} else {
        			$scope.areaWS = localArea;
-       			$scope.polygons = gMapService.getAreaPolygons();
+       			//$scope.polygons = gMapService.getAreaPolygons();
        		}
        	}
        	if(tab.index >= 2 && tab.index <= 6){
