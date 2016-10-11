@@ -1528,16 +1528,24 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		var zIndexs = initializeService.getZFilterIndexes();
 		var zVals = initializeService.getZValues();
 		if(zIndexs && zIndexs.length > 0){
+			var agency = "";
+			var vals = "";
+			var type = "";
 			for(var i = 0; i < zIndexs.length; i++){
-				var type = $scope.getCorrectZoneTypeFromId(Number(zIndexs[i]) + 2);
-				var vals = [];
-				if(zVals[i].indexOf(",") > -1){
-					vals = zVals[i].split(",");
+				if(zIndexs[i] != "c"){
+					type = $scope.getCorrectZoneTypeFromId(Number(zIndexs[i]) + 2);
+					vals = [];
+					if(zVals[i].indexOf(",") > -1){
+						vals = zVals[i].split(",");
+					} else {
+						vals.push(zVals[i]);
+					}
 				} else {
-					vals.push(zVals[i]);
+					// case agency
+					agency = zVals[i];
 				}
-				$scope.findZoneByName(type, vals);
 			}
+			$scope.findZoneByName(type, vals, agency);
 			return true;
 		} else {
 			return false;
@@ -1759,12 +1767,12 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		});
 	};
 	
-	$scope.findZoneByName = function(z_type, names){
+	$scope.findZoneByName = function(z_type, names, agency){
 		var idAndCenter = [];
 		var ids = [];
 		var centers = [];
 		var allZones = [];
-		var myZonePromise = zoneService.getZonesFromDbNS(z_type);
+		var myZonePromise = zoneService.getZonesFromDbNS(z_type, agency);
 		myZonePromise.then(function(result){
 			angular.copy(result, allZones);
 	    	for(var j = 0; j < names.length; j++){
@@ -1782,9 +1790,9 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 			var zones_centers = centers;
 			if(zones_id.length == 0)zones_id = null;
 			$scope.hideAllMapElements();
-			var streetCall = $scope.getAllStreets(true, zones_id);
+			var streetCall = $scope.getAllStreets(true, zones_id, agency);
 			streetCall.then(function(resutl){
-				$scope.checkAndInitSharedZones(zones_id);
+				$scope.checkAndInitSharedZones(zones_id, agency);
 			});
 			// call a function for shared zones
 			$scope.parkingMetersMarkers = [];
