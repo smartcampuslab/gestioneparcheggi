@@ -305,7 +305,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     };
     
     var agencyId;
-    /*$scope.initComponents = function(){
+    $scope.initComponents = function(){
     	if($scope.logtabs == null || $scope.logtabs.length == 0){
     		var logAuxTabs = [];
 	    	var street_occ_tab_obj = {};
@@ -364,9 +364,10 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   	angular.copy(logAuxTabs, $scope.logtabs);
 		   	sharedDataService.setFluxViewTabs($scope.logtabs);
     	}
-    };*/
+    	$scope.agencyId = agencyId = sharedDataService.getConfUserAgency().id;
+    };
 
-    $scope.initComponents = function(){
+    /*$scope.initComponents = function(){
     	agencyId = sharedDataService.getConfUserAgency().id;
     	$scope.agencyId = agencyId = sharedDataService.getConfUserAgency().id;
 	    if($scope.logtabs == null || $scope.logtabs.length == 0){
@@ -441,7 +442,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		   	angular.copy(logAuxTabs, $scope.logtabs);
 		   	sharedDataService.setFluxViewTabs($scope.logtabs);
 	    }    
-    };
+    };*/
     
     //Area Component settings
     $scope.loadAreaAttributes = function(attributes){

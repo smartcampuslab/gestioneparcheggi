@@ -835,7 +835,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        			$scope.getAllAreas();
        		} else {
        			$scope.areaWS = localArea;
-       			//$scope.polygons = gMapService.getAreaPolygons();
+       			$scope.polygons = gMapService.getAreaPolygons();
        		}
        	}
        	if(tab.index >= 2 && tab.index <= 6){

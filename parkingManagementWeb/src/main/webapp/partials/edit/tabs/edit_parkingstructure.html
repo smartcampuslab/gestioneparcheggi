@@ -458,7 +458,6 @@
 						    		</div>
 								</th>
 								<th width="28%">
-
 									<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>&nbsp;
 									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
@@ -497,7 +496,6 @@
 							<tbody ng-if="!tabletWiew" class="animate-repeat"
 								ng-repeat="pstruct in filtered = (pstructWS | filter:nameFilter | filter:agencyPStructFilter) | orderBy:'name' | startFrom:currentPagePs*maxPStructs | limitTo:maxPStructs">
 								<tr>
-									<td width="1%" align="left"><span ng-show="psconf.ps_show_widget.visible"><i class="glyphicon glyphicon-map-marker" ng-show="pstruct.showInWidget" title="{{ 'img_view_in_widget_title' | i18n }}" alt="{{ 'img_view_in_widget_title' | i18n }}"></i></span></td>
 									<td align="left">
 										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
 										<span ng-show="!isMyAgency(pstruct.agencyId)">{{ pstruct.agencyId | agencyCodeToName }}</span>
