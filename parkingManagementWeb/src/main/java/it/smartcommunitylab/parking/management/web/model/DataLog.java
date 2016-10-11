@@ -23,6 +23,7 @@ public class DataLog {
 
 	private String id;
 	private String objId;
+	private String userAgencyId;
 	private Point location;
 	private String type;
 	private Long updateTime;
@@ -149,6 +150,14 @@ public class DataLog {
 
 	public void setHolyday(boolean isHolyday) {
 		this.isHolyday = isHolyday;
+	}
+
+	public String getUserAgencyId() {
+		return userAgencyId;
+	}
+
+	public void setUserAgencyId(String userAgencyId) {
+		this.userAgencyId = userAgencyId;
 	}
 
 }

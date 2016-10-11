@@ -27,12 +27,18 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// BP get method without security
-	this.getBikePointsFromDbNS = function(showBp){
+	this.getBikePointsFromDbNS = function(showBp, agencyId){
 		var markers = [];
 		var allBpoints = [];
 		var method = 'GET';
+		var params = null;
+		if(agencyId != null && agencyId != ""){
+			params = {
+				agencyId: agencyId
+			}
+		}
 		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/bikepoint", null, sharedDataService.getAuthHeaders(), null);
+		var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/bikepoint", params, sharedDataService.getAuthHeaders(), null);
 		myDataPromise.then(function(allBpoints){
 	    	allBpoints = gMapService.initAllBPObjects(allBpoints);	// The only solution found to retrieve all data;
 	    	sharedDataService.setSharedLocalBps(allBpoints);
@@ -60,10 +66,12 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// BP update method
 	this.updateBikePointInDb = function(bp, zone0, zone1, zone2, zone3, zone4, geometry, type, agencyId){
+		var username = sharedDataService.getName();
 		var id = bp.id;
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var method = 'PUT';
 		
@@ -102,10 +110,12 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// BP create method
 	this.createBikePointInDb = function(bp, zone0, zone1, zone2, zone3, zone4, geometry, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var myAgencyList = []
 		if(agencyId){
@@ -132,10 +142,12 @@ pm.service('bikePointService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// PM delete method
 	this.deleteBikePointInDb = function(bp, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/bikepoint/" + bp.id , params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){

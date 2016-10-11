@@ -90,6 +90,66 @@ vehicleTypes:
     description: posti per camper
     language_key: camper_vehicle
   - name: Car
+    appId: tn
+    userName: comunetrento2
+    description: posti per automobile
+    language_key: car_vehicle
+  - name: Moto
+    appId: tn
+    userName: comunetrento2
+    description: posti per moto
+    language_key: moto_vehicle
+  - name: Taxi
+    appId: tn
+    userName: comunetrento2
+    description: posti per taxi
+    language_key: taxi_vehicle
+  - name: Bus
+    appId: tn
+    userName: comunetrento2
+    description: posti per autobus
+    language_key: autobus_vehicle
+  - name: Rack
+    appId: tn
+    userName: comunetrento2
+    description: posti per bici
+    language_key: bike_vehicle
+  - name: Camper
+    appId: tn
+    userName: comunetrento2
+    description: posti per camper
+    language_key: camper_vehicle
+  - name: Car
+    appId: tn
+    userName: comunetrento3
+    description: posti per automobile
+    language_key: car_vehicle
+  - name: Moto
+    appId: tn
+    userName: comunetrento3
+    description: posti per moto
+    language_key: moto_vehicle
+  - name: Taxi
+    appId: tn
+    userName: comunetrento3
+    description: posti per taxi
+    language_key: taxi_vehicle
+  - name: Bus
+    appId: tn
+    userName: comunetrento3
+    description: posti per autobus
+    language_key: autobus_vehicle
+  - name: Rack
+    appId: tn
+    userName: comunetrento3
+    description: posti per bici
+    language_key: bike_vehicle
+  - name: Camper
+    appId: tn
+    userName: comunetrento3
+    description: posti per camper
+    language_key: camper_vehicle
+  - name: Car
     appId: rv
     userName: rovereto1
     description: posti per automobile

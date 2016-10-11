@@ -72,7 +72,6 @@ private org.springframework.security.core.userdetails.User userdetails;
      			   			getAuthorities(role));
         }
         
-        
 //            userdetails = new User(user.getUsername(), 
 //            					   user.getPassword(),
 //    		        			   enabled,
@@ -107,7 +106,8 @@ private org.springframework.security.core.userdetails.User userdetails;
     
     public ObjectShowSetting getObjectShowDetails(String username){
     	UserSetting user = userSetup.findUserByUsername(username);
-    	return objectShowSetup.findProviderByAppId(user.getAppId());
+    	return objectShowSetup.findProviderById(user.getId());
+    	//return objectShowSetup.findProviderByAppId(user.getAppId());
     }
     
     public ObjectShowSetting getObjectShowDetailsByAppId(String appId){

@@ -14,6 +14,7 @@ public class Agency {
 	private int structure;	// permissions in ps: 0 no, 1 read, 2 update, 3 create-delete;
 	private int parkingmeter;	// permissions in pm: 0 no, 1 read, 2 update, 3 create-delete;
 	private int bike;	// permissions in bike: 0 no, 1 read, 2 update, 3 create-delete;
+	private String dbref;
 	
 	public String getId() {
 		return id;
@@ -87,6 +88,14 @@ public class Agency {
 		this.bike = bike;
 	}
 	
+	public String getDbref() {
+		return dbref;
+	}
+
+	public void setDbref(String dbref) {
+		this.dbref = dbref;
+	}
+
 	public Map<String, Object> toMap(){
 		Map<String,Object> comp = new HashMap<String,Object>();
 		comp.put("id", id);
@@ -98,6 +107,7 @@ public class Agency {
 		comp.put("structure", structure);
 		comp.put("parkingmeter", parkingmeter);
 		comp.put("bike", bike);
+		comp.put("dbref", dbref);
 		return comp;
 	}
 

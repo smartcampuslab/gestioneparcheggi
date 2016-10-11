@@ -1,6 +1,7 @@
 package it.smartcommunitylab.parking.management.web.utils;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,6 +63,15 @@ public class AgencyDataSetup {
 		} else {
 			return null;
 		}
+	}
+	
+	@SuppressWarnings("rawtypes")
+	public List<Map> getAllAgencyMaps() {
+		List<Map> allAgencies = new ArrayList<Map>();
+		for(int i = 0; i < agencies.size(); i++){
+			allAgencies.add(agencies.get(i).toMap());
+		}
+		return allAgencies;
 	}
 
 }

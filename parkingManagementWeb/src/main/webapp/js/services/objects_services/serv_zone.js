@@ -20,11 +20,17 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 	};
 	
 	// Get zones from DB method without service
-	this.getZonesFromDbNS = function(z_type){
+	this.getZonesFromDbNS = function(z_type, agencyId){
 		var allZones = [];
 		var method = 'GET';
+		var params = null;
+		if(agencyId != null && agencyId != ""){
+			params = {
+				agencyId: agencyId
+			}
+		}
 		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/zone/" + z_type, null, sharedDataService.getAuthHeaders(), null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/zone/" + z_type, params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allZones){
 	    	
 	    });
@@ -45,10 +51,12 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 	
 	// Zone update method
 	this.updateZoneInDb = function(zone, myColor, center, corrType, editCorrectedPath, agencyId){
+		var username = sharedDataService.getName();
 		var id = zone.id;
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var method = 'PUT';
 		
@@ -77,10 +85,12 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 	
 	// Zone create method
 	this.createZoneInDb = function(zone, myColor, center, corrType, newCorrectedPath, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var myAgencyList = []
 		if(agencyId){
@@ -110,10 +120,12 @@ pm.service('zoneService', ['$rootScope', 'invokeWSService', 'sharedDataService',
 	
 	// Zone delete method
 	this.deleteZoneInDb = function(zone, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId	
+			agencyId: agencyId,
+			username: username
 		};
 		
 		var myDataPromise = invokeWSService.getProxy(method, appId + "/zone/" + zone.id, params, sharedDataService.getAuthHeaders(), null);

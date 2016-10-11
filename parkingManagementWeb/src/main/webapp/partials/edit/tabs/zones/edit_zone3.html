@@ -128,7 +128,8 @@
 					<div class="tablewrapper">
 						<table class="table table-striped" style="width: 100%">
 							<tr ng-show="zoneWS.length != 0">
-								<th width="10%">
+								<th width="15%">
+									<span ng-show="zpc.att.zone_name.visible">{{ 'agency_title' | i18n }}</span>
 									<a href ng-click="showAgencyZFilter();currentPageZ=0" ng-show="!showAgencyZoneFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
 									<a href ng-click="agencyZoneFilter=null;hideAgencyZFilter()" ng-show="showAgencyZoneFilter" alt="{{ 'filter_agency_title' | i18n }}" title="{{ 'filter_agency_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showAgencyZoneFilter">
@@ -148,13 +149,14 @@
 								<th class="myCenter"><span ng-show="zpc.att.zone_submacro.visible">{{ 'zone_submacro' | i18n }}</span></th>
 								<th class="myCenter"><span ng-show="zpc.att.zone_submicro.visible">{{ 'zone_submicro' | i18n }}</span></th>
 								<th width="5%"><span ng-show="zpc.att.zone_color.visible">{{ 'zone_color' | i18n }}</span></th>
-								<th width="20%" class="myCenter">{{ 'operations' | i18n }}</th>
+								<th width="25%" class="myCenter">{{ 'operations' | i18n }}</th>
 							</tr>
 							<tbody class="animate-repeat"
 								ng-repeat="zone in filtered = (zoneWS | filter:nameFilter | filter:agencyZoneFilter) | orderBy: ['name', 'submacro'] |  startFrom:currentPageZ*maxZones | limitTo:maxZones">
 								<tr>
 									<td align="left">
 										<span ng-show="isMyAgency(zone.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
+										<span ng-show="!isMyAgency(zone.agencyId)">{{ zone.agencyId | agencyCodeToName }}</span>
 									</td>
 									<td align="left"><span ng-show="zpc.att.zone_name.visible">{{zone.name}}</span></td>
 									<td align="center"><span ng-show="zpc.att.zone_submacro.visible">{{zone.submacro}}</span></td>

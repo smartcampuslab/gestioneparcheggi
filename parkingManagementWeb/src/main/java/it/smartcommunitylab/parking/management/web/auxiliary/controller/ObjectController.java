@@ -87,57 +87,57 @@ public class ObjectController  {
 	} 
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/all") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgency(agency, skip, count);
+		return dataService.findAllLogsByAgency(agency, userAgency, skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/all/count") 
-	public @ResponseBody Long getAllTPLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgency(agency);
+	public @ResponseBody Long getAllTPLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgency(agency, userAgency);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPParkingLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPParkingLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgencyAndType(agency, Parking.class.getCanonicalName(), skip, count);
+		return dataService.findAllLogsByAgencyAndType(agency, userAgency, Parking.class.getCanonicalName(), skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkings/count") 
-	public @ResponseBody Long getAllTPParkingLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgencyAndType(agency, Parking.class.getCanonicalName());
+	public @ResponseBody Long getAllTPParkingLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgencyAndType(agency,  userAgency, Parking.class.getCanonicalName());
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkstructs") 
-	public @ResponseBody List<DataLogBeanTP> getAllParkStructsLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody List<DataLogBeanTP> getAllParkStructsLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgencyAndType(agency, ParkStruct.class.getCanonicalName(), skip, count);
+		return dataService.findAllLogsByAgencyAndType(agency, userAgency, ParkStruct.class.getCanonicalName(), skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkstructs/count") 
-	public @ResponseBody Long getAllTPParkStructsLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgencyAndType(agency, ParkStruct.class.getCanonicalName());
+	public @ResponseBody Long getAllTPParkStructsLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgencyAndType(agency, userAgency, ParkStruct.class.getCanonicalName());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkmeters") 
-	public @ResponseBody List<DataLogBeanTP> getAllParkMetersLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody List<DataLogBeanTP> getAllParkMetersLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgencyAndType(agency, ParkMeter.class.getCanonicalName(), skip, count);
+		return dataService.findAllLogsByAgencyAndType(agency, userAgency, ParkMeter.class.getCanonicalName(), skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/parkmeters/count") 
-	public @ResponseBody Long getAllParkMetersLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgencyAndType(agency, ParkMeter.class.getCanonicalName());
+	public @ResponseBody Long getAllParkMetersLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgencyAndType(agency, userAgency, ParkMeter.class.getCanonicalName());
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets") 
-	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+	public @ResponseBody Iterable<DataLogBeanTP> getAllTPStreetLogs(@PathVariable String agency, @RequestParam(required=true) String userAgency, @RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
-		return dataService.findAllLogsByAgencyAndType(agency, Street.class.getCanonicalName(), skip, count);
+		return dataService.findAllLogsByAgencyAndType(agency, userAgency, Street.class.getCanonicalName(), skip, count);
 	}
 	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/tplog/streets/count") 
-	public @ResponseBody Long getAllTPStreetLogsCount(@PathVariable String agency) {
-		return dataService.countAllLogsByAgencyAndType(agency, Street.class.getCanonicalName());
+	public @ResponseBody Long getAllTPStreetLogsCount(@PathVariable String agency, @RequestParam(required=true) String userAgency) {
+		return dataService.countAllLogsByAgencyAndType(agency, userAgency, Street.class.getCanonicalName());
 	}
 
 //	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/{agency}/log/all/{skip}") 
@@ -228,9 +228,10 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/{id}/{userId:.*}") 
-	public @ResponseBody String updateParking(@RequestBody Parking parking, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParking(@RequestBody Parking parking, 
+			@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			dataService.updateDynamicParkingData(parking, agency, userId, isSysLog, period, NO_PERIOD);
+			dataService.updateDynamicParkingData(parking, agency, userId, userAgencyId, isSysLog, username, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -239,13 +240,14 @@ public class ObjectController  {
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/{id}/{userId:.*}") 
-	public @ResponseBody String updateStreet(@RequestBody Street street, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreet(@RequestBody Street street, 
+			@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
 			if(period != null){
 				logger.debug("Inserted period = " + period[0] + "-" + period[1] );
 			}
-			dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, NO_PERIOD);
+			dataService.updateDynamicStreetData(street, agency, userId, userAgencyId, isSysLog, username, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -254,10 +256,10 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/{id}/{userId:.*}") 
-	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, isSysLog, from, to, period, NO_PERIOD);
+			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, userAgencyId, isSysLog, username, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -266,10 +268,11 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/{id}/{userId:.*}") 
-	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkStructProfitData(@RequestBody ParkStruct parkStruct, 
+			@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period, NO_PERIOD);
+			dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, userAgencyId, isSysLog, username, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -278,7 +281,8 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkings/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingList(@RequestBody Map<String, Object> data, 
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
@@ -446,7 +450,7 @@ public class ObjectController  {
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							park.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingData(park, agency, userId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicParkingData(park, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
 						}
 					}
 				}
@@ -460,7 +464,8 @@ public class ObjectController  {
 	}	
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
-	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId,  @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, 
+			@RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
@@ -635,7 +640,7 @@ public class ObjectController  {
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -649,7 +654,7 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload2/{userId:.*}") 
-	public @ResponseBody String updateStreetListWithFile(@RequestParam("tData") MultipartFile data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateStreetListWithFile(@RequestParam("tData") MultipartFile data, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			
 			File convFile = new File(data.getOriginalFilename());
@@ -778,7 +783,7 @@ public class ObjectController  {
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, isSysLog, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -792,7 +797,8 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkingmeters/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkingMeterList(@RequestBody Map<String, Object> data, 
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			logger.debug("started file uplodad flux");
 			String datas = data.get("logData").toString();
@@ -805,14 +811,22 @@ public class ObjectController  {
 					for(int i = 0; i < profits.size(); i++){
 						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
 							int profit = (int)(Double.parseDouble(profits.get(i)) * 100);
-							int ticket = Integer.parseInt(tickets.get(i));
+							int ticket = -1;
+							if(tickets != null && tickets.size() > 0){
+								try {
+									String tik = tickets.get(i);
+									ticket = Integer.parseInt(tik);
+								} catch(NullPointerException ne){
+									logger.error("No ticket retrieve. " + ne.getMessage());
+								}
+							}
 							parking.setProfit(profit);
 							parking.setTickets(ticket);
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							//period = dataService.getPeriodFromYearAndMonth(year, i);
 							parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingMeterData(parking, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
+							dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, from, to, period, MONTH_PERIOD);
 						}
 					}
 				} else {
@@ -828,7 +842,8 @@ public class ObjectController  {
 	}
 	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/parkstructprofit/fileupload/{userId:.*}") 
-	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, @RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
+	public @ResponseBody String updateParkStructProfitListData(@RequestBody Map<String, Object> data, 
+			@RequestParam(required=true) String agencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			
 			logger.debug("started file uplodad flux");
@@ -849,7 +864,7 @@ public class ObjectController  {
 							period = null;
 							//period = dataService.getPeriodFromYearAndMonth(year, i);
 							parkStruct.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, isSysLog, from, to, period, MONTH_PERIOD);
+							dataService.updateDynamicParkStructProfitData(parkStruct, agency, userId, agencyId, isSysLog, username, from, to, period, MONTH_PERIOD);
 						}
 					}
 				} else {
@@ -867,7 +882,7 @@ public class ObjectController  {
 	// --------------------------------- Part for csv files creation ------------------------------------
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/globallogs/csv")
 	public @ResponseBody
-	String createStreetCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+	String createAllLogCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
 		ArrayList<DataLogBean> logAllData = new ArrayList<DataLogBean>();
 		
 		String createdFile = "";
@@ -912,15 +927,42 @@ public class ObjectController  {
 			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
 			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
 			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
-			    	log_value.put("slotsFree", (!value.isNull("slotsFree")) ? value.getInt("slotsFree") : 0);
-			    	log_value.put("slotsOccupiedOnFree", (!value.isNull("slotsOccupiedOnFree")) ? value.getInt("slotsOccupiedOnFree") : 0);
-			    	log_value.put("slotsTimed", (!value.isNull("slotsTimed")) ? value.getInt("slotsTimed") : 0);
-			    	log_value.put("slotsOccupiedOnTimed", (!value.isNull("slotsOccupiedOnTimed")) ? value.getInt("slotsOccupiedOnTimed") : 0);
-			    	log_value.put("slotsPaying", (!value.isNull("slotsPaying")) ? value.getInt("slotsPaying") : 0);
-			    	log_value.put("slotsOccupiedOnPaying", (!value.isNull("slotsOccupiedOnPaying")) ? value.getInt("slotsOccupiedOnPaying") : 0);
-			    	log_value.put("slotsHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
-			    	log_value.put("slotsOccupiedOnHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
-			    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	if(value.isNull("slotsConfiguration")){
+			    		log_value.put("slotsFree", (!value.isNull("slotsFree")) ? value.getInt("slotsFree") : 0);
+			    		log_value.put("slotsOccupiedOnFree", (!value.isNull("slotsOccupiedOnFree")) ? value.getInt("slotsOccupiedOnFree") : 0);
+			    		log_value.put("slotsTimed", (!value.isNull("slotsTimed")) ? value.getInt("slotsTimed") : 0);
+			    		log_value.put("slotsOccupiedOnTimed", (!value.isNull("slotsOccupiedOnTimed")) ? value.getInt("slotsOccupiedOnTimed") : 0);
+			    		log_value.put("slotsPaying", (!value.isNull("slotsPaying")) ? value.getInt("slotsPaying") : 0);
+			    		log_value.put("slotsOccupiedOnPaying", (!value.isNull("slotsOccupiedOnPaying")) ? value.getInt("slotsOccupiedOnPaying") : 0);
+			    		log_value.put("slotsHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
+			    		log_value.put("slotsOccupiedOnHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
+			    		log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	} else {
+			    		JSONArray slotsConf = value.getJSONArray("slotsConfiguration");
+			    		JSONObject slotConf = slotsConf.getJSONObject(0);
+			    		log_value.put("slotsFree", (!slotConf.isNull("freeParkSlotNumber")) ? slotConf.getInt("freeParkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnFree", (!slotConf.isNull("freeParkSlotOccupied")) ? slotConf.getInt("freeParkSlotOccupied") : 0);
+			    		log_value.put("slotsFreeSigned", (!slotConf.isNull("freeParkSlotSignNumber")) ? slotConf.getInt("freeParkSlotSignNumber") : 0);
+			    		log_value.put("slotsOccupiedOnFreeSigned", (!slotConf.isNull("freeParkSlotSignOccupied")) ? slotConf.getInt("freeParkSlotSignOccupied") : 0);
+			    		log_value.put("slotsTimed", (!slotConf.isNull("timedParkSlotNumber")) ? slotConf.getInt("timedParkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnTimed", (!slotConf.isNull("timedParkSlotOccupied")) ? slotConf.getInt("timedParkSlotOccupied") : 0);
+			    		log_value.put("slotsPaying", (!slotConf.isNull("paidSlotNumber")) ? slotConf.getInt("paidSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnPaying", (!slotConf.isNull("paidSlotOccupied")) ? slotConf.getInt("paidSlotOccupied") : 0);
+			    		log_value.put("slotsHandicapped", (!slotConf.isNull("handicappedSlotNumber")) ? slotConf.getInt("handicappedSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnHandicapped", (!slotConf.isNull("handicappedSlotOccupied")) ? slotConf.getInt("handicappedSlotOccupied") : 0);
+			    		log_value.put("slotsReserved", (!slotConf.isNull("reservedSlotNumber")) ? slotConf.getInt("reservedSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnReserved", (!slotConf.isNull("reservedSlotOccupied")) ? slotConf.getInt("reservedSlotOccupied") : 0);
+			    		log_value.put("slotsRechargeable", (!slotConf.isNull("rechargeableSlotNumber")) ? slotConf.getInt("rechargeableSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnRechargeable", (!slotConf.isNull("rechargeableSlotOccupied")) ? slotConf.getInt("rechargeableSlotOccupied") : 0);
+			    		log_value.put("slotsCarSharing", (!slotConf.isNull("carSharingSlotNumber")) ? slotConf.getInt("carSharingSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnCarSharing", (!slotConf.isNull("carSharingSlotOccupied")) ? slotConf.getInt("carSharingSlotOccupied") : 0);
+			    		log_value.put("slotsLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotNumber")) ? slotConf.getInt("loadingUnloadingSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotOccupied")) ? slotConf.getInt("loadingUnloadingSlotOccupied") : 0);
+			    		log_value.put("slotsPink", (!slotConf.isNull("pinkSlotNumber")) ? slotConf.getInt("pinkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnPink", (!slotConf.isNull("pinkSlotOccupied")) ? slotConf.getInt("pinkSlotOccupied") : 0);
+			    		log_value.put("slotsUnavailable", (!slotConf.isNull("unusuableSlotNumber")) ? slotConf.getInt("unusuableSlotNumber") : 0);
+			    		log_value.put("vehicleType", (!slotConf.isNull("vehicleType")) ? slotConf.getString("vehicleType") : "Car");
+			    	}
 			    	log_value.put("polyline", (!value.isNull("polyline")) ? value.getString("polyline") : "n.p.");
 			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
 			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
@@ -933,9 +975,36 @@ public class ObjectController  {
 			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
 			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
 			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
-			    	log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
-			    	log_value.put("slotsOccupiedOnTotal", (!value.isNull("slotsOccupiedOnTotal")) ? value.getInt("slotsOccupiedOnTotal") : 0);
-			    	log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	if(value.isNull("slotsConfiguration")){
+			    		log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
+			    		log_value.put("slotsOccupiedOnTotal", (!value.isNull("slotsOccupiedOnTotal")) ? value.getInt("slotsOccupiedOnTotal") : 0);
+			    		log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+			    	} else {
+			    		JSONArray slotsConf = value.getJSONArray("slotsConfiguration");
+			    		JSONObject slotConf = slotsConf.getJSONObject(0);
+			    		log_value.put("slotsFree", (!slotConf.isNull("freeParkSlotNumber")) ? slotConf.getInt("freeParkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnFree", (!slotConf.isNull("freeParkSlotOccupied")) ? slotConf.getInt("freeParkSlotOccupied") : 0);
+			    		log_value.put("slotsFreeSigned", (!slotConf.isNull("freeParkSlotSignNumber")) ? slotConf.getInt("freeParkSlotSignNumber") : 0);
+			    		log_value.put("slotsOccupiedOnFreeSigned", (!slotConf.isNull("freeParkSlotSignOccupied")) ? slotConf.getInt("freeParkSlotSignOccupied") : 0);
+			    		log_value.put("slotsTimed", (!slotConf.isNull("timedParkSlotNumber")) ? slotConf.getInt("timedParkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnTimed", (!slotConf.isNull("timedParkSlotOccupied")) ? slotConf.getInt("timedParkSlotOccupied") : 0);
+			    		log_value.put("slotsPaying", (!slotConf.isNull("paidSlotNumber")) ? slotConf.getInt("paidSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnPaying", (!slotConf.isNull("paidSlotOccupied")) ? slotConf.getInt("paidSlotOccupied") : 0);
+			    		log_value.put("slotsHandicapped", (!slotConf.isNull("handicappedSlotNumber")) ? slotConf.getInt("handicappedSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnHandicapped", (!slotConf.isNull("handicappedSlotOccupied")) ? slotConf.getInt("handicappedSlotOccupied") : 0);
+			    		log_value.put("slotsReserved", (!slotConf.isNull("reservedSlotNumber")) ? slotConf.getInt("reservedSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnReserved", (!slotConf.isNull("reservedSlotOccupied")) ? slotConf.getInt("reservedSlotOccupied") : 0);
+			    		log_value.put("slotsRechargeable", (!slotConf.isNull("rechargeableSlotNumber")) ? slotConf.getInt("rechargeableSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnRechargeable", (!slotConf.isNull("rechargeableSlotOccupied")) ? slotConf.getInt("rechargeableSlotOccupied") : 0);
+			    		log_value.put("slotsCarSharing", (!slotConf.isNull("carSharingSlotNumber")) ? slotConf.getInt("carSharingSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnCarSharing", (!slotConf.isNull("carSharingSlotOccupied")) ? slotConf.getInt("carSharingSlotOccupied") : 0);
+			    		log_value.put("slotsLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotNumber")) ? slotConf.getInt("loadingUnloadingSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotOccupied")) ? slotConf.getInt("loadingUnloadingSlotOccupied") : 0);
+			    		log_value.put("slotsPink", (!slotConf.isNull("pinkSlotNumber")) ? slotConf.getInt("pinkSlotNumber") : 0);
+			    		log_value.put("slotsOccupiedOnPink", (!slotConf.isNull("pinkSlotOccupied")) ? slotConf.getInt("pinkSlotOccupied") : 0);
+			    		log_value.put("slotsUnavailable", (!slotConf.isNull("unusuableSlotNumber")) ? slotConf.getInt("unusuableSlotNumber") : 0);
+			    		log_value.put("vehicleType", (!slotConf.isNull("vehicleType")) ? slotConf.getString("vehicleType") : "Car");
+			    	}
 			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
 			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
 		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct") == 0){

@@ -10,6 +10,7 @@ public class RatePeriod {
 	private String to;
 	private List<String> weekDays;
 	private String timeSlot;
+	private List<Period> timeSlots;
 	private Integer rateValue;
 	private String note;
 	private String dayOrNight;
@@ -77,6 +78,14 @@ public class RatePeriod {
 
 	public void setDayOrNight(String dayOrNight) {
 		this.dayOrNight = dayOrNight;
+	}
+
+	public List<Period> getTimeSlots() {
+		return timeSlots;
+	}
+
+	public void setTimeSlots(List<Period> timeSlots) {
+		this.timeSlots = timeSlots;
 	}
 
 }

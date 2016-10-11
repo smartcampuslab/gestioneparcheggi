@@ -40,6 +40,7 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 	this.conf_show_bp;
 	this.conf_show_zone;
 	this.conf_user_agency;
+	this.conf_all_agencies;
 	
 	this.ueCitizen = false;
 	this.familyAllowances = false;
@@ -342,6 +343,34 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
     
     this.getConfUserAgency = function(){
     	return this.conf_user_agency;
+    };
+    
+    this.setAllAgencies = function(list){
+    	this.conf_all_agencies = list;
+    };
+    
+    this.getAllAgencies = function(){
+    	return this.conf_all_agencies;
+    };
+    
+    this.getAgenciesByDbId = function(dbId){
+    	var myAgenciesData = [];
+    	for(var i = 0; i < this.conf_all_agencies.length; i++){
+    		if(this.conf_all_agencies[i].dbref == dbId){
+    			myAgenciesData.push(this.conf_all_agencies[i])
+    		}
+    	}
+    	return myAgenciesData;
+    };
+    
+    this.getAgencyNameById = function(agencyId){
+    	var myAgenciesData = [];
+    	for(var i = 0; i < this.conf_all_agencies.length; i++){
+    		if(this.conf_all_agencies[i].id == agencyId){
+    			return this.conf_all_agencies[i].name;
+    		}
+    	}
+    	return "";
     };
     
     this.getAgencyPermissionsForObject = function(obj){
@@ -1593,6 +1622,47 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 			}
 		}
 		return myPayment;
+	};
+	
+	// Method correctTimeSlots: used to transform the timeSlot in string format to an array of from-to objects
+	this.correctTimeSlots = function(timeSlot){
+		var corrTimeSlot = []
+		if(timeSlot){
+			if(timeSlot.indexOf("/") != -1){
+				// case of multiple time slots
+				var tss = timeSlot.split("/");
+				for(var i = 0; i < tss.length; i++){
+					var ts = tss[i];
+					var ts_all = ts.split("-");
+					var corrTs = {
+						from: ts_all[0].trim(),
+						to: ts_all[1].trim()
+					};
+					corrTimeSlot.push(corrTs);
+				}
+			} else {
+				// case of single time slot
+				var ts_all = timeSlot.split("-");
+				var corrTs = {
+					from: ts_all[0].trim(),
+					to: ts_all[1].trim()
+				};
+				corrTimeSlot.push(corrTs);
+			}
+		}
+		return corrTimeSlot;
+	};
+	
+	// Method correctTimeSlotsToString: used to transform the timeSlots object array in a formatted string
+	this.correctTimeSlotsToString = function(timeSlots){
+		var corrTimeSlotString = "";
+		if(timeSlots){
+			for(var i = 0; i < timeSlots.length; i++){
+				corrTimeSlotString = timeSlots[i].from + "-" + timeSlots[i].to + " / ";
+			}
+			corrTimeSlotString = corrTimeSlotString.substring(0, corrTimeSlotString.length - 2);
+		}
+		return corrTimeSlotString;
 	};
 	
 	//Useful method to redirect to login and show session timeout modal

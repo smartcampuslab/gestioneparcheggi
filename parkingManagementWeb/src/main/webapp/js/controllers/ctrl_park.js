@@ -417,6 +417,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	$scope.psPermissions = sharedDataService.getAgencyPermissionsForObject("structure");
 	    	$scope.pmPermissions = sharedDataService.getAgencyPermissionsForObject("parkingmeter");
 	    	$scope.bikePermissions = sharedDataService.getAgencyPermissionsForObject("bike");
+	    	var appId = sharedDataService.getConfAppId();
+	    	var agenciesConf = sharedDataService.getAgenciesByDbId(appId);
 	    	$scope.allAgencyFilter = [{
 	    		id: "",
 	    		name: "Tutto"
@@ -424,6 +426,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		id: agencyId,
 	    		name: "Miei dati"
 	    	}];
+	    	for(var i = 0; i < agenciesConf.length; i ++){
+	    		if(agenciesConf[i].id != agencyId){
+	    			var tmpAgency = {
+	    				id: agenciesConf[i].id,
+	    				name: agenciesConf[i].name
+	    			};
+	    			$scope.allAgencyFilter.push(tmpAgency);
+	    		}
+	    	}
+	    	$scope.agencyAreaFilter = "";		// default value
+	    	$scope.agencyBPointFilter = "";		// default value
+	    	$scope.agencyPMeterFilter = "";		// default value
+	    	$scope.agencyPStructFilter = ""; 	// default value
+	    	$scope.agencyStreetFilter = ""; 	// default value
+	    	$scope.agencyZoneFilter = "";		// default value
 	    	angular.copy(parktabs, $scope.editparktabs);
     	}
     };
@@ -449,6 +466,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    to: "31/12",
 	    weekDays: [true, true, true, true, true, true, true],
 	    timeSlot: "00:00 - 23:59",
+	    timeSlots: [
+	        {
+	        	from: "00:00",
+	        	to: "23:59"
+	        }
+	    ],
 	    rateValue: 0.0,
 	    //dayOrNight: $scope.all_mode,
 	    holiday: false,
@@ -466,6 +489,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	to: "31/12",
 	    	weekDays: [true, true, true, true, true, true, true],
 	    	timeSlot: null,
+	    	timeSlots: [],
 	    	rateValue: 0.0,
 	    	//dayOrNight: $scope.all_mode,
 	    	holiday: false,
@@ -640,6 +664,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	}
     };
     
+    $scope.getCorrectTimeSlotsToString = function(timeSlots){
+    	return sharedDataService.correctTimeSlotsToString(timeSlots);
+    };
+    
     $scope.getWeekDaysFromArray = function(weekDaysBool, type){
     	var weekDaysString = [];
     	if(type == 0){
@@ -726,6 +754,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	return hoursArray;
     };
     
+    $scope.getHourSlotsFromTimePeriodArray = function(timePeriods){
+    	var hoursArray = [];
+    	var values = timePeriods;
+    	for(var i = 0; i < values.length; i++){
+    		hoursArray.push(values[i].from + " - " + values[i].to);
+    	}
+    	return hoursArray;
+    };
+    
     // -------------------------------------------------------------------------------------------------
     
     $scope.checkIfObjectOnViewPage = function(object){
@@ -789,13 +826,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	// area loading
    		if(localArea == null || localArea.length == 0){
    			$scope.getAllAreas();
-   		} else {
-   			//$scope.areaWS = localArea;
-   			//if($scope.vAreaMap){
-   			//	var toHide = $scope.vAreaMap.shapes;
-   			//	$scope.vAreaMap.shapes = gMapService.hideAllAreas(localArea, toHide);
-   			//}
-			//$scope.polygons = gMapService.getAreaPolygons();
+   			localArea = sharedDataService.getSharedLocalAreas();
    		}
   
        	if(tab.index == 1){
@@ -804,7 +835,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        			$scope.getAllAreas();
        		} else {
        			$scope.areaWS = localArea;
-       			$scope.polygons = gMapService.getAreaPolygons();
+       			//$scope.polygons = gMapService.getAreaPolygons();
        		}
        	}
        	if(tab.index >= 2 && tab.index <= 6){

@@ -211,6 +211,7 @@ pm.service('initializeService', function(){
 	this.filterZone2 = false;
 	this.filterZone3 = false;
 	this.filterZone4 = false;
+	this.filterAgency = false;
 	this.showZone0 = false;
 	this.showZone1 = false;
 	this.showZone2 = false;
@@ -554,6 +555,14 @@ pm.service('initializeService', function(){
 	
 	this.isFilterZone4 = function(){
 		return this.filterZone4;
+	};
+	
+	this.setFilterAgency = function(value){
+		this.filterAgency = value;
+	};
+	
+	this.isFilterAgency = function(){
+		return this.filterAgency;
 	};
 	
 	this.isWidgetAreaShowed = function(){

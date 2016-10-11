@@ -81,6 +81,8 @@ public class DashboardController {
 	private static final Logger logger = Logger
 			.getLogger(DashboardController.class);
 
+	private static final String ALL = "all";
+	
 	@Autowired
 	StorageManager storage;
 	
@@ -235,16 +237,16 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/parkingstructures")
 	public @ResponseBody
-	List<ParkingStructureBean> getAllParkingStructureOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	List<ParkingStructureBean> getAllParkingStructureOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=true) String agencyId) throws Exception {
 		String type = Parking.class.getCanonicalName();
-		return dynamic.getOccupationRateFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		return dynamic.getOccupationRateFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancychanged/{appId}/parkingstructures")
 	public @ResponseBody
-	List<CompactParkingStructureBean> getAllParkingStructureChangedOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	List<CompactParkingStructureBean> getAllParkingStructureChangedOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=true) String agencyId) throws Exception {
 		String type = Parking.class.getCanonicalName();
-		return dynamic.getOccupationChangesFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		return dynamic.getOccupationChangesFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/street/{id}")
@@ -291,7 +293,7 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancy/{appId}/streets")
 	public @ResponseBody
-	List<StreetBean> getAllStreetOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	List<StreetBean> getAllStreetOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=true) String agencyId) throws Exception {
 //		int year_f = (year!= null && year.length > 0) ? year[0] : 0;
 //		int year_t = (year!= null && year.length > 1) ? year[1] : 0;
 //		int month_f = (month!= null && month.length > 0) ? month[0] : 0;
@@ -307,12 +309,12 @@ public class DashboardController {
 //		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
 //		logger.info(String.format("Parameters retrieved in back-end request for streets: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d,%d,%d,%d,%d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_1, weekday_2, weekday_3, weekday_4, weekday_5, weekday_6, weekday_7, hour_f, hour_t, valueType));
 		String type = Street.class.getCanonicalName();
-		return dynamic.getOccupationRateFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		return dynamic.getOccupationRateFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/occupancychanged/{appId}/streets")
 	public @ResponseBody
-	List<CompactStreetBean> getAllStreetChangedOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	List<CompactStreetBean> getAllStreetChangedOccupancy(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=true) String agencyId) throws Exception {
 //		int year_f = (year!= null && year.length > 0) ? year[0] : 0;
 //		int year_t = (year!= null && year.length > 1) ? year[1] : 0;
 //		int month_f = (month!= null && month.length > 0) ? month[0] : 0;
@@ -328,21 +330,21 @@ public class DashboardController {
 //		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
 //		logger.info(String.format("Parameters retrieved in back-end request for streets: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d,%d,%d,%d,%d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_1, weekday_2, weekday_3, weekday_4, weekday_5, weekday_6, weekday_7, hour_f, hour_t, valueType));
 		String type = Street.class.getCanonicalName();
-		return dynamic.getOccupationChangesFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		return dynamic.getOccupationChangesFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkingmeters")
 	public @ResponseBody
-	List<ParkingMeterBean> getAllParkingMetersProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+	List<ParkingMeterBean> getAllParkingMetersProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=true) String agencyId) throws Exception {
 		String type = ParkMeter.class.getCanonicalName();
-		return dynamic.getProfitFromAllParkingMeters(appId, type, null, year, month, dayType, weekday, hour, valueType);
+		return dynamic.getProfitFromAllParkingMeters(appId, type, null, year, month, dayType, weekday, hour, valueType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkingmeter/{id}")
 	public @ResponseBody
-	ParkingMeterBean getParkingMeterProfit(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+	ParkingMeterBean getParkingMeterProfit(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=true) String agencyId) throws Exception {
 		String type = ParkMeter.class.getCanonicalName();
-		return dynamic.getProfitFromParkingMeter(id, appId, type, null, year, month, dayType, weekday, hour, valueType);
+		return dynamic.getProfitFromParkingMeter(id, appId, type, null, year, month, dayType, weekday, hour, valueType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkingmetercompare/{id}")
@@ -371,7 +373,7 @@ public class DashboardController {
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkstructs")
 	public @ResponseBody
-	List<ParkingStructureBean> getAllParkStructsProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+	List<ParkingStructureBean> getAllParkStructsProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=true) String agencyId) throws Exception {
 		String type = ParkStruct.class.getCanonicalName();
 //		int year_f = (year!= null && year.length > 0) ? year[0] : 0;
 //		int year_t = (year!= null && year.length > 1) ? year[1] : 0;
@@ -382,21 +384,21 @@ public class DashboardController {
 //		int hour_f = (hour!= null && hour.length > 0) ? hour[0] : 0;
 //		int hour_t = (hour!= null && hour.length > 1) ? hour[1] : 0;
 //		logger.info(String.format("Parameters retrieved in back-end request for parkingmeters: appId - %s; year - %d,%d; month - %d,%d; dayType - %s, weekday - %d,%d; hour - %d,%d; valueType - %d", appId, year_f, year_t, month_f, month_t, dayType, weekday_f, weekday_t, hour_f, hour_t, valueType));
-		return dynamic.getProfitFromAllParkStructs(appId, type, null, year, month, dayType, weekday, hour, valueType);
+		return dynamic.getProfitFromAllParkStructs(appId, type, null, year, month, dayType, weekday, hour, valueType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profitchanged/{appId}/parkstructs")
 	public @ResponseBody
-	List<CompactParkingStructureBean> getAllParkStructsChangedProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+	List<CompactParkingStructureBean> getAllParkStructsChangedProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=true) String agencyId) throws Exception {
 		String type = ParkStruct.class.getCanonicalName();
-		return dynamic.getProfitChangeFromAllParkStructs(appId, type, null, year, month, dayType, weekday, hour, valueType);
+		return dynamic.getProfitChangeFromAllParkStructs(appId, type, null, year, month, dayType, weekday, hour, valueType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkstruct/{id}")
 	public @ResponseBody
-	ParkingStructureBean getParkStructsProfit(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType) throws Exception {
+	ParkingStructureBean getParkStructsProfit(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=true) String agencyId) throws Exception {
 		String type = ParkStruct.class.getCanonicalName();
-		return dynamic.getProfitFromParkStruct(id, appId, type, null, year, month, dayType, weekday, hour, valueType);
+		return dynamic.getProfitFromParkStruct(id, appId, type, null, year, month, dayType, weekday, hour, valueType, agencyId);
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkstructcompare/{id}")
@@ -1068,18 +1070,24 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/occupancy/{appId}/streets")
 	@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy data items")
 	public @ResponseBody
-	List<StreetBean> getAllStreetOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	List<StreetBean> getAllStreetOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
 		String type = Street.class.getCanonicalName();
-		return dynamic.getOccupationRateFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		if(agencyId == null || agencyId.compareTo("") == 0){
+			agencyId = ALL;
+		}
+		return dynamic.getOccupationRateFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 	
 	// Open method to retrieve all street occupancy data (only occupancy data)
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/occupancychanged/{appId}/streets")
 	@ApiOperation(value = "Get Streets occupancy compact", notes = "Returns streets occupancy data compact items")
 	public @ResponseBody
-	List<CompactStreetBean> getAllStreetChangedOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	List<CompactStreetBean> getAllStreetChangedOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
 		String type = Street.class.getCanonicalName();
-		return dynamic.getOccupationChangesFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		if(agencyId == null || agencyId.compareTo("") == 0){
+			agencyId = ALL;
+		}
+		return dynamic.getOccupationChangesFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 	
 	// Open method to retrieve a single street occupancy data
@@ -1094,18 +1102,24 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/occupancy/{appId}/parkingstructures")
 	@ApiOperation(value = "Get Parking structures occupancy", notes = "Returns parking structure occupancy data items")
 	public @ResponseBody
-	List<ParkingStructureBean> getAllParkingStructureOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	List<ParkingStructureBean> getAllParkingStructureOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
 		String type = Parking.class.getCanonicalName();
-		return dynamic.getOccupationRateFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		if(agencyId == null || agencyId.compareTo("") == 0){
+			agencyId = ALL;
+		}
+		return dynamic.getOccupationRateFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 	
 	// Open method to retrieve all parkingStructures occupancy data (only occupancy data)
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/occupancychanged/{appId}/parkingstructures")
 	@ApiOperation(value = "Get Parking structures occupancy compact", notes = "Returns parking structure occupancy data compact items")
 	public @ResponseBody
-	List<CompactParkingStructureBean> getAllParkingStructureChangedOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	List<CompactParkingStructureBean> getAllParkingStructureChangedOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
 		String type = Parking.class.getCanonicalName();
-		return dynamic.getOccupationChangesFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		if(agencyId == null || agencyId.compareTo("") == 0){
+			agencyId = ALL;
+		}
+		return dynamic.getOccupationChangesFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 	
 	// Open method to retrieve a single parkingStructure occupancy data

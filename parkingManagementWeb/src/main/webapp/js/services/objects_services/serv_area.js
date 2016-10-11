@@ -31,11 +31,17 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	};
 	
 	// Area get method without security
-	this.getAreasFromDbNS = function(showArea){
+	this.getAreasFromDbNS = function(showArea, agencyId){
 		var allAreas = [];
 		var method = 'GET';
+		var params = null;
+		if(agencyId != null && agencyId != ""){
+			params = {
+				agencyId: agencyId
+			}
+		}
 		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/area", null, sharedDataService.getAuthHeaders(), null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/area", params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allAreas){
 	    	allAreas = gMapService.initAllAreaObjects(allAreas);	// The only solution found to retrieve all data;
 	    	if(showArea){
@@ -58,15 +64,18 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	
 	// Area update method
 	this.updateAreaInDb = function(area, color, zone0, zone1, zone2, zone3, zone4, editPaths, type, agencyId){
+		var username = sharedDataService.getName();
 		var validityPeriod = [];
 		if(type == 0){
 			if(area.validityPeriod){
 				for(var i = 0; i < area.validityPeriod.length; i++){
+					var tSlots = sharedDataService.correctTimeSlots(area.validityPeriod[i].timeSlot);
 					var corrPeriod = {
 						from: area.validityPeriod[i].from,
 						to: area.validityPeriod[i].to,
 						weekDays: area.validityPeriod[i].weekDays,
 						timeSlot: area.validityPeriod[i].timeSlot,
+						timeSlots: tSlots,
 						rateValue: area.validityPeriod[i].rateValue,
 						holiday: area.validityPeriod[i].holiday,
 						note: area.validityPeriod[i].note
@@ -79,7 +88,8 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 		var id = area.id;
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var method = 'PUT';
 		var data = {};
@@ -121,10 +131,12 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	
 	// Area create method
 	this.createAreaInDb = function(area, myColor, zone0, zone1, zone2, zone3, zone4, createdPaths, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var myAgencyList = []
 		if(agencyId){
@@ -133,11 +145,13 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 		var validityPeriod = [];
 		if(area.validityPeriod){
 			for(var i = 0; i < area.validityPeriod.length; i++){
+				var tSlots = sharedDataService.correctTimeSlots(area.validityPeriod[i].timeSlot);
 				var corrPeriod = {
 					from: area.validityPeriod[i].from,
 					to: area.validityPeriod[i].to,
 					weekDays: area.validityPeriod[i].weekDays,
 					timeSlot: area.validityPeriod[i].timeSlot,
+					timeSlots: tSlots,
 					rateValue: area.validityPeriod[i].rateValue,
 					holiday: area.validityPeriod[i].holiday,
 					note: area.validityPeriod[i].note
@@ -169,12 +183,13 @@ pm.service('areaService',['$rootScope', 'invokeWSService', 'invokeWSServiceNS', 
 	
 	// Area delete method
 	this.deleteAreaInDb = function(area, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId	
+			agencyId: agencyId,
+			username: username
 		};
-		
 		var myDataPromise = invokeWSService.getProxy(method, appId + "/area/" + area.id , params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){
 	    	console.log("Deleted area: " +area.name);

@@ -88,6 +88,7 @@ var conf_elements="<%=request.getAttribute("elements")%>";
 var conf_filters="<%=request.getAttribute("filters")%>";
 var conf_vehicle_type_list="<%=request.getAttribute("vehicle_type_list")%>";
 var conf_agency="<%=request.getAttribute("user_agency")%>";
+var conf_all_agencies="<%=request.getAttribute("all_agencies")%>";
 var object_to_show="<%=request.getAttribute("object_showed")%>";
 var ctx="<%=request.getContextPath()%>";
 
@@ -117,7 +118,7 @@ function getJSessionId(){
 	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()"><!-- ng-init="setItalianLanguage()" -->
     <div my-session-check> </div>
     <div id="my-big-menu" class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-      <div class="container-fluid" style="margin-left:160px; margin-right:160px">
+      <div class="container-fluid" style="margin-left:60px; margin-right:60px">
         <div class="collapse navbar-collapse">
           <div class="navbar-brand"><img src="imgs/logo.png"/></div>
           <ul class="nav navbar-nav">
@@ -156,9 +157,9 @@ function getJSessionId(){
     </div><!-- /.navbar -->
 	<div class="container-fluid">
 		<div id="my-big-body" class="row">
-			<div class="col-md-1" ng-controller="AuxCtrl" ng-init="initComponents()"></div>	<!-- used only to init aux components -->
-			<div class="col-md-10">
-				<div class="panel panel-default" style="margin-top:100px;">
+			<!-- <div class="col-md-1" ng-controller="AuxCtrl" ng-init="initComponents()"></div> -->	<!-- used only to init aux components -->
+			<div class="col-md-12" ng-controller="AuxCtrl" ng-init="initComponents()"><!-- used only to init aux components -->
+				<div class="panel panel-default" style="margin-top:100px;padding-left:50px;padding-right:50px;">
 			  		<div class="panel-body">
 			  			<div style="margin:5px 15px;">
 							<div class="row" ng-if="isHomeParkActive() == 'active'" ><!--   style="height: 150px;" -->
@@ -187,11 +188,11 @@ function getJSessionId(){
 						</div>
 					</div>
 				</div>
-				<div class="col-md-1"></div>
+				<!-- <div class="col-md-1"></div> -->
 			</div>
 			<div id="my-small-body" class="row">
-			<div class="col-sm-1" ng-controller="AuxCtrl" ng-init="initComponents()"></div>	<!-- used only to init aux components -->
-			<div class="col-sm-10">
+			<!-- <div class="col-sm-1" ng-controller="AuxCtrl" ng-init="initComponents()"></div> -->	<!-- used only to init aux components -->
+			<div class="col-sm-12" ng-controller="AuxCtrl" ng-init="initComponents()">
 				<div class="panel panel-default" style="margin-top:100px;">
 			  		<div class="panel-body">
 			  			<div style="margin:5px 15px;">
@@ -221,7 +222,7 @@ function getJSessionId(){
 						</div>
 					</div>
 				</div>
-				<div class="col-sm-1"></div>
+				<!-- <div class="col-sm-1"></div> -->
 			</div>
 			<div class="row footer">
 				<div class="col-md-12">

@@ -8,7 +8,7 @@
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_object_code' | i18n }}</strong></td>
-				<td>{{ logDetails.value.code }}<span ng-show="logDetails.value.note"> - {{ logDetails.value.note }}</span></td>
+				<td>{{ logDetails.value.code }}<span ng-show="logDetails.value.note"> - {{logDetails.value.note}}</span></td>
 			</tr>
 			<tr>
 				<td width="30%"><strong>{{ 'log_type' | i18n }}</strong></td>
@@ -48,7 +48,10 @@
 						</tr>
 						<tr>
 							<td width="30%"><strong>{{ 'ps_tickets' | i18n }}</strong></td>
-							<td>{{logDetails.value.tickets}}</td>
+							<td>
+								<span ng-show="logDetails.value.tickets != -1">{{logDetails.value.tickets}}</span>
+								<span ng-show="logDetails.value.tickets == -1">n.p.</span>
+							</td>
 						</tr>
 					</table>
 				</td>

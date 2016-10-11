@@ -28,12 +28,18 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// PS get method without security
-    this.getParkingStructuresFromDbNS = function(showPs){
+    this.getParkingStructuresFromDbNS = function(showPs, agencyId){
     	var markers = [];
     	var allPstructs = [];
 		var method = 'GET';
+		var params = null;
+		if(agencyId != null && agencyId != ""){
+			params = {
+				agencyId: agencyId
+			}
+		}
 		var appId = sharedDataService.getConfAppId();
-	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", null, sharedDataService.getAuthHeaders(), null);
+	   	var myDataPromise = invokeWSServiceNS.getProxy(method, appId + "/parkingstructure", params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(allPstructs){
 	    	allPstructs = gMapService.initAllPSObjects(allPstructs);	// The only solution found to retrieve all data;
 	    	if(showPs){
@@ -48,7 +54,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// Method getProfitStructFromDb: used to retrieve te streets occupancy data from the db
-	this.getProfitParksFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getProfitParksFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
 		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
@@ -64,6 +70,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			dayType: dayType,
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call" + JSON.stringify(params)); 	
@@ -74,7 +81,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// Occupancy Park retrieving method
-	this.getOccupancyParksFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getOccupancyParksFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
 		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
@@ -91,6 +98,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			vehicleType: sharedDataService.getVehicleType(),
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
@@ -101,7 +109,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	};
 	
 	// Method getOccupancyParksUpdatedFromDb: used to retrieve te parks occupancy data from the db
-	this.getOccupancyParksUpdatedFromDb = function(year, month, weekday, dayType, hour, valueType){
+	this.getOccupancyParksUpdatedFromDb = function(year, month, weekday, dayType, hour, valueType, agencyId){
 		// period params
 		var monthRange = sharedDataService.chekIfAllRange(month, 1);
 		var weekRange = sharedDataService.chekIfAllRange(weekday, 2);
@@ -117,6 +125,7 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 			hour: sharedDataService.correctParamsFromSemicolon(hourRange),
 			valueType: valueType,
 			vehicleType: sharedDataService.getVehicleType(),
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if(this.showLog)console.log("Params passed in ws get call for Parks" + JSON.stringify(params));
@@ -128,22 +137,26 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// PS update method
 	this.updateParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, type, agencyId){
+		var username = sharedDataService.getName();
 		var validityPeriod = [];
 		var id = ps.id;
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var method = 'PUT';
 		var data = {};
 		if(type == 0){
 			if(ps.validityPeriod){
 				for(var i = 0; i < ps.validityPeriod.length; i++){
+					var tSlots = sharedDataService.correctTimeSlots(ps.validityPeriod[i].timeSlot);
 					var corrPeriod = {
 						from: ps.validityPeriod[i].from,
 						to: ps.validityPeriod[i].to,
 						weekDays: ps.validityPeriod[i].weekDays,
 						timeSlot: ps.validityPeriod[i].timeSlot,
+						timeSlots: tSlots,
 						rateValue: ps.validityPeriod[i].rateValue,
 						holiday: ps.validityPeriod[i].holiday,
 						note: ps.validityPeriod[i].note
@@ -220,10 +233,12 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// PS create method
 	this.createParkingStructureInDb = function(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'POST';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 		var myAgencyList = []
 		if(agencyId){
@@ -232,11 +247,13 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 		var validityPeriod = [];
 		if(ps.validityPeriod){
 			for(var i = 0; i < ps.validityPeriod.length; i++){
+				var tSlots = sharedDataService.correctTimeSlots(ps.validityPeriod[i].timeSlot);
 				var corrPeriod = {
 					from: ps.validityPeriod[i].from,
 					to: ps.validityPeriod[i].to,
 					weekDays: ps.validityPeriod[i].weekDays,
 					timeSlot: ps.validityPeriod[i].timeSlot,
+					timeSlots: tSlots,
 					rateValue: ps.validityPeriod[i].rateValue,
 					holiday: ps.validityPeriod[i].holiday,
 					note: ps.validityPeriod[i].note
@@ -291,10 +308,12 @@ pm.service('structureService',['$rootScope', 'invokeWSService', 'sharedDataServi
 	
 	// PS delete method
 	this.deleteParkingStructureInDb = function(ps, agencyId){
+		var username = sharedDataService.getName();
 		var method = 'DELETE';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			username: username
 		};
 	   	var myDataPromise = invokeWSService.getProxy(method, appId + "/parkingstructure/" + ps.id, params, sharedDataService.getAuthHeaders(), null);
 	    myDataPromise.then(function(result){

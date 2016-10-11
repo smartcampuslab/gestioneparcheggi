@@ -562,6 +562,10 @@ div #panelMap {
   background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
 }
 
+.form-control {
+  padding: 2px 5px;
+}
+
 .footer {
 	background-color: #1E88E5;
 	padding: 0px;
