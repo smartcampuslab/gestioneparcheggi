@@ -104,6 +104,10 @@ private org.springframework.security.core.userdetails.User userdetails;
     	return userSetup.findUserByUsername(username);
     }
     
+    public UserSetting getUserDetailsByAppId(String appId){
+    	return userSetup.findUserByAppId(appId);
+    }
+    
     public ObjectShowSetting getObjectShowDetails(String username){
     	UserSetting user = userSetup.findUserByUsername(username);
     	return objectShowSetup.findProviderById(user.getId());

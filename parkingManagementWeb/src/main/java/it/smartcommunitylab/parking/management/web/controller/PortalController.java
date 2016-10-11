@@ -97,7 +97,6 @@ public class PortalController extends SCController{
 		//User user = mongoUserDetailsService.getUserDetail(name);
 		//model.addAttribute("user_name", user.getName());
 		//model.addAttribute("user_surname", user.getSurname());
-	
 		UserSetting user = mongoUserDetailsService.getUserDetails(name);
 		logger.debug("I am in home redirect. User id: " + name);
 		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetails(user.getUsername());
@@ -144,7 +143,8 @@ public class PortalController extends SCController{
 		model.addAttribute("no_sec", "true");
 		model.addAttribute("app_id", appId);
 		logger.info(String.format("I am in get viewAll %s", appId));
-		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetailsByAppId(appId);
+		UserSetting user = mongoUserDetailsService.getUserDetailsByAppId(appId);	// I force to pass to user
+		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetails(user.getUsername());
 		String mapcenter = null;
 		String mapzoom = (objectToShow != null) ? objectToShow.getMapZoom() : "14";
 		if(center != null && center != ""){
@@ -157,7 +157,7 @@ public class PortalController extends SCController{
 		model.addAttribute("map_zoom", mapzoom);
 		model.addAttribute("map_recenter", mapcenter);
 		model.addAttribute("widget_url", mainURL);
-		model.addAttribute("object_showed", objectToShow.getShowObjectsMap());
+		model.addAttribute("object_showed", (objectToShow != null) ? objectToShow.getShowObjectsMap() : "");
 		model.addAttribute("elements", p_elements);
 		model.addAttribute("filters", p_filters);
 		return new ModelAndView("viewallnosec");

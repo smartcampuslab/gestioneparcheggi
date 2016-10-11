@@ -75,22 +75,32 @@ public class UserSetup {
 	}
 
 	public UserSetting findUserById(String id) {
-		if (usersMap == null) {
+		//if (usersMap == null) {
 			usersMap = new HashMap<String, UserSetting>();
 			for (UserSetting user : users) {
 				usersMap.put(user.getId(), user);
 			}
-		}
+		//}
 		return usersMap.get(id);
 	}
 	
 	public UserSetting findUserByUsername(String username) {
-		if (usersMap == null) {
+		//if (usersMap == null) {
 			usersMap = new HashMap<String, UserSetting>();
 			for (UserSetting user : users) {
 				usersMap.put(user.getUsername(), user);
 			}
-		}
+		//}
 		return usersMap.get(username);
+	}
+	
+	public UserSetting findUserByAppId(String appId) {
+		//if (usersMap == null) {
+			usersMap = new HashMap<String, UserSetting>();
+			for (UserSetting user : users) {
+				usersMap.put(user.getAppId(), user);	// here insert only a user configuration
+			}
+		//}
+		return usersMap.get(appId);
 	}
 }
