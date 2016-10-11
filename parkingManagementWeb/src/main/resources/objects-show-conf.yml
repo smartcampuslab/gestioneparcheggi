@@ -2463,7 +2463,7 @@ providers:
         - code: link
           editable: false
           required: false
-          visible: true
+          visible: false
      - id: Agency
        type: agency
        label: agency
