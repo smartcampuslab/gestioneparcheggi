@@ -451,6 +451,10 @@
     "value": "Modifica parcometro",
     "description": "Titolo pagina editing parcometro"
 }, {
+    "key": "create_parkingmeter",
+    "value": "Nuovo parcometro",
+    "description": "Titolo pagina creazione parcometro"
+}, {
     "key": "pm_status",
     "value": "Stato",
     "description": "Label stato parcometro"
@@ -522,6 +526,10 @@
     "key": "edit_parkingstructure",
     "value": "Modifica parcheggio in struttura",
     "description": "Titolo pagina editing parcometro"
+}, {
+    "key": "create_parkingstructure",
+    "value": "Nuovo parcheggio in struttura",
+    "description": "Titolo pagina creazione parcometro"
 }, {
     "key": "ps_geometry",
     "value": "Posizione",
@@ -711,6 +719,10 @@
     "value": "Modifica punto bici",
     "description": "Titolo pagina editing punto bici"
 }, {
+    "key": "create_bikepoint",
+    "value": "Nuovo punto bici",
+    "description": "Titolo pagina creation punto bici"
+}, {
     "key": "bp_geometry",
     "value": "Posizione",
     "description": "Label geometry punto bici"
@@ -758,6 +770,10 @@
     "key": "edit_street",
     "value": "Modifica Strada",
     "description": "Titolo pagina editing strade"
+}, {
+    "key": "create_street",
+    "value": "Nuova Strada",
+    "description": "Titolo pagina creazione strade"
 }, {
     "key": "street_address",
     "value": "Via di riferimento",
@@ -947,6 +963,10 @@
     "value": "Modifica Zona",
     "description": "Titolo pagina editing zona"
 }, {
+    "key": "create_zone",
+    "value": "Nuova Zona",
+    "description": "Titolo pagina creazione zona"
+}, {
     "key": "zone_type",
     "value": "Tipo",
     "description": "Campo tipo zona"
@@ -1014,6 +1034,10 @@
     "key": "edit_area",
     "value": "Modifica Area",
     "description": "Titolo pagina editing area"
+}, {
+    "key": "create_area",
+    "value": "Nuova Area",
+    "description": "Titolo pagina creazione area"
 }, {
     "key": "area_geometry",
     "value": "Posizione",
@@ -1368,15 +1392,15 @@
     "description": "Title icona filtro per note"
 }, {
     "key": "filter_name_text",
-    "value": "Inserisci nome oggetto...",
+    "value": "Cerca per nome oggetto...",
     "description": "Testo filtro nome oggetto"
 }, {
     "key": "filter_code_text",
-    "value": "Inserisci codice oggetto...",
+    "value": "Cerca per codice oggetto...",
     "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_note_text",
-    "value": "Inserisci nota...",
+    "value": "Cerca per nota...",
     "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_area_title",

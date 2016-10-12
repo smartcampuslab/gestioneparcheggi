@@ -28,7 +28,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
 
     function changeTemplate() {
         var screenWidth = $window.innerWidth;
-        if (screenWidth >= 1170) {
+        if (screenWidth >= 1250) {	//1170
         	$scope.tabletWiew = false;
         } else {
         	$scope.tabletWiew = true;
