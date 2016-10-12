@@ -455,6 +455,10 @@
     "value": "Edit parking meter",
     "description": "Titolo pagina editing parcometro"
 }, {
+    "key": "create_parkingmeter",
+    "value": "Create parking meter",
+    "description": "Titolo pagina creazione parcometro"
+}, {
     "key": "pm_status",
     "value": "Status",
     "description": "Label stato parcometro"
@@ -524,8 +528,12 @@
     "description": "Testo pulsante 'modifica'"
 }, {
     "key": "edit_parkingstructure",
-    "value": "Edit parking structure",
+    "value": "Edit Parking Structure",
     "description": "Titolo pagina editing parcometro"
+}, {
+    "key": "create_parkingstructure",
+    "value": "New Parking Structure",
+    "description": "Titolo pagina creazione parcometro"
 }, {
     "key": "ps_geometry",
     "value": "Position",
@@ -723,6 +731,10 @@
     "value": "Bike point editing",
     "description": "Titolo pagina editing punto bici"
 }, {
+    "key": "create_bikepoint",
+    "value": "New Bike point",
+    "description": "Titolo pagina creation punto bici"
+}, {
     "key": "bp_geometry",
     "value": "Position",
     "description": "Label geometry punto bici"
@@ -770,6 +782,10 @@
     "key": "edit_street",
     "value": "Edit street",
     "description": "Titolo pagina editing strade"
+}, {
+    "key": "create_street",
+    "value": "New street",
+    "description": "Titolo pagina creazione strade"
 }, {
     "key": "street_address",
     "value": "Referenced street",
@@ -959,6 +975,10 @@
     "value": "Update zone",
     "description": "Titolo pagina editing zona"
 }, {
+    "key": "create_zone",
+    "value": "New zone",
+    "description": "Titolo pagina creazione zona"
+}, {
     "key": "zone_type",
     "value": "Type",
     "description": "Campo tipo zona"
@@ -1026,6 +1046,10 @@
     "key": "edit_area",
     "value": "Edit Area",
     "description": "Titolo pagina editing area"
+}, {
+    "key": "create_area",
+    "value": "New Area",
+    "description": "Titolo pagina creazione area"
 }, {
     "key": "area_geometry",
     "value": "Position",
@@ -1380,15 +1404,15 @@
     "description": "Title icona filtro per note"
 }, {
     "key": "filter_name_text",
-    "value": "Insert object name...",
+    "value": "Search by object name...",
     "description": "Testo filtro nome oggetto"
 }, {
     "key": "filter_code_text",
-    "value": "Insert code...",
+    "value": "Search by code...",
     "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_note_text",
-    "value": "Insert note...",
+    "value": "Search by note...",
     "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_area_title",

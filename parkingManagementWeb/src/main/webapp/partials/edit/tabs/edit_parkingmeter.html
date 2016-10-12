@@ -315,7 +315,7 @@
 										<th width="12%"><span ng-show="pmconf.pm_code.visible">{{ 'pm_code' | i18n }}</span></th>
 										<th width="16%">
 											<span ng-show="pmconf.pm_note.visible">{{ 'pm_note' | i18n }}</span>&nbsp;
-											<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+											<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 											<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 											<div ng-show="showNotFilter">
 										    	 <input type="search" ng-model="noteFilter" placeholder="{{ 'filter_note_text' | i18n }}" ng-change="currentPagePm = 0" />
@@ -348,8 +348,9 @@
 											<td align="left"><span ng-show="pmconf.pm_code.visible">{{pmeter.code}}</span></td>
 											<td align="left"><span ng-show="pmconf.pm_note.visible">{{pmeter.note}}</span></td>
 											<td align="center">
-												<span ng-show="pmconf.pm_status.visible && pmeter.status !='ACTIVE'" class="pmeter-off">OFF</span>
-												<span ng-show="pmconf.pm_status.visible && pmeter.status =='ACTIVE'" class="pmeter-on">ON</span>
+												<span ng-show="pmconf.pm_status.visible && pmeter.status !='ACTIVE'" class="pmeter-off">{{ 'inactive_pm_state' | i18n }}</span>
+												<span ng-show="pmconf.pm_status.visible && pmeter.status =='ACTIVE'" class="pmeter-on">{{ 'active_pm_state' | i18n }}</span>
+												
 											</td>
 											<td align="center"><div class="colorBox" ng-show="pmconf.pm_rateArea.visible" ng-style="{'background-color': correctColor(pmeter.color)}"></div></td><!-- {{area.color}} -->
 											<td align="center"><span ng-show="pmconf.pm_rateArea.visible">{{pmeter.area.name}}</span></td>
@@ -538,7 +539,8 @@
 		<div class="col-md-12">
 			<form role="form" name="form">
 				<div class="panel panel-default" width="90%">
-			    		<h3 class="panel-title"><strong>{{ 'edit_parkingmeter' | i18n }}</strong></h3>
+			    		<h3 class="panel-title" ng-show="isEditing"><strong>{{ 'edit_parkingmeter' | i18n }}</strong></h3>
+			    		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_parkingmeter' | i18n }}</strong></h3>
 			  		<div class="panel-body">	
 					   	<div class="form-group" ng-show="pmconf.pm_code.visible">
 					    	<label for="code">{{ 'pm_code' | i18n }}</label>
@@ -623,13 +625,28 @@
 						</div>
 					</div>
 					<div class="field-error" ng-show="showUpdatingErrorMessage">{{ 'err_in_update_parkingmeter' | i18n }}</div>
-			   		<table width="97%">			
+			   		<table width="97%" ng-show="!tabletWiew">			
 					   	<tr>
 					   		<td width="85%"></td>
 					   		<td width="8%" align="center">
 					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePmeter(0, parckingMeter, form, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPmeter(form, parckingMeter, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   		</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+					</table>
+					<table width="97%" ng-show="tabletWiew">			
+					   	<tr>
+					   		<td width="80%"></td>
+					   		<td width="10%" align="center">
+					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>
+					   		</td>
+					   		<td width="10%" align="right">
 					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePmeter(0, parckingMeter, form, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPmeter(form, parckingMeter, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>

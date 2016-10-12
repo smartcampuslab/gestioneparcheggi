@@ -228,7 +228,7 @@
 												</th>
 												<th width="40%">
 													<span ng-show="bpconf.bp_name.visible">{{ 'bp_name' | i18n }}</span>&nbsp;
-													<a href ng-click="showBpNameFilter();currentPageBp=0" ng-show="!showBpFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+													<a href ng-click="showBpNameFilter();currentPageBp=0" ng-show="!showBpFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 													<a href ng-click="nameFilter=null;hideBpNameFilter()" ng-show="showBpFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 													<div ng-show="showBpFilter">
 										    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageBp = 0" />
@@ -379,7 +379,8 @@
 				<div class="col-md-12">
 					<form role="form" name="form">
 						<div class="panel panel-default" width="90%">
-				    		<h3 class="panel-title"><strong>{{ 'edit_bikepoint' | i18n }}</strong></h3>
+				    		<h3 class="panel-title" ng-show="isEditing"><strong>{{ 'edit_bikepoint' | i18n }}</strong></h3>
+				    		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_bikepoint' | i18n }}</strong></h3>
 					  		<div class="panel-body">	
 							   	<div class="form-group" ng-show="bpconf.bp_name.visible">
 							    	<label for="name">{{ 'bp_name' | i18n }}</label>
@@ -449,13 +450,28 @@
 								</div>
 							</div>
 							<div class="field-error" ng-show="showUpdatingBPErrorMessage">{{ 'err_in_update_bikepoint' | i18n }}</div>
-					   		<table width="97%">			
+					   		<table width="97%" ng-show="!tabletWiew">			
 							   	<tr>
 							   		<td width="85%"></td>
 							   		<td width="8%" align="right">
 							   			<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
 							   		</td>
 							   		<td width="7%" align="right">
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(0, bikePoint, form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, bikePoint, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   		</td>
+								</tr>
+								<tr>
+									<td colspan="3">&nbsp;</td>
+								</tr>
+							</table>
+							<table width="97%" ng-show="tabletWiew">			
+							   	<tr>
+							   		<td width="80%"></td>
+							   		<td width="10%" align="right">
+							   			<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
+							   		</td>
+							   		<td width="10%" align="right">
 							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(0, bikePoint, form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
 							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, bikePoint, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 							   		</td>

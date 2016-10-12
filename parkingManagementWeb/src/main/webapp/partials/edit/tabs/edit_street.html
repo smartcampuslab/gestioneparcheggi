@@ -447,7 +447,7 @@
 						    		</div>
 								</th>
 								<th width="30%" ng-show="sconf.s_streetRef.visible">{{ 'street_name' | i18n }}&nbsp;
-									<a href ng-click="showStreetNameFilter();currentPageS = 0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="showStreetNameFilter();currentPageS = 0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 									<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showStreetFilter">
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageS = 0" />
@@ -743,7 +743,8 @@
 		<div class="col-md-12">
 			<form role="form" name="form">
 				<div class="panel panel-default" width="90%">
-			    	<h3 class="panel-title"><strong>{{ 'edit_street' | i18n }}</strong></h3>
+			    	<h3 class="panel-title" ng-show="isEditing"><strong>{{ 'edit_street' | i18n }}</strong></h3>
+			    	<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_street' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 			  			<div class="form-group" ng-show="!isEditing && sconf.s_areaId.visible">
 					    	<label for="area1">{{ 'street_area_name' | i18n }}</label>
@@ -1035,13 +1036,30 @@
 						</div>
 					</div>
 					<div class="field-error" ng-show="showUpdatingSErrorMessage">{{ 'err_in_update_street' | i18n }}</div>
-			   		<table width="97%">			
+			   		<table width="97%" ng-show="!tabletWiew">			
 					   	<tr>
 					   		<td width="85%"></td>
 					   		<td width="8%" align="center">
 					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
+	<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
+	<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateStreet(form, eStreet, myArea, myZone0, myZone1, myZone2, myZone3, myZone4, myPms)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createStreet(form, eStreet, myNewArea, myZone0, myZone1, myZone2, myZone3, myZone4, myPms)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   		</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+					</table>
+					<table width="97%" ng-show="tabletWiew">			
+					   	<tr>
+					   		<td width="80%"></td>
+					   		<td width="10%" align="center">
+					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeSView()">{{ 'text_btn_close' | i18n  }}</button>
+					   		</td>
+					   		<td width="10%" align="right">
 	<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="updateStreet(form, myArea, myZones, editStreet)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
 	<!-- 				   			<button type="button" class="btn btn-default btn-lg" ng-click="createStreet(form, myNewArea, myZones, newStreet)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button> -->
 					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateStreet(form, eStreet, myArea, myZone0, myZone1, myZone2, myZone3, myZone4, myPms)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>

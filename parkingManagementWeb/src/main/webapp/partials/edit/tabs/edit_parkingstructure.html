@@ -459,7 +459,7 @@
 								</th>
 								<th width="28%">
 									<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>&nbsp;
-									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 									<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showPsFilter">
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPagePs = 0" />
@@ -483,7 +483,7 @@
 								</th>
 								<th width="28%">
 									<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>&nbsp;
-									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="showPsNameFilter();currentPagePs=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 									<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showPsFilter">
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPagePs = 0" />
@@ -519,6 +519,7 @@
 								<tr>
 									<td align="left">
 										<span ng-show="isMyAgency(pstruct.agencyId)"><i class="glyphicon glyphicon-user"></i></span>
+										<span ng-show="!isMyAgency(pstruct.agencyId)">{{ pstruct.agencyId | agencyCodeToName }}</span>
 									</td>
 									<td align="left"><span ng-show="psconf.ps_name.visible">{{pstruct.name}}</span></td>
 									<td align="left"><span ng-show="psconf.ps_address.visible">{{pstruct.streetReference}}</span></td>
@@ -755,7 +756,8 @@
 		<div class="col-md-12">
 			<form role="form" name="form">
 				<div class="panel panel-default" width="100%">
-			    		<h3 class="panel-title"><strong>{{ 'edit_parkingstructure' | i18n }}</strong></h3>
+			    		<h3 class="panel-title" ng-show="isEditing"><strong>{{ 'edit_parkingstructure' | i18n }}</strong></h3>
+			    		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_parkingstructure' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 						<div class="col-md-12">
 							<map id="editPs" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPsMarker()" >
@@ -1499,13 +1501,28 @@
 					   	</div>
 					</div>
 					<div class="field-error" ng-show="showUpdatingPSErrorMessage">{{ 'err_in_update_parkingstructure' | i18n }}</div>
-			   		<table width="97%">			
+			   		<table width="97%" ng-show="!tabletWiew">			
 					   	<tr>
 					   		<td width="85%"></td>
 					   		<td width="8%" align="center">
 					   			<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePstruct(0, parkingStructure, form, myPayment, myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   		</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+					</table>
+					<table width="97%" ng-show="tabletWiew">			
+					   	<tr>
+					   		<td width="80%"></td>
+					   		<td width="10%" align="center">
+					   			<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>
+					   		</td>
+					   		<td width="10%" align="right">
 					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePstruct(0, parkingStructure, form, myPayment, myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>

@@ -98,7 +98,7 @@ public class UserSetup {
 		//if (usersMap == null) {
 			usersMap = new HashMap<String, UserSetting>();
 			for (UserSetting user : users) {
-				usersMap.put(user.getAppId(), user);	// here insert only a user configuration
+				usersMap.put(user.getAppId(), user);	// here I insert only an user for every appId
 			}
 		//}
 		return usersMap.get(appId);

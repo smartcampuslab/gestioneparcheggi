@@ -153,7 +153,7 @@ ul.payment{
 */
 
 .table > tbody > tr > th {
-     vertical-align: middle;
+     vertical-align: top;	/* middle */
 }
  
 .borderless td{
@@ -786,7 +786,7 @@ label.group-label {
 	}
 	
 	/* if width bigger than 1170px I show the big objects */
-	@media (min-width:1170px) {
+	@media (min-width:1170px) {	/*@media (min-width:1170px)*/
 		.nav-tabs.nav-justified > li { float: none; }
 		.angular-google-map-container { height: 700px; }
 		.tablewrapper { 

@@ -270,7 +270,7 @@
 								</th>
 								<th width="20%">
 									<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>&nbsp;
-									<a href ng-click="showAreaNameFilter();currentPageA=0" ng-show="!showAreaNFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+									<a href ng-click="showAreaNameFilter();currentPageA=0" ng-show="!showAreaNFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 									<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaNFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 									<div ng-show="showAreaNFilter">
 						    	 		<input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" ng-change="currentPageA = 0" />
@@ -457,7 +457,8 @@
 		<div class="col-md-12">
 			<form role="form" name="form">
 				<div class="panel panel-default" width="90%">
-			    	<h3 class="panel-title"><strong>{{ 'edit_area' | i18n }}</strong></h3>
+			    	<h3 class="panel-title" ng-show="isEditing"><strong>{{ 'edit_area' | i18n }}</strong></h3>
+			  		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_area' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 			  			<div class="col-md-12"><!-- id="map_canvas" ng-show="!isEditing" -->
 			  				<div id="panelMap" align ="center" ng-show="!isEditing">
@@ -953,13 +954,28 @@
 						</div> -->
 					</div>
 					<div class="field-error" ng-show="showUpdatingAErrorMessage">{{ 'err_in_update_area' | i18n }}</div>
-			   		<table width="97%">			
+			   		<table width="97%" ng-show="!tabletWiew">			
 					   	<tr>
 					   		<td width="85%"></td>
-					   		<td width="8%" align="right">
+					   		<td width="7%" align="right">
 								<button type="button" class="btn btn-default btn-lg" ng-click="closeAView()">{{ 'text_btn_close' | i18n  }}</button>	
 							</td>
-					   		<td width="7%" align="right">
+					   		<td width="8%" align="right">
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateArea(form, area, myColor, myAZone0, myAZone1, myAZone2, myAZone3, myAZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- , editArea -->
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createArea(form, area, myColor, myAZone0, myAZone1, myAZone2, myAZone3, myAZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   		</td>
+						</tr>
+						<tr>
+							<td colspan="3">&nbsp;</td>
+						</tr>
+					</table>
+					<table width="97%" ng-show="tabletWiew">			
+					   	<tr>
+					   		<td width="80%"></td>
+					   		<td width="10%" align="right">
+								<button type="button" class="btn btn-default btn-lg" ng-click="closeAView()">{{ 'text_btn_close' | i18n  }}</button>	
+							</td>
+					   		<td width="10%" align="right">
 					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateArea(form, area, myColor, myAZone0, myAZone1, myAZone2, myAZone3, myAZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button><!-- , editArea -->
 					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createArea(form, area, myColor, myAZone0, myAZone1, myAZone2, myAZone3, myAZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>
