@@ -571,6 +571,10 @@
     "value": "Proprietario",
     "description": "Label proprietario struttura"
 }, {
+    "key": "ps_manager_in_edit",
+    "value": "Proprietario",
+    "description": "Label proprietario struttura"
+}, {
     "key": "ps_fee",
     "value": "Tariffa sosta",
     "description": "Label tariffa sosta in struttura"

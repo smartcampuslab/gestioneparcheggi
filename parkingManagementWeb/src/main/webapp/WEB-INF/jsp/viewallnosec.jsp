@@ -56,7 +56,8 @@
 <script src="../js/directives.js"></script>
 
 <script src="../lib/lodash.js"></script>
-<script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs"></script>
+<!-- <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script> -->
 <script src="../lib/ng-map.min.js"></script>
 
 <script src="../lib/angular-file-upload.min.js" type="text/javascript"></script>

@@ -781,7 +781,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.isLoadingLogs = true;
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
-		var myDataPromise = invokeAuxWSService.getProxy(method, appId + path, {userAgency: agencyId, skip: skip, count: count}, $scope.authHeaders, null);
+		var myDataPromise = invokeAuxWSService.getProxy(method, appId + path, {userAgency: agencyId, skip: skip, count: count, noCache: new Date().getTime()}, $scope.authHeaders, null);
 		myDataPromise.then(function(result){
 			var partialLogs = result;
 			//$scope.globalLogs.concat(result);
@@ -813,7 +813,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			$scope.progress += 25;
 	    	$rootScope.$broadcast('dialogs.wait.progress',{msg: $scope.getLoadingText(),'progress': $scope.progress, m_title: $scope.getLoadingTitle()});
 	    	
-			invokeAuxWSService.getProxy(method, appId + path+"/count", {userAgency: agencyId}, $scope.authHeaders, null)
+			invokeAuxWSService.getProxy(method, appId + path+"/count", {userAgency: agencyId, noCache: new Date().getTime()}, $scope.authHeaders, null)
 			.then(function(result) {
 				$scope.logtabs[$scope.tabIndex].count = result;
 				
@@ -894,7 +894,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			$scope.isAllLogLoaded = false;
 			var method = 'GET';
 			var appId = sharedDataService.getConfAppId();
-			var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", {userAgency: agencyId, skip: 0, count: 1000}, $scope.authHeaders, null);
+			var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/tplog/all", {userAgency: agencyId, skip: 0, count: 1000, noCache: new Date().getTime()}, $scope.authHeaders, null);
 			myDataPromise.then(function(result){
 				var partialLogs = result;//$scope.globalLogs.concat(result);
 				var corrLog = null;
@@ -1045,7 +1045,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			noCache: new Date().getTime()
 		};
 		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/streets", params, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
@@ -1061,7 +1062,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			noCache: new Date().getTime()
 		};
 		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings", params, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
@@ -1078,7 +1080,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId
+			agencyId: agencyId,
+			noCache: new Date().getTime()
 		};
 		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkings", params, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
@@ -1098,7 +1101,8 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var method = 'GET';
 		var appId = sharedDataService.getConfAppId();
 		var params = {
-			agencyId: agencyId	
+			agencyId: agencyId,
+			noCache: new Date().getTime()
 		};
 		
 		var myDataPromise = invokeAuxWSService.getProxy(method, appId + "/parkingmeters", params, $scope.authHeaders, null);

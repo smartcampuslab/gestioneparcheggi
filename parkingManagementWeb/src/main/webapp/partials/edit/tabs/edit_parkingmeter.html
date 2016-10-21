@@ -412,7 +412,7 @@
 							</tr>
 							<tr ng-show="pmconf.pm_geometry.visible">
 								<td class="detailsViewParkmeterSX">{{ 'pm_geometry' | i18n }}:</td>
-								<td class="detailsViewParkmeterDX">{{ myGeometry }}</td>
+								<td class="detailsViewParkmeterDX">{{ parckingMeter.myGeometry }}</td>
 							</tr>
 							<tr ng-show="pmconf.pm_rateArea.visible">
 							    <td colspan="2" class="detailsTableColSpan">
@@ -541,7 +541,21 @@
 				<div class="panel panel-default" width="90%">
 			    		<h3 class="panel-title" ng-show="isEditing"><strong>{{ 'edit_parkingmeter' | i18n }}</strong></h3>
 			    		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_parkingmeter' | i18n }}</strong></h3>
-			  		<div class="panel-body">	
+			  		<div class="panel-body">
+			  			<div class="col-md-12" >
+							<map id="editPm" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPmMarker()" >
+								<marker ng-repeat="pm in newPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{{ pm.icon }}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()" ><!-- on-drag="updatePos()" -->
+								</marker>
+								<marker ng-repeat="pm in editPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{{ pm.icon }}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()" ><!-- on-drag="updatePos()" -->
+								</marker>
+							</map>
+						</div>
+			  			<div class="form-group" ng-show="pmconf.pm_geometry.visible">
+					    	<label for="geometry">{{ 'pm_geometry' | i18n }}</label>
+					    	<input id="geometry" type="text" class="form-control" name="pmGeometry" ng-model="parckingMeter.myGeometry" ng-pattern="gpsPos" ng-required="pmconf.pm_geometry.required" placeholder="{{ 'pm_geo_placeholder' | i18n }}" >
+					   		<div class="field-error" ng-show="!isInit && form.pmGeometry.$error.pattern">{{ 'parkingmeter_geometry_select_err_pattern' | i18n }}</div>
+							<div class="field-error" ng-show="!isInit && form.pmGeometry.$error.required">{{ 'parkingmeter_geometry_select_err_required' | i18n }}</div>
+						</div>	
 					   	<div class="form-group" ng-show="pmconf.pm_code.visible">
 					    	<label for="code">{{ 'pm_code' | i18n }}</label>
 					    	<input id="code" type="text" class="form-control" name="pCode" ng-model="parckingMeter.code" ng-required="pmconf.pm_code.required" placeholder="{{ 'pm_code_placeholder' | i18n }}" ng-mousedown="saveActualCodeValue(parckingMeter.code)" ng-change="checkIfAlreadyExist(parckingMeter.code)">
@@ -609,20 +623,6 @@
 					    	</select>
 					   		<div class="field-error" ng-show="!isInit && form.pmZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 						</div>
-						<div class="form-group">
-					    	<label for="geometry" ng-show="pmconf.pm_geometry.visible">{{ 'pm_geometry' | i18n }}</label>
-					    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="pmconf.pm_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'pm_geo_placeholder' | i18n }}" ng-show="pmconf.pm_geometry.visible" >
-					   		<div class="field-error" ng-show="!isInit && form.pArea.$error.pattern">{{ 'parkingmeter_geometry_select_err_pattern' | i18n }}</div>
-							<div class="field-error" ng-show="!isInit && form.pArea.$error.required">{{ 'parkingmeter_geometry_select_err_required' | i18n }}</div>
-						</div>
-						<div class="col-md-12" >
-							<map id="editPm" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPmMarker()" >
-								<marker ng-repeat="pm in newPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{{ pm.icon }}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()" ><!-- on-drag="updatePos()" -->
-								</marker>
-								<marker ng-repeat="pm in editPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{{ pm.icon }}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()" ><!-- on-drag="updatePos()" -->
-								</marker>
-							</map>
-						</div>
 					</div>
 					<div class="field-error" ng-show="showUpdatingErrorMessage">{{ 'err_in_update_parkingmeter' | i18n }}</div>
 			   		<table width="97%" ng-show="!tabletWiew">			
@@ -632,8 +632,8 @@
 					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePmeter(0, parckingMeter, form, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPmeter(form, parckingMeter, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePmeter(0, parckingMeter, form, myArea, parckingMeter.myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPmeter(form, parckingMeter, myArea, parckingMeter.myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>
 						</tr>
 						<tr>
@@ -647,8 +647,8 @@
 					   			<button type="button" class="btn btn-default btn-lg" ng-click="closeView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="10%" align="right">
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePmeter(0, parckingMeter, form, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPmeter(form, parckingMeter, myArea, myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePmeter(0, parckingMeter, form, myArea, parckingMeter.myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPmeter(form, parckingMeter, myArea, parckingMeter.myGeometry, myPmZone0, myPmZone1, myPmZone2, myPmZone3, myPmZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>
 						</tr>
 						<tr>

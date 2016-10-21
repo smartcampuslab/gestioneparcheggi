@@ -291,7 +291,7 @@
 								</tr>
 								<tr ng-show="bpconf.bp_geometry.visible">
 									<td class="detailsViewBikeSX">{{ 'pm_geometry' | i18n }}:</td>
-									<td class="detailsViewBikeDX">{{ myGeometry }}</td>
+									<td class="detailsViewBikeDX">{{ bikePoint.myGeometry }}</td>
 								</tr>
 								<tr ng-show="bpconf.bp_zones0.visible">
 									<td class="detailsViewBikeSX">
@@ -381,7 +381,21 @@
 						<div class="panel panel-default" width="90%">
 				    		<h3 class="panel-title" ng-show="isEditing"><strong>{{ 'edit_bikepoint' | i18n }}</strong></h3>
 				    		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_bikepoint' | i18n }}</strong></h3>
-					  		<div class="panel-body">	
+					  		<div class="panel-body">
+								<div class="col-md-12"  >
+									<map id="editBike" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewMarker()" ><!-- ng-show="resizeMap()" -->
+										<marker ng-repeat="bp in newBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
+										</marker>
+										<marker ng-repeat="bp in editBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
+										</marker>
+									</map>
+								</div>
+								<div class="form-group">
+							    	<label for="geometry" ng-show="bpconf.bp_geometry.visible">{{ 'bp_geometry' | i18n }}</label>
+							    	<input id="geometry" type="text" class="form-control" name="bpGeometry" ng-model="bikePoint.myGeometry" ng-required="bpconf.bp_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'bp_geo_placeholder' | i18n }}" ng-blur="moveMarker(bikePoint.myGeometry)" >
+							   		<div class="field-error" ng-show="!isInit && form.bpGeometry.$error.pattern">{{ 'bikepoint_geometry_select_err_pattern' | i18n }}</div>
+							   		<div class="field-error" ng-show="!isInit && form.bpGeometry.$error.required">{{ 'bikepoint_geometry_select_err_required' | i18n }}</div>
+								</div>
 							   	<div class="form-group" ng-show="bpconf.bp_name.visible">
 							    	<label for="name">{{ 'bp_name' | i18n }}</label>
 							    	<input id="name" type="text" class="form-control" name="pName" ng-model="bikePoint.name" ng-required="bpconf.bp_name.required" placeholder="{{ 'bp_name_placeholder' | i18n }}" >
@@ -434,20 +448,6 @@
 							    	</select>
 							   		<div class="field-error" ng-show="!isInit && form.bpZone4.$error.required">{{ 'zone_select_err_required' | i18n }}</div>
 								</div>
-								<div class="form-group">
-							    	<label for="geometry" ng-show="bpconf.bp_geometry.visible">{{ 'bp_geometry' | i18n }}</label>
-							    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="bpconf.bp_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'bp_geo_placeholder' | i18n }}" ng-blur="moveMarker(myGeometry)" ng-show="bpconf.bp_geometry.visible" >
-							   		<div class="field-error" ng-show="!isInit && form.pGeometry.$error.pattern">{{ 'bikepoint_geometry_select_err_pattern' | i18n }}</div>
-							   		<div class="field-error" ng-show="!isInit && form.pGeometry.$error.required">{{ 'bikepoint_geometry_select_err_required' | i18n }}</div>
-								</div>
-								<div class="col-md-12"  >
-									<map id="editBike" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewMarker()" ><!-- ng-show="resizeMap()" -->
-										<marker ng-repeat="bp in newBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
-										</marker>
-										<marker ng-repeat="bp in editBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
-										</marker>
-									</map>
-								</div>
 							</div>
 							<div class="field-error" ng-show="showUpdatingBPErrorMessage">{{ 'err_in_update_bikepoint' | i18n }}</div>
 					   		<table width="97%" ng-show="!tabletWiew">			
@@ -457,8 +457,8 @@
 							   			<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
 							   		</td>
 							   		<td width="7%" align="right">
-							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(0, bikePoint, form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, bikePoint, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(0, bikePoint, form, bikePoint.myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, bikePoint, bikePoint.myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 							   		</td>
 								</tr>
 								<tr>
@@ -472,8 +472,8 @@
 							   			<button type="button" class="btn btn-default btn-lg" ng-click="closeBPView()">{{ 'text_btn_close' | i18n  }}</button>
 							   		</td>
 							   		<td width="10%" align="right">
-							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(0, bikePoint, form, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, bikePoint, myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="updateBpoint(0, bikePoint, form, bikePoint.myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+							   			<button type="button" class="btn btn-primary btn-lg" ng-click="createBpoint(form, bikePoint, bikePoint.myGeometry, myBpZone0, myBpZone1, myBpZone2, myBpZone3, myBpZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 							   		</td>
 								</tr>
 								<tr>
