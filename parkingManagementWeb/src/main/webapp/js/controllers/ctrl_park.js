@@ -758,9 +758,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     $scope.getHourSlotsFromTimePeriodArray = function(timePeriods){
     	var hoursArray = [];
-    	var values = timePeriods;
-    	for(var i = 0; i < values.length; i++){
-    		hoursArray.push(values[i].from + " - " + values[i].to);
+    	if(timePeriods){
+	    	var values = timePeriods;
+	    	for(var i = 0; i < values.length; i++){
+	    		hoursArray.push(values[i].from + " - " + values[i].to);
+	    	}
     	}
     	return hoursArray;
     };
@@ -3691,7 +3693,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	$scope.mapOption = {
 		center : sharedDataService.getConfMapCenter(),	//"[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
 		zoom : sharedDataService.getConfMapZoom(),
-		style : myStyles
+		styles : myStyles
 	};
 	
 	$scope.getCorrectMap = function(type){
@@ -4073,6 +4075,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.parkingStructure.streetReference = result.substring(0, result.indexOf(','));
 			}
 		});
+	};
+	
+	$scope.closeAllInfoWindows = function(){
+		var infoWindow = $scope.vAreaMap.InfoWindow();
+		infoWindow.close($scope.vAreaMap);
 	};
 	
 	$scope.polygons = [];

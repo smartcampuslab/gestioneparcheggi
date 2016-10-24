@@ -1,11 +1,11 @@
 <div class="row">
 	<div ng-show="!editModeA"><!-- && !viewModeA -->
 		<div class="col-md-6" ><!-- id="map_canvas" ng-show="areaMapReady" -->
-			<map id="viewArea" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" ><!-- ng-show="resizeMap()" -->
+			<map id="viewArea" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" ><!-- ng-show="resizeMap()" -->
 				<shape name="polygon" ng-repeat="a in polygons" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
          			geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ a.stroke.weight }}"
-         			fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showInfoWindow(event, a.info_windows_cod)">
-     				<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
+         			fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showInfoWindow(event, a.info_windows_cod)"><!-- closeAllInfoWindows(); -->
+     				<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}" >
 				        <div ng-non-bindable="">
 				          	<div id="siteNotice"></div>
 				          	<h4 id="firstHeading" class="firstHeading"><span ng-show="aconf.a_name.visible">{{ a.data.name }}</span>&nbsp;&nbsp;&nbsp;
@@ -466,7 +466,7 @@
 								<button ng-click="removeAllNewPolygons()" type="button" class="btn btn-default" >{{ 'btn_remove_all_polygons' | i18n }}</button>
 	        					<button ng-click="removeLastNewPolygon()" type="button" class="btn btn-default" >{{ 'btn_remove_last_polygons' | i18n }}</button>
 							</div>
-							<map id="editArea" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addAreaPath()" on-rightclick="addNewAreaPath()" >
+							<map id="editArea" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" style="height: 400px" on-click="addAreaPath()" on-rightclick="addNewAreaPath()" >
 				    			<shape name="polygon" ng-repeat="eA in editGAreas" id="{{ eA.id }}" path="{{ eA.gpath }}" visible="{{ eA.visible }}" editable="{{ eA.editable }}" draggable="{{ eA.draggable }}"
 				         			geodesic="{{ eA.geodesic }}" stroke-color="#000000" stroke-opacity="1.0" stroke-weight="{{ eA.stroke.weight }}" on-rightclick="removeAreaPath(event, eA)"
 				         			fill-color="#000000" fill-opacity="{{ eA.fill.opacity }}">
@@ -583,7 +583,7 @@
 											<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
 										</td>
 										<td>
-											<ul class="no-margin" ng-repeat="t in getHourSlotsFromTimePeriodArray(r.timeSlots)">
+											<ul class="no-margin" ng-repeat="t in getHourSlotsFromArray(r.timeSlot)">
 												<li>{{ t }}</li>
 											</ul>
 										</td>
@@ -715,7 +715,7 @@
 								   			<td>{{ (r.to | date:'dd/MM') }}</td>
 											<td><span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span></td>
 											<td>
-												<ul class="no-margin" ng-repeat="t in getHourSlotsFromTimePeriodArray(r.timeSlots)">
+												<ul class="no-margin" ng-repeat="t in getHourSlotsFromArray(r.timeSlot)">
 													<li>{{ t }}</li>
 												</ul>
 											</td>

@@ -1,7 +1,7 @@
 <div class="row">
 	<div ng-show="!editModePS"><!-- && !viewModePS -->
 		<div class="col-md-6" ><!-- ng-show="psMapReady" -->
-			<map id="viewPs" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" >
+			<map id="viewPs" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" >
 				<marker ng-repeat="ps in parkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ ps.icon }}" on-click="showInfoWindow(event, 'ps')" >
 					<info-window id="ps" visible-on-marker="{{ ps.id }}">
 						<div ng-non-bindable="">
@@ -760,7 +760,7 @@
 			    		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_parkingstructure' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 						<div class="col-md-12">
-							<map id="editPs" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPsMarker()" >
+							<map id="editPs" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" style="height: 400px" on-click="addNewPsMarker()" >
 								<marker ng-repeat="ps in newPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->
 								</marker>
 								<marker ng-repeat="ps in editPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->

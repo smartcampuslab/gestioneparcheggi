@@ -1,7 +1,7 @@
 <div class="row"><!-- ng-init="getParkingMetersFromDb()" -->
 	<div ng-show="!editModePM"><!--  && !viewModePM -->			
 				<div class="col-md-6" ><!-- id="map_canvas" ng-show="pmMapReady" -->
-					<map id="viewPm" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" >
+					<map id="viewPm" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" >
 						<marker ng-repeat="pm in parkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showInfoWindow(event, 'pm')" >
 							<info-window id="pm" visible-on-marker="{{ pm.id }}">
 						        <div ng-non-bindable="">
@@ -543,7 +543,7 @@
 			    		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_parkingmeter' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 			  			<div class="col-md-12" >
-							<map id="editPm" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPmMarker()" >
+							<map id="editPm" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" style="height: 400px" on-click="addNewPmMarker()" >
 								<marker ng-repeat="pm in newPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{{ pm.icon }}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()" ><!-- on-drag="updatePos()" -->
 								</marker>
 								<marker ng-repeat="pm in editPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{{ pm.icon }}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()" ><!-- on-drag="updatePos()" -->
