@@ -1740,6 +1740,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	            { visibility: "off" }
 	        ]
 	    },
+	   /* {
+	    	featureType: "administrative",
+	        elementType: "labels",
+	        stylers: [
+	            { visibility: "off" }
+	        ]
+	    },*/
 	    {
 	    	featureType: "transit.station",
 	    	elementType: "all",
@@ -3471,10 +3478,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// retrieve all data Parallel: function that retrieve data in parallel way 
 	$scope.retrieveAllDataFromDBParallel = function(){
 		var isFirst = true;
-		var returnedAreas = $scope.getAllAreas();
-		returnedAreas.then(function(result){
-			sharedDataService.setSharedLocalAreas(result);
-		});
+		var sharedAreas = sharedDataService.getSharedLocalAreas();
+		if (sharedAreas != null){
+			var returnedAreas = $scope.getAllAreas();
+			returnedAreas.then(function(result){
+				sharedDataService.setSharedLocalAreas(result);
+			});
+		}
 		$scope.getAllProfitPM("", "1;12", "1,2,3,4,5,6,7", null, "0;23", 2, isFirst);
 		var returnedStreets = $scope.getAllOccupancyStreets("", "1;12", "1,2,3,4,5,6,7", "custom", "0;23", 2, isFirst);
 		returnedStreets.then(function(result){
@@ -3504,7 +3514,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			var type = $scope.getCorrectZoneTypeFromId(6);
 			$scope.getAllZones(type, 4);
 		}
-		$scope.getAllBikes(isFirst);
+		//$scope.getAllBikes(isFirst);
 	};
 	
 	$scope.retrieveAllDataFromDBSerial = function(){

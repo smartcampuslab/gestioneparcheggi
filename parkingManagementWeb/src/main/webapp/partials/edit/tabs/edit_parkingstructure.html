@@ -1,7 +1,7 @@
 <div class="row">
 	<div ng-show="!editModePS"><!-- && !viewModePS -->
 		<div class="col-md-6" ><!-- ng-show="psMapReady" -->
-			<map id="viewPs" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" >
+			<map id="viewPs" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" >
 				<marker ng-repeat="ps in parkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ ps.icon }}" on-click="showInfoWindow(event, 'ps')" >
 					<info-window id="ps" visible-on-marker="{{ ps.id }}">
 						<div ng-non-bindable="">
@@ -654,7 +654,7 @@
 						</tr>
 						<tr ng-show="psconf.ps_geometry.visible">
 							<td class="detailsViewStructSX">{{ 'ps_geometry' | i18n }}:</td>
-							<td class="detailsViewStructDX">{{ myGeometry }}</td>
+							<td class="detailsViewStructDX">{{ parkingStructure.myGeometry }}</td>
 						</tr>
 						<tr ng-show="psconf.ps_parkride.visible">
 							<td class="detailsViewStructSX">{{ 'ps_park_and_ride' | i18n }}:</td>
@@ -760,7 +760,7 @@
 			    		<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_parkingstructure' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 						<div class="col-md-12">
-							<map id="editPs" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addNewPsMarker()" >
+							<map id="editPs" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" style="height: 400px" on-click="addNewPsMarker()" >
 								<marker ng-repeat="ps in newPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->
 								</marker>
 								<marker ng-repeat="ps in editPsMarkers" id="{{ ps.id }}" position="{{ ps.pos }}" icon="{{ ps.icon }}" visible="{{ ps.options.visible }}" draggable="{{ ps.options.draggable }}" on-dragend="updatePsPos()" ><!-- on-drag="updatePos()" -->
@@ -771,7 +771,7 @@
 						</div>
 						<div class="form-group" ng-show="psconf.ps_geometry.visible">
 					    	<label for="geometry">{{ 'pm_geometry' | i18n }}</label>
-					    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="myGeometry" ng-required="ps_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'ps_geo_placeholder' | i18n }}" >
+					    	<input id="geometry" type="text" class="form-control" name="pGeometry" ng-model="parkingStructure.myGeometry" ng-required="ps_geometry.required" ng-pattern="gpsPos" placeholder="{{ 'ps_geo_placeholder' | i18n }}" >
 					   		<div class="field-error" ng-show="!isInit && form.pGeometry.$error.pattern">{{ 'parkingstructure_geometry_select_err_pattern' | i18n }}</div>
 					   		<div class="field-error" ng-show="!isInit && form.pGeometry.$error.required">{{ 'parkingstructure_geometry_select_err_required' | i18n }}</div>
 						</div>	
@@ -1508,8 +1508,8 @@
 					   			<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="7%" align="right">
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePstruct(0, parkingStructure, form, myPayment, myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePstruct(0, parkingStructure, form, myPayment, parkingStructure.myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, parkingStructure.myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>
 						</tr>
 						<tr>
@@ -1523,8 +1523,8 @@
 					   			<button type="button" class="btn btn-default btn-lg" ng-click="closePSView()">{{ 'text_btn_close' | i18n  }}</button>
 					   		</td>
 					   		<td width="10%" align="right">
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePstruct(0, parkingStructure, form, myPayment, myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
-					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="updatePstruct(0, parkingStructure, form, myPayment, parkingStructure.myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="isEditing">{{ 'text_btn_save' | i18n  }}</button>
+					   			<button type="button" class="btn btn-primary btn-lg" ng-click="createPstruct(form, parkingStructure, myPayment, parkingStructure.myGeometry, ps_payment.required, myPsZone0, myPsZone1, myPsZone2, myPsZone3, myPsZone4)" ng-show="!isEditing">{{ 'text_btn_save' | i18n  }}</button>
 					   		</td>
 						</tr>
 						<tr>

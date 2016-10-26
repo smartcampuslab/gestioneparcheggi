@@ -1280,7 +1280,7 @@
     "description": "Testo placeholder campo telefono struttura"
 }, { 
     "key": "ps_manager_placeholder",
-    "value": "Inserire il soggetto terzo proprietario della struttura",
+    "value": "Inserire il proprietario della struttura",
     "description": "Testo placeholder campo proprietario struttura"
 }, {
     "key": "ps_mmode_placeholder",

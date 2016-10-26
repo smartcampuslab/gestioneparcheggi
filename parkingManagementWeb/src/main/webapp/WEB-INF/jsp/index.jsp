@@ -56,7 +56,6 @@
 <script src="js/services/objects_services/serv_parking_meter.js"></script>
 <script src="js/services/objects_services/serv_bike_point.js"></script>
 <script src="js/filters.js?1001"></script>
-<!-- <script src="js/services.js?1001"></script> -->
 <script src="js/directives.js"></script>
 
 <script src="lib/angular-file-upload.js" type="text/javascript"></script>
@@ -65,7 +64,8 @@
 <script src="lib/angular-base64.min.js"></script>
 
 <script src="lib/lodash.js"></script>
-<script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs"></script>
+<!-- <script src="https://maps.google.com/maps/api/js?key=AIzaSyBmKVWmFzh2JHT7q1MLmQRQ7jC4AhkRBDs&sensor=false&v=3.exp"></script> -->
 <script src="lib/ng-map.min.js"></script>
 
 <base href="<%=request.getContextPath()%>/" />

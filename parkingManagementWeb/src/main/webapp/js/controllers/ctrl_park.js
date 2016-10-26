@@ -40,6 +40,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.zone = {};
     $scope.microzone = {};
     $scope.bikePoint = {};
+    $scope.myGeometry = "";
+	$scope.myLineGeometry = null;
+	$scope.myNewLineGeometry = null;
+	$scope.myPolGeometry = "";
+	$scope.myNewPolGeometry = null;
     
     $scope.openingPeriods = [];
     $scope.timePeriod = {};
@@ -756,9 +761,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     $scope.getHourSlotsFromTimePeriodArray = function(timePeriods){
     	var hoursArray = [];
-    	var values = timePeriods;
-    	for(var i = 0; i < values.length; i++){
-    		hoursArray.push(values[i].from + " - " + values[i].to);
+    	if(timePeriods){
+	    	var values = timePeriods;
+	    	for(var i = 0; i < values.length; i++){
+	    		hoursArray.push(values[i].from + " - " + values[i].to);
+	    	}
     	}
     	return hoursArray;
     };
@@ -836,6 +843,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
        		} else {
        			$scope.areaWS = localArea;
        			$scope.polygons = gMapService.getAreaPolygons();
+       			gMapService.closeLoadingMap();
        		}
        	}
        	if(tab.index >= 2 && tab.index <= 6){
@@ -856,6 +864,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	    	if(showPm)$scope.resizeMap("viewPm");
     	    	$scope.parkingMetersMarkers = gMapService.getParkingMetersMarkers();
     	    	$scope.pmMapReady = true;
+    	    	gMapService.closeLoadingMap();
        		}
        		var s = sharedDataService.getSharedLocalStreets();
        		if(s == null || s.length == 0){
@@ -873,6 +882,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	    	}
     	    	$scope.allAreaFilter = sharedDataService.getAreaFilter();
     			$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
+    			gMapService.closeLoadingMap();
        		}
        	}
        	if(tab.index == 8){
@@ -887,6 +897,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     				$scope.parkingStructureMarkers = (pMarkers) ? pMarkers : [];
     				$scope.resizeMap("viewPs");
     			}
+    			gMapService.closeLoadingMap();
        		}
        	}
        	if(tab.index == 9){
@@ -904,6 +915,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	    			$scope.vStreetMap.shapes = gMapService.hideAllStreets(s, toHide);
     	    		}
     				$scope.geoStreets = gMapService.getStreetPolylines();
+    				gMapService.closeLoadingMap();
     	    	}
     	    	$scope.allAreaFilter = sharedDataService.getAreaFilter();
     			$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
@@ -917,6 +929,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	    	if(showPm)$scope.resizeMap("viewPm");
     	    	$scope.parkingMetersMarkers = gMapService.getParkingMetersMarkers();
     	    	$scope.pmMapReady = true;
+    	    	gMapService.closeLoadingMap();
        		}
        	}
        	if(tab.index == 10){
@@ -1533,9 +1546,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		return corrType;
 	};
 	
-	$scope.setMyGeometry = function(value){
+	/*$scope.setMyGeometry = function(value){
 		$scope.myGeometry = value;
-	};
+	};*/
+	
+	/*$scope.getMyGeometry = function(){
+		return $scope.myGeometry;
+	};*/
 	
 	$scope.setMyLineGeometry = function(value){
 		$scope.myLineGeometry = value;
@@ -1570,7 +1587,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				    	var lat = marker.getPosition().lat();
 				    	var lng = marker.getPosition().lng();
 				    	console.log('marker dragend: ' + lat + "," + lng);
-				    	$scope.setMyGeometry(lat + "," + lng);
+				    	//$scope.setMyGeometry(lat + "," + lng);
+				    	$scope.myGeometry = lat + "," + lng;
 				    }
 				}
 		};
@@ -1591,7 +1609,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		},
 	    		icon: $scope.pmMarkerIcon
 	    	};
-	    	$scope.myGeometry = ret.pos;
+	    	$scope.parckingMeter.myGeometry = ret.pos;
+	    	//$scope.setMyGeometry(ret.pos);
 	    	return $scope.newPmMarkers.push(ret);
 		}
     };
@@ -1611,7 +1630,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		},
 	    		icon: $scope.psMarkerIcon
 	    	};
-	    	$scope.myGeometry = ret.pos;
+	    	$scope.parkingStructure.myGeometry = ret.pos;
+	    	//$scope.setMyGeometry(ret.pos);
 	    	$scope.getStructAddress(event);
 	    	return $scope.newPsMarkers.push(ret);
 		}
@@ -1632,6 +1652,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		}
 	    	};
 	    	$scope.myGeometry = ret.pos;
+	    	//$scope.setMyGeometry(ret.pos);
 	    	return $scope.newCentres.push(ret);
 		}
     };
@@ -1651,19 +1672,24 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		},
 	    		icon: $scope.bpMarkerIcon
 	    	};
-	    	$scope.myGeometry = ret.pos;
+	    	$scope.bikePoint.myGeometry = ret.pos;
+	    	//$scope.setMyGeometry(ret.pos);
 	    	return $scope.newBikePointMarkers.push(ret);
 		}
     };
 	
 	$scope.updatePmPos = function(event){
     	var pos = event.latLng;
-    	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    	$scope.parckingMeter.myGeometry = pos.lat() + "," + pos.lng();
+    	//var geom = pos.lat() + "," + pos.lng();
+    	//$scope.setMyGeometry(geom);
     };
     
     $scope.updatePsPos = function(event){
     	var pos = event.latLng;
-    	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    	$scope.parkingStructure.myGeometry = pos.lat() + "," + pos.lng();
+    	//var geom = pos.lat() + "," + pos.lng();
+    	//$scope.setMyGeometry(geom);
     	$scope.getStructAddress(event);
     };
     
@@ -1708,11 +1734,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     $scope.updateCenterPos = function(event){
     	var pos = event.latLng;
     	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    	//var geom = pos.lat() + "," + pos.lng();
+    	//$scope.setMyGeometry(geom);
     };
     
     $scope.updatePos = function(event){
     	var pos = event.latLng;
-    	$scope.myGeometry = pos.lat() + "," + pos.lng();
+    	$scope.bikePoint.myGeometry = pos.lat() + "," + pos.lng();
+    	//var geom = pos.lat() + "," + pos.lng();
+    	//$scope.setMyGeometry(geom);
     };
     
     $scope.moveMarker = function(val){
@@ -2131,6 +2161,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     // Retrieve all Area Method
     $scope.getAllAreas = function(){
+    	gMapService.loadMapsObject();	// To show modal waiting spinner
 		$scope.polygons = [];
 		var promiseAreas = areaService.getAreasFromDb(showArea);
 		promiseAreas.then(function(result){
@@ -2138,6 +2169,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			var toHide = $scope.vAreaMap.shapes;
 			$scope.vAreaMap.shapes = gMapService.hideAllAreas(result, toHide);
 			$scope.polygons = gMapService.getAreaPolygons();
+			gMapService.closeLoadingMap();
 		});
 	};
     
@@ -2433,6 +2465,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Method used to retrieve all zones from db and show the on map (if have geometry)
 	$scope.getAllZones = function(z_type, tindex){
+		gMapService.loadMapsObject();	// To show modal waiting spinner
 		$scope.zoneWS = [];	// clear zones;
 		var myZonePromise = zoneService.getZonesFromDb(z_type);
 		myZonePromise.then(function(result){
@@ -2442,6 +2475,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    	$scope.resizeMap("viewZone" + tindex);
 		    }
 		    sharedDataService.setSharedLocalZones($scope.zoneWS, tindex);
+		    gMapService.closeLoadingMap();
 		});
 	}
 	
@@ -2531,9 +2565,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			if(sLng.length > $scope.gpsLength){
 				toRemLng = sLng.length - $scope.gpsLength;
 			}
-			$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+			//$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+			$scope.myGeometry = sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng);
 		} else {
-			$scope.setMyGeometry(null);
+			//$scope.setMyGeometry(null);
+			$scope.myGeometry = null;
 		}
 		
 		var toHide = $scope.getCorrectMapZone(zindex);
@@ -2585,7 +2621,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			visible: true,
 			geodesic: false
 		};
-		$scope.setMyGeometry(null);
+		//$scope.setMyGeometry(null);
+		$scope.myGeometry = null;
 		
 		// Case edit
 		if(zone != null){
@@ -2611,7 +2648,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 			if(zone.centermap){
-				$scope.setMyGeometry(zone.centermap.lat + "," + zone.centermap.lng);
+				//$scope.setMyGeometry(zone.centermap.lat + "," + zone.centermap.lng);
+				$scope.myGeometry = zone.centermap.lat + "," + zone.centermap.lng;
 			}
 			if(zone.geometry != null && zone.geometry.points.length > 0){
 				var tmpPol = "";
@@ -2816,6 +2854,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Street retrieve method
 	$scope.getAllStreets = function(){
+		gMapService.loadMapsObject();	// To show modal waiting spinner
 		$scope.mapStreetSelectedMarkers = [];
 		$scope.geoStreets = [];
 		var promiseStreets = streetService.getStreetsFromDb(showStreets);
@@ -2830,6 +2869,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	}
 	    	$scope.allAreaFilter = sharedDataService.getAreaFilter();
 			$scope.streetAreaFilter = $scope.allAreaFilter[0].id;
+			gMapService.closeLoadingMap();
 		});
 	};
 	
@@ -3221,6 +3261,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Retrieve all PM objects from db
 	$scope.getAllParkingMeters = function(){
+		gMapService.loadMapsObject();	// To show modal waiting spinner
 		$scope.editModePM = false;
 		$scope.pmMapReady = false;
 		var myDataPromise = parkingMeterService.getParkingMetersFromDb(showPm);
@@ -3230,6 +3271,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	if(showPm)$scope.resizeMap("viewPm");
 	    	$scope.parkingMetersMarkers = gMapService.getParkingMetersMarkers();
 	    	$scope.pmMapReady = true;
+	    	gMapService.closeLoadingMap();
 	    });
 	};
 	
@@ -3256,7 +3298,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(sLng.length > $scope.gpsLength){
 			toRemLng = sLng.length - $scope.gpsLength;
 		}
-		$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+		//$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+		$scope.parckingMeter.myGeometry = sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng);
 		
 		$scope.pViewMetersMarkers = $scope.parkingMetersMarkers;
 		for(var i = 0; i < $scope.pViewMetersMarkers.length; i++){
@@ -3334,11 +3377,12 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				}
 			}
 			
-			$scope.setMyGeometry(parkingMeter.geometry.lat + "," + parkingMeter.geometry.lng);
+			//$scope.setMyGeometry(parkingMeter.geometry.lat + "," + parkingMeter.geometry.lng);
+			$scope.parckingMeter.myGeometry = parkingMeter.geometry.lat + "," + parkingMeter.geometry.lng
 			$scope.editPmMarkers = gMapService.setParkingMeterMapDetails(parkingMeter, 1);
 			
 		} else {
-			$scope.setMyGeometry(null);
+			//$scope.setMyGeometry(null);
 			$scope.parckingMeter = {
 				id: null,
 				code: null,
@@ -3348,6 +3392,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				zones: null,
 				geometry: null
 			};
+			$scope.parckingMeter.myGeometry = null;
 		}
 		$scope.viewModePM = false;
 		$scope.editModePM = true;
@@ -3464,6 +3509,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Method to retrieve all parkingStructures from db
 	$scope.getAllParkingStructures = function(){
+		gMapService.loadMapsObject();	// To show modal waiting spinner
 		//var markers = [];
 		var myDataPromise = structureService.getParkingStructuresFromDb(showPs);
 		myDataPromise.then(function(result){
@@ -3472,6 +3518,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				var pMarkers = gMapService.getParkingStructuresMarkers();
 				$scope.parkingStructureMarkers = (pMarkers) ? pMarkers : [];
 				$scope.resizeMap("viewPs");
+				gMapService.closeLoadingMap();
 			}
 		});
 	};
@@ -3495,7 +3542,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(sLng.length > $scope.gpsLength){
 			toRemLng = sLng.length - $scope.gpsLength;
 		}
-		$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+		//$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+		$scope.parkingStructure.myGeometry = sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng);
 		$scope.myPaymentMode = sharedDataService.castMyPaymentModeToString(parkingStructure.paymentMode);
 		
 		$scope.pViewStructMarkers = $scope.parkingStructureMarkers;
@@ -3672,12 +3720,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			}
 			
 			$scope.myPayment = sharedDataService.checkMyPaymentMode(parkingStruct.paymentMode, $scope.myPayment);
-			$scope.setMyGeometry(parkingStruct.geometry.lat + "," + parkingStruct.geometry.lng);
+			//$scope.setMyGeometry(parkingStruct.geometry.lat + "," + parkingStruct.geometry.lng);
+			$scope.parkingStructure.myGeometry = parkingStruct.geometry.lat + "," + parkingStruct.geometry.lng;
 			$scope.editPsMarkers = gMapService.setParkingStructureMapDetails(parkingStruct, 1);
 			
 		} else {
 			$scope.inithializeVehicleTypeList(null, 1);
-			$scope.setMyGeometry(null);
+			//$scope.setMyGeometry(null);
 			$scope.parkingStructure = {
 				name: null,
 				streetReference: null,
@@ -3693,6 +3742,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				zones: null,
 				geometry: null
 			};
+			$scope.parkingStructure.myGeometry = null;
 		}
 		$scope.initVehicleType(1);
 		$scope.initPSCityCenter();
@@ -4039,6 +4089,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	// Method to retrieve all bike points
 	$scope.getAllBikePoints = function(){
+		gMapService.loadMapsObject();	// To show modal waiting spinner
 		$scope.bikePointMarkers = [];
 		$scope.bpMapReady = false;
 		var allBpoints = [];
@@ -4052,6 +4103,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		$scope.bikePointMarkers = gMapService.getBikePointsMarkers();
 	    	}
 	    	$scope.bpMapReady = true;
+	    	gMapService.closeLoadingMap();
 	    });
 	};
 	
@@ -4071,7 +4123,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		if(sLng.length > $scope.gpsLength){
 			toRemLng = sLng.length - $scope.gpsLength;
 		}
-		$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+		//$scope.setMyGeometry(sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng));
+		$scope.bikePoint.myGeometry = sLat.substring(0, sLat.length - toRemLat) + "," + sLng.substring(0, sLng.length - toRemLng);
 		
 		$scope.pViewBikeMarkers = $scope.bikePointMarkers;
 		for(var i = 0; i < $scope.pViewBikeMarkers.length; i++){
@@ -4149,11 +4202,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					}
 				}
 			}
-			$scope.setMyGeometry(bikePoint.geometry.lat + "," + bikePoint.geometry.lng);
+			//$scope.setMyGeometry(bikePoint.geometry.lat + "," + bikePoint.geometry.lng);
+			$scope.bikePoint.myGeometry = bikePoint.geometry.lat + "," + bikePoint.geometry.lng;
 			$scope.editBikePointMarkers = gMapService.setBikePointMapDetails(bikePoint, 1);
 			
 		} else {
-			$scope.setMyGeometry(null);
+			//$scope.setMyGeometry(null);
+			$scope.bikePoint.myGeometry = null;
 		}
 		$scope.viewModeBP = false;
 		$scope.editModeBP = true;
@@ -4259,9 +4314,27 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		longitude: 11.037440299987793
 	};
 	
+	var myStyles =[
+	      {
+	        	featureType: "poi",
+	            elementType: "labels",
+	            stylers: [
+	                { visibility: "off" }
+	            ]
+	   	    },
+	       	{
+	        	featureType: "transit.station",
+	         	elementType: "all",
+	            stylers: [
+	                { visibility: "off" }
+	            ]
+	        }
+	   	];
+	
 	$scope.mapOption = {
 		center : sharedDataService.getConfMapCenter(),	//"[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
-		zoom : sharedDataService.getConfMapZoom()
+		zoom : sharedDataService.getConfMapZoom(),
+		styles : myStyles
 	};
 	
 	$scope.getCorrectMap = function(type){
@@ -4615,6 +4688,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    var myPoint = gMapService.getPointFromLatLng(event.latLng, 1);
 	    if(myPoint){
 	    	$scope.myGeometry = myPoint.latitude + "," + myPoint.longitude;
+	    	//var geom = myPoint.latitude + "," + myPoint.longitude;
+	    	//$scope.setMyGeometry(geom);
 	    }
 	    $scope.myZonePath.push(myPoint);
 	    $scope.setMyPolGeometry($scope.myZonePath);
@@ -4641,6 +4716,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.parkingStructure.streetReference = result.substring(0, result.indexOf(','));
 			}
 		});
+	};
+	
+	$scope.closeAllInfoWindows = function(){
+		var infoWindow = $scope.vAreaMap.InfoWindow();
+		infoWindow.close($scope.vAreaMap);
 	};
 	
 	$scope.polygons = [];

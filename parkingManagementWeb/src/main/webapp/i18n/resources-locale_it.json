@@ -576,8 +576,8 @@
     "description": "Label proprietario struttura"
 }, {
     "key": "ps_manager_in_edit",
-    "value": "Proprieta' di soggetto terzo",
-    "description": "Label gestore privato struttura"
+    "value": "Proprietario",
+    "description": "Label proprietario struttura"
 }, {
     "key": "ps_fee",
     "value": "Tariffa sosta",

@@ -576,8 +576,8 @@
     "description": "Label proprietario struttura"
 }, {
     "key": "ps_manager_in_edit",
-    "value": "Third party owner",
-    "description": "Label gestore privato struttura"
+    "value": "Owner",
+    "description": "Label proprietario struttura"
 }, {
     "key": "ps_fee",
     "value": "Stop rate",

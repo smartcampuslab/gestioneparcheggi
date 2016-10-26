@@ -46,7 +46,7 @@ public class MongoUserDetailsService implements UserDetailsService {
     private static final Logger logger = Logger.getLogger(MongoUserDetailsService.class);
     private static final Integer role = 1;
     
-private org.springframework.security.core.userdetails.User userdetails;
+    private org.springframework.security.core.userdetails.User userdetails;
 
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {

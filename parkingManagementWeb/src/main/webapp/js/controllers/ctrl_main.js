@@ -254,7 +254,7 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
         $scope.user_token = null;
         sharedDataService.setInGlobalLogPage(false);
         
-    	window.location.href = "logout";
+    	window.location.href = "metroparco/logout";
     };
                   		    
     $scope.getToken = function() {

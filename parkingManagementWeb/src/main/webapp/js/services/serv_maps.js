@@ -595,7 +595,7 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
 							},
 							data: areas[i],
 							info_windows_pos: this.correctPointGoogle(poligons[j].points[1]),
-							info_windows_cod: "a" + areas[i].id,
+							info_windows_cod: "aIW_" + areas[i].id,
 							editable: false,
 							draggable: false,
 							geodesic: false,

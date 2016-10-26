@@ -101,7 +101,7 @@ pm.directive('mySessionCheck', ['$interval', 'dateFilter', 'utilsService',
         updateCheck();
       });
 
-      stopCheck = $interval(updateCheck, 30000);	// half minute	//(1205000 - 30 min)
+      stopCheck = $interval(updateCheck, 600000);	// ten minute	//(1205000 - 30 min)
 
       // listen on DOM destroy (removal) event, and cancel the next UI update
       // to prevent updating time after the DOM element was removed.

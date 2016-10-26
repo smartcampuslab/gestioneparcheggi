@@ -1,7 +1,7 @@
 <div class="row">
 	<div ng-show="!editModeZ">
 		<div class="col-md-6">
-			<map id="viewZone3" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" ><!-- ng-show="resizeMap()" -->
+			<map id="viewZone3" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" ><!-- ng-show="resizeMap()" -->
 				<shape name="{{ z.type }}" ng-repeat="z in zone_polygons3" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
          			geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="{{ z.stroke.opacity }}" stroke-weight="{{ z.stroke.weight }}"
          			fill-color="{{ z.fill.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
@@ -248,7 +248,7 @@
 			    	<h3 class="panel-title" ng-show="!isEditing"><strong>{{ 'create_zone' | i18n }}</strong></h3>
 			  		<div class="panel-body">
 			  			<div class="col-md-12" ng-if="!zpc.att.zone_geom_from_subelement.visible" ><!-- id="map_canvas" ng-show="!isEditing" -->
-							<map id="editZone3" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" width="100%" style="height: 400px" on-click="addZonePath()" ><!-- ng-show="resizeMap()" -->
+							<map id="editZone3" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" style="height: 400px" on-click="addZonePath()" ><!-- ng-show="resizeMap()" -->
 								<shape name="polygon" id="editZPolygon" path="{{ editGZone.gpath }}" visible="{{ editGZone.visible }}" editable="{{ editGZone.editable }}"
 				         			geodesic="{{ editGZone.geodesic }}" stroke-color="{{ editGZone.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ editGZone.stroke.weight }}"
 				         			fill-color="{{ editGZone.fill.color }}" fill-opacity="{{ editGZone.fill.opacity }}">
