@@ -492,7 +492,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	weekDays: [true, true, true, true, true, true, true],
 	    	timeSlot: null,
 	    	timeSlots: [],
-	    	rateValue: 0.0,
+	    	rateValue: "",//"0,00",
 	    	//dayOrNight: $scope.all_mode,
 	    	holiday: false,
 	    	note: null
@@ -570,6 +570,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		   		}
 		   		$scope.clearPr();
 		   		$scope.isInitPeriod = true;
+		   		// here I call the close form method
+			    $scope.saveAndClosePForm();
 	    	}
     	}
     };

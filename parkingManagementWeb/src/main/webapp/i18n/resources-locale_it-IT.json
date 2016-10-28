@@ -2639,4 +2639,10 @@
 }, {
 	"key": "agency_title",
 	"value": "Agency"
+}, {
+	"key": "add_period_button",
+	"value": "AGGIUNGI"
+}, {
+	"key": "add_edit_period_button",
+	"value": "AGGIUNGI NUOVO"
 }]

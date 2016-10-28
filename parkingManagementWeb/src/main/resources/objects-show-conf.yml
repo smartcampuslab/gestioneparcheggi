@@ -1519,7 +1519,7 @@ providers:
           visible: true
         - code: timeSlot
           editable: true
-          required: false
+          required: true
           visible: true
         - code: smsCode
           editable: true
@@ -2488,7 +2488,7 @@ providers:
           visible: true
         - code: timeSlot
           editable: true
-          required: false
+          required: true
           visible: true
         - code: smsCode
           editable: true
