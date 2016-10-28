@@ -221,6 +221,10 @@ pre {
     border-color: rgba(0,0,0,.2);
 }
 
+td, th {
+    padding: 0 5px 0 5px;
+}
+
 td.detailsTableSX {
     width: 55%;
     height: 20px;
