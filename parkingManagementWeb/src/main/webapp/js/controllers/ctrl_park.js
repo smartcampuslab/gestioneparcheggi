@@ -505,6 +505,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     	$scope.isPeriodFormVisible = true;
     };
     
+    $scope.hidePForm = function(){
+    	$scope.clearPr();	// To clean the form input data
+    	$scope.isPeriodFormVisible = false;
+    };
+    
     $scope.saveAndClosePForm = function(){
     	$scope.isPeriodFormVisible = false;
     	angular.copy($scope.tmpPr, $scope.pr);

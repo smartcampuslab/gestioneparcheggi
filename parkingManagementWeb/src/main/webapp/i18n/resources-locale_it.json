@@ -2645,4 +2645,13 @@
 }, {
 	"key": "add_edit_period_button",
 	"value": "AGGIUNGI NUOVO"
+}, {
+	"key": "cancel_adding_vehicle_button",
+	"value": "ANNULLA"
+}, {
+	"key": "expand_edit_button",
+	"value": "Visualizza/modifica"
+}, {
+	"key": "reduce_close_button",
+	"value": "Nascondi"
 }]

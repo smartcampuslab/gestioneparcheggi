@@ -493,12 +493,12 @@
 										<tr valign="bottom">
 											<th width="7%">{{ 'area_rate_period_startdate' | i18n }}</th>
 											<th width="7%">{{ 'area_rate_period_enddate' | i18n }}</th>
-											<th width="30%">{{ 'area_rate_period_weekdays' | i18n }}</th>
+											<th width="25%">{{ 'area_rate_period_weekdays' | i18n }}</th>
 											<th width="16%">{{ 'area_rate_period_hours' | i18n }}</th>
 											<th width="10%">{{ 'area_rate_value' | i18n }}</th>
 											<th width="5%">{{ 'area_rate_is_holidays' | i18n }}</th>
-											<th width="20%">{{ 'area_rate_note' | i18n }}</th>
-											<th width="5%"></th>
+											<th width="25%">{{ 'area_rate_note' | i18n }}</th>
+											<th width="15%"></th>
 										</tr>
 										<tr>
 											<td>
@@ -531,11 +531,11 @@
 								    		<td>
 												<input id="note" type="text" class="form-control" name="pNote" ng-model="pr.note" ng-required="false" placeholder="{{ 'area_rate_period_note_placeholder' | i18n }}" >
 								    		</td>
-											<td width="3%">
-												&nbsp;
-											</td>
 											<!-- <td width="10%" align="right"><button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 0)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button></td> -->
-											<td width="10%" align="left"><button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 0)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">{{ 'add_period_button' | i18n }}</button></td>
+											<td align="left">
+												<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()">{{ 'cancel_adding_vehicle_button' | i18n }}</button>
+												&nbsp;<button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 0)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">{{ 'add_period_button' | i18n }}</button>
+											</td>
 										</tr>
 										<tr ng-show="(isErrorRatePeriod==true)">
 											<td colspan="8"><div class="alert alert-danger">{{ errorsMessageRatePeriod }}</div></td>
@@ -684,7 +684,10 @@
 												<input id="note" type="text" class="form-control" name="pNote" ng-model="pr.note" ng-required="false" placeholder="{{ 'area_rate_period_note_placeholder' | i18n }}" >
 								    		</td>
 											<!-- <td align="right"><button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 0)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button></td> -->
-											<td align="left"><button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 0)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">{{ 'add_period_button' | i18n }}</button></td>
+											<td align="left">
+												<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()">{{ 'cancel_adding_vehicle_button' | i18n }}</button>
+												&nbsp;<button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 0)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">{{ 'add_period_button' | i18n }}</button>
+											</td>
 										</tr>
 										<tr ng-show="(isErrorRatePeriod==true)">
 											<td colspan="4"><div class="alert alert-danger">{{ errorsMessageRatePeriod }}</div></td>
