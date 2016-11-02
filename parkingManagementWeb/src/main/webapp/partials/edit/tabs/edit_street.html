@@ -790,8 +790,12 @@
 								<tr>
 									<td width="40%"></td>
 									<td width="20%" align="center"><h3 class="panel-title">{{ getVehicleKey(sc.vehicleType) | i18n }}</h3></td>
-									<td width="30%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed($index)" ng-click="showVehicleSlotsPanel($index)"></span></td>
-									<td width="10%" align="right"><span class="glyphicon glyphicon-trash" ng-click="deleteVehicleTypeSlots(sc, 0)"></span></td>
+									<td width="40%" align="right">
+										<button class="btn btn-primary btn-sm" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)" alt="{{ 'reduce_close_button' | i18n }}" title="{{ 'reduce_close_button' | i18n }}"><i class="glyphicon glyphicon-chevron-up" ></i></button>
+										<button class="btn btn-primary btn-sm" ng-click="showVehicleSlotsPanel($index)" ng-show="!vehicle_slots_panel_showed($index)" alt="{{ 'expand_edit_button' | i18n }}" title="{{ 'expand_edit_button' | i18n }}"><i class="glyphicon glyphicon-chevron-down" ></i></button>
+										&nbsp;
+										<button class="btn btn-danger btn-sm" ng-click="deleteVehicleTypeSlots(sc, 0)" alt="{{ 'btn_delete_text' | i18n }}" title="{{ 'btn_delete_text' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
+									</td>
 								</tr>
 								</table>
 		  					</div>
@@ -866,7 +870,14 @@
 	  						</div>
 	  					</div>
 	  					<div class="panel panel-default" ng-show="newVehicleList && newVehicleList.length > 0" >
-							<div class="panel-heading">
+							<div>
+								<table width="100%">
+									<tr>
+										<td align="left"><button class="btn btn-success" ng-show="!vehicle_slots_panel_showed_new()" ng-click="showVehicleSlotsPanelNew()">{{ 'add_new_vehicle_slots' | i18n }}</button></td>
+									</tr>
+								</table>
+							</div>
+							<!-- <div class="panel-heading">
 		    					<table width="100%">
 								<tr>
 									<td width="40%"></td>
@@ -874,7 +885,7 @@
 									<td width="40%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed_new()" ng-click="hideVehicleSlotsPanelNew()"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed_new()" ng-click="showVehicleSlotsPanelNew()"></span></td>
 								</tr>
 								</table>
-		  					</div>
+		  					</div> -->
 		  					<div class="well" ng-show="vehicle_slots_panel_showed_new()"><!-- class="panel-body" -->
 							   	<div class="panel-body">
 						   			<div class="form-group" ng-show="sconf.s_slotNum.visible">
@@ -955,10 +966,12 @@
 									</div>
 									<table width="100%">
 										<tr>
-											<td width="80%"></td>
-											<td width="20%" align="right">
-												<button type="button" class="btn btn-primary" ng-click="addNewConfigurationSlots(newSlotsConf, 0)">{{ 'ok_button' | i18n  }}</button>
+											<td width="30%" align="left">
+												<button type="button" class="btn btn-default" ng-click="hideVehicleSlotsPanelNew()">{{ 'cancel_adding_vehicle_button' | i18n  }}</button>
+												&nbsp;
+												<button type="button" class="btn btn-success" ng-click="addNewConfigurationSlots(newSlotsConf, 0)">{{ 'add_new_object' | i18n  }}</button>
 											</td>
+											<td width="70%"></td>
 										</tr>
 									</table>
 							   	</div>

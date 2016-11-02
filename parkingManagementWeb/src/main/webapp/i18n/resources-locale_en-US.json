@@ -2832,5 +2832,14 @@
 	"value": "ADD"
 }, {
 	"key": "add_edit_period_button",
-	"value": "ADD/EDIT"
+	"value": "ADD NEW"
+}, {
+	"key": "cancel_adding_vehicle_button",
+	"value": "CANCEL"
+}, {
+	"key": "expand_edit_button",
+	"value": "Show/edit"
+}, {
+	"key": "reduce_close_button",
+	"value": "Hide"
 }]

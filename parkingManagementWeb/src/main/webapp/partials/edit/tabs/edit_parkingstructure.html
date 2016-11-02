@@ -847,7 +847,10 @@
 											<td width="3%">
 												&nbsp;
 											</td>
-											<td width="10%" align="right"><button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 1)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button></td>
+											<td width="10%" align="left">
+												<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()">{{ 'cancel_adding_vehicle_button' | i18n }}</button>
+												&nbsp;<button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 1)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">{{ 'add_period_button' | i18n }}</button>
+											</td>
 										</tr>
 										<tr ng-show="(isErrorRatePeriod==true)">
 											<td colspan="8"><div class="alert alert-danger">{{ errorsMessageRatePeriod }}</div></td>
@@ -878,15 +881,15 @@
 										<th width="7%">{{ 'area_rate_period_startdate' | i18n }}</th>
 										<th width="7%">{{ 'area_rate_period_enddate' | i18n }}</th>
 										<th width="20%">{{ 'area_rate_period_weekdays' | i18n }}</th>
-										<th width="20%">{{ 'area_rate_period_hours' | i18n }}</th>
+										<th width="15%">{{ 'area_rate_period_hours' | i18n }}</th>
 										<th width="10%">{{ 'area_fee' | i18n }}</th>
 <!-- 										<th width="10%">{{ 'area_rate_is_day_or_night' | i18n }}</th> -->
 										<th width="5%">{{ 'area_rate_is_holidays' | i18n }}</th>
-										<th width="25%">{{ 'area_rate_note' | i18n }}</th>
-										<th width="10%"></th>
+										<th width="20%">{{ 'area_rate_note' | i18n }}</th>
+										<th width="20%"></th>
 									</tr>
 						  			<tbody class="animate-repeat" ng-repeat="r in parkingStructure.validityPeriod">
-									<tr>
+									<tr class="spaceline">
 										<td>
 								   			{{ (r.from | date:'dd/MM') }}
 								   		</td>
@@ -916,34 +919,40 @@
 										<td>
 											{{ r.note }}
 										</td>
-										<td align="center">
+										<td align="left">
 											<!-- <button type="button" class="btn btn-default btn-xs" ng-click="editRatePeriod(r)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_edit' | i18n }}" title="{{ 'area_rate_edit' | i18n }}" ><i class="glyphicon glyphicon-pencil"></i></button> -->
-											<button type="button" class="btn btn-default btn-xs" ng-click="deleteRatePeriod(r, 1)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_canc' | i18n }}" title="{{ 'area_rate_canc' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
+											<button type="button" class="btn btn-danger btn-sm" ng-click="deleteRatePeriod(r, 1)" alt="{{ 'area_rate_canc' | i18n }}" title="{{ 'area_rate_canc' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
 										</td>
 									</tr>
 									</tbody>
 									<tr ng-show="parkingStructure.validityPeriod.length > 0"><td colspan="8"><hr></td></tr>
 									<tr ng-show="parkingStructure.validityPeriod.length > 0">
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td></td>
-										<td align="right">
-											<button type="button" class="btn btn-default" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
-											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+										<td align="left">
+											<button type="button" class="btn btn-success" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible">{{ 'add_edit_period_button' | i18n }}</button>
+											<!-- <button type="button" class="btn btn-success" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button> -->
 										</td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
+										<td></td>
 									</tr>
 								</table>
 								<table width="100%" ng-show="parkingStructure.validityPeriod.length == 0 || parkingStructure.validityPeriod == null">
 									<tr>
-										<td colspan="7">{{ 'no_value_inserted_period' | i18n }}</td>
-										<td align="right">
-											<button type="button" class="btn btn-default" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
-											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+										<td colspan="8">{{ 'no_value_inserted_period' | i18n }}</td>
+									</tr>
+									<tr>
+										<td colspan="8"><hr/></td>
+									</tr>
+									<tr>	
+										<td align="left">
+											<button type="button" class="btn btn-success" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible">{{ 'add_edit_period_button' | i18n }}</button>
+											<!-- <button type="button" class="btn btn-success" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button> -->
 										</td>
+										<td colspan="7"></td>
 									</tr>
 								</table>
 							</div>
@@ -995,7 +1004,10 @@
 								    		<td>
 												<input id="note" type="text" class="form-control" name="pNote" ng-model="pr.note" ng-required="false" placeholder="{{ 'area_rate_period_note_placeholder' | i18n }}" >
 								    		</td>
-											<td align="right"><button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 1)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">&nbsp;<i class="glyphicon glyphicon-plus icon-white"></i>&nbsp;</button></td>
+											<td align="left">
+												<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()">{{ 'cancel_adding_vehicle_button' | i18n }}</button>
+												&nbsp;<button type="button" class="btn btn-success" ng-click="addRatePeriod(pr, form, 1)" alt="{{ 'area_add_period_rate_text' | i18n }}" title="{{ 'area_add_period_rate_text' | i18n }}">{{ 'add_period_button' | i18n }}</button>
+											</td>
 										</tr>
 										<tr ng-show="(isErrorRatePeriod==true)">
 											<td colspan="4"><div class="alert alert-danger">{{ errorsMessageRatePeriod }}</div></td>
@@ -1052,32 +1064,41 @@
 												<span ng-show="!r.holiday">{{ 'no_val_select' | i18n }}</span>
 											</td>
 											<td>{{ r.note }}</td>
-											<td align="center">
+											<td align="left">
 												<!-- <button type="button" class="btn btn-default btn-xs" ng-click="editRatePeriod(r)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_edit' | i18n }}" title="{{ 'area_rate_edit' | i18n }}" ><i class="glyphicon glyphicon-pencil"></i></button> -->
-												<button type="button" class="btn btn-default btn-xs" ng-click="deleteRatePeriod(r, 1)" ng-show="isPeriodFormVisible == true" alt="{{ 'area_rate_canc' | i18n }}" title="{{ 'area_rate_canc' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
+												<button type="button" class="btn btn-danger btn-sm" ng-click="deleteRatePeriod(r, 1)" alt="{{ 'area_rate_canc' | i18n }}" title="{{ 'area_rate_canc' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
 											</td>
+										</tr>
+										<tr ng-show="r != parkingStructure.validityPeriod[parkingStructure.validityPeriod.length - 1]">
+											<td colspan="4"><hr/></td>
 										</tr>
 									</table>
 								</div>	
 								<table width="100%">	
 									<tr ng-show="parkingStructure.validityPeriod.length > 0"><td colspan="4"><hr></td></tr>
 									<tr ng-show="parkingStructure.validityPeriod.length > 0">
-										<td></td>
-										<td></td>
-										<td></td>
-										<td align="right">
-											<button type="button" class="btn btn-default" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
-											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+										<td align="left">
+											<button type="button" class="btn btn-success" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible">{{ 'add_edit_period_button' | i18n }}</button>
+											<!-- <button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button> -->
 										</td>
+										<td></td>
+										<td></td>
+										<td></td>
 									</tr>
 								</table>
 								<table width="100%" ng-show="parkingStructure.validityPeriod.length == 0 || parkingStructure.validityPeriod == null">
 									<tr>
-										<td colspan="3">{{ 'no_value_inserted_period' | i18n }}</td>
-										<td align="right">
-											<button type="button" class="btn btn-default" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible"><i class="glyphicon glyphicon-pencil"></i></button>
-											<button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button>
+										<td colspan="4">{{ 'no_value_inserted_period' | i18n }}</td>
+									</tr>
+									<tr>
+										<td colspan="4"><hr/></td>
+									</tr>
+									<tr>	
+										<td align="left">
+											<button type="button" class="btn btn-success" ng-click="showPForm()" alt="{{ 'area_rate_period_insert_edit' | i18n }}" title="{{ 'area_rate_period_insert_edit' | i18n }}" ng-show="!isPeriodFormVisible">{{ 'add_edit_period_button' | i18n }}</button>
+											<!-- <button type="button" class="btn btn-default" ng-click="saveAndClosePForm()" ng-show="isPeriodFormVisible == true">{{ 'ok_button' | i18n }}</button> -->
 										</td>
+										<td colspan="3"></td>
 									</tr>
 								</table>
 							</div>
@@ -1142,8 +1163,12 @@
 										<tr>
 											<td width="40%"></td>
 											<td width="20%" align="center"><h3 class="panel-title">{{ getVehicleKey(sc.vehicleType) | i18n }}</h3></td>
-											<td width="30%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed($index)" ng-click="showVehicleSlotsPanel($index)"></span></td>
-											<td width="10%" align="right"><span class="glyphicon glyphicon-trash" ng-click="deleteVehicleTypeSlots(sc, 1)"></span></td>
+											<td width="40%" align="right">
+												<button class="btn btn-primary btn-sm" ng-show="vehicle_slots_panel_showed($index)" ng-click="hideVehicleSlotsPanel($index)" alt="{{ 'reduce_close_button' | i18n }}" title="{{ 'reduce_close_button' | i18n }}"><i class="glyphicon glyphicon-chevron-up" ></i></button>
+												<button class="btn btn-primary btn-sm" ng-click="showVehicleSlotsPanel($index)" ng-show="!vehicle_slots_panel_showed($index)" alt="{{ 'expand_edit_button' | i18n }}" title="{{ 'expand_edit_button' | i18n }}"><i class="glyphicon glyphicon-chevron-down" ></i></button>
+												&nbsp;
+												<button class="btn btn-danger btn-sm" ng-click="deleteVehicleTypeSlots(sc, 1)" alt="{{ 'btn_delete_text' | i18n }}" title="{{ 'btn_delete_text' | i18n }}" ><i class="glyphicon glyphicon-trash"></i></button>
+											</td>
 										</tr>
 										</table>
 				  					</div>
@@ -1218,7 +1243,14 @@
 			  						</div>
 			  					</div>
 						   		<div class="panel panel-default" ng-show="newVehicleList && newVehicleList.length > 0" >
-									<div class="panel-heading">
+									<div>
+										<table width="100%">
+										<tr>
+											<td align="left"><button class="btn btn-success" ng-show="!vehicle_slots_panel_showed_new()" ng-click="showVehicleSlotsPanelNew()">{{ 'add_new_vehicle_slots' | i18n }}</button></td>
+										</tr>
+										</table>
+									</div>
+									<!-- <div class="panel-heading">
 				    					<table width="100%">
 										<tr>
 											<td width="40%"></td>
@@ -1226,7 +1258,7 @@
 											<td width="40%" align="left"><span class="glyphicon glyphicon-chevron-up" ng-show="vehicle_slots_panel_showed_new()" ng-click="hideVehicleSlotsPanelNew()"></span><span class="glyphicon glyphicon-chevron-down" ng-show="!vehicle_slots_panel_showed_new()" ng-click="showVehicleSlotsPanelNew()"></span></td>
 										</tr>
 										</table>
-				  					</div>
+				  					</div> -->
 				  					<div class="well" ng-show="vehicle_slots_panel_showed_new()"><!-- class="panel-body" -->
 									   	<div class="panel-body">
 								   			<div class="form-group" ng-show="sconf.s_slotNum.visible">
@@ -1307,10 +1339,12 @@
 											</div>
 											<table width="100%">
 												<tr>
-													<td width="80%"></td>
-													<td width="20%" align="right">
-														<button type="button" class="btn btn-primary" ng-click="addNewConfigurationSlots(newSlotsConfPS, 1)">{{ 'ok_button' | i18n  }}</button>
+													<td width="30%" align="left">
+														<button type="button" class="btn btn-default" ng-click="hideVehicleSlotsPanelNew()">{{ 'cancel_adding_vehicle_button' | i18n  }}</button>
+														&nbsp;
+														<button type="button" class="btn btn-success" ng-click="addNewConfigurationSlots(newSlotsConfPS, 1)">{{ 'add_new_object' | i18n  }}</button>
 													</td>
+													<td width="70%"></td>
 												</tr>
 											</table>
 									   	</div>
