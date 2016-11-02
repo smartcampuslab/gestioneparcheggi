@@ -1445,7 +1445,7 @@
 								   	</div>
 								   	<div class="form-group">
 								    	<label for="sl_flow">{{ 'impact_intercepted_traffic' | i18n }}</label>
-								    	<input id="sl_flow" type="text" class="form-control" name="pSLFlow" ng-model="parkingStructure.flow" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_intercepted_traffic' | i18n }}" ng-change="getParkDemand(parkingStructure, myGeometry)" ><!-- ng-blur="getParkDemand(parkingStructure, myGeometry)" -->
+								    	<input id="sl_flow" type="text" class="form-control" name="pSLFlow" ng-model="parkingStructure.flow" ng-pattern="onlyNumbers" ng-required="psconf.ps_streetlife.required" placeholder="{{ 'impact_intercepted_traffic' | i18n }}" ng-change="getParkDemand(parkingStructure, parkingStructure.myGeometry)" ><!-- ng-blur="getParkDemand(parkingStructure, myGeometry)" -->
 								    	<div class="field-error" ng-show="!isInit && form.pSLFlow.$error.pattern">{{ 'impact_intercepted_traffic_error_incorrect' | i18n }}</div>
 								    	<div class="field-error" ng-show="!isInit && form.pSLFlow.$error.required">{{ 'impact_intercepted_traffic_error_required' | i18n }}</div>
 								   	</div>
@@ -1455,7 +1455,7 @@
 								   	
 								   	<div class="field-error" ng-show="showMissingFields">{{ 'impact_empty_field_list' | i18n }}: {{ missingFields }}</div>
 								   	<div class="row" align="right">
-								   		<button type="button" class="btn btn-primary" ng-click="getParkDemand(parkingStructure, myGeometry);calculateImpactEvaluation(parkingStructure)">{{ 'impact_load_value' | i18n }}</button>
+								   		<button type="button" class="btn btn-primary" ng-click="getParkDemand(parkingStructure, parkingStructure.myGeometry);calculateImpactEvaluation(parkingStructure)">{{ 'impact_load_value' | i18n }}</button>
 								   	</div>
 								   	<div class="form-group">
 								    	<label for="sl_percentageDemand">{{ 'impact_use_request' | i18n }}</label>

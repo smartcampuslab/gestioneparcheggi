@@ -1709,8 +1709,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
     
     $scope.calculateDistanceBetweenCenterAndPS = function(centerLat, centerLng){
-    	if($scope.myGeometry){
-    		var pos2 = $scope.myGeometry.split(",");
+    	if($scope.parkingStructure.myGeometry){
+    		var pos2 = $scope.parkingStructure.myGeometry.split(",");
     		var lat2 = pos2[0];
     		var lon2 = pos2[1];
     		var distance = $scope.getDistanceFromLatLonInKm(centerLat, centerLng, lat2, lon2) + "";
@@ -2004,6 +2004,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			hour: "10,12",
 			valueType: 2,
 			vehicleType: sharedDataService.getVehicleType(),
+			agencyId: agencyId,
 			noCache: new Date().getTime()
 		};
 		if($scope.showLogs)console.log("Params passed in ws get call" + JSON.stringify(params));	
