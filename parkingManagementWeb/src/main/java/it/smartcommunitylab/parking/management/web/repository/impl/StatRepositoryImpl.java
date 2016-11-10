@@ -17,8 +17,11 @@ package it.smartcommunitylab.parking.management.web.repository.impl;
 
 import it.smartcommunitylab.parking.management.web.model.ObjectsHolidays;
 import it.smartcommunitylab.parking.management.web.model.ObjectsSpecialHolidays;
+import it.smartcommunitylab.parking.management.web.model.stats.DayStat;
+import it.smartcommunitylab.parking.management.web.model.stats.MonthStat;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
+import it.smartcommunitylab.parking.management.web.model.stats.TreeStat;
 import it.smartcommunitylab.parking.management.web.model.stats.YearStat;
 import it.smartcommunitylab.parking.management.web.repository.StatCustomRepository;
 import it.smartcommunitylab.parking.management.web.repository.StatRepository;
@@ -61,15 +64,19 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	private static final long MILLISINMONTH = 2629743830L;
 	private static final long MAXMILLISINAMONTH = 2678400000L;
 	private static final long MILLISINYEAR = 31556926000L;
+	private static final String G_YEAR = "year";
+	private static final String G_MONTH = "month";
+	private static final String G_DAY = "day";
+	private static final String G_HOUR = "hour";
     
 	public Map<StatKey, StatValue> findStats(String objectId, String appId, String type, Map<String, Object> params,
 			int[] years, byte[] months, byte[] days, byte[] hours) {
 		
 		Query query = null;
 		if (days == null || days.length == 0) {
-			query = createQuery(objectId, appId, type, params, years, months, days, true, true, hours);
+			query = createQuery(objectId, appId, type, params, years, months, days, true, true, hours, false);
 		} else {
-			query = createQuery(objectId, appId, type, params, years, months, days, false, false, hours);
+			query = createQuery(objectId, appId, type, params, years, months, days, false, false, hours, false);
 		} 
 		List<YearStat> stats = mongoTemplate.find(query, YearStat.class);
 		
@@ -78,14 +85,14 @@ public class StatRepositoryImpl implements StatCustomRepository {
 
 	public Map<StatKey, StatValue> findStatsWD(String objectId, String appId,
 			String type, Map<String, Object> params, int[] years, byte[] months, byte[] hours) {
-		Query query = createQuery(objectId, appId, type, params, years, months, null, true, false, hours);
+		Query query = createQuery(objectId, appId, type, params, years, months, null, true, false, hours, false);
 		List<YearStat> stats = mongoTemplate.find(query, YearStat.class);
 		return toMap(stats);
 	}
 
 	public Map<StatKey, StatValue> findStatsWE(String objectId, String appId,
 			String type, Map<String, Object> params, int[] years, byte[] months, byte[] hours) {
-		Query query = createQuery(objectId, appId, type, params, years, months, null, false, true, hours);
+		Query query = createQuery(objectId, appId, type, params, years, months, null, false, true, hours, false);
 		List<YearStat> stats = mongoTemplate.find(query, YearStat.class);
 		return toMap(stats);
 	}
@@ -1235,10 +1242,11 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			byte[] days, 
 			boolean wd, 
 			boolean we,
-			byte[] hours) 
+			byte[] hours,
+			boolean isGranularity) 
 	{
 		//Criteria res = new Criteria("key.appId").is(appId).and("key.type").is(type);
-		Criteria res = new Criteria("key.appId").is(appId).and("key.type").regex(type + ".*");	// new management of type: contains instead of is
+		Criteria res = (!isGranularity) ? new Criteria("key.appId").is(appId).and("key.type").regex(type + ".*") : new Criteria("key.appId").is(appId).and("key.type").is(type);	// new management of type: contains instead of is
 		if (params != null && !params.isEmpty()) {
 			for (String key : params.keySet())
 				res.and("parameters."+key).is(params.get(key));
@@ -1334,6 +1342,292 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		return map;
 	}
 	
+	private Map<String, Object> toMapObjectGranularity(List<YearStat> stats, String granularity, String objectId) {
+		String[] granParams = null;
+		if(granularity != null){ 
+			if(granularity.contains(",")){
+				granParams = granularity.split(",");
+			} else {
+				granParams = new String[1];
+				granParams[0] = granularity;
+			}
+		}
+		Map<String, StatValue> map = new HashMap<String, StatValue>();
+		Map<String, Object> corrMap = new HashMap<String, Object>();
+		//if(granParams.length == 1){
+		if(objectId == null){
+			for (YearStat stat : stats) {
+				String oId = null;
+				oId = stat.getKey().toStatKey().toStringSpecial();
+				String key = stat.getKey().getYear().toString();
+				StatValue value = stat.toStatValueByYear();
+				if(granularity.contains(G_YEAR)){
+					map.put(oId + key.toString(), value.merge(map.get(oId + key.toString())));
+				}
+				if(granularity.contains(G_MONTH)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							StatValue monthValue = monthStat.get(monthkey).toStatValueByMonth();
+							if((granParams.length == 1)){
+								map.put(oId + monthkey.toString(), monthValue.merge(map.get(oId + monthkey.toString())));
+							} else {
+								map.put(key.toString() + "." + monthkey.toString(), monthValue.merge(map.get(oId + monthkey.toString())));
+							}
+					    }
+					}
+				}
+				if(granularity.contains(G_DAY)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							MonthStat monthStatVal = monthStat.get(monthkey);
+							Map<Byte, DayStat> dayStat = monthStatVal.getDays();
+							for (Iterator<Byte> dayIterator = dayStat.keySet().iterator(); dayIterator.hasNext();) {
+								Byte daykey = dayIterator.next();
+								if (dayStat.get(daykey) != null) {
+									StatValue dayValue = dayStat.get(daykey).toStatValueByDay();
+									if((granParams.length == 1)){
+										map.put(oId + daykey.toString(), dayValue.merge(map.get(oId + daykey.toString())));
+									} else {
+										map.put(oId + key.toString() + "." + monthkey.toString() + "." + daykey.toString(), dayValue.merge(map.get(oId + daykey.toString())));
+									}
+								}	
+							}
+					    }
+					}
+				}
+				if(granularity.contains(G_HOUR)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							MonthStat monthStatVal = monthStat.get(monthkey);
+							Map<Byte, DayStat> dayStat = monthStatVal.getDays();
+							for (Iterator<Byte> dayIterator = dayStat.keySet().iterator(); dayIterator.hasNext();) {
+								Byte daykey = dayIterator.next();
+								if (dayStat.get(daykey) != null) {
+									DayStat dayValue = dayStat.get(daykey);
+									Map<Byte, StatValue> hourStat = dayValue.getHours();
+									for(Iterator<Byte> hourIterator = hourStat.keySet().iterator(); hourIterator.hasNext();) {
+										Byte hourkey = hourIterator.next();
+										if (hourStat.get(hourkey) != null){
+											StatValue hourVal = hourStat.get(hourkey);
+											if((granParams.length == 1)){
+												map.put(oId + hourkey.toString(), hourVal.merge(map.get(oId + hourkey.toString())));
+											} else {
+												map.put(oId + key.toString() + "." + monthkey.toString() + "." + daykey.toString() + "." + hourkey.toString(), hourVal.merge(map.get(oId + hourkey.toString())));
+											}
+										}	
+									}
+							    }
+							}
+					    }
+					}
+				}
+			}
+		} else {
+			for (YearStat stat : stats) {
+				String key = stat.getKey().getYear().toString();
+				StatValue value = stat.toStatValueByYear();
+				if(granularity.contains(G_YEAR)){
+					map.put(key.toString(), value.merge(map.get(key.toString())));
+				}
+				if(granularity.contains(G_MONTH)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							StatValue monthValue = monthStat.get(monthkey).toStatValueByMonth();
+							if((granParams.length == 1)){
+								map.put(monthkey.toString(), monthValue.merge(map.get(monthkey.toString())));
+							} else {
+								map.put(key.toString() + "." + monthkey.toString(), monthValue.merge(map.get(monthkey.toString())));
+							}
+					    }
+					}
+				}
+				if(granularity.contains(G_DAY)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							MonthStat monthStatVal = monthStat.get(monthkey);
+							Map<Byte, DayStat> dayStat = monthStatVal.getDays();
+							for (Iterator<Byte> dayIterator = dayStat.keySet().iterator(); dayIterator.hasNext();) {
+								Byte daykey = dayIterator.next();
+								if (dayStat.get(daykey) != null) {
+									StatValue dayValue = dayStat.get(daykey).toStatValueByDay();
+									if((granParams.length == 1)){
+										map.put(daykey.toString(), dayValue.merge(map.get(daykey.toString())));
+									} else {
+										map.put(key.toString() + "." + monthkey.toString() + "." + daykey.toString(), dayValue.merge(map.get(daykey.toString())));
+									}
+								}	
+							}
+					    }
+					}
+				}
+				if(granularity.contains(G_HOUR)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							MonthStat monthStatVal = monthStat.get(monthkey);
+							Map<Byte, DayStat> dayStat = monthStatVal.getDays();
+							for (Iterator<Byte> dayIterator = dayStat.keySet().iterator(); dayIterator.hasNext();) {
+								Byte daykey = dayIterator.next();
+								if (dayStat.get(daykey) != null) {
+									DayStat dayValue = dayStat.get(daykey);
+									Map<Byte, StatValue> hourStat = dayValue.getHours();
+									for(Iterator<Byte> hourIterator = hourStat.keySet().iterator(); hourIterator.hasNext();) {
+										Byte hourkey = hourIterator.next();
+										if (hourStat.get(hourkey) != null){
+											StatValue hourVal = hourStat.get(hourkey);
+											if((granParams.length == 1)){
+												map.put(hourkey.toString(), hourVal.merge(map.get(hourkey.toString())));
+											} else {
+												map.put(key.toString() + "." + monthkey.toString() + "." + daykey.toString() + "." + hourkey.toString(), hourVal.merge(map.get(hourkey.toString())));
+											}
+										}	
+									}
+							    }
+							}
+					    }
+					}
+				}
+			}
+		}
+		//}
+		//if(objectId != null){
+			for (Iterator<String> iterator = map.keySet().iterator(); iterator.hasNext();) {
+				String skey = iterator.next().toString();
+			    if (!map.get(skey).empty()) {
+			    	corrMap.put(skey, map.get(skey));
+			    }
+			}
+		//}
+		if(granParams.length > 1){
+			// here I have to generate a tree with all granularity level
+			Map<String, TreeStat> years = new HashMap<String, TreeStat>();
+			Map<String, TreeStat> months = new HashMap<String, TreeStat>();
+			Map<String, TreeStat> days = new HashMap<String, TreeStat>();
+			Map<String, TreeStat> hours = new HashMap<String, TreeStat>();
+			Map<String, Object> complexMap = new HashMap<String, Object>();
+			String[] complexKey = null;
+			for (Iterator<String> iterator = corrMap.keySet().iterator(); iterator.hasNext();) {
+				String cmkey = iterator.next().toString();
+			    if (corrMap.get(cmkey) != null) {
+			    	if(objectId == null){
+			    		String[] completeKey = cmkey.split("=");
+			    		complexKey = completeKey[1].split("\\.");
+			    	} else {
+			    		complexKey = cmkey.split("\\.");
+			    	}
+			        switch(complexKey.length){
+			        	case 1:
+			        		TreeStat year = new TreeStat(corrMap.get(cmkey), null);
+			        		years.put(cmkey, year); 
+			        		break;
+			        	case 2:
+			        		TreeStat month = new TreeStat(corrMap.get(cmkey), null);
+			        		months.put(cmkey, month);
+			        		break;
+			        	case 3:
+			        		TreeStat day = new TreeStat(corrMap.get(cmkey), null);
+			        		days.put(cmkey, day);
+			        		break;
+			        	case 4: 
+			        		TreeStat hour = new TreeStat(corrMap.get(cmkey), null);
+			        		hours.put(cmkey, hour);
+			        		break;
+			        }
+			    }
+			}
+			// merge hours in days
+			for (Iterator<String> iterator = hours.keySet().iterator(); iterator.hasNext();) {
+				String hkey = iterator.next().toString();
+				TreeStat hValue = hours.get(hkey);
+				String dkey = getKeyFromComplete(hkey, 3);
+				if(days.get(dkey) != null){
+					Map<String, TreeStat> subElem = days.get(dkey).getSubEle();
+					subElem.put(getSpecKeyFromComplete(hkey, 4), hValue);
+					days.get(dkey).setSubEle(subElem);
+				} else {
+					Map<String, TreeStat> tmp = new HashMap<String, TreeStat>();
+					tmp.put(getSpecKeyFromComplete(hkey, 4), hValue);
+					TreeStat day = new TreeStat(corrMap.get(dkey), tmp);
+	        		days.put(dkey, day);
+				}
+			}
+			// merge days in months
+			for (Iterator<String> iterator = days.keySet().iterator(); iterator.hasNext();) {
+				String dkey = iterator.next().toString();
+				TreeStat dValue = days.get(dkey);
+				String mkey = getKeyFromComplete(dkey, 2);
+				if(months.get(mkey) != null){
+					Map<String, TreeStat> subElem = months.get(mkey).getSubEle();
+					subElem.put(getSpecKeyFromComplete(dkey, 3), dValue);
+					months.get(mkey).setSubEle(subElem);
+				} else {
+					Map<String, TreeStat> tmp = new HashMap<String, TreeStat>();
+					tmp.put(getSpecKeyFromComplete(dkey, 3), dValue);
+					TreeStat month = new TreeStat(corrMap.get(mkey), tmp);
+	        		months.put(mkey, month);
+				}
+				
+			}
+			// merge months in years
+			for (Iterator<String> iterator = months.keySet().iterator(); iterator.hasNext();) {
+				String mkey = iterator.next().toString();
+				TreeStat mValue = months.get(mkey);
+				String ykey = getKeyFromComplete(mkey, 1);
+				if(years.get(ykey) != null){
+					Map<String, TreeStat> subElem = years.get(ykey).getSubEle();
+					subElem.put(getSpecKeyFromComplete(mkey, 2), mValue);
+					years.get(ykey).setSubEle(subElem);
+				} else {
+					Map<String, TreeStat> tmp = new HashMap<String, TreeStat>();
+					tmp.put(getSpecKeyFromComplete(mkey, 2), mValue);
+					TreeStat year = new TreeStat(corrMap.get(ykey), tmp);
+	        		years.put(ykey, year);
+				}
+			}
+			
+			for (Iterator<String> iterator = years.keySet().iterator(); iterator.hasNext();) {
+				String ykey = iterator.next().toString();
+				complexMap.put(ykey, years.get(ykey));
+			}
+			return complexMap;
+		}
+		
+		return corrMap;
+	}
+	
+	private String getKeyFromComplete(String completeKey, int mergeIndex){
+		String[] completeVal = completeKey.split("\\.");
+		switch(mergeIndex){
+			case 1: return completeVal[0];
+			case 2: return completeVal[0] + "." + completeVal[1];
+			case 3: return completeVal[0] + "." + completeVal[1] + "." + completeVal[2];
+			case 4: return completeVal[0] + "." + completeVal[1] + "." + completeVal[2] + "." + completeVal[3];
+			default: return "";
+		}
+	}
+	
+	private String getSpecKeyFromComplete(String completeKey, int mergeIndex){
+		String[] completeVal = completeKey.split("\\.");
+		switch(mergeIndex){
+			case 1: return completeVal[0];
+			case 2: return completeVal[1];
+			case 3: return completeVal[2];
+			case 4: return completeVal[3];
+			default: return "";
+		}
+	}
+	
 	private List<ObjectsHolidays> getAllHolidays(String appId){
 		List<ObjectsHolidays> res = objectItaHolidays.getHolidays();
 		List<ObjectsHolidays> resApp = new ArrayList<ObjectsHolidays>();
@@ -1397,6 +1691,51 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		//logger.error(String.format("isAHoliday function: day of week %d, day %d, month %d", wd, cal.get(Calendar.DAY_OF_MONTH), cal.get(Calendar.MONTH) + 1));
 		//logger.error(String.format("isAHoliday function result: %s", isHoliday));
 		return isHoliday;
+	}
+
+	@Override
+	public Map<String, Object> findStatsByGranularity(String objectId, String appId, String type, String granularity,
+			Map<String, Object> params, int[] years, byte[] months, byte[] days, byte[] hours) {
+		
+		String[] granParams = null;
+		if(granularity != null){ 
+			if(granularity.contains(",")){
+				granParams = granularity.split(",");
+			} else {
+				granParams = new String[1];
+				granParams[0] = granularity;
+			}
+		}
+		if(granParams.length == 1 && granParams[0].compareTo("year") == 0){
+			// year case
+		} else {
+			if(months == null || months.length == 0){
+				months = new byte[2];
+				months[0] = Byte.valueOf("1");
+				months[1] = Byte.valueOf("12");
+			}
+			if(granularity.contains(G_HOUR) && hours == null){
+				hours = new byte[24];
+				for(int i = 0; i < hours.length; i++){
+					hours[i] = Byte.valueOf(i + "");
+				}
+			}
+			if (days == null || days.length == 0) {
+				days = new byte[7];
+				for(int i = 0; i < days.length; i++){
+					days[i] = Byte.valueOf((i + 1) + "");
+				}
+			}	
+		}
+		
+		Query query = null;
+		if (days == null || days.length == 0) {
+			query = createQuery(objectId, appId, type, params, years, months, days, true, true, hours, true);
+		} else {
+			query = createQuery(objectId, appId, type, params, years, months, days, false, false, hours, true);
+		} 
+		List<YearStat> stats = mongoTemplate.find(query, YearStat.class);
+		return toMapObjectGranularity(stats, granularity, objectId);
 	};
     
 }

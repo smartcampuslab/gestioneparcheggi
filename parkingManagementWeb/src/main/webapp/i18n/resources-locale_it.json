@@ -2489,6 +2489,9 @@
     "key": "manage_zonemunicipality_tab",
     "value": "Comune"
 }, {
+    "key": "manage_zonequarters_tab",
+    "value": "Quartiere"
+}, {
     "key": "manage_street_tab",
     "value": "Parcheggio"
 }, {
@@ -2596,6 +2599,9 @@
 }, {
     "key": "label_zonemunicipality",
     "value": "Comune"
+}, {
+    "key": "label_zonequarters",
+    "value": "Quartiere"
 }, {
     "key": "vt_app_title",
     "value": "Scarica l'app"

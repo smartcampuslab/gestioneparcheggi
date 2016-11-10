@@ -99,7 +99,7 @@
 						</th>
 						<th width="30%">
 							<span ng-show="pmconf.pm_note.visible">{{ 'pm_note' | i18n }}</span>
-							<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showNoteFilter();currentPagePm=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showNotFilter">
 						    	 <input type="search" ng-model="noteFilter" placeholder="{{ 'filter_note_text' | i18n }}" />
@@ -177,7 +177,7 @@
 						</th>
 						<th width="20%">
 							<span ng-show="pmconf.pm_note.visible">{{ 'pm_note' | i18n }}</span>
-							<a href ng-click="showNoteFilter();currentPagePmp=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showNoteFilter();currentPagePmp=0" ng-show="!showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="noteFilter=null;hideNoteFilter()" ng-show="showNotFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showNotFilter">
 						    	 <input type="search" ng-model="noteFilter" placeholder="{{ 'filter_note_text' | i18n }}" />
@@ -247,7 +247,7 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="streetWS.length != 0" >
 						<th width="20%">{{ 'street_name' | i18n }}&nbsp;
-							<a href ng-click="showStreetNameFilter();currentPageSa=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showStreetNameFilter();currentPageSa=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showStreetFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -325,7 +325,7 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="streetWS.length != 0">
 						<th width="16%">{{ 'street_name' | i18n }}&nbsp;
-							<a href ng-click="showStreetNameFilter();currentPageSo=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showStreetNameFilter();currentPageSo=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showStreetFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -411,7 +411,7 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="profitStreetsList.length != 0">
 						<th width="20%">{{ 'street_name' | i18n }}&nbsp;
-							<a href ng-click="showStreetNameFilter();currentPageSp=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showStreetNameFilter();currentPageSp=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showStreetFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -483,7 +483,7 @@
 				<table class="table table-striped" style="width: 100%">
 					<tr ng-show="streetWS.length != 0">
 						<th width="16%">{{ 'street_name' | i18n }}&nbsp;
-							<a href ng-click="showStreetNameFilter();currentPageSt=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showStreetNameFilter();currentPageSt=0" ng-show="!showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideStreetNameFilter()" ng-show="showStreetFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showStreetFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -562,7 +562,7 @@
 					<tr ng-show="zoneWS0.length != 0">
 						<th width="25%">
 							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -616,7 +616,7 @@
 					<tr ng-show="zoneWS0.length != 0">
 						<th width="20%">
 							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -677,7 +677,7 @@
 					<tr ng-show="profitZonesList0.length != 0">
 						<th width="20%">
 							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -741,7 +741,7 @@
 					<tr ng-show="zoneWS0.length != 0">
 						<th width="20%">
 							<span ng-show="zconf0.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -808,7 +808,7 @@
 					<tr ng-show="zoneWS1.length != 0">
 						<th width="25%">
 							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -862,7 +862,7 @@
 					<tr ng-show="zoneWS1.length != 0">
 						<th width="20%">
 							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -923,7 +923,7 @@
 					<tr ng-show="profitZonesList1.length != 0">
 						<th width="20%">
 							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -987,7 +987,7 @@
 					<tr ng-show="zoneWS1.length != 0">
 						<th width="20%">
 							<span ng-show="zconf1.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1054,7 +1054,7 @@
 					<tr ng-show="zoneWS2.length != 0">
 						<th width="25%">
 							<span ng-show="zconf2.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1108,7 +1108,7 @@
 					<tr ng-show="zoneWS2.length != 0">
 						<th width="20%">
 							<span ng-show="zconf2.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1169,7 +1169,7 @@
 					<tr ng-show="profitZonesList2.length != 0">
 						<th width="20%">
 							<span ng-show="zconf2.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1233,7 +1233,7 @@
 					<tr ng-show="zoneWS2.length != 0">
 						<th width="20%">
 							<span ng-show="zconf2.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1300,7 +1300,7 @@
 					<tr ng-show="zoneWS3.length != 0">
 						<th width="25%">
 							<span ng-show="zconf3.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1354,7 +1354,7 @@
 					<tr ng-show="zoneWS3.length != 0">
 						<th width="20%">
 							<span ng-show="zconf3.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1415,7 +1415,7 @@
 					<tr ng-show="profitZonesList3.length != 0">
 						<th width="20%">
 							<span ng-show="zconf3.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1479,7 +1479,7 @@
 					<tr ng-show="zoneWS3.length != 0">
 						<th width="20%">
 							<span ng-show="zconf3.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1546,7 +1546,7 @@
 					<tr ng-show="zoneWS4.length != 0">
 						<th width="25%">
 							<span ng-show="zconf4.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZa=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1600,7 +1600,7 @@
 					<tr ng-show="zoneWS4.length != 0">
 						<th width="20%">
 							<span ng-show="zconf4.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZo=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1661,7 +1661,7 @@
 					<tr ng-show="profitZonesList4.length != 0">
 						<th width="20%">
 							<span ng-show="zconf4.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZp=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1725,7 +1725,7 @@
 					<tr ng-show="zoneWS4.length != 0">
 						<th width="20%">
 							<span ng-show="zconf4.zone_name.visible">{{ 'zone_name' | i18n }}</span>
-							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showZoneNameFilter();currentPageZt=0" ng-show="!showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideZoneNameFilter()" ng-show="showZoneFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showZoneFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1792,7 +1792,7 @@
 					<tr ng-show="areaWS.length != 0">
 						<th width="20%">
 							<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>
-							<a href ng-click="showAreaNameFilter();currentPageAa=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showAreaNameFilter();currentPageAa=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1853,7 +1853,7 @@
 					<tr ng-show="areaWS.length != 0">
 						<th width="15%">
 							<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>
-							<a href ng-click="showAreaNameFilter();currentPageAo=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showAreaNameFilter();currentPageAo=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1922,7 +1922,7 @@
 					<tr ng-show="profitAreaList.length != 0">
 						<th width="15%">
 							<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>
-							<a href ng-click="showAreaNameFilter();currentPageAp=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showAreaNameFilter();currentPageAp=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -1995,7 +1995,7 @@
 					<tr ng-show="pstructWS.length != 0">
 						<th width="24%">
 							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
-							<a href ng-click="showPsNameFilter();currentPagePsa=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPsNameFilter();currentPagePsa=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -2078,7 +2078,7 @@
 					<tr ng-show="pstructWS.length != 0">
 						<th width="25%">
 							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
-							<a href ng-click="showPsNameFilter();currentPagePso=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPsNameFilter();currentPagePso=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -2170,7 +2170,7 @@
 					<tr ng-show="areaWS.length != 0">
 						<th width="15%">
 							<span ng-show="aconf.a_name.visible">{{ 'area_name' | i18n }}</span>
-							<a href="" ng-click="showAreaNameFilter();currentPageAt=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href="" ng-click="showAreaNameFilter();currentPageAt=0" ng-show="!showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href="" ng-click="nameFilter=null;hideAreaNameFilter()" ng-show="showAreaFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showAreaFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}">
@@ -2241,7 +2241,7 @@
 					<tr ng-show="profitStructWS.length != 0">
 						<th width="16%">
 							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
-							<a href ng-click="showPsNameFilter();currentPagePsp=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPsNameFilter();currentPagePsp=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />
@@ -2308,7 +2308,7 @@
 					<tr ng-show="pstructWS.length != 0">
 						<th width="16%">
 							<span ng-show="psconf.ps_name.visible">{{ 'ps_name' | i18n }}</span>
-							<a href ng-click="showPsNameFilter();currentPagePst=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-filter"></i></a>
+							<a href ng-click="showPsNameFilter();currentPagePst=0" ng-show="!showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-search"></i></a>
 							<a href ng-click="nameFilter=null;hidePsNameFilter()" ng-show="showPsFilter" alt="{{ 'filter_name_title' | i18n }}" title="{{ 'filter_name_title' | i18n }}"><i class="glyphicon glyphicon-remove"></i></a>
 							<div ng-show="showPsFilter">
 						    	 <input type="search" ng-model="nameFilter" placeholder="{{ 'filter_name_text' | i18n }}" />

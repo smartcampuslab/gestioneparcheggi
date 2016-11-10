@@ -16,12 +16,13 @@
 package it.smartcommunitylab.parking.management.web.bean;
 
 import java.util.List;
+import java.util.Map;
 
-public class StreetBean {
-	private String id;
-	private String id_app;
-	private String streetReference;
-	private Integer slotNumber;
+import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
+import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
+
+public class StreetBean extends StreetBeanCore {
+	
 	private List<VehicleSlotBean> slotsConfiguration;
 	
 	/*private Integer handicappedSlotNumber;
@@ -39,30 +40,13 @@ public class StreetBean {
 	private Integer unusuableSlotNumber;*/
 	
 	private boolean subscritionAllowedPark;
-	private String rateAreaId;
 	private LineBean geometry;
 	private String color;
-	private List<String> zones;	//List with the id of the associated zone
 	private List<String> parkingMeters;	//List with the id of the associated pms (optional)
 	private Long lastChange;
 	private double occupancyRate;	// I use it only in the bean and not in the db object
 	private List<String> agencyId;	// relation to agency object
 	
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public String getStreetReference() {
-		return streetReference;
-	}
-
-	public void setStreetReference(String streetReference) {
-		this.streetReference = streetReference;
-	}
 
 	public List<VehicleSlotBean> getSlotsConfiguration() {
 		return slotsConfiguration;
@@ -70,22 +54,6 @@ public class StreetBean {
 
 	public void setSlotsConfiguration(List<VehicleSlotBean> slotsConfiguration) {
 		this.slotsConfiguration = slotsConfiguration;
-	}
-
-	public Integer getSlotNumber() {
-		return slotNumber;
-	}
-
-	public void setSlotNumber(Integer slotNumber) {
-		this.slotNumber = slotNumber;
-	}
-
-	public String getRateAreaId() {
-		return rateAreaId;
-	}
-
-	public void setRateAreaId(String areaId) {
-		this.rateAreaId = areaId;
 	}
 
 	public LineBean getGeometry() {
@@ -112,28 +80,12 @@ public class StreetBean {
 		this.subscritionAllowedPark = subscritionAllowedPark;
 	}
 
-	public String getId_app() {
-		return id_app;
-	}
-	
-	public List<String> getZones(){
-		return zones;
-	}
-
 	public List<String> getParkingMeters() {
 		return parkingMeters;
 	}
 
 	public Long getLastChange() {
 		return lastChange;
-	}
-
-	public void setId_app(String id_app) {
-		this.id_app = id_app;
-	}
-	
-	public void setZones(List<String> zones) {
-		this.zones = zones;
 	}
 
 	public void setParkingMeters(List<String> parkingMeters) {
@@ -266,8 +218,8 @@ public class StreetBean {
 
 	@Override
 	public String toString() {
-		return "StreetBean [id=" + id + ", id_app=" + id_app
-				+ ", streetReference=" + streetReference + ", slotNumber=" + slotNumber
+		return "StreetBean [id=" + getId() + ", id_app=" + getId_app()
+				+ ", streetReference=" + getStreetReference() + ", slotNumber=" + getSlotNumber()
 				/*+ ", handicappedSlotNumber="
 				+ handicappedSlotNumber + ", handicappedSlotOccupied="
 				+ handicappedSlotOccupied+ ", reservedSlotNumber="
@@ -282,8 +234,8 @@ public class StreetBean {
 				+ paidSlotNumber + ", paidSlotOccupied=" + paidSlotOccupied
 				+ ", unusuableSlotNumber=" + unusuableSlotNumber*/
 				+ ", subscritionAllowedPark=" + subscritionAllowedPark
-				+ ", rateAreaId=" + rateAreaId + ", geometry=" + geometry
-				+ ", color=" + color + ", zones=" + zones + ", parkingMeters="
+				+ ", rateAreaId=" + getRateAreaId() + ", geometry=" + geometry
+				+ ", color=" + color + ", zones=" + getZones() + ", parkingMeters="
 				+ parkingMeters + ", lastChange=" + lastChange + ", occupancyRate=" + occupancyRate + "]";
 	}
 
