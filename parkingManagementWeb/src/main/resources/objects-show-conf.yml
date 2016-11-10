@@ -1554,9 +1554,9 @@ providers:
           required: false
           visible: false
         - code: zone1
-          editable: true
+          editable: false
           required: false
-          visible: true
+          visible: false
         - code: edittab
           editable: false
           required: false
@@ -2482,9 +2482,9 @@ providers:
           required: false
           visible: false
         - code: zone1
-          editable: true
+          editable: false
           required: false
-          visible: true
+          visible: false
         - code: edittab
           editable: false
           required: false
