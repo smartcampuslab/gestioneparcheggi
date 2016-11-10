@@ -518,6 +518,28 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
 	    		} else {
 	    			$scope.showDashboardMenuLink = false;
 	    		}
+	    		if($scope.showedObjects[i].attributes[1] != null){
+	    			for(var j = 1; j < $scope.showedObjects[i].attributes.length; j++){
+	    				if($scope.showedObjects[i].attributes[j].code == "dashbordAgencyAll"){	
+	    					// case agencyall
+	    					if($scope.showedObjects[i].attributes[j].visible){
+	    						sharedDataService.setDasboardAllAgency("all");
+	    					}
+		    			} else if($scope.showedObjects[i].attributes[j].code == "occupancyAgencyAll") {
+		    				// case occupancyall
+	    					if($scope.showedObjects[i].attributes[j].visible){
+	    						sharedDataService.setDasboardAllAgency("occupancy");
+	    					} 
+		    			} else if($scope.showedObjects[i].attributes[j].code == "profitAgencyAll") {
+		    				// case profityall
+	    					if($scope.showedObjects[i].attributes[j].visible){
+	    						sharedDataService.setDasboardAllAgency("profit");
+	    					}
+		    			}
+	    			}
+	    		} else {
+	    			sharedDataService.setDasboardAllAgency("");
+	    		}
 	    	}
 	    	if($scope.showedObjects[i].id == 'Agency'){
 	    		if($scope.showedObjects[i].attributes[0].visible){

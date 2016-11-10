@@ -27,6 +27,7 @@ import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
 import it.smartcommunitylab.parking.management.web.bean.StreetLog;
 import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
@@ -50,6 +51,8 @@ import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
@@ -333,29 +336,32 @@ public class DynamicManager {
 		crit.and("id_app").is(appId);
 		crit.and(sId).exists(true);
 		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
-		
 		Map<String, Street> tempStreets = ra.getStreets();
 		Street s = null;
 		if(tempStreets != null && !tempStreets.isEmpty()){
 			s = tempStreets.get(streetId);
 		}
-		// for area
-		/*Criteria crit_street = new Criteria();
-		crit_street.and("_id").is(new ObjectId(streetId));
-		Criteria crit = new Criteria();
-		crit.and("id_app").is(appId);
-		crit.and("streets").elemMatch(crit_street);
-		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
-		Street s = new Street();
-		s.setId(streetId);
-		int index = ra.getStreets().indexOf(s);
-		if (index != -1) {
-			Street st = ra.getStreets().get(index);
-			StreetBean result = ModelConverter.toStreetBean(ra, st);
-			return result;
-		}*/
 		if(s != null){
 			StreetBean result = ModelConverter.toStreetBean(ra, s);
+			return result;
+		}
+		return null;
+	}
+	
+	public StreetBeanCore findStreetLight(String streetId, String appId) {
+		// for street
+		String sId = "streets." + streetId;
+		Criteria crit = new Criteria();
+		crit.and("id_app").is(appId);
+		crit.and(sId).exists(true);
+		RateArea ra = mongodb.findOne(Query.query(crit), RateArea.class);
+		Map<String, Street> tempStreets = ra.getStreets();
+		Street s = null;
+		if(tempStreets != null && !tempStreets.isEmpty()){
+			s = tempStreets.get(streetId);
+		}
+		if(s != null){
+			StreetBeanCore result = ModelConverter.toStreetBeanLight(ra, s);
 			return result;
 		}
 		return null;
@@ -1627,6 +1633,12 @@ public class DynamicManager {
 		return res;
 	}
 	
+	// Method getOccupationRateFromObjects: retrieve all occupancy data (average) filtered considering input parameters
+	public Map<String, Object> getAverageOccupationRateFromObjectsByGranularity(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, String vehicleType, String granularity){
+		type = type + "@" + vehicleType;
+		return repo.findStatsByGranularity(null, appId, type, granularity, params, years, months, days, hours);
+	}
+	
 	/**
 	 * Method getOccupationRateFromObject: retrieve the occupation rate of a specific object in a specific time range
 	 * @param objectId: id of the stored object
@@ -1659,6 +1671,11 @@ public class DynamicManager {
 		} else {
 			return -1.0;
 		}
+	}
+	
+	
+	public Map<String, Object> getOccupationRateFromObjectByGranularity(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, String granularity){
+		return repo.findStatsByGranularity(objectId, appId, type, granularity, params, years, months, days, hours);
 	}
 	
 	/**
@@ -1907,6 +1924,19 @@ public class DynamicManager {
 		return s;
 	}
 	
+	public StreetBeanCore mergeOccupationRateForStreetCore(String objectId, StreetBean s, String appId, String type, int valueType, String vehicleType, Map<StatKey, StatValue> statsVals, Map<String, Object> completeStatsVals, String agencyId){
+		String sId = getCorrectId(objectId, "street", appId);
+		StreetBeanCore sbc = new StreetBeanCore();
+		sbc.setId(s.getId());
+		sbc.setId_app(s.getId_app());
+		sbc.setSlotNumber(s.getSlotNumber());
+		sbc.setStreetReference(s.getStreetReference());
+		sbc.setZones(s.getZones());
+		sbc.setRateAreaId(s.getRateAreaId());
+		sbc.setOccupancyData(retrieveCorrectCompleteOccupancyFromStatValue(sId, appId, type, completeStatsVals));
+		return sbc;
+	}
+	
 	public ParkingStructureBean mergeOccupationRateForParking(String objectId, ParkingStructureBean p, String appId, String type, int valueType, String vehicleType, Map<StatKey, StatValue> statsVals, String agencyId){
 		String pId = getCorrectId(p.getId(), "parking", appId);
 		double occRate = -1;
@@ -1987,7 +2017,6 @@ public class DynamicManager {
 		int[] totalAverageSlot = null;
 		int[] usedAverageSlot = null;
 		int totalAverageUnusuabled = 0;
-		
 		try {
 			List<VehicleSlotBean> vehicleSlotList = s.getSlotsConfiguration();
 			VehicleSlotBean vs = null;
@@ -2045,6 +2074,18 @@ public class DynamicManager {
 		} catch (Exception ex){
 			logger.error("Error in slots configuration reading " + ex.getMessage());
 		}
+		logger.info("Elapsed Time for slots conf in street (" + objectId + "): "+ watch.getElapsedTime());
+		return s;
+	}
+	
+	public StreetBeanCore getOccupationRateFromStreetCore(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType, String granularity){
+		StopWatch watch = new Log4JStopWatch();
+		logger.debug("Start Time for street (" + objectId + "): " + watch.getStartTime());
+		StreetBeanCore s = null;
+		s = findStreetLight(objectId, appId);
+		logger.debug("Elapsed Time to find street (" + objectId + "): "+ watch.getElapsedTime());
+		String sId = getCorrectId(objectId, "street", appId);
+		s.setOccupancyData(getOccupationRateFromObjectByGranularity(sId, appId, type + "@" + vehicleType, params, years, months, dayType, days, hours, granularity));
 		logger.info("Elapsed Time for slots conf in street (" + objectId + "): "+ watch.getElapsedTime());
 		return s;
 	}
@@ -2140,6 +2181,22 @@ public class DynamicManager {
 		} else {	// no rilevation
 			return -1.0;
 		}
+	};
+	
+	private Map<String,Object> retrieveCorrectCompleteOccupancyFromStatValue(String sId, String appId, String type, Map<String, Object> statsVals){
+		StatKey myKey = new StatKey(sId, appId, type);
+		Map<String, Object> corrMap = new HashMap<String, Object>();
+		for (Iterator<String> iterator = statsVals.keySet().iterator(); iterator.hasNext();) {
+			String key = iterator.next();
+			if(key.contains(myKey.toStringSpecial())){
+				corrMap.put(removeObjectIdFromKey(key, myKey.toStringSpecial()), statsVals.get(key));
+			}
+		}
+		return corrMap;
+	};
+	
+	private String removeObjectIdFromKey(String completeKey, String key){
+		return completeKey.replaceFirst(key + "@Car=", "");
 	};
 	
 	private double retrieveCorrectProfitFromStatValue(String pId, String appId, String type, int valueType, Map<StatKey, StatValue> statsVals){
@@ -3812,6 +3869,31 @@ public class DynamicManager {
 		List<StreetBean> corrStreets = new ArrayList<StreetBean>();
 		for(StreetBean s : streets){
 			StreetBean corrStreet = mergeOccupationRateForStreet(s.getId(), s, appId, type, valueType, vehicleType, statsVals, agencyId);
+			//StreetBean corrStreet = getOccupationRateFromStreet(s.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
+			corrStreets.add(corrStreet);
+		}
+		logger.debug("Occupation Street Elapsed Time : "+ watch.getElapsedTime());  
+		logger.debug("Occupation Street Stop Time : "+watch.stop());
+		return corrStreets;
+	}
+	
+	public List<StreetBeanCore> getOccupationRateFromAllStreetsWithGranularity(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType, String agencyId, String granularity){
+		// Perf4J part
+		BasicConfigurator.configure();
+		StopWatch watch = new Log4JStopWatch(); 
+		logger.debug("Occupation Street Start Time : "+watch.getStartTime());
+		List<StreetBean> streets = getAllStreetsInAppId(null, appId);
+		Map<String, Object> statsVals = null;
+		if(vehicleType == null || vehicleType.compareTo("") == 0){
+			vehicleType = "Car";
+		}
+		// average
+		statsVals =  getAverageOccupationRateFromObjectsByGranularity(appId, type, params, years, months, dayType, days, hours, vehicleType, granularity);
+		logger.debug("Streets list size : " + streets.size());
+		logger.debug("Stats map size : " + statsVals.size());
+		List<StreetBeanCore> corrStreets = new ArrayList<StreetBeanCore>();
+		for(StreetBean s : streets){
+			StreetBeanCore corrStreet = mergeOccupationRateForStreetCore(s.getId(), s, appId, type, valueType, vehicleType, null, statsVals, agencyId);
 			//StreetBean corrStreet = getOccupationRateFromStreet(s.getId(), appId, type, params, years, months, dayType, days, hours, valueType, vehicleType);
 			corrStreets.add(corrStreet);
 		}

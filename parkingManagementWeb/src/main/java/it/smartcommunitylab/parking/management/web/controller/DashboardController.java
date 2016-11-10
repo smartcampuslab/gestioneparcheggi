@@ -26,6 +26,7 @@ import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
@@ -1070,12 +1071,18 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/occupancy/{appId}/streets")
 	@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy data items")
 	public @ResponseBody
-	List<StreetBean> getAllStreetOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
+	List<StreetBeanCore> getAllStreetOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Street.class.getCanonicalName();
 		if(agencyId == null || agencyId.compareTo("") == 0){
 			agencyId = ALL;
 		}
-		return dynamic.getOccupationRateFromAllStreets(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
+		if(valueType == null){
+			valueType = 2;
+		}
+		if(granularity == null){
+			granularity = "year";
+		}
+		return dynamic.getOccupationRateFromAllStreetsWithGranularity(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId, granularity);
 	}
 	
 	// Open method to retrieve all street occupancy data (only occupancy data)
@@ -1093,9 +1100,12 @@ public class DashboardController {
 	// Open method to retrieve a single street occupancy data
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/nosec/occupancy/{appId}/street/{id}")
 	@ApiOperation(value = "Get Street occupancy", notes = "Returns single street occupancy data item")
-	public @ResponseBody StreetBean getStreetOccupancyNS(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType) throws Exception {
+	public @ResponseBody StreetBeanCore getStreetOccupancyNS(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Street.class.getCanonicalName();
-		return dynamic.getOccupationRateFromStreet(id, appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType);
+		if(valueType == null){
+			valueType = 2;
+		}
+		return dynamic.getOccupationRateFromStreetCore(id, appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, granularity);
 	}
 	
 	// Open method to retrieve all parkingStructures occupancy data (with complete ps data)

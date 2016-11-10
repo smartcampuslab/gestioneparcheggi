@@ -23,6 +23,7 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
     	return this.authHeaders;
     };
     
+    this.show_dasboard_all_agency = "";
     this.vehicle_type = "Car";
 	
 	// Shared field app conf
@@ -204,6 +205,14 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
     
     this.ps_managers = [];
     this.municipality = [];
+    
+    this.setDasboardAllAgency = function(value){
+    	this.show_dasboard_all_agency = value;
+    };
+    
+    this.getDasboardAllAgency = function(){
+    	return this.show_dasboard_all_agency;
+    };
     
     this.setZoneTypeList = function(value){
     	this.zone_type_list = value;

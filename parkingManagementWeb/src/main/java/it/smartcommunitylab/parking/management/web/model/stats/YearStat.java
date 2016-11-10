@@ -16,6 +16,7 @@
 package it.smartcommunitylab.parking.management.web.model.stats;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.springframework.data.mongodb.core.index.Indexed;
@@ -77,6 +78,19 @@ public class YearStat {
 		}
 		return value;
 	}
+	public StatValue toStatValueByYear() {
+		StatValue value = new StatValue();
+		if (all != null) {
+			merge(value, all);
+		}
+		if (months != null) {
+			for (MonthStat month : months.values()) {
+				merge(value, month);
+			}
+		}
+		return value;
+	}
+	
 	private void merge(StatValue value, MonthStat month) {
 		month.mergeIntoValue(value);
 	}

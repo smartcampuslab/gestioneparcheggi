@@ -47,6 +47,18 @@ public class DayStat {
 	public void setAll(StatValue all) {
 		this.all = all;
 	}
+	
+	public StatValue toStatValueByDay() {
+		StatValue value = new StatValue();
+		if (all != null) {
+			value.merge(all);
+		} else if (hours != null) {
+			for (StatValue h : hours.values()) {
+				value.merge(h);
+			}
+		}
+		return value;
+	}
 
 	public void mergeIntoValue(StatValue value) {
 		if (all != null) {

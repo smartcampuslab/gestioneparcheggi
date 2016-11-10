@@ -55,6 +55,19 @@ public class MonthStat {
 			}
 		}
 	}
+	
+	public StatValue toStatValueByMonth() {
+		StatValue value = new StatValue();
+		if (wd != null || we != null) {
+			if (wd != null) wd.mergeIntoValue(value);
+			if (we != null) we.mergeIntoValue(value);
+		} else if (days != null) {
+			for (DayStat day : days.values()) {
+				day.mergeIntoValue(value);
+			}
+		}
+		return value;
+	}
 	public DayStat day(int day) {
 		if (days != null && days.containsKey((byte)day)) return days.get((byte)day);	// MB31072015: forced cast to byte to retrieve the correct object
 		return new DayStat();

@@ -95,4 +95,8 @@ public class StatKey {
 				+ type + "]";
 	}
 	
+	public String toStringSpecial() {
+		return objectId + "-" + appId + "-" + type + "=";
+	}
+	
 }

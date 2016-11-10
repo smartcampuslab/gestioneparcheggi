@@ -1518,7 +1518,11 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
     
     var agencyId;
     $scope.initComponents = function(){
-    	$scope.agencyId = agencyId = sharedDataService.getConfUserAgency().id;
+    	if(sharedDataService.getDasboardAllAgency() == "all"){
+    		$scope.agencyId = agencyId = "all";
+    	} else {
+    		$scope.agencyId = agencyId = sharedDataService.getConfUserAgency().id;
+    	}
 	    if($scope.editparktabs == null || $scope.editparktabs.length == 0){
 	    	$scope.aconf = initializeService.getAreaConfData();
 	    	$scope.sconf = initializeService.getStreetConfData();
@@ -3795,7 +3799,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.getAllProfitPM = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		$scope.streetMapReady = false;
 		var markers = [];
-		var myDataPromise = (isFirst) ? parkingMeterService.getParkingMetersFromDb(true) : parkingMeterService.getProfitPMFromDb(year, month, weekday, dayType, hour, valueType, agencyId);
+		var agencyP;
+		if(sharedDataService.getDasboardAllAgency() == "profit"){
+			agencyP = "all";
+		} else {
+			agencyP = agencyId;
+		}
+		var myDataPromise = (isFirst) ? parkingMeterService.getParkingMetersFromDb(true) : parkingMeterService.getProfitPMFromDb(year, month, weekday, dayType, hour, valueType, agencyP);
 		myDataPromise.then(function(allPMs){
 		    $scope.parkingMeterWS = $scope.initPMObjectsLight(allPMs);	//MB_lightWS
 		    
@@ -3844,8 +3854,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.zoneCvsFile = "";
 		$scope.areaCvsFile = "";
 		$scope.structCvsFile = "";
-		
-		var myDataPromise = streetService.getOccupancyStreetsUpdatesFromDb(year, month, weekday, dayType, hour, valueType, agencyId);
+		var agencyO;
+		if(sharedDataService.getDasboardAllAgency() == "occupancy"){
+			agencyO = "all";
+		} else {
+			agencyO = agencyId;
+		}
+		var myDataPromise = streetService.getOccupancyStreetsUpdatesFromDb(year, month, weekday, dayType, hour, valueType, agencyO);
 		myDataPromise.then(function(allStreet){
 		    gMapService.updateLoadingMapState();
 		    $scope.myTmpZoneOccupation = [];
@@ -3957,8 +3972,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 		$scope.streetMapReady = false;
 		var markers = [];
 		var allPSs = [];
-		
-		var myDataPromise = (isFirst) ? structureService.getParkingStructuresFromDb(true) : structureService.getProfitParksFromDb(year, month, weekday, dayType, hour, valueType, agencyId);
+		var agencyPP
+		if(sharedDataService.getDasboardAllAgency() == "profit"){
+			agencyPP = "all";
+		} else {
+			agencyPP = agencyId;
+		}
+		var myDataPromise = (isFirst) ? structureService.getParkingStructuresFromDb(true) : structureService.getProfitParksFromDb(year, month, weekday, dayType, hour, valueType, agencyPP);
 		myDataPromise.then(function(allPSs){
 		    $scope.profitStructWS = $scope.mergeParkDbData($scope.pstructWS, allPSs);
 		    angular.copy( $scope.profitStructWS, $scope.allDataStructWS);
@@ -3987,7 +4007,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	$scope.getAllOccupancyParks = function(year, month, weekday, dayType, hour, valueType, isFirst){
 		var allParks = [];
 		var markers = [];
-		var myDataPromise = (isFirst) ? structureService.getParkingStructuresFromDb(true) : structureService.getOccupancyParksFromDb(year, month, weekday, dayType, hour, valueType, agencyId);
+		var agencyOP
+		if(sharedDataService.getDasboardAllAgency() == "occupancy"){
+			agencyOP = "all";
+		} else {
+			agencyOP = agencyId;
+		}
+		var myDataPromise = (isFirst) ? structureService.getParkingStructuresFromDb(true) : structureService.getOccupancyParksFromDb(year, month, weekday, dayType, hour, valueType, agencyOP);
 		myDataPromise.then(function(allParks){
 		    gMapService.updateLoadingMapState();
 		    $scope.actualParks = allParks;
@@ -4020,7 +4046,13 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	// Method getAllOccupancyParksUpdated: used to retrieve te parks occupancy data from the db
 	$scope.getAllOccupancyParksUpdated = function(year, month, weekday, dayType, hour, valueType, callType, oldParks, cost_type){
 		var markers = [];
-		var myDataPromise = structureService.getOccupancyParksUpdatedFromDb(year, month, weekday, dayType, hour, valueType, agencyId);
+		var agencyOP;
+		if(sharedDataService.getDasboardAllAgency() == "occupancy"){
+			agencyOP = "all";
+		} else {
+			agencyOP = agencyId;
+		}
+		var myDataPromise = structureService.getOccupancyParksUpdatedFromDb(year, month, weekday, dayType, hour, valueType, agencyOP);
 		myDataPromise.then(function(allParks){
 			//angular.copy(result, allParks);
 			gMapService.updateLoadingMapState();

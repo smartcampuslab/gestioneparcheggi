@@ -2481,6 +2481,9 @@
     "key": "manage_zonemunicipality_tab",
     "value": "Municipality"
 }, {
+    "key": "manage_zonequarters_tab",
+    "value": "Quarter"
+}, {
     "key": "manage_street_tab",
     "value": "Parking"
 }, {
@@ -2588,6 +2591,9 @@
 }, {
     "key": "label_zonemunicipality",
     "value": "Municipality"
+}, {
+    "key": "label_zonequarters",
+    "value": "Quarter"
 }, {
     "key": "vt_app_title",
     "value": "Download app from store"
