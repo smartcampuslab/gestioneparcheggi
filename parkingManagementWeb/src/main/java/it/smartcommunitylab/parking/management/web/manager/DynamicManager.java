@@ -2188,15 +2188,16 @@ public class DynamicManager {
 		Map<String, Object> corrMap = new HashMap<String, Object>();
 		for (Iterator<String> iterator = statsVals.keySet().iterator(); iterator.hasNext();) {
 			String key = iterator.next();
-			if(key.contains(myKey.toStringSpecial())){
-				corrMap.put(removeObjectIdFromKey(key, myKey.toStringSpecial()), statsVals.get(key));
+			//logger.info("myKey: " + myKey.toStringSpecial2() );
+			if(key.contains(myKey.toStringSpecial2())){
+				corrMap.put(removeObjectIdFromKey(key, myKey.toStringSpecial2()), statsVals.get(key));
 			}
 		}
 		return corrMap;
 	};
 	
 	private String removeObjectIdFromKey(String completeKey, String key){
-		return completeKey.replaceFirst(key + "@Car=", "");
+		return completeKey.replaceFirst(key + "@Car:", "");
 	};
 	
 	private double retrieveCorrectProfitFromStatValue(String pId, String appId, String type, int valueType, Map<StatKey, StatValue> statsVals){

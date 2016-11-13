@@ -1373,7 +1373,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 							if((granParams.length == 1)){
 								map.put(oId + monthkey.toString(), monthValue.merge(map.get(oId + monthkey.toString())));
 							} else {
-								map.put(key.toString() + "." + monthkey.toString(), monthValue.merge(map.get(oId + monthkey.toString())));
+								map.put(oId + key.toString() + "." + monthkey.toString(), monthValue.merge(map.get(oId + monthkey.toString())));
 							}
 					    }
 					}
@@ -1521,8 +1521,12 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				String cmkey = iterator.next().toString();
 			    if (corrMap.get(cmkey) != null) {
 			    	if(objectId == null){
-			    		String[] completeKey = cmkey.split("=");
-			    		complexKey = completeKey[1].split("\\.");
+			    		String[] completeKey = cmkey.split("\\:");
+			    		if(completeKey.length > 1){
+			    			complexKey = completeKey[1].split("\\.");
+			    		} else {
+			    			complexKey = completeKey[0].split("\\.");
+			    		}
 			    	} else {
 			    		complexKey = cmkey.split("\\.");
 			    	}
@@ -1607,24 +1611,58 @@ public class StatRepositoryImpl implements StatCustomRepository {
 	}
 	
 	private String getKeyFromComplete(String completeKey, int mergeIndex){
-		String[] completeVal = completeKey.split("\\.");
-		switch(mergeIndex){
-			case 1: return completeVal[0];
-			case 2: return completeVal[0] + "." + completeVal[1];
-			case 3: return completeVal[0] + "." + completeVal[1] + "." + completeVal[2];
-			case 4: return completeVal[0] + "." + completeVal[1] + "." + completeVal[2] + "." + completeVal[3];
-			default: return "";
+		if(completeKey.contains(":")){
+			String[] complexVal = completeKey.split("\\:");
+			String[] completeVal = null;
+			if(complexVal.length > 1){
+				completeVal = complexVal[1].split("\\.");
+			} else {
+				completeVal = complexVal[0].split("\\.");
+			}
+			switch(mergeIndex){
+				case 1: return complexVal[0] + ":" + completeVal[0];
+				case 2: return complexVal[0] + ":" + completeVal[0] + "." + completeVal[1];
+				case 3: return complexVal[0] + ":" + completeVal[0] + "." + completeVal[1] + "." + completeVal[2];
+				case 4: return complexVal[0] + ":" + completeVal[0] + "." + completeVal[1] + "." + completeVal[2] + "." + completeVal[3];
+				default: return "";
+			}
+		} else {
+			String[] completeVal = completeKey.split("\\.");
+			switch(mergeIndex){
+				case 1: return completeVal[0];
+				case 2: return completeVal[0] + "." + completeVal[1];
+				case 3: return completeVal[0] + "." + completeVal[1] + "." + completeVal[2];
+				case 4: return completeVal[0] + "." + completeVal[1] + "." + completeVal[2] + "." + completeVal[3];
+				default: return "";
+			}
 		}
 	}
 	
 	private String getSpecKeyFromComplete(String completeKey, int mergeIndex){
-		String[] completeVal = completeKey.split("\\.");
-		switch(mergeIndex){
-			case 1: return completeVal[0];
-			case 2: return completeVal[1];
-			case 3: return completeVal[2];
-			case 4: return completeVal[3];
-			default: return "";
+		if(completeKey.contains(":")){
+			String[] complexVal = completeKey.split("\\:");
+			String[] completeVal = null;
+			if(complexVal.length > 1){
+				completeVal = complexVal[1].split("\\.");
+			} else {
+				completeVal = complexVal[0].split("\\.");
+			}
+			switch(mergeIndex){
+				case 1: return completeVal[0];
+				case 2: return completeVal[1];
+				case 3: return completeVal[2];
+				case 4: return completeVal[3];
+				default: return "";
+			}
+		} else {
+			String[] completeVal = completeKey.split("\\.");
+			switch(mergeIndex){
+				case 1: return completeVal[0];
+				case 2: return completeVal[1];
+				case 3: return completeVal[2];
+				case 4: return completeVal[3];
+				default: return "";
+			}
 		}
 	}
 	
