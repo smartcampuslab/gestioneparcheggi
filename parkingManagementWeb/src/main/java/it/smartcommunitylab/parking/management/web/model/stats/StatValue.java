@@ -78,6 +78,15 @@ public class StatValue {
 		return this;
 	}
 	
+	public StatValue add(StatValue v) {
+		if (v != null) {
+			aggregateValue = (aggregateValue + v.aggregateValue);
+			count += v.count;
+			lastValue += v.lastValue;
+		}
+		return this;
+	}
+	
 	public boolean empty() {
 		return count == 0;
 	}

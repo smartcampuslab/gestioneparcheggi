@@ -1610,6 +1610,174 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		return corrMap;
 	}
 	
+	private Map<String, StatValue> toMapStatValsGranularity(List<YearStat> stats, String granularity, String objectId) {
+		String[] granParams = null;
+		if(granularity != null){ 
+			if(granularity.contains(",")){
+				granParams = granularity.split(",");
+			} else {
+				granParams = new String[1];
+				granParams[0] = granularity;
+			}
+		}
+		Map<String, StatValue> map = new HashMap<String, StatValue>();
+		Map<String, StatValue> corrMap = new HashMap<String, StatValue>();
+		if(objectId == null){
+			for (YearStat stat : stats) {
+				String oId = null;
+				oId = stat.getKey().toStatKey().toStringSpecial();
+				String key = stat.getKey().getYear().toString();
+				StatValue value = stat.toStatValueByYear();
+				if(granularity.contains(G_YEAR)){
+					map.put(oId + key.toString(), value.merge(map.get(oId + key.toString())));
+				}
+				if(granularity.contains(G_MONTH)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							StatValue monthValue = monthStat.get(monthkey).toStatValueByMonth();
+							if((granParams.length == 1)){
+								map.put(oId + monthkey.toString(), monthValue.merge(map.get(oId + monthkey.toString())));
+							} else {
+								map.put(oId + key.toString() + "." + monthkey.toString(), monthValue.merge(map.get(oId + monthkey.toString())));
+							}
+					    }
+					}
+				}
+				if(granularity.contains(G_DAY)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							MonthStat monthStatVal = monthStat.get(monthkey);
+							Map<Byte, DayStat> dayStat = monthStatVal.getDays();
+							for (Iterator<Byte> dayIterator = dayStat.keySet().iterator(); dayIterator.hasNext();) {
+								Byte daykey = dayIterator.next();
+								if (dayStat.get(daykey) != null) {
+									StatValue dayValue = dayStat.get(daykey).toStatValueByDay();
+									if((granParams.length == 1)){
+										map.put(oId + daykey.toString(), dayValue.merge(map.get(oId + daykey.toString())));
+									} else {
+										map.put(oId + key.toString() + "." + monthkey.toString() + "." + daykey.toString(), dayValue.merge(map.get(oId + daykey.toString())));
+									}
+								}	
+							}
+					    }
+					}
+				}
+				if(granularity.contains(G_HOUR)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							MonthStat monthStatVal = monthStat.get(monthkey);
+							Map<Byte, DayStat> dayStat = monthStatVal.getDays();
+							for (Iterator<Byte> dayIterator = dayStat.keySet().iterator(); dayIterator.hasNext();) {
+								Byte daykey = dayIterator.next();
+								if (dayStat.get(daykey) != null) {
+									DayStat dayValue = dayStat.get(daykey);
+									Map<Byte, StatValue> hourStat = dayValue.getHours();
+									for(Iterator<Byte> hourIterator = hourStat.keySet().iterator(); hourIterator.hasNext();) {
+										Byte hourkey = hourIterator.next();
+										if (hourStat.get(hourkey) != null){
+											StatValue hourVal = hourStat.get(hourkey);
+											if((granParams.length == 1)){
+												map.put(oId + hourkey.toString(), hourVal.merge(map.get(oId + hourkey.toString())));
+											} else {
+												map.put(oId + key.toString() + "." + monthkey.toString() + "." + daykey.toString() + "." + hourkey.toString(), hourVal.merge(map.get(oId + hourkey.toString())));
+											}
+										}	
+									}
+							    }
+							}
+					    }
+					}
+				}
+			}
+		} else {
+			for (YearStat stat : stats) {
+				String key = stat.getKey().getYear().toString();
+				StatValue value = stat.toStatValueByYear();
+				if(granularity.contains(G_YEAR)){
+					map.put(key.toString(), value.merge(map.get(key.toString())));
+				}
+				if(granularity.contains(G_MONTH)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							StatValue monthValue = monthStat.get(monthkey).toStatValueByMonth();
+							if((granParams.length == 1)){
+								map.put(monthkey.toString(), monthValue.merge(map.get(monthkey.toString())));
+							} else {
+								map.put(key.toString() + "." + monthkey.toString(), monthValue.merge(map.get(monthkey.toString())));
+							}
+					    }
+					}
+				}
+				if(granularity.contains(G_DAY)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							MonthStat monthStatVal = monthStat.get(monthkey);
+							Map<Byte, DayStat> dayStat = monthStatVal.getDays();
+							for (Iterator<Byte> dayIterator = dayStat.keySet().iterator(); dayIterator.hasNext();) {
+								Byte daykey = dayIterator.next();
+								if (dayStat.get(daykey) != null) {
+									StatValue dayValue = dayStat.get(daykey).toStatValueByDay();
+									if((granParams.length == 1)){
+										map.put(daykey.toString(), dayValue.merge(map.get(daykey.toString())));
+									} else {
+										map.put(key.toString() + "." + monthkey.toString() + "." + daykey.toString(), dayValue.merge(map.get(daykey.toString())));
+									}
+								}	
+							}
+					    }
+					}
+				}
+				if(granularity.contains(G_HOUR)){
+					Map<Byte, MonthStat> monthStat = stat.getMonths();
+					for (Iterator<Byte> iterator = monthStat.keySet().iterator(); iterator.hasNext();) {
+						Byte monthkey = iterator.next();
+						if (monthStat.get(monthkey) != null) {
+							MonthStat monthStatVal = monthStat.get(monthkey);
+							Map<Byte, DayStat> dayStat = monthStatVal.getDays();
+							for (Iterator<Byte> dayIterator = dayStat.keySet().iterator(); dayIterator.hasNext();) {
+								Byte daykey = dayIterator.next();
+								if (dayStat.get(daykey) != null) {
+									DayStat dayValue = dayStat.get(daykey);
+									Map<Byte, StatValue> hourStat = dayValue.getHours();
+									for(Iterator<Byte> hourIterator = hourStat.keySet().iterator(); hourIterator.hasNext();) {
+										Byte hourkey = hourIterator.next();
+										if (hourStat.get(hourkey) != null){
+											StatValue hourVal = hourStat.get(hourkey);
+											if((granParams.length == 1)){
+												map.put(hourkey.toString(), hourVal.merge(map.get(hourkey.toString())));
+											} else {
+												map.put(key.toString() + "." + monthkey.toString() + "." + daykey.toString() + "." + hourkey.toString(), hourVal.merge(map.get(hourkey.toString())));
+											}
+										}	
+									}
+							    }
+							}
+					    }
+					}
+				}
+			}
+		}
+		
+		for (Iterator<String> iterator = map.keySet().iterator(); iterator.hasNext();) {
+			String skey = iterator.next().toString();
+		    if (!map.get(skey).empty()) {
+		    	corrMap.put(skey, map.get(skey));
+		    }
+		}
+		
+		return corrMap;
+	}
+	
 	private String getKeyFromComplete(String completeKey, int mergeIndex){
 		if(completeKey.contains(":")){
 			String[] complexVal = completeKey.split("\\:");
@@ -1774,6 +1942,51 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		} 
 		List<YearStat> stats = mongoTemplate.find(query, YearStat.class);
 		return toMapObjectGranularity(stats, granularity, objectId);
+	};
+	
+	@Override
+	public Map<String, StatValue> findStatValsByGranularity(String objectId, String appId, String type, String granularity,
+			Map<String, Object> params, int[] years, byte[] months, byte[] days, byte[] hours) {
+		
+		String[] granParams = null;
+		if(granularity != null){ 
+			if(granularity.contains(",")){
+				granParams = granularity.split(",");
+			} else {
+				granParams = new String[1];
+				granParams[0] = granularity;
+			}
+		}
+		if(granParams.length == 1 && granParams[0].compareTo("year") == 0){
+			// year case
+		} else {
+			if(months == null || months.length == 0){
+				months = new byte[2];
+				months[0] = Byte.valueOf("1");
+				months[1] = Byte.valueOf("12");
+			}
+			if(granularity.contains(G_HOUR) && hours == null){
+				hours = new byte[24];
+				for(int i = 0; i < hours.length; i++){
+					hours[i] = Byte.valueOf(i + "");
+				}
+			}
+			if (days == null || days.length == 0) {
+				days = new byte[7];
+				for(int i = 0; i < days.length; i++){
+					days[i] = Byte.valueOf((i + 1) + "");
+				}
+			}	
+		}
+		
+		Query query = null;
+		if (days == null || days.length == 0) {
+			query = createQuery(objectId, appId, type, params, years, months, days, true, true, hours, true);
+		} else {
+			query = createQuery(objectId, appId, type, params, years, months, days, false, false, hours, true);
+		} 
+		List<YearStat> stats = mongoTemplate.find(query, YearStat.class);
+		return toMapStatValsGranularity(stats, granularity, objectId);
 	};
     
 }
