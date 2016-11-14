@@ -96,7 +96,11 @@ public class StatKey {
 	}
 	
 	public String toStringSpecial() {
-		return objectId + "-" + appId + "-" + type + "=";
+		return objectId + "-" + appId + "-" + type + ":";
+	}
+	
+	public String toStringSpecial2() {
+		return objectId + "-" + appId + "-" + type;
 	}
 	
 }

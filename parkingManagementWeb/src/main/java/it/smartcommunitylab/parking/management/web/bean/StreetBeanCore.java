@@ -3,6 +3,8 @@ package it.smartcommunitylab.parking.management.web.bean;
 import java.util.List;
 import java.util.Map;
 
+import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
+
 public class StreetBeanCore {
 
 	private String id;
@@ -12,6 +14,7 @@ public class StreetBeanCore {
 	private String rateAreaId;
 	private List<String> zones;
 	private Map<String, Object> occupancyData; // Attribute used in new rest API for planner
+	private Map<String, StatValue> statValueData;
 
 	public String getId() {
 		return id;
@@ -67,6 +70,14 @@ public class StreetBeanCore {
 
 	public void setOccupancyData(Map<String, Object> occupancyData) {
 		this.occupancyData = occupancyData;
+	}
+
+	public Map<String, StatValue> getStatValueData() {
+		return statValueData;
+	}
+
+	public void setStatValueData(Map<String, StatValue> statValueData) {
+		this.statValueData = statValueData;
 	}
 	
 }

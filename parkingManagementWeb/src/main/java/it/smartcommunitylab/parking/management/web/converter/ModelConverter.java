@@ -16,9 +16,11 @@
 package it.smartcommunitylab.parking.management.web.converter;
 
 import it.smartcommunitylab.parking.management.web.bean.LineBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBeanCore;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
 import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentMode;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.Street;
@@ -125,6 +127,16 @@ public class ModelConverter {
 		sb.setRateAreaId(area.getId());
 		sb.setZones(s.getZones());
 		return sb;
+	}
+	
+	public static ParkingStructureBeanCore toStructureBeanLight(ParkingStructure ps){
+		ParkingStructureBeanCore psb = new ParkingStructureBeanCore();
+		psb.setId(ps.getId());
+		psb.setId_app(ps.getId_app());
+		psb.setName(ps.getName());
+		psb.setSlotNumber(ps.getSlotNumber());
+		psb.setZones(ps.getZones());
+		return psb;
 	}
 	
 	public static List<VehicleSlotBean> toVehicleSlotBeanList(List<VehicleSlot> vehicleSlots){

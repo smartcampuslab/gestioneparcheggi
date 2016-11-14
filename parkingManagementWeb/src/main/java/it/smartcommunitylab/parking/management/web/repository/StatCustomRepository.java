@@ -65,6 +65,17 @@ public interface StatCustomRepository {
 			byte[] days,
 			byte[] hours);
 	
+	public Map<String, StatValue> findStatValsByGranularity(
+			String objectId,
+			String appId,
+			String type,
+			String granularity,
+			Map<String, Object> params,
+			int[] years,
+			byte[] months,
+			byte[] days,
+			byte[] hours);
+	
 	public Map<StatKey, StatValue> findStatsWD(
 			String objectId,
 			String appId,
