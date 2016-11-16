@@ -36,7 +36,7 @@
         <property name="maxUploadSize" value="10485760" /> <!-- 10 Mb -->
     </bean>
     
-    <bean id="beanConfig" class="io.swagger.jaxrs.config.BeanConfig">
+    <!-- <bean id="beanConfig" class="io.swagger.jaxrs.config.BeanConfig">
         <property name="title" value="Swagger Sample App"/>
         <property name="version" value="1.0.0" />
         <property name="schemes" value="http" />
@@ -44,9 +44,17 @@
         <property name="basePath" value="metroparco/rest/nosec/*"/>
         <property name="resourcePackage" value="io.swagger.resources"/>
         <property name="scan" value="true"/>
+    </bean> -->
+    
+    <bean id="swaggerConfig" class="io.swagger.jaxrs.config.BeanConfig">
+        <property name="resourcePackage" value="it.smartcommunitylab.parking.management.web.controller" />
+        <property name="version" value="1.0.0" />
+        <property name="basePath" value="http://localhost:8080/metroparco/dashboard/rest/nosec" />
+        <property name="title" value="Swagger UI Integration Sample" />
+        <property name="description"
+            value="Swagger UI Integration Sample for demonstrating its working." />
+        <property name="scan" value="true" />
     </bean>
-    
-    
 
     
 </beans>

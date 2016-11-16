@@ -12,8 +12,7 @@ public class ParkingStructureBeanCore {
 	private String name;
 	private Integer slotNumber;
 	private List<String> zones;
-	private Map<String, Object> occupancyData; // Attribute used in new rest API
-												// for planner
+	private Map<String, Object> occupancyData; // Attribute used in new rest API for planner
 	private Map<String, StatValue> statValueData;
 
 	public String getId() {

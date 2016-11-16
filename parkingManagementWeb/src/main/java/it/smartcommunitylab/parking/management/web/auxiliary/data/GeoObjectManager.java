@@ -877,7 +877,9 @@ public class GeoObjectManager {
     	
     	String[] allRecords = data.split("\n");
     	String year = "";
+    	String month = "";
     	FilterPeriod period = new FilterPeriod();
+    	int days_in_month = 30;
     	
     	for(int i = 0; i < allRecords.length; i++){
     		//TODO: here I have to check the data list and understand if the value are in horizontal mode or in vertical mode
@@ -887,6 +889,11 @@ public class GeoObjectManager {
 	    			if(att_and_vals[0].compareTo("Anno") == 0){
 	        			year = att_and_vals[1];
 	        	    	period.setYear(year);
+	        		} else if(att_and_vals[0].compareTo("Mese") == 0){
+	        			month = att_and_vals[1];
+	        			String[] months = new String[1];
+	        			months[0] = month;
+	        	    	period.setMonth(months);
 	        		} else {
 	        			//if(att_and_vals[0].contains("park")){
 	        				// vertical mode
@@ -899,16 +906,33 @@ public class GeoObjectManager {
 		        				tmpPProfit.setPeriod(period);
 		    			
 		        				// here I load the vals
-		        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);						// 14 are tot values
-		        				String[] tickets = null;
-		        				try {
-		        					tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
-		        				} catch(Exception ex){
-		        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
-		        				}
-		        				tmpPProfit.setProfitVals(cleanStringArray(vals));
-		        				if(tickets != null){
-		        					tmpPProfit.setTickets(cleanStringArray(tickets));
+		        				if(month == null || month.compareTo("") == 0){
+			        				// month values
+		        					String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);						// 14 are tot values
+			        				String[] tickets = null;
+			        				try {
+			        					tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+			        				} catch(Exception ex){
+			        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
+			        				}
+			        				tmpPProfit.setProfitVals(cleanStringArray(vals));
+			        				if(tickets != null){
+			        					tmpPProfit.setTickets(cleanStringArray(tickets));
+			        				}
+		        				} else {
+		        					// day values
+		        					int dinamycTot = days_in_month + 2;
+		        					String[] vals = Arrays.copyOfRange(att_and_vals, 2, dinamycTot);						// 14 are tot values
+			        				String[] tickets = null;
+			        				try {
+			        					tickets = Arrays.copyOfRange(att_and_vals, dinamycTot + 1, att_and_vals.length - 1);	// 27 are tot values
+			        				} catch(Exception ex){
+			        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
+			        				}
+			        				tmpPProfit.setProfitVals(cleanStringArray(vals));
+			        				if(tickets != null){
+			        					tmpPProfit.setTickets(cleanStringArray(tickets));
+			        				}
 		        				}
 		        				
 		        				logger.error(String.format("Corrected Object: %s", tmpPProfit.toString()));
@@ -916,6 +940,14 @@ public class GeoObjectManager {
 		        			}
 	        			//}
 	        		}
+	    		} else {
+	    			// heaer line: here I have to count the columns to retrieve the correct number of days in month
+	    			if(att_and_vals.length > 50){
+	    				// case with tickets
+	    				days_in_month = (att_and_vals.length/2) - 2 - 2;
+	    			} else {
+	    				days_in_month = att_and_vals.length - 2 - 1;
+	    			}
 	    		}
     		}
     	}
@@ -947,10 +979,16 @@ public class GeoObjectManager {
 	    			
 	        				// here I load the vals
 	        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
-	        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+	        				String[] tickets = null;
+	        				try {
+	        					tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+	        				} catch(Exception ex){
+	        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
+	        				}
 	        				tmpSProfit.setProfitVals(cleanStringArray(vals));
-	        				tmpSProfit.setTickets(cleanStringArray(tickets));
-	        				
+	        				if(tickets != null){
+	        					tmpSProfit.setTickets(cleanStringArray(tickets));
+	        				}
 	        				logger.error(String.format("Corrected Object: %s", tmpSProfit.toString()));
 	        				correctData.add(tmpSProfit);
 	        			}
@@ -1007,11 +1045,19 @@ public class GeoObjectManager {
     };
     
     public long getTimeStampFromYearAndMonth(int year, int month){
+    	return getTimeStampFromParams(year, month, 1, 0);
+    };
+    
+    public long getTimeStampFromYearMonthAndDay(int year, int month, int day){
+    	return getTimeStampFromParams(year, month, day, 0);
+    };
+    
+    public long getTimeStampFromParams(int year, int month, int day, int hour){
     	Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, year);
 		c.set(Calendar.MONTH, month);
-		c.set(Calendar.DAY_OF_MONTH, 1);
-		c.set(Calendar.HOUR, 0);
+		c.set(Calendar.DAY_OF_MONTH, day);
+		c.set(Calendar.HOUR, hour);
 		c.set(Calendar.AM_PM, Calendar.AM);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);

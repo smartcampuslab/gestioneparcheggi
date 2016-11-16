@@ -1397,14 +1397,20 @@ public class DynamicManager {
 		if(period == null || period.length == 0){
 			if(p_type != -1){
 				repo.updateDirectPeriodStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, p_type);
-				repo.updateDirectPeriodStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+				if(ticketsVal > 0){
+					repo.updateDirectPeriodStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+				}
 			} else {
 				repo.updateStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
-				repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+				if(ticketsVal > 0){
+					repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+				}
 			}
 		} else {
 			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period, 2);
-			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
+			if(ticketsVal > 0){
+				repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
+			}
 		}
 	}
 	
@@ -1416,14 +1422,9 @@ public class DynamicManager {
 		pm.setUser(Integer.valueOf(authorId));
 		
 		ParkingMeterBean entity = findParkingMeter(pmId, agencyId);
-		//mongodb.save(entity);
-		
-		//ProfitLogBean pl = new ProfitLogBean();
 		DataLogBean pl = new DataLogBean();
 		pl.setObjId(pm.getId());
 		pl.setType(ParkMeter.class.getCanonicalName());
-		//pl.setFromTime(startTime);
-		//pl.setToTime(timestamp);
 		pl.setTime(timestamp);
 		if(period != null && period.length == 2){		// If there is a log period
 			Long[] periodLong = {period[0], period[1]};
@@ -1443,17 +1444,7 @@ public class DynamicManager {
 		boolean isHolyday = repo.isAHoliday(cal, entity.getId_app());
 		pl.setHolyday(isHolyday);
 		pl.setSystemLog(sysLog);
-		//---------------------------
-		//Integer oldVersion = getLastVersion(dl.getObjId());
-		//dl.setVersion(new Integer(oldVersion.intValue() + 1));
-		//if(entity.getGeometry() != null){
-		//	PointBean point = new PointBean();
-		//	point.setLat(entity.getGeometry().getLat());
-		//	point.setLng(entity.getGeometry().getLng());
-		//	dl.setLocation(point);
-		//}
 		pl.setDeleted(false);
-		//dl.setContent(entity.toJSON());
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(pm, Map.class);
 		pl.setValue(map);
@@ -1461,24 +1452,26 @@ public class DynamicManager {
 		pl.setValueString(tmpVal.toString(4));
 		mongodb.save(pl);
 		logger.info(String.format("Updated parking meter %s profit by user %s", pm.getId(), username));
-		// Update Profit Stat report
-		//int[] total = {p.getSlotsTotal()};
-		//int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
-		//double statValue = findOccupationRate(total, occupied, 0, 0, 1);
 		int profitVal = pm.getProfit();
 		int ticketsVal = pm.getTickets();
 		if(period == null || period.length == 0){
 			if(p_type != -1){
 				repo.updateDirectPeriodStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, p_type);
-				repo.updateDirectPeriodStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+				if(ticketsVal > 0){
+					repo.updateDirectPeriodStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+				}
 			} else {
 				repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
-				repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+				if(ticketsVal > 0){
+					repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+				}
 			}
 		} else {
 			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period, 2);
-			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
-		}
+			if(ticketsVal > 0){
+				repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
+			}
+		}	
 	}
 
 	

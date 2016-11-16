@@ -1512,8 +1512,12 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	};
 	
 	$scope.correctProfitLogId = function(logId){
-		var res = logId.split("@");
-		return "parkstruct@" + res[1] + "@" + res[2];
+		if(logId != null){
+			var res = logId.split("@");
+			return "parkstruct@" + res[1] + "@" + res[2];
+		} else {
+			return logId;
+		}
 	};
 	
 	$scope.correctDateIt = function(date){

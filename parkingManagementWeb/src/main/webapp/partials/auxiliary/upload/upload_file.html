@@ -55,7 +55,7 @@
 										class="glyphicon glyphicon-ban-circle"></i></span> <span
 									ng-show="item.isError"><i
 										class="glyphicon glyphicon-remove"></i></span></td>
-								<td nowrap ng-show="params.objtype == 1">
+								<td nowrap ng-show="params.objtype == 1"><!-- streets occupancy data -->
 									<!-- here I have to manage all the case of upload -->
 									<a href="#/auxiliary/logs/1" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(1,0);item.remove()"
@@ -86,7 +86,7 @@
 	 								    <span class="glyphicon glyphicon-trash"></span> {{ 'btn_remove_text' | i18n }}
 									</a>
 								</td>
-								<td nowrap ng-show="params.objtype == 2">
+								<td nowrap ng-show="params.objtype == 2"><!-- structures occupancy data -->
 									<!-- here I have to manage all the case of upload -->
 									<a href="#/auxiliary/logs/2" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(2,0);item.remove()"
@@ -117,7 +117,7 @@
 	 								    <span class="glyphicon glyphicon-trash"></span> {{ 'btn_remove_text' | i18n }}
 									</a>
 								</td>
-								<td nowrap ng-show="params.objtype == 3">
+								<td nowrap ng-show="params.objtype == 3"><!-- parkingmeters profit data -->
 									<!-- here I have to manage all the case of upload -->
 									<a href="#/auxiliary/logs/3" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(3,0);item.remove()"
@@ -148,7 +148,7 @@
 	 								    <span class="glyphicon glyphicon-trash"></span> {{ 'btn_remove_text' | i18n }}
 									</a>
 								</td>
-								<td nowrap ng-show="params.objtype == 4">
+								<td nowrap ng-show="params.objtype == 4"><!-- structures profit data -->
 									<!-- here I have to manage all the case of upload -->
 									<a href="#/auxiliary/logs/4" type="button" class="btn btn-success btn-lg"
 										ng-click="loadLogData(4,0);item.remove()"

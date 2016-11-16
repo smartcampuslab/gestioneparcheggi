@@ -110,11 +110,4 @@
 	</sec:authentication-manager>
 	
     <context:component-scan base-package="it.smartcommunitylab.parking.management.web.security" />
-
-	<bean id="apiListingResourceJSON" 
-	    class="io.swagger.jaxrs.listing.ApiListingResource">
-	</bean>	
-    <bean id="apiDeclarationProvider" 
-        class="io.swagger.jaxrs.listing.SwaggerSerializers" scope="singleton">
-	</bean>
 </beans>
