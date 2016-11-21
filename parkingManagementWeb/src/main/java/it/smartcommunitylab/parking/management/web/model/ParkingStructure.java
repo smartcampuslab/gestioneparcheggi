@@ -46,8 +46,8 @@ public class ParkingStructure {
 	private List<PaymentMode> paymentMode;
 	private String phoneNumber;
 	private Long lastChange;
-	private boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
-	private boolean abuttingPark;	// if there is a bus service
+	private Boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
+	private Boolean abuttingPark;	// if there is a bus service
 	private List<String> zones;		// list of related zones (id)
 	private List<String> agencyId;	// relation to agency object
 	
@@ -179,19 +179,19 @@ public class ParkingStructure {
 		this.lastChange = lastChange;
 	}
 	
-	public boolean isParkAndRide() {
+	public Boolean getParkAndRide() {
 		return parkAndRide;
 	}
 
-	public void setParkAndRide(boolean parkAndRide) {
+	public void setParkAndRide(Boolean parkAndRide) {
 		this.parkAndRide = parkAndRide;
 	}
 
-	public boolean isAbuttingPark() {
+	public Boolean getAbuttingPark() {
 		return abuttingPark;
 	}
 
-	public void setAbuttingPark(boolean abuttingPark) {
+	public void setAbuttingPark(Boolean abuttingPark) {
 		this.abuttingPark = abuttingPark;
 	}
 
@@ -301,7 +301,7 @@ public class ParkingStructure {
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
-		json += "\"parkAndRide\":\"" + isParkAndRide() + "\"";
+		json += "\"parkAndRide\":\"" + getParkAndRide() + "\"";
 		json += "}";
 		return json;
 	}

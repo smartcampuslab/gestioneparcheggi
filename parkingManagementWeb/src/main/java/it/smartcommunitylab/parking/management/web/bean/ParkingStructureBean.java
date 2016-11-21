@@ -40,8 +40,8 @@ public class ParkingStructureBean {
 	private double occupancyRate;	// I use it only in the bean and not in the db object
 	private double profit;			// in eurocent
 	private int tickets;			// number of tickets
-	private boolean parkAndRide;
-	private boolean abuttingPark;	// if there is a bus service
+	private Boolean parkAndRide;
+	private Boolean abuttingPark;	// if there is a bus service
 	private List<String> zones;		// list of related zones (id)
 	private List<String> agencyId;	// relation to agency object
 	
@@ -197,19 +197,21 @@ public class ParkingStructureBean {
 		this.tickets = tickets;
 	}
 
-	public boolean isParkAndRide() {
+	
+
+	public Boolean getParkAndRide() {
 		return parkAndRide;
 	}
 
-	public void setParkAndRide(boolean parkAndRide) {
+	public void setParkAndRide(Boolean parkAndRide) {
 		this.parkAndRide = parkAndRide;
 	}
 
-	public boolean isAbuttingPark() {
+	public Boolean getAbuttingPark() {
 		return abuttingPark;
 	}
 
-	public void setAbuttingPark(boolean abuttingPark) {
+	public void setAbuttingPark(Boolean abuttingPark) {
 		this.abuttingPark = abuttingPark;
 	}
 
@@ -323,7 +325,7 @@ public class ParkingStructureBean {
 		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
 		json += "\"profit\":\"" + getProfit() + "\",";
 		json += "\"tickets\":\"" + getTickets() + "\",";
-		json += "\"parkAndRide\":\"" + isParkAndRide() + "\",";
+		json += "\"parkAndRide\":\"" + getParkAndRide() + "\",";
 		json += "\"manager\":\"" + getManager() + "\"";
 		json += "}";
 		return json;
