@@ -2634,7 +2634,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			rechargeableSlotNumber: newSlotsConf.rechargeableSlotNumber,
     			loadingUnloadingSlotNumber: newSlotsConf.loadingUnloadingSlotNumber,
     			pinkSlotNumber: newSlotsConf.pinkSlotNumber,
-    			carSharingSlotNumber: newSlotsConf.carSharingSlotNumber
+    			carSharingSlotNumber: newSlotsConf.carSharingSlotNumber,
+    			unusuableSlotNumber : newSlotsConf.unusuableSlotNumber
     		};
     		if(type == 0){
     			$scope.eStreet.slotsConfiguration.push(newSlotConfiguration);
@@ -2666,7 +2667,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			rechargeableSlotNumber: null,
     			loadingUnloadingSlotNumber: null,
     			pinkSlotNumber: null,
-    			carSharingSlotNumber: null
+    			carSharingSlotNumber: null,
+    			unusuableSlotNumber: null
 	    	};
     	} else {
     		$scope.newSlotsConfPS = {
@@ -2681,7 +2683,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			rechargeableSlotNumber: null,
     			loadingUnloadingSlotNumber: null,
     			pinkSlotNumber: null,
-    			carSharingSlotNumber: null
+    			carSharingSlotNumber: null,
+    			unusuableSlotNumber: null
     		};
     	}
     };
