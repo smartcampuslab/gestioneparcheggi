@@ -184,6 +184,10 @@
 															    		<td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
 															    		<td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
 															    	</tr>
+															    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
+															    		<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
+															    		<td>&nbsp;{{ sc.unusuableSlotNumber }}</td>
+															    	</tr>
 												    			</table>
 												    		</td>	
 												    	</tr>
@@ -397,6 +401,10 @@
 															    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
 															    		<td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
 															    		<td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
+															    	</tr>
+															    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
+															    		<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
+															    		<td>&nbsp;{{ sc.unusuableSlotNumber }}</td>
 															    	</tr>
 												    			</table>
 												    		</td>	
@@ -645,10 +653,10 @@
 										<td class="detailsViewStreetSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.carSharingSlotNumber }}</td>
 									</tr>
-									<!-- <tr ng-show="sconf.s_unusuableSlot.visible">
+									<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
 										<td class="detailsViewStreetSX">{{ 'street_unusuable_slot' | i18n }}:</td>
 										<td class="detailsViewStreetDX">&nbsp;{{ sc.unusuableSlotNumber }}</td>
-									</tr> -->
+									</tr>
 							    </table>
 							</td>	
 						</tr>
@@ -1229,6 +1237,12 @@
 											    <div class="field-error" ng-show="form.sCarsharingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 											    <div class="field-error" ng-show="!isInit && form.sCarsharingslot.$error.required">{{ 'street_car_sharing_slots_err_required' | i18n }}</div>
 											</div>
+											<div class="form-group" ng-show="manageVehicleTypesPs(sc.vehicleType).s_unusuableSlot.visible">
+											    <label for="unusuabledSlot">{{ 'street_unusuable_slot' | i18n }}</label>
+											    <input id="unusuabledSlot" type="text" class="form-control" name="sUnusuabledSlot" ng-model="sc.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="manageVehicleTypesPs(sc.vehicleType).s_unusuableSlot.required" placeholder="{{ 'street_unusuableslot_placeholder' | i18n }}" >
+											    <div class="field-error" ng-show="form.sUnusuabledSlot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
+											    <div class="field-error" ng-show="!isInit && form.sUnusuabledSlot.$error.required">{{ 'street_unusuable_slots_err_required' | i18n }}</div>
+											</div>
 											<div class="form-group" ng-show="manageVehicleTypesPs(sc.vehicleType).s_activeType.visible">
 											    <label for="activeType">{{ 'street_active_vehicle_type' | i18n }}
 											    	<input id="activeType" type="checkbox" name="nsActivetype" ng-model="sc.vehicleTypeActive" >
@@ -1327,7 +1341,7 @@
 											    <div class="field-error" ng-show="form.nsCarsharingslot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
 											    <div class="field-error" ng-show="!isInit && form.nsCarsharingslot.$error.required">{{ 'street_car_sharing_slots_err_required' | i18n }}</div>
 											</div>
-											<div class="form-group">
+											<div class="form-group" ng-show="newVSC.s_unusuableSlot.visible">
 											    <label for="unusuabledSlot">{{ 'street_unusuable_slot' | i18n }}</label>
 											    <input id="unusuabledSlot" type="text" class="form-control" name="nsUnusuabledSlot" ng-model="newSlotsConfPS.unusuableSlotNumber" ng-pattern="onlyNumbers" ng-required="newVSC.s_unusuableSlot.required" placeholder="{{ 'street_unusuableslot_placeholder' | i18n }}" >
 											    <div class="field-error" ng-show="form.nsUnusuabledSlot.$error.pattern">{{ 'street_slots_err_pattern' | i18n }}</div>
