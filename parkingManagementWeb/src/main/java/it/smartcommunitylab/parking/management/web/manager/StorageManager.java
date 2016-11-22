@@ -15,14 +15,14 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
+import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
-import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
-import it.smartcommunitylab.parking.management.web.bean.RatePeriodBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.PolygonBean;
-import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
+import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
+import it.smartcommunitylab.parking.management.web.bean.RatePeriodBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
@@ -30,12 +30,12 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
-import it.smartcommunitylab.parking.management.web.model.RateArea;
-import it.smartcommunitylab.parking.management.web.model.RatePeriod;
-import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
-import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.Agency;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.RateArea;
+import it.smartcommunitylab.parking.management.web.model.RatePeriod;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.Zone;
 import it.smartcommunitylab.parking.management.web.model.geo.Line;
@@ -1066,7 +1066,8 @@ public class StorageManager {
 
 	public List<ParkingStructureBean> getAllParkingStructure(String appId) {
 		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
-		for (ParkingStructure entity : mongodb.findAll(ParkingStructure.class)) {
+		List<ParkingStructure> pss = mongodb.findAll(ParkingStructure.class);
+		for (ParkingStructure entity : pss) {
 			if(entity != null && appId.compareTo("all") == 0){
 				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
 			} else if(entity != null && entity.getId_app().compareTo(appId) == 0){
@@ -1168,9 +1169,10 @@ public class StorageManager {
 					entity.setShowInWidget(entityBean.isShowInWidget());
 					entity.getGeometry().setLat(entityBean.getGeometry().getLat());
 					entity.getGeometry().setLng(entityBean.getGeometry().getLng());
-					entity.setParkAndRide(entityBean.isParkAndRide());
-					entity.setAbuttingPark(entityBean.isAbuttingPark());
+					entity.setParkAndRide(entityBean.getParkAndRide());
+					entity.setAbuttingPark(entityBean.getAbuttingPark());
 					if(entityBean.getAlgoritmData()!=null)entity.setAlgoritmData(entityBean.getAlgoritmData());
+
 					if(entityBean.getZones()!=null)entity.setZones(entityBean.getZones());
 					mongodb.save(entity);
 					logger.info("Parking structure " + entity.getId() + " updated by user " + username);

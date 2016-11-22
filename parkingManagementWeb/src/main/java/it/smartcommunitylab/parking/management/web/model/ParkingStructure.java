@@ -37,18 +37,12 @@ public class ParkingStructure {
 	private Point geometry;
 	private Integer slotNumber;
 	private List<VehicleSlot> slotsConfiguration;	// Slot configuration for each vehicle type
-	/*private Integer payingSlotNumber;
-	private Integer handicappedSlotNumber;
-	private Integer unusuableSlotNumber;
-	// dynamic data
-	private Integer payingSlotOccupied;		// on Paying
-	private Integer handicappedSlotOccupied;*/
 	
 	private List<PaymentMode> paymentMode;
 	private String phoneNumber;
 	private Long lastChange;
-	private boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
-	private boolean abuttingPark;	// if there is a bus service
+	private Boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
+	private Boolean abuttingPark;	// if there is a bus service
 	private List<String> zones;		// list of related zones (id)
 	private boolean showInWidget;	// used to specify if a park is visible or not in the widget
 	private AlgoritmData algoritmData;
@@ -134,46 +128,6 @@ public class ParkingStructure {
 		return paymentMode;
 	}
 
-	/*public Integer getPayingSlotNumber() {
-		return payingSlotNumber;
-	}
-
-	public void setPayingSlotNumber(Integer payingSlotNumber) {
-		this.payingSlotNumber = payingSlotNumber;
-	}
-
-	public Integer getPayingSlotOccupied() {
-		return payingSlotOccupied;
-	}
-
-	public Integer getHandicappedSlotNumber() {
-		return handicappedSlotNumber;
-	}
-
-	public Integer getHandicappedSlotOccupied() {
-		return handicappedSlotOccupied;
-	}
-
-	public Integer getUnusuableSlotNumber() {
-		return unusuableSlotNumber;
-	}
-
-	public void setPayingSlotOccupied(Integer slotOccupied) {
-		this.payingSlotOccupied = slotOccupied;
-	}
-
-	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
-		this.handicappedSlotNumber = handicappedSlotNumber;
-	}
-
-	public void setHandicappedSlotOccupied(Integer handicappedSlotOccupied) {
-		this.handicappedSlotOccupied = handicappedSlotOccupied;
-	}
-
-	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
-		this.unusuableSlotNumber = unusuableSlotNumber;
-	}*/
-
 	public Long getLastChange() {
 		return lastChange;
 	}
@@ -182,19 +136,19 @@ public class ParkingStructure {
 		this.lastChange = lastChange;
 	}
 	
-	public boolean isParkAndRide() {
+	public Boolean getParkAndRide() {
 		return parkAndRide;
 	}
 
-	public void setParkAndRide(boolean parkAndRide) {
+	public void setParkAndRide(Boolean parkAndRide) {
 		this.parkAndRide = parkAndRide;
 	}
 
-	public boolean isAbuttingPark() {
+	public Boolean getAbuttingPark() {
 		return abuttingPark;
 	}
 
-	public void setAbuttingPark(boolean abuttingPark) {
+	public void setAbuttingPark(Boolean abuttingPark) {
 		this.abuttingPark = abuttingPark;
 	}
 
@@ -320,7 +274,7 @@ public class ParkingStructure {
 		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
 		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
-		json += "\"parkAndRide\":\"" + isParkAndRide() + "\"";
+		json += "\"parkAndRide\":\"" + getParkAndRide() + "\"";
 		json += "\"showInWidget\":\"" + isShowInWidget() + "\"";
 		json += "}";
 		return json;

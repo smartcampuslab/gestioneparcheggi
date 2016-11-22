@@ -231,7 +231,7 @@ public class ObjectController  {
 	public @ResponseBody String updateParking(@RequestBody Parking parking, 
 			@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			dataService.updateDynamicParkingData(parking, agency, userId, userAgencyId, isSysLog, username, period, NO_PERIOD);
+			dataService.updateDynamicParkingData(parking, agency, userId, userAgencyId, isSysLog, username, null, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -247,7 +247,7 @@ public class ObjectController  {
 			if(period != null){
 				logger.debug("Inserted period = " + period[0] + "-" + period[1] );
 			}
-			dataService.updateDynamicStreetData(street, agency, userId, userAgencyId, isSysLog, username, period, NO_PERIOD);
+			dataService.updateDynamicStreetData(street, agency, userId, userAgencyId, isSysLog, username, null, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -410,47 +410,11 @@ public class ObjectController  {
 							}
 						}
 						park.setSlotsConfiguration(sc);
-					/*List<String> slotsOcc = p.getOccSlots();
-					List<String> slotsH = p.getHSlots();
-					List<String> slotsND = p.getNdSlots();
-					for(int i = 0; i < slotsOcc.size(); i++){
-						boolean skipUpdate = true;
-						int slotsOccOnPaying = -1;
-						int slotsOccOnHandicapped = -1;
-						int slotNumND = -1;
-						if(slotsOcc.get(i).compareTo("") != 0 && slotsOcc.get(i).compareTo("-1") != 0){
-							slotsOccOnPaying = Integer.parseInt(slotsOcc.get(i));
-						}
-						if(slotsH.get(i).compareTo("") != 0 && slotsH.get(i).compareTo("-1") != 0){
-							slotsOccOnHandicapped = Integer.parseInt(slotsH.get(i));
-						}
-						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
-							slotNumND = Integer.parseInt(slotsND.get(i));
-						}
-						//TODO manage new vehicleSlotsConfiguration
-						if(slotsOccOnPaying != -1){
-							park.setSlotsOccupiedOnPaying(slotsOccOnPaying);
-							skipUpdate = false;
-						} else {
-							park.setSlotsOccupiedOnPaying(0);
-						}
-						if(slotsOccOnHandicapped != -1){
-							park.setSlotsOccupiedOnHandicapped(slotsOccOnHandicapped);
-							skipUpdate = false;
-						} else {
-							park.setSlotsOccupiedOnHandicapped(0);
-						}
-						if(slotNumND != -1){
-							park.setSlotsUnavailable(slotNumND);
-							skipUpdate = false;
-						} else {
-							park.setSlotsUnavailable(-1);
-						}*/
 						if(!skipUpdate){
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							park.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingData(park, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
+							dataService.updateDynamicParkingData(park, agency, userId, agencyId, isSysLog, username, null, period, MONTH_PERIOD);
 						}
 					}
 				}
@@ -593,54 +557,11 @@ public class ObjectController  {
 							}
 						}
 						street.setSlotsConfiguration(sc);
-						//TODO manage new vehicleSlotsConfiguration
-						/*if(slotOccLc != -1){
-							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnFreeSigned(0);
-						}
-						if(slotOccLs != -1){
-							street.setSlotsOccupiedOnFree(slotOccLs);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnFree(0);
-						}
-						if(slotOccP != -1){
-							street.setSlotsOccupiedOnPaying(slotOccP);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnPaying(0);
-						}
-						if(slotOccDO != -1){
-							street.setSlotsOccupiedOnTimed(slotOccDO);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnTimed(0);
-						}
-						if(slotOccH != -1){
-							street.setSlotsOccupiedOnHandicapped(slotOccH);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnHandicapped(0);
-						}
-						if(slotOccR != -1){
-							street.setSlotsOccupiedOnReserved(slotOccR);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnReserved(0);
-						}
-						if(slotNumND != -1){
-							street.setSlotsUnavailable(slotNumND);
-							skipUpdate = false;
-						} else {
-							street.setSlotsUnavailable(-1);
-						}*/
 						int year = Integer.parseInt(s.getPeriod().getYear());
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, null, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -736,54 +657,11 @@ public class ObjectController  {
 						if(slotsND.get(i).compareTo("") != 0 && slotsND.get(i).compareTo("-1") != 0){
 							slotNumND = Integer.parseInt(slotsND.get(i));
 						}
-						//TODO manage new vehicleSlotsConfiguration
-						/*if(slotOccLc != -1){
-							street.setSlotsOccupiedOnFreeSigned(slotOccLc);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnFreeSigned(0);
-						}
-						if(slotOccLs != -1){
-							street.setSlotsOccupiedOnFree(slotOccLs);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnFree(0);
-						}
-						if(slotOccP != -1){
-							street.setSlotsOccupiedOnPaying(slotOccP);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnPaying(0);
-						}
-						if(slotOccDO != -1){
-							street.setSlotsOccupiedOnTimed(slotOccDO);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnTimed(0);
-						}
-						if(slotOccH != -1){
-							street.setSlotsOccupiedOnHandicapped(slotOccH);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnHandicapped(0);
-						}
-						if(slotOccR != -1){
-							street.setSlotsOccupiedOnReserved(slotOccR);
-							skipUpdate = false;
-						} else {
-							street.setSlotsOccupiedOnReserved(0);
-						}
-						if(slotNumND != -1){
-							street.setSlotsUnavailable(slotNumND);
-							skipUpdate = false;
-						} else {
-							street.setSlotsUnavailable(-1);
-						}*/
 						int year = Integer.parseInt(s.getPeriod().getYear());
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, null, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -810,23 +688,31 @@ public class ObjectController  {
 					List<String> profits = p.getProfitVals();
 					for(int i = 0; i < profits.size(); i++){
 						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
-							int profit = (int)(Double.parseDouble(profits.get(i)) * 100);
+							Double profit = Double.parseDouble(profits.get(i)) * 100d;
+							int profInt =  Math.round(profit.floatValue());
 							int ticket = -1;
 							if(tickets != null && tickets.size() > 0){
 								try {
 									String tik = tickets.get(i);
 									ticket = Integer.parseInt(tik);
-								} catch(NullPointerException ne){
-									logger.error("No ticket retrieve. " + ne.getMessage());
+								} catch(Exception ex){
+									logger.error("No ticket retrieve. " + ex.getMessage());
 								}
 							}
-							parking.setProfit(profit);
+							parking.setProfit(profInt);
 							parking.setTickets(ticket);
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
-							//period = dataService.getPeriodFromYearAndMonth(year, i);
-							parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, from, to, period, MONTH_PERIOD);
+							if(p.getPeriod().getMonth() != null){
+								int month = Integer.parseInt(p.getPeriod().getMonth()[0]) - 1;	// month start from 0 to 11
+								// day period
+								parking.setUpdateTime(dataService.getTimeStampFromYearMonthAndDay(year, month, i + 1));	// day start from 1, index start from 0
+								dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, from, to, period, DOW_PERIOD);
+							} else {
+								// month period
+								parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
+								dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, from, to, period, MONTH_PERIOD);
+							}
 						}
 					}
 				} else {
@@ -856,9 +742,10 @@ public class ObjectController  {
 					List<String> profits = p.getProfitVals();
 					for(int i = 0; i < profits.size(); i++){
 						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
-							int profit = (int)(Double.parseDouble(profits.get(i)) * 100);
+							Double profit = Double.parseDouble(profits.get(i)) * 100d;
+							int profInt =  Math.round(profit.floatValue());
 							int ticket = Integer.parseInt(tickets.get(i));
-							parkStruct.setProfit(profit);
+							parkStruct.setProfit(profInt);
 							parkStruct.setTickets(ticket);
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;

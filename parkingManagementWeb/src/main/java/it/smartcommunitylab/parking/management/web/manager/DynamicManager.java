@@ -529,25 +529,26 @@ public class DynamicManager {
 		return null;
 	}	
 
-	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws DatabaseException {
+	public void editStreetAux(it.smartcommunitylab.parking.management.web.auxiliary.model.Street s, Long timestamp, String agencyId, String channelId, String userAgencyId, boolean sysLog, String username, String author, long[] period, int p_type) throws DatabaseException {
 		String[] ids = s.getId().split("@");
 		String asId = ids[2];
 		s.setUpdateTime(timestamp);
-		s.setUser(Integer.valueOf(authorId));
+		s.setUser(Integer.valueOf(channelId));
+		String sAuthor = "";
+		if(channelId.compareTo("0") == 0){
+			sAuthor = username;
+		} else {
+			sAuthor = author;
+		}
+		s.setAuthor(sAuthor);
 		
 		RateArea area = null;
 		if((s.getAreaId() != null) && (s.getAreaId().compareTo("") != 0)){
 			area = mongodb.findById(s.getAreaId(), RateArea.class);
 		} else {
 			List<RateArea> aree = mongodb.findAll(RateArea.class);
-			//Street myS = new Street();
 			for (RateArea a : aree) {
 				if (a.getStreets() != null) {
-					//myS.setId(asId);
-					//int index = a.getStreets().indexOf(s);
-					//if (index != -1) {
-					//	area = a;
-					//}
 					if(a.getStreets().containsKey(s.getId())){
 						area = a;
 					}
@@ -566,13 +567,6 @@ public class DynamicManager {
 					if(editedSlotsConf != null && !editedSlotsConf.isEmpty()){
 						temp.setSlotsConfiguration(editedSlotsConf); 	// In this way I update only the inserted updated slots
 					}
-					/*temp.setFreeParkSlotOccupied(s.getSlotsOccupiedOnFree());
-					temp.setFreeParkSlotSignOccupied(s.getSlotsOccupiedOnFreeSigned());
-					temp.setTimedParkSlotOccupied(s.getSlotsOccupiedOnTimed());
-					temp.setPaidSlotOccupied(s.getSlotsOccupiedOnPaying());
-					temp.setHandicappedSlotOccupied(s.getSlotsOccupiedOnHandicapped());
-					temp.setReservedSlotOccupied(s.getSlotsOccupiedOnReserved());
-					temp.setUnusuableSlotNumber(s.getSlotsUnavailable());*/
 					
 					temp.setLastChange(timestamp);
 					//mongodb.save(area);
@@ -585,7 +579,7 @@ public class DynamicManager {
 						Long[] periodLong = {period[0], period[1]};
 						dl.setLogPeriod(periodLong);
 					}
-					dl.setAuthor(authorId);
+					dl.setAuthor(sAuthor);
 					dl.setAgency(agencyId);
 					dl.setUserAgencyId(userAgencyId);
 					
@@ -617,7 +611,7 @@ public class DynamicManager {
 					
 					if(slotsConfiguration != null && !slotsConfiguration.isEmpty()){
 						for(VehicleSlot vs: slotsConfiguration){
-							updateVehicleSlotsData(s, dl, vs, timestamp, agencyId, authorId, sysLog, period, p_type);
+							updateVehicleSlotsData(s, dl, vs, timestamp, agencyId, channelId, sysLog, period, p_type);
 						}
 					}
 					
@@ -1011,11 +1005,18 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingStructureAux: used to save a DataLogBean object for the new occupancy data in a parkingStructure
-	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws NotFoundException {
+	public void editParkingStructureAux(Parking p, Long timestamp, String agencyId, String channelId, String userAgencyId, boolean sysLog, String username, String author, long[] period, int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
-		p.setUser(Integer.valueOf(authorId));
+		p.setUser(Integer.valueOf(channelId));
+		String pAuthor = "";
+		if(channelId.compareTo("0") == 0){
+			pAuthor = username;
+		} else {
+			pAuthor = author;
+		}
+		p.setAuthor(pAuthor);
 		
 		ParkingStructure entity = findById(pmId,ParkingStructure.class);
 		// Dynamic data
@@ -1038,7 +1039,7 @@ public class DynamicManager {
 			Long[] periodLong = {period[0], period[1]};
 			dl.setLogPeriod(periodLong);
 		}
-		dl.setAuthor(authorId);
+		dl.setAuthor(pAuthor);
 		dl.setAgency(agencyId);
 		dl.setUserAgencyId(userAgencyId);
 		// set new fields ---------
@@ -1076,7 +1077,7 @@ public class DynamicManager {
 		
 		if(slotsConfiguration != null && !slotsConfiguration.isEmpty()){
 			for(VehicleSlot vs: slotsConfiguration){
-				updateVehicleSlotsDataForPS(p, dl, vs, timestamp, agencyId, authorId, sysLog, period, p_type);
+				updateVehicleSlotsDataForPS(p, dl, vs, timestamp, agencyId, channelId, sysLog, period, p_type);
 			}
 		}
 		// Update Stat report
@@ -1397,14 +1398,20 @@ public class DynamicManager {
 		if(period == null || period.length == 0){
 			if(p_type != -1){
 				repo.updateDirectPeriodStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, p_type);
-				repo.updateDirectPeriodStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+				if(ticketsVal > 0){
+					repo.updateDirectPeriodStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+				}
 			} else {
 				repo.updateStats(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
-				repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+				if(ticketsVal > 0){
+					repo.updateStats(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+				}
 			}
 		} else {
 			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period, 2);
-			repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
+			if(ticketsVal > 0){
+				repo.updateStatsPeriod(p.getId(), p.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
+			}
 		}
 	}
 	
@@ -1416,14 +1423,9 @@ public class DynamicManager {
 		pm.setUser(Integer.valueOf(authorId));
 		
 		ParkingMeterBean entity = findParkingMeter(pmId, agencyId);
-		//mongodb.save(entity);
-		
-		//ProfitLogBean pl = new ProfitLogBean();
 		DataLogBean pl = new DataLogBean();
 		pl.setObjId(pm.getId());
 		pl.setType(ParkMeter.class.getCanonicalName());
-		//pl.setFromTime(startTime);
-		//pl.setToTime(timestamp);
 		pl.setTime(timestamp);
 		if(period != null && period.length == 2){		// If there is a log period
 			Long[] periodLong = {period[0], period[1]};
@@ -1443,17 +1445,7 @@ public class DynamicManager {
 		boolean isHolyday = repo.isAHoliday(cal, entity.getId_app());
 		pl.setHolyday(isHolyday);
 		pl.setSystemLog(sysLog);
-		//---------------------------
-		//Integer oldVersion = getLastVersion(dl.getObjId());
-		//dl.setVersion(new Integer(oldVersion.intValue() + 1));
-		//if(entity.getGeometry() != null){
-		//	PointBean point = new PointBean();
-		//	point.setLat(entity.getGeometry().getLat());
-		//	point.setLng(entity.getGeometry().getLng());
-		//	dl.setLocation(point);
-		//}
 		pl.setDeleted(false);
-		//dl.setContent(entity.toJSON());
 		@SuppressWarnings("unchecked")
 		Map<String,Object> map = ModelConverter.convert(pm, Map.class);
 		pl.setValue(map);
@@ -1461,24 +1453,26 @@ public class DynamicManager {
 		pl.setValueString(tmpVal.toString(4));
 		mongodb.save(pl);
 		logger.info(String.format("Updated parking meter %s profit by user %s", pm.getId(), username));
-		// Update Profit Stat report
-		//int[] total = {p.getSlotsTotal()};
-		//int[] occupied = {p.getSlotsOccupiedOnTotal(),p.getSlotsUnavailable()};
-		//double statValue = findOccupationRate(total, occupied, 0, 0, 1);
 		int profitVal = pm.getProfit();
 		int ticketsVal = pm.getTickets();
 		if(period == null || period.length == 0){
 			if(p_type != -1){
 				repo.updateDirectPeriodStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, p_type);
-				repo.updateDirectPeriodStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+				if(ticketsVal > 0){
+					repo.updateDirectPeriodStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, p_type);
+				}
 			} else {
 				repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp);
-				repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+				if(ticketsVal > 0){
+					repo.updateStats(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp);
+				}
 			}
 		} else {
 			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + profit, null, profitVal, timestamp, period, 2);
-			repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
-		}
+			if(ticketsVal > 0){
+				repo.updateStatsPeriod(pm.getId(), pm.getAgency(), pl.getType() + tickets, null, ticketsVal, timestamp, period, 2);
+			}
+		}	
 	}
 
 	

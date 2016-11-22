@@ -24,7 +24,6 @@ import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 import it.smartcommunitylab.parking.management.web.model.stats.TreeStat;
 import it.smartcommunitylab.parking.management.web.model.stats.YearStat;
 import it.smartcommunitylab.parking.management.web.repository.StatCustomRepository;
-import it.smartcommunitylab.parking.management.web.repository.StatRepository;
 import it.smartcommunitylab.parking.management.web.security.ObjectsHolidaysSetup;
 import it.smartcommunitylab.parking.management.web.security.ObjectsSpecialHolidaysSetup;
 
@@ -47,9 +46,6 @@ public class StatRepositoryImpl implements StatCustomRepository {
 
     @Autowired
     private MongoTemplate mongoTemplate;
-
-    @Autowired
-    private StatRepository repository;
 
 	@Autowired
 	private ObjectsHolidaysSetup objectItaHolidays;
@@ -1356,6 +1352,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 		Map<String, Object> corrMap = new HashMap<String, Object>();
 		//if(granParams.length == 1){
 		if(objectId == null){
+			// case of all objects of a type
 			for (YearStat stat : stats) {
 				String oId = null;
 				oId = stat.getKey().toStatKey().toStringSpecial();
@@ -1429,11 +1426,13 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				}
 			}
 		} else {
+			// case with object id
 			for (YearStat stat : stats) {
 				String key = stat.getKey().getYear().toString();
 				StatValue value = stat.toStatValueByYear();
 				if(granularity.contains(G_YEAR)){
 					map.put(key.toString(), value.merge(map.get(key.toString())));
+					//map.put(generateKeyFromGranularityAndValues(key.toString(), null, null, null, granularity), value.merge(map.get(key.toString())));
 				}
 				if(granularity.contains(G_MONTH)){
 					Map<Byte, MonthStat> monthStat = stat.getMonths();
@@ -1445,6 +1444,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 								map.put(monthkey.toString(), monthValue.merge(map.get(monthkey.toString())));
 							} else {
 								map.put(key.toString() + "." + monthkey.toString(), monthValue.merge(map.get(monthkey.toString())));
+								//map.put(generateKeyFromGranularityAndValues(key.toString(), monthkey.toString(), null, null, granularity), monthValue.merge(map.get(monthkey.toString())));
 							}
 					    }
 					}
@@ -1464,6 +1464,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 										map.put(daykey.toString(), dayValue.merge(map.get(daykey.toString())));
 									} else {
 										map.put(key.toString() + "." + monthkey.toString() + "." + daykey.toString(), dayValue.merge(map.get(daykey.toString())));
+										//map.put(generateKeyFromGranularityAndValues(key.toString(), monthkey.toString(), daykey.toString(), null, granularity), dayValue.merge(map.get(daykey.toString())));
 									}
 								}	
 							}
@@ -1490,6 +1491,7 @@ public class StatRepositoryImpl implements StatCustomRepository {
 												map.put(hourkey.toString(), hourVal.merge(map.get(hourkey.toString())));
 											} else {
 												map.put(key.toString() + "." + monthkey.toString() + "." + daykey.toString() + "." + hourkey.toString(), hourVal.merge(map.get(hourkey.toString())));
+												//map.put(generateKeyFromGranularityAndValues(key.toString(), monthkey.toString(), daykey.toString(), hourkey.toString(), granularity), hourVal.merge(map.get(hourkey.toString())));
 											}
 										}	
 									}
@@ -1500,15 +1502,12 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				}
 			}
 		}
-		//}
-		//if(objectId != null){
-			for (Iterator<String> iterator = map.keySet().iterator(); iterator.hasNext();) {
-				String skey = iterator.next().toString();
-			    if (!map.get(skey).empty()) {
-			    	corrMap.put(skey, map.get(skey));
-			    }
-			}
-		//}
+		for (Iterator<String> iterator = map.keySet().iterator(); iterator.hasNext();) {
+			String skey = iterator.next().toString();
+		    if (!map.get(skey).empty()) {
+		    	corrMap.put(skey, map.get(skey));
+		    }
+		}
 		if(granParams.length > 1){
 			// here I have to generate a tree with all granularity level
 			Map<String, TreeStat> years = new HashMap<String, TreeStat>();
@@ -1548,6 +1547,57 @@ public class StatRepositoryImpl implements StatCustomRepository {
 			        		hours.put(cmkey, hour);
 			        		break;
 			        }
+			        /*switch(complexKey.length){
+		        	case 1:
+		        		if(complexKey[0].contains("y")){
+		        			TreeStat year = new TreeStat(corrMap.get(cmkey), null);
+		        			years.put(cmkey, year); 
+		        		}
+		        		if(complexKey[0].contains("m")){
+		        			TreeStat month = new TreeStat(corrMap.get(cmkey), null);
+			        		months.put(cmkey, month); 
+		        		}
+		        		if(complexKey[0].contains("d")){
+		        			TreeStat day = new TreeStat(corrMap.get(cmkey), null);
+			        		days.put(correctKeyFromDay(cmkey), day);
+		        		}
+		        		if(complexKey[0].contains("h")){
+		        			TreeStat hour = new TreeStat(corrMap.get(cmkey), null);
+			        		hours.put(cmkey, hour);
+		        		}
+		        		break;
+		        	case 2:
+		        		if(cmkey.contains("m") && cmkey.contains("y")){
+		        			TreeStat month = new TreeStat(corrMap.get(cmkey), null);
+			        		months.put(cmkey, month); 
+		        		}
+		        		if(cmkey.contains("d") && cmkey.contains("m")){
+		        			TreeStat day = new TreeStat(corrMap.get(cmkey), null);
+			        		days.put(cmkey, day);
+		        		}
+		        		if(cmkey.contains("h") && cmkey.contains("d")){
+		        			TreeStat hour = new TreeStat(corrMap.get(cmkey), null);
+			        		hours.put(cmkey, hour);
+		        		}
+		        		break;
+		        	case 3:
+		        		if(cmkey.contains("d") && cmkey.contains("m") && cmkey.contains("y")){
+		        			TreeStat day = new TreeStat(corrMap.get(cmkey), null);
+			        		days.put(cmkey, day);
+		        		}
+		        		if(cmkey.contains("h") && cmkey.contains("d") && cmkey.contains("m")){
+		        			TreeStat hour = new TreeStat(corrMap.get(cmkey), null);
+			        		hours.put(cmkey, hour);
+		        		}
+		        		break;
+		        	case 4: 
+		        		if(cmkey.contains("h") && cmkey.contains("d") && cmkey.contains("m") && cmkey.contains("y")){
+		        			TreeStat hour = new TreeStat(corrMap.get(cmkey), null);
+			        		hours.put(cmkey, hour);
+		        		}
+		        		break;
+			        }*/
+			        
 			    }
 			}
 			// merge hours in days
@@ -1604,10 +1654,88 @@ public class StatRepositoryImpl implements StatCustomRepository {
 				String ykey = iterator.next().toString();
 				complexMap.put(ykey, years.get(ykey));
 			}
+			
+			// new version -------------------------------------------------------------
+			// merge hours in days
+			/*for (Iterator<String> iterator = hours.keySet().iterator(); iterator.hasNext();) {
+				String hkey = iterator.next().toString();
+				TreeStat hValue = hours.get(hkey);
+				String dkey = correctKeyFromDayAndHour(hkey, 2, 1);
+				if(days.get(dkey) != null){
+					Map<String, TreeStat> subElem = days.get(dkey).getSubEle();
+					subElem.put(correctKeyFromDayAndHour(hkey, 1, 1), hValue);
+					days.get(dkey).setSubEle(subElem);
+				} else {
+					Map<String, TreeStat> tmp = new HashMap<String, TreeStat>();
+					tmp.put(correctKeyFromDayAndHour(hkey, 1, 1), hValue);
+					TreeStat day = new TreeStat(corrMap.get(dkey), tmp);
+				    days.put(dkey, day);
+				}
+			}
+			for (Iterator<String> iterator = days.keySet().iterator(); iterator.hasNext();) {
+				String dkey = iterator.next().toString();
+				complexMap.put(dkey, days.get(dkey));
+			}*/
+			//-------------------------------------------------------------------------------------
+			
 			return complexMap;
 		}
 		
 		return corrMap;
+	}
+	
+	private String correctKeyFromDayAndHour(String key, int type, int mode){
+		String corr = "";
+		String[] complete = key.split("\\.");
+		if(mode == 1){
+			if(complete[0].contains("d")){
+				complete[0] = complete[0].replace("d", "");
+			}
+			if(complete[1].contains("h")){
+				complete[1] = complete[1].replace("h", "");
+			}
+		}
+		switch(type){
+			case 1:
+				corr = complete[1];
+			case 2:
+				corr = complete[0];
+				break;
+			default: break;
+		}
+		return corr;
+	}
+	
+	private String correctKeyFromDay(String key){
+		String corr = "";
+		if(key.contains("d")){
+			key = key.replace("d", "");
+		}
+		corr = key;
+		return corr;
+	}
+	
+	private String generateKeyFromGranularityAndValues(String year, String month, String day, String hour, String granularity){
+		String finalKey = "";
+		boolean isYear = false;
+		boolean isMonth = false;
+		boolean isDay = false;
+		boolean isHour = false;
+		if(granularity.contains(G_YEAR) && year != null){
+			isYear = true;
+		}
+		if(granularity.contains(G_MONTH) && month != null){
+			isMonth = true;
+		}
+		if(granularity.contains(G_DAY) && day != null){
+			isDay = true;
+		}
+		if(granularity.contains(G_HOUR) && hour != null){
+			isHour = true;
+		}
+		finalKey = ((isYear) ? ("y" + year + ".") : "") + ((isMonth) ? ("m" + month + ".") : "") + ((isDay) ? ("d" + day + ".") : "") + ((isHour) ? ("h" + hour + ".") : "");
+		finalKey = finalKey.substring(0, finalKey.length() - 1);	// here I remove last '.' from string
+		return finalKey;
 	}
 	
 	private Map<String, StatValue> toMapStatValsGranularity(List<YearStat> stats, String granularity, String objectId) {

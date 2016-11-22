@@ -31,19 +31,14 @@ public class ParkingStructureBean {
 	private PointBean geometry;
 	private Integer slotNumber;
 	private List<VehicleSlotBean> slotsConfiguration;
-	/*private Integer payingSlotNumber;
-	private Integer payingSlotOccupied;
-	private Integer handicappedSlotNumber;
-	private Integer handicappedSlotOccupied;
-	private Integer unusuableSlotNumber;*/
 	private List<String> paymentMode;
 	private String phoneNumber;
 	private Long lastChange;
 	private double occupancyRate;	// I use it only in the bean and not in the db object
 	private double profit;			// in eurocent
 	private int tickets;			// number of tickets
-	private boolean parkAndRide;
-	private boolean abuttingPark;	// if there is a bus service
+	private Boolean parkAndRide;
+	private Boolean abuttingPark;	// if there is a bus service
 	private List<String> zones;		// list of related zones (id)
 	private boolean showInWidget;
 	private AlgoritmData algoritmData;
@@ -88,46 +83,6 @@ public class ParkingStructureBean {
 	public void setSlotNumber(Integer slotNumber) {
 		this.slotNumber = slotNumber;
 	}
-	
-	/*public Integer getPayingSlotNumber() {
-		return payingSlotNumber;
-	}
-
-	public Integer getPayingSlotOccupied() {
-		return payingSlotOccupied;
-	}
-
-	public void setPayingSlotNumber(Integer payingSlotNumber) {
-		this.payingSlotNumber = payingSlotNumber;
-	}
-
-	public void setPayingSlotOccupied(Integer payingSlotOccupied) {
-		this.payingSlotOccupied = payingSlotOccupied;
-	}
-
-	public Integer getHandicappedSlotNumber() {
-		return handicappedSlotNumber;
-	}
-
-	public Integer getHandicappedSlotOccupied() {
-		return handicappedSlotOccupied;
-	}
-
-	public Integer getUnusuableSlotNumber() {
-		return unusuableSlotNumber;
-	}
-
-	public void setHandicappedSlotNumber(Integer handicappedSlotNumber) {
-		this.handicappedSlotNumber = handicappedSlotNumber;
-	}
-
-	public void setHandicappedSlotOccupied(Integer handicappedSlotOccupied) {
-		this.handicappedSlotOccupied = handicappedSlotOccupied;
-	}
-
-	public void setUnusuableSlotNumber(Integer unusuableSlotNumber) {
-		this.unusuableSlotNumber = unusuableSlotNumber;
-	}*/
 
 	public List<VehicleSlotBean> getSlotsConfiguration() {
 		return slotsConfiguration;
@@ -201,19 +156,21 @@ public class ParkingStructureBean {
 		this.tickets = tickets;
 	}
 
-	public boolean isParkAndRide() {
+	
+
+	public Boolean getParkAndRide() {
 		return parkAndRide;
 	}
 
-	public void setParkAndRide(boolean parkAndRide) {
+	public void setParkAndRide(Boolean parkAndRide) {
 		this.parkAndRide = parkAndRide;
 	}
 
-	public boolean isAbuttingPark() {
+	public Boolean getAbuttingPark() {
 		return abuttingPark;
 	}
 
-	public void setAbuttingPark(boolean abuttingPark) {
+	public void setAbuttingPark(Boolean abuttingPark) {
 		this.abuttingPark = abuttingPark;
 	}
 
@@ -334,16 +291,11 @@ public class ParkingStructureBean {
 		json += "\"streetReference\":\"" + getStreetReference() + "\",";
 		json += "\"geometry\":\"" + getGeometry() + "\",";
 		json += "\"slotNumber\":\"" + getSlotNumber() + "\",";
-		/*json += "\"payingSlotNumber\":\"" + getPayingSlotNumber() + "\",";
-		json += "\"payingSlotOccupied\":\"" + getPayingSlotOccupied() + "\",";
-		json += "\"handicappedSlotNumber\":\"" + getHandicappedSlotNumber() + "\",";
-		json += "\"handicappedSlotOccupied\":\"" + getHandicappedSlotOccupied() + "\",";
-		json += "\"unusuableSlotNumber\":\"" + getUnusuableSlotNumber() + "\",";*/
 		json += "\"lastChange\":\"" + getLastChange() + "\",";
 		json += "\"occupancyRate\":\"" + getOccupancyRate() + "\",";
 		json += "\"profit\":\"" + getProfit() + "\",";
 		json += "\"tickets\":\"" + getTickets() + "\",";
-		json += "\"parkAndRide\":\"" + isParkAndRide() + "\",";
+		json += "\"parkAndRide\":\"" + getParkAndRide() + "\"";
 		json += "\"manager\":\"" + getManager() + "\",";
 		json += "\"showInWidget\":\"" + isShowInWidget() + "\"";
 		json += "}";

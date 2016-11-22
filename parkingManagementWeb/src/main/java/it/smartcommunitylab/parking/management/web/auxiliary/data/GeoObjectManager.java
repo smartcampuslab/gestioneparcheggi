@@ -175,24 +175,20 @@ public class GeoObjectManager {
 		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
-	public void updateDynamicStreetData(Street s, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicStreetData(Street s, String agencyId, String channelId, String userAgencyId, boolean sysLog, String username, String author, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(s.getUpdateTime() != null){
 			currTime = s.getUpdateTime();
 		}
-		//currTime = 1419462000000L; // Christmas Day 2014
-		//currTime = 1428271200000L; // Easter Monday 2015
-		//currTime = 1431813600000L; // A Sunday
-		//currTime = 1432543500000L;	// Today at 10.45 am
-		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, userAgencyId, sysLog, username, period, p_type);
+		dynamicManager.editStreetAux(s, currTime, agencyId, channelId, userAgencyId, sysLog, username, author, period, p_type);
 	}
 	
-	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, String userAgency, boolean sysLog, String username, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkingData(Parking object, String agencyId, String channelId, String userAgency, boolean sysLog, String username, String author, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, userAgency, sysLog, username, period, p_type);
+		dynamicManager.editParkingStructureAux(object, currTime, agencyId, channelId, userAgency, sysLog, username, author, period, p_type);
 	}
 	
 	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
@@ -879,7 +875,7 @@ public class GeoObjectManager {
     	String year = "";
     	String month = "";
     	FilterPeriod period = new FilterPeriod();
-    	int lastProfVal = 14;	// default month table last value
+    	int days_in_month = 30;
     	
     	for(int i = 0; i < allRecords.length; i++){
     		//TODO: here I have to check the data list and understand if the value are in horizontal mode or in vertical mode
@@ -893,7 +889,7 @@ public class GeoObjectManager {
 	        			month = att_and_vals[1];
 	        			String[] months = new String[1];
 	        			months[0] = month;
-	        	    	period.setMonth(months);	// I store the month value in the first array position
+	        	    	period.setMonth(months);
 	        		} else {
 	        			//if(att_and_vals[0].contains("park")){
 	        				// vertical mode
@@ -906,16 +902,33 @@ public class GeoObjectManager {
 		        				tmpPProfit.setPeriod(period);
 		    			
 		        				// here I load the vals
-		        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);						// 14 are tot values
-		        				String[] tickets = null;
-		        				try {
-		        					tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
-		        				} catch(Exception ex){
-		        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
-		        				}
-		        				tmpPProfit.setProfitVals(cleanStringArray(vals));
-		        				if(tickets != null){
-		        					tmpPProfit.setTickets(cleanStringArray(tickets));
+		        				if(month == null || month.compareTo("") == 0){
+			        				// month values
+		        					String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);						// 14 are tot values
+			        				String[] tickets = null;
+			        				try {
+			        					tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+			        				} catch(Exception ex){
+			        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
+			        				}
+			        				tmpPProfit.setProfitVals(cleanStringArray(vals));
+			        				if(tickets != null){
+			        					tmpPProfit.setTickets(cleanStringArray(tickets));
+			        				}
+		        				} else {
+		        					// day values
+		        					int dinamycTot = days_in_month + 2;
+		        					String[] vals = Arrays.copyOfRange(att_and_vals, 2, dinamycTot);						// 14 are tot values
+			        				String[] tickets = null;
+			        				try {
+			        					tickets = Arrays.copyOfRange(att_and_vals, dinamycTot + 1, att_and_vals.length - 1);	// 27 are tot values
+			        				} catch(Exception ex){
+			        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
+			        				}
+			        				tmpPProfit.setProfitVals(cleanStringArray(vals));
+			        				if(tickets != null){
+			        					tmpPProfit.setTickets(cleanStringArray(tickets));
+			        				}
 		        				}
 		        				
 		        				logger.error(String.format("Corrected Object: %s", tmpPProfit.toString()));
@@ -924,7 +937,13 @@ public class GeoObjectManager {
 	        			//}
 	        		}
 	    		} else {
-	    			lastProfVal = calculateLastProfValue(att_and_vals);
+	    			// heaer line: here I have to count the columns to retrieve the correct number of days in month
+	    			if(att_and_vals.length > 50){
+	    				// case with tickets
+	    				days_in_month = (att_and_vals.length/2) - 2 - 2;
+	    			} else {
+	    				days_in_month = att_and_vals.length - 2 - 1;
+	    			}
 	    		}
     		}
     	}
@@ -966,10 +985,16 @@ public class GeoObjectManager {
 	    			
 	        				// here I load the vals
 	        				String[] vals = Arrays.copyOfRange(att_and_vals, 2, 14);							// 14 are tot values
-	        				String[] tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+	        				String[] tickets = null;
+	        				try {
+	        					tickets = Arrays.copyOfRange(att_and_vals, 15, att_and_vals.length - 1);	// 27 are tot values
+	        				} catch(Exception ex){
+	        					logger.error("Exception in tickets reading: no value. " + ex.getMessage());
+	        				}
 	        				tmpSProfit.setProfitVals(cleanStringArray(vals));
-	        				tmpSProfit.setTickets(cleanStringArray(tickets));
-	        				
+	        				if(tickets != null){
+	        					tmpSProfit.setTickets(cleanStringArray(tickets));
+	        				}
 	        				logger.error(String.format("Corrected Object: %s", tmpSProfit.toString()));
 	        				correctData.add(tmpSProfit);
 	        			}
@@ -1038,11 +1063,19 @@ public class GeoObjectManager {
     };
     
     public long getTimeStampFromYearAndMonth(int year, int month){
+    	return getTimeStampFromParams(year, month, 1, 0);
+    };
+    
+    public long getTimeStampFromYearMonthAndDay(int year, int month, int day){
+    	return getTimeStampFromParams(year, month, day, 0);
+    };
+    
+    public long getTimeStampFromParams(int year, int month, int day, int hour){
     	Calendar c = Calendar.getInstance();
 		c.set(Calendar.YEAR, year);
 		c.set(Calendar.MONTH, month);
-		c.set(Calendar.DAY_OF_MONTH, 1);
-		c.set(Calendar.HOUR, 0);
+		c.set(Calendar.DAY_OF_MONTH, day);
+		c.set(Calendar.HOUR, hour);
 		c.set(Calendar.AM_PM, Calendar.AM);
 		c.set(Calendar.MINUTE, 0);
 		c.set(Calendar.SECOND, 0);

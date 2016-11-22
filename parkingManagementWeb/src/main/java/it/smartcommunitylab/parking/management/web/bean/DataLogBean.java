@@ -50,10 +50,6 @@ public class DataLogBean {
 	public String getObjId() {
 		return objId;
 	}
-
-	//public PointBean getLocation() {
-	//	return location;
-	//}
 	
 	public String getType() {
 		return type;
@@ -74,10 +70,6 @@ public class DataLogBean {
 	public void setObjId(String objId) {
 		this.objId = objId;
 	}
-	
-	//public void setLocation(PointBean location) {
-	//	this.location = location;
-	//}
 	
 	public void setType(String type) {
 		this.type = type;
