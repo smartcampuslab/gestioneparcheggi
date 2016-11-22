@@ -25,7 +25,6 @@ import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
-import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 @Controller
 public class DashboardRestController {
@@ -48,9 +47,6 @@ public class DashboardRestController {
 	CSVManager csvManager;
 
 	MarkerIconStorage markerIconStorage;
-	
-	@Autowired
-	private VehicleTypeDataSetup vehicleTypeDataSetup;
 
 	@PostConstruct
 	private void init() throws IOException {
