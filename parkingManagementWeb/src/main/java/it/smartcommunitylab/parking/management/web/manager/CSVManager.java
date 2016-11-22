@@ -316,7 +316,7 @@ public class CSVManager {
 				writer.append(CSV_SEPARATOR);
 				writer.append(cleanCommaValue(ps.getStreetReference()));
 				writer.append(CSV_SEPARATOR);
-				writer.append((ps.isParkAndRide()) ? "Si" : "No");
+				writer.append((ps.getParkAndRide()) ? "Si" : "No");
 				writer.append(CSV_SEPARATOR);
 				writer.append((ps.getValidityPeriod()!= null && !ps.getValidityPeriod().isEmpty()) ? ps.feePeriodsSummary() : "");
 				writer.append(CSV_SEPARATOR);

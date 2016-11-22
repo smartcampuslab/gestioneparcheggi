@@ -290,23 +290,50 @@ pm.controller('MainCtrl',['$scope', '$http', '$route', '$window', '$cookies', '$
     	if(stringList && stringList != "null"){
 	    	var subList = stringList.substring(1, stringList.length - 1);
 	    	var elements = subList.split("},");
-	    	for(var i = 0; i < elements.length; i++){
-	    		var allAttribute = elements[i].split(", ");
-	    		var appId = allAttribute[0].split("=")[1];
-	    		var description = allAttribute[1].split("=")[1];
-	    		var name = allAttribute[2].split("=")[1];
-	    		var language = allAttribute[3].split("=")[1];
-	    		var userName = allAttribute[4].split("=")[1];
-	    		var corrVehicleType = {
-	    			appId: appId,
-	    			description: description,
-	    			name: name,
-	    			language_key: language,
-	    			userName: userName,
-	    			visible: false
-	    		};
-	    		list.push(corrVehicleType);
-	    	}
+
+	    	for (var j = 0; j < elements.length; j++) {
+				var allAttribute = elements[j].split(", ");
+
+				var appId;
+				var name;
+				var description;
+				var language_key;
+				var userName;
+				var visible;
+
+				for (var i = 0; i < allAttribute.length; i++) {
+					if (allAttribute[i].indexOf("appId=") !== -1) {
+						appId = allAttribute[i].split("=")[1];
+					}
+					if (allAttribute[i].indexOf("name=") !== -1) {
+						name = allAttribute[i].split("=")[1];
+					}
+					if (allAttribute[i].indexOf("description=") !== -1) {
+						description = allAttribute[i].split("=")[1];
+					}
+
+					if (allAttribute[i].indexOf("language_key=") !== -1) {
+						language_key = allAttribute[i].split("=")[1];
+					}
+					if (allAttribute[i].indexOf("userName=") !== -1) {
+						userName = allAttribute[i].split("=")[1];
+					}
+					if (allAttribute[i].indexOf("visible=") !== -1) {
+						visible = allAttribute[i].split("=")[1];
+					}
+
+				}
+				var data = {
+					appId : appId,
+					name : name,
+					description : description,
+					language_key : language_key,
+					userName : userName,
+					visible : visible
+				};
+
+				list.push(data);
+			}
     	}
     	return list;
     }
