@@ -33,14 +33,9 @@ public class Parking implements Serializable  {
 	private Long updateTime;
 	private Long version;
 	private Integer user;
+	private String author;
 	
 	private int slotsTotal;
-	/*private int slotsPaying;			// Total
-	private int slotsOccupiedOnPaying;	// Total
-	private int slotsHandicapped;
-	private int slotsOccupiedOnHandicapped;
-	private int slotsUnavailable;*/
-	
 	private List<VehicleSlot> slotsConfiguration;	// Slot configuration for each vehicle type
 	
 	private LastChange lastChange;
@@ -49,46 +44,6 @@ public class Parking implements Serializable  {
 	public int getSlotsTotal() {
 		return slotsTotal;
 	}
-
-	/*public int getSlotsPaying() {
-		return slotsPaying;
-	}
-
-	public int getSlotsOccupiedOnPaying() {
-		return slotsOccupiedOnPaying;
-	}
-
-	public void setSlotsPaying(int slotsPaying) {
-		this.slotsPaying = slotsPaying;
-	}
-
-	public void setSlotsOccupiedOnPaying(int slotsOccupiedOnPaying) {
-		this.slotsOccupiedOnPaying = slotsOccupiedOnPaying;
-	}
-
-	public int getSlotsUnavailable() {
-		return slotsUnavailable;
-	}
-
-	public void setSlotsUnavailable(int mSlotsUnavailable) {
-		this.slotsUnavailable = mSlotsUnavailable;
-	}
-
-	public int getSlotsHandicapped() {
-		return slotsHandicapped;
-	}
-
-	public int getSlotsOccupiedOnHandicapped() {
-		return slotsOccupiedOnHandicapped;
-	}
-
-	public void setSlotsHandicapped(int slotsHandicapped) {
-		this.slotsHandicapped = slotsHandicapped;
-	}
-
-	public void setSlotsOccupiedOnHandicapped(int slotsOccupiedOnHandicapped) {
-		this.slotsOccupiedOnHandicapped = slotsOccupiedOnHandicapped;
-	}*/
 	
 	public LastChange getLastChange() {
 		return lastChange;
@@ -174,6 +129,14 @@ public class Parking implements Serializable  {
 		this.user = user;
 	}
 
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	public String toJSON() {
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
@@ -190,11 +153,6 @@ public class Parking implements Serializable  {
 		json += "\"name\":\"" + getName() + "\",";
 		json += "\"description\":\"" + getDescription() + "\",";
 		json += "\"slotsTotal\":" + getSlotsTotal() + ",";
-		/*json += "\"slotsPaying\":" + getSlotsTotal() + ",";
-		json += "\"slotsOccupiedOnPaying\":" + getSlotsOccupiedOnPaying() + ",";
-		json += "\"slotsHandicapped\":" + getSlotsHandicapped() + ",";
-		json += "\"slotsOccupiedOnHandicapped\":" + getSlotsOccupiedOnHandicapped() + ",";
-		json += "\"slotsUnavailable\":" + getSlotsUnavailable() + ",";*/
 		json += "\"lastChange\":" + getUpdateTime() + "";
 		json += "}";
 		return json;

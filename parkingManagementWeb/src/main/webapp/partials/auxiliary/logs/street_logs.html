@@ -25,8 +25,8 @@
 			<tr>
 				<td width="30%"><strong>{{ 'log_author' | i18n }}</strong></td>
 				<td>
-					<span ng-show="logDetails.author == 999">{{ 'system_log_author' | i18n }}</span>
-					<span ng-show="logDetails.author != 999">{{ logDetails.author }}</span>
+					<span ng-show="logDetails.author == 999 || logDetails.author == logUsername">{{ 'system_log_author' | i18n }}</span>
+					<span ng-show="logDetails.author != 999 && logDetails.author != logUsername">{{ logDetails.author }}</span>
 				</td>
 			</tr>
 			<tr>
@@ -121,38 +121,6 @@
 					</table>
 				</td>	
 			</tr>
-			<!-- <table width="100%">
-				<tr>
-					<td width="30%"><strong>{{ 'log_slot_free' | i18n }}</strong></td>
-					<td>{{logDetails.value.slotsFree}}</td>
-				</tr>
-				<tr>
-					<td width="30%"><strong>{{ 'log_slot_occupied_on_free' | i18n }}</strong></td>
-					<td>{{logDetails.value.slotsOccupiedOnFree}}</td>
-				</tr>
-				<tr>
-					<td width="30%"><strong>{{ 'log_slot_paying' | i18n }}</strong></td>
-					<td>{{logDetails.value.slotsPaying}}</td>
-				</tr>
-				<tr>
-					<td width="30%"><strong>{{ 'log_slot_occupied_on_paying' | i18n }}</strong></td>
-					<td>{{logDetails.value.slotsOccupiedOnPaying}}</td>
-				</tr>
-				<tr>
-					<td width="30%"><strong>{{ 'log_slot_timed' | i18n }}</strong></td>
-					<td>{{logDetails.value.slotsTimed}}</td>
-				</tr>
-				<tr>
-					<td width="30%"><strong>{{ 'log_slot_occupied_on_timed' | i18n }}</strong></td>
-					<td>{{logDetails.value.slotsOccupiedOnTimed}}</td>
-				</tr>
-				<tr>
-					<td width="30%"><strong>{{ 'log_slot_handicapped' | i18n }}</strong></td>
-					<td>{{logDetails.value.slotsHandicapped}}</td>
-				</tr>
-			</table>
-		</td>
-		</tr> -->
 		</table>
 		<table style="width: 100%">
 			<tr>
@@ -201,8 +169,8 @@
 					</td>
 					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
 					<td width="15%" align="left">
-						<span ng-show="log.author == 999">{{ 'system_log_author' | i18n }}</span>
-						<span ng-show="log.author != 999">{{ log.author }}</span>
+						<span ng-show="log.author == 999 || log.author == logUsername">{{ 'system_log_author' | i18n }}</span>
+						<span ng-show="log.author != 999 && log.author != logUsername">{{ log.author }}</span>
 					</td>
 					<td width="23%" align="left">
 						{{log.value.name}}
@@ -267,10 +235,6 @@
 							<td><strong>{{ 'street_name' | i18n }}</strong></td>
 							<td>{{ myStreetDetails.name }}</td>
 						</tr>
-<!-- 					<tr> -->
-<!-- 						<td><strong>{{ 'street_area_name' | i18n }}</strong></td> -->
-<!-- 						<td>{{ myStreetDetails.area_name }}</td> -->
-<!-- 					</tr> -->
 						<tr>
 							<td colspan="2"><hr/></td>
 						</tr>
@@ -514,218 +478,6 @@
 	  					</div>
 	  				</div>
 			   	
-					<!-- <div ng-show="streetLoadedAndSelected">
-				   		<label class="group-label" for="totalSlot">{{ 'street_slots' | i18n }}</label>
-				   		<div class="panel panel-default" width="90%">
-				   			<div class="panel-body">
-				   				<table width="100%">
-									<tr>
-				   						<td><strong>{{ 'street_freepark_slot' | i18n }}</strong></td>
-				   						<td>{{ myStreetDetails.slotsFree }}</td>
-				   						<td><strong>{{ 'log_slot_occupied_on_free' | i18n }}</strong></td>
-				   						<td><input id="occupiedSlotOnFree" type="number" class="form-control" name="sOccupiedslotOnFree" ng-pattern="onlyNumbers" ng-model="myStreetDetails.slotsOccupiedOnFree" placeholder="{{ 'street_freeslotoccupied_placeholder' | i18n }}" ng-disabled="myStreetDetails.slotsFree <= 0" ng-required="myStreetDetails.slotsFree > 0" min="0" ng-change="checkCorrectSlots(myStreetDetails)"></td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnFree.$error.pattern">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_free_error_pattern' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnFree.$error.required">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_free_error_required' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnFree.$error.min">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_free_error_min' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="showMaxErrorFree">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_free_error_max' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr>
-				   						<td><strong>{{ 'street_freepark_slot_signed' | i18n }}</strong></td>
-				   						<td>{{ myStreetDetails.slotsFreeSigned }}</td>
-				   						<td><strong>{{ 'log_slot_occupied_on_free_signed' | i18n }}</strong></td>
-				   						<td><input id="occupiedSlotOnFreeSigned" type="number" class="form-control" name="sOccupiedslotOnFreeSigned" ng-pattern="onlyNumbers" ng-model="myStreetDetails.slotsOccupiedOnFreeSigned" placeholder="{{ 'street_freeslotoccupiedsigned_placeholder' | i18n }}" ng-disabled="myStreetDetails.slotsFreeSigned <= 0" ng-required="myStreetDetails.slotsFreeSigned > 0" min="0" ng-change="checkCorrectSlots(myStreetDetails)"></td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnFreeSigned.$error.pattern">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_free_signed_error_pattern' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnFreeSigned.$error.required">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_free_signed_error_required' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnFreeSigned.$error.min">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_free_signed_error_min' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="showMaxErrorFreeSigned">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_free_signed_error_max' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr>
-				   						<td width="22%"><strong>{{ 'street_timedpark_slot' | i18n }}</strong></td>
-				   						<td width="4%">{{ myStreetDetails.slotsTimed }}</td>
-				   						<td width="24%"><strong>{{ 'log_slot_occupied_on_timed' | i18n }}</strong></td>
-				   						<td width="50%"><input id="occupiedSlotOnTimed" type="number" class="form-control" name="sOccupiedslotOnTimed" ng-pattern="onlyNumbers" ng-model="myStreetDetails.slotsOccupiedOnTimed" placeholder="{{ 'street_timedslotoccupied_placeholder' | i18n }}" ng-disabled="myStreetDetails.slotsTimed <= 0" ng-required="myStreetDetails.slotsTimed > 0" min="0" ng-change="checkCorrectSlots(myStreetDetails)"></td>max="{{myStreetDetails.slotsTimed}}"
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnTimed.$error.pattern">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_timed_error_pattern' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnTimed.$error.required">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_timed_error_required' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnTimed.$error.min">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_timed_error_min' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="showMaxErrorTimed">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_timed_error_max' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr>
-				   						<td><strong>{{ 'street_paid_slot' | i18n }}</strong></td>
-				   						<td>{{ myStreetDetails.slotsPaying }}</td>
-				   						<td><strong>{{ 'log_slot_occupied_on_paying' | i18n }}</strong></td>
-				   						<td><input id="occupiedSlotOnPaying" type="number" class="form-control" name="sOccupiedslotOnPaying" ng-pattern="onlyNumbers" ng-model="myStreetDetails.slotsOccupiedOnPaying" placeholder="{{ 'street_paidslotoccupied_placeholder' | i18n }}" ng-disabled="myStreetDetails.slotsPaying <= 0" ng-required="myStreetDetails.slotsPaying > 0" min="0" ng-change="checkCorrectSlots(myStreetDetails)"></td>
-				   					</tr>
-					   				<tr ng-show="!isInit && form.sOccupiedslotOnPaying.$error.pattern">
-					   					<td colspan="3"></td>
-					   					<td align="center">
-					   						<div class="alert alert-danger">{{ 'log_street_occupied_paid_error_pattern' | i18n }}</div>
-					   					</td>
-					   				</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnPaying.$error.required">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_paid_error_required' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnPaying.$error.min">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_paid_error_min' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="showMaxErrorPaing">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_paid_error_max' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr>
-				   						<td><strong>{{ 'street_handicapped_slot' | i18n }}</strong></td>
-				   						<td>{{ myStreetDetails.slotsHandicapped }}</td>
-				   						<td><strong>{{ 'log_slot_occupied_on_handicapped' | i18n }}</strong></td>
-				   						<td><input id="occupiedSlotOnHandicapped" type="number" class="form-control" name="sOccupiedslotOnHandicapped" ng-pattern="onlyNumbers" ng-model="myStreetDetails.slotsOccupiedOnHandicapped" placeholder="{{ 'street_handicappedslotoccupied_placeholder' | i18n }}" ng-disabled="myStreetDetails.slotsHandicapped <= 0" ng-required="myStreetDetails.slotsHandicapped > 0" min="0" ng-change="checkCorrectSlots(myStreetDetails)"></td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnHandicapped.$error.pattern">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_handicapped_error_pattern' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnHandicapped.$error.required">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_handicapped_error_required' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnHandicapped.$error.min">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_handicapped_error_min' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="showMaxErrorHandicapped">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_handicapped_error_max' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr>
-				   						<td><strong>{{ 'street_reserved_slot' | i18n }}</strong></td>
-				   						<td>{{ myStreetDetails.slotsReserved }}</td>
-				   						<td><strong>{{ 'log_slot_occupied_on_reserved' | i18n }}</strong></td>
-				   						<td><input id="occupiedSlotOnReserved" type="number" class="form-control" name="sOccupiedslotOnReserved" ng-pattern="onlyNumbers" ng-model="myStreetDetails.slotsOccupiedOnReserved" placeholder="{{ 'street_reservedslotoccupied_placeholder' | i18n }}" ng-disabled="myStreetDetails.slotsReserved <= 0" ng-required="myStreetDetails.slotsReserved > 0" min="0" ng-change="checkCorrectSlots(myStreetDetails)"></td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnReserved.$error.pattern">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_reserved_error_pattern' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnReserved.$error.required">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_reserved_error_required' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnReserved.$error.min">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_reserved_error_min' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="showMaxErrorReserved">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_occupied_reserved_error_max' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr>
-				   						<td><strong>{{ 'street_unusuable_slot' | i18n }}</strong></td>
-				   						<td></td>{{ myStreetDetails.slotsUnavailable }}
-				   						<td></td>
-				   						<td><input id="unavailableSlots" type="number" class="form-control" name="sUnavalableSlots" ng-pattern="onlyNumbers" ng-model="myStreetDetails.slotsUnavailable" placeholder="{{ 'street_unavailableslot_placeholder' | i18n }}" min="0" ng-change="checkCorrectSlots(myStreetDetails)"></td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sUnavalableSlots.$error.pattern">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_unavailable_error_pattern' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="!isInit && form.sOccupiedslotOnFree.$error.min">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_unavailable_error_min' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   					<tr ng-show="showMaxErrorUnusuable">
-				   						<td colspan="3"></td>
-				   						<td align="center">
-				   							<div class="alert alert-danger">{{ 'log_street_unavailable_error_max' | i18n }}</div>
-				   						</td>
-				   					</tr>
-				   				</table>
-				   			</div>
-					</div> -->
 					<div class="field-error" ng-show="showUpdatingSErrorMessage">{{ 'err_in_log_street_inserting' | i18n }}</div>
 					<div class="alert alert-success" ng-show="showUpdatingSSuccessMessage">{{ 'succ_in_log_street_inserting' | i18n }}</div>
 		   			<table width="97%">			

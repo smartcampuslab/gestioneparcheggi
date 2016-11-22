@@ -25,8 +25,8 @@
 			<tr>
 				<td width="30%"><strong>{{ 'log_author' | i18n }}</strong></td>
 				<td>
-					<span ng-show="logDetails.author == 999">{{ 'system_log_author' | i18n }}</span>
-					<span ng-show="logDetails.author != 999">{{ logDetails.author }}</span>
+					<span ng-show="logDetails.author == 999 || logDetails.author == logUsername">{{ 'system_log_author' | i18n }}</span>
+					<span ng-show="logDetails.author != 999 && logDetails.author != logUsername">{{ logDetails.author }}</span>
 				</td>
 			</tr>
 			<tr>
@@ -166,8 +166,8 @@
 					</td>
 					<td width="15%" align="left">{{ (log.time | date:'short') }}</td>
 					<td width="15%" align="left">
-						<span ng-show="log.author == 999">{{ 'system_log_author' | i18n }}</span>
-						<span ng-show="log.author != 999">{{ log.author }}</span>
+						<span ng-show="log.author == 999 || log.author == logUsername">{{ 'system_log_author' | i18n }}</span>
+						<span ng-show="log.author != 999 && log.author != logUsername">{{ log.author }}</span>
 					</td>
 					<td width="23%" align="left">
 <!-- 						<span ng-show="log.type == 'it.smartcommunitylab.parking.management.web.auxiliary.model.Parking'">name: {{log.value.name}}, agency: {{log.value.agency}}, position: {{log.value.position}}, slotsTotal: {{log.value.slotsTotal}}, slotsOccupied: {{log.value.slotsOccupiedOnTotal}}, slotsUnavailable: {{log.value.slotsUnavailable}}</span> -->

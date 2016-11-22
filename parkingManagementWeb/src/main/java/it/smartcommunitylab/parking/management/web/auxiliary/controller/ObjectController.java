@@ -231,7 +231,7 @@ public class ObjectController  {
 	public @ResponseBody String updateParking(@RequestBody Parking parking, 
 			@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
-			dataService.updateDynamicParkingData(parking, agency, userId, userAgencyId, isSysLog, username, period, NO_PERIOD);
+			dataService.updateDynamicParkingData(parking, agency, userId, userAgencyId, isSysLog, username, null, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -247,7 +247,7 @@ public class ObjectController  {
 			if(period != null){
 				logger.debug("Inserted period = " + period[0] + "-" + period[1] );
 			}
-			dataService.updateDynamicStreetData(street, agency, userId, userAgencyId, isSysLog, username, period, NO_PERIOD);
+			dataService.updateDynamicStreetData(street, agency, userId, userAgencyId, isSysLog, username, null, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -414,7 +414,7 @@ public class ObjectController  {
 							int year = Integer.parseInt(p.getPeriod().getYear());
 							period = null;
 							park.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-							dataService.updateDynamicParkingData(park, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
+							dataService.updateDynamicParkingData(park, agency, userId, agencyId, isSysLog, username, null, period, MONTH_PERIOD);
 						}
 					}
 				}
@@ -561,7 +561,7 @@ public class ObjectController  {
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, null, period, MONTH_PERIOD);
 						}
 					}	
 				}
@@ -661,7 +661,7 @@ public class ObjectController  {
 						period = null;
 						street.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
 						if(!skipUpdate){
-							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, period, MONTH_PERIOD);
+							dataService.updateDynamicStreetData(street, agency, userId, agencyId, isSysLog, username, null, period, MONTH_PERIOD);
 						}
 					}	
 				}

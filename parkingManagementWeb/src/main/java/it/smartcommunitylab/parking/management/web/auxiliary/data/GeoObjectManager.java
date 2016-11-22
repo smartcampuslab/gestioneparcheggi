@@ -175,24 +175,20 @@ public class GeoObjectManager {
 		return searchParkingMeters(new Circle(lat, lon, radius), Collections.<String,Object>singletonMap("agency", agency), agencyId); //new Circle(lat, lon, radius),
 	}
 	
-	public void updateDynamicStreetData(Street s, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicStreetData(Street s, String agencyId, String channelId, String userAgencyId, boolean sysLog, String username, String author, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(s.getUpdateTime() != null){
 			currTime = s.getUpdateTime();
 		}
-		//currTime = 1419462000000L; // Christmas Day 2014
-		//currTime = 1428271200000L; // Easter Monday 2015
-		//currTime = 1431813600000L; // A Sunday
-		//currTime = 1432543500000L;	// Today at 10.45 am
-		dynamicManager.editStreetAux(s, currTime, agencyId, authorId, userAgencyId, sysLog, username, period, p_type);
+		dynamicManager.editStreetAux(s, currTime, agencyId, channelId, userAgencyId, sysLog, username, author, period, p_type);
 	}
 	
-	public void updateDynamicParkingData(Parking object, String agencyId, String authorId, String userAgency, boolean sysLog, String username, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkingData(Parking object, String agencyId, String channelId, String userAgency, boolean sysLog, String username, String author, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingStructureAux(object, currTime, agencyId, authorId, userAgency, sysLog, username, period, p_type);
+		dynamicManager.editParkingStructureAux(object, currTime, agencyId, channelId, userAgency, sysLog, username, author, period, p_type);
 	}
 	
 	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {

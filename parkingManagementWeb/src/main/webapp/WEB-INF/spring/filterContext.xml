@@ -51,7 +51,9 @@
 	<http xmlns="http://www.springframework.org/schema/security"
 		pattern="/csv/**" security="none" />
 	<http xmlns="http://www.springframework.org/schema/security"
-		pattern="/auxiliary/rest/**" security="none" />
+		pattern="/data/**" security="none" />
+	<http xmlns="http://www.springframework.org/schema/security"
+		pattern="/stats/**" security="none" />	
 	
 	<!-- Rest WS security with OAUTH2 -->
 <!-- 	<sec:http pattern="/rest/**" entry-point-ref="forbEntryPoint" -->
@@ -60,6 +62,17 @@
 <!-- 		<sec:intercept-url pattern="/**" access="isFullyAuthenticated()" /> -->
 <!-- 	</sec:http> -->
 
+	<!-- REST WS FOR AUSILIARI APP -->
+	<sec:http pattern="/data-mgt/**" use-expressions="false" authentication-manager-ref="mongoAuthenticationManager">
+    	<sec:http-basic />
+    	<sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    	<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY" />
+    	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession">
+		     <sec:concurrency-control expired-url="/login" />
+		</sec:session-management>
+		<sec:form-login login-page="/login.jsp" />
+	</sec:http>
+	
 	<!-- Dashboard Rest WS security configuration -->
 	<sec:http pattern="/dashboard/rest/**" use-expressions="false"
 	    authentication-manager-ref="mongoAuthenticationManager">
@@ -72,10 +85,22 @@
 		<sec:form-login login-page="/login.jsp" />
 	</sec:http>
 	
-	<!-- Rest WS security configuration -->
+	<!-- Editing Rest WS security configuration -->
 	<sec:http pattern="/rest/**" use-expressions="false"
 	    authentication-manager-ref="mongoAuthenticationManager">
     	<!-- <sec:http-basic /> -->
+    	<sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
+    	<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"/>
+    	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession">
+		     <sec:concurrency-control expired-url="/login" />
+		</sec:session-management>
+    	<sec:form-login login-page="/login.jsp" />
+	</sec:http>
+	
+	<!-- Auxiliary Rest WS security configuration -->
+	<sec:http pattern="/auxiliary/rest/**" use-expressions="false"
+	    authentication-manager-ref="mongoAuthenticationManager">
+    	<sec:http-basic />
     	<sec:intercept-url pattern="/login" access="IS_AUTHENTICATED_ANONYMOUSLY" />
     	<sec:intercept-url pattern="/**" access="IS_AUTHENTICATED_FULLY"/>
     	<sec:session-management invalid-session-url="/login" session-fixation-protection="newSession">

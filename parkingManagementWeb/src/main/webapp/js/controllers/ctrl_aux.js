@@ -7,14 +7,14 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
                                function($scope, $http, $routeParams, $rootScope, $route, $location, $dialogs, sharedDataService, $filter, invokeWSService, invokeWSServiceProxy, invokeAuxWSService, initializeService, getMyMessages, $timeout, FileUploader) { 
 	this.$scope = $scope;
     $scope.params = $routeParams;
-    $scope.systemUserNumber = 999;
+    $scope.systemUserNumber = 0;
     
     // ---------------------------------- START Code for file upload ------------------------------------
 	var uploader = $scope.uploader = new FileUploader({
 		//queueLimit: 1,	// MB21062016: tested with correct call of uploader file methods
 		//alias: "tData",
 		//removeAfterUpload: true,
-		//url: "auxiliary/rest/rv/streets/fileupload2/999"
+		//url: "auxiliary/rest/rv/streets/fileupload2/0"
 		url: 'js/controllers/upload.php'   
     });
 	
@@ -308,6 +308,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     var agencyId;
     $scope.initComponents = function(){
     	$scope.agencyId = agencyId = sharedDataService.getConfUserAgency().id;
+    	$scope.logUsername = sharedDataService.getName();
 	    if($scope.logtabs == null || $scope.logtabs.length == 0){
 	    	var logAuxTabs = [];
 	    	var street_occ_tab_obj = {};
@@ -933,9 +934,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 	
 	$scope.viewDetails = function(type, log){
 		$scope.showDetails = true;
-//		if(type == 1){
-//			$scope.showFiltered = false;
-//		}
 		$scope.logDetails = log;
 		//if(log.value.slotsHandicapped == null){
 		//	log.value.slotsHandicapped = 0;
@@ -950,25 +948,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 			$scope.showFiltered = true;
 		}
 		$scope.logDetails = {};
-	};
-	
-//	$scope.viewFiltered = function(log){
-//		$scope.filterForLog = log.objId;
-//		$scope.showFiltered = true;
-//	};
-//	
-//	$scope.closeFiltered = function(){
-//		$scope.filterForLog = null;
-//		$scope.showFiltered = false;
-//	};
-//	
-//	$scope.numberOfPages = function(list){
-//       	if(list != null){
-//       		return Math.ceil(list.length/$scope.maxLogs);
-//       	} else {
-//       		return 0;
-//     	}
-//	};  
+	}; 
 	
 	$scope.correctEuroCent = function(eurocent){
 		var intval = parseInt(eurocent);
@@ -1130,9 +1110,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		$scope.myParkingDetails = park;
 		$scope.myParkingDetails.slotsConfiguration = $scope.initDefaultValuesForSlots(park.slotsConfiguration);
 		$scope.inithializeVehicleTypeList(park.slotsConfiguration, 1);
-		/*if($scope.myParkingDetails.slotsHandicapped == null){
-			$scope.myParkingDetails.slotsHandicapped = 0;
-		}*/
 		//$scope.myParkingDetails.slotsPaying = $scope.myParkingDetails.slotsTotal - $scope.myParkingDetails.slotsHandicapped;
 		$scope.initParkTimeValues(1);
 		$scope.parkLoadedAndSelected = true;
@@ -1885,7 +1862,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
     	var username = sharedDataService.getName();
     	var appId = sharedDataService.getConfAppId();
     	agencyId = sharedDataService.getConfUserAgency().id;
-    	var user = "999";
+    	var user = "0";
     	$scope.progress = 25;
  		$dialogs.wait($scope.getLoadingText(), $scope.progress, $scope.getLoadingTitle());
  		var out_obj = (out) ? out.textContent : "";
