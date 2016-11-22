@@ -457,7 +457,7 @@ public class DynamicManagerTest {
 					s.setUpdateTime(updateTime);
 					s.setUser(999);
 					try {
-						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, userAgencyTn, "999", true, usernameTn, null, null, -1);
+						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, userAgencyTn, "0", true, usernameTn, null, null, -1);
 						System.out.println("Street updated " + s.toJSON());
 					} catch (DatabaseException e) {
 						// TODO Auto-generated catch block
@@ -594,7 +594,7 @@ public class DynamicManagerTest {
 					s.setUser(999);
 					try {
 						if(updateTime >= 1456786800000L){ //1446505200000L){	// to load only the recent updates
-							dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "999", userAgency, true, username, null, null, -1);
+							dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "0", userAgency, true, username, null, null, -1);
 							System.out.println("Street updated " + s.toJSON());
 						}
 					} catch (DatabaseException e) {
@@ -635,7 +635,7 @@ public class DynamicManagerTest {
 					p.setUpdateTime(myOldParks.get(i).getTime());
 					p.setUser(999);
 					try {
-						dynManager.editParkingStructureAux(p, myOldParks.get(i).getTime(), "rv", "999",true, null, -1);
+						dynManager.editParkingStructureAux(p, myOldParks.get(i).getTime(), "rv", "0",true, null, -1);
 						System.out.println("Parking updated " + p.toJSON());
 					} catch (Exception e) {
 						// TODO Auto-generated catch block
@@ -764,7 +764,7 @@ public class DynamicManagerTest {
 						s.setUser(999);
 						try {
 							if(updateTime >= 1456786800000L){	// to load only the recent updates
-								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "999", userAgency, true, username, null, null, -1);
+								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "0", userAgency, true, username, null, null, -1);
 								System.out.println("Street updated " + s.toJSON());
 							}
 						} catch (DatabaseException e) {
@@ -877,7 +877,7 @@ public class DynamicManagerTest {
 						s.setUser(999);
 						try {
 							if(updateTime >= 1456786800000L){	// to load only the recent updates
-								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "999", userAgency, true, username, null, null, -1);
+								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "0", userAgency, true, username, null, null, -1);
 								System.out.println("Street updated " + s.toJSON());
 							}
 						} catch (DatabaseException e) {
