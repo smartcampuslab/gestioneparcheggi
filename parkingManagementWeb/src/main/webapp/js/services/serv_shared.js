@@ -1576,60 +1576,46 @@ pm.service('sharedDataService', function($window, $dialogs, $timeout){
 		if(myPm.cash_checked){
 			correctedPm.push(this.listaPagamenti[0].idObj);
 		}
-		if(myPm.automated_teller_checked){
-			correctedPm.push(this.listaPagamenti[1].idObj);
-		}
 		if(myPm.prepaid_card_checked){
 			correctedPm.push(this.listaPagamenti[2].idObj);
+		}
+		return correctedPm;
+	};
+	
+	this.correctMyPaymentPoint = function(myPm){
+		var correctedPm = [];
+		if(myPm.automated_teller_checked){
+			correctedPm.push(this.listaPagamenti[1].idObj);
 		}
 		if(myPm.parcometro_checked){
 			correctedPm.push(this.listaPagamenti[3].idObj);
 		}
 		return correctedPm;
-	};
+	};	
 	
-	this.castMyPaymentModeToString = function(myPm){
-		var correctedPm = "";
-		for(var i = 0; i < myPm.length; i++){
-			var stringVal = "";
-			switch (myPm[i]){
-				case this.cash_mode : 
-					stringVal = this.listaPagamenti[0].descrizione;
-					break;
-				case this.automated_teller_mode: 
-					stringVal = this.listaPagamenti[1].descrizione;
-					break;
-				case this.prepaid_card_mode: 
-					stringVal = this.listaPagamenti[2].descrizione;
-					break;
-				case this.parcometro: 
-					stringVal = this.listaPagamenti[3].descrizione;
-					break;
-				default: break;
-			}
-			correctedPm = correctedPm + stringVal + ",";
-		}
-		correctedPm = correctedPm.substring(0, correctedPm.length-1);
-		return correctedPm;
-	};
 	
-	this.checkMyPaymentMode = function(paymentMode, myPayment){
+	this.checkMyPayment = function(paymentMode, paymentPoint, myPayment){
 		for(var i = 0; i < paymentMode.length; i++){
 			switch(paymentMode[i]){
 				case this.cash_mode:
 					myPayment.cash_checked = true;
 					break;
-				case this.automated_teller_mode: 
-					myPayment.automated_teller_checked = true;
-					break;
 				case this.prepaid_card_mode: 
 					myPayment.prepaid_card_checked = true;
+					break;
+			}
+		}
+		for(var i = 0; i < paymentPoint.length; i++){
+			switch(paymentPoint[i]){
+				case this.automated_teller_mode: 
+					myPayment.automated_teller_checked = true;
 					break;
 				case this.parcometro: 
 					myPayment.parcometro_checked = true;
 					break;
 			}
-		}
+		}		
+		
 		return myPayment;
 	};
 	

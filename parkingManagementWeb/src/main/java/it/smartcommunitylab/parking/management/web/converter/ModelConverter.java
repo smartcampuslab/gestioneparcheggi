@@ -22,6 +22,7 @@ import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
 import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentMode;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentPoint;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
@@ -59,6 +60,19 @@ public class ModelConverter {
 		}
 		return result;
 	}
+	
+	public static String fromPaymentPoint(PaymentPoint point) {
+		return point.toString();
+	}
+
+	public static List<String> fromPaymentPoint(List<PaymentPoint> points) {
+		List<String> result = new ArrayList<String>();
+		for (PaymentPoint point : points) {
+			result.add(fromPaymentPoint(point));
+		}
+		return result;
+	}	
+	
 
 	public static PaymentMode toPaymentMode(String mode) {
 		try {
@@ -80,6 +94,29 @@ public class ModelConverter {
 		}
 		return result;
 	}
+	
+	public static PaymentPoint toPaymentPoint(String point) {
+		try {
+			return PaymentPoint.valueOf(point);
+		} catch (IllegalArgumentException e) {
+			logger.error(String.format("%s not present in PaymentPoint enum",
+					point));
+			return null;
+		}
+	}
+
+	public static List<PaymentPoint> toPaymentPoint(List<String> points) {
+		List<PaymentPoint> result = new ArrayList<PaymentPoint>();
+		for (String point : points) {
+			PaymentPoint p = toPaymentPoint(point);
+			if (p != null) {
+				result.add(p);
+			}
+		}
+		return result;
+	}	
+	
+	
 	
 	/**
 	 * Method toStreetBean: used to transform a Street object in a StreetBean object

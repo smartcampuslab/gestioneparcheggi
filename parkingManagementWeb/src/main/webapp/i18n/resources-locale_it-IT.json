@@ -559,6 +559,10 @@
     "value": "Modalita' di pagamento",
     "description": "Label modalita' di pagamento struttura"
 }, {
+    "key": "ps_payment_point",
+    "value": "Punto di pagamento",
+    "description": "Label punto di pagamento struttura"
+}, {
     "key": "ps_management_mode",
     "value": "Modalita' di gestione",
     "description": "Label modalita' di gestione struttura"
@@ -621,6 +625,10 @@
 }, {
     "key": "parkingstructure_payment_mode_select_err_required",
     "value": "Campo Modalita' di pagamento obbligatorio. Selezionare almeno uno strumento di pagamento.",
+    "description": "Messaggio errore campo modalita' pagamento obbligatorio"
+}, {
+    "key": "parkingstructure_payment_point_select_err_required",
+    "value": "Campo Punto di pagamento obbligatorio. Selezionare almeno un punto di pagamento.",
     "description": "Messaggio errore campo modalita' pagamento obbligatorio"
 }, {
     "key": "parkingstructure_fee_err_required",
@@ -1780,7 +1788,7 @@
     "description": "Placeholder per posti riservati occupati in creazione log via"
 }, {
     "key": "street_unavailableslot_placeholder",
-    "value": "Inserire numero posti occupati tra i gratuiti",
+    "value": "Inserire numero posti non disponibili",
     "description": "Placeholder per posti non disponibili in creazione log via"
 }, {
     "key": "park_handicappedslotoccupied_placeholder",
@@ -2144,7 +2152,7 @@
 	"description": "Messaggio campo posti per disabili troppo grande in creazione log parcheggio"
 }, {
 	"key": "log_street_occupied_free_error_required",
-	"value": "Campo 'posti gratuiti occupati' obbligato Inserire un valore numerico",
+	"value": "Campo 'posti gratuiti occupati' obbligatorio. Inserire un valore numerico",
 	"description": "Messaggio campo posti gratuiti obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_free_error_min",

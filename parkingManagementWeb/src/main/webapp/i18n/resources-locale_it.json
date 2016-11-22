@@ -285,7 +285,7 @@
 }, {
     "key": "area_rate_canc",
     "value": "Cancella",
-    "description": "Testo pulsante ok"
+    "description": "Testo pulsante cancella periodo tariffa area"
 }, {
     "key": "area_rate_edit",
     "value": "Modifica",
@@ -559,6 +559,10 @@
     "value": "Modalita' di pagamento",
     "description": "Label modalita' di pagamento struttura"
 }, {
+    "key": "ps_payment_point",
+    "value": "Punto di pagamento",
+    "description": "Label punto di pagamento struttura"
+}, {
     "key": "ps_management_mode",
     "value": "Modalita' di gestione",
     "description": "Label modalita' di gestione struttura"
@@ -621,6 +625,10 @@
 }, {
     "key": "parkingstructure_payment_mode_select_err_required",
     "value": "Campo Modalita' di pagamento obbligatorio. Selezionare almeno uno strumento di pagamento.",
+    "description": "Messaggio errore campo modalita' pagamento obbligatorio"
+}, {
+    "key": "parkingstructure_payment_point_select_err_required",
+    "value": "Campo Punto di pagamento obbligatorio. Selezionare almeno un punto di pagamento.",
     "description": "Messaggio errore campo modalita' pagamento obbligatorio"
 }, {
     "key": "parkingstructure_fee_err_required",
