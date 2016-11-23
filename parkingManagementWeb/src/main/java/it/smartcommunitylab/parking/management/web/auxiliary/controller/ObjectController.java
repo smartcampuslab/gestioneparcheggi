@@ -695,8 +695,8 @@ public class ObjectController  {
 								try {
 									String tik = tickets.get(i);
 									ticket = Integer.parseInt(tik);
-								} catch(NullPointerException ne){
-									logger.error("No ticket retrieve. " + ne.getMessage());
+								} catch(Exception ex){
+									logger.error("No ticket retrieve. " + ex.getMessage());
 								}
 							}
 							parking.setProfit(profInt);

@@ -57,7 +57,8 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/streets") 
-	public @ResponseBody List<Street> getStreets(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+	public @ResponseBody List<Street> getStreets(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, 
+		@RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
 		String uname = principal.getName();
 		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
@@ -115,11 +116,13 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.POST, value = "/data-mgt/{agency}/parkings/{id}/{channelId:.*}") 
-	public @ResponseBody String updateParking(Principal principal, @RequestBody Parking parking, @RequestParam(required=false) String author,
+	@RequestMapping(method = RequestMethod.POST, value = "/data-mgt/{agency}/parkings/{id}") 
+	public @ResponseBody String updateParking(Principal principal, @RequestBody Parking parking,
 		@RequestParam(required=false) String userAgencyId, @RequestParam(required=false) boolean isSysLog, 
 		@RequestParam(required=false) String username, @RequestParam(required=false) long[] period, 
-		@PathVariable String agency, @PathVariable String id, @PathVariable String channelId) throws Exception, NotFoundException {
+		@PathVariable String agency, @PathVariable String id) throws Exception, NotFoundException {
+		String channelId = "1";	// mobile app mode
+		String author = parking.getAuthor();
 		String uname = principal.getName();
 		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
@@ -137,12 +140,17 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.POST, value = "/data-mgt/{agency}/streets/{id}/{channelId:.*}") 
-	public @ResponseBody String updateStreet(Principal principal, @RequestBody Street street, @RequestParam(required=false) String author,
+	@RequestMapping(method = RequestMethod.POST, value = "/data-mgt/{agency}/streets/{id}") 
+	public @ResponseBody String updateStreet(Principal principal, @RequestBody Street street,
 		@RequestParam(required=false) String userAgencyId, @RequestParam(required=false) boolean isSysLog, 
 		@RequestParam(required=false) String username, @RequestParam(required=false) long[] period, 
-		@PathVariable String agency, @PathVariable String id, @PathVariable String channelId) throws Exception, NotFoundException {
+		@PathVariable String agency, @PathVariable String id) throws Exception, NotFoundException {
+		String channelId = "1";	// mobile app mode
+		String author = street.getAuthor();
 		String uname = principal.getName();
+		if(street.getAreaId() == null){
+			street.setAgency(agency);
+		}
 		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(userAgencyId == null || userAgencyId.compareTo("") == 0){
