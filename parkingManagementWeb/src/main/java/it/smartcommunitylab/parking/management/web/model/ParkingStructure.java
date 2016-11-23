@@ -23,8 +23,11 @@ import java.util.List;
 public class ParkingStructure {
 
 	public static enum PaymentMode {
-		CASH, AUTOMATED_TELLER, PREPAID_CARD, PARCOMETRO
+		CASH, PREPAID_CARD
 	}
+	public static enum PaymentPoint {
+		AUTOMATED_TELLER, PARCOMETRO
+	}	
 
 	private String id;
 	private String id_app;		// used to specify the actual app (tn, rv, ecc...)
@@ -44,6 +47,7 @@ public class ParkingStructure {
 	private Integer handicappedSlotOccupied;*/
 	
 	private List<PaymentMode> paymentMode;
+	private List<PaymentPoint> paymentPoint;
 	private String phoneNumber;
 	private Long lastChange;
 	private Boolean parkAndRide;	// used to specify if a structure is used in parkAndRide features
@@ -119,6 +123,18 @@ public class ParkingStructure {
 		this.paymentMode = paymentMode;
 	}
 
+	public List<PaymentMode> getPaymentMode() {
+		return paymentMode;
+	}
+	
+	public List<PaymentPoint> getPaymentPoint() {
+		return paymentPoint;
+	}
+
+	public void setPaymentPoint(List<PaymentPoint> paymentPoint) {
+		this.paymentPoint = paymentPoint;
+	}
+
 	public List<VehicleSlot> getSlotsConfiguration() {
 		return slotsConfiguration;
 	}
@@ -127,9 +143,7 @@ public class ParkingStructure {
 		this.slotsConfiguration = slotsConfiguration;
 	}
 
-	public List<PaymentMode> getPaymentMode() {
-		return paymentMode;
-	}
+
 
 	/*public Integer getPayingSlotNumber() {
 		return payingSlotNumber;

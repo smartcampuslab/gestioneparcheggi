@@ -16,13 +16,14 @@
 package it.smartcommunitylab.parking.management.web.manager;
 
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
-import it.smartcommunitylab.parking.management.web.model.RateArea;
-import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
-import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentMode;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentPoint;
+import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.Street;
 import it.smartcommunitylab.parking.management.web.model.Zone;
-import it.smartcommunitylab.parking.management.web.model.ParkingStructure.PaymentMode;
 import it.smartcommunitylab.parking.management.web.model.geo.Geom;
 import it.smartcommunitylab.parking.management.web.model.geo.Line;
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
@@ -130,7 +131,7 @@ public class ZipCsvExporter implements Exporter {
 
 	private String getParcheggiostrutturaCsv() {
 		List<ParkingStructure> list = db.findAll(ParkingStructure.class);
-		String result = "NOME,INDIRIZZO,GESTIONE,CAPIENZA,ORARI,PAGAMENTO,TELEFONO,TARIFFE,GEOMETRIA\n";
+		String result = "NOME,INDIRIZZO,GESTIONE,CAPIENZA,ORARI,TIPO_PAGAMENTO,PUNTO_PAGAMENTO,TELEFONO,TARIFFE,GEOMETRIA\n";
 		for (ParkingStructure element : list) {
 			result += "\"" + element.getName() + "\"" + CSV_SEPARATOR + "\""
 					+ element.getStreetReference() + "\"" + CSV_SEPARATOR
@@ -142,6 +143,10 @@ public class ZipCsvExporter implements Exporter {
 				result += p + " ";
 			}
 			result += "\"" + CSV_SEPARATOR;
+			for (PaymentPoint p : element.getPaymentPoint()) {
+				result += p + " ";
+			}
+			result += "\"" + CSV_SEPARATOR;			
 			result += "\"" + element.getPhoneNumber() + "\"" + CSV_SEPARATOR
 					//+ "\"" + element.getFee_val() + "\"" + CSV_SEPARATOR
 					+ geoToCsv(element.getGeometry()) + "\n";

@@ -35,6 +35,7 @@ public class ParkingStructureBean {
 	private Integer handicappedSlotOccupied;
 	private Integer unusuableSlotNumber;*/
 	private List<String> paymentMode;
+	private List<String> paymentPoint;
 	private String phoneNumber;
 	private Long lastChange;
 	private double occupancyRate;	// I use it only in the bean and not in the db object
@@ -163,6 +164,14 @@ public class ParkingStructureBean {
 
 	public void setPaymentMode(List<String> paymentMode) {
 		this.paymentMode = paymentMode;
+	}
+
+	public List<String> getPaymentPoint() {
+		return paymentPoint;
+	}
+
+	public void setPaymentPoint(List<String> paymentPoint) {
+		this.paymentPoint = paymentPoint;
 	}
 
 	public Long getLastChange() {

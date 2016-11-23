@@ -167,9 +167,13 @@
 													<span ng-if="isUsedEngLang()">{{ ps.data.parkAndRide | boolToStringEng }}</span>
 												</td>
 											</tr>
-							        		<tr ng-show="psconf.ps_payment.visible">
-							        			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td>
+							        		<tr ng-show="psconf.ps_payment.visible && ps.data.paymentMode">
+								       			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
+								       			<td>&nbsp;{{ castMyPaymentToString(ps.data.paymentMode) }}</td>
+							        		</tr>
+							        		<tr ng-show="psconf.ps_payment.visible  && ps.data.paymentPoint">
+								       			<td><strong>{{ 'ps_payment_point' | i18n }}:</strong></td>
+								       			<td>&nbsp;{{ castMyPaymentToString(ps.data.paymentPoint) }}</td>
 							        		</tr>
 							        		<tr ng-if="psconf.ps_zones0.visible">	
 												<td>
