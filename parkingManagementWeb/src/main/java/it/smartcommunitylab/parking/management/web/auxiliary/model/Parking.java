@@ -32,7 +32,7 @@ public class Parking implements Serializable  {
 	// Fields from basic object
 	private Long updateTime;
 	private Long version;
-	private Integer user;
+	private Integer channel;
 	private String author;
 	
 	private int slotsTotal;
@@ -93,10 +93,6 @@ public class Parking implements Serializable  {
 		return version;
 	}
 
-	public Integer getUser() {
-		return user;
-	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -125,8 +121,12 @@ public class Parking implements Serializable  {
 		this.version = version;
 	}
 
-	public void setUser(Integer user) {
-		this.user = user;
+	public Integer getChannel() {
+		return channel;
+	}
+
+	public void setChannel(Integer channel) {
+		this.channel = channel;
 	}
 
 	public String getAuthor() {
@@ -142,7 +142,7 @@ public class Parking implements Serializable  {
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"updateTime\":" + getUpdateTime() + ",";
 		json += "\"version\":" + getVersion() + ",";
-		json += "\"user\":\"" + getUser() + "\",";
+		json += "\"channel\":\"" + getChannel() + "\",";
 		json += "\"agency\":\"" + getAgency() + "\",";
 		if(getPosition() != null && getPosition().length > 0){
 			double[] pos = getPosition();

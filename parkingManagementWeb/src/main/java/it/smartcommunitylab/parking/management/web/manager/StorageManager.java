@@ -1143,6 +1143,7 @@ public class StorageManager {
 					entity.setManagementMode(entityBean.getManagementMode());
 					entity.setName(entityBean.getName());
 					entity.setPaymentMode(ModelConverter.toPaymentMode(entityBean.getPaymentMode()));
+					entity.setPaymentPoint(ModelConverter.toPaymentPoint(entityBean.getPaymentPoint()));
 					entity.setManager(entityBean.getManager());
 					entity.setPhoneNumber(entityBean.getPhoneNumber());
 					entity.setSlotNumber(entityBean.getSlotNumber());

@@ -55,9 +55,13 @@
 											<span ng-if="isUsedEngLang()">{{ ps.data.abuttingPark | boolToStringEng }}</span>
 										</td>
 									</tr>
-						       		<tr ng-show="psconf.ps_payment.visible">
+						       		<tr ng-show="psconf.ps_payment.visible && ps.data.paymentMode">
 						       			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
-						       			<td>&nbsp;{{ castMyPaymentModeToString(ps.data.paymentMode) }}</td>
+						       			<td>&nbsp;{{ castMyPaymentToString(ps.data.paymentMode) }}</td>
+					        		</tr>
+					        		<tr ng-show="psconf.ps_payment.visible  && ps.data.paymentPoint">
+						       			<td><strong>{{ 'ps_payment_point' | i18n }}:</strong></td>
+						       			<td>&nbsp;{{ castMyPaymentToString(ps.data.paymentPoint) }}</td>
 					        		</tr>
 					        		<tr ng-if="psconf.ps_zones0.visible">	
 										<td>
@@ -273,9 +277,13 @@
 											<span ng-if="isUsedEngLang()">{{ sps.data.abuttingPark | boolToStringEng }}</span>
 										</td>
 									</tr>
-						       		<tr ng-show="psconf.ps_payment.visible">
+					        		<tr ng-show="psconf.ps_payment.visible && sps.data.paymentMode">
 						       			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
-						       			<td>&nbsp;{{ castMyPaymentModeToString(sps.data.paymentMode) }}</td>
+						       			<td>&nbsp;{{ castMyPaymentToString(sps.data.paymentMode) }}</td>
+					        		</tr>
+					        		<tr ng-show="psconf.ps_payment.visible  && sps.data.paymentPoint">
+						       			<td><strong>{{ 'ps_payment_point' | i18n }}:</strong></td>
+						       			<td>&nbsp;{{ castMyPaymentToString(sps.data.paymentPoint) }}</td>
 					        		</tr>
 					        		<tr ng-if="psconf.ps_zones0.visible">	
 										<td>
@@ -595,10 +603,14 @@
 							<td class="detailsViewStructSX">{{ 'ps_management_mode' | i18n }}:</td>
 							<td class="detailsViewStructDX">{{ viewParkingStructure.managementMode }}</td>
 						</tr>
-						<tr ng-show="psconf.ps_payment.visible">	
+						<tr ng-show="psconf.ps_payment.visible && myPaymentMode">	
 							<td class="detailsViewStructSX">{{ 'ps_payment_mode' | i18n }}:</td>
 							<td class="detailsViewStructDX">{{ myPaymentMode }}</td>
 						</tr>
+					    <tr ng-show="psconf.ps_payment.visible  && myPaymentPoint">
+						    <td class="detailsViewStructSX">{{ 'ps_payment_point' | i18n }}:</td>
+						    <td class="detailsViewStructDX">{{ myPaymentPoint }}</td>
+					    </tr>
 						<tr ng-show="psconf.ps_slotNumber.visible">	
 							<td class="detailsViewStructSX">{{ 'ps_totalslot' | i18n }}:</td>
 							<td class="detailsViewStructDX">{{ viewParkingStructure.slotNumber }}</td>
@@ -785,8 +797,8 @@
 						</div>	
 					   	<div class="form-group" ng-show="psconf.ps_name.visible">
 					    	<label for="name">{{ 'ps_name' | i18n }}</label>
-					    	<input id="name" type="text" class="form-control" name="pName" ng-model="parkingStructure.name" ng-required="ps_name.required" placeholder="{{ 'ps_name_placeholder' | i18n }}" ng-change="initPSCityCenter()">
-					   		<div class="field-error" ng-show="!isInit && form.pCode.$error.required">{{ 'parkingstructure_name_err_required' | i18n }}</div>
+					    	<input id="name" type="text" class="form-control" name="pName" ng-model="parkingStructure.name" ng-required="ps_name.required" placeholder="{{ 'ps_name_placeholder' | i18n }}" ng-change="initPSCityCenter()" >
+					   		<div class="field-error" ng-show="!isInit && form.pName.$error.required">{{ 'parkingstructure_name_err_required' | i18n }}</div>
 					   	</div>
 					   	<div class="form-group" ng-show="psconf.ps_address.visible">
 					    	<label for="address">{{ 'ps_address' | i18n }}</label>
@@ -1139,15 +1151,28 @@
 					   			<div class="panel-body">
 								   	<table width="100%">
 								   		<tr>
-								   			<td width="25%"><label for="cashPayment">{{ listaPagamenti[0].descrizione }}:</label> <input id="cashPayment" type="checkbox" ng-model="myPayment.cash_checked" ng-change="checkIfPaymentChecked(psconf.ps_payment.required)"></td>
-								   			<td width="25%"><label for="automatedPayment">{{ listaPagamenti[1].descrizione }}:</label> <input id="automatedPayment" type="checkbox" ng-model="myPayment.automated_teller_checked" ng-change="checkIfPaymentChecked(psconf.ps_payment.required)"></td>
-								   			<td width="25%"><label for="prepaidPayment">{{ listaPagamenti[2].descrizione }}:</label> <input id="prepaidPayment" type="checkbox" ng-model="myPayment.prepaid_card_checked" ng-change="checkIfPaymentChecked(psconf.ps_payment.required)"></td>
-								   			<td width="25%"><label for="parcometroPayment">{{ listaPagamenti[3].descrizione }}:</label> <input id="parcometroPayment" type="checkbox" ng-model="myPayment.parcometro_checked" ng-change="checkIfPaymentChecked(psconf.ps_payment.required)"></td>
+								   			<td width="25%"><label for="cashPayment">{{ listaPagamenti[0].descrizione }}:</label> <input id="cashPayment" type="checkbox" ng-model="myPayment.cash_checked" ng-change="checkIfPaymentModeChecked(psconf.ps_payment.required)"></td>
+								   			<td width="25%"><label for="prepaidPayment">{{ listaPagamenti[2].descrizione }}:</label> <input id="prepaidPayment" type="checkbox" ng-model="myPayment.prepaid_card_checked" ng-change="checkIfPaymentModeChecked(psconf.ps_payment.required)"></td>
 								   		</tr>
 								   	</table>
 							   	</div>
-					    	<div class="field-error" ng-show="noPaymentChecked">{{ 'parkingstructure_payment_mode_select_err_required' | i18n }}</div>
+							   	
+					   		<label for="paymentPoint">{{ 'ps_payment_point' | i18n }}</label>
+					   		<div class="panel panel-default" width="95%">
+					   			<div class="panel-body">
+								   	<table width="100%">
+								   		<tr>
+								   			<td width="25%"><label for="automatedPayment">{{ listaPagamenti[1].descrizione }}:</label> <input id="automatedPayment" type="checkbox" ng-model="myPayment.automated_teller_checked" ng-change="checkIfPaymentPointChecked(psconf.ps_payment.required)"></td>
+								   			<td width="25%"><label for="parcometroPayment">{{ listaPagamenti[3].descrizione }}:</label> <input id="parcometroPayment" type="checkbox" ng-model="myPayment.parcometro_checked" ng-change="checkIfPaymentPointChecked(psconf.ps_payment.required)"></td>
+								   		</tr>
+								   	</table>
+							   	</div>							   	
+							   	
+							   	
+					    	<div class="field-error" ng-show="noPaymentModeChecked">{{ 'parkingstructure_payment_mode_select_err_required' | i18n }}</div>
+					    	<div class="field-error" ng-show="noPaymentPointChecked">{{ 'parkingstructure_payment_point_select_err_required' | i18n }}</div>
 					   		</div>
+					   	</div>
 					   	</div>
 					   	<label for="totalSlot">{{ 'ps_slots' | i18n }}</label>
 					   <!-- 	<div class="subpanel panel panel-default" width="95%">

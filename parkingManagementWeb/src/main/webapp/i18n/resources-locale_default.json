@@ -563,6 +563,10 @@
     "value": "Modalita' di pagamento",
     "description": "Label modalita' di pagamento struttura"
 }, {
+    "key": "ps_payment_point",
+    "value": "Punto di pagamento",
+    "description": "Label punto di pagamento struttura"
+}, {
     "key": "ps_management_mode",
     "value": "Modalita' di gestione",
     "description": "Label modalita' di gestione struttura"
@@ -629,6 +633,10 @@
 }, {
     "key": "parkingstructure_payment_mode_select_err_required",
     "value": "Campo Modalita' di pagamento obbligatorio. Selezionare almeno uno strumento di pagamento.",
+    "description": "Messaggio errore campo modalita' pagamento obbligatorio"
+}, {
+    "key": "parkingstructure_payment_point_select_err_required",
+    "value": "Campo Punto di pagamento obbligatorio. Selezionare almeno un punto di pagamento.",
     "description": "Messaggio errore campo modalita' pagamento obbligatorio"
 }, {
     "key": "parkingstructure_fee_err_required",
@@ -1128,7 +1136,7 @@
     "description": "Testo placeholder campo nome area"
 }, {
     "key": "area_fee_placeholder",
-    "value": "euro/ora (es:0,50)",
+    "value": "euro/ora (es: 0,50)",
     "description": "Testo placeholder campo tariffa oraria area"
 }, {
     "key": "area_time_placeholder",
@@ -1412,7 +1420,7 @@
     "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_note_text",
-    "value": "Cerca per nota...",
+    "value": "Cerca nota...",
     "description": "Testo filtro codice oggetto"
 }, {
     "key": "filter_area_title",
@@ -2012,24 +2020,24 @@
 	"description": "Messaggio campo posti disco orario obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_timed_error_min",
-	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore maggiore",
+	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore maggiore.",
 	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo piccolo"
 }, {
 	"key": "log_street_occupied_timed_error_max",
-	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore minore",
+	"value": "Valore non corretto nel campo 'posti disco orario occupati'. Inserire un valore minore.",
 	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo grande"
 }, {
 	"key": "log_street_occupied_free_error_pattern",
 	"value": "Campo 'posti gratuiti occupati' non corretto. Inserire un valore numerico",
 	"description": "Messaggio campo posti gratuiti non corretto in creazione log via"
 }, {
+	"key": "log_street_occupied_reserved_error_pattern",
+	"value": "Campo 'posti riservati occupati' non corretto. Inserire un valore numerico",
+	"description": "Messaggio campo posti riservati non corretto in creazione log via"
+}, {
 	"key": "log_street_occupied_free_signed_error_pattern",
 	"value": "Campo 'posti gratuiti occupati con segnaletica' non corretto. Inserire un valore numerico",
 	"description": "Messaggio campo posti gratuiti con segnaletica non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_free_signed_error_required",
-	"value": "Campo 'posti gratuiti occupati con segnaletica' obbligatorio. Inserire un valore numerico",
-	"description": "Messaggio campo posti gratuiti con segnaletica obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_rechargeable_error_pattern",
 	"value": "Campo 'posti ricaricabili occupati' non corretto. Inserire un valore numerico",
@@ -2095,9 +2103,9 @@
 	"value": "Valore non corretto nel campo 'posti auto-condivisa occupati'. Inserire un valore minore",
 	"description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo grande"
 }, {
-	"key": "log_street_occupied_reserved_error_pattern",
-	"value": "Campo 'posti riservati occupati' non corretto. Inserire un valore numerico",
-	"description": "Messaggio campo posti riservati non corretto in creazione log via"
+	"key": "log_street_occupied_free_signed_error_required",
+	"value": "Campo 'posti gratuiti occupati con segnaletica' obbligatorio. Inserire un valore numerico",
+	"description": "Messaggio campo posti gratuiti con segnaletica obbligatorio in creazione log via"
 }, {
 	"key": "log_street_occupied_reserved_error_required",
 	"value": "Campo 'posti riservati occupati' obbligatorio. Inserire un valore numerico",

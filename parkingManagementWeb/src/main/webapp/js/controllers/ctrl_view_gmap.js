@@ -594,7 +594,7 @@ pm.controller('ViewCtrlGmap',['$scope', '$http', '$route', '$routeParams', '$roo
 		return corrType;
 	};
 	
-	$scope.castMyPaymentModeToString = function(myPm){
+	$scope.castMyPaymentToString = function(myPm){
 		var correctedPm = "";
 		for(var i = 0; i < myPm.length; i++){
 			var stringVal = "";

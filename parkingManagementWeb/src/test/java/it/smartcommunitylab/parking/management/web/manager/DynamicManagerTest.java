@@ -455,7 +455,7 @@ public class DynamicManagerTest {
 					}
 					
 					s.setUpdateTime(updateTime);
-					s.setUser(999);
+					s.setChannel(0);
 					try {
 						dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appIdTn, userAgencyTn, "0", true, usernameTn, null, null, -1);
 						System.out.println("Street updated " + s.toJSON());
@@ -591,7 +591,7 @@ public class DynamicManagerTest {
 					}
 					
 					s.setUpdateTime(updateTime);
-					s.setUser(999);
+					s.setChannel(0);
 					try {
 						if(updateTime >= 1456786800000L){ //1446505200000L){	// to load only the recent updates
 							dynManager.editStreetAux(s, myOldStreets.get(i).getTime(), appId, "0", userAgency, true, username, null, null, -1);
@@ -761,7 +761,7 @@ public class DynamicManagerTest {
 						}
 						
 						s.setUpdateTime(updateTime);
-						s.setUser(999);
+						s.setChannel(0);
 						try {
 							if(updateTime >= 1456786800000L){	// to load only the recent updates
 								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "0", userAgency, true, username, null, null, -1);
@@ -874,7 +874,7 @@ public class DynamicManagerTest {
 						}
 						
 						s.setUpdateTime(updateTime);
-						s.setUser(999);
+						s.setChannel(0);
 						try {
 							if(updateTime >= 1456786800000L){	// to load only the recent updates
 								dynManager.editStreetAux(s, myOldParks.get(i).getTime(), appId, "0", userAgency, true, username, null, null, -1);

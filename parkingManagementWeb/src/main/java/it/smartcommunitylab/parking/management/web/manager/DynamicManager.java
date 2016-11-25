@@ -533,7 +533,7 @@ public class DynamicManager {
 		String[] ids = s.getId().split("@");
 		String asId = ids[2];
 		s.setUpdateTime(timestamp);
-		s.setUser(Integer.valueOf(channelId));
+		s.setChannel(Integer.valueOf(channelId));
 		String sAuthor = "";
 		if(channelId.compareTo("0") == 0){
 			sAuthor = username;
@@ -549,7 +549,7 @@ public class DynamicManager {
 			List<RateArea> aree = mongodb.findAll(RateArea.class);
 			for (RateArea a : aree) {
 				if (a.getStreets() != null) {
-					if(a.getStreets().containsKey(s.getId())){
+					if(a.getStreets().containsKey(asId)){
 						area = a;
 					}
 				}
@@ -567,7 +567,9 @@ public class DynamicManager {
 					if(editedSlotsConf != null && !editedSlotsConf.isEmpty()){
 						temp.setSlotsConfiguration(editedSlotsConf); 	// In this way I update only the inserted updated slots
 					}
-					
+					if(s.getName() == null || s.getName().compareTo("") == 0){
+						s.setName(temp.getStreetReference());
+					}
 					temp.setLastChange(timestamp);
 					//mongodb.save(area);
 					
@@ -1009,7 +1011,7 @@ public class DynamicManager {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
-		p.setUser(Integer.valueOf(channelId));
+		p.setChannel(Integer.valueOf(channelId));
 		String pAuthor = "";
 		if(channelId.compareTo("0") == 0){
 			pAuthor = username;
@@ -1023,6 +1025,9 @@ public class DynamicManager {
 		List<VehicleSlot> editedSlotsConf = p.getSlotsConfiguration();
 		if(editedSlotsConf != null && !editedSlotsConf.isEmpty()){
 			entity.setSlotsConfiguration(editedSlotsConf); 	// In this way I update only the inserted updated slots
+		}
+		if(p.getName() == null || p.getName().compareTo("") == 0){
+			p.setName(entity.getName());
 		}
 		/*entity.setHandicappedSlotOccupied(p.getSlotsOccupiedOnHandicapped());
 		entity.setPayingSlotOccupied(p.getSlotsOccupiedOnPaying());
