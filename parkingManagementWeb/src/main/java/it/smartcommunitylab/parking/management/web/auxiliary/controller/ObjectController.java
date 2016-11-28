@@ -259,7 +259,7 @@ public class ObjectController  {
 	public @ResponseBody String updateParkingMeter(@RequestBody ParkMeter parkingMeter, @RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, @PathVariable String id, @PathVariable String userId) throws Exception, NotFoundException {
 		try {
 			//logger.error("Update street Log: isSysLog = " + isSysLog );
-			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, userAgencyId, isSysLog, username, from, to, period, NO_PERIOD);
+			dataService.updateDynamicParkingMeterData(parkingMeter, agency, userId, userAgencyId, isSysLog, username, null, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			e.printStackTrace();
@@ -707,11 +707,11 @@ public class ObjectController  {
 								int month = Integer.parseInt(p.getPeriod().getMonth()[0]) - 1;	// month start from 0 to 11
 								// day period
 								parking.setUpdateTime(dataService.getTimeStampFromYearMonthAndDay(year, month, i + 1));	// day start from 1, index start from 0
-								dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, from, to, period, DOW_PERIOD);
+								dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, null, from, to, period, DOW_PERIOD);
 							} else {
 								// month period
 								parking.setUpdateTime(dataService.getTimeStampFromYearAndMonth(year, i));
-								dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, from, to, period, MONTH_PERIOD);
+								dataService.updateDynamicParkingMeterData(parking, agency, userId, agencyId, isSysLog, username, null, from, to, period, MONTH_PERIOD);
 							}
 						}
 					}

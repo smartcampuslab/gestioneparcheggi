@@ -170,12 +170,14 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	}
 	
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.POST, value = "/data-mgt/{agency}/parkingmeters/{id}/{channelId:.*}") 
+	@RequestMapping(method = RequestMethod.POST, value = "/data-mgt/{agency}/parkingmeters/{id}") 
 	public @ResponseBody String updateParkingMeter(Principal principal, @RequestBody ParkMeter parkingMeter, 
 		@RequestParam(required=false) String userAgencyId, @RequestParam(required=false) boolean isSysLog, 
 		@RequestParam(required=false) String username, @RequestParam(required=false) long[] period, 
 		@RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, 
-		@PathVariable String id, @PathVariable String channelId) throws Exception, NotFoundException {
+		@PathVariable String id) throws Exception, NotFoundException {
+		String channelId = "1";	// mobile app mode
+		String author = parkingMeter.getAuthor();
 		String uname = principal.getName();
 		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
@@ -184,7 +186,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 			username = uname;
 		}
 		try {
-			dataService.updateDynamicParkingMeterData(parkingMeter, agency, channelId, userAgencyId, isSysLog, username, from, to, period, NO_PERIOD);
+			dataService.updateDynamicParkingMeterData(parkingMeter, agency, channelId, userAgencyId, isSysLog, username, author, from, to, period, NO_PERIOD);
 			return "OK";
 		} catch (it.smartcommunitylab.parking.management.web.exception.NotFoundException e) {
 			logger.error("Exception in parking meter profit log insert: " + e.getMessage());
