@@ -14,7 +14,8 @@ public class ParkMeter implements Serializable{
 	private String status;
 	// Fields from basic object
 	private Long updateTime;
-	private Integer user;
+	private Integer channel;
+	private String author;
 	private String areaId;
 	
 	private int profit;		// in eurocent
@@ -46,10 +47,6 @@ public class ParkMeter implements Serializable{
 
 	public Long getUpdateTime() {
 		return updateTime;
-	}
-
-	public Integer getUser() {
-		return user;
 	}
 
 	public int getProfit() {
@@ -84,10 +81,6 @@ public class ParkMeter implements Serializable{
 		this.updateTime = updateTime;
 	}
 
-	public void setUser(Integer user) {
-		this.user = user;
-	}
-
 	public void setProfit(int profit) {
 		this.profit = profit;
 	}
@@ -108,11 +101,27 @@ public class ParkMeter implements Serializable{
 		this.tickets = tickets;
 	}
 
+	public Integer getChannel() {
+		return channel;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setChannel(Integer channel) {
+		this.channel = channel;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	public String toJSON() {
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"updateTime\":" + getUpdateTime() + ",";
-		json += "\"user\":\"" + getUser() + "\",";
+		json += "\"user\":\"" + getChannel() + "\",";
 		json += "\"agency\":\"" + getAgency() + "\",";
 		if(getPosition() != null && getPosition().length > 0){
 			double[] pos = getPosition();

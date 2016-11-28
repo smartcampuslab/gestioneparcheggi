@@ -1355,11 +1355,18 @@ public class DynamicManager {
 	}
 	
 	// Method editParkStructProfitAux: used to save a ProfitLogBean object for the new profit data in a parkingStructure
-	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period,  int p_type) throws NotFoundException {
+	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String channelId, String userAgencyId, boolean sysLog, String username, String author, long[] period,  int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
-		p.setUser(Integer.valueOf(authorId));
+		p.setChannel(Integer.valueOf(channelId));
+		String pAuthor = "";
+		if(channelId.compareTo("0") == 0){
+			pAuthor = username;
+		} else {
+			pAuthor = author;
+		}
+		p.setAuthor(pAuthor);
 		
 		ParkingStructure entity = findById(pmId,ParkingStructure.class);
 		DataLogBean pl = new DataLogBean();
@@ -1372,7 +1379,7 @@ public class DynamicManager {
 			Long[] periodLong = {period[0], period[1]};
 			pl.setLogPeriod(periodLong);
 		}
-		pl.setAuthor(authorId);
+		pl.setAuthor(pAuthor);
 		pl.setAgency(agencyId);
 		pl.setUserAgencyId(userAgencyId);
 		// set new fields ---------
@@ -1421,11 +1428,18 @@ public class DynamicManager {
 	}
 	
 	// Method editParkingMeterAux: used to save a ProfitLogBean object for the new profit data in a parkingMeter
-	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period, int p_type) throws NotFoundException {
+	public void editParkingMeterAux(ParkMeter pm, Long timestamp, Long startTime, String agencyId, String channelId, String userAgencyId, boolean sysLog, String username, String author, long[] period, int p_type) throws NotFoundException {
 		String[] ids = pm.getId().split("@");
 		String pmId = ids[2];
 		pm.setUpdateTime(timestamp);
-		pm.setUser(Integer.valueOf(authorId));
+		pm.setChannel(Integer.valueOf(channelId));
+		String pAuthor = "";
+		if(channelId.compareTo("0") == 0){
+			pAuthor = username;
+		} else {
+			pAuthor = author;
+		}
+		pm.setAuthor(pAuthor);
 		
 		ParkingMeterBean entity = findParkingMeter(pmId, agencyId);
 		DataLogBean pl = new DataLogBean();
@@ -1436,7 +1450,7 @@ public class DynamicManager {
 			Long[] periodLong = {period[0], period[1]};
 			pl.setLogPeriod(periodLong);
 		}
-		pl.setAuthor(authorId);
+		pl.setAuthor(pAuthor);
 		pl.setAgency(agencyId);
 		pl.setUserAgencyId(userAgencyId);
 		// set new fields ---------

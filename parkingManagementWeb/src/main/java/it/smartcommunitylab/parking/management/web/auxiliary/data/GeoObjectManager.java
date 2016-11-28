@@ -191,7 +191,7 @@ public class GeoObjectManager {
 		dynamicManager.editParkingStructureAux(object, currTime, agencyId, channelId, userAgency, sysLog, username, author, period, p_type);
 	}
 	
-	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkingMeterData(ParkMeter object, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, String author, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -200,10 +200,10 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, userAgencyId, sysLog, username, period, p_type);
+		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, userAgencyId, sysLog, username, author, period, p_type);
 	}
 	
-	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, String userAgency, boolean sysLog, String username, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, String userAgency, boolean sysLog, String username, String author, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -212,7 +212,7 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, userAgency, sysLog, username, period, p_type);
+		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, userAgency, sysLog, username, author, period, p_type);
 	}
 
 //	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
