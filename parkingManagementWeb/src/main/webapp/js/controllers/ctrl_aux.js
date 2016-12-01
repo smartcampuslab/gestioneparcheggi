@@ -842,7 +842,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var corrected = "";
 		if(value != null){
 			corrected = value.replace(/\n\t|NumberLong|\(|\)/g, "");
-			//console.log("corrected " + corrected);
 		};
 		return corrected;
 	};

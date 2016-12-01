@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,6 +21,7 @@ import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
+import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.CSVManager;
@@ -34,6 +36,7 @@ public class AuxiliaryRestController {
 private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
 	private static final int NO_PERIOD = -1;
+	private static final int DEFAULT_COUNT = 500;	// last 500 values
 	
 	@Autowired
 	private GeoObjectManager dataService;
@@ -62,7 +65,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		String uname = principal.getName();
 		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
-		if(agencyId == null || agencyId.compareTo("") == 0){
+		if(!StringUtils.hasText(agencyId)){
 			agencyId = userAgencyData.get("id");
 		}
 		if (lat != null && lon != null && radius != null) {
@@ -77,7 +80,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		String uname = principal.getName();
 		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
-		if(agencyId == null || agencyId.compareTo("") == 0){
+		if(!StringUtils.hasText(agencyId)){
 			agencyId = userAgencyData.get("id");
 		}
 		if (lat != null && lon != null && radius != null) {
@@ -92,7 +95,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		String uname = principal.getName();
 		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
-		if(agencyId == null || agencyId.compareTo("") == 0){
+		if(!StringUtils.hasText(agencyId)){
 			agencyId = userAgencyData.get("id");
 		}
 		if (lat != null && lon != null && radius != null) {
@@ -100,6 +103,27 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		} 
 		return dataService.getParkingMeters(agency, agencyId);
 	}
+	
+	@SuppressWarnings("unchecked")
+	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/logs") 
+	public @ResponseBody Iterable<DataLogBean> getAllLogs(Principal principal, @PathVariable String agency, 
+			@RequestParam(required=false) String type, @RequestParam(required=false) String author, @RequestParam(required=false)String mode,
+			@RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+		if (count == null) count = DEFAULT_COUNT;
+		if (skip == null) skip = 0;
+		String uname = principal.getName();
+		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
+		String userAgency = userAgencyData.get("id");
+		if(StringUtils.hasText(mode) && mode.compareTo("object") == 0){
+			return dataService.findAllLogsObjects(agency, userAgency, type, author, skip, count);
+		} else {
+			return dataService.findAllLogs(agency, userAgency, type, author, skip, count);
+		}
+		
+	}
+	
+	
 	
 	// Method open to get all area objects
 	@SuppressWarnings("unchecked")

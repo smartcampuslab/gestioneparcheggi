@@ -46,7 +46,6 @@ import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
-import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.StatRepository;
 import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
@@ -4432,39 +4431,52 @@ public class DynamicManager {
 		}
 		return result;
 	}
-	public Long countTPAll(String agency, String userAgency, boolean deleted) {
-		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false)), "dataLogBean");
+	
+	public Long countTPAll(String agency, String userAgency, boolean deleted, String type) {
+		Criteria ct = new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(deleted);
+		if(type != null){
+			ct.and("type").is(type);
+		}
+		return mongodb.count(Query.query(ct), "dataLogBean");
 	}
-	public Long countTPTyped(String agency, String userAgency, boolean deleted, String type) {
-		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false).and("type").is(type)), "dataLogBean");
-	}
-	public List<DataLogBeanTP> findTPAll(String agency, boolean deleted, int skip, int limit) {
-		Query query = Query.query(new Criteria("agency").is(agency).and("deleted").is(false));
+	public List<DataLogBean> findAllObjectLogs(String agency, boolean deleted, String userAgency, String type, String author, int skip, int limit) {
+		Criteria ct = new Criteria("agency").is(agency).and("deleted").is(deleted);
+		if(userAgency != null){
+			ct.and("userAgencyId").is(userAgency);
+		}
+		if(type != null){
+			ct.and("type").is(type);
+		}
+		if(author != null){
+			ct.and("author").is(author);
+		}
+		Query query = Query.query(ct);
 		query.limit(limit);
 		query.skip(skip);
 		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");	
+		query.fields().exclude("valueString");
+		return mongodb.find(query, DataLogBean.class, "dataLogBean");
 	}
-	public List<DataLogBeanTP> findTPAllByUserAgency(String agency, String userAgency, boolean deleted, int skip, int limit) {
-		Query query = Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false));
-		query.limit(limit);
+	public List<DataLogBean> findAllLogs(String agency, boolean deleted, String userAgency, String type, String author, int skip, int limit) {
+		Criteria ct = new Criteria("agency").is(agency).and("deleted").is(deleted);
+		if(userAgency != null){
+			ct.and("userAgencyId").is(userAgency);
+		}
+		if(type != null){
+			ct.and("type").is(type);
+		}
+		if(author != null){
+			ct.and("author").is(author);
+		}
+		Query query = Query.query(ct);
+		if(limit != -1){
+			query.limit(limit);
+		}
 		query.skip(skip);
 		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");	
+		query.fields().exclude("value");
+		return mongodb.find(query, DataLogBean.class, "dataLogBean");
 	}
-	public List<DataLogBeanTP> findTPTyped(String agency, boolean deleted, String type, int skip, int limit) {
-		Query query = Query.query(new Criteria("agency").is(agency).and("deleted").is(false).and("type").is(type));
-		query.limit(limit);
-		query.skip(skip);
-		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");
-	}
-	public List<DataLogBeanTP> findTPTypedByUserAgency(String agency, String userAgency, boolean deleted, String type, int skip, int limit) {
-		Query query = Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false).and("type").is(type));
-		query.limit(limit);
-		query.skip(skip);
-		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");
-	}
+	
 
 }
