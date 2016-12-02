@@ -849,7 +849,6 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		var corrected = "";
 		if(value != null){
 			corrected = value.replace(/\n\t|NumberLong|\(|\)/g, "");
-			//console.log("corrected " + corrected);
 		};
 		return corrected;
 	};
@@ -1387,7 +1386,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						name: myParkingProfitDetails.name, 
 						description: myParkingProfitDetails.description,
 						updateTime: $scope.getLogMillis(myParkingProfitDetails.loghour, myParkingProfitDetails.logtime), 
-						user: parseInt(myParkingProfitDetails.user), 
+						channel: parseInt(myParkingProfitDetails.user), 
 						//slotsTotal: parseInt(myParkingProfitDetails.slotsTotal), 
 						//slotsOccupiedOnTotal: parseInt(myParkingDetails.slotsOccupiedOnTotal),
 						//slotsUnavailable: parseInt(myParkingDetails.slotsUnavailable), 
@@ -1451,7 +1450,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					note: myPmProfitDetails.note,
 					status: myPmProfitDetails.status,
 					updateTime: $scope.getLogMillis(myPmProfitDetails.loghour, myPmProfitDetails.logtime), 
-					user: parseInt(myPmProfitDetails.user), 
+					channel: parseInt(myPmProfitDetails.user), 
 					areaId: myPmProfitDetails.areaId,
 					lastChange:myPmProfitDetails.lastChange,
 					profit: parseInt(myPmProfitDetails.profit),

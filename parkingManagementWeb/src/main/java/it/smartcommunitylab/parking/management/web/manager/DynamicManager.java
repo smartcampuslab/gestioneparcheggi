@@ -46,7 +46,6 @@ import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
 import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
-import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
 import it.smartcommunitylab.parking.management.web.repository.StatRepository;
 import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
@@ -69,6 +68,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 // Manager used to store the dynamic data
 @Service("storageDynamicManager")
@@ -1355,11 +1355,18 @@ public class DynamicManager {
 	}
 	
 	// Method editParkStructProfitAux: used to save a ProfitLogBean object for the new profit data in a parkingStructure
-	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String authorId, String userAgencyId, boolean sysLog, String username, long[] period,  int p_type) throws NotFoundException {
+	public void editParkStructProfitAux(ParkStruct p, Long timestamp, Long startTime, String agencyId, String channelId, String userAgencyId, boolean sysLog, String username, String author, long[] period,  int p_type) throws NotFoundException {
 		String[] ids = p.getId().split("@");
 		String pmId = ids[2];
 		p.setUpdateTime(timestamp);
-		p.setUser(Integer.valueOf(authorId));
+		p.setChannel(Integer.valueOf(channelId));
+		String pAuthor = "";
+		if(channelId.compareTo("0") == 0){
+			pAuthor = username;
+		} else {
+			pAuthor = author;
+		}
+		p.setAuthor(pAuthor);
 		
 		ParkingStructure entity = findById(pmId,ParkingStructure.class);
 		DataLogBean pl = new DataLogBean();
@@ -1372,7 +1379,7 @@ public class DynamicManager {
 			Long[] periodLong = {period[0], period[1]};
 			pl.setLogPeriod(periodLong);
 		}
-		pl.setAuthor(authorId);
+		pl.setAuthor(pAuthor);
 		pl.setAgency(agencyId);
 		pl.setUserAgencyId(userAgencyId);
 		// set new fields ---------
@@ -1506,15 +1513,11 @@ public class DynamicManager {
 				}
 			}
 		} else {
-			query = Query.query(Criteria.where("value.id").is(id).and("value.agency").is(agency)).limit(count);
+			query = Query.query(Criteria.where("objId").is(id).and("agency").is(agency)).limit(count);
 		}
 		query.sort().on("time", Order.DESCENDING);
+		query.fields().exclude("value");
 		List<DataLogBean> myLog = mongodb.find(query, DataLogBean.class);
-		//List<DataLogBean> myLog = mongodb.findAll(DataLogBean.class);
-//		List<DataLogBean> myLogBean = new ArrayList<DataLogBean>();
-//		for(int i = 0; i < myLog.size(); i++){
-//			myLogBean.add(ModelConverter.convert(myLog.get(i), DataLogBean.class));
-//		}
 		return myLog;
 	}
 	
@@ -4425,39 +4428,58 @@ public class DynamicManager {
 		}
 		return result;
 	}
-	public Long countTPAll(String agency, String userAgency, boolean deleted) {
-		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false)), "dataLogBean");
+	
+	public Long countTPAll(String agency, String userAgency, boolean deleted, String type) {
+		Criteria ct = new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(deleted);
+		if(type != null){
+			ct.and("type").is(type);
+		}
+		return mongodb.count(Query.query(ct), "dataLogBean");
 	}
-	public Long countTPTyped(String agency, String userAgency, boolean deleted, String type) {
-		return mongodb.count(Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false).and("type").is(type)), "dataLogBean");
-	}
-	public List<DataLogBeanTP> findTPAll(String agency, boolean deleted, int skip, int limit) {
-		Query query = Query.query(new Criteria("agency").is(agency).and("deleted").is(false));
+	public List<DataLogBean> findAllObjectLogs(String id, String agency, boolean deleted, String userAgency, String type, String author, int skip, int limit) {
+		Criteria ct = new Criteria("agency").is(agency).and("deleted").is(deleted);
+		if(StringUtils.hasText(userAgency)){
+			ct.and("userAgencyId").is(userAgency);
+		}
+		if(StringUtils.hasText(type)){
+			ct.and("type").is(type);
+		}
+		if(StringUtils.hasText(author)){
+			ct.and("author").is(author);
+		}
+		if(StringUtils.hasText(id)){
+			ct.and("objId").is(id);
+		}
+		Query query = Query.query(ct);
 		query.limit(limit);
 		query.skip(skip);
 		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");	
+		query.fields().exclude("valueString");
+		return mongodb.find(query, DataLogBean.class, "dataLogBean");
 	}
-	public List<DataLogBeanTP> findTPAllByUserAgency(String agency, String userAgency, boolean deleted, int skip, int limit) {
-		Query query = Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false));
-		query.limit(limit);
+	public List<DataLogBean> findAllLogs(String id, String agency, boolean deleted, String userAgency, String type, String author, int skip, int limit) {
+		Criteria ct = new Criteria("agency").is(agency).and("deleted").is(deleted);
+		if(StringUtils.hasText(userAgency)){
+			ct.and("userAgencyId").is(userAgency);
+		}
+		if(StringUtils.hasText(type)){
+			ct.and("type").is(type);
+		}
+		if(StringUtils.hasText(author)){
+			ct.and("author").is(author);
+		}
+		if(StringUtils.hasText(id)){
+			ct.and("objId").is(id);
+		}
+		Query query = Query.query(ct);
+		if(limit != -1){
+			query.limit(limit);
+		}
 		query.skip(skip);
 		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");	
+		query.fields().exclude("value");
+		return mongodb.find(query, DataLogBean.class, "dataLogBean");
 	}
-	public List<DataLogBeanTP> findTPTyped(String agency, boolean deleted, String type, int skip, int limit) {
-		Query query = Query.query(new Criteria("agency").is(agency).and("deleted").is(false).and("type").is(type));
-		query.limit(limit);
-		query.skip(skip);
-		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");
-	}
-	public List<DataLogBeanTP> findTPTypedByUserAgency(String agency, String userAgency, boolean deleted, String type, int skip, int limit) {
-		Query query = Query.query(new Criteria("agency").is(agency).and("userAgencyId").is(userAgency).and("deleted").is(false).and("type").is(type));
-		query.limit(limit);
-		query.skip(skip);
-		query.sort().on("time", Order.DESCENDING);
-		return mongodb.find(query, DataLogBeanTP.class, "dataLogBean");
-	}
+	
 
 }

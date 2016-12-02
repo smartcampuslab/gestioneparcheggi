@@ -29,7 +29,8 @@ public class ParkStruct implements Serializable  {
 	// Fields from basic object
 	private Long updateTime;
 	private Long version;
-	private Integer user;
+	private Integer channel;
+	private String author;
 	private int profit;		// in eurocent
 	private int tickets;
 	private LastChange lastChange;
@@ -78,10 +79,6 @@ public class ParkStruct implements Serializable  {
 		return version;
 	}
 
-	public Integer getUser() {
-		return user;
-	}
-
 	public void setId(String id) {
 		this.id = id;
 	}
@@ -109,10 +106,6 @@ public class ParkStruct implements Serializable  {
 	public void setVersion(Long version) {
 		this.version = version;
 	}
-
-	public void setUser(Integer user) {
-		this.user = user;
-	}
 	
 	public int getTickets() {
 		return tickets;
@@ -122,12 +115,28 @@ public class ParkStruct implements Serializable  {
 		this.tickets = tickets;
 	}
 
+	public Integer getChannel() {
+		return channel;
+	}
+
+	public String getAuthor() {
+		return author;
+	}
+
+	public void setChannel(Integer channel) {
+		this.channel = channel;
+	}
+
+	public void setAuthor(String author) {
+		this.author = author;
+	}
+
 	public String toJSON() {
 		String json = "{";
 		json += "\"id\":\"" + getId() + "\",";
 		json += "\"updateTime\":" + getUpdateTime() + ",";
 		json += "\"version\":" + getVersion() + ",";
-		json += "\"user\":\"" + getUser() + "\",";
+		json += "\"user\":\"" + getChannel() + "\",";
 		json += "\"agency\":\"" + getAgency() + "\",";
 		if(getPosition() != null && getPosition().length > 0){
 			double[] pos = getPosition();

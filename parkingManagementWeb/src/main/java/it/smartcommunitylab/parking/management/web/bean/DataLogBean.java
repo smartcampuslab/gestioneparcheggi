@@ -17,7 +17,6 @@ package it.smartcommunitylab.parking.management.web.bean;
 
 import java.util.Map;
 
-
 public class DataLogBean {
 
 	private String id;
@@ -40,7 +39,6 @@ public class DataLogBean {
 
 	private String valueString;
 	private Map<String, Object> value;
-	
 	
 	
 	public String getId() {

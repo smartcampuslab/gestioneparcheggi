@@ -26,7 +26,7 @@ import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 
 @Controller
-public class EditingRestController {
+public class DataRestController {
 	
 	@Autowired
 	StorageManager storage;

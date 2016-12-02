@@ -36,8 +36,6 @@ import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
-import it.smartcommunitylab.parking.management.web.repository.DataLogBeanTP;
-import it.smartcommunitylab.parking.management.web.repository.DataLogRepositoryDao;
 import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
 import java.util.ArrayList;
@@ -48,8 +46,6 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.log4j.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.geo.Circle;
@@ -67,8 +63,6 @@ public class GeoObjectManager {
 	private StorageManager storageManager;
 	@Autowired
 	private DynamicManager dynamicManager;
-	@Autowired
-	private DataLogRepositoryDao dataLogRepo;
 	@Autowired
 	private MongoTemplate mongodb;
 	@Autowired
@@ -203,7 +197,7 @@ public class GeoObjectManager {
 		dynamicManager.editParkingMeterAux(object, currTime, startTime, agencyId, authorId, userAgencyId, sysLog, username, author, period, p_type);
 	}
 	
-	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, String userAgency, boolean sysLog, String username, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
+	public void updateDynamicParkStructProfitData(ParkStruct object, String agencyId, String authorId, String userAgency, boolean sysLog, String username, String author, Long from, Long to, long[] period, int p_type) throws Exception, NotFoundException {
 		long currTime = System.currentTimeMillis();
 		Long startTime = null;
 		if(from != null && to != null){
@@ -212,22 +206,14 @@ public class GeoObjectManager {
 		} else if(object.getUpdateTime() != null){
 			currTime = object.getUpdateTime();
 		}
-		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, userAgency, sysLog, username, period, p_type);
+		dynamicManager.editParkStructProfitAux(object, currTime, startTime, agencyId, authorId, userAgency, sysLog, username, author, period, p_type);
 	}
-
-//	public List<DataLogBean> getAllLogs(String agency, int count, int skip) {
-//		return dynamicManager.getLogsById(null, agency, count, skip, "all");
-//	}
 	
 	public DataLogBean getLogById(String id) {
 		return dynamicManager.getLogByLogId(id);
 	}
 	
-//	public int countAllLogs(String agency) {
-//		return dynamicManager.countLogsById(null, agency, -1, 0, "all");
-//	}
-//	
-	private List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
+	public List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
 		return dynamicManager.getLogsById(id, agency, count, 0, type);
 	}
 	
@@ -235,21 +221,40 @@ public class GeoObjectManager {
 		return dynamicManager.getLogsByAuthor(authorId, agency, count);
 	}
 	
-	public List<DataLogBeanTP> findAllLogsByAgency(String agency, String userAgency, Integer skip, Integer count){
-		//return dynamicManager.findTPAll(agency, false, skip, count);
-		return dynamicManager.findTPAllByUserAgency(agency, userAgency, false, skip, count);
+	public List<DataLogBean> findAllLogsByAgency(String agency, String userAgency, Integer skip, Integer count){
+		//return dynamicManager.findTPAll(agency, false, userAgency, null, null, skip, count);
+		return dynamicManager.findAllLogs(null, agency, false, userAgency, null, null, skip, count);
+	};
+	
+	public List<DataLogBean> findAllLogsByAgencyAndAuthor(String agency, String userAgency, String author, Integer skip, Integer count){
+		//return dynamicManager.findTPAll(agency, false, userAgency, null, author, skip, count);
+		return dynamicManager.findAllLogs(null, agency, false, userAgency, null, author, skip, count);
 	};
 
+	public List<DataLogBean> findAllLogsByAgencyAndType(String agency, String userAgency, String type, Integer skip, Integer count){
+		//return dynamicManager.findTPAll(agency, false, userAgency, type, null, skip, count);
+		return dynamicManager.findAllLogs(null, agency, false, userAgency, type, null, skip, count);
+	};
+	
+	public List<DataLogBean> findAllLogsByAgencyTypeAndAuthor(String agency, String userAgency, String type, String author, Integer skip, Integer count){
+		//return dynamicManager.findTPAll(agency, false, userAgency, type, author, skip, count);
+		return dynamicManager.findAllLogs(null, agency, false, userAgency, type, author, skip, count);
+	};
+	
+	public List<DataLogBean> findAllLogs(String id, String agency, String userAgency, String type, String author, Integer skip, Integer count){
+		return dynamicManager.findAllLogs(id, agency, false, userAgency, type, author, skip, count);
+	};
+	
+	public List<DataLogBean> findAllLogsObjects(String id, String agency, String userAgency, String type, String author, Integer skip, Integer count){
+		return dynamicManager.findAllObjectLogs(id, agency, false, userAgency, type, author, skip, count);
+	};
+	
 	public Long countAllLogsByAgency(String agency, String userAgency) {
-		return dynamicManager.countTPAll(agency, userAgency, false);
+		return dynamicManager.countTPAll(agency, userAgency, false, null);
 	}
 
-	public List<DataLogBeanTP> findAllLogsByAgencyAndType(String agency, String userAgency, String type, Integer skip, Integer count){
-		return dynamicManager.findTPTypedByUserAgency(agency, userAgency, false, type, skip, count);
-	};
-
 	public Long countAllLogsByAgencyAndType(String agency, String userAgency, String type) {
-		return dynamicManager.countTPTyped(agency, userAgency, false, type);
+		return dynamicManager.countTPAll(agency, userAgency, false, type);
 	}
 
 	public int countAllStreetLogs(String agency) {
@@ -264,9 +269,10 @@ public class GeoObjectManager {
 		return getLogsById(id, agency, count, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
 	}
 	
-	public List<DataLogBeanTP> getStreetLogsByAgency(String agency){
-		List<DataLogBeanTP> correctedStreetLogs = new ArrayList<DataLogBeanTP>();
-		List<DataLogBeanTP> streetLogs = dataLogRepo.findByType(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+	public List<DataLogBean> getStreetLogsByAgency(String agency){
+		List<DataLogBean> correctedStreetLogs = new ArrayList<DataLogBean>();
+		//List<DataLogBean> streetLogs = dataLogRepo.findByType(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
+		List<DataLogBean> streetLogs = dynamicManager.findAllLogs(null, agency, false, null, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName(), null, 0, -1);
 		for(int i = 0; i < streetLogs.size(); i++){
 			if(streetLogs.get(i) != null && !streetLogs.get(i).isDeleted() && streetLogs.get(i).getAgency() != null && streetLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedStreetLogs.add(streetLogs.get(i));
@@ -287,9 +293,10 @@ public class GeoObjectManager {
 		return getLogsById(id, agency, count, Parking.class.getCanonicalName());
 	}
 	
-	public List<DataLogBeanTP> getParkingLogsByAgency(String agency){
-		List<DataLogBeanTP> correctedParkingLogs = new ArrayList<DataLogBeanTP>();
-		List<DataLogBeanTP> parkingLogs = dataLogRepo.findByType(Parking.class.getCanonicalName());
+	public List<DataLogBean> getParkingLogsByAgency(String agency){
+		List<DataLogBean> correctedParkingLogs = new ArrayList<DataLogBean>();
+		//List<DataLogBean> parkingLogs = dataLogRepo.findByType(Parking.class.getCanonicalName());
+		List<DataLogBean> parkingLogs = dynamicManager.findAllLogs(null, agency, false, null, Parking.class.getCanonicalName(), null, 0, -1);
 		for(int i = 0; i < parkingLogs.size(); i++){
 			if(parkingLogs.get(i) != null && !parkingLogs.get(i).isDeleted() && parkingLogs.get(i).getAgency() != null && parkingLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedParkingLogs.add(parkingLogs.get(i));
@@ -298,9 +305,10 @@ public class GeoObjectManager {
 		return correctedParkingLogs;
 	};
 	
-	public List<DataLogBeanTP> getParkProfitLogsByAgency(String agency){
-		List<DataLogBeanTP> correctedParkProfitLogs = new ArrayList<DataLogBeanTP>();
-		List<DataLogBeanTP> parkProfitLogs = dataLogRepo.findByType(ParkStruct.class.getCanonicalName());
+	public List<DataLogBean> getParkProfitLogsByAgency(String agency){
+		List<DataLogBean> correctedParkProfitLogs = new ArrayList<DataLogBean>();
+		//List<DataLogBean> parkProfitLogs = dataLogRepo.findByType(ParkStruct.class.getCanonicalName());
+		List<DataLogBean> parkProfitLogs = dynamicManager.findAllLogs(null, agency, false, null, ParkStruct.class.getCanonicalName(), null, 0, -1);
 		for(int i = 0; i < parkProfitLogs.size(); i++){
 			if(parkProfitLogs.get(i) != null && !parkProfitLogs.get(i).isDeleted() && parkProfitLogs.get(i).getAgency() != null && parkProfitLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedParkProfitLogs.add(parkProfitLogs.get(i));
@@ -309,9 +317,10 @@ public class GeoObjectManager {
 		return correctedParkProfitLogs;
 	};
 	
-	public List<DataLogBeanTP> getPmLogsByAgency(String agency){
-		List<DataLogBeanTP> correctedParkMeterLogs = new ArrayList<DataLogBeanTP>();
-		List<DataLogBeanTP> parkMeterLogs = dataLogRepo.findByType(ParkMeter.class.getCanonicalName());
+	public List<DataLogBean> getPmLogsByAgency(String agency){
+		List<DataLogBean> correctedParkMeterLogs = new ArrayList<DataLogBean>();
+		//List<DataLogBean> parkMeterLogs = dataLogRepo.findByType(ParkMeter.class.getCanonicalName());
+		List<DataLogBean> parkMeterLogs = dynamicManager.findAllLogs(null, agency, false, null, ParkMeter.class.getCanonicalName(), null, 0, -1);
 		for(int i = 0; i < parkMeterLogs.size(); i++){
 			if(parkMeterLogs.get(i) != null && !parkMeterLogs.get(i).isDeleted() && parkMeterLogs.get(i).getAgency() != null && parkMeterLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedParkMeterLogs.add(parkMeterLogs.get(i));
@@ -462,53 +471,6 @@ public class GeoObjectManager {
 		return result;
 	}
 	
-	
-	@SuppressWarnings("unused")
-	private Street castStreetJSONToObject(String value){
-		logger.debug(String.format("Street to be casted : %s", value));
-		JSONObject jsonStreet = new JSONObject(value);
-
-		Street s = new Street();
-		s.setId(jsonStreet.getString("id"));
-		s.setAgency(jsonStreet.getString("agency"));
-		// TODO update slots uploading from json
-		/*s.setSlotsFree(Integer.valueOf(jsonStreet.getInt("slotsFree")));
-		s.setSlotsPaying(Integer.valueOf(jsonStreet.getInt("slotsPaying")));
-		s.setSlotsTimed(Integer.valueOf(jsonStreet.getInt("slotsTimed")));*/
-		
-		s.setName(jsonStreet.getString("name"));
-		s.setPolyline(jsonStreet.getString("polyline"));
-		JSONArray pos = jsonStreet.getJSONArray("position");//getString("position");
-		if(pos != null && pos.length() > 0){
-			//String[] pos_string = pos.split(",");
-			double[] pos_double = new double[2];
-			pos_double[0] = Double.valueOf(pos.getDouble(0));	//pos_string[0]
-			pos_double[1] = Double.valueOf(pos.getDouble(1));	//pos_string[1]
-			s.setPosition(pos_double);
-		}
-		s.setDescription(jsonStreet.getString("description"));
-		return s;
-	}
-	
-	@SuppressWarnings("unused")
-	private Parking castParkingJSONToObject(String value){
-		JSONObject jsonParking = new JSONObject(value);	
-		Parking p = new Parking();
-		p.setId(jsonParking.getString("id"));
-		p.setAgency(jsonParking.getString("agency"));
-		p.setSlotsTotal(Integer.valueOf(jsonParking.getInt("slotsTotal")));
-		p.setName(jsonParking.getString("name"));
-		JSONArray pos = jsonParking.getJSONArray("position");//getString("position");
-		if(pos != null && pos.length() > 0){
-			//String[] pos_string = pos.split(",");
-			double[] pos_double = new double[2];
-			pos_double[0] = Double.valueOf(pos.getDouble(0));	//pos_string[0]
-			pos_double[1] = Double.valueOf(pos.getDouble(1));	//pos_string[1]
-			p.setPosition(pos_double);
-		}
-		p.setDescription(jsonParking.getString("description"));
-		return p;
-	}
 	
 	private Street castPMStreetBeanToStreet(StreetBean street){
 		//logger.error(String.format("Street to be casted : %s", street.toJSON()));
