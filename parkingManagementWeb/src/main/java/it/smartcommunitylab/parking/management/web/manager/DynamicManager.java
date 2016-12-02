@@ -68,6 +68,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
 
 // Manager used to store the dynamic data
 @Service("storageDynamicManager")
@@ -1512,15 +1513,11 @@ public class DynamicManager {
 				}
 			}
 		} else {
-			query = Query.query(Criteria.where("value.id").is(id).and("value.agency").is(agency)).limit(count);
+			query = Query.query(Criteria.where("objId").is(id).and("agency").is(agency)).limit(count);
 		}
 		query.sort().on("time", Order.DESCENDING);
+		query.fields().exclude("value");
 		List<DataLogBean> myLog = mongodb.find(query, DataLogBean.class);
-		//List<DataLogBean> myLog = mongodb.findAll(DataLogBean.class);
-//		List<DataLogBean> myLogBean = new ArrayList<DataLogBean>();
-//		for(int i = 0; i < myLog.size(); i++){
-//			myLogBean.add(ModelConverter.convert(myLog.get(i), DataLogBean.class));
-//		}
 		return myLog;
 	}
 	
@@ -4439,16 +4436,19 @@ public class DynamicManager {
 		}
 		return mongodb.count(Query.query(ct), "dataLogBean");
 	}
-	public List<DataLogBean> findAllObjectLogs(String agency, boolean deleted, String userAgency, String type, String author, int skip, int limit) {
+	public List<DataLogBean> findAllObjectLogs(String id, String agency, boolean deleted, String userAgency, String type, String author, int skip, int limit) {
 		Criteria ct = new Criteria("agency").is(agency).and("deleted").is(deleted);
-		if(userAgency != null){
+		if(StringUtils.hasText(userAgency)){
 			ct.and("userAgencyId").is(userAgency);
 		}
-		if(type != null){
+		if(StringUtils.hasText(type)){
 			ct.and("type").is(type);
 		}
-		if(author != null){
+		if(StringUtils.hasText(author)){
 			ct.and("author").is(author);
+		}
+		if(StringUtils.hasText(id)){
+			ct.and("objId").is(id);
 		}
 		Query query = Query.query(ct);
 		query.limit(limit);
@@ -4457,16 +4457,19 @@ public class DynamicManager {
 		query.fields().exclude("valueString");
 		return mongodb.find(query, DataLogBean.class, "dataLogBean");
 	}
-	public List<DataLogBean> findAllLogs(String agency, boolean deleted, String userAgency, String type, String author, int skip, int limit) {
+	public List<DataLogBean> findAllLogs(String id, String agency, boolean deleted, String userAgency, String type, String author, int skip, int limit) {
 		Criteria ct = new Criteria("agency").is(agency).and("deleted").is(deleted);
-		if(userAgency != null){
+		if(StringUtils.hasText(userAgency)){
 			ct.and("userAgencyId").is(userAgency);
 		}
-		if(type != null){
+		if(StringUtils.hasText(type)){
 			ct.and("type").is(type);
 		}
-		if(author != null){
+		if(StringUtils.hasText(author)){
 			ct.and("author").is(author);
+		}
+		if(StringUtils.hasText(id)){
+			ct.and("objId").is(id);
 		}
 		Query query = Query.query(ct);
 		if(limit != -1){

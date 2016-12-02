@@ -104,10 +104,40 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		return dataService.getParkingMeters(agency, agencyId);
 	}
 	
+	private String retrieveTypeFromDesc(String desc){
+		String corrType = "";
+		if(desc.compareTo("street") == 0){					// street occupancy case
+			corrType = Street.class.getCanonicalName();
+		} else if(desc.compareTo("parking") == 0){			// parking structure occupancy case
+			corrType = Parking.class.getCanonicalName();
+		} else if(desc.compareTo("parkingmeter") == 0){		// parking meter profit case
+			corrType = ParkMeter.class.getCanonicalName();
+		} else if(desc.compareTo("parkstruct") == 0){		// parking structure profit case
+			corrType = ParkStruct.class.getCanonicalName();
+		}
+		
+		return corrType;
+	}
+	
+	private String retrieveDescFromType(String desc){
+		String corrType = "street";		// default case (if no type passed)
+		if(desc.compareTo(Street.class.getCanonicalName()) == 0){				// street occupancy case
+			corrType = "street";
+		} else if(desc.compareTo(Parking.class.getCanonicalName()) == 0){		// parking structure occupancy case
+			corrType = "parking";
+		} else if(desc.compareTo(ParkMeter.class.getCanonicalName()) == 0){		// parking meter profit case
+			corrType = "parkingmeter";
+		} else if(desc.compareTo(ParkStruct.class.getCanonicalName()) == 0){	// parking structure profit case
+			corrType = "parkstruct";
+		}
+		
+		return corrType;
+	}
+	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/logs") 
 	public @ResponseBody Iterable<DataLogBean> getAllLogs(Principal principal, @PathVariable String agency, 
-			@RequestParam(required=false) String type, @RequestParam(required=false) String author, @RequestParam(required=false)String mode,
+			@RequestParam(required=false) String id, @RequestParam(required=false) String type, @RequestParam(required=false) String author, @RequestParam(required=false)String mode,
 			@RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
@@ -115,12 +145,21 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		String userAgency = userAgencyData.get("id");
-		if(StringUtils.hasText(mode) && mode.compareTo("object") == 0){
-			return dataService.findAllLogsObjects(agency, userAgency, type, author, skip, count);
-		} else {
-			return dataService.findAllLogs(agency, userAgency, type, author, skip, count);
+		if(StringUtils.hasText(type)){
+			if(!type.contains(".")){
+				type = retrieveTypeFromDesc(type);
+			}
 		}
-		
+		if(StringUtils.hasText(id)){
+			if(!id.contains("@")){
+				id = retrieveDescFromType(type) + "@" + agency + "@" + id;
+			}
+		}
+		if(StringUtils.hasText(mode) && mode.compareTo("object") == 0){
+			return dataService.findAllLogsObjects(id, agency, userAgency, type, author, skip, count);
+		} else {
+			return dataService.findAllLogs(id, agency, userAgency, type, author, skip, count);
+		}
 	}
 	
 	

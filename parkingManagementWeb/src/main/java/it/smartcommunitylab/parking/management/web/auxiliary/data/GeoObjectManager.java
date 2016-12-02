@@ -213,7 +213,7 @@ public class GeoObjectManager {
 		return dynamicManager.getLogByLogId(id);
 	}
 	
-	private List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
+	public List<DataLogBean> getLogsById(String id, String agency, int count, String type) {
 		return dynamicManager.getLogsById(id, agency, count, 0, type);
 	}
 	
@@ -223,30 +223,30 @@ public class GeoObjectManager {
 	
 	public List<DataLogBean> findAllLogsByAgency(String agency, String userAgency, Integer skip, Integer count){
 		//return dynamicManager.findTPAll(agency, false, userAgency, null, null, skip, count);
-		return dynamicManager.findAllLogs(agency, false, userAgency, null, null, skip, count);
+		return dynamicManager.findAllLogs(null, agency, false, userAgency, null, null, skip, count);
 	};
 	
 	public List<DataLogBean> findAllLogsByAgencyAndAuthor(String agency, String userAgency, String author, Integer skip, Integer count){
 		//return dynamicManager.findTPAll(agency, false, userAgency, null, author, skip, count);
-		return dynamicManager.findAllLogs(agency, false, userAgency, null, author, skip, count);
+		return dynamicManager.findAllLogs(null, agency, false, userAgency, null, author, skip, count);
 	};
 
 	public List<DataLogBean> findAllLogsByAgencyAndType(String agency, String userAgency, String type, Integer skip, Integer count){
 		//return dynamicManager.findTPAll(agency, false, userAgency, type, null, skip, count);
-		return dynamicManager.findAllLogs(agency, false, userAgency, type, null, skip, count);
+		return dynamicManager.findAllLogs(null, agency, false, userAgency, type, null, skip, count);
 	};
 	
 	public List<DataLogBean> findAllLogsByAgencyTypeAndAuthor(String agency, String userAgency, String type, String author, Integer skip, Integer count){
 		//return dynamicManager.findTPAll(agency, false, userAgency, type, author, skip, count);
-		return dynamicManager.findAllLogs(agency, false, userAgency, type, author, skip, count);
+		return dynamicManager.findAllLogs(null, agency, false, userAgency, type, author, skip, count);
 	};
 	
-	public List<DataLogBean> findAllLogs(String agency, String userAgency, String type, String author, Integer skip, Integer count){
-		return dynamicManager.findAllLogs(agency, false, userAgency, type, author, skip, count);
+	public List<DataLogBean> findAllLogs(String id, String agency, String userAgency, String type, String author, Integer skip, Integer count){
+		return dynamicManager.findAllLogs(id, agency, false, userAgency, type, author, skip, count);
 	};
 	
-	public List<DataLogBean> findAllLogsObjects(String agency, String userAgency, String type, String author, Integer skip, Integer count){
-		return dynamicManager.findAllObjectLogs(agency, false, userAgency, type, author, skip, count);
+	public List<DataLogBean> findAllLogsObjects(String id, String agency, String userAgency, String type, String author, Integer skip, Integer count){
+		return dynamicManager.findAllObjectLogs(id, agency, false, userAgency, type, author, skip, count);
 	};
 	
 	public Long countAllLogsByAgency(String agency, String userAgency) {
@@ -272,7 +272,7 @@ public class GeoObjectManager {
 	public List<DataLogBean> getStreetLogsByAgency(String agency){
 		List<DataLogBean> correctedStreetLogs = new ArrayList<DataLogBean>();
 		//List<DataLogBean> streetLogs = dataLogRepo.findByType(it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName());
-		List<DataLogBean> streetLogs = dynamicManager.findAllLogs(agency, false, null, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName(), null, 0, -1);
+		List<DataLogBean> streetLogs = dynamicManager.findAllLogs(null, agency, false, null, it.smartcommunitylab.parking.management.web.auxiliary.model.Street.class.getCanonicalName(), null, 0, -1);
 		for(int i = 0; i < streetLogs.size(); i++){
 			if(streetLogs.get(i) != null && !streetLogs.get(i).isDeleted() && streetLogs.get(i).getAgency() != null && streetLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedStreetLogs.add(streetLogs.get(i));
@@ -296,7 +296,7 @@ public class GeoObjectManager {
 	public List<DataLogBean> getParkingLogsByAgency(String agency){
 		List<DataLogBean> correctedParkingLogs = new ArrayList<DataLogBean>();
 		//List<DataLogBean> parkingLogs = dataLogRepo.findByType(Parking.class.getCanonicalName());
-		List<DataLogBean> parkingLogs = dynamicManager.findAllLogs(agency, false, null, Parking.class.getCanonicalName(), null, 0, -1);
+		List<DataLogBean> parkingLogs = dynamicManager.findAllLogs(null, agency, false, null, Parking.class.getCanonicalName(), null, 0, -1);
 		for(int i = 0; i < parkingLogs.size(); i++){
 			if(parkingLogs.get(i) != null && !parkingLogs.get(i).isDeleted() && parkingLogs.get(i).getAgency() != null && parkingLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedParkingLogs.add(parkingLogs.get(i));
@@ -308,7 +308,7 @@ public class GeoObjectManager {
 	public List<DataLogBean> getParkProfitLogsByAgency(String agency){
 		List<DataLogBean> correctedParkProfitLogs = new ArrayList<DataLogBean>();
 		//List<DataLogBean> parkProfitLogs = dataLogRepo.findByType(ParkStruct.class.getCanonicalName());
-		List<DataLogBean> parkProfitLogs = dynamicManager.findAllLogs(agency, false, null, ParkStruct.class.getCanonicalName(), null, 0, -1);
+		List<DataLogBean> parkProfitLogs = dynamicManager.findAllLogs(null, agency, false, null, ParkStruct.class.getCanonicalName(), null, 0, -1);
 		for(int i = 0; i < parkProfitLogs.size(); i++){
 			if(parkProfitLogs.get(i) != null && !parkProfitLogs.get(i).isDeleted() && parkProfitLogs.get(i).getAgency() != null && parkProfitLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedParkProfitLogs.add(parkProfitLogs.get(i));
@@ -320,7 +320,7 @@ public class GeoObjectManager {
 	public List<DataLogBean> getPmLogsByAgency(String agency){
 		List<DataLogBean> correctedParkMeterLogs = new ArrayList<DataLogBean>();
 		//List<DataLogBean> parkMeterLogs = dataLogRepo.findByType(ParkMeter.class.getCanonicalName());
-		List<DataLogBean> parkMeterLogs = dynamicManager.findAllLogs(agency, false, null, ParkMeter.class.getCanonicalName(), null, 0, -1);
+		List<DataLogBean> parkMeterLogs = dynamicManager.findAllLogs(null, agency, false, null, ParkMeter.class.getCanonicalName(), null, 0, -1);
 		for(int i = 0; i < parkMeterLogs.size(); i++){
 			if(parkMeterLogs.get(i) != null && !parkMeterLogs.get(i).isDeleted() && parkMeterLogs.get(i).getAgency() != null && parkMeterLogs.get(i).getAgency().compareTo(agency) == 0){
 				correctedParkMeterLogs.add(parkMeterLogs.get(i));
