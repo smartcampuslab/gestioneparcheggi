@@ -1235,7 +1235,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						name: myStreetDetails.name, 
 						description: myStreetDetails.description,
 						updateTime: $scope.getLogMillis(myStreetDetails.loghour, myStreetDetails.logtime), 
-						user: parseInt(myStreetDetails.user),
+						channel: parseInt(myStreetDetails.user),
 						/*slotsFree: parseInt(myStreetDetails.slotsFree), 
 						slotsOccupiedOnFree: parseInt(myStreetDetails.slotsOccupiedOnFree), 
 						slotsFreeSigned: parseInt(myStreetDetails.slotsFreeSigned), 
@@ -1313,7 +1313,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 						name: myParkingDetails.name, 
 						description: myParkingDetails.description,
 						updateTime: $scope.getLogMillis(myParkingDetails.loghour, myParkingDetails.logtime), 
-						user: parseInt(myParkingDetails.user),
+						channel: parseInt(myParkingDetails.user),
 						/*slotsTotal: parseInt(myParkingDetails.slotsTotal), 
 						slotsPaying: parseInt(myParkingDetails.slotsPaying),
 						slotsOccupiedOnPaying: parseInt(myParkingDetails.slotsOccupiedOnPaying),	// I consider this value as the occupied on paying
