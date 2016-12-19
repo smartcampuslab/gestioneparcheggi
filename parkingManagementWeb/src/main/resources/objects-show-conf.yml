@@ -84,34 +84,6 @@ providers:
           editable: true
           required: true
           visible: true
-        - code: handicappedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: reservedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: timedParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: paidSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotSignNumber
-          editable: true
-          required: false
-          visible: true  
-        - code: unusuableSlotNumber
-          editable: true
-          required: false
-          visible: true
         - code: subscritionAllowedPark
           editable: true
           required: false
@@ -600,34 +572,6 @@ providers:
         - code: slotNumber
           editable: true
           required: true
-          visible: true
-        - code: handicappedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: reservedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: timedParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: paidSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotSignNumber
-          editable: true
-          required: false
-          visible: true
-        - code: unusuableSlotNumber
-          editable: true
-          required: false
           visible: true
         - code: subscritionAllowedPark
           editable: true
@@ -1582,34 +1526,6 @@ providers:
           editable: true
           required: true
           visible: true
-        - code: handicappedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: reservedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: timedParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: paidSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotSignNumber
-          editable: true
-          required: false
-          visible: true
-        - code: unusuableSlotNumber
-          editable: true
-          required: false
-          visible: true
         - code: subscritionAllowedPark
           editable: true
           required: true
@@ -2510,34 +2426,6 @@ providers:
           editable: true
           required: true
           visible: true
-        - code: handicappedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: reservedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: timedParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: paidSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotSignNumber
-          editable: true
-          required: false
-          visible: true
-        - code: unusuableSlotNumber
-          editable: true
-          required: false
-          visible: true
         - code: subscritionAllowedPark
           editable: true
           required: true
@@ -3437,34 +3325,6 @@ providers:
         - code: slotNumber
           editable: true
           required: true
-          visible: true
-        - code: handicappedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: reservedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: timedParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: paidSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotSignNumber
-          editable: true
-          required: false
-          visible: true
-        - code: unusuableSlotNumber
-          editable: true
-          required: false
           visible: true
         - code: subscritionAllowedPark
           editable: true
@@ -4403,34 +4263,6 @@ providers:
           editable: true
           required: true
           visible: true
-        - code: handicappedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: reservedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: timedParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: paidSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: freeParkSlotSignNumber
-          editable: true
-          required: false
-          visible: true  
-        - code: unusuableSlotNumber
-          editable: true
-          required: false
-          visible: true
         - code: subscritionAllowedPark
           editable: true
           required: false
@@ -4589,14 +4421,6 @@ providers:
         - code: slotNumber
           editable: true
           required: true
-          visible: true
-        - code: handicappedSlotNumber
-          editable: true
-          required: false
-          visible: true
-        - code: unusuableSlotNumber
-          editable: true
-          required: false
           visible: true
         - code: phoneNumber
           editable: true
