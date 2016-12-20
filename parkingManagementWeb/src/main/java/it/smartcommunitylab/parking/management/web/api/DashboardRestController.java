@@ -167,7 +167,7 @@ public class DashboardRestController {
 	}
 		
 	// Open method to retrieve all parkingStructures occupancy data (with complete ps data)
-	@RequestMapping(method = RequestMethod.GET, value = "/stast/occupancy/{appId}/parkingstructures")
+	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/parkingstructures")
 	//@ApiOperation(value = "Get Parking structures occupancy", notes = "Returns parking structure occupancy data items")
 	public @ResponseBody
 	List<ParkingStructureBean> getAllParkingStructureOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
