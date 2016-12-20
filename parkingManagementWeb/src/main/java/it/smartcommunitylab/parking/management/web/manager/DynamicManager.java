@@ -63,9 +63,9 @@ import org.json.JSONObject;
 import org.perf4j.StopWatch;
 import org.perf4j.log4j.Log4JStopWatch;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -1515,9 +1515,11 @@ public class DynamicManager {
 		} else {
 			query = Query.query(Criteria.where("objId").is(id).and("agency").is(agency)).limit(count);
 		}
-		query.sort().on("time", Order.DESCENDING);
+//		query.sort().on("time", Order.DESCENDING);
+		query.with(new Sort(Sort.Direction.DESC, "time"));
 		query.fields().exclude("value");
 		List<DataLogBean> myLog = mongodb.find(query, DataLogBean.class);
+		
 		return myLog;
 	}
 	
@@ -1552,7 +1554,8 @@ public class DynamicManager {
 	
 	public List<DataLogBean> getLogsByAuthor(String authorId, String agency, int count) {
 		Query query = Query.query(Criteria.where("author").is(authorId).and("value.agency").is(agency)).limit(count);
-		query.sort().on("time", Order.DESCENDING);
+//		query.sort().on("time", Order.DESCENDING);
+		query.with(new Sort(Sort.Direction.DESC, "time"));
 		//query.with(new Sort(Sort.Direction.DESC, "time"));
 		//List<DataLogBean> result = new ArrayList<DataLogBean>();
 		List<DataLogBean> resLog = new ArrayList<DataLogBean>();
@@ -1583,7 +1586,8 @@ public class DynamicManager {
 		Integer version = new Integer(0);
 		Query q = new Query();
 		q.addCriteria(Criteria.where("objId").is(objId));
-		q.sort().on("updateTime", Order.DESCENDING);
+//		q.sort().on("updateTime", Order.DESCENDING);
+		q.with(new Sort(Sort.Direction.DESC, "updateTime"));
 		//q.with(new Sort(Sort.Direction.DESC, "updateTime"));
 		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
 		if(result != null && result.size() > 0){
@@ -4453,7 +4457,8 @@ public class DynamicManager {
 		Query query = Query.query(ct);
 		query.limit(limit);
 		query.skip(skip);
-		query.sort().on("time", Order.DESCENDING);
+//		query.sort().on("time", Order.DESCENDING);
+		query.with(new Sort(Sort.Direction.DESC, "time"));
 		query.fields().exclude("valueString");
 		return mongodb.find(query, DataLogBean.class, "dataLogBean");
 	}
@@ -4476,7 +4481,8 @@ public class DynamicManager {
 			query.limit(limit);
 		}
 		query.skip(skip);
-		query.sort().on("time", Order.DESCENDING);
+//		query.sort().on("time", Order.DESCENDING);
+		query.with(new Sort(Sort.Direction.DESC, "time"));
 		query.fields().exclude("value");
 		return mongodb.find(query, DataLogBean.class, "dataLogBean");
 	}

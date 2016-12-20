@@ -15,6 +15,20 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.controller;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PSOccupancyData;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.PSProfitData;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.SOccupancyData;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
+import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
+import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.manager.CSVManager;
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
@@ -27,6 +41,10 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,25 +56,6 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
-
-import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.PSOccupancyData;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.PSProfitData;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.SOccupancyData;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
-import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
-import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
-import it.smartcommunitylab.parking.management.web.manager.CSVManager;
-import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
-
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
 
 @Controller
 public class ObjectController  {

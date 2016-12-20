@@ -15,9 +15,9 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
-import java.util.Map;
-
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
+
+import java.util.Map;
 
 public class DataLog {
 

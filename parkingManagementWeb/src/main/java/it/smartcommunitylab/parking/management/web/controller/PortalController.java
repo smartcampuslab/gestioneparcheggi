@@ -15,12 +15,10 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.controller;
 
-import it.smartcommunitylab.parking.management.web.model.Agency;
 //import eu.trentorise.smartcampus.aac.AACException;
 import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
 import it.smartcommunitylab.parking.management.web.model.UserSetting;
-import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
-import it.smartcommunitylab.parking.management.web.security.MongoUserDetailsService;
+import it.smartcommunitylab.parking.management.web.security.YamlUserDetailsService;
 import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
 import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
@@ -51,7 +49,7 @@ import org.springframework.web.servlet.ModelAndView;
 public class PortalController extends SCController{
 	
 	@Autowired
-	private MongoUserDetailsService mongoUserDetailsService;
+	private YamlUserDetailsService yamlUserDetailsService;
 	
 	@Autowired
 	private VehicleTypeDataSetup vehicleTypeDataSetup;
@@ -94,13 +92,13 @@ public class PortalController extends SCController{
 		//if(model !=null && model.containsKey("mailMessage")){
 		//	mailMessages = model.get("mailMessage").toString();
 		//}
-		//User user = mongoUserDetailsService.getUserDetail(name);
+		//User user = yamlUserDetailsService.getUserDetail(name);
 		//model.addAttribute("user_name", user.getName());
 		//model.addAttribute("user_surname", user.getSurname());
 	
-		UserSetting user = mongoUserDetailsService.getUserDetails(name);
+		UserSetting user = yamlUserDetailsService.getUserDetails(name);
 		logger.debug("I am in home redirect. User id: " + name);
-		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetails(user.getUsername());
+		ObjectShowSetting objectToShow = yamlUserDetailsService.getObjectShowDetails(user.getUsername());
 		String userAgency = user.getAgency();
 		model.addAttribute("user_name", user.getUsername());
 		model.addAttribute("user_surname", (objectToShow != null) ? objectToShow.getId() : user.getId());
@@ -144,8 +142,8 @@ public class PortalController extends SCController{
 		model.addAttribute("no_sec", "true");
 		model.addAttribute("app_id", appId);
 		logger.info(String.format("I am in get viewAll %s", appId));
-		UserSetting user = mongoUserDetailsService.getUserDetailsByAppId(appId);	// I force to pass to user
-		ObjectShowSetting objectToShow = mongoUserDetailsService.getObjectShowDetails(user.getUsername());
+		UserSetting user = yamlUserDetailsService.getUserDetailsByAppId(appId);	// I force to pass to user
+		ObjectShowSetting objectToShow = yamlUserDetailsService.getObjectShowDetails(user.getUsername());
 		String mapcenter = null;
 		String mapzoom = (objectToShow != null) ? objectToShow.getMapZoom() : "14";
 		if(center != null && center != ""){

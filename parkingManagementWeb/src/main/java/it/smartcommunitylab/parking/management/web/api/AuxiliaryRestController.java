@@ -1,5 +1,20 @@
 package it.smartcommunitylab.parking.management.web.api;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.controller.ObjectController;
+import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
+import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
+import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
+import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.manager.CSVManager;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.model.UserSetting;
+import it.smartcommunitylab.parking.management.web.security.YamlUserDetailsService;
+import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
+
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -14,21 +29,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import it.smartcommunitylab.parking.management.web.auxiliary.controller.ObjectController;
-import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
-import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
-import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
-import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
-import it.smartcommunitylab.parking.management.web.manager.CSVManager;
-import it.smartcommunitylab.parking.management.web.manager.StorageManager;
-import it.smartcommunitylab.parking.management.web.model.UserSetting;
-import it.smartcommunitylab.parking.management.web.security.MongoUserDetailsService;
-import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
 
 @Controller
 public class AuxiliaryRestController {
@@ -45,7 +45,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	StorageManager storage;
 	
 	@Autowired
-	private MongoUserDetailsService mongoUserDetailsService;
+	private YamlUserDetailsService yamlUserDetailsService;
 	
 	@Autowired
 	private AgencyDataSetup agencyDataSetup;
@@ -63,7 +63,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	public @ResponseBody List<Street> getStreets(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, 
 		@RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
 		String uname = principal.getName();
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(!StringUtils.hasText(agencyId)){
 			agencyId = userAgencyData.get("id");
@@ -78,7 +78,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/parkings") 
 	public @ResponseBody List<Parking> getParkings(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
 		String uname = principal.getName();
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(!StringUtils.hasText(agencyId)){
 			agencyId = userAgencyData.get("id");
@@ -93,7 +93,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/parkingmeters") 
 	public @ResponseBody List<ParkMeter> getParkingMeters(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
 		String uname = principal.getName();
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(!StringUtils.hasText(agencyId)){
 			agencyId = userAgencyData.get("id");
@@ -142,7 +142,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
 		String uname = principal.getName();
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		String userAgency = userAgencyData.get("id");
 		if(StringUtils.hasText(type)){
@@ -170,7 +170,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	public @ResponseBody
 	List<RateAreaBean> getRateAreaDatas(Principal principal, @PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
 		String uname = principal.getName();
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(agencyId == null || agencyId.compareTo("") == 0){
 			agencyId = userAgencyData.get("id");
@@ -187,7 +187,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		String channelId = "1";	// mobile app mode
 		String author = parking.getAuthor();
 		String uname = principal.getName();
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(userAgencyId == null || userAgencyId.compareTo("") == 0){
 			userAgencyId = userAgencyData.get("id");
@@ -214,7 +214,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		if(street.getAreaId() == null){
 			street.setAgency(agency);
 		}
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(userAgencyId == null || userAgencyId.compareTo("") == 0){
 			userAgencyId = userAgencyData.get("id");
@@ -242,7 +242,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		String channelId = "1";	// mobile app mode
 		String author = parkingMeter.getAuthor();
 		String uname = principal.getName();
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(userAgencyId == null || userAgencyId.compareTo("") == 0){
 			userAgencyId = userAgencyData.get("id");
@@ -267,7 +267,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		String channelId = "1";	// mobile app mode
 		String author = parkStruct.getAuthor();
 		String uname = principal.getName();
-		UserSetting user = mongoUserDetailsService.getUserDetails(uname);
+		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
 		if(userAgencyId == null || userAgencyId.compareTo("") == 0){
 			userAgencyId = userAgencyData.get("id");

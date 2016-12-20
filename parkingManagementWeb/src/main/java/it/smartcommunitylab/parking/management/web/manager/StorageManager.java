@@ -53,9 +53,9 @@ import java.util.Map;
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Order;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
@@ -1469,7 +1469,8 @@ public class StorageManager {
 		Integer version = new Integer(0);
 		Query q = new Query();
 		q.addCriteria(Criteria.where("objId").is(objId));
-		q.sort().on("updateTime", Order.DESCENDING);
+//		q.sort().on("updateTime", Order.DESCENDING);
+		q.with(new Sort(Sort.Direction.DESC, "updateTime"));
 		//q.with(new Sort(Sort.Direction.DESC, "updateTime"));
 		List<DataLogBean> result = mongodb.find(q, it.smartcommunitylab.parking.management.web.bean.DataLogBean.class);
 		if(result != null && result.size() > 0){

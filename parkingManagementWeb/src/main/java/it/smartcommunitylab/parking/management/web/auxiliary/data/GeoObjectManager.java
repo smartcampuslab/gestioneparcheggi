@@ -47,8 +47,8 @@ import java.util.Map;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.geo.Circle;
 import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.geo.Circle;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 
@@ -352,7 +352,7 @@ public class GeoObjectManager {
 				logger.debug(String.format("Streets: lat:%s, lng:%s", s.getPosition()[0], s.getPosition()[1]));
 				double dist = distance(circle.getCenter().getX(), circle.getCenter().getY(), s.getPosition()[0], s.getPosition()[1],'K');
 				logger.debug(String.format("distance: %s", dist));
-				if(dist  <= circle.getRadius()){
+				if(dist  <= circle.getRadius().getValue()){
 					listaObj.add(s);
 				}
 			} else {
@@ -384,7 +384,7 @@ public class GeoObjectManager {
 			Parking p = castPMStructureBeanToParking(myStructures.get(i));
 			if(circle != null){
 				// here I have to create a specific filter for position distances from circle center and distances < radius
-				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), p.getPosition()[0], p.getPosition()[1],'K') <= circle.getRadius()){
+				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), p.getPosition()[0], p.getPosition()[1],'K') <= circle.getRadius().getValue()){
 					listaObj.add(p);
 				}
 			} else {
@@ -408,7 +408,7 @@ public class GeoObjectManager {
 			ParkMeter pm = castPMeterBeanToParkingMeter(myParkingMeters.get(i));
 			if(circle != null){
 				// here I have to create a specific filter for position distances from circle center and distances < radius
-				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), pm.getPosition()[0], pm.getPosition()[1],'K') <= circle.getRadius()){
+				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), pm.getPosition()[0], pm.getPosition()[1],'K') <= circle.getRadius().getValue()){
 					listaObj.add(pm);
 				}
 			} else {
@@ -430,7 +430,7 @@ public class GeoObjectManager {
 			ParkStruct ps = castPStructBeanToParkStruct(myParkingStructures.get(i));
 			if(circle != null){
 				// here I have to create a specific filter for position distances from circle center and distances < radius
-				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), ps.getPosition()[0], ps.getPosition()[1],'K') <= circle.getRadius()){
+				if(distance(circle.getCenter().getX(), circle.getCenter().getY(), ps.getPosition()[0], ps.getPosition()[1],'K') <= circle.getRadius().getValue()){
 					listaObj.add(ps);
 				}
 			} else {

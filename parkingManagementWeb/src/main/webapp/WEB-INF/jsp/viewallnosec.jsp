@@ -2,6 +2,9 @@
 <html ng-app="pm">
 <head id="myHead" lang="it">
 <meta charset="utf-8">
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="-1" />
 <title>{{ 'app_tab-title' | i18n }}</title>
 
 <link href="../css/bootstrap.min.css" rel="stylesheet" />

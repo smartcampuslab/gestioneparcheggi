@@ -1,5 +1,17 @@
 package it.smartcommunitylab.parking.management.web.api;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBeanCore;
+import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
+import it.smartcommunitylab.parking.management.web.controller.DashboardController;
+import it.smartcommunitylab.parking.management.web.manager.CSVManager;
+import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
+import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -13,18 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBeanCore;
-import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
-import it.smartcommunitylab.parking.management.web.controller.DashboardController;
-import it.smartcommunitylab.parking.management.web.manager.CSVManager;
-import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
-import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
-import it.smartcommunitylab.parking.management.web.manager.StorageManager;
-import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 @Controller
 public class DashboardRestController {

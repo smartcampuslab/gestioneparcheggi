@@ -15,10 +15,10 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.model;
 
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
+
 import java.io.Serializable;
 import java.util.List;
-
-import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 public class Parking implements Serializable  {
 	private static final long serialVersionUID = 8076535734041609036L;

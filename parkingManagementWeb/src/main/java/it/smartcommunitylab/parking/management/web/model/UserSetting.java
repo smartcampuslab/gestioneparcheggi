@@ -16,7 +16,6 @@
 package it.smartcommunitylab.parking.management.web.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 public class UserSetting implements Serializable {
 	

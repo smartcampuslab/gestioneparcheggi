@@ -61,9 +61,9 @@
 							<div style="margin: 10px" align="center">
 							</div>
 							<div class="well" align="center">
-							    <img src="imgs/logo.png" style="margin: 20px" />
+							    <img src="img/logo.png" style="margin: 20px" />
 <!-- 								<h2 id="banner">MetroParco</h2> -->
-									<form name="f" action="login.do" method="POST" accept-charset="utf-8"><!-- j_spring_security_check -->
+									<form name="f" action="login" method="POST" accept-charset="utf-8"><!-- j_spring_security_check -->
 										<table style="width: 45%;">
 											<tr>
 												<td colspan="2" id="err_login">
@@ -80,11 +80,11 @@
 											</tr>
 											<tr>
 												<td width="30%"><label for="input_user">Username:</label></td>
-												<td width="70%"><input id="input_user" class="form-control" type='text' name='j_username' /></td>
+												<td width="70%"><input id="input_user" class="form-control" type='text' name='username' /></td>
 											</tr>
 											<tr>
 												<td><label for="input_pwd">Password:</label></td>
-												<td><input id="input_pwd" class="form-control" type='password' name='j_password' /></td>
+												<td><input id="input_pwd" class="form-control" type='password' name='password' /></td>
 											</tr>
 											<tr>
 												<td colspan="2">&nbsp;</td>
@@ -114,7 +114,7 @@
 								<div class="well" align="center">
 								    <img src="imgs/logo.png" style="margin: 20px" />
 <!-- 									<h2 id="banner">MetroParco</h2> -->
-										<form name="f" action="login.do" method="POST" accept-charset="utf-8"><!-- j_spring_security_check -->
+										<form name="f" action="login" method="POST" accept-charset="utf-8"><!-- j_spring_security_check -->
 											<table style="width: 45%;">
 												<tr>
 													<td colspan="2" id="err_login_cel">
@@ -131,11 +131,11 @@
 												</tr>
 												<tr>
 													<td width="30%"><label for="input_user">Username:</label></td>
-													<td width="70%"><input id="input_user" class="form-control" type='text' name='j_username' /></td>
+													<td width="70%"><input id="input_user" class="form-control" type='text' name='username' /></td>
 												</tr>
 												<tr>
 													<td><label for="input_pwd">Password:</label></td>
-													<td><input id="input_pwd" class="form-control" type='password' name='j_password' /></td>
+													<td><input id="input_pwd" class="form-control" type='password' name='password' /></td>
 												</tr>
 												<tr>
 													<td colspan="2">&nbsp;</td>

@@ -15,11 +15,11 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.services;
 
-import java.util.ArrayList;
-import java.util.List;
-
 //import it.smartcommunitylab.parking.management.web.auxiliary.model.ViaBean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.PointBean;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class PolylineEncoder {
 

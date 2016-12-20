@@ -1,5 +1,7 @@
 package it.smartcommunitylab.parking.management.web.utils;
 
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,8 +16,6 @@ import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.yaml.snakeyaml.Yaml;
 import org.yaml.snakeyaml.constructor.Constructor;
-
-import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 
 @Component
 public class VehicleTypeDataSetup {

@@ -15,10 +15,10 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.controller;
 
-import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
+import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
