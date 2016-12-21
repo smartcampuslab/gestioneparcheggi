@@ -25,6 +25,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -54,14 +55,14 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	CSVManager csvManager;
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/ping") 
-	public @ResponseBody String ping() {
+	public @ResponseBody String ping(@RequestHeader(value="Authorization", required=true) String authorization) {
 		return "pong";
 	}
 
 	@SuppressWarnings("unchecked")
-	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/streets") 
+	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/streets")
 	public @ResponseBody List<Street> getStreets(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, 
-		@RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+		@RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius, @RequestHeader(value="Authorization", required=true) String authorization) throws Exception {
 		String uname = principal.getName();
 		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
@@ -76,7 +77,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/parkings") 
-	public @ResponseBody List<Parking> getParkings(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+	public @ResponseBody List<Parking> getParkings(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius, @RequestHeader(value="Authorization", required=true) String authorization) throws Exception {
 		String uname = principal.getName();
 		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
@@ -91,7 +92,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/parkingmeters") 
-	public @ResponseBody List<ParkMeter> getParkingMeters(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius) throws Exception {
+	public @ResponseBody List<ParkMeter> getParkingMeters(Principal principal, @PathVariable String agency, @RequestParam(required=false) String agencyId, @RequestParam(required=false) Double lat, @RequestParam(required=false) Double lon, @RequestParam(required=false) Double radius, @RequestHeader(value="Authorization", required=true) String authorization) throws Exception {
 		String uname = principal.getName();
 		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
@@ -138,7 +139,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{agency}/logs") 
 	public @ResponseBody Iterable<DataLogBean> getAllLogs(Principal principal, @PathVariable String agency, 
 			@RequestParam(required=false) String id, @RequestParam(required=false) String type, @RequestParam(required=false) String author, @RequestParam(required=false)String mode,
-			@RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip) {
+			@RequestParam(required=false) Integer count, @RequestParam(required=false) Integer skip, @RequestHeader(value="Authorization", required=true) String authorization) {
 		if (count == null) count = DEFAULT_COUNT;
 		if (skip == null) skip = 0;
 		String uname = principal.getName();
@@ -168,7 +169,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	@SuppressWarnings("unchecked")
 	@RequestMapping(method = RequestMethod.GET, value = "/data-mgt/{appId}/area")
 	public @ResponseBody
-	List<RateAreaBean> getRateAreaDatas(Principal principal, @PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+	List<RateAreaBean> getRateAreaDatas(Principal principal, @PathVariable("appId") String appId, @RequestParam(required=false) String agencyId, @RequestHeader(value="Authorization", required=true) String authorization) {
 		String uname = principal.getName();
 		UserSetting user = yamlUserDetailsService.getUserDetails(uname);
 		Map<String, String> userAgencyData = agencyDataSetup.getAgencyMap(agencyDataSetup.getAgencyById(user.getAgency()));
@@ -183,7 +184,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	public @ResponseBody String updateParking(Principal principal, @RequestBody Parking parking,
 		@RequestParam(required=false) String userAgencyId, @RequestParam(required=false) boolean isSysLog, 
 		@RequestParam(required=false) String username, @RequestParam(required=false) long[] period, 
-		@PathVariable String agency, @PathVariable String id) throws Exception, NotFoundException {
+		@PathVariable String agency, @PathVariable String id, @RequestHeader(value="Authorization", required=true) String authorization) throws Exception, NotFoundException {
 		String channelId = "1";	// mobile app mode
 		String author = parking.getAuthor();
 		String uname = principal.getName();
@@ -207,7 +208,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 	public @ResponseBody String updateStreet(Principal principal, @RequestBody Street street,
 		@RequestParam(required=false) String userAgencyId, @RequestParam(required=false) boolean isSysLog, 
 		@RequestParam(required=false) String username, @RequestParam(required=false) long[] period, 
-		@PathVariable String agency, @PathVariable String id) throws Exception, NotFoundException {
+		@PathVariable String agency, @PathVariable String id, @RequestHeader(value="Authorization", required=true) String authorization) throws Exception, NotFoundException {
 		String channelId = "1";	// mobile app mode
 		String author = street.getAuthor();
 		String uname = principal.getName();
@@ -238,7 +239,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		@RequestParam(required=false) String userAgencyId, @RequestParam(required=false) boolean isSysLog, 
 		@RequestParam(required=false) String username, @RequestParam(required=false) long[] period, 
 		@RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, 
-		@PathVariable String id) throws Exception, NotFoundException {
+		@PathVariable String id, @RequestHeader(value="Authorization", required=true) String authorization) throws Exception, NotFoundException {
 		String channelId = "1";	// mobile app mode
 		String author = parkingMeter.getAuthor();
 		String uname = principal.getName();
@@ -263,7 +264,7 @@ private static final Logger logger = Logger.getLogger(ObjectController.class);
 		@RequestParam(required=true) String userAgencyId, @RequestParam(required=false) boolean isSysLog, 
 		@RequestParam(required=false) String username, @RequestParam(required=false) long[] period, 
 		@RequestParam(required=false) Long from, @RequestParam(required=false) Long to, @PathVariable String agency, 
-		@PathVariable String id) throws Exception, NotFoundException {
+		@PathVariable String id, @RequestHeader(value="Authorization", required=true) String authorization) throws Exception, NotFoundException {
 		String channelId = "1";	// mobile app mode
 		String author = parkStruct.getAuthor();
 		String uname = principal.getName();
