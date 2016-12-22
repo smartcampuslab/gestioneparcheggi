@@ -1173,6 +1173,21 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 		}
 	};
 	
+	// Method used to calculate occupied slots before inserting a new occupation data
+	$scope.calculateTotalOccupiedSlots = function(slotConf){
+		var occupied = sharedDataService.initIfNull(slotConf.handicappedSlotOccupied)
+		+ sharedDataService.initIfNull(slotConf.reservedSlotOccupied)
+		+ sharedDataService.initIfNull(slotConf.paidSlotOccupied)
+		+ sharedDataService.initIfNull(slotConf.timedParkSlotOccupied)
+		+ sharedDataService.initIfNull(slotConf.freeParkSlotOccupied)
+		+ sharedDataService.initIfNull(slotConf.freeParkSlotSignOccupied)
+		+ sharedDataService.initIfNull(slotConf.rechargeableSlotOccupied)
+		+ sharedDataService.initIfNull(slotConf.loadingUnloadingSlotOccupied)
+		+ sharedDataService.initIfNull(slotConf.pinkSlotOccupied)
+		+ sharedDataService.initIfNull(slotConf.carSharingSlotOccupied);
+		return occupied;
+	};
+	
 	// Method used to correct the slotsConfiguration list to be aligned with back-end model objects
 	$scope.correctSlotConfiguration = function(slotsConfiguration){
 		var correctedSlotsConf = [];
@@ -1198,7 +1213,7 @@ pm.controller('AuxCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$rou
 					reservedSlotNumber : slotsConfiguration[i].reservedSlotNumber,
 					reservedSlotOccupied : slotsConfiguration[i].reservedSlotOccupied,
 					slotNumber : slotsConfiguration[i].slotNumber,
-					slotOccupied : slotsConfiguration[i].slotOccupied,
+					slotOccupied : $scope.calculateTotalOccupiedSlots(slotsConfiguration[i]),
 					timedParkSlotNumber : slotsConfiguration[i].timedParkSlotNumber,
 					timedParkSlotOccupied : slotsConfiguration[i].timedParkSlotOccupied,
 					unusuableSlotNumber : slotsConfiguration[i].unusuableSlotNumber,
