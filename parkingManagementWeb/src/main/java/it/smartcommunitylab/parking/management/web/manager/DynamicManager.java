@@ -641,7 +641,7 @@ public class DynamicManager {
 		}
 		// Here I have to difference the type of the park: total, free, paying and timed - MULTIPARKOCC
 		if(countElements(total) > 1){	// Here I check if there are more than one element of park type
-			if(retrieveSlots(vs.getFreeParkSlotNumber()) != 0){
+			if(retrieveSlots(vs.getFreeParkSlotNumber()) != 0 && retrieveSlots(vs.getFreeParkSlotOccupied()) != 0){
 				double freeOccValue = findOccupationRate(null, null, vs.getFreeParkSlotNumber(), vs.getFreeParkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -658,7 +658,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getFreeParkSlotSignNumber()) != 0){
+			if(retrieveSlots(vs.getFreeParkSlotSignNumber()) != 0 && retrieveSlots(vs.getFreeParkSlotSignOccupied()) != 0){
 				double freeSignOccValue = findOccupationRate(null, null, vs.getFreeParkSlotSignNumber(), vs.getFreeParkSlotSignOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -675,7 +675,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getPaidSlotNumber()) != 0){
+			if(retrieveSlots(vs.getPaidSlotNumber()) != 0 && retrieveSlots(vs.getPaidSlotOccupied()) != 0){
 				double payingOccValue = findOccupationRate(null, null, vs.getPaidSlotNumber(), vs.getPaidSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -692,7 +692,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getTimedParkSlotNumber()) != 0){
+			if(retrieveSlots(vs.getTimedParkSlotNumber()) != 0 && retrieveSlots(vs.getTimedParkSlotOccupied()) != 0){
 				double timedOccValue = findOccupationRate(null, null, vs.getTimedParkSlotNumber(), vs.getTimedParkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -709,7 +709,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getHandicappedSlotNumber()) != 0){
+			if(retrieveSlots(vs.getHandicappedSlotNumber()) != 0 && retrieveSlots(vs.getHandicappedSlotOccupied()) != 0){
 				double handicappedOccValue = findOccupationRate(null, null, vs.getHandicappedSlotNumber(), vs.getHandicappedSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -726,7 +726,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getReservedSlotNumber()) != 0){
+			if(retrieveSlots(vs.getReservedSlotNumber()) != 0 && retrieveSlots(vs.getReservedSlotOccupied()) != 0){
 				double reservedOccValue = findOccupationRate(null, null, vs.getReservedSlotNumber(), vs.getReservedSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -743,7 +743,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getRechargeableSlotNumber()) != 0){
+			if(retrieveSlots(vs.getRechargeableSlotNumber()) != 0 && retrieveSlots(vs.getRechargeableSlotOccupied()) != 0){
 				double rechargeableOccValue = findOccupationRate(null, null, vs.getRechargeableSlotNumber(), vs.getRechargeableSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -760,7 +760,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getLoadingUnloadingSlotNumber()) != 0){
+			if(retrieveSlots(vs.getLoadingUnloadingSlotNumber()) != 0 && retrieveSlots(vs.getLoadingUnloadingSlotOccupied()) != 0 ){
 				double loadingUnloadingOccValue = findOccupationRate(null, null, vs.getLoadingUnloadingSlotNumber(), vs.getLoadingUnloadingSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -777,7 +777,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getPinkSlotNumber()) != 0){
+			if(retrieveSlots(vs.getPinkSlotNumber()) != 0 && retrieveSlots(vs.getPinkSlotOccupied()) != 0){
 				double pinkOccValue = findOccupationRate(null, null, vs.getPinkSlotNumber(), vs.getPinkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -794,7 +794,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getCarSharingSlotNumber()) != 0){
+			if(retrieveSlots(vs.getCarSharingSlotNumber()) != 0 && retrieveSlots(vs.getCarSharingSlotOccupied()) != 0){
 				double carSharingOccValue = findOccupationRate(null, null, vs.getCarSharingSlotNumber(), vs.getCarSharingSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1168,7 +1168,7 @@ public class DynamicManager {
 		}
 		// Here I have to difference the type of the park: total, free, paying and timed - MULTIPARKOCC
 		if(countElements(total) > 1){	// Here I check if there are more than one element of park type
-			if(retrieveSlots(vs.getFreeParkSlotNumber()) != 0){
+			if(retrieveSlots(vs.getFreeParkSlotNumber()) != 0 && retrieveSlots(vs.getFreeParkSlotOccupied()) != 0){
 				double freeOccValue = findOccupationRate(null, null, vs.getFreeParkSlotNumber(), vs.getFreeParkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1185,7 +1185,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getFreeParkSlotSignNumber()) != 0){
+			if(retrieveSlots(vs.getFreeParkSlotSignNumber()) != 0 && retrieveSlots(vs.getFreeParkSlotSignOccupied()) != 0){
 				double freeSignOccValue = findOccupationRate(null, null, vs.getFreeParkSlotSignNumber(), vs.getFreeParkSlotSignOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1202,7 +1202,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getPaidSlotNumber()) != 0){
+			if(retrieveSlots(vs.getPaidSlotNumber()) != 0 && retrieveSlots(vs.getPaidSlotOccupied()) != 0){
 				double payingOccValue = findOccupationRate(null, null, vs.getPaidSlotNumber(), vs.getPaidSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1219,7 +1219,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getTimedParkSlotNumber()) != 0){
+			if(retrieveSlots(vs.getTimedParkSlotNumber()) != 0 && retrieveSlots(vs.getTimedParkSlotOccupied()) != 0){
 				double timedOccValue = findOccupationRate(null, null, vs.getTimedParkSlotNumber(), vs.getTimedParkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1236,7 +1236,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getHandicappedSlotNumber()) != 0){
+			if(retrieveSlots(vs.getHandicappedSlotNumber()) != 0 && retrieveSlots(vs.getHandicappedSlotOccupied()) != 0){
 				double handicappedOccValue = findOccupationRate(null, null, vs.getHandicappedSlotNumber(), vs.getHandicappedSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1253,7 +1253,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getReservedSlotNumber()) != 0){
+			if(retrieveSlots(vs.getReservedSlotNumber()) != 0 && retrieveSlots(vs.getReservedSlotOccupied()) != 0){
 				double reservedOccValue = findOccupationRate(null, null, vs.getReservedSlotNumber(), vs.getReservedSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1270,7 +1270,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getRechargeableSlotNumber()) != 0){
+			if(retrieveSlots(vs.getRechargeableSlotNumber()) != 0 && retrieveSlots(vs.getRechargeableSlotOccupied()) != 0){
 				double rechargeableOccValue = findOccupationRate(null, null, vs.getRechargeableSlotNumber(), vs.getRechargeableSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1287,7 +1287,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getLoadingUnloadingSlotNumber()) != 0){
+			if(retrieveSlots(vs.getLoadingUnloadingSlotNumber()) != 0 && retrieveSlots(vs.getLoadingUnloadingSlotOccupied()) != 0){
 				double loadingUnloadingOccValue = findOccupationRate(null, null, vs.getLoadingUnloadingSlotNumber(), vs.getLoadingUnloadingSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1304,7 +1304,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getPinkSlotNumber()) != 0){
+			if(retrieveSlots(vs.getPinkSlotNumber()) != 0 && retrieveSlots(vs.getPinkSlotOccupied()) != 0){
 				double pinkOccValue = findOccupationRate(null, null, vs.getPinkSlotNumber(), vs.getPinkSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
@@ -1321,7 +1321,7 @@ public class DynamicManager {
 					unavailableSlots = 0;
 				}
 			}
-			if(retrieveSlots(vs.getCarSharingSlotNumber()) != 0){
+			if(retrieveSlots(vs.getCarSharingSlotNumber()) != 0 && retrieveSlots(vs.getCarSharingSlotOccupied()) != 0){
 				double carSharingOccValue = findOccupationRate(null, null, vs.getCarSharingSlotNumber(), vs.getCarSharingSlotOccupied(), 2, unavailableSlots);
 				if(period == null || period.length == 0){
 					if(p_type != -1){
