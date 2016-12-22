@@ -1,5 +1,17 @@
 package it.smartcommunitylab.parking.management.web.api;
 
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBeanCore;
+import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
+import it.smartcommunitylab.parking.management.web.controller.DashboardController;
+import it.smartcommunitylab.parking.management.web.manager.CSVManager;
+import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
+import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -13,18 +25,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBeanCore;
-import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
-import it.smartcommunitylab.parking.management.web.controller.DashboardController;
-import it.smartcommunitylab.parking.management.web.manager.CSVManager;
-import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
-import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
-import it.smartcommunitylab.parking.management.web.manager.StorageManager;
-import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 @Controller
 public class DashboardRestController {
@@ -167,10 +167,10 @@ public class DashboardRestController {
 	}
 		
 	// Open method to retrieve all parkingStructures occupancy data (with complete ps data)
-	@RequestMapping(method = RequestMethod.GET, value = "/stast/occupancy/{appId}/parkingstructures")
+	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/parkingstructures")
 	//@ApiOperation(value = "Get Parking structures occupancy", notes = "Returns parking structure occupancy data items")
 	public @ResponseBody
-	List<ParkingStructureBean> getAllParkingStructureOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
+	List<ParkingStructureBean> getAllParkingStructureOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
 		String type = Parking.class.getCanonicalName();
 		if(agencyId == null || agencyId.compareTo("") == 0){
 			agencyId = ALL;

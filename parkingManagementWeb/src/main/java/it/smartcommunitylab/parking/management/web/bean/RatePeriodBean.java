@@ -1,8 +1,8 @@
 package it.smartcommunitylab.parking.management.web.bean;
 
-import java.util.List;
-
 import it.smartcommunitylab.parking.management.web.model.Period;
+
+import java.util.List;
 
 public class RatePeriodBean {
 	

@@ -15,10 +15,10 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
-import java.util.List;
-
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
+
+import java.util.List;
 
 public class Zone {
 	private String id;

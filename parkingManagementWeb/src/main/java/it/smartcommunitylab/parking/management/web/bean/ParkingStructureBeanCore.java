@@ -1,9 +1,9 @@
 package it.smartcommunitylab.parking.management.web.bean;
 
+import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
+
 import java.util.List;
 import java.util.Map;
-
-import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 
 public class ParkingStructureBeanCore {
 

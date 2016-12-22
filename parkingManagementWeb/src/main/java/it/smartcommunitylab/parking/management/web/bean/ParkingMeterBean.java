@@ -15,9 +15,9 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
-import java.util.List;
-
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter.Status;
+
+import java.util.List;
 
 public class ParkingMeterBean {
 	private String id;

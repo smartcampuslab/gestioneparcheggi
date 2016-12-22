@@ -15,11 +15,11 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.model;
 
+import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
+
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.List;
-
-import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 public class Street implements Serializable {
 

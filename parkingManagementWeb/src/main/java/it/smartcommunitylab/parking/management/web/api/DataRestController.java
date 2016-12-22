@@ -1,5 +1,16 @@
 package it.smartcommunitylab.parking.management.web.api;
 
+import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
+import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
+import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
+import it.smartcommunitylab.parking.management.web.controller.EditingController;
+import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -13,17 +24,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
-import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
-import it.smartcommunitylab.parking.management.web.bean.StreetBean;
-import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
-import it.smartcommunitylab.parking.management.web.controller.EditingController;
-import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
-import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
-import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 
 @Controller
 public class DataRestController {

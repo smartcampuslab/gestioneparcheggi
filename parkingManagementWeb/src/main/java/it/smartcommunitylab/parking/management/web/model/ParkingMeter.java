@@ -15,9 +15,9 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
-import java.util.List;
-
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
+
+import java.util.List;
 
 public class ParkingMeter {
 	public static enum Status {

@@ -15,9 +15,9 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
-import java.util.List;
-
 import it.smartcommunitylab.parking.management.web.model.geo.Polygon;
+
+import java.util.List;
 
 public class ZoneBean {
 	private String id;

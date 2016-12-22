@@ -15,10 +15,10 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.model;
 
-import java.util.List;
-
 import it.smartcommunitylab.parking.management.web.model.geo.Line;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
+
+import java.util.List;
 
 public class Street {
 	protected String id;

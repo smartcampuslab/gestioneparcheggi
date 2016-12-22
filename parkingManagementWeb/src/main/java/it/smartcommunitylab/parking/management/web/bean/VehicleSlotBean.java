@@ -1,5 +1,7 @@
 package it.smartcommunitylab.parking.management.web.bean;
 
+import java.util.Date;
+
 public class VehicleSlotBean {
 
 	private String vehicleType;			// type of vehicle that slots are for
@@ -19,6 +21,7 @@ public class VehicleSlotBean {
 	private Integer carSharingSlotNumber;		// posti car sharing
 	
 	private Integer unusuableSlotNumber;	// off_in
+	private Date unusuableSlotExpiration;
 	
 	// Dynamic data (for occupancy report only - used in DynamicManager)
 	private Integer handicappedSlotOccupied;
@@ -232,6 +235,14 @@ public class VehicleSlotBean {
 
 	public void setSlotOccupied(Integer slotOccupied) {
 		this.slotOccupied = slotOccupied;
+	}
+
+	public Date getUnusuableSlotExpiration() {
+		return unusuableSlotExpiration;
+	}
+
+	public void setUnusuableSlotExpiration(Date unusuableSlotExpiration) {
+		this.unusuableSlotExpiration = unusuableSlotExpiration;
 	}
 
 }

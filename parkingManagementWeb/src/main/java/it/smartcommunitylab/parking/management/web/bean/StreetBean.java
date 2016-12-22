@@ -16,10 +16,6 @@
 package it.smartcommunitylab.parking.management.web.bean;
 
 import java.util.List;
-import java.util.Map;
-
-import it.smartcommunitylab.parking.management.web.model.stats.StatKey;
-import it.smartcommunitylab.parking.management.web.model.stats.StatValue;
 
 public class StreetBean extends StreetBeanCore {
 	
