@@ -51,39 +51,39 @@
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_reserved_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.reservedSlotOccupied }}/{{ sc.reservedSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.reservedSlotOccupied">{{ sc.reservedSlotOccupied }}</span><span ng-show="!sc.reservedSlotOccupied">0</span>/{{ sc.reservedSlotNumber }}</td>
 				    	</tr>
 					   	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
 				    		<td class="detailsLogTableSX">{{ 'street_paidpark_slot' | i18n }}:</td>
-				    		<td class="detailsLogTableDX">&nbsp;{{ sc.paidSlotOccupied }}/{{ sc.paidSlotNumber }}</td>
+				    		<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.paidSlotOccupied">{{ sc.paidSlotOccupied }}</span><span ng-show="!sc.paidSlotOccupied">0</span>/{{ sc.paidSlotNumber }}</td>
 				    	</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
 				    		<td class="detailsLogTableSX">{{ 'street_timedpark_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.timedParkSlotOccupied }}/{{ sc.timedParkSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.timedParkSlotOccupied">{{ sc.timedParkSlotOccupied }}</span><span ng-show="!sc.timedParkSlotOccupied">0</span>/{{ sc.timedParkSlotNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_freepark_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.freeParkSlotOccupied }}/{{ sc.freeParkSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.freeParkSlotOccupied">{{ sc.freeParkSlotOccupied }}</span><span ng-show="!sc.freeParkSlotOccupied">0</span>/{{ sc.freeParkSlotNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
 							<td class="detailsLogTableSX">{{ 'street_freepark_slot_signed' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.freeParkSlotSignOccupied }}/{{ sc.freeParkSlotSignNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.freeParkSlotSignOccupied">{{ sc.freeParkSlotSignOccupied }}</span><span ng-show="!sc.freeParkSlotSignOccupied">0</span>/{{ sc.freeParkSlotSignNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_rechargeable_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.rechargeableSlotOccupied }}/{{ sc.rechargeableSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.rechargeableSlotOccupied">{{ sc.rechargeableSlotOccupied }}</span><span ng-show="!sc.rechargeableSlotOccupied">0</span>/{{ sc.rechargeableSlotNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_loading_unloading_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.loadingUnloadingSlotOccupied }}/{{ sc.loadingUnloadingSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.loadingUnloadingSlotOccupied">{{ sc.loadingUnloadingSlotOccupied }}</span><span ng-show="!sc.loadingUnloadingSlotOccupied">0</span>/{{ sc.loadingUnloadingSlotNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_pink_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.pinkSlotOccupied }}/{{ sc.pinkSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.pinkSlotOccupied">{{ sc.pinkSlotOccupied }}</span><span ng-show="!sc.pinkSlotOccupied">0</span>/{{ sc.pinkSlotNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_car_sharing_slot' | i18n }}:</td>
-							<td class="detailsLogTableDX">&nbsp;{{ sc.carSharingSlotOccupied }}/{{ sc.carSharingSlotNumber }}</td>
+							<td class="detailsLogTableDX">&nbsp;<span ng-show="sc.carSharingSlotOccupied">{{ sc.carSharingSlotOccupied }}</span><span ng-show="!sc.carSharingSlotOccupied">0</span>/{{ sc.carSharingSlotNumber }}</td>
 						</tr>
 						<tr ng-show="manageVehicleTypes(sc.vehicleType).s_unusuableSlot.visible && sc.unusuableSlotNumber">
 							<td class="detailsLogTableSX">{{ 'street_unusuable_slot' | i18n }}:</td>
