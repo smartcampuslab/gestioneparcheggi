@@ -311,6 +311,8 @@ public class ObjectController  {
 						}
 						List<VehicleSlot> sc = park.getSlotsConfiguration();
 						for(VehicleSlot vs : sc){
+							// add totalOccupied slots
+							vs.setSlotOccupied(getSlotsOccupied(vs));
 							if(vs.getVehicleType().compareTo(p.getVehicleType()) == 0){
 								if(slotOccLc != -1){
 									vs.setFreeParkSlotSignOccupied(slotOccLc);
@@ -388,6 +390,21 @@ public class ObjectController  {
 		}
 	}	
 	
+	private int getSlotsOccupied(VehicleSlot vs){
+		int total = 0;
+		total += ((vs.getCarSharingSlotOccupied()!= null) ? vs.getCarSharingSlotOccupied() : 0) +
+				((vs.getFreeParkSlotOccupied()!= null) ? vs.getFreeParkSlotOccupied() : 0) + 
+				((vs.getFreeParkSlotSignOccupied()!= null) ? vs.getFreeParkSlotSignOccupied() : 0) +
+				((vs.getHandicappedSlotOccupied()!= null) ? vs.getHandicappedSlotOccupied() : 0) +
+				((vs.getLoadingUnloadingSlotOccupied()!= null) ? vs.getLoadingUnloadingSlotOccupied() : 0) + 
+				((vs.getPaidSlotOccupied()!= null) ? vs.getPaidSlotOccupied() : 0) + 
+				((vs.getPinkSlotOccupied()!= null) ? vs.getPinkSlotOccupied() : 0) + 
+				((vs.getRechargeableSlotOccupied()!= null) ? vs.getRechargeableSlotOccupied() : 0) + 
+				((vs.getReservedSlotOccupied()!= null) ? vs.getReservedSlotOccupied() : 0) + 
+				((vs.getTimedParkSlotOccupied()!= null) ? vs.getTimedParkSlotOccupied() : 0);
+		return total;
+	}
+	
 	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/{agency}/streets/fileupload/{userId:.*}") 
 	public @ResponseBody String updateStreetList(@RequestBody Map<String, Object> data, 
 			@RequestParam(required=false) boolean isSysLog, @RequestParam(required=false) String username, @RequestParam(required=false) long[] period, @RequestParam(required=true) String agencyId, @PathVariable String agency, @PathVariable String userId) throws Exception, NotFoundException {
@@ -458,6 +475,8 @@ public class ObjectController  {
 						}
 						List<VehicleSlot> sc = street.getSlotsConfiguration();
 						for(VehicleSlot vs : sc){
+							// add totalOccupied slots
+							vs.setSlotOccupied(getSlotsOccupied(vs));
 							if(vs.getVehicleType().compareTo(s.getVehicleType()) == 0){
 								if(slotOccLc != -1){
 									vs.setFreeParkSlotSignOccupied(slotOccLc);
