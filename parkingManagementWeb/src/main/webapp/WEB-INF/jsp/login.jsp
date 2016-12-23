@@ -21,8 +21,7 @@
 <!-- <script src="i18n/angular-locale_en-EN.js"></script> -->
 <script src="js/app.js?1001"></script>
 <script src="js/controllers/ctrl.js?1001"></script>
-<script src="js/controllers/ctrl_login.js?1000"></script>
-<script src="js/controllers/ctrl_main.js?1000"></script>
+<script src="js/controllers/ctrl_main.js?1001"></script>
 <script src="js/services/serv.js"></script>
 <script src="js/services/serv_shared.js"></script>
 <script src="js/services/serv_initialize.js"></script>
@@ -47,7 +46,7 @@
 
 </head>
 	<body>
-		<div class="container"><!-- ng-controller="LoginCtrl" ng-init="checkLogin()" -->
+		<div class="container">
 			<div class="row" style="margin-top: 20px;">
 				<div id="my-big-login" ng-class="col-md-8">
 						<div style="margin: 10px 10px 10px 10px">

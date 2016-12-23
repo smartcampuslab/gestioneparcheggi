@@ -40,7 +40,6 @@
 <script src="../js/app.js?1001"></script>
 <script src="../js/controllers/ctrl.js?1001"></script>
 <script src="../js/controllers/ctrl_main.js"></script>
-<!-- <script src="js/controllers/ctrl_view.js"></script> -->
 <script src="../js/controllers/ctrl_view_gmap.js"></script>
 <script src="../js/controllers/ctrl_db_viewpark.js"></script>
 

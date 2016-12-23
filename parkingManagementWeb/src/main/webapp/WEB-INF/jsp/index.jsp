@@ -41,10 +41,8 @@
 <script src="js/app.js?1001"></script>
 <script src="js/controllers/ctrl.js?1001"></script>
 <script src="js/controllers/ctrl_aux.js"></script>
-<script src="js/controllers/ctrl_login.js?1000"></script>
 <script src="js/controllers/ctrl_main.js"></script>
 <script src="js/controllers/ctrl_park.js"></script>
-<script src="js/controllers/ctrl_bike.js"></script>
 <script src="js/controllers/ctrl_view_gmap.js"></script>
 <script src="js/controllers/ctrl_db_viewpark.js"></script>
 <script src="js/services/serv.js"></script>
