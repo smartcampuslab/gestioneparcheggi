@@ -1270,39 +1270,41 @@ pm.service('gMapService',['$rootScope', '$dialogs', '$timeout', 'sharedDataServi
     			}
     		}
 			var myMarker = markers[i];
-			myMarker.options.visible = visible && visible_state;
-			myMarker.options.map = map;
-    		switch(type){
-	    		case 0:
-					myAreaPm = sharedDataService.getLocalAreaById(markers[i].data.areaId);
-					myMarker.icon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
-	    			break;
-	    		case 1:
-	    			myMarker.icon = this.psMarkerIcon;
-	    			break;
-	    		case 2:
-	    			var myIcon = this.getOccupancyIcon(markers[i].data.occupancyRate, 2);
-	    			myMarker.icon = myIcon;
-	    			break;
-	    		case 3:
-	    			var myIcon = this.getProfitIcon(markers[i].data.profit, 2);
-	    			myMarker.icon = myIcon;
-	    			break;
-	    		case 4:
-	    			var occupancy = markers[i].data.occupancyRate;
-	    			var timeCost = this.getExtratimeFromOccupancy(occupancy);
-	    			var myIcon = this.getTimeCostIcon(timeCost, 2);
-	    			myMarker.icon = myIcon;
-	    			myMarker.data.extratime = timeCost;
-	    			break;
-	    		case 5:		// profit icon for parking meter
-	    			var myIcon = this.getProfitIcon(markers[i].data.profit, 1);
-	    			myMarker.icon = myIcon;
-	    			break;
-	    		default:
-	    			break;
-    		}
-    		myMarkers.push(myMarker);
+			if(myMarker != null && myMarker.options != null){
+				myMarker.options.visible = visible && visible_state;
+				myMarker.options.map = map;
+	    		switch(type){
+		    		case 0:
+						myAreaPm = sharedDataService.getLocalAreaById(markers[i].data.areaId);
+						myMarker.icon = baseUrl+'/marker/'+company+'/parcometro/'+((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+		    			break;
+		    		case 1:
+		    			myMarker.icon = this.psMarkerIcon;
+		    			break;
+		    		case 2:
+		    			var myIcon = this.getOccupancyIcon(markers[i].data.occupancyRate, 2);
+		    			myMarker.icon = myIcon;
+		    			break;
+		    		case 3:
+		    			var myIcon = this.getProfitIcon(markers[i].data.profit, 2);
+		    			myMarker.icon = myIcon;
+		    			break;
+		    		case 4:
+		    			var occupancy = markers[i].data.occupancyRate;
+		    			var timeCost = this.getExtratimeFromOccupancy(occupancy);
+		    			var myIcon = this.getTimeCostIcon(timeCost, 2);
+		    			myMarker.icon = myIcon;
+		    			myMarker.data.extratime = timeCost;
+		    			break;
+		    		case 5:		// profit icon for parking meter
+		    			var myIcon = this.getProfitIcon(markers[i].data.profit, 1);
+		    			myMarker.icon = myIcon;
+		    			break;
+		    		default:
+		    			break;
+	    		}
+	    		myMarkers.push(myMarker);
+			}
     	}
     	this.closeLoadingMap();
     	return myMarkers;
