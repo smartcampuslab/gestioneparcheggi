@@ -568,7 +568,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	}
 	    	if(!$scope.notValidDateFrom && !$scope.notValidDateTo){
 		   		var periodData = {};
-		   		period.rateValue = Math.ceil(parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100);	// here I force the cast to int
+		   		period.rateValue = parseInt(parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100);	// here I force the cast to int
 		   		period.weekDays = $scope.getWeekDaysFromArray(period.weekDays, 1),
 		   		angular.copy(period, periodData);
 		   		if(type == 0){
