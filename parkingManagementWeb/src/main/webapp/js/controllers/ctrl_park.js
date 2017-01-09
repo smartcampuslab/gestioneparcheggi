@@ -568,7 +568,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    	}
 	    	if(!$scope.notValidDateFrom && !$scope.notValidDateTo){
 		   		var periodData = {};
-		   		period.rateValue = Math.ceil(parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100);	// here I force the cast to int
+		   		period.rateValue = parseInt(parseFloat($scope.correctDecimal(period.rateValue, 1)) * 100);	// here I force the cast to int
 		   		period.weekDays = $scope.getWeekDaysFromArray(period.weekDays, 1),
 		   		angular.copy(period, periodData);
 		   		if(type == 0){
@@ -3808,14 +3808,28 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		var validityPeriod = [];
 		if(!form.$valid){
 			$scope.isInit=false;
+			if(!$scope.checkCorrectPaymode(paymode, req)){
+				$scope.setMyPaymentModeErrMode(true);
+			} else {
+				$scope.setMyPaymentModeErrMode(false);
+			}
+			if(!$scope.checkCorrectPaypoint(paymode, req)){
+				$scope.setMyPaymentPointErrMode(true);
+			} else {
+				$scope.setMyPaymentPointErrMode(false);
+			}	
 		} else {
 			if(!$scope.checkCorrectPaymode(paymode, req)){
 				$scope.isInit=false;
-				$scope.setMyPaymentoErrMode(true);
+				$scope.setMyPaymentModeErrMode(true);
+			} else if(!$scope.checkCorrectPaypoint(paymode, req)){
+				$scope.isInit=false;
+				$scope.setMyPaymentPointErrMode(true);
 			} else {
 				$scope.isInit=true;
 				$scope.showUpdatingPSErrorMessage = false;
-				$scope.setMyPaymentoErrMode(false);
+				$scope.setMyPaymentModeErrMode(false);
+				$scope.setMyPaymentPointErrMode(false);
 				
 				var ps_manager = ps.manager;
 				if($scope.myManager){
@@ -3854,8 +3868,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				
 				var id = ps.id;
 				var appId = sharedDataService.getConfAppId();
+				var username = sharedDataService.getName();
 				var params = {
-					agencyId: agencyId
+					agencyId: agencyId,
+					username: username
 				};
 				var method = 'PUT';
 				
@@ -3888,6 +3904,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					managementMode: ps.managementMode,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: sharedDataService.correctMyPaymentMode(paymode),
+					paymentPoint: sharedDataService.correctMyPaymentPoint(paymode),
 					slotNumber: psSlots,
 					slotsConfiguration: ps.slotsConfiguration,
 					/*payingSlotNumber: ps.payingSlotNumber,
@@ -4055,8 +4072,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				//var totalStructSlots = $scope.initIfNull(ps.payingSlotNumber) + $scope.initIfNull(ps.handicappedSlotNumber);// + $scope.initIfNull(ps.unusuableSlotNumber);
 				var method = 'POST';
 				var appId = sharedDataService.getConfAppId();
+				var username = sharedDataService.getName();
 				var params = {
-					agencyId: agencyId
+					agencyId: agencyId,
+					username: username
 				};
 				var myAgencyList = []
 				if(agencyId){
@@ -4091,6 +4110,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					manager: ps.manager,
 					phoneNumber: ps.phoneNumber,
 					paymentMode: sharedDataService.correctMyPaymentMode(paymode),
+					paymentPoint: sharedDataService.correctMyPaymentPoint(paymode),
 					slotNumber: psSlots,
 					slotsConfiguration: ps.slotsConfiguration,
 					/*payingSlotNumber: ps.payingSlotNumber,
