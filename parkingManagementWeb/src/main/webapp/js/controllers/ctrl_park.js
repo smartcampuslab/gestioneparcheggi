@@ -3804,7 +3804,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	};
 	
 	// Update ParkingStructure Object
-	$scope.updatePstruct = function(type, ps, form, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
+	/*$scope.updatePstruct = function(type, ps, form, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
 		var validityPeriod = [];
 		if(!form.$valid){
 			$scope.isInit=false;
@@ -3879,10 +3879,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					id_app: ps.id_app,
 					name: ps.name,
 					streetReference: ps.streetReference,
-					/*fee_val: fee_eurocent,
+					fee_val: fee_eurocent,
 					fee_note: ps.fee_note,
 					timeSlot: ps.timeSlot,
-					openingTime: openingPeriod,*/
+					openingTime: openingPeriod,
 					validityPeriod: validityPeriod,
 					manager: ps_manager,
 					managementMode: ps.managementMode,
@@ -3890,9 +3890,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					paymentMode: sharedDataService.correctMyPaymentMode(paymode),
 					slotNumber: psSlots,
 					slotsConfiguration: ps.slotsConfiguration,
-					/*payingSlotNumber: ps.payingSlotNumber,
+					payingSlotNumber: ps.payingSlotNumber,
 					handicappedSlotNumber: ps.handicappedSlotNumber,
-					unusuableSlotNumber: ps.unusuableSlotNumber,*/
+					unusuableSlotNumber: ps.unusuableSlotNumber,
 					geometry: gMapService.correctMyGeometry(geo),
 					zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 					parkAndRide: ps.parkAndRide,
@@ -3925,10 +3925,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			    });
 			}
 		}	
-	};
+	};*/
 	
 	// Update ParkingStructure Object
-	/*$scope.updatePstruct = function(type, ps, form, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
+	$scope.updatePstruct = function(type, ps, form, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
 		if(!form.$valid){
 			$scope.isInit=false;
 			if(!$scope.checkCorrectPaymode(paymode, req)){
@@ -3972,10 +3972,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				});
 			}
 		}	
-	};*/
+	};
 	
 	// ParkingStructure creation method
-	$scope.createPstruct = function(form, ps, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
+	/*$scope.createPstruct = function(form, ps, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
 		if(!form.$valid){
 			$scope.isInit=false;
 			if(!$scope.checkCorrectPaymode(paymode, req)){
@@ -4001,7 +4001,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				$scope.setMyPaymentModeErrMode(false);
 				$scope.setMyPaymentPointErrMode(false);
 				
-				/*var fee_eurocent = 0;
+				var fee_eurocent = 0;
 				if(ps.fee_val != null){
 					if(ps.fee_val.indexOf(",") > -1){
 						ps.fee_val = ps.fee_val.replace(",", ".");
@@ -4021,7 +4021,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					openingPeriod = { 
 						period: cleanedPeriods	
 					};
-				}*/
+				}
 				
 				var validityPeriod = [];
 				if(ps.validityPeriod){
@@ -4093,9 +4093,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 					paymentMode: sharedDataService.correctMyPaymentMode(paymode),
 					slotNumber: psSlots,
 					slotsConfiguration: ps.slotsConfiguration,
-					/*payingSlotNumber: ps.payingSlotNumber,
+					payingSlotNumber: ps.payingSlotNumber,
 					handicappedSlotNumber: ps.handicappedSlotNumber,
-					unusuableSlotNumber: ps.unusuableSlotNumber,*/
+					unusuableSlotNumber: ps.unusuableSlotNumber,
 					geometry: gMapService.correctMyGeometry(geo),
 					zones: sharedDataService.correctMyZonesForStreet(zone0, zone1, zone2, zone3, zone4),
 					parkAndRide: ps.parkAndRide,
@@ -4112,6 +4112,53 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 				//var myPSPromise = structureService.createParkingStructureInDb(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, agencyId);
 				//myPSPromise.then(function(result){
 					//console.log("Created parkingStructure: " + JSON.stringify(result));
+			    	if(result != null && result != ""){
+			    		$scope.getAllParkingStructures();
+						$scope.editModePS = false;
+						$scope.myPsZone0 = null;
+						$scope.myPsZone1 = null;
+						$scope.myPsZone2 = null;
+						$scope.myPsZone3 = null;
+						$scope.myPsZone4 = null;
+			    	} else {
+			    		$scope.editModePS = true;
+			    		$scope.showUpdatingPSErrorMessage = true;
+			    	}
+			    });
+				
+			}
+		}
+	};*/
+	
+	// ParkingStructure creation method
+	$scope.createPstruct = function(form, ps, paymode, geo, req, zone0, zone1, zone2, zone3, zone4){
+		if(!form.$valid){
+			$scope.isInit=false;
+			if(!$scope.checkCorrectPaymode(paymode, req)){
+				$scope.setMyPaymentModeErrMode(true);
+			} else {
+				$scope.setMyPaymentModeErrMode(false);
+			}
+			if(!$scope.checkCorrectPaypoint(paymode, req)){
+				$scope.setMyPaymentPointErrMode(true);
+			} else {
+				$scope.setMyPaymentPointErrMode(false);
+			}	
+		} else {
+			if(!$scope.checkCorrectPaymode(paymode, req)){
+				$scope.isInit=false;
+				$scope.setMyPaymentModeErrMode(true);
+			} else if(!$scope.checkCorrectPaypoint(paymode, req)){
+				$scope.isInit=false;
+				$scope.setMyPaymentPointErrMode(true);
+			} else {
+				$scope.isInit=true;
+				$scope.showUpdatingPSErrorMessage = false;
+				$scope.setMyPaymentModeErrMode(false);
+				$scope.setMyPaymentPointErrMode(false);
+				
+				var myPSPromise = structureService.createParkingStructureInDb(ps, paymode, zone0, zone1, zone2, zone3, zone4, geo, agencyId);
+				myPSPromise.then(function(result){
 			    	if(result != null && result != ""){
 			    		$scope.getAllParkingStructures();
 						$scope.editModePS = false;

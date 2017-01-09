@@ -243,15 +243,19 @@ providers:
           editable: true
           required: true
           visible: true
+        - code: handicappedSlotNumber
+          editable: true
+          required: false
+          visible: true
+        - code: unusuableSlotNumber
+          editable: true
+          required: false
+          visible: true
         - code: phoneNumber
           editable: true
           required: false
           visible: true
         - code: geometry
-          editable: true
-          required: true
-          visible: true
-        - code: parkride
           editable: true
           required: true
           visible: true
@@ -1876,10 +1880,6 @@ providers:
           editable: true
           required: false
           visible: true
-        - code: onlyactive
-          editable: false
-          required: false
-          visible: false
      - id: Ps
        type: ps
        label: ps
@@ -2830,10 +2830,6 @@ providers:
           required: true
           visible: true
         - code: parkride
-          editable: true
-          required: true
-          visible: true
-        - code: viewInWidget
           editable: true
           required: true
           visible: true
@@ -4431,10 +4427,6 @@ providers:
           required: false
           visible: true
         - code: geometry
-          editable: true
-          required: true
-          visible: true
-        - code: parkride
           editable: true
           required: true
           visible: true
