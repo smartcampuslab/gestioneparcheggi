@@ -4190,6 +4190,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    });
 	};
 	
+	
 	// ##################################### Bike point methods #######################################
 	
 	// Method to retrieve all bike points
