@@ -22,7 +22,7 @@ import org.springframework.web.client.RestTemplate;
 import it.smartcommunitylab.parking.management.web.streetlife.model.RideService;
 import it.smartcommunitylab.parking.management.web.streetlife.model.StructureRegulation;
 
-@Controller
+//@Controller
 public class StreetLifeController {
 	
 	@Autowired

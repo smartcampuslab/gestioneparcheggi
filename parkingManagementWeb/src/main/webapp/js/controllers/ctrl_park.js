@@ -1919,7 +1919,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	
 	
 	// Method initPSCityCenter; used to integrate the citycenter marker in the edit ps map and to calculate the distance between the center and the struct position
-	$scope.initPSCityCenter = function(){
+	/*$scope.initPSCityCenter = function(){
 		$scope.cityCenter = [];
 		var pos = $scope.mapOption.center.split(",");
 		$scope.myPsCityCenter = {
@@ -1938,10 +1938,10 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		};
 		$scope.cityCenter.push($scope.myPsCityCenter);
 		$scope.calculateDistanceBetweenCenterAndPS(pos[0],pos[1]);	// calculate distance between center and structure
-	}
+	}*/
 	
 	// Method used to get demand data using ws form streetlife project
-	$scope.getParkDemand = function(demandData, position_geo){
+	/*$scope.getParkDemand = function(demandData, position_geo){
 		$scope.showMissingFields = false;
 		if(!demandData.name || !position_geo || !demandData.slotNumber){
 			$scope.showMissingFields = true;
@@ -1989,7 +1989,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 		    	}
 		    });
 		}
-	};
+	};*/
 	
 	$scope.toFloatWithThreeDecimals = function(num){
 		var stringVal = num.toFixed(3);
@@ -2004,7 +2004,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	}
 	
 	// Method getRideServices: used to retrieve from the server the list of ride-services available
-	$scope.getRideServices = function(){
+	/*$scope.getRideServices = function(){
 		var method = 'GET';
 		var myDataPromise = invokeWSService.getProxy(method, "streetlife/rideservices", null, $scope.authHeaders, null);
 	    myDataPromise.then(function(result){
@@ -2017,7 +2017,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 	    		console.log("No rideservices found");
 	    	}
 	    });
-	};
+	};*/
 	
 	// Method getOccupancyStreetsFromDb: used to retrieve te streets occupancy data from the db
 	$scope.getOccupancyStreetsFromDb = function(){
@@ -3785,7 +3785,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 			$scope.parkingStructure.myGeometry = null;
 		}
 		$scope.initVehicleType(1);
-		$scope.initPSCityCenter();
+		//$scope.initPSCityCenter();
 		$scope.viewModePS = false;
 		$scope.editModePS = true;
 		$scope.resizeMapTimed("editPs", false);
