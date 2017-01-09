@@ -630,18 +630,6 @@ public class GeoObjectManager {
 		        				if(slotsKeys.contains(R)){
 		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
 		        				}
-		        				if(slotsKeys.contains(P)){
-		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
-		        				}
-		        				if(slotsKeys.contains(DO)){
-		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
-		        				}
-		        				if(slotsKeys.contains(H)){
-		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
-		        				}
-		        				if(slotsKeys.contains(R)){
-		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
-		        				}
 		        				if(slotsKeys.contains(E)){
 		        					eSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
 		        				}
