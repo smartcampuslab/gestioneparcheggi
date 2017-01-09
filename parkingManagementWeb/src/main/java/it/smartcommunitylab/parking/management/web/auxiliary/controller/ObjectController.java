@@ -724,7 +724,15 @@ public class ObjectController  {
 						if(profits.get(i).compareTo("") != 0 && profits.get(i).compareTo("0") != 0){
 							Double profit = Double.parseDouble(profits.get(i)) * 100d;
 							int profInt =  Math.round(profit.floatValue());
-							int ticket = Integer.parseInt(tickets.get(i));
+							int ticket = -1;
+							if(tickets != null && tickets.size() > 0){
+								try {
+									String tik = tickets.get(i);
+									ticket = Integer.parseInt(tik);
+								} catch(Exception ex){
+									logger.error("No ticket retrieve. " + ex.getMessage());
+								}
+							}
 							parkStruct.setProfit(profInt);
 							parkStruct.setTickets(ticket);
 							int year = Integer.parseInt(p.getPeriod().getYear());
