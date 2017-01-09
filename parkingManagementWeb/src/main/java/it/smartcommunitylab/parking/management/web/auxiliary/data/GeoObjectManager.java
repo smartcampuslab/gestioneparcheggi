@@ -572,6 +572,7 @@ public class GeoObjectManager {
 		return ps;
 	}	
 	
+	// Method used to cast the structure data from string to object (list of PSOccupancyData)
 	public ArrayList<PSOccupancyData> classStringToOPSObjArray(String data, String agency) throws Exception {
     	logger.debug(String.format("Map Object data: %s", data));
     	
@@ -613,49 +614,49 @@ public class GeoObjectManager {
 		        				List<String> ndSlots = initEmptyList();
 		        				// here I load the vals
 		        				if(slotsKeys.contains(LC)){
-		        					lcSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LC), slotsKeys.size() + 1);
+		        					lcSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(LC), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(LS)){
-		        					lsSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LS), slotsKeys.size() + 1);
+		        					lsSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(LS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(P)){
-		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        					pSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(DO)){
-		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        					doSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(H)){
-		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        					hSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(R)){
-		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        					rSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(P)){
-		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        					pSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(DO)){
-		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        					doSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(H)){
-		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        					hSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(R)){
-		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        					rSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(E)){
-		        					eSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
+		        					eSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(CeS)){
-		        					c_sSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CeS), slotsKeys.size() + 1);
+		        					c_sSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(CeS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(RO)){
-		        					roSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(RO), slotsKeys.size() + 1);
+		        					roSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(RO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(CS)){
-		        					csSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CS), slotsKeys.size() + 1);
+		        					csSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(CS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(ND)){
-		        					ndSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(ND), slotsKeys.size() + 1);
+		        					ndSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(ND), slotsKeys.size() + 1);
 		        				}
 		        				tmpPSOcc.setVehicleType(vehicleType);
 		        				tmpPSOcc.setOccLC(lcSlots);
@@ -711,6 +712,7 @@ public class GeoObjectManager {
 		return corrList;
 	}
 	
+	// Method used to cast the street occupancy data from string to object (list of SOccupancyData)
 	public ArrayList<SOccupancyData> classStringToOSObjArray(String data, String agency) throws Exception{
     	logger.debug(String.format("Map Object data: %s", data));
     	ArrayList<SOccupancyData> correctData = new ArrayList<SOccupancyData>();
@@ -751,49 +753,49 @@ public class GeoObjectManager {
 		        				List<String> ndSlots = initEmptyList();
 		        				// here I load the vals
 		        				if(slotsKeys.contains(LC)){
-		        					lcSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LC), slotsKeys.size() + 1);
+		        					lcSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(LC), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(LS)){
-		        					lsSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(LS), slotsKeys.size() + 1);
+		        					lsSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(LS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(P)){
-		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        					pSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(DO)){
-		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        					doSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(H)){
-		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        					hSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(R)){
-		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        					rSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(P)){
-		        					pSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
+		        					pSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(P), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(DO)){
-		        					doSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
+		        					doSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(DO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(H)){
-		        					hSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
+		        					hSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(H), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(R)){
-		        					rSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
+		        					rSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(R), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(E)){
-		        					eSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
+		        					eSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(E), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(CeS)){
-		        					c_sSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CeS), slotsKeys.size() + 1);
+		        					c_sSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(CeS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(RO)){
-		        					roSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(RO), slotsKeys.size() + 1);
+		        					roSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(RO), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(CS)){
-		        					csSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(CS), slotsKeys.size() + 1);
+		        					csSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(CS), slotsKeys.size() + 1);
 		        				}
 		        				if(slotsKeys.contains(ND)){
-		        					ndSlots = loadRicursive(att_and_vals, slotsKeys.indexOf(ND), slotsKeys.size() + 1);
+		        					ndSlots = loadRecursive(att_and_vals, slotsKeys.indexOf(ND), slotsKeys.size() + 1);
 		        				}
 		        				tmpSOcc.setVehicleType(vehicleType);
 		        				tmpSOcc.setOccLC(lcSlots);
@@ -975,7 +977,7 @@ public class GeoObjectManager {
     	return correctedVal;
     };
     
-    private List<String> loadRicursive(String[] arr, int first, int cell_offset){
+    private List<String> loadRecursive(String[] arr, int first, int cell_offset){
     	List<String> correctedVal = new ArrayList<String>();
     	for(int i = (first + OCCUPANCY_CELLS_FIRSTVAL); i < arr.length; i+=cell_offset){
     		String cleandedVal = cleanField(arr[i]);
