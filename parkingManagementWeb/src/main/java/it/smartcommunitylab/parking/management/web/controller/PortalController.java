@@ -26,6 +26,7 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -83,6 +84,17 @@ public class PortalController extends SCController{
 
 	private static final Logger logger = Logger.getLogger(PortalController.class);
 	
+	
+	@PostConstruct
+	public void initPort() {
+		String serverPort = System.getProperty("server.port");
+		String port = "8080";
+		try {
+			port = "" + Integer.parseInt(serverPort);
+		} catch (Exception e) {
+		}
+		mainURL = mainURL.replace("<<port>>", port);
+	}	
 	
 	@SuppressWarnings("rawtypes")
 	@RequestMapping(method = RequestMethod.GET, value = "/home")

@@ -17,6 +17,7 @@ package it.smartcommunitylab.parking.management.web.controller;
 
 import java.util.Map;
 
+import javax.annotation.PostConstruct;
 import javax.servlet.http.HttpServletRequest;
 
 import org.apache.log4j.Logger;
@@ -38,6 +39,17 @@ public class WsProxyController {
 	@Autowired
 	@Value("${smartcommunity.urlws.parking}")
 	private String parkingUrl;
+	
+	@PostConstruct
+	public void initPort() {
+		String serverPort = System.getProperty("server.port");
+		String port = "8081";
+		try {
+			port = "" + Integer.parseInt(serverPort) + 1;
+		} catch (Exception e) {
+		}
+		parkingUrl = parkingUrl.replace("<<port>>", port);
+	}
 	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/allGet")
