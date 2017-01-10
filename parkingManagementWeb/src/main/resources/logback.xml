@@ -10,13 +10,13 @@
 		</encoder>
 	</appender>
 	<appender name="FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>/home/mattia/logs/metroparco.log</file>
+		<file>/home/dev/logs/metroparco.log</file>
 		<encoder>
 			<pattern>%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n</pattern>
 		</encoder>
  
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-			<fileNamePattern>/home/mattia/logs/metroparco.%d.log</fileNamePattern>
+			<fileNamePattern>/home/dev/logs/metroparco.%d.log</fileNamePattern>
 		</rollingPolicy>
 	</appender>		
 
@@ -24,5 +24,9 @@
             <appender-ref ref="STDOUT" />
             <appender-ref ref="FILE" />
 	</logger>	
+	
+	<logger name="org.springframework" level="DEBUG" additivity="false">
+            <appender-ref ref="STDOUT" />
+	</logger>		
 
 </configuration>
