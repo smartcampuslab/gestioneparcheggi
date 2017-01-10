@@ -79,6 +79,11 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class DashboardController {
 
+	private static final String STATIC = "./static";
+	private static final String TMP_CSV = "./tmp/csv";
+	private static final String CSV = "/csv/";
+	private static final String TMP = "tmp/";
+
 	private static final Logger logger = Logger
 			.getLogger(DashboardController.class);
 	
@@ -431,8 +436,7 @@ public class DashboardController {
 			@PathVariable String entity, @PathVariable String company)
 			throws IOException {
 
-		getMarkerIcon(response, request.getSession().getServletContext()
-				.getRealPath("/"), company, entity, color);
+		getMarkerIcon(response, STATIC, company, entity, color);
 	}
 	
 	// Method without security
@@ -442,16 +446,14 @@ public class DashboardController {
 			@PathVariable String entity, @PathVariable String company)
 			throws IOException {
 
-		getMarkerIcon(response, request.getSession().getServletContext()
-				.getRealPath("/"), company, entity, color);
+		getMarkerIcon(response, STATIC, company, entity, color);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/marker/{company}/{entity}")
 	public void getMarkerIconNoColor(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable String entity,
 			@PathVariable String company) throws IOException {
-		getMarkerIcon(response, request.getSession().getServletContext()
-				.getRealPath("/"), company, entity, null);
+		getMarkerIcon(response, STATIC, company, entity, null);
 	}
 
 	private void getMarkerIcon(HttpServletResponse response, String basePath,
@@ -472,15 +474,16 @@ public class DashboardController {
 		logger.debug("I am in street csv creation.");
 //		ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		logger.debug("Current path: " + path);	
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_supply_file_streets(data, path);
+			createdFile = TMP + csvManager.create_supply_file_streets(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per vie: " + e.getMessage());
 		}
+		
 		return createdFile;
 	}
 	
@@ -491,11 +494,11 @@ public class DashboardController {
 		logger.debug("I am in zone csv creation.");
 //		ArrayList<Zone> zoneData = new ArrayList<Zone>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 			
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_supply_file_zones(data, path);
+			createdFile = TMP + csvManager.create_supply_file_zones(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per zone: " + e.getMessage());
 		}
@@ -508,11 +511,11 @@ public class DashboardController {
 		logger.debug("I am in area csv creation.");
 //		ArrayList<RateArea> areaData = new ArrayList<RateArea>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");	
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 			
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_supply_file_areas(data, path);
+			createdFile = TMP + csvManager.create_supply_file_areas(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
 		}
@@ -525,10 +528,10 @@ public class DashboardController {
 		logger.debug("I am in parkingstructures csv creation.");
 //		ArrayList<ParkingStructure> structData = new ArrayList<ParkingStructure>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");	
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 			
 		try {
-			createdFile = csvManager.create_supply_file_structs(data, path);
+			createdFile = TMP + csvManager.create_supply_file_structs(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
@@ -541,10 +544,10 @@ public class DashboardController {
 		logger.debug("I am in parkingmeter csv creation.");
 //		ArrayList<ParkingMeter> pMData = new ArrayList<ParkingMeter>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");	
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
-			createdFile = csvManager.create_supply_file_parkingmeters(data, path);
+			createdFile = TMP + csvManager.create_supply_file_parkingmeters(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcometri: " + e.getMessage());
 		}
@@ -558,11 +561,11 @@ public class DashboardController {
 		logger.debug("I am in street csv creation.");
 		//	ArrayList<OccupancyStreet> streetData = new ArrayList<OccupancyStreet>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		logger.debug("Current path: " + path);
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_streets(data, path, vehicleType);
+			createdFile = TMP + csvManager.create_occupancy_file_streets(data, path, vehicleType);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per vie: " + e.getMessage());
 		}
@@ -575,11 +578,11 @@ public class DashboardController {
 		logger.debug("I am in zone csv creation.");
 //		ArrayList<OccupancyZone> zoneData = new ArrayList<OccupancyZone>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_zones(data, path);
+			createdFile = TMP + csvManager.create_occupancy_file_zones(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per zone: " + e.getMessage());
 		}
@@ -591,10 +594,10 @@ public class DashboardController {
 	String createOccupancyAreaCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody ArrayList<OccupancyRateArea> data) {	//@RequestBody String data
 		logger.debug("I am in area csv creation.");
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
-			createdFile = csvManager.create_occupancy_file_areas(data, path);
+			createdFile = TMP + csvManager.create_occupancy_file_areas(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
 		}
@@ -607,11 +610,11 @@ public class DashboardController {
 			@RequestBody ArrayList<OccupancyParkingStructure> data) {	//@RequestBody String data
 		logger.debug("I am in parkingstructures csv creation.");
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");	
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_structs(data, path, vehicleType);
+			createdFile = TMP + csvManager.create_occupancy_file_structs(data, path, vehicleType);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
@@ -625,12 +628,12 @@ public class DashboardController {
 		logger.debug("I am in profit street csv creation.");
 		//ArrayList<ProfitStreet> streetData = new ArrayList<ProfitStreet>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		logger.debug("Current path: " + path);
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_profit_file_streets(data, path);
+			createdFile = TMP + csvManager.create_profit_file_streets(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV ricavi per vie: " + e.getMessage());
 		}
@@ -643,10 +646,10 @@ public class DashboardController {
 		logger.debug("I am in profit parkingmeter csv creation.");
 //		ArrayList<ProfitParkingMeter> profitPMData = new ArrayList<ProfitParkingMeter>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
-			createdFile = csvManager.create_profit_file_parkingmeters(data, path);
+			createdFile = TMP + csvManager.create_profit_file_parkingmeters(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV incassi per parcometri: " + e.getMessage());
 		}
@@ -659,10 +662,10 @@ public class DashboardController {
 		logger.debug("I am in profit zone csv creation.");
 //		ArrayList<ProfitZone> zoneData = new ArrayList<ProfitZone>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
-			createdFile = csvManager.create_profit_file_zones(data, path);
+			createdFile = TMP + csvManager.create_profit_file_zones(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV incassi per zone: " + e.getMessage());
 		}
@@ -675,11 +678,11 @@ public class DashboardController {
 		logger.debug("I am in profit area csv creation.");
 //		ArrayList<ProfitRateArea> areaData = new ArrayList<ProfitRateArea>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_profit_file_areas(data, path);
+			createdFile = TMP + csvManager.create_profit_file_areas(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
 		}
@@ -692,10 +695,10 @@ public class DashboardController {
 		logger.debug("I am in profit parkingstructures csv creation.");
 //		ArrayList<ProfitParkingStructure> structData = new ArrayList<ProfitParkingStructure>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");	
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
-			createdFile = csvManager.create_profit_file_structs(data, path);
+			createdFile = TMP + csvManager.create_profit_file_structs(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
@@ -709,11 +712,11 @@ public class DashboardController {
 		logger.debug("I am in street time cost csv creation.");
 //		ArrayList<TimeCostStreet> streetData = new ArrayList<TimeCostStreet>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		logger.debug("Current path: " + path);
 		
 		try {
-			createdFile = csvManager.create_timeCost_file_streets(data, path);
+			createdFile = TMP + csvManager.create_timeCost_file_streets(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV con tempo di accesso per vie: " + e.getMessage());
 		}
@@ -726,10 +729,10 @@ public class DashboardController {
 		logger.debug("I am in zone csv creation.");
 //		ArrayList<TimeCostZone> zoneData = new ArrayList<TimeCostZone>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
-			createdFile = csvManager.create_timeCost_file_zones(data, path);
+			createdFile = TMP + csvManager.create_timeCost_file_zones(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV costo di accesso per zone: " + e.getMessage());
 		}
@@ -742,11 +745,11 @@ public class DashboardController {
 		logger.debug("I am in timeCost area csv creation.");
 //		ArrayList<TimeCostRateArea> areaData = new ArrayList<TimeCostRateArea>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_timeCost_file_areas(data, path);
+			createdFile = TMP + csvManager.create_timeCost_file_areas(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per aree: " + e.getMessage());
 		}
@@ -759,10 +762,10 @@ public class DashboardController {
 		logger.debug("I am in timeCost parkingstructures csv creation.");
 //		ArrayList<TimeCostParkingStructure> structData = new ArrayList<TimeCostParkingStructure>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");	
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 		try {
-			createdFile = csvManager.create_timeCost_file_structs(data, path);
+			createdFile = TMP + csvManager.create_timeCost_file_structs(data, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV per parcheggi in struttura: " + e.getMessage());
 		}
@@ -778,7 +781,7 @@ public class DashboardController {
 	String createOccupationStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 	    	
 	    it.smartcommunitylab.parking.management.web.model.Street s = new it.smartcommunitylab.parking.management.web.model.Street();
 	    s.setStreetReference(dstreet_name);
@@ -786,7 +789,7 @@ public class DashboardController {
 	    s.setArea_name(dstreet_area);
 		
 		try {
-			createdFile = csvManager.create_occupancy_file_history_streets(s, matrix, path); //occ_matrix
+			createdFile = TMP + csvManager.create_occupancy_file_history_streets(s, matrix, path); //occ_matrix
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV occupazione storico per vie: " + e.getMessage());
 		}
@@ -799,7 +802,7 @@ public class DashboardController {
 	String createOccupationZoneHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_submacro, @RequestParam(required=false) String dzone_submicro, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 	    	
 	    it.smartcommunitylab.parking.management.web.model.OccupancyZone z = new it.smartcommunitylab.parking.management.web.model.OccupancyZone();
 	    z.setName(dzone_name);
@@ -809,7 +812,7 @@ public class DashboardController {
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_history_zone(z, matrix, path); //occ_matrix
+			createdFile = TMP + csvManager.create_occupancy_file_history_zone(z, matrix, path); //occ_matrix
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV occupazione storico per zone: " + e.getMessage());
 		}
@@ -822,7 +825,7 @@ public class DashboardController {
 	String createOccupationAreaHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		String valPeriods = "";
 	    	
 	    it.smartcommunitylab.parking.management.web.model.OccupancyRateArea a = new it.smartcommunitylab.parking.management.web.model.OccupancyRateArea();
@@ -834,7 +837,7 @@ public class DashboardController {
 	    a.setSlotNumber(Integer.parseInt(darea_totalslot));
 			
 		try {
-			createdFile = csvManager.create_occupancy_file_history_area(a, matrix, path, valPeriods); //occ_matrix
+			createdFile = TMP + csvManager.create_occupancy_file_history_area(a, matrix, path, valPeriods); //occ_matrix
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV occupazione storico per aree: " + e.getMessage());
 		}
@@ -847,7 +850,7 @@ public class DashboardController {
 	String createOccupationStructureHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dparking_name, @RequestParam(required=false) String dparking_streetreference, @RequestParam(required=false) String dparking_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 	    OccupancyParkingStructure ops = new OccupancyParkingStructure();
 	    ops.setName(dparking_name);
@@ -856,7 +859,7 @@ public class DashboardController {
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_occupancy_file_history_structs(ops, matrix, path);
+			createdFile = TMP + csvManager.create_occupancy_file_history_structs(ops, matrix, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV occupazione storico per parcheggi in struttura: " + e.getMessage());
 		}
@@ -868,7 +871,7 @@ public class DashboardController {
 	public @ResponseBody
 	String createProfitStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) {
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
     	
 		it.smartcommunitylab.parking.management.web.model.Street s = new it.smartcommunitylab.parking.management.web.model.Street();
 	    s.setStreetReference(dstreet_name);
@@ -877,7 +880,7 @@ public class DashboardController {
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_profit_file_history_street(s, matrix, path);
+			createdFile = TMP + csvManager.create_profit_file_history_street(s, matrix, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV incassi storico per vie: " + e.getMessage());
 		}
@@ -889,7 +892,7 @@ public class DashboardController {
 	public @ResponseBody
 	String createProfitZoneHistoryCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_submacro, @RequestParam(required=false) String dzone_submicro, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) {
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = request.getSession().getServletContext().getRealPath(CSV);
 		    	
 	    it.smartcommunitylab.parking.management.web.model.ProfitZone z = new it.smartcommunitylab.parking.management.web.model.ProfitZone();
 	    z.setName(dzone_name);
@@ -898,7 +901,7 @@ public class DashboardController {
 	    z.setSlotNumber(Integer.parseInt(dzone_totalslot));
 			
 		try {
-			createdFile = csvManager.create_profit_file_history_zone(z, matrix, path);
+			createdFile = TMP + csvManager.create_profit_file_history_zone(z, matrix, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV incassi storico per zone: " + e.getMessage());
 		}
@@ -910,7 +913,7 @@ public class DashboardController {
 	public @ResponseBody
 	String createProfitAreaHistoryCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot,  @RequestBody String[][] matrix) {
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = request.getSession().getServletContext().getRealPath(CSV);
 		String valPeriods = "";
 			    	
 		it.smartcommunitylab.parking.management.web.model.ProfitRateArea a = new it.smartcommunitylab.parking.management.web.model.ProfitRateArea();
@@ -922,7 +925,7 @@ public class DashboardController {
 	    a.setSlotNumber(Integer.parseInt(darea_totalslot));
 				
 		try {
-			createdFile = csvManager.create_profit_file_history_area(a, matrix, path, valPeriods);
+			createdFile = TMP + csvManager.create_profit_file_history_area(a, matrix, path, valPeriods);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV incassi storico per aree: " + e.getMessage());
 		}
@@ -935,7 +938,7 @@ public class DashboardController {
 	String createProfitPMHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dparking_code, @RequestParam(required=false) String dparking_note, @RequestParam(required=false) String dparking_area, @RequestBody String[][] matrix) {
 		String createdFile = "";
 		//byte[] return_data = null;
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = request.getSession().getServletContext().getRealPath(CSV);
     	
 	    Integer code = Integer.parseInt(dparking_code);
 	    	
@@ -946,7 +949,7 @@ public class DashboardController {
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_profit_file_history_parkingmeters(ppm, matrix, path);
+			createdFile = TMP + csvManager.create_profit_file_history_parkingmeters(ppm, matrix, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV incassi storico per parcometri: " + e.getMessage());
 		}
@@ -959,7 +962,7 @@ public class DashboardController {
 	String createProfitStructureHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dparkstruct_name, @RequestParam(required=false) String dparkstruct_streetreference, @RequestParam(required=false) String dparkstruct_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = request.getSession().getServletContext().getRealPath(CSV);
 		
 		ProfitParkingStructure pps = new ProfitParkingStructure();
 	    pps.setName(dparkstruct_name);
@@ -968,7 +971,7 @@ public class DashboardController {
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_profit_file_history_structs(pps, matrix, path);
+			createdFile = TMP + csvManager.create_profit_file_history_structs(pps, matrix, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV profitto storico per parcheggi in struttura: " + e.getMessage());
 		}
@@ -980,7 +983,7 @@ public class DashboardController {
 	public @ResponseBody
 	String createTimeCostAreaHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String darea_name, @RequestParam(required=false) String darea_fee, @RequestParam(required=false) String darea_totalslot, @RequestBody String[][] matrix) {
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = request.getSession().getServletContext().getRealPath(CSV);
 	    String valPeriods = "";
 		
 		it.smartcommunitylab.parking.management.web.model.OccupancyRateArea a = new it.smartcommunitylab.parking.management.web.model.OccupancyRateArea();
@@ -992,7 +995,7 @@ public class DashboardController {
 	    a.setSlotNumber(Integer.parseInt(darea_totalslot));
 			
 		try {
-			createdFile = csvManager.create_timecost_file_history_area(a, matrix, path, valPeriods);
+			createdFile = TMP + csvManager.create_timecost_file_history_area(a, matrix, path, valPeriods);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV costo accesso storico per zone: " + e.getMessage());
 		}
@@ -1004,7 +1007,7 @@ public class DashboardController {
 	public @ResponseBody
 	String createTimeCostZoneHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dzone_name, @RequestParam(required=false) String dzone_submacro, @RequestParam(required=false) String dzone_submicro, @RequestParam(required=false) String dzone_totalslot, @RequestBody String[][] matrix) {
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = request.getSession().getServletContext().getRealPath(CSV);
 	    	
 	    it.smartcommunitylab.parking.management.web.model.OccupancyZone z = new it.smartcommunitylab.parking.management.web.model.OccupancyZone();
 	    z.setName(dzone_name);
@@ -1013,7 +1016,7 @@ public class DashboardController {
 	    z.setSlotNumber(Integer.parseInt(dzone_totalslot));
 			
 		try {
-			createdFile = csvManager.create_timecost_file_history_zone(z, matrix, path);
+			createdFile = TMP + csvManager.create_timecost_file_history_zone(z, matrix, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV costo accesso storico per zone: " + e.getMessage());
 		}
@@ -1025,7 +1028,7 @@ public class DashboardController {
 	public @ResponseBody
 	String createTimeCostStreetHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dstreet_name, @RequestParam(required=false) String dstreet_area, @RequestParam(required=false) String dstreet_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = request.getSession().getServletContext().getRealPath(CSV);
 	    	
 	    it.smartcommunitylab.parking.management.web.model.Street s = new it.smartcommunitylab.parking.management.web.model.Street();
 	    s.setStreetReference(dstreet_name);
@@ -1034,7 +1037,7 @@ public class DashboardController {
 			
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_timecost_file_history_streets(s, matrix, path); //occ_matrix
+			createdFile = TMP + csvManager.create_timecost_file_history_streets(s, matrix, path); //occ_matrix
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV costo accesso storico per vie: " + e.getMessage());
 		}
@@ -1047,7 +1050,7 @@ public class DashboardController {
 	String createTimeCostStructureHistorycalCSV(HttpServletRequest request, HttpServletResponse response, @RequestParam(required=false) String dparking_name, @RequestParam(required=false) String dparking_streetreference, @RequestParam(required=false) String dparking_totalslot, @RequestBody String[][] matrix) { //@RequestBody String data,
 		//ArrayList<it.smartcommunitylab.parking.management.web.model.Street> streetData = new ArrayList<it.smartcommunitylab.parking.management.web.model.Street>();
 		String createdFile = "";
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
+		String path = TMP_CSV; // request.getSession().getServletContext().getRealPath("/csv/");
 		
 	    OccupancyParkingStructure ops = new OccupancyParkingStructure();
 	    ops.setName(dparking_name);
@@ -1056,7 +1059,7 @@ public class DashboardController {
 		
 		try {
 			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_timecost_file_history_structs(ops, matrix, path);
+			createdFile = TMP + csvManager.create_timecost_file_history_structs(ops, matrix, path);
 		} catch (Exception e) {
 			logger.error("Errore in creazione CSV occupazione storico per parcheggi in struttura: " + e.getMessage());
 		}
