@@ -2646,8 +2646,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     };
     
     // Method used to add a new vehicle type slot configuration in a street
-    $scope.addNewConfigurationSlots = function(newSlotsConf, type, form){
-    	if(newSlotsConf != null && newSlotsConf.vehicleType && newSlotsConf.vehicleType != "") {
+    $scope.addNewConfigurationSlots = function(newSlotsConf, type){
+    	if(newSlotsConf != null && newSlotsConf.vehicleType && newSlotsConf.vehicleType != ""){
     		$scope.showErrorTypeReq = false;
     		$scope.isInitNS=true;
     		var newSlotConfiguration = {
@@ -2663,37 +2663,21 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			loadingUnloadingSlotNumber: newSlotsConf.loadingUnloadingSlotNumber,
     			pinkSlotNumber: newSlotsConf.pinkSlotNumber,
     			carSharingSlotNumber: newSlotsConf.carSharingSlotNumber,
-    			unusuableSlotNumber : newSlotsConf.unusuableSlotNumber,
-    			unusuableSlotExpiration : newSlotsConf.unusuableSlotExpiration
+    			unusuableSlotNumber : newSlotsConf.unusuableSlotNumber
     		};
+    		if(type == 0){
+    			$scope.eStreet.slotsConfiguration.push(newSlotConfiguration);
+    			$scope.inithializeVehicleTypeList($scope.eStreet.slotsConfiguration, type);
+    		} else {
+    			$scope.parkingStructure.slotsConfiguration.push(newSlotConfiguration);
+    			$scope.inithializeVehicleTypeList($scope.parkingStructure.slotsConfiguration, type);
+    		}
+    		$scope.initVehicleType(type);
+    		$scope.hideVehicleSlotsPanelNew();
     	} else {
     		$scope.showErrorTypeReq = true;
     		$scope.isInitNS=false;
     	}
-    	
-    	if (type == 1) {
-    		if (!$scope.checkExistingDate(newSlotsConf.unusuableSlotExpiration)) {
-				$scope.showErrorUnusuableSlotExpirationPattern = true;
-	    		$scope.isInitNS=false;  
-    		} else {
-    			$scope.showErrorUnusuableSlotExpirationPattern = false;
-    			$scope.isInitNS &= true;  
-    		}
-    	}
-    	
-	    if ($scope.isInitNS) {
-			if(type == 0) {
-				$scope.eStreet.slotsConfiguration.push(newSlotConfiguration);
-				$scope.inithializeVehicleTypeList($scope.eStreet.slotsConfiguration, type);
-			} else {
-	    			$scope.parkingStructure.slotsConfiguration.push(newSlotConfiguration);
-	    			$scope.inithializeVehicleTypeList($scope.parkingStructure.slotsConfiguration, type);
-				}
-			$scope.initVehicleType(type);
-			$scope.hideVehicleSlotsPanelNew();    	
-	    }
-    	
-    	
     };
     
     // Method used to init the vehicle type for a new slot configuration creation (show the placeholder)
@@ -2712,8 +2696,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			loadingUnloadingSlotNumber: null,
     			pinkSlotNumber: null,
     			carSharingSlotNumber: null,
-    			unusuableSlotNumber: null,
-    			unusuableSlotExpiration: null
+    			unusuableSlotNumber: null
 	    	};
     	} else {
     		$scope.newSlotsConfPS = {
@@ -2729,8 +2712,7 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     			loadingUnloadingSlotNumber: null,
     			pinkSlotNumber: null,
     			carSharingSlotNumber: null,
-    			unusuableSlotNumber: null,
-    			unusuableSlotExpiration: null
+    			unusuableSlotNumber: null
     		};
     	}
     };
@@ -4720,25 +4702,4 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
     
     // ------------------------------ End of block for Methods to manage and cast dates -----------------------------      
           
-    $scope.mydate = new Date();
-    
- // for the date picker
-	$scope.today = function() {
-		$scope.mydate = new Date();
-	};
-	$scope.today();
-
-	// for the date picker
-	$scope.clear = function() {
-		$scope.mydate = null;
-	};
-	// for the date picker
-	$scope.open = function($event) {
-		$event.preventDefault();
-		$event.stopPropagation();
-
-		$scope.opened = true;
-	};    
-    
-    
 }]);
