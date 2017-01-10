@@ -24,6 +24,17 @@ public class SecurityConfig {
 		builder.userDetailsService(yamlUserDetailsService);
 	}
 
+//	@Configuration
+//	@Order(10)
+//	public static class NoWebSecurityConfig extends WebSecurityConfigurerAdapter {
+//
+//		@Override
+//		public void configure(WebSecurity web) throws Exception {
+//			web.ignoring().antMatchers("/tmp/**");
+//		}
+//	}	
+	
+	
 	@Configuration
 	@Order(30)
 	public static class BasicAuthSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -62,5 +73,7 @@ public class SecurityConfig {
 			http.authorizeRequests().antMatchers("/api/**").anonymous().anyRequest().permitAll();
 		}
 	}
+	
+	
 
 }
