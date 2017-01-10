@@ -36,6 +36,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -51,8 +53,13 @@ import org.springframework.web.bind.annotation.ResponseBody;
 //@Api(value = "Metroparco", description = "Metroparco objects API")
 public class EditingController {
 
+	private static final String STATIC = "./static";
+
 	@Autowired
 	StorageManager storage;
+	
+	@Value("static")
+	Resource folder;
 
 	MarkerIconStorage markerIconStorage;
 
@@ -534,8 +541,7 @@ public class EditingController {
 			@PathVariable String entity, @PathVariable String company)
 			throws IOException {
 
-		getMarkerIcon(response, request.getSession().getServletContext()
-				.getRealPath("/"), company, entity, color);
+		getMarkerIcon(response, STATIC, company, entity, color);
 	}
 	
 	// Method without security
@@ -545,16 +551,14 @@ public class EditingController {
 			@PathVariable String entity, @PathVariable String company)
 			throws IOException {
 
-		getMarkerIcon(response, request.getSession().getServletContext()
-				.getRealPath("/"), company, entity, color);
+		getMarkerIcon(response, STATIC, company, entity, color);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/marker/{company}/{entity}")
 	public void getMarkerIconNoColor(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable String entity,
 			@PathVariable String company) throws IOException {
-		getMarkerIcon(response, request.getSession().getServletContext()
-				.getRealPath("/"), company, entity, null);
+		getMarkerIcon(response, STATIC, company, entity, null);
 	}
 
 	private void getMarkerIcon(HttpServletResponse response, String basePath,
