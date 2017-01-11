@@ -1916,8 +1916,17 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	
 	$scope.changeDashboardView = function(type, autoInit, dashboard_topics, dashboard_topics_list){
-		$scope.dashboard_topics = dashboard_topics;
-		$scope.dashboard_topics_list = dashboard_topics_list;
+		if(type == 1){
+			// case map
+			$scope.dashboard_topics = dashboard_topics;
+			$scope.dashboard_topics_list = dashboard_topics;
+		} else {
+			// case list
+			$scope.dashboard_topics = dashboard_topics_list;
+			$scope.dashboard_topics_list = dashboard_topics_list;
+		}
+		//$scope.dashboard_topics = dashboard_topics;
+		//$scope.dashboard_topics_list = dashboard_topics_list;
 		$scope.closeAllLegend();
 		if(type == 1){
 			if(autoInit){
@@ -3575,7 +3584,7 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 			return $scope.getAllOccupancyStreets("", "1;12", "1,2,3,4,5,6,7", "custom", "0;23", 2, isFirst);
 		}).then(function(result){
 			$scope.dashboard_space.microzone_part = true;
-	    	$scope.dashboard_topics == "parkSupply";
+	    	$scope.dashboard_topics = "parkSupply";
 	    	if(showStreets){
 		    	$scope.updateStreetOccupancy($scope.streetWS);
 			}
