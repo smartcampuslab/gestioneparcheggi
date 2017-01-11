@@ -3,7 +3,7 @@
 <!-- 		<div class="col-md-2 left-filter"> -->
 		<div ng-class="{'col-md-2':!tabletWiew, 'col-sm-2':tabletWiew}" class="left-filter">	
 			<h4><strong>{{ 'left_filter_title' | i18n }}</strong></h4>
-			<div ng-show="isInListTab()">
+			<div ng-if="isInListTab()">
 				<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
 				<table width="100%" ng-controller="TimeFilterCtrl">
 					<tr>
@@ -58,7 +58,7 @@
 				</table>
 				<p style="font-size:3px">&nbsp;</p>
 			</div>
-			<div ng-show="!isInListTab()">
+			<div ng-if="!isInListTab()">
 				<div>
 					<h5><strong>{{ 'viewAllPanelTitle' | i18n }}</strong></h5>
 					<table width="100%" ng-controller="TimeFilterCtrl">
