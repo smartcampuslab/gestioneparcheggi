@@ -1916,17 +1916,8 @@ pm.controller('ViewDashboardCtrlPark',['$scope', '$http', '$route', '$routeParam
 	
 	
 	$scope.changeDashboardView = function(type, autoInit, dashboard_topics, dashboard_topics_list){
-		if(type == 1){
-			// case map
-			$scope.dashboard_topics = dashboard_topics;
-			$scope.dashboard_topics_list = dashboard_topics;
-		} else {
-			// case list
-			$scope.dashboard_topics = dashboard_topics_list;
-			$scope.dashboard_topics_list = dashboard_topics_list;
-		}
-		//$scope.dashboard_topics = dashboard_topics;
-		//$scope.dashboard_topics_list = dashboard_topics_list;
+		$scope.dashboard_topics = dashboard_topics;
+		$scope.dashboard_topics_list = dashboard_topics_list;
 		$scope.closeAllLegend();
 		if(type == 1){
 			if(autoInit){
