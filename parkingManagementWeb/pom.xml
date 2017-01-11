@@ -18,6 +18,72 @@
 		<!-- <tomcat.version>8.5.6</tomcat.version> -->
 		<tomcat.version>7.0.59</tomcat.version>
 	</properties>
+
+	<profiles>
+		<profile>
+			<id>windows</id>
+			<activation>
+				<os>
+		        <family>Windows</family>
+		        </os>
+			</activation>
+			<build>
+				<plugins>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-antrun-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>install</id>
+			            <phase>install</phase>
+			            <configuration>
+			                <tasks>
+			                    <exec executable="${project.basedir}/src/main/resources/extract.bat">
+			                    </exec>
+				                </tasks>
+			            </configuration>
+			            <goals>
+			                <goal>run</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>					
+				</plugins>
+			</build>
+		</profile>	
+		<profile>
+			<id>linux</id>
+			<activation>
+				<os>
+		        <family>Unix</family>
+		        </os>
+			</activation>
+			<build>
+				<plugins>
+			<plugin>
+			    <groupId>org.apache.maven.plugins</groupId>
+			    <artifactId>maven-antrun-plugin</artifactId>
+			    <executions>
+			        <execution>
+			            <id>install</id>
+			            <phase>install</phase>
+			            <configuration>
+			                <tasks>
+			                    <exec executable="${project.basedir}/src/main/resources/extract.sh">
+			                    </exec>
+				                </tasks>
+			            </configuration>
+			            <goals>
+			                <goal>run</goal>
+			            </goals>
+			        </execution>
+			    </executions>
+			</plugin>					
+				</plugins>
+			</build>
+		</profile>		
+	</profiles>	    
+	    
 	<dependencies>
 
 		<dependency>
@@ -168,8 +234,8 @@
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
 				<configuration>
-					<source>1.8</source>
-					<target>1.8</target>
+					<source>1.7</source>
+					<target>1.7</target>
 				</configuration>
 			</plugin>			
 			<plugin>
