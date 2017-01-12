@@ -13,13 +13,15 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  ******************************************************************************/
-package it.smartcommunitylab.parking.management.web.manager;
+package it.smartcommunitylab.parking.management.web.scripts;
 
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
 import it.smartcommunitylab.parking.management.web.bean.ParkingLog;
 import it.smartcommunitylab.parking.management.web.bean.StreetLog;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
+import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 import java.util.ArrayList;
@@ -32,13 +34,17 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.geo.Circle;
-import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.junit4.SpringRunner;
 
-@RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = { "/spring/filterContext.xml" })
-public class DynamicManagerTest {
+//@RunWith(SpringJUnit4ClassRunner.class)
+//@ContextConfiguration(locations = { "/spring/filterContext.xml" })
+@RunWith(SpringRunner.class)
+@SpringBootTest
+@EnableConfigurationProperties
+public class DynamicManagerUpdate {
 	
 	private static final String appId="rv";
 	private static final String appIdTn="tn";
