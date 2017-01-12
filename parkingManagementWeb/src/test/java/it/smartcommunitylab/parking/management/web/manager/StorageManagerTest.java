@@ -45,6 +45,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import com.fasterxml.jackson.core.JsonGenerationException;
 import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
 
 @RunWith(SpringRunner.class)
 //@ContextConfiguration(locations = { "classpath*:/spring/filterContext*.xml", "classpath*:/spring/SpringAppDispatcher-servlet*.xml" })
@@ -60,13 +61,7 @@ public class StorageManagerTest {
 	private StorageManager manager;
 
 	@Test
-	public void getParcometri() {
-		//manager.setAppId(appId);
-		Assert.assertTrue(manager.getAllParkingMeters(appId).size() > 0);
-	}
-
-	@Test
-	public void save() throws SecurityException, NoSuchFieldException,
+	public void saveRv() throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException {
 		
@@ -132,6 +127,7 @@ public class StorageManagerTest {
 		//area.setTimeSlot("08:00 - 18:00");
 		area.setSmsCode("567");
 		area.setGeometry(areaGeo);
+		area.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		area = manager.save(area,appId, "rv_tes_091616", "userTest");
 		
 		RateAreaBean area2 = new RateAreaBean();
@@ -142,6 +138,7 @@ public class StorageManagerTest {
 		//area2.setTimeSlot("10:00 - 14:00");
 		area2.setSmsCode("1234");
 		area2.setGeometry(areaGeo2);
+		area2.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		area2 = manager.save(area2,appId, "rv_tes_091616", "userTest");
 		
 		RateAreaBean area3 = new RateAreaBean();
@@ -151,6 +148,7 @@ public class StorageManagerTest {
 		//area3.setFee(new Float(1.50));
 		//area3.setTimeSlot("08:00 - 20:00");
 		area3.setSmsCode("1235");
+		area3.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		area3 = manager.save(area3,appId, "rv_tes_091616", "userTest");
 		
 		// Geo Zone creation
@@ -184,6 +182,7 @@ public class StorageManagerTest {
 		z.setSubmacro("B");
 		z.setColor("33cc66");
 		z.setGeometry(polz1);
+		z.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		z = manager.save(z,appId, "rv_tes_091616", "userTest");
 		
 		PolygonBean polz2 = new PolygonBean();
@@ -216,6 +215,7 @@ public class StorageManagerTest {
 		z2.setSubmacro("A");
 		z2.setColor("990033");
 		z2.setGeometry(polz2);
+		z2.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		z2 = manager.save(z2,appId, "rv_tes_091616", "userTest");
 		
 		PolygonBean polz3 = new PolygonBean();
@@ -244,6 +244,7 @@ public class StorageManagerTest {
 		z3.setSubmacro("A");
 		z3.setColor("ffddee");
 		z3.setGeometry(polz3);
+		z3.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		z3 = manager.save(z3,appId, "rv_tes_091616", "userTest");
 		
 		// Streets Creation
@@ -475,9 +476,10 @@ public class StorageManagerTest {
 		g11.setLng(11.032121);
 		ps.setGeometry(g11);
 		List<String> payMode = new ArrayList<String>();
-		payMode.add("AUTOMATED_TELLER");
-		payMode.add("PARCOMETRO");
+//		payMode.add("AUTOMATED_TELLER");
+		payMode.add("PREPAID_CARD");
 		ps.setPaymentMode(payMode);
+		ps.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		
 		ParkingStructureBean ps2 = new ParkingStructureBean();
 		ps2.setName("StazioneFS");
@@ -493,9 +495,10 @@ public class StorageManagerTest {
 		g12.setLng(11.033929);
 		ps2.setGeometry(g12);
 		List<String> payMode2 = new ArrayList<String>();
-		payMode2.add("AUTOMATED_TELLER");
+//		payMode2.add("AUTOMATED_TELLER");
 		payMode2.add("PREPAID_CARD");
 		ps2.setPaymentMode(payMode2);
+		ps2.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		
 		// BikePoints Creation
 		BikePointBean pb = new BikePointBean();
@@ -507,6 +510,7 @@ public class StorageManagerTest {
 		geo.setLat(45.889315);
 		geo.setLng(11.033718);
 		pb.setGeometry(geo);
+		pb.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		
 		BikePointBean pb2 = new BikePointBean();
 		pb2.setId_app(appId);
@@ -517,6 +521,7 @@ public class StorageManagerTest {
 		geo2.setLat(45.900247);
 		geo2.setLng(11.036632);
 		pb2.setGeometry(geo2);
+		pb2.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		
 		BikePointBean pb3 = new BikePointBean();
 		pb3.setId_app(appId);
@@ -527,6 +532,7 @@ public class StorageManagerTest {
 		geo3.setLat(45.893628);
 		geo3.setLng(11.043685);
 		pb3.setGeometry(geo3);
+		pb3.setAgencyId(Lists.newArrayList("rv_tes_091616"));
 		
 		try {
 			manager.save(s,appId, "rv_tes_091616", "userTest");
@@ -637,6 +643,7 @@ public class StorageManagerTest {
 		//area.setTimeSlot("08:00 - 19:30");
 		area.setSmsCode("726");
 		area.setGeometry(areaGeo);
+		area.setAgencyId(Lists.newArrayList("tn_tes_091516"));
 		area = manager.save(area, appIdTn, "tn_tes_091516", "userTest");
 		
 		// Geo Zone creation
@@ -671,6 +678,7 @@ public class StorageManagerTest {
 		z.setColor("e3e427");
 		z.setType("zona tm trento");
 		z.setGeometry(polz1);
+		z.setAgencyId(Lists.newArrayList("tn_tes_091516"));
 		z = manager.save(z,appIdTn, "tn_tes_091516", "userTest");
 		
 		
@@ -779,6 +787,7 @@ public class StorageManagerTest {
 		PointBean geo = new PointBean();
 		geo.setLat(46.071984);
 		geo.setLng(11.119766);
+		pb.setAgencyId(Lists.newArrayList("tn_tes_091516"));
 		pb.setGeometry(geo);
 		
 		BikePointBean pb2 = new BikePointBean();
@@ -789,6 +798,7 @@ public class StorageManagerTest {
 		PointBean geo2 = new PointBean();
 		geo2.setLat(46.070164);
 		geo2.setLng(11.119793);
+		pb2.setAgencyId(Lists.newArrayList("tn_tes_091516"));
 		pb2.setGeometry(geo2);
 		
 		BikePointBean pb3 = new BikePointBean();
@@ -799,6 +809,7 @@ public class StorageManagerTest {
 		PointBean geo3 = new PointBean();
 		geo3.setLat(46.070529);
 		geo3.setLng(11.121263);
+		pb3.setAgencyId(Lists.newArrayList("tn_tes_091516"));
 		pb3.setGeometry(geo3);
 		
 		try {
@@ -841,43 +852,43 @@ public class StorageManagerTest {
 	
 	
 	@Test
-	public void delete() throws SecurityException, NoSuchFieldException,
+	public void deleteRv() throws SecurityException, NoSuchFieldException,
 			IllegalArgumentException, IllegalAccessException,
 			NoSuchMethodException, InvocationTargetException,
 			JsonGenerationException, JsonMappingException, IOException {
 		
 		//manager.setAppId(appId);
 		
-		List<ZoneBean> zones = manager.getAllZone(appIdTn);
+		List<ZoneBean> zones = manager.getAllZone(appId);
 		for(ZoneBean z : zones){
-			manager.removeZone(z.getId(),appIdTn, "tn_tes_091516", "userTest");
+			manager.removeZone(z.getId(),appId, "rv_tes_091616", "userTest");
 		}
 		
-		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appIdTn, "tn_tes_091516");
+		List<ParkingMeterBean> parkingMeters = manager.getAllParkingMeters(appId, "rv_tes_091616");
 		for(ParkingMeterBean pm : parkingMeters){
-			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appIdTn, "tn_tes_091516", "userTest");
+			manager.removeParkingMeter(pm.getAreaId(), pm.getId(), appId, "rv_tes_091616", "userTest");
 		}
 		
-		List<ParkingStructureBean> parkingStructs = manager.getAllParkingStructure(appIdTn);
+		List<ParkingStructureBean> parkingStructs = manager.getAllParkingStructure(appId);
 		for(ParkingStructureBean ps : parkingStructs){
-			manager.removeParkingStructure(ps.getId(),appIdTn, "tn_tes_091516", "userTest");
+			manager.removeParkingStructure(ps.getId(),appId, "rv_tes_091616", "userTest");
 		}
 		
-		List<BikePointBean> bikePoints = manager.getAllBikePoints(appIdTn);
+		List<BikePointBean> bikePoints = manager.getAllBikePoints(appId);
 		for(BikePointBean bp : bikePoints){
-			manager.removeBikePoint(bp.getId(),appIdTn, "tn_tes_091516", "userTest");
+			manager.removeBikePoint(bp.getId(),appId, "rv_tes_091616", "userTest");
 		}
 		
-		List<RateAreaBean> areas = manager.getAllArea(appIdTn);
+		List<RateAreaBean> areas = manager.getAllArea(appId);
 		for(RateAreaBean area : areas){
-			manager.removeArea(area.getId(),appIdTn, "tn_tes_091516", "userTest");
+			manager.removeArea(area.getId(),appId, "rv_tes_091616", "userTest");
 		}
 		
-		Assert.assertTrue(manager.getAllArea(appIdTn).size() == 0);
-		Assert.assertTrue(manager.getAllParkingMeters(appIdTn).size() == 0);
-		Assert.assertTrue(manager.getAllParkingStructure(appIdTn).size() == 0);
-		Assert.assertTrue(manager.getAllZone(appIdTn).size() == 0);
-		Assert.assertTrue(manager.getAllBikePoints(appIdTn).size() == 0);
+		Assert.assertTrue(manager.getAllArea(appId).size() == 0);
+		Assert.assertTrue(manager.getAllParkingMeters(appId).size() == 0);
+		Assert.assertTrue(manager.getAllParkingStructure(appId).size() == 0);
+		Assert.assertTrue(manager.getAllZone(appId).size() == 0);
+		Assert.assertTrue(manager.getAllBikePoints(appId).size() == 0);
 		
 	}
 	
