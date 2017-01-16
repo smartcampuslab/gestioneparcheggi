@@ -13,7 +13,7 @@
  *    See the License for the specific language governing permissions and
  *    limitations under the License.
  ******************************************************************************/
-package it.smartcommunitylab.parking.management.web.manager;
+package it.smartcommunitylab.parking.management.test.queries;
 
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
@@ -30,6 +30,9 @@ import it.smartcommunitylab.parking.management.web.converter.ModelConverter;
 import it.smartcommunitylab.parking.management.web.exception.DatabaseException;
 import it.smartcommunitylab.parking.management.web.exception.ExportException;
 import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.manager.Exporter;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.manager.ZipCsvExporter;
 import it.smartcommunitylab.parking.management.web.model.Agency;
 import it.smartcommunitylab.parking.management.web.model.BikePoint;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
@@ -59,8 +62,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
-@Service("storageManager")
-public class StorageManager {
+@Service("oldstorageManager")
+public class OldStorageManager {
 
 	private static final Logger logger = Logger.getLogger(StorageManager.class);
 	private static final int READ_VAL = 1;
@@ -181,52 +184,27 @@ public class StorageManager {
 
 	public List<RateAreaBean> getAllArea(String appId) {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
-		// logger.error(String.format("Area app id: %s", appId));
-
-		List<RateArea> ras;
-		if ("all".equals(appId)) {
-			ras = mongodb.findAll(RateArea.class);
-		} else {
-			Criteria criteria = new Criteria("id_app").is(appId);
-			Query query = new Query(criteria);
-			ras = mongodb.find(query, RateArea.class);
+		//logger.error(String.format("Area app id: %s", appId));
+		for (RateArea a : mongodb.findAll(RateArea.class)) {
+			if(a != null && appId.compareTo("all") == 0){
+				result.add(ModelConverter.convert(a, RateAreaBean.class));
+			} else if(a != null && a.getId_app().compareTo(appId) == 0){
+				result.add(ModelConverter.convert(a, RateAreaBean.class));
+			}
 		}
-
-		for (RateArea a : ras) {
-			result.add(ModelConverter.convert(a, RateAreaBean.class));
-		}
-
 		return result;
 	}
-	
-//	public List<RateAreaBean> getAllAreaByAgencyId(String appId, String agencyId) {
-//		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
-//		Agency ag = agencyDataSetup.getAgencyById(agencyId);
-//		if(ag == null || ag.getArea() >= READ_VAL){
-//			Criteria crit = new Criteria();
-//			crit.and("agencyId").is(agencyId);
-//			for (RateArea a : mongodb.find(Query.query(crit), RateArea.class)) {
-//				if(a != null && appId.compareTo("all") == 0){
-//					result.add(ModelConverter.convert(a, RateAreaBean.class));
-//				} else if(a != null && a.getId_app().compareTo(appId) == 0){
-//					result.add(ModelConverter.convert(a, RateAreaBean.class));
-//				}
-//			}
-//		} else {
-//			throw new AccessControlException("no read permission for area object");
-//		}
-//		return result;
-//	}	
 
 	public List<RateAreaBean> getAllAreaByAgencyId(String appId, String agencyId) {
 		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag == null || ag.getArea() >= READ_VAL){
-			Criteria criteria = new Criteria("agencyId").is(agencyId);
-			Query query = new Query(criteria);
-			List<RateArea> ras = mongodb.find(query, RateArea.class);
-			for (RateArea a : ras) {
-				if ("all".equals(appId) || appId.equals( a.getId_app())) {
+			Criteria crit = new Criteria();
+			crit.and("agencyId").in(agencyId);
+			for (RateArea a : mongodb.find(Query.query(crit), RateArea.class)) {
+				if(a != null && appId.compareTo("all") == 0){
+					result.add(ModelConverter.convert(a, RateAreaBean.class));
+				} else if(a != null && a.getId_app().compareTo(appId) == 0){
 					result.add(ModelConverter.convert(a, RateAreaBean.class));
 				}
 			}
@@ -238,7 +216,7 @@ public class StorageManager {
 	
 	private RateArea getAreaObjectById(String areaId, String appId) {
 		Criteria crit = new Criteria();
-		crit.and("id_app").is(appId);
+		crit.and("id_app").in(appId);
 		crit.and("_id").is(new ObjectId(areaId));
 		RateArea a = mongodb.findOne(Query.query(crit), RateArea.class);
 		return a;
@@ -246,7 +224,7 @@ public class StorageManager {
 	
 	public RateAreaBean getAreaById(String areaId, String appId) {
 		Criteria crit = new Criteria();
-		crit.and("id_app").is(appId);
+		crit.and("id_app").in(appId);
 		crit.and("_id").is(new ObjectId(areaId));
 		RateArea a = mongodb.findOne(Query.query(crit), RateArea.class);
 		RateAreaBean ra = ModelConverter.convert(a, RateAreaBean.class);
@@ -302,7 +280,9 @@ public class StorageManager {
 	public List<ParkingMeterBean> getAllParkingMeters(String appId) {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 		for (RateAreaBean temp : getAllArea(appId)) {
-			result.addAll(getAllParkingMeters(temp, appId));
+			if(temp != null && temp.getId_app().compareTo(appId) == 0){
+				result.addAll(getAllParkingMeters(temp, appId));
+			}
 		}
 		return result;
 	}
@@ -312,7 +292,9 @@ public class StorageManager {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getParkingmeter() >= READ_VAL){
 			for (RateAreaBean temp : getAllAreaByAgencyId(appId, agencyId)) {
-				result.addAll(getAllParkingMeters(temp, appId));
+				if(temp != null && temp.getId_app().compareTo(appId) == 0){
+					result.addAll(getAllParkingMeters(temp, appId));
+				}
 			}
 		} else {
 			throw new AccessControlException("no read permission for parkingmeter object");
@@ -320,7 +302,6 @@ public class StorageManager {
 		return result;
 	}
 
-	// TODO
 	public List<ParkingMeterBean> getAllParkingMeters(RateAreaBean ab, String appId) {
 		RateArea area = mongodb.findById(ab.getId(), RateArea.class);
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
@@ -343,7 +324,6 @@ public class StorageManager {
 		return result;
 	}
 	
-	// ???
 	public List<ParkingMeterBean> getAllParkingMeters(String appId, String municipality) {
 		List<ParkingMeterBean> result = new ArrayList<ParkingMeterBean>();
 		//for (RateAreaBean temp : getAllArea(appId, municipality)) {
@@ -520,13 +500,16 @@ public class StorageManager {
 	public List<StreetBean> getAllStreets(String appId) {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		for (RateAreaBean temp : getAllArea(appId)) {
+			if(temp != null && appId.compareTo("all") == 0){
+				result.addAll(getAllStreets(temp, "all"));
+			} else if(temp != null && temp.getId_app().compareTo(appId) == 0){
 				result.addAll(getAllStreets(temp, appId));
+			}
 		}
 
 		return result;
 	}
 	
-	// ???
 	public List<StreetBean> getAllStreets(String appId, String municipality) {
 		List<StreetBean> result = new ArrayList<StreetBean>();
 		for (RateAreaBean temp : getAllArea(appId)) {	
@@ -638,7 +621,9 @@ public class StorageManager {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag == null || ag.getStreet() >= READ_VAL){
 			for (RateAreaBean temp : getAllAreaByAgencyId(appId, agencyId)) {
-				if("all".equals(appId) || temp.getId_app().equals(appId)) {
+				if(temp != null && appId.compareTo("all") == 0){
+					result.addAll(getAllStreets(temp, "all"));
+				} else if(temp != null && temp.getId_app().compareTo(appId) == 0){
 					result.addAll(getAllStreets(temp, appId));
 				}
 			}
@@ -966,18 +951,13 @@ public class StorageManager {
 
 	public List<BikePointBean> getAllBikePoints(String appId) {
 		List<BikePointBean> result = new ArrayList<BikePointBean>();
-		
-		List<BikePoint> bps;
-		if ("all".equals(appId)) {
-			bps = mongodb.findAll(BikePoint.class);
-		} else {
-			Criteria criteria = new Criteria("id_app").is(appId);
-			Query query = new Query(criteria);
-			bps = mongodb.find(query, BikePoint.class);
-		}		
-		
-		for (BikePoint bp : bps) {
-			result.add(ModelConverter.convert(bp, BikePointBean.class));
+		for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
+			if(bp != null && appId.compareTo("all") == 0){
+				result.add(ModelConverter.convert(bp, BikePointBean.class));
+			} else if(bp != null && bp.getId_app().compareTo(appId) == 0){
+			//logger.info(String.format("Bike point found : %s", pb.toString()));
+				result.add(ModelConverter.convert(bp, BikePointBean.class));
+			}
 		}
 		return result;
 	}
@@ -987,12 +967,14 @@ public class StorageManager {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getBike() >= READ_VAL){
 			Criteria crit = new Criteria();
-			crit.and("agencyId").is(agencyId);
+			crit.and("agencyId").in(agencyId);
 			for (BikePoint bp : mongodb.find(Query.query(crit), BikePoint.class)) {
 			//for (BikePoint bp : mongodb.findAll(BikePoint.class)) {
-				if("all".equals(appId) || bp.getId_app().equals(appId)) {
+				if(bp != null && appId.compareTo("all") == 0){
 					result.add(ModelConverter.convert(bp, BikePointBean.class));
-				}				
+				} else if(bp != null && bp.getId_app().compareTo(appId) == 0){
+					result.add(ModelConverter.convert(bp, BikePointBean.class));
+				}
 			}
 		} else {
 			throw new AccessControlException("no read permission for bike point object");
@@ -1087,16 +1069,24 @@ public class StorageManager {
 
 	public List<ParkingStructureBean> getAllParkingStructure(String appId) {
 		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
-		
-		List<ParkingStructure> pss;
-		if ("all".equals(appId)) {
-			pss = mongodb.findAll(ParkingStructure.class, "parkingStructure");
-		} else {
-			Criteria criteria = new Criteria("id_app").is(appId);
-			Query query = new Query(criteria);
-			pss = mongodb.find(query, ParkingStructure.class, "parkingStructure");
+		List<ParkingStructure> pss = mongodb.findAll(ParkingStructure.class);
+		for (ParkingStructure entity : pss) {
+			if(entity != null && appId.compareTo("all") == 0){
+				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+			} else if(entity != null && entity.getId_app().compareTo(appId) == 0){
+				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+			}
 		}
+		return result;
+	}
+	
+	public List<ParkingStructureBean> getAllParkingStructureNew(String appId) {
+		List<ParkingStructureBean> result = new ArrayList<ParkingStructureBean>();
 		
+		Criteria criteria = new Criteria("id_app").in(appId, "all");
+		Query query = new Query(criteria);
+		
+		List<ParkingStructure> pss = mongodb.find(query, ParkingStructure.class, "parkingStructure");
 		for (ParkingStructure entity : pss) {
 				result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
 		}
@@ -1108,9 +1098,11 @@ public class StorageManager {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getStructure() >= READ_VAL){
 			Criteria crit = new Criteria();
-			crit.and("agencyId").is(agencyId);
+			crit.and("agencyId").in(agencyId);
 			for (ParkingStructure entity : mongodb.find(Query.query(crit), ParkingStructure.class)) {
-				if ("all".equals(appId) || appId.equals(entity.getId_app())) {
+				if(entity != null && appId.compareTo("all") == 0){
+					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
+				} else if(entity != null && entity.getId_app().compareTo(appId) == 0){
 					result.add(ModelConverter.convert(entity, ParkingStructureBean.class));
 				}
 			}
@@ -1257,19 +1249,12 @@ public class StorageManager {
 
 	public List<ZoneBean> getAllZone(String appId) {
 		List<ZoneBean> result = new ArrayList<ZoneBean>();
-		
-		List<Zone> zs;
-		if ("all".equals(appId)) {
-			zs = mongodb.findAll(Zone.class);
-		} else {
-			Criteria criteria = new Criteria("id_app").is(appId);
-			Query query = new Query(criteria);
-			zs = mongodb.find(query, Zone.class);
-		}		
-		
-		
-		for (Zone z : zs) {
-			result.add(ModelConverter.convert(z, ZoneBean.class));
+		for (Zone z : mongodb.findAll(Zone.class)) {
+			if(z != null && appId.compareTo("all") == 0){
+				result.add(ModelConverter.convert(z, ZoneBean.class));
+			} else if(z != null && z.getId_app().compareTo(appId) == 0){
+				result.add(ModelConverter.convert(z, ZoneBean.class));
+			}
 		}
 		return result;
 	}
@@ -1279,9 +1264,11 @@ public class StorageManager {
 		Agency ag = agencyDataSetup.getAgencyById(agencyId);
 		if(ag.getZone() >= READ_VAL){
 			Criteria crit = new Criteria();
-			crit.and("agencyId").is(agencyId);
+			crit.and("agencyId").in(agencyId);
 			for (Zone z : mongodb.find(Query.query(crit), Zone.class)) {
-				if ("all".equals(appId) || z.getId_app().equals(appId)) {
+				if(z != null && appId.compareTo("all") == 0){
+					result.add(ModelConverter.convert(z, ZoneBean.class));
+				} else if(z != null && z.getId_app().compareTo(appId) == 0){
 					result.add(ModelConverter.convert(z, ZoneBean.class));
 				}
 			}
@@ -1355,7 +1342,7 @@ public class StorageManager {
 	public List<ZoneBean> getZoneByTypeAndAgencyId(String type, String appId, String agencyId) {
 		List<ZoneBean> result = new ArrayList<ZoneBean>();
 		Criteria crit = new Criteria();
-		crit.and("agencyId").is(agencyId);
+		crit.and("agencyId").in(agencyId);
 		for (Zone z : mongodb.find(Query.query(crit), Zone.class)) {
 			if(z != null && appId.compareTo("all") == 0){
 				if(z.getType().compareToIgnoreCase(type) == 0){
