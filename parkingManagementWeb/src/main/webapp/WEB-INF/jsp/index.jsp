@@ -118,8 +118,8 @@ function getJSessionId(){
 <body>
 	<div id="myBody" ng-controller="MainCtrl" ng-init="setItalianLanguage()"><!-- ng-init="setItalianLanguage()" -->
     <div my-session-check> </div>
-    <div id="my-big-menu" class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-      <div class="container-fluid" style="margin-left:60px; margin-right:60px">
+    <div class="navbar navbar-fixed-top navbar-inverse" role="navigation">
+      <div class="container-fluid">
         <div class="collapse navbar-collapse">
           <div class="navbar-brand"><img src="imgs/logo.png"/></div>
           <ul class="nav navbar-nav">
@@ -128,8 +128,6 @@ function getJSessionId(){
             <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
             <li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
             <li class="{{ isHomeAuxActive() }}" ng-show="showAuxMenuLink"><a href=#/auxiliary/logs/1" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li><!-- href="#/aux/home" -->
-<!--             <li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li> -->
-<!--             <li class="{{ isEditingBikeActive() }}"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li> -->
           </ul>
           <ul class="nav navbar-nav navbar-right" >
           	<li class="{{ isActiveItaLang() }}"><a href ng-click="setItalianLanguage()">IT</a></li>
@@ -139,32 +137,14 @@ function getJSessionId(){
         </div><!-- /.nav-collapse -->
       </div><!-- /.container -->
     </div><!-- /.navbar -->
-    <div id="my-small-menu" class="navbar navbar-fixed-top navbar-inverse" role="navigation">
-      <div class="container-fluid" style="margin-left:15px; margin-right:15px">
-        <div class="collapse navbar-collapse">
-          <div class="navbar-brand"><img src="imgs/logo_small.png"/></div>
-          <ul class="nav navbar-nav">
-            <li></li>
-			<li class="{{ isHomeDashboardActive() }}" ng-show="showDashboardMenuLink"><a href="#/dashboard/home" ng-click="setHomeDashboardActive()">{{ 'menu_bar-homedashboard' | i18n }}</a></li>
-            <li class="{{ isHomeParkActive() }}"><a href="#/park/home" ng-click="setHomeParkActive()">{{ 'menu_bar-homepark' | i18n }}</a></li>
-            <li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
-            <li class="{{ isHomeAuxActive() }}" ng-show="showAuxMenuLink"><a href=#/auxiliary/logs/1" ng-click="setHomeAuxActive()">{{ 'menu_bar-homeaux' | i18n }}</a></li><!-- href="#/aux/home" -->
-          	<li class="{{ isActiveItaLang() }}"><a href ng-click="setItalianLanguage()">IT</a></li>
-          	<li class="{{ isActiveEngLang() }}"><a href ng-click="setEnglishLanguage()">EN</a></li>
-            <li><a href="" ng-click="logout()">{{ 'menu_bar-logout' | i18n }}</a></li>
-          </ul>
-        </div><!-- /.nav-collapse -->
-      </div><!-- /.container -->
-    </div><!-- /.navbar -->
 	<div class="container-fluid">
-		<div id="my-big-body" class="row">
-			<!-- <div class="col-md-1" ng-controller="AuxCtrl" ng-init="initComponents()"></div> -->	<!-- used only to init aux components -->
-			<div class="col-md-12" ng-controller="AuxCtrl" ng-init="initComponents()"><!-- used only to init aux components -->
-				<div class="panel panel-default" style="margin-top:100px;padding-left:50px;padding-right:50px;">
+		<div class="row">
+			<div class="col-md-12 col-sm-12" ng-controller="AuxCtrl" ng-init="initComponents()"><!-- used only to init aux components -->
+				<div class="panel panel-default">
 			  		<div class="panel-body">
 			  			<div style="margin:5px 15px;">
 							<div class="row" ng-if="isHomeParkActive() == 'active'" ><!--   style="height: 150px;" -->
-								<div class="col-md-2" ng-show="false">
+								<div class="col-md-2 col-sm-2" ng-show="false">
 									<div class="panel panel-primary" align="left">
 										<div class="panel-heading">
 											<h5 class="panel-title">{{ 'park_menu_list' | i18n }}</h5>
@@ -178,7 +158,7 @@ function getJSessionId(){
 										</div>
 									</div>
 								</div>
-								<div class="col-md-12">
+								<div class="col-md-12 col-sm-12">
 									<div ng-view class="row">{{ 'loading_text'| i18n }}...</div>
 								</div>
 							</div>
@@ -189,41 +169,6 @@ function getJSessionId(){
 						</div>
 					</div>
 				</div>
-				<!-- <div class="col-md-1"></div> -->
-			</div>
-			<div id="my-small-body" class="row">
-			<!-- <div class="col-sm-1" ng-controller="AuxCtrl" ng-init="initComponents()"></div> -->	<!-- used only to init aux components -->
-			<div class="col-sm-12" ng-controller="AuxCtrl" ng-init="initComponents()">
-				<div class="panel panel-default" style="margin-top:100px;">
-			  		<div class="panel-body">
-			  			<div style="margin:5px 15px;">
-							<div class="row" ng-if="isHomeParkActive() == 'active'" ><!--   style="height: 150px;" -->
-								<div class="col-sm-2" ng-show="false">
-									<div class="panel panel-primary" align="left">
-										<div class="panel-heading">
-											<h5 class="panel-title">{{ 'park_menu_list' | i18n }}</h5>
-										</div>
-										<div class="panel-body">
-											<ul class="nav nav-pills nav-stacked" style="font-size: 14px">
-												<li class="{{ isEditingParkActive() }}"><a href="#/edit/park" ng-click="setEditingParkActive()">{{ 'menu_bar-parkediting' | i18n }}</a></li>
-		<!-- MB20150504: moved link to bike tab <li class="{{ isEditingBikeActive() }}" ng-show="showBikeMenuLink"><a href="#/edit/bike" ng-click="setEditingBikeActive()">{{ 'menu_bar-bikeediting' | i18n }}</a></li> -->
-						          				<li class="{{ isViewAllActive() }}"><a href="#/view" ng-click="setViewAllActive()">{{ 'menu_bar-parkview' | i18n }}</a></li>
-											</ul>
-										</div>
-									</div>
-								</div>
-								<div class="col-sm-12">
-									<div ng-view class="row">{{ 'loading_text'| i18n }}...</div>
-								</div>
-							</div>
-							<div ng-if="isHomeParkActive() != 'active'">
-								<div ng-view class="row" >{{ 'loading_text'| i18n }}...</div>
-							</div>
-						</div>
-						</div>
-					</div>
-				</div>
-				<!-- <div class="col-sm-1"></div> -->
 			</div>
 			<div class="row footer">
 				<div class="col-md-12">

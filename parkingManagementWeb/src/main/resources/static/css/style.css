@@ -769,11 +769,13 @@ label.group-label {
 	/* default I show the small objects */
 	#my-small-login { display: block; }   /* hide it elsewhere */
   	#my-big-login { display: none; }   /* show it elsewhere */
-	#my-small-menu { display: block; }
-  	#my-big-menu { display: none; }
-  	#my-small-body { display: block; }
-  	#my-big-body { display: none; }
-  	
+  	.navbar .container-fluid {
+  		margin-left:15px; 
+  		margin-right:15px;
+  	}
+  	.container-fluid .panel-default {
+		margin-top:100px;
+  	}    	
 
 	/* if width bigger than 769px I show the big objects */
 	@media (min-width:769px) {
@@ -782,10 +784,13 @@ label.group-label {
 		.panel-body { padding: 5px; }
 		#my-small-login { display: block; }   /* hide it elsewhere */
   		#my-big-login { display: none; }   /* show it elsewhere */
-		#my-small-menu { display: block; }
-  		#my-big-menu { display: none; }
-  		#my-small-body { display: block; }
-  		#my-big-body { display: none; }
+  		.navbar .container-fluid {
+	  		margin-left:15px; 
+	  		margin-right:15px;
+  		}
+  		.container-fluid .panel-default {
+			margin-top:100px;
+  		}  		
 	}
 	
 	/* if width bigger than 1170px I show the big objects */
@@ -798,10 +803,15 @@ label.group-label {
 		}
 		#my-small-login { display: none; }   /* hide it elsewhere */
   		#my-big-login { display: block; }   /* show it elsewhere */
-		#my-small-menu { display: none; }
-  		#my-big-menu { display: block; }
-  		#my-small-body { display: none; }
-  		#my-big-body { display: block; }
+	  	.navbar .container-fluid {
+	  		margin-left:60px; 
+	  		margin-right:60px;
+	  	}
+  		.container-fluid .panel-default {
+			margin-top:100px;
+			padding-left:50px;
+			padding-right:50px;  		
+  		}	  	
 	}
 
 

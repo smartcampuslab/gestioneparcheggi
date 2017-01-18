@@ -31,8 +31,8 @@ pm.config(['$routeProvider', '$locationProvider',
     	})*/
     	.when('/home', {
     		templateUrl: 'partials/home.html',
-    		controller: 'MainCtrl',
-    		controllerAs: 'main'
+    		//controller: 'MainCtrl',
+    		//controllerAs: 'main'
     	})
     	.when('/error', {
     		templateUrl: 'partials/error/error.html',
@@ -105,3 +105,4 @@ pm.config(['$compileProvider',
 //pm.run(function(editableOptions) {
 //	 editableOptions.theme = 'bs3'; // bootstrap3 theme. Can be also 'bs2', 'default'
 //});
+
