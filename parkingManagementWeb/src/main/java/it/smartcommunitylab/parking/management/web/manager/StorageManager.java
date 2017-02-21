@@ -23,6 +23,8 @@ import it.smartcommunitylab.parking.management.web.bean.PointBean;
 import it.smartcommunitylab.parking.management.web.bean.PolygonBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
 import it.smartcommunitylab.parking.management.web.bean.RatePeriodBean;
+import it.smartcommunitylab.parking.management.web.bean.SimpleParkingMeter;
+import it.smartcommunitylab.parking.management.web.bean.SimpleRateArea;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.VehicleSlotBean;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
@@ -49,6 +51,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.log4j.Logger;
 import org.bson.types.ObjectId;
@@ -58,6 +61,9 @@ import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
+
+import com.google.common.collect.ArrayListMultimap;
+import com.google.common.collect.Multimap;
 
 @Service("storageManager")
 public class StorageManager {
@@ -515,6 +521,36 @@ public class StorageManager {
 		}
 		return p;
 	}
+	
+	
+	public List<SimpleRateArea> getSimpleRateArea(String appId, List<String> agencyId, Double lat, Double lon, Double radius, Integer limit) {
+		Criteria criteria = new Criteria("id_app").is(appId);
+		if (agencyId != null) {
+			criteria = criteria.and("agencyId").in(agencyId);
+		}
+		Query query = new Query(criteria);
+		query.fields().include("parkingMeters");
+		query.fields().include("validityPeriod");
+		
+		List<RateArea> ras = mongodb.find(query, RateArea.class);
+		
+		Multimap<Double, ParkingMeter> byDist = ArrayListMultimap.create();
+		
+		List<SimpleRateArea> sra = ras.stream().map(x -> new SimpleRateArea(x)).collect(Collectors.toList());
+		ras.stream().flatMap(x -> x.getParkingMeters().values().stream())
+				.forEach(y -> byDist.put(Math.sqrt(Math.pow(lat - y.getGeometry().getLat(), 2) + Math.pow(lon - y.getGeometry().getLng(), 2)), y));
+		List<SimpleParkingMeter> spm = byDist.keySet().stream().sorted().flatMap(x -> byDist.get(x).stream()).limit(limit).map(y -> new SimpleParkingMeter(y)).collect(Collectors.toList());
+		sra = sra.stream().filter(x -> {
+			x.getParkingMeters().retainAll(spm);
+			return !x.getParkingMeters().isEmpty();
+		}).collect(Collectors.toList());
+		
+		return sra;
+	}		
+	
+	
+	
+	
 
 	// Street Methods
 	public List<StreetBean> getAllStreets(String appId) {

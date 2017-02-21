@@ -1,9 +1,11 @@
 package it.smartcommunitylab.parking.management.web.api;
 
+import io.swagger.annotations.ApiParam;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
 import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
+import it.smartcommunitylab.parking.management.web.bean.SimpleRateArea;
 import it.smartcommunitylab.parking.management.web.bean.StreetBean;
 import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
 import it.smartcommunitylab.parking.management.web.controller.EditingController;
@@ -12,7 +14,9 @@ import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
 import it.smartcommunitylab.parking.management.web.manager.StorageManager;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.annotation.PostConstruct;
 
@@ -72,6 +76,19 @@ public class DataRestController {
 			return storage.getAllParkingMetersByAgencyId(appId, agencyId);
 		}
 	}
+	
+	// Method open to get near parkingMeters
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/nearparkingmeters/{latitude}/{longitude}/{radius}/{limit}")
+	//@ApiOperation(value = "Get ParkingMeters", notes = "Returns parking meter items")
+	public @ResponseBody
+	List<SimpleRateArea> getNearParkingMeters(@ApiParam(defaultValue="tn") @PathVariable("appId") String appId, @ApiParam(defaultValue="46.057598") @PathVariable double latitude, @ApiParam(defaultValue="11.133676") @PathVariable double longitude,
+			@ApiParam(defaultValue="0.05") @PathVariable double radius, @ApiParam(defaultValue="5") @PathVariable int limit, @ApiParam(required=false) @RequestParam(required=false) String agencyIds) {
+		if(agencyIds == null){
+			return storage.getSimpleRateArea(appId, null, latitude, longitude, radius, limit);
+		} else {
+			return storage.getSimpleRateArea(appId, Arrays.stream(agencyIds.split(",")).collect(Collectors.toList()), latitude, longitude, radius, limit);
+		}
+	}	
 		
 	// Method open to get all parkingMeters
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingmeter/{pmId}")
