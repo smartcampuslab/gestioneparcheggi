@@ -94,6 +94,7 @@ public class PortalController extends SCController{
 		} catch (Exception e) {
 		}
 		mainURL = mainURL.replace("<<port>>", port);
+		widgetURL = widgetURL.replace("<<port>>", port);
 	}	
 	
 	@SuppressWarnings("rawtypes")
