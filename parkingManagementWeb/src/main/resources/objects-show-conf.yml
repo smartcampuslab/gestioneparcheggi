@@ -1880,6 +1880,47 @@ providers:
           editable: true
           required: false
           visible: true
+     - id: Pm
+       type: pm
+       label: pm
+       title: Pm
+       attributes:
+        - code: code
+          editable: false
+          required: false
+          visible: false
+        - code: note
+          editable: false
+          required: false
+          visible: false
+        - code: status
+          editable: false
+          required: false
+          visible: false
+        - code: rateArea
+          editable: false
+          required: false
+          visible: false
+        - code: geometry
+          editable: false
+          required: false
+          visible: false
+        - code: zone1
+          editable: true
+          required: true
+          visible: false
+        - code: edittab
+          editable: false
+          required: false
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: false
+        - code: widget
+          editable: false
+          required: false
+          visible: true          
      - id: Ps
        type: ps
        label: ps
@@ -2780,6 +2821,47 @@ providers:
           editable: true
           required: false
           visible: true
+     - id: Pm
+       type: pm
+       label: pm
+       title: Pm
+       attributes:
+        - code: code
+          editable: false
+          required: false
+          visible: false
+        - code: note
+          editable: false
+          required: false
+          visible: false
+        - code: status
+          editable: false
+          required: false
+          visible: false
+        - code: rateArea
+          editable: false
+          required: false
+          visible: false
+        - code: geometry
+          editable: false
+          required: false
+          visible: false
+        - code: zone1
+          editable: true
+          required: true
+          visible: false
+        - code: edittab
+          editable: false
+          required: false
+          visible: false
+        - code: viewPage
+          editable: false
+          required: false
+          visible: false
+        - code: widget
+          editable: false
+          required: false
+          visible: true               
      - id: Ps
        type: ps
        label: ps

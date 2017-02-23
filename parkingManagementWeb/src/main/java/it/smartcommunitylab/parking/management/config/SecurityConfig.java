@@ -56,7 +56,7 @@ public class SecurityConfig {
 		@Override
 		protected void configure(HttpSecurity http) throws Exception {
 			http.csrf().disable();
-			http.authorizeRequests().antMatchers("/home", "/rest/**", "/auxiliary/rest/**", "/dashboard/rest/**").fullyAuthenticated().and().formLogin().loginPage("/login").permitAll().and().logout()
+			http.authorizeRequests().antMatchers("/home", "/rest/*", "/auxiliary/rest/**", "/dashboard/rest/**").fullyAuthenticated().and().formLogin().loginPage("/login").permitAll().and().logout()
 					.deleteCookies("JSESSIONID").clearAuthentication(true).logoutRequestMatcher(new AntPathRequestMatcher("/logout")).logoutSuccessUrl("/home");
 		}
 	}
@@ -70,7 +70,7 @@ public class SecurityConfig {
 			http.csrf().disable();
 			http.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS);
 
-			http.authorizeRequests().antMatchers("/api/**").anonymous().anyRequest().permitAll();
+			http.authorizeRequests().antMatchers("/api/**", "/rest/nosec/**").anonymous().anyRequest().permitAll();
 		}
 	}
 	
