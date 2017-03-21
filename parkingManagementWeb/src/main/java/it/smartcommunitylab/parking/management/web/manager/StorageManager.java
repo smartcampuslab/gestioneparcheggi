@@ -451,7 +451,10 @@ public class StorageManager {
 							temp.setStatus(pb.getStatus());
 							temp.getGeometry().setLat(pb.getGeometry().getLat());
 							temp.getGeometry().setLng(pb.getGeometry().getLng());
-							if(pb.getZones() != null)temp.setZones(pb.getZones());
+							if(pb.getZones() != null) {
+								temp.setZones(pb.getZones());
+							}
+							temp.setPaymentMethods(pb.getPaymentMethods());
 							area.getParkingMeters().put(temp.getId(), temp);	// to update the object
 							mongodb.save(area);
 							founded = true;

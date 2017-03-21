@@ -17,6 +17,7 @@ package it.smartcommunitylab.parking.management.web.model;
 
 import it.smartcommunitylab.parking.management.web.model.geo.Point;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class ParkingMeter {
@@ -24,6 +25,8 @@ public class ParkingMeter {
 		ACTIVE, INACTIVE
 	}
 
+	public final static List<String> CASH_PAYMENT = Arrays.asList("Cash");
+	
 	private String id;
 	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
 	private Integer code;
@@ -32,6 +35,7 @@ public class ParkingMeter {
 	private Point geometry;
 	private List<String> zones;
 	private List<String> agencyId;	// relation to agency object
+	private List<String> paymentMethods;
 	
 	public String getId_app() {
 		return id_app;
@@ -95,6 +99,17 @@ public class ParkingMeter {
 
 	public void setAgencyId(List<String> agencyId) {
 		this.agencyId = agencyId;
+	}
+
+	public List<String> getPaymentMethods() {
+		if (paymentMethods == null) {
+			return CASH_PAYMENT;
+		}
+		return paymentMethods;
+	}
+
+	public void setPaymentMethods(List<String> paymentMethods) {
+		this.paymentMethods = paymentMethods;
 	}
 
 	@Override

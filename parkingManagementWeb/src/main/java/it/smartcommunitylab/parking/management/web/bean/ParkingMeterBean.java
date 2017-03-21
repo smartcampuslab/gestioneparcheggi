@@ -15,6 +15,7 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.bean;
 
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter.Status;
 
 import java.util.List;
@@ -32,6 +33,7 @@ public class ParkingMeterBean {
 	private int tickets;
 	private List<String> zones;
 	private List<String> agencyId;	// relation to agency object
+	private List<String> paymentMethods;
 
 	public String getId() {
 		return id;
@@ -127,6 +129,17 @@ public class ParkingMeterBean {
 
 	public void setAgencyId(List<String> agencyId) {
 		this.agencyId = agencyId;
+	}
+
+	public List<String> getPaymentMethods() {
+		if (paymentMethods == null) {
+			return ParkingMeter.CASH_PAYMENT;
+		}
+		return paymentMethods;
+	}
+
+	public void setPaymentMethods(List<String> paymentMethods) {
+		this.paymentMethods = paymentMethods;
 	}
 	
 }
