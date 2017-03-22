@@ -95,25 +95,25 @@
     "value": "Loading",
     "description": "Testo per caricamento dati in corso"
 }, {
-	"key": "previous_label",
-	"value": "Prev",
-	"description": "Label precedente"
+    "key": "previous_label",
+    "value": "Prev",
+    "description": "Label precedente"
 }, {
-	"key": "next_label",
-	"value": "Next",
-	"description": "Label successivo"
+    "key": "next_label",
+    "value": "Next",
+    "description": "Label successivo"
 }, {
-	"key": "link_edit_title",
-	"value": "Edit",
-	"description": "Title link modifica"
+    "key": "link_edit_title",
+    "value": "Edit",
+    "description": "Title link modifica"
 }, {
-	"key": "link_view_title",
-	"value": "View",
-	"description": "Title link visualizza"
+    "key": "link_view_title",
+    "value": "View",
+    "description": "Title link visualizza"
 }, {
-	"key": "link_remove_title",
-	"value": "Delete",
-	"description": "Title link elimina"
+    "key": "link_remove_title",
+    "value": "Delete",
+    "description": "Title link elimina"
 }, {
     "key": "view_areas",
     "value": "Rateing areas",
@@ -162,6 +162,11 @@
     "key": "area_color",
     "value": "Color",
     "description": "Intestazione colonna colore in tabella lista aree"
+},
+  {
+    "key": "pm_payment",
+    "value": "Payment",
+    "description": "Type of payment"
 }, {
     "key": "area_zonemicro",
     "value": "Microzona",
@@ -331,9 +336,9 @@
     "value": "No area found",
     "description": "Messaggio nessuna area in db"
 }, {
-	"key": "operations",
-	"value": "Actions",
-	"description": "Label operazioni"
+    "key": "operations",
+    "value": "Actions",
+    "description": "Label operazioni"
 }, {
     "key": "street_list",
     "value": "Parking List",
@@ -1282,11 +1287,11 @@
     "key": "ps_time_period_delete",
     "value": "Delete",
     "description": "Testo pulsante per cancellazione periodo apertura da lista"
-}, { 
+}, {
     "key": "ps_phone_placeholder",
     "value": "Insert the structure phone number",
     "description": "Testo placeholder campo telefono struttura"
-}, { 
+}, {
     "key": "ps_manager_placeholder",
     "value": "Insert the structure owner",
     "description": "Testo placeholder campo proprietario struttura"
@@ -1310,15 +1315,15 @@
     "key": "ps_unusuableslot_placeholder",
     "value": "Insert the unusable slots number",
     "description": "Testo placeholder campo posti non utilizzabili struttura"
-}, { 
+}, {
     "key": "ps_geo_placeholder",
     "value": "Select the structure position (click on map)",
     "description": "Testo placeholder campo posti disco orario via"
-}, { 
+}, {
     "key": "ps_period_overlap_error",
     "value": "Attention: the new opening period overlaps an existing period",
     "description": "Testo messaggio di errore per periodo sovrapposto in ora apertura struttura"
-}, { 
+}, {
     "key": "ps_period_from_to_error",
     "value": "Incorrecte inserte period: opening time is grater then closing time",
     "description": "Testo messaggio di errore per periodo non corretto in ora apertura struttura"
@@ -1459,9 +1464,9 @@
     "value": "Balance",
     "description": "Label per check bilancio"
 }, {
-	"key": "ps_fee_details",
-	"value": "Hourly rate",
-	"description": "Label per tariffa oraria in dettagli oggetto dashboard"
+    "key": "ps_fee_details",
+    "value": "Hourly rate",
+    "description": "Label per tariffa oraria in dettagli oggetto dashboard"
 }, {
     "key": "view_macrozones",
     "value": "Macrozones",
@@ -1575,13 +1580,13 @@
     "value": "FILTER SET UP",
     "description": "Testo label filtro di sinistra in dashboard"
 }, {
-	"key": "other_settings",
-	"value": "Other settings",
-	"description": "Label per altre impostazioni in settaggio filtro occupazione"
+    "key": "other_settings",
+    "value": "Other settings",
+    "description": "Label per altre impostazioni in settaggio filtro occupazione"
 }, {
-	"key": "use_average_zone_occ",
-	"value": "Zone average occupancy",
-	"description": "Label per checkbox di occupazione media di zona in filtro occupazione"
+    "key": "use_average_zone_occ",
+    "value": "Zone average occupancy",
+    "description": "Label per checkbox di occupazione media di zona in filtro occupazione"
 }, {
     "key": "euro_hour",
     "value": "€/hour",
@@ -1831,41 +1836,41 @@
     "value": "The inserted period in not correct, starting date is greater then the final date",
     "description": "Messaggio errore periodo in creazione log via"
 }, {
-	"key": "datepicker_button_today",
-	"value": "Today",
-	"description": "Testo pulsante datapicker per oggi"
+    "key": "datepicker_button_today",
+    "value": "Today",
+    "description": "Testo pulsante datapicker per oggi"
 }, {
-	"key": "datepicker_button_canc",
-	"value": "Delete",
-	"description": "Testo pulsante datapicker per cancella"
+    "key": "datepicker_button_canc",
+    "value": "Delete",
+    "description": "Testo pulsante datapicker per cancella"
 }, {
-	"key": "datepicker_button_close",
-	"value": "Close",
-	"description": "Testo pulsante datapicker per chiudi"
+    "key": "datepicker_button_close",
+    "value": "Close",
+    "description": "Testo pulsante datapicker per chiudi"
 }, {
-	"key": "log_time_error_required",
-	"value": "'Time' field is mandatory",
-	"description": "Messaggio ora log mancante in creazione log via"
+    "key": "log_time_error_required",
+    "value": "'Time' field is mandatory",
+    "description": "Messaggio ora log mancante in creazione log via"
 }, {
-	"key": "log_time_error_pattern",
-	"value": "'Time' field is not correct. Insert a value in the hh:mm:ss values",
-	"description": "Messaggio ora log non corretta in creazione log via"
+    "key": "log_time_error_pattern",
+    "value": "'Time' field is not correct. Insert a value in the hh:mm:ss values",
+    "description": "Messaggio ora log non corretta in creazione log via"
 }, {
-	"key": "street_userlog_err_required",
-	"value": "'User log' field is mandatory",
-	"description": "Messaggio user log mancante in creazione log via"
+    "key": "street_userlog_err_required",
+    "value": "'User log' field is mandatory",
+    "description": "Messaggio user log mancante in creazione log via"
 }, {
-	"key": "street_userlog_pattern",
-	"value": "'User log' field is not correct: insert a numeric value",
-	"description": "Messaggio user log non corretta in creazione log via"
+    "key": "street_userlog_pattern",
+    "value": "'User log' field is not correct: insert a numeric value",
+    "description": "Messaggio user log non corretta in creazione log via"
 }, {
-	"key": "err_in_log_street_inserting",
-	"value": "Error in inserting new log: DB is not ready. Try again later",
-	"description": "Messaggio errore in db in creazione log via"
+    "key": "err_in_log_street_inserting",
+    "value": "Error in inserting new log: DB is not ready. Try again later",
+    "description": "Messaggio errore in db in creazione log via"
 }, {
-	"key": "succ_in_log_street_inserting",
-	"value": "New log inserting success",
-	"description": "Messaggio successo in creazione log via in db"
+    "key": "succ_in_log_street_inserting",
+    "value": "New log inserting success",
+    "description": "Messaggio successo in creazione log via in db"
 }, {
     "key": "new_log_parking",
     "value": "Create Structure Log",
@@ -1959,442 +1964,442 @@
     "value": "'Log time' field is mandatory",
     "description": "Messaggio orario log mancante in creazione log parcheggio"
 }, {
-	"key": "parking_userlog_err_required",
-	"value": "'Log user' field is mandatory",
-	"description": "Messaggio user log mancante in creazione log parcheggio"
-}, {
-	"key": "parking_userlog_pattern",
-	"value": "'Log user' field is not correct: insert a numeric value",
-	"description": "Messaggio user log non corretta in creazione log parcheggio"
-}, {
-	"key": "err_in_log_parking_inserting",
-	"value": "Error in new log insertion: DB is not ready. Try again later",
-	"description": "Messaggio errore in db in creazione log parcheggio"
-}, {
-	"key": "succ_in_log_parking_inserting",
-	"value": "New log insertion success",
-	"description": "Messaggio successo in creazione log parcheggio in db"
-}, {
-	"key": "parking_slots",
-	"value": "Slots",
-	"description": "Titolo pannello posti in creazione log parcheggio"
-}, {
-	"key": "parking_totalslot",
-	"value": "Total slots",
-	"description": "Label per campo posti totali in creazione log parcheggio"
-}, {
-	"key": "parking_occupied_slot",
-	"value": "Occupied slots",
-	"description": "Label per campo posti occupati in creazione log parcheggio"
-}, {
-	"key": "parking_slotoccupied_placeholder",
-	"value": "Insert the occupied slots number",
-	"description": "Valore placeholder per campo posti occupati in creazione log parcheggio"
-}, {
-	"key": "parking_unavailable_slot",
-	"value": "Unusable slots",
-	"description": "Label per campo posti non disponibili in creazione log parcheggio"
-}, {
-	"key": "log_parking_occupied_error_pattern",
-	"value": "'Occupied slots' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti non corretto in creazione log parcheggio"
-}, {
-	"key": "log_parking_occupied_error_required",
-	"value": "'Occupied slots' field is mandatory. Insert a numeric value",
-	"description": "Messaggio campo posti obbligatorio in creazione log parcheggio"
-}, {
-	"key": "log_parking_occupied_error_min",
-	"value": "'Occupied slots' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti non corretto in creazione log parcheggio per valore troppo piccolo"
-}, {
-	"key": "log_parking_occupied_error_max",
-	"value": "'Occupied slots' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti non corretto in creazione log parcheggio per valore troppo grande"
-}, {
-	"key": "log_street_occupied_timed_error_pattern",
-	"value": "'Occupied slots on timed park' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti disco orario non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_timed_error_required",
-	"value": "'Occupied slots on timed park' field is mandatory. Insert a numeric value",
-	"description": "Messaggio campo posti disco orario obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_timed_error_min",
-	"value": "'Occupied slots on timed park' field value is not correct. Insert a bigger value.",
-	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_timed_error_max",
-	"value": "'Occupied slots on timed park' field value is not correct. Insert a smaller value.",
-	"description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_free_error_pattern",
-	"value": "'Occupied slots on free' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti gratuiti non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_reserved_error_pattern",
-	"value": "'Occupied slots on reserved' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti riservati non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_free_signed_error_pattern",
-	"value": "'Occupied slots on free signed' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti gratuiti con segnaletica non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_rechargeable_error_pattern",
-	"value": "'Occupied slots on rechargeable' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti ricaricabili occupati non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_rechargeable_error_required",
-	"value": "'Occupied slots on rechargeable' field value is required. Insert a numeric value",
-	"description": "Messaggio campo posti ricaricabili obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_rechargeable_error_min",
-	"value": "'Occupied slots on rechargeable' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti ricaricabili non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_rechargeable_error_max",
-	"value": "'Occupied slots on rechargeable' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti ricaricabili non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_loadingUnloading_error_pattern",
-	"value": "'Occupied slots on loading-unloading' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti carico-scarico occupati non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_loadingUnloading_error_required",
-	"value": "'Occupied slots on loading-unloading' field value is required. Insert a numeric value",
-	"description": "Messaggio campo posti carico-scarico obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_loadingUnloading_error_min",
-	"value": "'Occupied slots on loading-unloading' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti carico-scarico non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_loadingUnloading_error_max",
-	"value": "'Occupied slots on loading-unloading' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti carico-scarico non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_pink_error_pattern",
-	"value": "'Occupied slots on pink' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti rosa occupati non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_pink_error_required",
-	"value": "'Occupied slots on pink' field value is required. Insert a numeric value",
-	"description": "Messaggio campo posti rosa obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_pink_error_min",
-	"value": "'Occupied slots on pink' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti rosa non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_pink_error_max",
-	"value": "'Occupied slots on pink' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti rosa non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_car_sharing_error_pattern",
-	"value": "'Occupied slots on car-sharing' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti auto-condivisa occupati non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_car_sharing_error_required",
-	"value": "'Occupied slots on car-sharing' field value is required. Insert a numeric value",
-	"description": "Messaggio campo posti auto-condivisa obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_car_sharing_error_min",
-	"value": "'Occupied slots on car-sharing' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_car_sharing_error_max",
-	"value": "'Occupied slots on car-sharing' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_free_signed_error_required",
-	"value": "'Occupied slots on free signed' field value is mandatory. Insert a numeric value",
-	"description": "Messaggio campo posti gratuiti con segnaletica obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_reserved_error_required",
-	"value": "'Occupied slots on reserved' field value is mandatory. Insert a numeric value",
-	"description": "Messaggio campo posti riservati obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_handicapped_error_pattern",
-	"value": "'Occupied slots on handicapped' field value is not correct. Insert a numeric value.",
-	"description": "Messaggio campo posti per disabili non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_handicapped_error_required",
-	"value": "'Occupied slots on handicapped' field value is mandatory. Insert a numeric value.",
-	"description": "Messaggio campo posti per disabili obbligatorio in creazione log via"
-}, {
-	"key": "log_street_unavailable_error_pattern",
-	"value": "'Unusable slots' field value is not correct. Insert a numeric value.",
-	"description": "Messaggio campo posti inutilizzabili non corretto in creazione log via"
-}, {
-	"key": "log_street_unavailable_error_min",
-	"value": "'Unusable slots' field value is not correct. Insert a bigger value",
-	"description": "Messaggio campo posti inutilizzabili non corretto (min) in creazione log via"
-}, {
-	"key": "log_street_unavailable_error_max",
-	"value": "'Unusable slots' field value is not correct. Insert a smaller value",
-	"description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log via"
-}, {
-	"key": "log_park_unavailable_error_pattern",
-	"value": "'Unusable slots' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti inutilizzabili non corretto in creazione log parcheggio"
-}, {
-	"key": "log_park_unavailable_error_min",
-	"value": "'Unusable slots' field value is not correct. Insert a bigger value",
-	"description": "Messaggio campo posti inutilizzabili non corretto (min) in creazione log parcheggio"
-}, {
-	"key": "log_park_unavailable_error_max",
-	"value": "'Unusable slots' field value is not correct. Insert a smaller value",
-	"description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log parcheggio"
-}, {
-	"key": "log_park_occupied_handicapped_error_pattern",
-	"value": "'Occupied slots on handicapped' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti per disabili non corretto in creazione log parcheggio"
-}, {
-	"key": "log_park_occupied_handicapped_error_required",
-	"value": "'Occupied slots on handicapped' field value is mandatory. Insert a numeric value",
-	"description": "Messaggio campo posti per disabili obbligatorio in creazione log parcheggio"
-}, {
-	"key": "log_park_occupied_handicapped_error_min",
-	"value": "'Occupied slots on handicapped' field value is not correct. Insert a bigger value",
-	"description": "Messaggio campo posti per disabili troppo piccolo in creazione log parcheggio"
-}, {
-	"key": "log_park_occupied_handicapped_error_max",
-	"value": "'Occupied slots on handicapped' field value is not correct. Insert a smaller value",
-	"description": "Messaggio campo posti per disabili troppo grande in creazione log parcheggio"
-}, {
-	"key": "log_street_occupied_free_error_required",
-	"value": "'Occupied slots on free park' field value is mandatory. Insert a numeric value",
-	"description": "Messaggio campo posti gratuiti obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_free_error_min",
-	"value": "'Occupied slots on free park' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti gratuiti non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_free_error_max",
-	"value": "'Occupied slots on free park' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti gratuiti non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_free_signed_error_min",
-	"value": "'Occupied slots on free park signed' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti gratuiti con segnaletica non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_free_signed_error_max",
-	"value": "'Occupied slots on free park signed' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti gratuiti con segnaletica non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_reserved_error_min",
-	"value": "'Occupied slots on reserved' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti riservati non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_reserved_error_max",
-	"value": "'Occupied slots on reserved' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti riservati non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_handicapped_error_min",
-	"value": "'Occupied slots on handicapped' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti per disabili non corretto in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_handicapped_error_max",
-	"value": "'Occupied slots on handicapped' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti per disabili non corretto in creazione log via per valore troppo grande"
-}, {
-	"key": "log_street_occupied_paid_error_pattern",
-	"value": "'Occupied slots on paid park' field value is not correct. Insert a numeric value",
-	"description": "Messaggio campo posti a pagamento non corretto in creazione log via"
-}, {
-	"key": "log_street_occupied_paid_error_required",
-	"value": "'Occupied slots on paid park' field value is mandatory. Insert a numeric value",
-	"description": "Messaggio campo posti a pagamento obbligatorio in creazione log via"
-}, {
-	"key": "log_street_occupied_paid_error_min",
-	"value": "'Occupied slots on paid park' field value is not correct. Insert a bigger value",
-	"description": "Messaggio errore campo posti a pagamento obbligatorio in creazione log via per valore troppo piccolo"
-}, {
-	"key": "log_street_occupied_paid_error_max",
-	"value": "'Occupied slots on paid park' field value is not correct. Insert a smaller value",
-	"description": "Messaggio errore campo posti a pagamento obbligatorio in creazione log via per valore troppo grande"
-}, {
-	"key": "system_log_alt_title",
-	"value": "System log",
-	"description": "Titolo alt per icona log di sistema"
-}, {
-	"key": "log_insertion",
-	"value": "User log from ",
-	"description": "Label per campo tipo inserimento log"
-}, {
-	"key": "log_system_insertion_value",
-	"value": "System form",
-	"description": "Valore per tipo inserimento log"
-}, {
-	"key": "log_client_insertion_value",
-	"value": "app client",
-	"description": "Valore per tipo inserimento log"
-}, { 
-	"key": "pm_profit",
-	"value": "Profit",
-	"description": "Label per valore di incasso parcometro"
-}, { 
-	"key": "pm_tickets",
-	"value": "Ticket num",
-	"description": "Label per numero ticket emessi da parcometro"
-}, { 
-	"key": "ps_profit",
-	"value": "Profit",
-	"description": "Label per valore di incasso struttura parcheggio"
-}, { 
-	"key": "ps_tickets",
-	"value": "Ticket num",
-	"description": "Label per numero ticket emessi da struttura parcheggio"
-}, { 
-	"key": "street_profit",
-	"value": "Profit",
-	"description": "Label per valore di incasso via"
-}, { 
-	"key": "street_tickets",
-	"value": "Ticket num",
-	"description": "Label per numero ticket emessi in via"
-}, { 
-	"key": "street_profits",
-	"value": "Profit",
-	"description": "Titolo sezione incasso via"
-}, {
-	"key": "zone_paid_slots",
-	"value": "Paid slot number",
-	"description": "Label per posti a pagamento in sezione incasso zona"
-}, {
-	"key": "zone_profit", 
-	"value": "Profit",
-	"description": "Label per valore di incasso zona"
-}, {
-	"key": "zone_tickets", 
-	"value": "Ticket num",
-	"description": "Label per numero ticket emessi in zona"
-}, {
-	"key": "area_total_pms", 
-	"value": "Parking meter num.",
-	"description": "Label per numero parcometri in area"
-}, {
-	"key": "area_profit", 
-	"value": "Profit",
-	"description": "Label per valore di incasso area"
-}, {
-	"key": "area_tickets", 
-	"value": "Ticket num",
-	"description": "Label per numero ticket emessi in area"
-}, {
-	"key": "element_profit", 
-	"value": "Profit",
-	"description": "Label per valore di incasso in elemento in lista"
-}, { 
-	"key": "element_tickets", 
-	"value": "Ticket num",
-	"description": "Label per numero ticket emessi in elemento in lista"
-}, { 
-	"key": "element_costTime", 
-	"value": "Search time",
-	"description": "Label per costo di accesso in posto"
-}, { 
-	"key": "element_waiting_time", 
-	"value": "Waiting time",
-	"description": "Label per tempo di attesa per parcheggio"
-}, { 
-	"key": "element_waiting_min", 
-	"value": "min",
-	"description": "Label per minuti di attesa per parcheggio"
-}, { 
-	"key": "log_period", 
-	"value": "Period",
-	"description": "Label per periodo temporale specifico in inserimento log"
-}, { 
-	"key": "log_period_from_date", 
-	"value": "From",
-	"description": "Label per inizio periodo in inserimento log"
-}, { 
-	"key": "log_period_to_date", 
-	"value": "To",
-	"description": "Label per fine periodo in inserimento log"
-}, { 
-	"key": "log_period_time", 
-	"value": "Period time",
-	"description": "Label per ora periodo in inserimento log"
-}, { 
-	"key": "from_to_period_err", 
-	"value": "Incorrected inserted period: starting date is greater than ending date.",
-	"description": "Messaggio errore periodo data da maggiore di data a in inserimento log"
-}, { 
-	"key": "start_or_end_emplty_period_err", 
-	"value": "Starting and ending dates are missing. Please inserte the two values.",
-	"description": "Messaggio errore periodo data da o data a mancanti in inserimento log"
-}, { 
-	"key": "cmp_report_creation_button", 
-	"value": "Compare values",
-	"description": "Testo pulsante per creazione report di comparazione in lista dati"
-}, { 
-	"key": "cmp_report_creation_panel", 
-	"value": "Compare report creation",
-	"description": "Titolo pannello per creazione report di comparazione in lista dati"
-}, { 
-	"key": "vertical_compare_values", 
-	"value": "Vertical values",
-	"description": "Label select valori verticali per creazione report di comparazione in lista dati"
-}, { 
-	"key": "orizontal_compare_values", 
-	"value": "Horizontal values",
-	"description": "Label select valori orizzontali per creazione report di comparazione in lista dati"
-}, { 
-	"key": "vertical_data_select_err_required", 
-	"value": "Creating report compare error: you have to select a value for 'verical values'",
-	"description": "Testo errore in creazione report di comparazione: campo valori verticali obbligatorio"
-}, { 
-	"key": "orizontal_data_select_err_required", 
-	"value": "Creating report compare error: you have to select a value for 'horizontal'",
-	"description": "Testo errore in creazione report di comparazione: campo valori orizzontali obbligatorio"
-}, { 
-	"key": "create_comparation_report_btn", 
-	"value": "Create Report",
-	"description": "Testo pulsate creazione nuovo report di confronto"
-}, { 
-	"key": "profit_history_table_label", 
-	"value": "Profit (€)",
-	"description": "Titolo tabella profitto in dettagli storici parcometro"
-}, { 
-	"key": "tickets_history_table_label", 
-	"value": "Emitted tickets",
-	"description": "Titolo tabella ticket in dettagli storici parcometro"
-}, { 
-	"key": "legend_alt_title_val", 
-	"value": "Show legend",
-	"description": "Alt e title link per visualizzazione legenda"
-}, { 
-	"key": "legend_occupancy_label", 
-	"value": "Occupation legend",
-	"description": "Label per legenda occupazione"
-}, { 
-	"key": "legend_profit_label", 
-	"value": "Profit legend",
-	"description": "Label per legenda incassi"
-}, { 
-	"key": "legend_time_label", 
-	"value": "Search time legend",
-	"description": "Label per legenda tempo ricerca"
-}, { 
-	"key": "legend_np_data", 
-	"value": "not available",
-	"description": "Valore dato non disponibile in legenda"
-}, { 
-	"key": "legend_open_label", 
-	"value": "Show legend",
-	"description": "Label pulsante mostra legenda"
-}, { 
-	"key": "legend_close_label", 
-	"value": "Hide legend",
-	"description": "Label pulsante chiudi legenda"
-}, { 
-	"key": "report_management_button_label", 
-	"value": "Report management",
-	"description": "Label pulsante gestione report"
-}, { 
-	"key": "system_log_author", 
-	"value": "System",
-	"description": "Testo log di sistema se autore 999"
-}, { 
+    "key": "parking_userlog_err_required",
+    "value": "'Log user' field is mandatory",
+    "description": "Messaggio user log mancante in creazione log parcheggio"
+}, {
+    "key": "parking_userlog_pattern",
+    "value": "'Log user' field is not correct: insert a numeric value",
+    "description": "Messaggio user log non corretta in creazione log parcheggio"
+}, {
+    "key": "err_in_log_parking_inserting",
+    "value": "Error in new log insertion: DB is not ready. Try again later",
+    "description": "Messaggio errore in db in creazione log parcheggio"
+}, {
+    "key": "succ_in_log_parking_inserting",
+    "value": "New log insertion success",
+    "description": "Messaggio successo in creazione log parcheggio in db"
+}, {
+    "key": "parking_slots",
+    "value": "Slots",
+    "description": "Titolo pannello posti in creazione log parcheggio"
+}, {
+    "key": "parking_totalslot",
+    "value": "Total slots",
+    "description": "Label per campo posti totali in creazione log parcheggio"
+}, {
+    "key": "parking_occupied_slot",
+    "value": "Occupied slots",
+    "description": "Label per campo posti occupati in creazione log parcheggio"
+}, {
+    "key": "parking_slotoccupied_placeholder",
+    "value": "Insert the occupied slots number",
+    "description": "Valore placeholder per campo posti occupati in creazione log parcheggio"
+}, {
+    "key": "parking_unavailable_slot",
+    "value": "Unusable slots",
+    "description": "Label per campo posti non disponibili in creazione log parcheggio"
+}, {
+    "key": "log_parking_occupied_error_pattern",
+    "value": "'Occupied slots' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti non corretto in creazione log parcheggio"
+}, {
+    "key": "log_parking_occupied_error_required",
+    "value": "'Occupied slots' field is mandatory. Insert a numeric value",
+    "description": "Messaggio campo posti obbligatorio in creazione log parcheggio"
+}, {
+    "key": "log_parking_occupied_error_min",
+    "value": "'Occupied slots' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti non corretto in creazione log parcheggio per valore troppo piccolo"
+}, {
+    "key": "log_parking_occupied_error_max",
+    "value": "'Occupied slots' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti non corretto in creazione log parcheggio per valore troppo grande"
+}, {
+    "key": "log_street_occupied_timed_error_pattern",
+    "value": "'Occupied slots on timed park' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti disco orario non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_timed_error_required",
+    "value": "'Occupied slots on timed park' field is mandatory. Insert a numeric value",
+    "description": "Messaggio campo posti disco orario obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_timed_error_min",
+    "value": "'Occupied slots on timed park' field value is not correct. Insert a bigger value.",
+    "description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_timed_error_max",
+    "value": "'Occupied slots on timed park' field value is not correct. Insert a smaller value.",
+    "description": "Messaggio errore campo posti disco orario non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_free_error_pattern",
+    "value": "'Occupied slots on free' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti gratuiti non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_reserved_error_pattern",
+    "value": "'Occupied slots on reserved' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti riservati non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_free_signed_error_pattern",
+    "value": "'Occupied slots on free signed' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti gratuiti con segnaletica non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_rechargeable_error_pattern",
+    "value": "'Occupied slots on rechargeable' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti ricaricabili occupati non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_rechargeable_error_required",
+    "value": "'Occupied slots on rechargeable' field value is required. Insert a numeric value",
+    "description": "Messaggio campo posti ricaricabili obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_rechargeable_error_min",
+    "value": "'Occupied slots on rechargeable' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti ricaricabili non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_rechargeable_error_max",
+    "value": "'Occupied slots on rechargeable' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti ricaricabili non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_loadingUnloading_error_pattern",
+    "value": "'Occupied slots on loading-unloading' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti carico-scarico occupati non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_loadingUnloading_error_required",
+    "value": "'Occupied slots on loading-unloading' field value is required. Insert a numeric value",
+    "description": "Messaggio campo posti carico-scarico obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_loadingUnloading_error_min",
+    "value": "'Occupied slots on loading-unloading' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti carico-scarico non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_loadingUnloading_error_max",
+    "value": "'Occupied slots on loading-unloading' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti carico-scarico non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_pink_error_pattern",
+    "value": "'Occupied slots on pink' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti rosa occupati non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_pink_error_required",
+    "value": "'Occupied slots on pink' field value is required. Insert a numeric value",
+    "description": "Messaggio campo posti rosa obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_pink_error_min",
+    "value": "'Occupied slots on pink' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti rosa non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_pink_error_max",
+    "value": "'Occupied slots on pink' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti rosa non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_car_sharing_error_pattern",
+    "value": "'Occupied slots on car-sharing' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti auto-condivisa occupati non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_car_sharing_error_required",
+    "value": "'Occupied slots on car-sharing' field value is required. Insert a numeric value",
+    "description": "Messaggio campo posti auto-condivisa obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_car_sharing_error_min",
+    "value": "'Occupied slots on car-sharing' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_car_sharing_error_max",
+    "value": "'Occupied slots on car-sharing' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti auto-condivisa non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_free_signed_error_required",
+    "value": "'Occupied slots on free signed' field value is mandatory. Insert a numeric value",
+    "description": "Messaggio campo posti gratuiti con segnaletica obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_reserved_error_required",
+    "value": "'Occupied slots on reserved' field value is mandatory. Insert a numeric value",
+    "description": "Messaggio campo posti riservati obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_handicapped_error_pattern",
+    "value": "'Occupied slots on handicapped' field value is not correct. Insert a numeric value.",
+    "description": "Messaggio campo posti per disabili non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_handicapped_error_required",
+    "value": "'Occupied slots on handicapped' field value is mandatory. Insert a numeric value.",
+    "description": "Messaggio campo posti per disabili obbligatorio in creazione log via"
+}, {
+    "key": "log_street_unavailable_error_pattern",
+    "value": "'Unusable slots' field value is not correct. Insert a numeric value.",
+    "description": "Messaggio campo posti inutilizzabili non corretto in creazione log via"
+}, {
+    "key": "log_street_unavailable_error_min",
+    "value": "'Unusable slots' field value is not correct. Insert a bigger value",
+    "description": "Messaggio campo posti inutilizzabili non corretto (min) in creazione log via"
+}, {
+    "key": "log_street_unavailable_error_max",
+    "value": "'Unusable slots' field value is not correct. Insert a smaller value",
+    "description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log via"
+}, {
+    "key": "log_park_unavailable_error_pattern",
+    "value": "'Unusable slots' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti inutilizzabili non corretto in creazione log parcheggio"
+}, {
+    "key": "log_park_unavailable_error_min",
+    "value": "'Unusable slots' field value is not correct. Insert a bigger value",
+    "description": "Messaggio campo posti inutilizzabili non corretto (min) in creazione log parcheggio"
+}, {
+    "key": "log_park_unavailable_error_max",
+    "value": "'Unusable slots' field value is not correct. Insert a smaller value",
+    "description": "Messaggio campo posti inutilizzabili non corretto (max) in creazione log parcheggio"
+}, {
+    "key": "log_park_occupied_handicapped_error_pattern",
+    "value": "'Occupied slots on handicapped' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti per disabili non corretto in creazione log parcheggio"
+}, {
+    "key": "log_park_occupied_handicapped_error_required",
+    "value": "'Occupied slots on handicapped' field value is mandatory. Insert a numeric value",
+    "description": "Messaggio campo posti per disabili obbligatorio in creazione log parcheggio"
+}, {
+    "key": "log_park_occupied_handicapped_error_min",
+    "value": "'Occupied slots on handicapped' field value is not correct. Insert a bigger value",
+    "description": "Messaggio campo posti per disabili troppo piccolo in creazione log parcheggio"
+}, {
+    "key": "log_park_occupied_handicapped_error_max",
+    "value": "'Occupied slots on handicapped' field value is not correct. Insert a smaller value",
+    "description": "Messaggio campo posti per disabili troppo grande in creazione log parcheggio"
+}, {
+    "key": "log_street_occupied_free_error_required",
+    "value": "'Occupied slots on free park' field value is mandatory. Insert a numeric value",
+    "description": "Messaggio campo posti gratuiti obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_free_error_min",
+    "value": "'Occupied slots on free park' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti gratuiti non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_free_error_max",
+    "value": "'Occupied slots on free park' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti gratuiti non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_free_signed_error_min",
+    "value": "'Occupied slots on free park signed' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti gratuiti con segnaletica non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_free_signed_error_max",
+    "value": "'Occupied slots on free park signed' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti gratuiti con segnaletica non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_reserved_error_min",
+    "value": "'Occupied slots on reserved' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti riservati non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_reserved_error_max",
+    "value": "'Occupied slots on reserved' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti riservati non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_handicapped_error_min",
+    "value": "'Occupied slots on handicapped' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti per disabili non corretto in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_handicapped_error_max",
+    "value": "'Occupied slots on handicapped' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti per disabili non corretto in creazione log via per valore troppo grande"
+}, {
+    "key": "log_street_occupied_paid_error_pattern",
+    "value": "'Occupied slots on paid park' field value is not correct. Insert a numeric value",
+    "description": "Messaggio campo posti a pagamento non corretto in creazione log via"
+}, {
+    "key": "log_street_occupied_paid_error_required",
+    "value": "'Occupied slots on paid park' field value is mandatory. Insert a numeric value",
+    "description": "Messaggio campo posti a pagamento obbligatorio in creazione log via"
+}, {
+    "key": "log_street_occupied_paid_error_min",
+    "value": "'Occupied slots on paid park' field value is not correct. Insert a bigger value",
+    "description": "Messaggio errore campo posti a pagamento obbligatorio in creazione log via per valore troppo piccolo"
+}, {
+    "key": "log_street_occupied_paid_error_max",
+    "value": "'Occupied slots on paid park' field value is not correct. Insert a smaller value",
+    "description": "Messaggio errore campo posti a pagamento obbligatorio in creazione log via per valore troppo grande"
+}, {
+    "key": "system_log_alt_title",
+    "value": "System log",
+    "description": "Titolo alt per icona log di sistema"
+}, {
+    "key": "log_insertion",
+    "value": "User log from ",
+    "description": "Label per campo tipo inserimento log"
+}, {
+    "key": "log_system_insertion_value",
+    "value": "System form",
+    "description": "Valore per tipo inserimento log"
+}, {
+    "key": "log_client_insertion_value",
+    "value": "app client",
+    "description": "Valore per tipo inserimento log"
+}, {
+    "key": "pm_profit",
+    "value": "Profit",
+    "description": "Label per valore di incasso parcometro"
+}, {
+    "key": "pm_tickets",
+    "value": "Ticket num",
+    "description": "Label per numero ticket emessi da parcometro"
+}, {
+    "key": "ps_profit",
+    "value": "Profit",
+    "description": "Label per valore di incasso struttura parcheggio"
+}, {
+    "key": "ps_tickets",
+    "value": "Ticket num",
+    "description": "Label per numero ticket emessi da struttura parcheggio"
+}, {
+    "key": "street_profit",
+    "value": "Profit",
+    "description": "Label per valore di incasso via"
+}, {
+    "key": "street_tickets",
+    "value": "Ticket num",
+    "description": "Label per numero ticket emessi in via"
+}, {
+    "key": "street_profits",
+    "value": "Profit",
+    "description": "Titolo sezione incasso via"
+}, {
+    "key": "zone_paid_slots",
+    "value": "Paid slot number",
+    "description": "Label per posti a pagamento in sezione incasso zona"
+}, {
+    "key": "zone_profit",
+    "value": "Profit",
+    "description": "Label per valore di incasso zona"
+}, {
+    "key": "zone_tickets",
+    "value": "Ticket num",
+    "description": "Label per numero ticket emessi in zona"
+}, {
+    "key": "area_total_pms",
+    "value": "Parking meter num.",
+    "description": "Label per numero parcometri in area"
+}, {
+    "key": "area_profit",
+    "value": "Profit",
+    "description": "Label per valore di incasso area"
+}, {
+    "key": "area_tickets",
+    "value": "Ticket num",
+    "description": "Label per numero ticket emessi in area"
+}, {
+    "key": "element_profit",
+    "value": "Profit",
+    "description": "Label per valore di incasso in elemento in lista"
+}, {
+    "key": "element_tickets",
+    "value": "Ticket num",
+    "description": "Label per numero ticket emessi in elemento in lista"
+}, {
+    "key": "element_costTime",
+    "value": "Search time",
+    "description": "Label per costo di accesso in posto"
+}, {
+    "key": "element_waiting_time",
+    "value": "Waiting time",
+    "description": "Label per tempo di attesa per parcheggio"
+}, {
+    "key": "element_waiting_min",
+    "value": "min",
+    "description": "Label per minuti di attesa per parcheggio"
+}, {
+    "key": "log_period",
+    "value": "Period",
+    "description": "Label per periodo temporale specifico in inserimento log"
+}, {
+    "key": "log_period_from_date",
+    "value": "From",
+    "description": "Label per inizio periodo in inserimento log"
+}, {
+    "key": "log_period_to_date",
+    "value": "To",
+    "description": "Label per fine periodo in inserimento log"
+}, {
+    "key": "log_period_time",
+    "value": "Period time",
+    "description": "Label per ora periodo in inserimento log"
+}, {
+    "key": "from_to_period_err",
+    "value": "Incorrected inserted period: starting date is greater than ending date.",
+    "description": "Messaggio errore periodo data da maggiore di data a in inserimento log"
+}, {
+    "key": "start_or_end_emplty_period_err",
+    "value": "Starting and ending dates are missing. Please inserte the two values.",
+    "description": "Messaggio errore periodo data da o data a mancanti in inserimento log"
+}, {
+    "key": "cmp_report_creation_button",
+    "value": "Compare values",
+    "description": "Testo pulsante per creazione report di comparazione in lista dati"
+}, {
+    "key": "cmp_report_creation_panel",
+    "value": "Compare report creation",
+    "description": "Titolo pannello per creazione report di comparazione in lista dati"
+}, {
+    "key": "vertical_compare_values",
+    "value": "Vertical values",
+    "description": "Label select valori verticali per creazione report di comparazione in lista dati"
+}, {
+    "key": "orizontal_compare_values",
+    "value": "Horizontal values",
+    "description": "Label select valori orizzontali per creazione report di comparazione in lista dati"
+}, {
+    "key": "vertical_data_select_err_required",
+    "value": "Creating report compare error: you have to select a value for 'verical values'",
+    "description": "Testo errore in creazione report di comparazione: campo valori verticali obbligatorio"
+}, {
+    "key": "orizontal_data_select_err_required",
+    "value": "Creating report compare error: you have to select a value for 'horizontal'",
+    "description": "Testo errore in creazione report di comparazione: campo valori orizzontali obbligatorio"
+}, {
+    "key": "create_comparation_report_btn",
+    "value": "Create Report",
+    "description": "Testo pulsate creazione nuovo report di confronto"
+}, {
+    "key": "profit_history_table_label",
+    "value": "Profit (€)",
+    "description": "Titolo tabella profitto in dettagli storici parcometro"
+}, {
+    "key": "tickets_history_table_label",
+    "value": "Emitted tickets",
+    "description": "Titolo tabella ticket in dettagli storici parcometro"
+}, {
+    "key": "legend_alt_title_val",
+    "value": "Show legend",
+    "description": "Alt e title link per visualizzazione legenda"
+}, {
+    "key": "legend_occupancy_label",
+    "value": "Occupation legend",
+    "description": "Label per legenda occupazione"
+}, {
+    "key": "legend_profit_label",
+    "value": "Profit legend",
+    "description": "Label per legenda incassi"
+}, {
+    "key": "legend_time_label",
+    "value": "Search time legend",
+    "description": "Label per legenda tempo ricerca"
+}, {
+    "key": "legend_np_data",
+    "value": "not available",
+    "description": "Valore dato non disponibile in legenda"
+}, {
+    "key": "legend_open_label",
+    "value": "Show legend",
+    "description": "Label pulsante mostra legenda"
+}, {
+    "key": "legend_close_label",
+    "value": "Hide legend",
+    "description": "Label pulsante chiudi legenda"
+}, {
+    "key": "report_management_button_label",
+    "value": "Report management",
+    "description": "Label pulsante gestione report"
+}, {
+    "key": "system_log_author",
+    "value": "System",
+    "description": "Testo log di sistema se autore 999"
+}, {
     "key": "time_vis",
     "value": "View"
 }, {
@@ -2644,36 +2649,36 @@
     "key": "camper_vehicle",
     "value": "Camper"
 }, {
-	"key": "add_new_vehicle_slots",
-	"value": "Add new vehicle slots"
+    "key": "add_new_vehicle_slots",
+    "value": "Add new vehicle slots"
 }, {
-	"key": "vehicle_type",
-	"value": "Vehicle Type"
+    "key": "vehicle_type",
+    "value": "Vehicle Type"
 }, {
-	"key": "street_active_vehicle_type",
-	"value": "Active"
+    "key": "street_active_vehicle_type",
+    "value": "Active"
 }, {
-	"key": "ps_abutting_park",
-	"value": "Park with bus service"
+    "key": "ps_abutting_park",
+    "value": "Park with bus service"
 }, {
-	"key": "filter_agency_title",
-	"value": "Filter for agencyId"
+    "key": "filter_agency_title",
+    "value": "Filter for agencyId"
 }, {
-	"key": "agency_title",
-	"value": "Agency"
+    "key": "agency_title",
+    "value": "Agency"
 }, {
-	"key": "add_period_button",
-	"value": "ADD"
+    "key": "add_period_button",
+    "value": "ADD"
 }, {
-	"key": "add_edit_period_button",
-	"value": "ADD NEW"
+    "key": "add_edit_period_button",
+    "value": "ADD NEW"
 }, {
-	"key": "cancel_adding_vehicle_button",
-	"value": "CANCEL"
+    "key": "cancel_adding_vehicle_button",
+    "value": "CANCEL"
 }, {
-	"key": "expand_edit_button",
-	"value": "Show/edit"
+    "key": "expand_edit_button",
+    "value": "Show/edit"
 }, {
-	"key": "reduce_close_button",
-	"value": "Hide"
+    "key": "reduce_close_button",
+    "value": "Hide"
 }]

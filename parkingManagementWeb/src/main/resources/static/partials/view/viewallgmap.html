@@ -3,419 +3,424 @@
 <!-- 		<h4 class="panel-title">{{ 'viewAllPanelTitle' | i18n }}</h4> -->
 <!-- 	</div> -->
 <!-- 	<div class="panel-body"> -->
-		<!--<form name="viewForm"  > ng-init="initWs()" -->
-			<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
-				<div class="col-md-9">
-					<map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}">
-						<marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" visible="{{ pm.options.visible }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showInfoWindow(event, 'pm')" >
-							<info-window id="pm" visible-on-marker="{{ pm.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="pmconf.pm_code.visible">{{ pm.data.code }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="pmconf.pm_note.visible">
-							        			<td><strong>{{ 'pm_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ pm.data.note }}</td>
-							        		</tr>
-											<tr ng-show="pmconf.pm_status.visible">
-							        			<td><strong>{{ 'pm_status' | i18n }}:</strong></td>
-							        			<td>
-							        				<span ng-show="pm.data.status=='ACTIVE'">{{ 'active_pm_state' | i18n }}</span>
-													<span ng-show="pm.data.status!='ACTIVE'">{{ 'inactive_pm_state' | i18n }}</span>
-												</td>	
-							        		</tr>
-							        		<tr ng-if="pmconf.pm_zones0.visible">	
-												<td>
-													<strong>{{ zone0_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z0 in pm.zones0 track by z0.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
-															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="pmconf.pm_zones1.visible">	
-												<td>
-													<strong>{{ zone1_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z1 in pm.data.zones1 track by z1.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
-															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="pmconf.pm_zones2.visible">	
-												<td>
-													<strong>{{ zone2_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z2 in pm.data.zones2 track by z2.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
-															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="pmconf.pm_zones3.visible">	
-												<td>
-													<strong>{{ zone3_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z3 in pm.data.zones3 track by z3.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
-															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="pmconf.pm_zones4.visible">	
-												<td>
-													<strong>{{ zone4_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z4 in pm.data.zones4 track by z4.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
-															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-							        		<tr ng-show="pmconf.pm_rateArea.visible">
-							        			<td colspan="2">
-							        				<strong>{{ 'pm_area_name' | i18n }}:</strong>
-							        				<div class="panel panel-default">
-														<div class="panel-body">
-															<table width="100%">
-																<tr>
-																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-																	<td width="55%">{{ pm.area.name }}</td>
-																</tr>
-																<tr>
-																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>
-																		<div ng-repeat="r in pm.area.validityPeriod">
-																			<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
-																			<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
-																			<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
-																			<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
-																			<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
-																		</div>
-																	</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-																	<td>{{ pm.area.smsCode }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_color' | i18n }}</strong></td>
-																	<td><span class="colorBox" ng-style="{'background-color': correctColor(pm.area.color)}"></span></td>
-																</tr>
-													   		</table>
-														</div>
-													</div>	
-							        			</td>
-							        		</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-						</marker>
-						<marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ psMarkerIcon }}" on-click="showInfoWindow(event, 'ps')" >
-							<info-window id="ps" visible-on-marker="{{ ps.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="psconf.ps_name.visible">{{ ps.data.name }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="psconf.ps_address.visible">
-							        			<td><strong>{{ 'ps_address' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.streetReference }}</td>
-							        		</tr>
-							        		<tr ng-show="psconf.ps_fee.visible">	
-												<td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
-												<td>
-													<div ng-repeat="r in ps.data.validityPeriod">
-														<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
-														<!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
-														<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
-														<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
-														<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
-													</div>
-												</td>
-											</tr>
-							        		<tr ng-show="psconf.ps_phoneNumber.visible">
-							        			<td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.phoneNumber }}</td>
-							        		</tr>
-							        		<tr ng-show="psconf.ps_manager.visible">
-							        			<td><strong>{{ 'ps_manager' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.manager }}</td>
-							        		</tr>
-							        		<tr ng-show="psconf.ps_management.visible">
-							        			<td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ ps.data.managementMode }}</td>
-							        		</tr>
-							        		<tr ng-show="psconf.ps_parkride.visible">
-												<td><strong>{{ 'ps_park_and_ride' | i18n }}:</strong></td>
-												<td>&nbsp;
-													<span ng-if="isUsedItaLang()">{{ ps.data.parkAndRide | boolToString }}</span>
-													<span ng-if="isUsedEngLang()">{{ ps.data.parkAndRide | boolToStringEng }}</span>
-												</td>
-											</tr>
-							        		<tr ng-show="psconf.ps_payment.visible && ps.data.paymentMode">
-								       			<td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
-								       			<td>&nbsp;{{ castMyPaymentToString(ps.data.paymentMode) }}</td>
-							        		</tr>
-							        		<tr ng-show="psconf.ps_payment.visible  && ps.data.paymentPoint">
-								       			<td><strong>{{ 'ps_payment_point' | i18n }}:</strong></td>
-								       			<td>&nbsp;{{ castMyPaymentToString(ps.data.paymentPoint) }}</td>
-							        		</tr>
-							        		<tr ng-if="psconf.ps_zones0.visible">	
-												<td>
-													<strong>{{ zone0_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z0 in ps.data.zones0 track by z0.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
-															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="psconf.ps_zones1.visible">	
-												<td>
-													<strong>{{ zone1_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z1 in ps.data.zones1 track by z1.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
-															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="psconf.ps_zones2.visible">	
-												<td>
-													<strong>{{ zone2_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z2 in ps.data.zones2 track by z2.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
-															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="psconf.ps_zones3.visible">	
-												<td>
-													<strong>{{ zone3_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z3 in ps.data.zones3 track by z3.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
-															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="psconf.ps_zones4.visible">	
-												<td>
-													<strong>{{ zone4_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z4 in ps.data.zones4 track by z4.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
-															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr>
-												<td colspan="2">
-													<strong>{{ 'ps_slots' | i18n }}</strong>:
-													<div class="panel panel-default">
-														<div class="panel-body">
-															<table width="100%">
-																<tr ng-show="psconf.ps_slotNumber.visible">
-																	<td width="45%"><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
-																	<td width="55%">{{ ps.data.slotNumber }}</td>
-																</tr>
-																<!-- <tr ng-show="psconf.ps_handicappedSlot.visible">	
+<!--<form name="viewForm"  > ng-init="initWs()" -->
+<div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
+  <div class="col-md-9">
+    <map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}">
+      <marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" visible="{{ pm.options.visible }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showInfoWindow(event, 'pm')">
+        <info-window id="pm" visible-on-marker="{{ pm.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="pmconf.pm_code.visible">{{ pm.data.code }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr ng-show="pmconf.pm_note.visible">
+                  <td><strong>{{ 'pm_note' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ pm.data.note }}</td>
+                </tr>
+                <tr ng-show="pmconf.pm_status.visible">
+                  <td><strong>{{ 'pm_status' | i18n }}:</strong></td>
+                  <td>
+                    <span ng-show="pm.data.status=='ACTIVE'">{{ 'active_pm_state' | i18n }}</span>
+                    <span ng-show="pm.data.status!='ACTIVE'">{{ 'inactive_pm_state' | i18n }}</span>
+                  </td>
+                </tr>
+                <tr ng-show="pmconf.pm_status.visible">
+                  <td><strong>{{ 'pm_payment' | i18n }}</strong></td>
+                  <td>
+                    <span ng-repeat="type in pm.data.paymentMethods">{{type}}</span>
+                  </td>
+                </tr>
+                <tr ng-if="pmconf.pm_zones0.visible">
+                  <td>
+                    <strong>{{ zone0_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z0 in pm.zones0 track by z0.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
+                        <td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="pmconf.pm_zones1.visible">
+                  <td>
+                    <strong>{{ zone1_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z1 in pm.data.zones1 track by z1.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
+                        <td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="pmconf.pm_zones2.visible">
+                  <td>
+                    <strong>{{ zone2_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z2 in pm.data.zones2 track by z2.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
+                        <td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="pmconf.pm_zones3.visible">
+                  <td>
+                    <strong>{{ zone3_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z3 in pm.data.zones3 track by z3.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
+                        <td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="pmconf.pm_zones4.visible">
+                  <td>
+                    <strong>{{ zone4_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z4 in pm.data.zones4 track by z4.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
+                        <td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-show="pmconf.pm_rateArea.visible">
+                  <td colspan="2">
+                    <strong>{{ 'pm_area_name' | i18n }}:</strong>
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <table width="100%">
+                          <tr>
+                            <td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
+                            <td width="55%">{{ pm.area.name }}</td>
+                          </tr>
+                          <tr>
+                            <td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+                            <td>
+                              <div ng-repeat="r in pm.area.validityPeriod">
+                                <span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+                                <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+                                <span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+                                <span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+                                <span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><strong>{{ 'area_sms' | i18n }}:</strong></td>
+                            <td>{{ pm.area.smsCode }}</td>
+                          </tr>
+                          <tr>
+                            <td><strong>{{ 'area_color' | i18n }}</strong></td>
+                            <td><span class="colorBox" ng-style="{'background-color': correctColor(pm.area.color)}"></span></td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </marker>
+      <marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ psMarkerIcon }}" on-click="showInfoWindow(event, 'ps')">
+        <info-window id="ps" visible-on-marker="{{ ps.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="psconf.ps_name.visible">{{ ps.data.name }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr ng-show="psconf.ps_address.visible">
+                  <td><strong>{{ 'ps_address' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ ps.data.streetReference }}</td>
+                </tr>
+                <tr ng-show="psconf.ps_fee.visible">
+                  <td><strong>{{ 'ps_fee_val' | i18n }}:</strong></td>
+                  <td>
+                    <div ng-repeat="r in ps.data.validityPeriod">
+                      <span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }}, </span>
+                      <!-- <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br> -->
+                      <span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+                      <span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+                      <span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr ng-show="psconf.ps_phoneNumber.visible">
+                  <td><strong>{{ 'ps_phone' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ ps.data.phoneNumber }}</td>
+                </tr>
+                <tr ng-show="psconf.ps_manager.visible">
+                  <td><strong>{{ 'ps_manager' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ ps.data.manager }}</td>
+                </tr>
+                <tr ng-show="psconf.ps_management.visible">
+                  <td><strong>{{ 'ps_management_mode' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ ps.data.managementMode }}</td>
+                </tr>
+                <tr ng-show="psconf.ps_parkride.visible">
+                  <td><strong>{{ 'ps_park_and_ride' | i18n }}:</strong></td>
+                  <td>&nbsp;
+                    <span ng-if="isUsedItaLang()">{{ ps.data.parkAndRide | boolToString }}</span>
+                    <span ng-if="isUsedEngLang()">{{ ps.data.parkAndRide | boolToStringEng }}</span>
+                  </td>
+                </tr>
+                <tr ng-show="psconf.ps_payment.visible && ps.data.paymentMode">
+                  <td><strong>{{ 'ps_payment_mode' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ castMyPaymentToString(ps.data.paymentMode) }}</td>
+                </tr>
+                <tr ng-show="psconf.ps_payment.visible  && ps.data.paymentPoint">
+                  <td><strong>{{ 'ps_payment_point' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ castMyPaymentToString(ps.data.paymentPoint) }}</td>
+                </tr>
+                <tr ng-if="psconf.ps_zones0.visible">
+                  <td>
+                    <strong>{{ zone0_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z0 in ps.data.zones0 track by z0.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
+                        <td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="psconf.ps_zones1.visible">
+                  <td>
+                    <strong>{{ zone1_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z1 in ps.data.zones1 track by z1.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
+                        <td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="psconf.ps_zones2.visible">
+                  <td>
+                    <strong>{{ zone2_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z2 in ps.data.zones2 track by z2.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
+                        <td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="psconf.ps_zones3.visible">
+                  <td>
+                    <strong>{{ zone3_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z3 in ps.data.zones3 track by z3.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
+                        <td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="psconf.ps_zones4.visible">
+                  <td>
+                    <strong>{{ zone4_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z4 in ps.data.zones4 track by z4.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
+                        <td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr>
+                  <td colspan="2">
+                    <strong>{{ 'ps_slots' | i18n }}</strong>:
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <table width="100%">
+                          <tr ng-show="psconf.ps_slotNumber.visible">
+                            <td width="45%"><strong>{{ 'ps_totalslot' | i18n }}:</strong></td>
+                            <td width="55%">{{ ps.data.slotNumber }}</td>
+                          </tr>
+                          <!-- <tr ng-show="psconf.ps_handicappedSlot.visible">
 																	<td><strong>{{ 'ps_handicapped_slot' | i18n }}:</strong></td>
 																	<td>{{ ps.data.handicappedSlotNumber }}</td>
 																</tr> -->
-																<tr ng-show="psconf.ps_slotNumber.visible" ng-repeat="sc in ps.data.slotsConfiguration">
-														    		<td colspan="2" ng-show="sc.vehicleTypeActive">
-														    			<table frame="box" width="100%" >
-														    				<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_slotNum.visible">
-														    					<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
-														    				</tr>
-														    				<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_slotNum.visible">
-																	        	<td width="70%"><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
-																	        	<td width="30%">&nbsp;{{ sc.slotNumber }}</td>
-																	   		</tr>
-														    				<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
-																	    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
-																	    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.reservedSlotNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
-																	    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.paidSlotNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
-																	    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
-																	    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
-																	    		<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
-																	    		<td><strong>{{ 'street_rechargeable_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.rechargeableSlotNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
-																	    		<td><strong>{{ 'street_loading_unloading_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
-																	    		<td><strong>{{ 'street_pink_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.pinkSlotNumber }}</td>
-																	    	</tr>
-																	    	<tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
-																	    		<td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
-																	    		<td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
-																	    	</tr>
-														    			</table>
-														    		</td>	
-														    	</tr>
-															</table>
-														</div>
-													</div>
-												</td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-						</marker>
-						<marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')" >
-							<info-window id="bp" visible-on-marker="{{ bp.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="bpconf.bp_name.visible">{{ bp.data.name }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-											<tr ng-show="bpconf.bp_slotNumber.visible">
-							        			<td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ bp.data.slotNumber }}</td>
-							        		</tr>
-							        		<tr ng-show="bpconf.bp_bikeNumber.visible">
-							        			<td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ bp.data.bikeNumber }}</td>
-							        		</tr>
-							        		<tr ng-if="bpconf.bp_zones0.visible">	
-												<td>
-													<strong>{{ zone0_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z0 in bp.data.zones0 track by z0.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
-															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="bpconf.bp_zones1.visible">	
-												<td>
-													<strong>{{ zone1_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z1 in bp.data.zones1 track by z1.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
-															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="bpconf.bp_zones2.visible">	
-												<td>
-													<strong>{{ zone2_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z2 in bp.data.zones2 track by z2.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
-															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="bpconf.bp_zones3.visible">	
-												<td>
-													<strong>{{ zone3_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z3 in bp.data.zones3 track by z3.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
-															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="bpconf.bp_zones4.visible">	
-												<td>
-													<strong>{{ zone4_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z4 in bp.data.zones4 track by z4.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
-															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-						</marker>
-						<shape name="polyline" ng-repeat="s in mapStreets" id="{{ s.id }}" path="{{ s.gpath }}" 
-         					geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showInfoWindow(event, s.info_windows_cod)">
-     						<info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="sconf.s_streetRef.visible">{{ s.data.streetReference }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<!-- <tr ng-show="sconf.s_slotNum.visible">
+                          <tr ng-show="psconf.ps_slotNumber.visible" ng-repeat="sc in ps.data.slotsConfiguration">
+                            <td colspan="2" ng-show="sc.vehicleTypeActive">
+                              <table frame="box" width="100%">
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_slotNum.visible">
+                                  <td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_slotNum.visible">
+                                  <td width="70%"><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
+                                  <td width="30%">&nbsp;{{ sc.slotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+                                  <td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+                                  <td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.reservedSlotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+                                  <td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.paidSlotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+                                  <td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+                                  <td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+                                  <td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+                                  <td><strong>{{ 'street_rechargeable_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.rechargeableSlotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+                                  <td><strong>{{ 'street_loading_unloading_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+                                  <td><strong>{{ 'street_pink_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.pinkSlotNumber }}</td>
+                                </tr>
+                                <tr ng-show="manageVehicleTypesPs(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+                                  <td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
+                                  <td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
+                                </tr>
+                              </table>
+                            </td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </marker>
+      <marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')">
+        <info-window id="bp" visible-on-marker="{{ bp.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="bpconf.bp_name.visible">{{ bp.data.name }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr ng-show="bpconf.bp_slotNumber.visible">
+                  <td><strong>{{ 'bp_slots' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ bp.data.slotNumber }}</td>
+                </tr>
+                <tr ng-show="bpconf.bp_bikeNumber.visible">
+                  <td><strong>{{ 'bp_bikes' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ bp.data.bikeNumber }}</td>
+                </tr>
+                <tr ng-if="bpconf.bp_zones0.visible">
+                  <td>
+                    <strong>{{ zone0_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z0 in bp.data.zones0 track by z0.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
+                        <td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="bpconf.bp_zones1.visible">
+                  <td>
+                    <strong>{{ zone1_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z1 in bp.data.zones1 track by z1.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
+                        <td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="bpconf.bp_zones2.visible">
+                  <td>
+                    <strong>{{ zone2_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z2 in bp.data.zones2 track by z2.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
+                        <td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="bpconf.bp_zones3.visible">
+                  <td>
+                    <strong>{{ zone3_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z3 in bp.data.zones3 track by z3.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
+                        <td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="bpconf.bp_zones4.visible">
+                  <td>
+                    <strong>{{ zone4_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z4 in bp.data.zones4 track by z4.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
+                        <td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </marker>
+      <shape name="polyline" ng-repeat="s in mapStreets" id="{{ s.id }}" path="{{ s.gpath }}" geodesic="{{ s.geodesic }}" stroke-color="{{ s.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ s.stroke.weight }}" on-click="showInfoWindow(event, s.info_windows_cod)">
+        <info-window id="{{ s.info_windows_cod }}" data-position="{{ s.info_windows_pos }}" visible-on-marker="{{ s.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="sconf.s_streetRef.visible">{{ s.data.streetReference }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <!-- <tr ng-show="sconf.s_slotNum.visible">
 							        			<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.slotNumber }}</td>
 							        		</tr>
@@ -443,535 +448,565 @@
 							        			<td><strong>{{ 'street_unusuable_slot' | i18n }}:</strong></td>
 							        			<td>&nbsp;{{ s.data.unusuableSlotNumber }}</td>
 							        		</tr> -->
-							        		<tr ng-show="sconf.s_slotNum.visible">
-									        	<td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
-									        	<td>&nbsp;{{ s.data.slotNumber }}</td>
-									   		</tr>
-									    	<tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in s.data.slotsConfiguration">
-									    		<td colspan="2" ng-show="sc.vehicleTypeActive">
-									    			<table frame="box" width="100%" >
-									    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
-									    					<td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
-									    				</tr>
-									    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
-												        	<td width="70%"><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
-												        	<td width="30%">&nbsp;{{ sc.slotNumber }}</td>
-												   		</tr>
-									    				<tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
-												    		<td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
-												    		<td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.reservedSlotNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
-												    		<td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.paidSlotNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
-												    		<td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
-												    		<td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
-												    		<td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
-												    		<td><strong>{{ 'street_rechargeable_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.rechargeableSlotNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
-												    		<td><strong>{{ 'street_loading_unloading_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
-												    		<td><strong>{{ 'street_pink_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.pinkSlotNumber }}</td>
-												    	</tr>
-												    	<tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
-												    		<td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
-												    		<td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
-												    	</tr>
-									    			</table>
-									    		</td>	
-									    	</tr>
-							        		<tr ng-show="sconf.s_subscrition.visible">
-							        			<td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
-							        			<td>&nbsp;
-							        				<span ng-if="isUsedItaLang()">{{ s.data.subscritionAllowedPark | boolToString }}</span>
-													<span ng-if="isUsedEngLang()">{{ s.data.subscritionAllowedPark | boolToStringEng }}</span>
-							        			</td>
-							        		</tr>
-											<tr ng-show="sconf.s_pms.visible">	
-												<td>
-													<strong>{{ 'street_pm' | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="p in s.data.pms track by p.code">
-															<td width="30%">{{ p.code }}</td>
-															<td width="70%">{{ p.note }}</td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="sconf.s_zones0.visible">	
-												<td>
-													<strong>{{ zone0_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z0 in s.data.zones0 track by z0.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
-															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="sconf.s_zones1.visible">	
-												<td>
-													<strong>{{ zone1_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z1 in s.data.zones1 track by z1.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
-															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="sconf.s_zones2.visible">	
-												<td>
-													<strong>{{ zone2_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z2 in s.data.zones2 track by z2.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
-															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="sconf.s_zones3.visible">	
-												<td>
-													<strong>{{ zone3_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z3 in s.data.zones3 track by z3.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
-															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="sconf.s_zones4.visible">	
-												<td>
-													<strong>{{ zone4_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z4 in s.data.zones4 track by z4.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
-															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-show="sconf.s_areaId.visible">
-									        	<td colspan="2">
-									        		<strong>{{ 'street_area_name' | i18n }}:</strong>
-									        		<div class="panel panel-default">
-														<div class="panel-body">
-															<table width="100%">
-																<tr>
-																	<td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
-																	<td width="55%">{{ s.data.area.name }}</td>
-																</tr>
-																<tr>
-																	<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-																	<td>
-																		<div ng-repeat="r in s.data.area.validityPeriod">
-																			<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
-																			<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
-																			<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
-																			<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
-																			<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
-																		</div>
-																	</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-																	<td>{{ s.data.area.smsCode }}</td>
-																</tr>
-																<tr>	
-																	<td><strong>{{ 'area_color' | i18n }}</strong></td>
-																	<td><span class="colorBox" ng-style="{'background-color': correctColor(s.data.area.color)}"></span></td>
-																</tr>
-															</table>
-														</div>
-													</div>	
-									        	</td>
-									        </tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-     					</shape>
-						<shape name="polygon" ng-repeat="z in mapZones0" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
-         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
-         					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
-     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="zconf0.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf0.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="zconf0.zone_type.visible">
-							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
-							        			<td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
-							        		</tr>
-											<tr ng-show="zconf0.zone_note.visible">
-							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.note }}</td>
-							        		</tr>
-							        		<tr ng-show="zconf0.zone_color.visible">	
-												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-     					</shape>
-     					<shape name="polygon" ng-repeat="z in mapZones1" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
-         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
-         					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
-     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="zconf1.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf1.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="zconf1.zone_type.visible">
-							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
-							        			<td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
-							        		</tr>
-											<tr ng-show="zconf1.zone_note.visible">
-							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.note }}</td>
-							        		</tr>
-							        		<tr ng-show="zconf1.zone_color.visible">	
-												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-     					</shape>
-     					<shape name="polygon" ng-repeat="z in mapZones2" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
-         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
-         					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
-     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="zconf2.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf2.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="zconf2.zone_type.visible">
-							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
-							        			<td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
-							        		</tr>
-											<tr ng-show="zconf2.zone_note.visible">
-							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.note }}</td>
-							        		</tr>
-							        		<tr ng-show="zconf2.zone_color.visible">	
-												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-     					</shape>
-     					<shape name="polygon" ng-repeat="z in mapZones3" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
-         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
-         					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
-     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="zconf3.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf3.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="zconf3.zone_type.visible">
-							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
-							        			<td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
-							        		</tr>
-											<tr ng-show="zconf3.zone_note.visible">
-							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.note }}</td>
-							        		</tr>
-							        		<tr ng-show="zconf3.zone_color.visible">	
-												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-     					</shape>
-     					<shape name="polygon" ng-repeat="z in mapZones4" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}"
-         					geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}"
-         					fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
-     						<info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="zconf4.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf4.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr ng-show="zconf4.zone_type.visible">
-							        			<td><strong>{{ 'zone_type' | i18n }}:</strong></td>
-							        			<td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
-							        		</tr>
-											<tr ng-show="zconf4.zone_note.visible">
-							        			<td><strong>{{ 'zone_note' | i18n }}:</strong></td>
-							        			<td>&nbsp;{{ z.data.note }}</td>
-							        		</tr>
-							        		<tr ng-show="zconf4.zone_color.visible">	
-												<td><strong>{{ 'zone_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-     					</shape>
-     					<shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}"
-         					geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ a.stroke.weight }}"
-         					fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showInfoWindow(event, a.info_windows_cod)">
-     						<info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
-						        <div ng-non-bindable="">
-						          	<div id="siteNotice"></div>
-						          	<h4 id="firstHeading" class="firstHeading"><span ng-show="aconf.a_name.visible">{{ a.data.name }}</span></h4>
-							        <div id="bodyContent">
-							        	<table>
-							        		<tr>
-												<td><strong>{{ 'area_rate' | i18n }}:</strong></td>
-												<td>
-													<div ng-repeat="r in a.data.validityPeriod">
-														<span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
-														<span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
-														<span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
-														<span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
-														<span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
-													</div>
-												</td>
-											</tr>
-											<tr ng-show="aconf.a_smsCode.visible">	
-												<td><strong>{{ 'area_sms' | i18n }}:</strong></td>
-												<td>{{ a.data.smsCode }}</td>
-											</tr>
-											<tr ng-show="aconf.a_color.visible">	
-												<td><strong>{{ 'area_color' | i18n }}</strong></td>
-												<td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
-											</tr>
-											<tr ng-show="aconf.a_note.visible">	
-												<td><strong>{{ 'area_note' | i18n }}:</strong></td>
-												<td>{{ a.data.note }}</td>
-											</tr>
-											<tr ng-if="aconf.a_zones0.visible">
-												<td>
-													<strong>{{ zone0_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z0 in a.data.zones0 track by z0.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
-															<td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="aconf.a_zones1.visible">
-												<td>
-													<strong>{{ zone1_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z1 in a.data.zones1 track by z1.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
-															<td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="aconf.a_zones2.visible">	
-												<td>
-													<strong>{{ zone2_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z2 in a.data.zones2 track by z2.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
-															<td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="aconf.a_zones3.visible">	
-												<td>
-													<strong>{{ zone3_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z3 in s.data.zones3 track by z3.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
-															<td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-											<tr ng-if="aconf.a_zones4.visible">	
-												<td>
-													<strong>{{ zone4_label | i18n }}:</strong>
-												</td>
-												<td>
-													<table width="100%">
-														<tr ng-repeat="z4 in s.data.zones4 track by z4.id">
-															<td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
-															<td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
-														</tr>
-													</table>
-												</td>
-											</tr>
-							        	</table>
-							        </div>
-						        </div>
-						    </info-window>
-     					</shape>
-					</map>
-				</div>
-				<div class="col-md-3">
-					<div class="panel panel-success" ng-if="filterForZone0 || filterForZone1 || filterForZone2 || filterForZone3 || filterForZone4 || filterForAgency">
-						<div class="panel-heading">
-							<h5 class="panel-title">{{ 'filter_block_title' | i18n }}</h5>
-						</div>
-						<div class="panel-body">
-							<div ng-if="filterForZone0">
-								<label for="zone0">{{ zone0_label | i18n }}</label>
-					    		<select id="zone0" name="fZone0" class="form-control" ng-options="m as m.label for m in fZones0 | orderBy: 'label'" ng-model="myFilterZone0" ng-change="filterAllData(myFilterZone0, 0, agencyFilter)">
-					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
-					    		</select>
-							</div>
-							<div ng-if="filterForZone1">
-								<label for="zone1">{{ zone1_label | i18n }}</label>
-					    		<select id="zone1" name="fZone1" class="form-control" ng-options="m as m.label for m in fZones1 | orderBy: 'label'" ng-model="myFilterZone1" ng-change="filterAllData(myFilterZone1, 1, agencyFilter)">
-					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
-					    		</select>
-							</div>
-							<div ng-if="filterForZone2">
-								<label for="zone2">{{ zone2_label | i18n }}</label>
-					    		<select id="zone2" name="fZone2" class="form-control" ng-options="m as m.label for m in fZones2 | orderBy: 'label'" ng-model="myFilterZone2" ng-change="filterAllData(myFilterZone2, 2, agencyFilter)">
-					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
-					    		</select>
-							</div>
-							<div ng-if="filterForZone3">
-								<label for="zone3">{{ zone3_label | i18n }}</label>
-					    		<select id="zone3" name="sZone3" class="form-control" ng-options="m as m.label for m in fZones3 | orderBy: 'label'" ng-model="myFilterZone3" ng-change="filterAllData(myFilterZone3, 3, agencyFilter)">
-					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
-					    		</select>
-							</div>
-							<div ng-if="filterForZone4">
-								<label for="zone4">{{ zone4_label | i18n }}</label>
-					    		<select id="zone4" name="sZone4" class="form-control" ng-options="m as m.label for m in fZones4 | orderBy: 'label'" ng-model="myFilterZone4" ng-change="filterAllData(myFilterZone4, 4, agencyFilter)">
-					    			<option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
-					    		</select>
-							</div>
-							<div><br/></div>
-							<div ng-if="filterForAgency">
-								<label for="f_agency_area">{{ 'agency_title' | i18n }}</label>
-					    		<select id="f_agency_area" class="form-control" ng-model="agencyFilter" ng-change="filterAllData(myZoneFilter, myZoneIndex, agencyFilter)" >
-						    		<option ng-repeat="a in allAgencyFilter" value="{{a.id}}" >{{ a.name }}</option>
-						    	</select>
-							</div>
-						</div>
-					</div>
-					<div class="panel panel-success">
-						<div class="panel-heading">
-							<h5 class="panel-title">{{ 'view_hide_block_title' | i18n }}</h5>
-						</div>
-						<div class="panel-body">
-							<table width="100%">
-								<tr ng-show="isAreaVisible()">
-									<td align="center" width="15%"><input id="rateArea" type="checkbox" ng-model="mapelements.rateareas" ng-click="changeAreaPolygons()"></td>
-									<td align="left" width="85%"><label for="rateArea">{{ 'view_areas' | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isZones0Visible() && !filterForZone0">
-									<td align="center"><input id="zones0" type="checkbox" ng-model="mapelements.zones0" ng-click="changeZonePolygons(0)"></td>
-									<td align="left"><label for="zones0">{{ zone0_label | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isZones1Visible() && !filterForZone1">
-									<td align="center"><input id="zones1" type="checkbox" ng-model="mapelements.zones1" ng-click="changeZonePolygons(1)"></td>
-									<td align="left"><label for="zones1">{{ zone1_label | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isZones2Visible() && !filterForZone2">
-									<td align="center"><input id="zones2" type="checkbox" ng-model="mapelements.zones2" ng-click="changeZonePolygons(2)"></td>
-									<td align="left"><label for="zones2">{{ zone2_label | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isZones3Visible() && !filterForZone3">
-									<td align="center"><input id="zones3" type="checkbox" ng-model="mapelements.zones3" ng-click="changeZonePolygons(3)"></td>
-									<td align="left"><label for="zones3">{{ zone3_label | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isZones4Visible() && !filterForZone4">
-									<td align="center"><input id="zones4" type="checkbox" ng-model="mapelements.zones4" ng-click="changeZonePolygons(4)"></td>
-									<td align="left"><label for="zones4">{{ zone4_label | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isStreetVisible()">
-									<td align="center"><input id="streets" type="checkbox" ng-model="mapelements.streets" ng-click="changeStreetPolylines()"></td>
-									<td align="left"><label for="streets">{{ 'view_streets' | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isPsVisible()">
-									<td align="center"><input id="pStruct" type="checkbox" ng-model="mapelements.parkingstructs" ng-click="changeParkingStructuresMarkers()"></td>
-									<td align="left"><label for="pStruct">{{ 'view_parkingstructs' | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isPmVisible()">
-									<td align="center"><input id="pMeters" type="checkbox" ng-model="mapelements.parkingmeters" ng-click="changeParkingMetersMarkers()"></td>
-									<td align="left"><label for="pMeters">{{ 'view_parkingmeters' | i18n }}</label></td>
-								</tr>
-								<tr ng-show="isBpVisible()">
-									<td align="center"><input id="bikePoint" type="checkbox" ng-model="mapelements.bikepoints" ng-click="changeBikePointsMarkers()"></td>
-									<td align="left"><label for="bikePoint">{{ 'view_bikepoints' | i18n }}</label></td>
-								</tr>
-							</table>
-						</div>
-					</div>
-				</div>
-<!-- 			</div> -->
-<!-- 			<div class="row" ng-controller="MainCtrl"> -->
-				<div class="col-md-8">
-					<div class="map_margins">
-						<p>{{ 'widget_copy_text' | i18n }}</p>
-					</div>
-					<div class="highlight">
-						<code class="language-html" data-lang="html">
+                <tr ng-show="sconf.s_slotNum.visible">
+                  <td><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ s.data.slotNumber }}</td>
+                </tr>
+                <tr ng-show="sconf.s_slotNum.visible" ng-repeat="sc in s.data.slotsConfiguration">
+                  <td colspan="2" ng-show="sc.vehicleTypeActive">
+                    <table frame="box" width="100%">
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+                        <td colspan="2"><strong>{{ getVehicleKey(sc.vehicleType) | i18n }}</strong></td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_slotNum.visible">
+                        <td width="70%"><strong>{{ 'street_totalslot' | i18n }}:</strong></td>
+                        <td width="30%">&nbsp;{{ sc.slotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_handicappedSlot.visible && sc.handicappedSlotNumber">
+                        <td><strong>{{ 'street_handicapped_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.handicappedSlotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_reservedSlot.visible && sc.reservedSlotNumber">
+                        <td><strong>{{ 'street_reserved_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.reservedSlotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_paidSlot.visible && sc.paidSlotNumber">
+                        <td><strong>{{ 'street_paidpark_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.paidSlotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_timedSlot.visible && sc.timedParkSlotNumber">
+                        <td><strong>{{ 'street_timedpark_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.timedParkSlotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlot.visible && sc.freeParkSlotNumber">
+                        <td><strong>{{ 'street_freepark_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.freeParkSlotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_freeSlotSign.visible && sc.freeParkSlotSignNumber">
+                        <td><strong>{{ 'street_freepark_slot_signed' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.freeParkSlotSignNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_rechargeableSlot.visible && sc.rechargeableSlotNumber">
+                        <td><strong>{{ 'street_rechargeable_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.rechargeableSlotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_loadingUnloadingSlot.visible && sc.loadingUnloadingSlotNumber">
+                        <td><strong>{{ 'street_loading_unloading_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.loadingUnloadingSlotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_pinkSlot.visible && sc.pinkSlotNumber">
+                        <td><strong>{{ 'street_pink_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.pinkSlotNumber }}</td>
+                      </tr>
+                      <tr ng-show="manageVehicleTypes(sc.vehicleType).s_carSharingSlot.visible && sc.carSharingSlotNumber">
+                        <td><strong>{{ 'street_car_sharing_slot' | i18n }}:</strong></td>
+                        <td>&nbsp;{{ sc.carSharingSlotNumber }}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-show="sconf.s_subscrition.visible">
+                  <td><strong>{{ 'street_subscription_allowed' | i18n }}:</strong></td>
+                  <td>&nbsp;
+                    <span ng-if="isUsedItaLang()">{{ s.data.subscritionAllowedPark | boolToString }}</span>
+                    <span ng-if="isUsedEngLang()">{{ s.data.subscritionAllowedPark | boolToStringEng }}</span>
+                  </td>
+                </tr>
+                <tr ng-show="sconf.s_pms.visible">
+                  <td>
+                    <strong>{{ 'street_pm' | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="p in s.data.pms track by p.code">
+                        <td width="30%">{{ p.code }}</td>
+                        <td width="70%">{{ p.note }}</td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="sconf.s_zones0.visible">
+                  <td>
+                    <strong>{{ zone0_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z0 in s.data.zones0 track by z0.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
+                        <td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="sconf.s_zones1.visible">
+                  <td>
+                    <strong>{{ zone1_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z1 in s.data.zones1 track by z1.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
+                        <td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="sconf.s_zones2.visible">
+                  <td>
+                    <strong>{{ zone2_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z2 in s.data.zones2 track by z2.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
+                        <td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="sconf.s_zones3.visible">
+                  <td>
+                    <strong>{{ zone3_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z3 in s.data.zones3 track by z3.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
+                        <td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="sconf.s_zones4.visible">
+                  <td>
+                    <strong>{{ zone4_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z4 in s.data.zones4 track by z4.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
+                        <td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-show="sconf.s_areaId.visible">
+                  <td colspan="2">
+                    <strong>{{ 'street_area_name' | i18n }}:</strong>
+                    <div class="panel panel-default">
+                      <div class="panel-body">
+                        <table width="100%">
+                          <tr>
+                            <td width="45%"><strong>{{ 'area_name' | i18n }}:</strong></td>
+                            <td width="55%">{{ s.data.area.name }}</td>
+                          </tr>
+                          <tr>
+                            <td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+                            <td>
+                              <div ng-repeat="r in s.data.area.validityPeriod">
+                                <span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+                                <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+                                <span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+                                <span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+                                <span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+                              </div>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td><strong>{{ 'area_sms' | i18n }}:</strong></td>
+                            <td>{{ s.data.area.smsCode }}</td>
+                          </tr>
+                          <tr>
+                            <td><strong>{{ 'area_color' | i18n }}</strong></td>
+                            <td><span class="colorBox" ng-style="{'background-color': correctColor(s.data.area.color)}"></span></td>
+                          </tr>
+                        </table>
+                      </div>
+                    </div>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </shape>
+      <shape name="polygon" ng-repeat="z in mapZones0" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}" geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
+        <info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="zconf0.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf0.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr ng-show="zconf0.zone_type.visible">
+                  <td><strong>{{ 'zone_type' | i18n }}:</strong></td>
+                  <td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
+                </tr>
+                <tr ng-show="zconf0.zone_note.visible">
+                  <td><strong>{{ 'zone_note' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ z.data.note }}</td>
+                </tr>
+                <tr ng-show="zconf0.zone_color.visible">
+                  <td><strong>{{ 'zone_color' | i18n }}</strong></td>
+                  <td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </shape>
+      <shape name="polygon" ng-repeat="z in mapZones1" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}" geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
+        <info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="zconf1.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf1.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr ng-show="zconf1.zone_type.visible">
+                  <td><strong>{{ 'zone_type' | i18n }}:</strong></td>
+                  <td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
+                </tr>
+                <tr ng-show="zconf1.zone_note.visible">
+                  <td><strong>{{ 'zone_note' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ z.data.note }}</td>
+                </tr>
+                <tr ng-show="zconf1.zone_color.visible">
+                  <td><strong>{{ 'zone_color' | i18n }}</strong></td>
+                  <td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </shape>
+      <shape name="polygon" ng-repeat="z in mapZones2" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}" geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
+        <info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="zconf2.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf2.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr ng-show="zconf2.zone_type.visible">
+                  <td><strong>{{ 'zone_type' | i18n }}:</strong></td>
+                  <td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
+                </tr>
+                <tr ng-show="zconf2.zone_note.visible">
+                  <td><strong>{{ 'zone_note' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ z.data.note }}</td>
+                </tr>
+                <tr ng-show="zconf2.zone_color.visible">
+                  <td><strong>{{ 'zone_color' | i18n }}</strong></td>
+                  <td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </shape>
+      <shape name="polygon" ng-repeat="z in mapZones3" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}" geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
+        <info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="zconf3.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf3.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr ng-show="zconf3.zone_type.visible">
+                  <td><strong>{{ 'zone_type' | i18n }}:</strong></td>
+                  <td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
+                </tr>
+                <tr ng-show="zconf3.zone_note.visible">
+                  <td><strong>{{ 'zone_note' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ z.data.note }}</td>
+                </tr>
+                <tr ng-show="zconf3.zone_color.visible">
+                  <td><strong>{{ 'zone_color' | i18n }}</strong></td>
+                  <td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </shape>
+      <shape name="polygon" ng-repeat="z in mapZones4" id="{{ z.id }}" path="{{ z.gpath }}" visible="{{ z.visible }}" geodesic="{{ z.geodesic }}" stroke-color="{{ z.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ z.stroke.weight }}" fill-color="{{ z.stroke.color }}" fill-opacity="{{ z.fill.opacity }}" on-click="showInfoWindow(event, z.info_windows_cod)">
+        <info-window id="{{ z.info_windows_cod }}" data-position="{{ z.info_windows_pos }}" visible-on-marker="{{ z.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="zconf4.zone_name.visible">{{ z.data.name }}</span><span ng-show="zconf4.zone_submacro.visible">_{{ z.data.submacro }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr ng-show="zconf4.zone_type.visible">
+                  <td><strong>{{ 'zone_type' | i18n }}:</strong></td>
+                  <td>&nbsp;<span ng-if="z.data.myType.label">{{ z.data.myType.label }}</span></td>
+                </tr>
+                <tr ng-show="zconf4.zone_note.visible">
+                  <td><strong>{{ 'zone_note' | i18n }}:</strong></td>
+                  <td>&nbsp;{{ z.data.note }}</td>
+                </tr>
+                <tr ng-show="zconf4.zone_color.visible">
+                  <td><strong>{{ 'zone_color' | i18n }}</strong></td>
+                  <td><span class="colorBox" ng-style="{'background-color': correctColor(z.data.color)}"></span></td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </shape>
+      <shape name="polygon" ng-repeat="a in mapAreas" id="{{ a.id }}" path="{{ a.gpath }}" visible="{{ a.visible }}" geodesic="{{ a.geodesic }}" stroke-color="{{ a.stroke.color }}" stroke-opacity="1.0" stroke-weight="{{ a.stroke.weight }}" fill-color="{{ a.fill.color }}" fill-opacity="{{ a.fill.opacity }}" on-click="showInfoWindow(event, a.info_windows_cod)">
+        <info-window id="{{ a.info_windows_cod }}" data-position="{{ a.info_windows_pos }}" visible-on-marker="{{ a.id }}">
+          <div ng-non-bindable="">
+            <div id="siteNotice"></div>
+            <h4 id="firstHeading" class="firstHeading"><span ng-show="aconf.a_name.visible">{{ a.data.name }}</span></h4>
+            <div id="bodyContent">
+              <table>
+                <tr>
+                  <td><strong>{{ 'area_rate' | i18n }}:</strong></td>
+                  <td>
+                    <div ng-repeat="r in a.data.validityPeriod">
+                      <span>{{ r.rateValue | centToeuroVal }} {{ 'euro_hour' | i18n }} : </span>
+                      <span>{{ 'area_rate_period_startdate' | i18n }} {{ r.from }} {{ 'area_rate_period_enddate' | i18n }} {{ r.to }}</span></br>
+                      <span>{{ 'area_rate_period_hours' | i18n }}: {{ r.timeSlot }};</span>
+                      <span ng-repeat="d in getWeekDaysFromArray(r.weekDays, 0)">{{ d | i18n }};&nbsp</span>
+                      <span ng-show="r.holiday">{{ 'area_rate_is_holidays' | i18n }}</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr ng-show="aconf.a_smsCode.visible">
+                  <td><strong>{{ 'area_sms' | i18n }}:</strong></td>
+                  <td>{{ a.data.smsCode }}</td>
+                </tr>
+                <tr ng-show="aconf.a_color.visible">
+                  <td><strong>{{ 'area_color' | i18n }}</strong></td>
+                  <td><span class="colorBox" ng-style="{'background-color': correctColor(a.data.color)}"></span></td>
+                </tr>
+                <tr ng-show="aconf.a_note.visible">
+                  <td><strong>{{ 'area_note' | i18n }}:</strong></td>
+                  <td>{{ a.data.note }}</td>
+                </tr>
+                <tr ng-if="aconf.a_zones0.visible">
+                  <td>
+                    <strong>{{ zone0_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z0 in a.data.zones0 track by z0.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z0.color)}"></span></td>
+                        <td width="80%">{{ z0.name }}<span ng-if="z0.submacro"> - {{ z0.submacro }}</span><span ng-if="z0.submicro"> - {{ z0.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="aconf.a_zones1.visible">
+                  <td>
+                    <strong>{{ zone1_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z1 in a.data.zones1 track by z1.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z1.color)}"></span></td>
+                        <td width="80%">{{ z1.name }}<span ng-if="z1.submacro"> - {{ z1.submacro }}</span><span ng-if="z1.submicro"> - {{ z1.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="aconf.a_zones2.visible">
+                  <td>
+                    <strong>{{ zone2_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z2 in a.data.zones2 track by z2.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z2.color)}"></span></td>
+                        <td width="80%">{{ z2.name }}<span ng-if="z2.submacro"> - {{ z2.submacro }}</span><span ng-if="z2.submicro"> - {{ z2.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="aconf.a_zones3.visible">
+                  <td>
+                    <strong>{{ zone3_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z3 in s.data.zones3 track by z3.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z3.color)}"></span></td>
+                        <td width="80%">{{ z3.name }}<span ng-if="z3.submacro"> - {{ z3.submacro }}</span><span ng-if="z3.submicro"> - {{ z3.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                <tr ng-if="aconf.a_zones4.visible">
+                  <td>
+                    <strong>{{ zone4_label | i18n }}:</strong>
+                  </td>
+                  <td>
+                    <table width="100%">
+                      <tr ng-repeat="z4 in s.data.zones4 track by z4.id">
+                        <td width="20%"><span class="colorBox" ng-style="{'background-color': correctColor(z4.color)}"></span></td>
+                        <td width="80%">{{ z4.name }}<span ng-if="z4.submacro"> - {{ z4.submacro }}</span><span ng-if="z4.submicro"> - {{ z4.submicro }}</span></td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </div>
+          </div>
+        </info-window>
+      </shape>
+    </map>
+  </div>
+  <div class="col-md-3">
+    <div class="panel panel-success" ng-if="filterForZone0 || filterForZone1 || filterForZone2 || filterForZone3 || filterForZone4 || filterForAgency">
+      <div class="panel-heading">
+        <h5 class="panel-title">{{ 'filter_block_title' | i18n }}</h5>
+      </div>
+      <div class="panel-body">
+        <div ng-if="filterForZone0">
+          <label for="zone0">{{ zone0_label | i18n }}</label>
+          <select id="zone0" name="fZone0" class="form-control" ng-options="m as m.label for m in fZones0 | orderBy: 'label'" ng-model="myFilterZone0" ng-change="filterAllData(myFilterZone0, 0, agencyFilter)">
+            <option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
+          </select>
+        </div>
+        <div ng-if="filterForZone1">
+          <label for="zone1">{{ zone1_label | i18n }}</label>
+          <select id="zone1" name="fZone1" class="form-control" ng-options="m as m.label for m in fZones1 | orderBy: 'label'" ng-model="myFilterZone1" ng-change="filterAllData(myFilterZone1, 1, agencyFilter)">
+            <option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
+          </select>
+        </div>
+        <div ng-if="filterForZone2">
+          <label for="zone2">{{ zone2_label | i18n }}</label>
+          <select id="zone2" name="fZone2" class="form-control" ng-options="m as m.label for m in fZones2 | orderBy: 'label'" ng-model="myFilterZone2" ng-change="filterAllData(myFilterZone2, 2, agencyFilter)">
+            <option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
+          </select>
+        </div>
+        <div ng-if="filterForZone3">
+          <label for="zone3">{{ zone3_label | i18n }}</label>
+          <select id="zone3" name="sZone3" class="form-control" ng-options="m as m.label for m in fZones3 | orderBy: 'label'" ng-model="myFilterZone3" ng-change="filterAllData(myFilterZone3, 3, agencyFilter)">
+            <option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
+          </select>
+        </div>
+        <div ng-if="filterForZone4">
+          <label for="zone4">{{ zone4_label | i18n }}</label>
+          <select id="zone4" name="sZone4" class="form-control" ng-options="m as m.label for m in fZones4 | orderBy: 'label'" ng-model="myFilterZone4" ng-change="filterAllData(myFilterZone4, 4, agencyFilter)">
+            <option value="">{{ 'zone_filter_placeholder' | i18n }}</option>
+          </select>
+        </div>
+        <div>
+          <br/>
+        </div>
+        <div ng-if="filterForAgency">
+          <label for="f_agency_area">{{ 'agency_title' | i18n }}</label>
+          <select id="f_agency_area" class="form-control" ng-model="agencyFilter" ng-change="filterAllData(myZoneFilter, myZoneIndex, agencyFilter)">
+            <option ng-repeat="a in allAgencyFilter" value="{{a.id}}">{{ a.name }}</option>
+          </select>
+        </div>
+      </div>
+    </div>
+    <div class="panel panel-success">
+      <div class="panel-heading">
+        <h5 class="panel-title">{{ 'view_hide_block_title' | i18n }}</h5>
+      </div>
+      <div class="panel-body">
+        <table width="100%">
+          <tr ng-show="isAreaVisible()">
+            <td align="center" width="15%">
+              <input id="rateArea" type="checkbox" ng-model="mapelements.rateareas" ng-click="changeAreaPolygons()">
+            </td>
+            <td align="left" width="85%">
+              <label for="rateArea">{{ 'view_areas' | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isZones0Visible() && !filterForZone0">
+            <td align="center">
+              <input id="zones0" type="checkbox" ng-model="mapelements.zones0" ng-click="changeZonePolygons(0)">
+            </td>
+            <td align="left">
+              <label for="zones0">{{ zone0_label | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isZones1Visible() && !filterForZone1">
+            <td align="center">
+              <input id="zones1" type="checkbox" ng-model="mapelements.zones1" ng-click="changeZonePolygons(1)">
+            </td>
+            <td align="left">
+              <label for="zones1">{{ zone1_label | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isZones2Visible() && !filterForZone2">
+            <td align="center">
+              <input id="zones2" type="checkbox" ng-model="mapelements.zones2" ng-click="changeZonePolygons(2)">
+            </td>
+            <td align="left">
+              <label for="zones2">{{ zone2_label | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isZones3Visible() && !filterForZone3">
+            <td align="center">
+              <input id="zones3" type="checkbox" ng-model="mapelements.zones3" ng-click="changeZonePolygons(3)">
+            </td>
+            <td align="left">
+              <label for="zones3">{{ zone3_label | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isZones4Visible() && !filterForZone4">
+            <td align="center">
+              <input id="zones4" type="checkbox" ng-model="mapelements.zones4" ng-click="changeZonePolygons(4)">
+            </td>
+            <td align="left">
+              <label for="zones4">{{ zone4_label | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isStreetVisible()">
+            <td align="center">
+              <input id="streets" type="checkbox" ng-model="mapelements.streets" ng-click="changeStreetPolylines()">
+            </td>
+            <td align="left">
+              <label for="streets">{{ 'view_streets' | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isPsVisible()">
+            <td align="center">
+              <input id="pStruct" type="checkbox" ng-model="mapelements.parkingstructs" ng-click="changeParkingStructuresMarkers()">
+            </td>
+            <td align="left">
+              <label for="pStruct">{{ 'view_parkingstructs' | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isPmVisible()">
+            <td align="center">
+              <input id="pMeters" type="checkbox" ng-model="mapelements.parkingmeters" ng-click="changeParkingMetersMarkers()">
+            </td>
+            <td align="left">
+              <label for="pMeters">{{ 'view_parkingmeters' | i18n }}</label>
+            </td>
+          </tr>
+          <tr ng-show="isBpVisible()">
+            <td align="center">
+              <input id="bikePoint" type="checkbox" ng-model="mapelements.bikepoints" ng-click="changeBikePointsMarkers()">
+            </td>
+            <td align="left">
+              <label for="bikePoint">{{ 'view_bikepoints' | i18n }}</label>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+  <!-- 			</div> -->
+  <!-- 			<div class="row" ng-controller="MainCtrl"> -->
+  <div class="col-md-8">
+    <div class="map_margins">
+      <p>{{ 'widget_copy_text' | i18n }}</p>
+    </div>
+    <div class="highlight">
+      <code class="language-html" data-lang="html">
 							<span class="nt">&lt;iframe</span> 
 							<br/>&nbsp;<span class="na">src=</span><span class="s">"</span><span>{{ widget_inport_url }}{{ widget_url_params }}{{ getWidgetFilters() }}</span><span class="s">"</span>
 							<br/>&nbsp;<span class="na">width=</span><span class="s">"100%"</span> <span class="na">height=</span><span class="s">"700px"</span> <span class="na">frameBorder=</span><span class="s">"0"</span> <span class="nt">&gt;</span>
 							<br/><span class="nt">&lt;/iframe</span><span class="nt">&gt;</span>
 						</code>
-					</div>
-				</div>
-				<div class="col-md-4"></div>
-			</div>
+    </div>
+  </div>
+  <div class="col-md-4"></div>
+</div>
 <!-- 			</div> -->
 <!-- 		</form> -->
 <!-- 	</div> -->
