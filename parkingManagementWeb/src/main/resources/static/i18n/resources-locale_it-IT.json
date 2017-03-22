@@ -167,6 +167,18 @@
   "value": "Pagamento",
   "description": "Tipo di pagamento del parcometro"
 }, {
+  "key": "payment_type_cash",
+  "value": "Contanti",
+  "description": "Pagamento in contanti"
+}, {
+  "key": "payment_type_credit",
+  "value": "Carta di credito",
+  "description": "Pgamento con carta di credito"
+}, , {
+  "key": "payment_type_debit",
+  "value": "Bancomat",
+  "description": "gamento con carta Bancomat"
+}, {
   "key": "area_zonemicro",
   "value": "Microzona",
   "description": "Label per zona in area"

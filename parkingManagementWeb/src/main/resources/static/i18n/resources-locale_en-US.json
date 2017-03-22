@@ -168,6 +168,18 @@
     "value": "Payment",
     "description": "Type of payment"
 }, {
+    "key": "payment_type_cash",
+    "value": "Cash",
+    "description": "Pagamento in contanti"
+}, {
+    "key": "payment_type_credit",
+    "value": "Credit card",
+    "description": "Pgamento con carta di credito"
+}, {
+    "key": "payment_type_debit",
+    "value": "Debit cart",
+    "description": "gamento con carta Bancomat"
+}, {
     "key": "area_zonemicro",
     "value": "Microzona",
     "description": "Label per zona in area"
