@@ -173,8 +173,8 @@
     "description": "Pagamento in contanti"
 }, {
     "key": "payment_type_credit",
-    "value": "Credit card",
-    "description": "Pgamento con carta di credito"
+    "value": "Cards",
+    "description": "Payment with cards"
 }, {
     "key": "payment_type_debit",
     "value": "Debit cart",

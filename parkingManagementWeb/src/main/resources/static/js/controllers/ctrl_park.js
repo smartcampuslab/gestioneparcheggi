@@ -3110,11 +3110,13 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
       $scope.allPaymentMethods = sharedDataService.getSharedPaymentMethods();
       $scope.selection = {
         type: {},
-        value: {}
+        value: {
+          Cash: true
+        }
       };
       if (parkingMeter) {
         for (var i = 0; i < parkingMeter.paymentMethods.length; i++) {
-          $scope.selection.value[parkingMeter.paymentMethods] = true;
+          $scope.selection.value[parkingMeter.paymentMethods[i]] = true;
         }
       }
 

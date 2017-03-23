@@ -2397,7 +2397,7 @@
                   <td class="detailsListTableSX">{{ 'pm_payment' | i18n }}</td>
                   <td class="detailsListTableCX"></td>
                   <td class="detailsListTableDX">
-                    <span ng-repeat="type in pmDetails.paymentMethods">{{getLabelByType(type) | i18n}}</span>
+                    <span ng-repeat="type in pmDetails.paymentMethods">{{getLabelByType(type) | i18n}}{{$last ? '' : ', '}}</span>
                   </td>
                 </tr>
                 <tr ng-show="pmconf.pm_zones0.visible  && (pmDetails.myZones0 != null && pmDetails.myZones0.length > 0)">

@@ -153,374 +153,410 @@ ul.payment{
 */
 
 .table > tbody > tr > th {
-     vertical-align: top;	/* middle */
+  vertical-align: top;
+  /* middle */
 }
- 
-.borderless td{
-    border: 0;
+
+.borderless td {
+  border: 0;
 }
 
 div.listwrapper {
-    height: 580px; 
-    overflow-y: auto;
-    margin-bottom: 10px;
+  height: 580px;
+  overflow-y: auto;
+  margin-bottom: 10px;
 }
 
 div.tablewrapper {
-    height: 600px; 
-    overflow-y: auto;
+  height: 600px;
+  overflow-y: auto;
 }
 
 div.detailstablewrapper {
-    width: 100%; 
-    overflow-y: auto;
-    margin-top: 10px;
-    margin-left: 5px;
-    margin-right: 5px;
+  width: 100%;
+  overflow-y: auto;
+  margin-top: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
 }
 
 div.tabledetailswrapper {
-    width: 99%;
-    min-width: 100px;
-    max-width: 150px;
+  width: 99%;
+  min-width: 100px;
+  max-width: 150px;
 }
 
 div.logwrapper {
-    height: 680px; 
-    overflow-y: auto;
-    margin-bottom: 10px;
-    margin-top: 10px;
+  height: 680px;
+  overflow-y: auto;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 .angular-google-map-container {
-    height: 400px;
+  height: 400px;
 }
 
 .angular-google-map-container-dash {
-	height: 700px;
+  height: 700px;
 }
 
 div.map_margins {
-	margin-bottom: 10px;
-    margin-top: 10px;
+  margin-bottom: 10px;
+  margin-top: 10px;
 }
 
 pre {
-    outline: 1px solid #ccc; 
-    padding: 5px; 
-    margin: 5px; 
+  outline: 1px solid #ccc;
+  padding: 5px;
+  margin: 5px;
 }
 
-.colorBox {   
-    float: left;
-    width: 15px;
-    height: 15px;
-    margin: 2px;
-    border-width: 1px;
-    border-style: solid;
-    border-color: rgba(0,0,0,.2);
+.colorBox {
+  float: left;
+  width: 15px;
+  height: 15px;
+  margin: 2px;
+  border-width: 1px;
+  border-style: solid;
+  border-color: rgba(0, 0, 0, .2);
 }
 
 tr.spaceline {
-	line-height: 3;
+  line-height: 3;
 }
 
-td, th {
-    padding: 0 5px 0 5px;
+td,
+th {
+  padding: 0 5px 0 5px;
 }
 
 td.detailsTableSX {
-    width: 55%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+  width: 55%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsTableCX {
-    width: 5%;
-    height: 20px;
-    text-align: right;
-    vertical-align: middle;
+  width: 5%;
+  height: 20px;
+  text-align: right;
+  vertical-align: middle;
 }
+
 td.detailsTableDX {
-    width: 40%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+  width: 40%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsTitleTableSX {
-    width: 35%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+  width: 35%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsTitleTableCX {
-    width: 5%;
-    height: 20px;
-    text-align: right;
-    vertical-align: middle;
+  width: 5%;
+  height: 20px;
+  text-align: right;
+  vertical-align: middle;
 }
+
 td.detailsTitleTableDX {
-    width: 60%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+  width: 60%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsTableColSpan {
-    width: 100%;
-    height: 20px;
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-    vertical-align: middle;
+  width: 100%;
+  height: 20px;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
+
 td.detailsTableColSpanLeft {
-    width: 100%;
-    height: 20px;
-    text-align: left;
-    font-weight: bold;
-    text-transform: uppercase;
-    vertical-align: middle;
+  width: 100%;
+  height: 20px;
+  text-align: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
+
 td.detailsListTableSX {
-    width: 30%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+  width: 30%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsListTableCX {
-    width: 5%;
-    height: 20px;
-    text-align: right;
-    vertical-align: middle;
+  width: 5%;
+  height: 20px;
+  text-align: right;
+  vertical-align: middle;
 }
+
 td.detailsListTableDX {
-    width: 65%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+  width: 65%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsNumberListTableSX {
-    width: 55%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+  width: 55%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsNumberListTableCX {
-    width: 5%;
-    height: 20px;
-    text-align: right;
-    vertical-align: middle;
+  width: 5%;
+  height: 20px;
+  text-align: right;
+  vertical-align: middle;
 }
+
 td.detailsNumberListTableDX {
-    width: 40%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+  width: 40%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsTableColSpanS {
-    width: 90%;
-    height: 20px;
-    text-align: center;
-    font-weight: bold;
-    text-transform: uppercase;
-    vertical-align: middle;
+  width: 90%;
+  height: 20px;
+  text-align: center;
+  font-weight: bold;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
+
 td.detailsTableColSpanLeftS {
-    width: 90%;
-    height: 20px;
-    text-align: left;
-    font-weight: bold;
-    text-transform: uppercase;
-    vertical-align: middle;
+  width: 90%;
+  height: 20px;
+  text-align: left;
+  font-weight: bold;
+  text-transform: uppercase;
+  vertical-align: middle;
 }
+
 td.detailsListTableSXS {
-    width: 30%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+  width: 30%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsListTableCXS {
-    width: 5%;
-    height: 20px;
-    text-align: right;
-    vertical-align: middle;
+  width: 5%;
+  height: 20px;
+  text-align: right;
+  vertical-align: middle;
 }
+
 td.detailsListTableDXS {
-    width: 55%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+  width: 55%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsNumberListTableSXS {
-    width: 45%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+  width: 45%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsNumberListTableCXS {
-    width: 5%;
-    height: 20px;
-    text-align: right;
-    vertical-align: middle;
+  width: 5%;
+  height: 20px;
+  text-align: right;
+  vertical-align: middle;
 }
+
 td.detailsNumberListTableDXS {
-    width: 40%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+  width: 40%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsCompressTableSX {
-    width: 25%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+  width: 25%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsCompressTableCX {
-    width: 3%;
-    height: 20px;
-    text-align: right;
-    vertical-align: middle;
+  width: 3%;
+  height: 20px;
+  text-align: right;
+  vertical-align: middle;
 }
+
 td.detailsCompressTableDX {
-    width: 32%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+  width: 32%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsCompressTableDiagram {
-    width: 40%;
-    font-weight: bold;
-    text-align: center;
-    vertical-align: middle;
+  width: 40%;
+  font-weight: bold;
+  text-align: center;
+  vertical-align: middle;
 }
+
 td.detailsLogTableSX {
-    width: 30%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+  width: 30%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
+
 td.detailsLogTableDX {
-    width: 70%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+  width: 70%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
+
 th.myCenter {
-    text-align: center;
+  text-align: center;
 }
 
-td.detailsViewAreaSX{
-    width: 40%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
-}
-td.detailsViewAreaDX{
-    width: 60%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+td.detailsViewAreaSX {
+  width: 40%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
 
-td.detailsViewBikeSX{
-    width: 45%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
-}
-td.detailsViewBikeDX{
-    width: 55%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+td.detailsViewAreaDX {
+  width: 60%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
 
-td.detailsViewZoneSX{
-    width: 45%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
-}
-td.detailsViewZoneDX{
-    width: 55%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+td.detailsViewBikeSX {
+  width: 45%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
 
-td.detailsViewStructSX{
-    width: 45%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
-}
-td.detailsViewStructDX{
-    width: 55%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+td.detailsViewBikeDX {
+  width: 55%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
 
-td.detailsViewParkmeterSX{
-    width: 45%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
-}
-td.detailsViewParkmeterDX{
-    width: 55%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+td.detailsViewZoneSX {
+  width: 45%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
 }
 
-td.detailsViewStreetSX{
-    width: 45%;
-    height: 20px;
-    font-weight: normal;
-    text-align: left;
-    vertical-align: middle;
+td.detailsViewZoneDX {
+  width: 55%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
-td.detailsViewStreetDX{
-    width: 55%;
-    height: 20px;
-    font-weight: bold;
-    text-align: left;
-    vertical-align: middle;
+
+td.detailsViewStructSX {
+  width: 45%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
+}
+
+td.detailsViewStructDX {
+  width: 55%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
+}
+
+td.detailsViewParkmeterSX {
+  width: 45%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
+}
+
+td.detailsViewParkmeterDX {
+  width: 55%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
+}
+
+td.detailsViewStreetSX {
+  width: 45%;
+  height: 20px;
+  font-weight: normal;
+  text-align: left;
+  vertical-align: middle;
+}
+
+td.detailsViewStreetDX {
+  width: 55%;
+  height: 20px;
+  font-weight: bold;
+  text-align: left;
+  vertical-align: middle;
 }
 
 div.left-filter {
-    font-size: medium;
+  font-size: medium;
 }
 
 label.left-filter {
-    font-size: small;
+  font-size: small;
 }
 
 div #panelMap {
@@ -539,9 +575,11 @@ div #panelMap {
   width: 170px;
   height: 40px;
 }
+
 .custom-file-input::-webkit-file-upload-button {
   visibility: hidden;
 }
+
 .custom-file-input::before {
   content: 'Seleziona un file';
   color: black;
@@ -560,258 +598,325 @@ div #panelMap {
   width: 170px;
   height: 40px;
 }
+
 .custom-file-input:hover::before {
   border-color: black;
 }
+
 .custom-file-input:active {
   outline: 0;
 }
+
 .custom-file-input:active::before {
-  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9); 
+  background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
 }
 
 .form-control {
   padding: 2px 5px;
 }
 
+.payment-checkbox {
+  display: inline-block;
+  min-height: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  font-weight: normal;
+  margin: 0px 20px 0px 20px;
+}
+
 .footer {
-	background-color: #1E88E5;
-	padding: 0px;
+  background-color: #1E88E5;
+  padding: 0px;
 }
 
-.footer img{
-/* 	height: 95px; */
-	width: 12%;
-	padding: 5px 5px 5px 5px;
-	display: block;
-    margin-left: auto;
-    margin-right: auto
+.footer img {
+  /* 	height: 95px; */
+  width: 12%;
+  padding: 5px 5px 5px 5px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto
 }
 
-.footer div{
-	align: center;
-}   
+.footer div {
+  align: center;
+}
 
 .navbar-brand > img {
-	height: 70px;
-}    
+  height: 70px;
+}
 
 .navbar .nav>li {
-	bottom: -50px;
+  bottom: -50px;
 }
 
 .navbar-brand {
-    height:inherit; 	
+  height: inherit;
 }
 
 .dashboard-panel {
-	font-size: 12px  !important;
-	padding: 10px !important;
+  font-size: 12px !important;
+  padding: 10px !important;
 }
 
 .panel-radio {
-	margin-right: 5px !important;
+  margin-right: 5px !important;
 }
 
 .navbar-inverse {
-    background-image: none;
-    background-color: #ffffff;
-    border-bottom-color: #1E88E5;
-    border-bottom-width: 5px;
+  background-image: none;
+  background-color: #ffffff;
+  border-bottom-color: #1E88E5;
+  border-bottom-width: 5px;
 }
 
 .navbar-inverse .navbar-nav>li>a {
-    text-shadow: none;  
-    color: #000000;
+  text-shadow: none;
+  color: #000000;
 }
+
 .navbar-inverse .navbar-nav>li>a:hover {
-    color: #1E88E5 !important;
-	background: none !important;
+  color: #1E88E5 !important;
+  background: none !important;
 }
 
 .navbar-inverse .navbar-nav>li.active>a {
-    color: #1E88E5 !important;
-    font-weight: bold !important;
-    background: none !important;
-    box-shadow: none !important;
-    -webkit-box-shadow: none !important;
+  color: #1E88E5 !important;
+  font-weight: bold !important;
+  background: none !important;
+  box-shadow: none !important;
+  -webkit-box-shadow: none !important;
 }
 
 .panel {
-    border: 0;	
-    box-shadow: none;
-    -webkit-box-shadow: none;
+  border: 0;
+  box-shadow: none;
+  -webkit-box-shadow: none;
 }
 
 .nav-tabs>li.active>a {
-	color: #1E88E5;
-	font-weight: bold;
+  color: #1E88E5;
+  font-weight: bold;
 }
 
 .nav-tabs>li:not(.active)>a {
-    color: #000000;
-    font-weight: bold;
+  color: #000000;
+  font-weight: bold;
 }
+
 .nav-tabs>li:not(.active)>a:hover {
-    color: #1E88E5;
-	background: none;
-	border: 0;
+  color: #1E88E5;
+  background: none;
+  border: 0;
 }
 
 .close {
-	color: #ffffff;
-	text-shadow: none;
-	opacity: 1;
+  color: #ffffff;
+  text-shadow: none;
+  opacity: 1;
 }
 
 .dialog-header-confirm {
-	background-color: #1E88E5;
+  background-color: #1E88E5;
 }
 
 .alert.alert-danger {
-	background: none;
-	border: 0px;
-	border-bottom: 2px solid #1E88E5;
-    box-shadow: none;
-    -webkit-box-shadow: none;
-    border-radius: 0px;
-    color: #1E88E5;
-    padding-left: 0px;
-    padding-right: 0px;
-    padding-bottom: 5px;
+  background: none;
+  border: 0px;
+  border-bottom: 2px solid #1E88E5;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-radius: 0px;
+  color: #1E88E5;
+  padding-left: 0px;
+  padding-right: 0px;
+  padding-bottom: 5px;
 }
 
 .alert.alert-danger .btn-danger {
-    box-shadow: none;
-    -webkit-box-shadow: none;
-	background: none;
-    border: none;
-    color: #b92c28;
-    text-shadow: none;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  background: none;
+  border: none;
+  color: #b92c28;
+  text-shadow: none;
 }
 
 .alert.alert-danger .btn-danger i::before {
-	font-size: 16px;
+  font-size: 16px;
 }
 
 .detailsTableColSpan hr {
-	border-top-color: #1E88E5;
+  border-top-color: #1E88E5;
 }
 
 .btn-primary {
-	background-image: linear-gradient(to bottom, #1E88E5 0, #1460a4 100%);
-}
-.btn-primary:hover {
-    background-image: linear-gradient(to bottom, #1460a4 0, #1460a4 100%);
+  background-image: linear-gradient(to bottom, #1E88E5 0, #1460a4 100%);
 }
 
-.panel-success > .panel-heading, .panel-default > .panel-heading {
-	background: none;
-    border: 0px;
-    border-bottom: 2px solid #1E88E5;
-    box-shadow: none;
-    -webkit-box-shadow: none;
-    border-radius: 0px;
-    color: #1E88E5;
-    padding-left: 0px;
-    padding-bottom: 5px;
+.btn-primary:hover {
+  background-image: linear-gradient(to bottom, #1460a4 0, #1460a4 100%);
+}
+
+.panel-success > .panel-heading,
+.panel-default > .panel-heading {
+  background: none;
+  border: 0px;
+  border-bottom: 2px solid #1E88E5;
+  box-shadow: none;
+  -webkit-box-shadow: none;
+  border-radius: 0px;
+  color: #1E88E5;
+  padding-left: 0px;
+  padding-bottom: 5px;
 }
 
 .pmeter-on {
-	color: #5cb85c;
-	font-weight: bold;
+  color: #5cb85c;
+  font-weight: bold;
 }
 
 .pmeter-off {
-    color: #b92c28;
-    font-weight: bold;
+  color: #b92c28;
+  font-weight: bold;
 }
 
 label {
-	text-transform: uppercase;
+  text-transform: uppercase;
 }
 
 label.group-label {
-    border-bottom: 2px solid #1E88E5;
-    width: 100%;
+  border-bottom: 2px solid #1E88E5;
+  width: 100%;
 }
 
 .subpanel {
-	border-radius: 0;
-    border-top: 2px solid #1E88E5;
-	border-bottom: 2px solid #1E88E5;
+  border-radius: 0;
+  border-top: 2px solid #1E88E5;
+  border-bottom: 2px solid #1E88E5;
 }
 
 .subpanel label {
-    text-transform: none !important;
+  text-transform: none !important;
 }
 
 .field-error {
-	color: #b92c28;
+  color: #b92c28;
 }
 
 .well {
-    background: none;
-    border: 0px;
-    box-shadow: none;
-    -webkit-box-shadow: none;
+  background: none;
+  border: 0px;
+  box-shadow: none;
+  -webkit-box-shadow: none;
 }
 
 .info_window_buttons {
-	align: left;
+  align: left;
 }
 
 .no-margin {
-	margin-top: 0;
-	margin-bottom: 0;
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-	/* default I show the small objects */
-	#my-small-login { display: block; }   /* hide it elsewhere */
-  	#my-big-login { display: none; }   /* show it elsewhere */
-  	.navbar .container-fluid {
-  		margin-left:15px; 
-  		margin-right:15px;
-  	}
-  	.container-fluid .panel-default {
-		margin-top:100px;
-  	}    	
-
-	/* if width bigger than 769px I show the big objects */
-	@media (min-width:769px) {
-		.nav-tabs.nav-justified > li { float: none; }
-		.angular-google-map-container { height: 550px; }
-		.panel-body { padding: 5px; }
-		#my-small-login { display: block; }   /* hide it elsewhere */
-  		#my-big-login { display: none; }   /* show it elsewhere */
-  		.navbar .container-fluid {
-	  		margin-left:15px; 
-	  		margin-right:15px;
-  		}
-  		.container-fluid .panel-default {
-			margin-top:100px;
-  		}  		
-	}
-	
-	/* if width bigger than 1170px I show the big objects */
-	@media (min-width:1170px) {	/*@media (min-width:1170px)*/
-		.nav-tabs.nav-justified > li { float: none; }
-		.angular-google-map-container { height: 700px; }
-		.tablewrapper { 
-			margin-bottom: 10px;
-			height: 490px; 
-		}
-		#my-small-login { display: none; }   /* hide it elsewhere */
-  		#my-big-login { display: block; }   /* show it elsewhere */
-	  	.navbar .container-fluid {
-	  		margin-left:60px; 
-	  		margin-right:60px;
-	  	}
-  		.container-fluid .panel-default {
-			margin-top:100px;
-			padding-left:50px;
-			padding-right:50px;  		
-  		}	  	
-	}
+.payment-checkbox {
+  display: inline-block;
+  min-height: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 20px;
+  font-weight: normal;
+  margin: 0px 20px 0px 20px;
+}
 
 
+/* default I show the small objects */
+
+#my-small-login {
+  display: block;
+}
+
+
+/* hide it elsewhere */
+
+#my-big-login {
+  display: none;
+}
+
+
+/* show it elsewhere */
+
+.navbar .container-fluid {
+  margin-left: 15px;
+  margin-right: 15px;
+}
+
+.container-fluid .panel-default {
+  margin-top: 100px;
+}
+
+
+/* if width bigger than 769px I show the big objects */
+
+@media (min-width:769px) {
+  .nav-tabs.nav-justified > li {
+    float: none;
+  }
+  .angular-google-map-container {
+    height: 550px;
+  }
+  .panel-body {
+    padding: 5px;
+  }
+  #my-small-login {
+    display: block;
+  }
+  /* hide it elsewhere */
+  #my-big-login {
+    display: none;
+  }
+  /* show it elsewhere */
+  .navbar .container-fluid {
+    margin-left: 15px;
+    margin-right: 15px;
+  }
+  .container-fluid .panel-default {
+    margin-top: 100px;
+  }
+}
+
+
+/* if width bigger than 1170px I show the big objects */
+
+@media (min-width:1170px) {
+  /*@media (min-width:1170px)*/
+  .nav-tabs.nav-justified > li {
+    float: none;
+  }
+  .angular-google-map-container {
+    height: 700px;
+  }
+  .tablewrapper {
+    margin-bottom: 10px;
+    height: 490px;
+  }
+  #my-small-login {
+    display: none;
+  }
+  /* hide it elsewhere */
+  #my-big-login {
+    display: block;
+  }
+  /* show it elsewhere */
+  .navbar .container-fluid {
+    margin-left: 60px;
+    margin-right: 60px;
+  }
+  .container-fluid .panel-default {
+    margin-top: 100px;
+    padding-left: 50px;
+    padding-right: 50px;
+  }
+}

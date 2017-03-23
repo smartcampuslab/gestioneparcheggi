@@ -172,9 +172,9 @@
   "description": "Pagamento in contanti"
 }, {
   "key": "payment_type_credit",
-  "value": "Carta di credito",
-  "description": "Pgamento con carta di credito"
-}, , {
+  "value": "Carte",
+  "description": "Pagamento con carte"
+}, {
   "key": "payment_type_debit",
   "value": "Bancomat",
   "description": "gamento con carta Bancomat"

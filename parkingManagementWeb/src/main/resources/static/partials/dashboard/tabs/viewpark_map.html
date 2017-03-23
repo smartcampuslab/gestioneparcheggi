@@ -248,7 +248,7 @@
             <td class="detailsTableSX">{{ 'pm_payment' | i18n }}</td>
             <td class="detailsTableCX"></td>
             <td class="detailsTableDX">
-              <span ng-repeat="type in pmDetails.data.paymentMethods">{{getLabelByType(type) | i18n}}</span>
+              <span ng-repeat="type in pmDetails.data.paymentMethods">{{getLabelByType(type) | i18n}}{{$last ? '' : ', '}}</span>
             </td>
           </tr>
           <tr>

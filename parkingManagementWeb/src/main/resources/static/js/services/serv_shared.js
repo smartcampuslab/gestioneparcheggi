@@ -199,13 +199,10 @@ pm.service('sharedDataService', function ($window, $dialogs, $timeout) {
       value: "payment_type_cash"
     },
     {
-      type: "CreditCard",
+      type: "Cash_And_CreditCard",
       value: "payment_type_credit"
-    },
-    {
-      type: "DebitCard",
-      value: "payment_type_debit"
     }
+
     ];
   this.flux_view_tabs = [];
   this.showOccStreetLogEdit = false;

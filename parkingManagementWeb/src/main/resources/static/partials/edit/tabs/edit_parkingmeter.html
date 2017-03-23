@@ -28,7 +28,7 @@
                   <tr ng-show="pmconf.pm_status.visible">
                     <td><strong>{{'pm_payment' | i18n}}</strong></td>
                     <td>
-                      <span ng-repeat="type in pm.data.paymentMethods">{{getLabelByType(type) | i18n}}</span>
+                      <span ng-repeat="type in pm.data.paymentMethods">{{getLabelByType(type) | i18n}}{{$last ? '' : ', '}}</span>
                     </td>
                   </tr>
                   <tr ng-if="pmconf.pm_zones0.visible">
@@ -175,7 +175,7 @@
                   <tr ng-show="pmconf.pm_status.visible">
                     <td><strong>{{ 'pm_payment' | i18n }}</strong></td>
                     <td>
-                      <span ng-repeat="type in pm.data.paymentMethods">{{getLabelByType(type) | i18n}}</span>
+                      <span ng-repeat="type in pm.data.paymentMethods">{{getLabelByType(type) | i18n}}{{$last ? '' : ', '}}</span>
                     </td>
                   </tr>
                   <tr ng-if="pmconf.pm_zones0.visible">
@@ -431,7 +431,7 @@
             <tr ng-show="pmconf.pm_status.visible">
               <td class="detailsViewParkmeterSX">{{ 'pm_payment' | i18n }}</td>
               <td class="detailsViewParkmeterDX">
-                <span ng-repeat="type in viewParckingMeter.paymentMethods">{{getLabelByType(type) | i18n}}</span>
+                <span ng-repeat="type in viewParckingMeter.paymentMethods">{{getLabelByType(type) | i18n}}{{$last ? '' : ', '}}</span>
               </td>
             </tr>
             <tr ng-show="pmconf.pm_geometry.visible">
@@ -616,13 +616,10 @@
             </div>
             <div class="form-group">
               <label>{{ 'pm_payment' | i18n }}</label>
-              <!--
-<label ng-repeat="payment in allPaymentMethods">
-  <input type="checkbox" value="{{payment.type}}" ng-checked="selection.indexOf(payment) > -1" ng-click="toggleSelection(payment)"> {{payment.value| i18n}}
-</label>-->
+
               <span ng-repeat="payment in allPaymentMethods">
-                    <label class="checkbox" for="{{payment.type}}">
-                        <input type="checkbox" ng-model="selection.value[payment.type]" name="group" id="{{payment.type}}" />
+                    <label class="checkbox payment-checkbox" for="{{payment.type}}">
+                        <input type="checkbox" ng-model="selection.value[payment.type]" name="group" id="{{payment.type}}" ng-disabled="payment.type=='Cash' && selection.value[payment.type]" />
                          {{payment.value| i18n}}
                         </label>
                       </span>

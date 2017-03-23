@@ -24,7 +24,7 @@
                 <tr ng-show="pmconf.pm_status.visible">
                   <td><strong>{{ 'pm_payment' | i18n }}</strong></td>
                   <td>
-                    <span ng-repeat="type in pm.data.paymentMethods">{{getLabelByType(type) | i18n}}</span>
+                    <span ng-repeat="type in pm.data.paymentMethods">{{getLabelByType(type) | i18n}}{{$last ? '' : ', '}}</span>
                   </td>
                 </tr>
                 <tr ng-if="pmconf.pm_zones0.visible">
