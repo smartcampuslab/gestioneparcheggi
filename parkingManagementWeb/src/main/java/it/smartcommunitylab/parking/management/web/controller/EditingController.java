@@ -53,6 +53,8 @@ import org.springframework.web.bind.annotation.ResponseBody;
 //@Api(value = "Metroparco", description = "Metroparco objects API")
 public class EditingController {
 
+	private static final String STATIC = "./static/";
+
 	@Autowired
 	StorageManager storage;
 	
@@ -539,7 +541,7 @@ public class EditingController {
 			@PathVariable String entity, @PathVariable String company)
 			throws IOException {
 
-		getMarkerIcon(response, "./static", company, entity, color);
+		getMarkerIcon(response, STATIC, company, entity, color);
 	}
 	
 	// Method without security
@@ -549,14 +551,14 @@ public class EditingController {
 			@PathVariable String entity, @PathVariable String company)
 			throws IOException {
 
-		getMarkerIcon(response, "./static", company, entity, color);
+		getMarkerIcon(response, STATIC, company, entity, color);
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/marker/{company}/{entity}")
 	public void getMarkerIconNoColor(HttpServletRequest request,
 			HttpServletResponse response, @PathVariable String entity,
 			@PathVariable String company) throws IOException {
-		getMarkerIcon(response, "./static", company, entity, null);
+		getMarkerIcon(response, STATIC, company, entity, null);
 	}
 
 	private void getMarkerIcon(HttpServletResponse response, String basePath,
