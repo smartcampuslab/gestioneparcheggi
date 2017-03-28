@@ -79,7 +79,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 @Controller
 public class DashboardController {
 
-	private static final String STATIC = "./static";
+	private static final String STATIC = "./static/";
 	private static final String TMP_CSV = "./tmp/csv";
 	private static final String CSV = "/csv/";
 	private static final String TMP = "tmp/";
