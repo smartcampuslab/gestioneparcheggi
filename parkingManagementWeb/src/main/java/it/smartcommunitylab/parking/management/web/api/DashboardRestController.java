@@ -116,6 +116,9 @@ public class DashboardRestController {
 		if(valueType == null){
 			valueType = 2;
 		}
+		if(granularity == null){
+			granularity = "year";
+		}		
 		return dynamic.getOccupationRateFromStreetCore(id, appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, granularity);
 	}
 		
@@ -163,6 +166,9 @@ public class DashboardRestController {
 		if(valueType == null){
 			valueType = 2;
 		}
+		if(granularity == null){
+			granularity = "year";
+		}		
 		return dynamic.getOccupationRateFromStructureCore(id, appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, granularity);
 	}
 		
