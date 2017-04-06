@@ -205,6 +205,28 @@ public class StorageManager {
 		return result;
 	}
 	
+	public List<RateAreaBean> getAllAreaByZoneId(String appId, String zoneId) {
+		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
+		// logger.error(String.format("Area app id: %s", appId));
+
+		List<RateArea> ras;
+		if ("all".equals(appId)) {
+			Criteria criteria = new Criteria("zones").is(zoneId);
+			Query query = new Query(criteria);
+			ras = mongodb.find(query, RateArea.class);
+		} else {
+			Criteria criteria = new Criteria("id_app").is(appId).and("zones").is(zoneId);
+			Query query = new Query(criteria);
+			ras = mongodb.find(query, RateArea.class);
+		}
+
+		for (RateArea a : ras) {
+			result.add(ModelConverter.convert(a, RateAreaBean.class));
+		}
+
+		return result;
+	}	
+	
 //	public List<RateAreaBean> getAllAreaByAgencyId(String appId, String agencyId) {
 //		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
 //		Agency ag = agencyDataSetup.getAgencyById(agencyId);
@@ -241,6 +263,24 @@ public class StorageManager {
 		}
 		return result;
 	}
+	
+	public List<RateAreaBean> getAllAreaByAgencyAndZoneId(String appId, String agencyId, String zoneId) {
+		List<RateAreaBean> result = new ArrayList<RateAreaBean>();
+		Agency ag = agencyDataSetup.getAgencyById(agencyId);
+		if(ag == null || ag.getArea() >= READ_VAL){
+			Criteria criteria = new Criteria("agencyId").is(agencyId).and("zones").is(zoneId);
+			Query query = new Query(criteria);
+			List<RateArea> ras = mongodb.find(query, RateArea.class);
+			for (RateArea a : ras) {
+				if ("all".equals(appId) || appId.equals( a.getId_app())) {
+					result.add(ModelConverter.convert(a, RateAreaBean.class));
+				}
+			}
+		} else {
+			throw new AccessControlException("no read permission for area object");
+		}
+		return result;
+	}	
 	
 	private RateArea getAreaObjectById(String areaId, String appId) {
 		Criteria crit = new Criteria();
