@@ -2237,7 +2237,10 @@ public class DynamicManager {
 		return s;
 	}
 	
-	public StreetBeanCore getOccupationRateFromStreetCore(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType, String granularity){
+	public StreetBeanCore getOccupationRateFromStreetCore(String objectId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int  valueType, String vehicleType, String granularity){
+		if(vehicleType == null || vehicleType.compareTo("") == 0){
+			vehicleType = "Car";
+		}
 		StopWatch watch = new Log4JStopWatch();
 		logger.debug("Start Time for street (" + objectId + "): " + watch.getStartTime());
 		StreetBeanCore s = null;
