@@ -5,7 +5,7 @@
     <div class="col-md-6">
       <!-- id="map_canvas" ng-show="pmMapReady" -->
       <map id="viewPm" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%">
-        <marker ng-repeat="pm in parkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40]}" on-click="showInfoWindow(event, 'pm')">
+        <marker ng-repeat="pm in parkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showInfoWindow(event, 'pm')">
           <info-window id="pm" visible-on-marker="{{ pm.id }}">
             <div ng-non-bindable="">
               <div id="siteNotice"></div>
@@ -152,7 +152,7 @@
             </div>
           </info-window>
         </marker>
-        <marker ng-repeat="spm in mySpecialPMMarkers" id="{{ spm.id }}" position="{{ spm.position }}" icon="{{ spm.icon }}" visible="{{ spm.visible }}" animation="{{ spm.options.animation }}" on-click="showInfoWindow(event, 'spm')">
+        <marker ng-repeat="spm in mySpecialPMMarkers" id="{{ spm.id }}" position="{{ spm.position }}" icon="{url:'{{spm.icon}}',scaledSize:[40,40],anchor: [20,20]}" visible="{{ spm.visible }}" animation="{{ spm.options.animation }}" on-click="showInfoWindow(event, 'spm')">
           <info-window id="spm" visible-on-marker="{{ spm.id }}">
             <div ng-non-bindable="">
               <div id="siteNotice"></div>
@@ -568,10 +568,10 @@
           <div class="panel-body">
             <div class="col-md-12">
               <map id="editPm" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" style="height: 400px" on-click="addNewPmMarker()">
-                <marker ng-repeat="pm in newPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40]}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()">
+                <marker ng-repeat="pm in newPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40],anchor: [20,20]}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()">
                   <!-- on-drag="updatePos()" -->
                 </marker>
-                <marker ng-repeat="pm in editPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40]}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()">
+                <marker ng-repeat="pm in editPmMarkers" id="{{ pm.id }}" position="{{ pm.pos }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40],anchor: [20,20]}" visible="{{ pm.options.visible }}" draggable="{{ pm.options.draggable }}" on-dragend="updatePmPos()">
                   <!-- on-drag="updatePos()" -->
                 </marker>
               </map>

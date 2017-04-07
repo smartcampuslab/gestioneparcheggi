@@ -2526,6 +2526,12 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
       }
       var mySpecialPMMarker = {};
       if (type == 0) {
+        var url = '';
+        if (parkingMeter.paymentMethods.indexOf("Cash_And_CreditCard") > -1) {
+          url = baseUrl + '/marker/' + company + '/parcometrocartaneg/' + ((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor);
+        } else {
+          url = baseUrl + '/marker/' + company + '/parcometroneg/' + ((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor);
+        }
         mySpecialPMMarker = {
           id: 0,
           coords: {
@@ -2545,7 +2551,7 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
           zones2: myZones2,
           zones3: myZones3,
           zones4: myZones4,
-          icon: baseUrl + '/marker/' + company + '/parcometroneg/' + ((myAreaP.color != null) ? myAreaP.color : defaultMarkerColor) //$scope.pmMarkerIcon
+          icon: url
         };
       } else {
         mySpecialPMMarker = {

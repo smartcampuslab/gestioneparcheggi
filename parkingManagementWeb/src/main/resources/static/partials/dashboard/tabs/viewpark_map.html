@@ -64,10 +64,10 @@
     </div>
     <map id="viewMap" class="angular-google-map-container-dash" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}">
       <!--      <marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{{ pm.icon }}" on-click="showDetails(event, pm, 1, 0)">-->
-      <marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40]}" on-click="showDetails(event, pm, 1, 0)">
+      <marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" position="{{ pm.position }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showDetails(event, pm, 1, 0)">
         <!-- on-click="showInfoWindow(event, 'pm')" -->
       </marker>
-      <marker ng-repeat="pmSel in mapParkingMetersSelectedMarkers" id="{{ pmSel.id }}" animation="{{ pmSel.options.animation }}" position="{{ pmSel.position }}" icon="{url:'{{pmSel.icon}}',scaledSize:[40,40]}" on-click="hideDetails(event, pmSel, 1, theme)"></marker>
+      <marker ng-repeat="pmSel in mapParkingMetersSelectedMarkers" id="{{ pmSel.id }}" animation="{{ pmSel.options.animation }}" position="{{ pmSel.position }}" icon="{url:'{{pmSel.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="hideDetails(event, pmSel, 1, theme)"></marker>
       <!-- on-click="showInfoWindow(event, 'pm')" -->
       <marker ng-repeat="pmProf in profitParkingMetersMarkers" id="{{ pmProf.id }}" animation="{{ pmProf.options.animation }}" position="{{ pmProf.position }}" icon="{{ pmProf.icon }}" on-click="showDetails(event, pmProf, 1, 2)"></marker>
       <marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ ps.icon }}" on-click="showDetails(event, ps, 2, 0)">
