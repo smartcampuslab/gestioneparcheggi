@@ -5772,13 +5772,23 @@ pm.controller('ViewDashboardCtrlPark', ['$scope', '$http', '$route', '$routePara
           if (theme == 0) {
             var myAreaPm = {};
             myAreaPm = sharedDataService.getLocalAreaById(object.data.areaId);
-            object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+            if (object.data.paymentMethods.indexOf("Cash_And_CreditCard") > -1) {
+              object.icon = baseUrl + '/marker/' + company + '/parcometrocarta/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+            } else {
+              object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+            }
+            //object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
             $scope.mapParkingMetersMarkers.push(object);
           } else if (theme == 1) {
             $scope.occupancyParkingMeterMarkers.push(object);
           } else if (theme == 2) {
             var color = $scope.plainColor(object.myprofitColor);
-            object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((color != null && color != "") ? color : defaultMarkerColor);
+            if (object.data.paymentMethods.indexOf("Cash_And_CreditCard") > -1) {
+              object.icon = baseUrl + '/marker/' + company + '/parcometrocarta/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+            } else {
+              object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+            }
+            //object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((color != null && color != "") ? color : defaultMarkerColor);
             $scope.profitParkingMetersMarkers.push(object);
           }
         }
