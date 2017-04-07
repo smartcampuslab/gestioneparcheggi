@@ -7,7 +7,7 @@
 <div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
   <div class="col-md-9">
     <map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}">
-      <marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" visible="{{ pm.options.visible }}" position="{{ pm.position }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40]}" on-click="showInfoWindow(event, 'pm')">
+      <marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" visible="{{ pm.options.visible }}" position="{{ pm.position }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showInfoWindow(event, 'pm')">
         <info-window id="pm" visible-on-marker="{{ pm.id }}">
           <div ng-non-bindable="">
             <div id="siteNotice"></div>
@@ -136,7 +136,7 @@
           </div>
         </info-window>
       </marker>
-      <marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{{ psMarkerIcon }}" on-click="showInfoWindow(event, 'ps')">
+      <marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{url:'{{psMarkerIcon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showInfoWindow(event, 'ps')">
         <info-window id="ps" visible-on-marker="{{ ps.id }}">
           <div ng-non-bindable="">
             <div id="siteNotice"></div>
@@ -328,7 +328,7 @@
           </div>
         </info-window>
       </marker>
-      <marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')">
+      <marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{url:'{{bpMarkerIcon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showInfoWindow(event, 'bp')">
         <info-window id="bp" visible-on-marker="{{ bp.id }}">
           <div ng-non-bindable="">
             <div id="siteNotice"></div>

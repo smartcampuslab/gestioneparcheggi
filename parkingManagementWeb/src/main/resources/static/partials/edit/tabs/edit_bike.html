@@ -2,7 +2,7 @@
 			<div ng-show="!editModeBP"><!-- && !viewModeBP -->
 				<div class="col-md-6" ><!-- ng-show="bpMapReady" -->
 					<map id="viewBike" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" >
-						<marker ng-repeat="bp in bikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')" >
+						<marker ng-repeat="bp in bikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{url:'{{bpMarkerIcon}}',scaledSize:[40,40],anchor: [20,20]}"  on-click="showInfoWindow(event, 'bp')" >
 							<info-window id="bp" visible-on-marker="{{ bp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
@@ -100,7 +100,7 @@
 						        </div>
 						    </info-window>
 						</marker>
-						<marker ng-repeat="sbp in mySpecialBPMarkers" id="{{ sbp.id }}" position="{{ sbp.pos }}" icon="{{ sbp.icon }}" visible="{{ sbp.visible }}" animation="{{ sbp.options.animation }}" on-click="showInfoWindow(event, 'sbp')" >
+						<marker ng-repeat="sbp in mySpecialBPMarkers" id="{{ sbp.id }}" position="{{ sbp.pos }}" icon="{url:'{{sps.icon}}',scaledSize:[40,40],anchor: [20,20]}" visible="{{ sbp.visible }}" animation="{{ sbp.options.animation }}" on-click="showInfoWindow(event, 'sbp')" >
 							<info-window id="sbp" visible-on-marker="{{ sbp.id }}">
 						        <div ng-non-bindable="">
 						          	<div id="siteNotice"></div>
@@ -384,9 +384,9 @@
 					  		<div class="panel-body">
 								<div class="col-md-12"  >
 									<map id="editBike" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}" width="100%" style="height: 400px" on-click="addNewMarker()" ><!-- ng-show="resizeMap()" -->
-										<marker ng-repeat="bp in newBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
+										<marker ng-repeat="bp in newBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{url:'{{bp.icon}}',scaledSize:[40,40],anchor: [20,20]}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
 										</marker>
-										<marker ng-repeat="bp in editBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{{ bp.icon }}" visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
+										<marker ng-repeat="bp in editBikePointMarkers" id="{{ bp.id }}" position="{{ bp.pos }}" icon="{url:'{{bp.icon}}',scaledSize:[40,40],anchor: [20,20]}"  visible="{{ bp.options.visible }}" draggable="{{ bp.options.draggable }}" on-dragend="updatePos()" ><!-- on-drag="updatePos()" -->
 										</marker>
 									</map>
 								</div>
