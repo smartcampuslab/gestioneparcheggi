@@ -100,15 +100,21 @@ public class DataRestController {
 	
 	// Method open to get all area objects
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/area")
-	//@ApiOperation(value = "Get Areas", notes = "Returns area items")
-	public @ResponseBody
-	List<RateAreaBean> getRateAreas(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
-		if(agencyId == null){
-			return storage.getAllArea(appId);
+	public @ResponseBody List<RateAreaBean> getRateAreas(@PathVariable("appId") String appId, @RequestParam(required = false) String zoneId, @RequestParam(required = false) String agencyId) {
+		if (zoneId == null) {
+			if (agencyId == null) {
+				return storage.getAllArea(appId);
+			} else {
+				return storage.getAllAreaByAgencyId(appId, agencyId);
+			}
 		} else {
-			return storage.getAllAreaByAgencyId(appId, agencyId);
+			if (agencyId == null) {
+				return storage.getAllAreaByZoneId(appId, zoneId);
+			} else {
+				return storage.getAllAreaByAgencyAndZoneId(appId, agencyId, zoneId);
+			}
 		}
-	}
+	}	
 			
 	// Method open to get a single area object
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/area/{aid}")
