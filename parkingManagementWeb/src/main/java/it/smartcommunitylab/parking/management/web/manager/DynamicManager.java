@@ -4195,7 +4195,7 @@ public class DynamicManager {
 	 * @param valueType: type of searched value: last profit or profit sum
 	 * @return
 	 */
-	public List<ParkingMeterBean> getProfitFromAllParkingMeters(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String agencyId){
+	public List<ParkingMeterBean> getProfitFromAllParkingMeters(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String agencyId) throws Exception {
 		List<ParkingMeterBean> parkingmeters = getAllParkingMeters(appId);
 		Map<StatKey, StatValue> statsVals = getProfitFromObjects(appId, type, params, years, months, dayType, days, hours);
 		String pId = "";

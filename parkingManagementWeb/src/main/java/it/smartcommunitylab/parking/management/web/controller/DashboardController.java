@@ -340,8 +340,13 @@ public class DashboardController {
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkingmeters")
 	public @ResponseBody
 	List<ParkingMeterBean> getAllParkingMetersProfit(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) int valueType, @RequestParam(required=true) String agencyId) throws Exception {
+		try {
 		String type = ParkMeter.class.getCanonicalName();
 		return dynamic.getProfitFromAllParkingMeters(appId, type, null, year, month, dayType, weekday, hour, valueType, agencyId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/dashboard/rest/profit/{appId}/parkingmeter/{id}")
