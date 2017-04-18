@@ -70,6 +70,8 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import com.google.common.collect.Lists;
+
 // Manager used to store the dynamic data
 @Service("storageDynamicManager")
 public class DynamicManager {
@@ -4197,6 +4199,9 @@ public class DynamicManager {
 		List<ParkingMeterBean> parkingmeters = getAllParkingMeters(appId);
 		Map<StatKey, StatValue> statsVals = getProfitFromObjects(appId, type, params, years, months, dayType, days, hours);
 		String pId = "";
+		
+		List<ParkingMeterBean> newParkingmeters = Lists.newArrayList();
+		
 		for(ParkingMeterBean pm : parkingmeters){
 			if(pm.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
 				double profitVal = 0;
@@ -4214,12 +4219,13 @@ public class DynamicManager {
 				}*/
 				pm.setProfit(profitVal);
 				pm.setTickets(ticketsNum);
+				newParkingmeters.add(pm);
 			} else {
 				pm.setProfit(-1.0);
 				pm.setTickets(-1);
 			}
 		}
-		return parkingmeters;
+		return newParkingmeters;
 	}
 	
 	public ParkingMeterBean getProfitFromParkingMeter(String parkMeterId, String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String agencyId){
