@@ -5309,9 +5309,9 @@ pm.controller('ViewDashboardCtrlPark', ['$scope', '$http', '$route', '$routePara
           var color = $scope.plainColor(object.myprofitColor);
 
           if (object.data.paymentMethods.indexOf("Cash_And_CreditCard") > -1) {
-            object.icon = baseUrl + '/marker/' + company + '/parcometrocarta/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+            object.icon = baseUrl + '/marker/' + company + '/parcometrocarta/' + ((color != null) ? color : defaultMarkerColor);
           } else {
-            object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+            object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((color != null) ? color : defaultMarkerColor);
           }
           //object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((color != null && color != "") ? color : defaultMarkerColor);
         }
@@ -5784,9 +5784,9 @@ pm.controller('ViewDashboardCtrlPark', ['$scope', '$http', '$route', '$routePara
           } else if (theme == 2) {
             var color = $scope.plainColor(object.myprofitColor);
             if (object.data.paymentMethods.indexOf("Cash_And_CreditCard") > -1) {
-              object.icon = baseUrl + '/marker/' + company + '/parcometrocarta/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+              object.icon = baseUrl + '/marker/' + company + '/parcometrocarta/' + ((color != null) ? color : defaultMarkerColor);
             } else {
-              object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((myAreaPm.color != null) ? myAreaPm.color : defaultMarkerColor);
+              object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((color != null) ? color : defaultMarkerColor);
             }
             //object.icon = baseUrl + '/marker/' + company + '/parcometro/' + ((color != null && color != "") ? color : defaultMarkerColor);
             $scope.profitParkingMetersMarkers.push(object);

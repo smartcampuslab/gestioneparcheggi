@@ -274,7 +274,7 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
     };
 
     // Method getProfitIcon: retrieve the correct profit icon with the color of the profit value passed in input (for type pm and ps)
-    this.getProfitIcon = function (value, type) {
+    this.getProfitIcon = function (myMarker, value, type) {
       //------ To be configured in external conf file!!!!!------
       var company = "tm";
       var appId = sharedDataService.getConfAppId();
@@ -289,7 +289,12 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
       var color = "";
       if (type == 1) { // corrected profit icon for parkingmeter
         color = this.getProfitColor(value);
-        image_url = baseUrl + '/marker/' + company + '/parcometro/' + this.plainColor(color);
+        //image_url = baseUrl + '/marker/' + company + '/parcometro/' + this.plainColor(color);
+        if (myMarker.data.paymentMethods.indexOf("Cash_And_CreditCard") > -1) {
+          image_url = baseUrl + '/marker/' + company + '/parcometrocarta/' + this.plainColor(color);
+        } else {
+          image_url = baseUrl + '/marker/' + company + '/parcometro/' + this.plainColor(color);
+        }
       } else if (type == 2) { // corrected profit icon for parkingstructures
         if (value > 0) {
           value = value / 100
@@ -1297,7 +1302,7 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
             myMarker.icon = myIcon;
             break;
           case 3:
-            var myIcon = this.getProfitIcon(markers[i].data.profit, 2);
+            var myIcon = this.getProfitIcon(myMarker, markers[i].data.profit, 2);
             myMarker.icon = myIcon;
             break;
           case 4:
@@ -1308,8 +1313,9 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
             myMarker.data.extratime = timeCost;
             break;
           case 5: // profit icon for parking meter
-            var myIcon = this.getProfitIcon(markers[i].data.profit, 1);
+            var myIcon = this.getProfitIcon(myMarker, markers[i].data.profit, 1);
             myMarker.icon = myIcon;
+
             break;
           default:
             break;

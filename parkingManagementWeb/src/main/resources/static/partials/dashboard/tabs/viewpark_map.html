@@ -69,20 +69,21 @@
       </marker>
       <marker ng-repeat="pmSel in mapParkingMetersSelectedMarkers" id="{{ pmSel.id }}" animation="{{ pmSel.options.animation }}" position="{{ pmSel.position }}" icon="{url:'{{pmSel.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="hideDetails(event, pmSel, 1, theme)"></marker>
       <!-- on-click="showInfoWindow(event, 'pm')" -->
-      <marker ng-repeat="pmProf in profitParkingMetersMarkers" id="{{ pmProf.id }}" animation="{{ pmProf.options.animation }}" position="{{ pmProf.position }}" icon="{{ pmProf.icon }}" on-click="showDetails(event, pmProf, 1, 2)"></marker>
+      <marker ng-repeat="pmProf in profitParkingMetersMarkers" id="{{ pmProf.id }}" animation="{{ pmProf.options.animation }}" position="{{ pmProf.position }}" icon="{url:'{{pmProf.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showDetails(event, pmProf, 1, 2)"></marker>
+
       <marker ng-repeat="ps in mapParkingStructureMarkers" id="{{ ps.id }}" position="{{ ps.position }}" icon="{url:'{{ps.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showDetails(event, ps, 2, 0)">
         <!-- on-click="showInfoWindow(event, 'ps')" -->
       </marker>
       <marker ng-repeat="psSel in mapParkingStructureSelectedMarkers" id="{{ psSel.id }}" animation="{{ psSel.options.animation }}" position="{{ psSel.position }}" icon="{url:'{{psSel.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="hideDetails(event, psSel, 2, theme)">
         <!-- on-click="showInfoWindow(event, 'ps')" -->
       </marker>
-      <marker ng-repeat="psOcc in occupancyParkingStructureMarkers" id="{{ psOcc.id }}" position="{{ psOcc.position }}" icon="{{ psOcc.icon }}" on-click="showDetails(event, psOcc, 2, 1)">
+      <marker ng-repeat="psOcc in occupancyParkingStructureMarkers" id="{{ psOcc.id }}" position="{{ psOcc.position }}" icon="{url:'{{psOcc.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showDetails(event, psOcc, 2, 1)">
         <!-- on-click="showInfoWindow(event, 'ps')" -->
       </marker>
-      <marker ng-repeat="psProf in profitParkingStructureMarkers" id="{{ psProf.id }}" position="{{ psProf.position }}" icon="{{ psProf.icon }}" on-click="showDetails(event, psProf, 2, 2)">
+      <marker ng-repeat="psProf in profitParkingStructureMarkers" id="{{ psProf.id }}" position="{{ psProf.position }}" icon="{url:'{{psProf.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showDetails(event, psProf, 2, 2)">
         <!-- on-click="showInfoWindow(event, 'ps')" -->
       </marker>
-      <marker ng-repeat="psTime in timeCostParkingStructureMarkers" id="{{ psTime.id }}" position="{{ psTime.position }}" icon="{{ psTime.icon }}" on-click="showDetails(event, psTime, 2, 3)">
+      <marker ng-repeat="psTime in timeCostParkingStructureMarkers" id="{{ psTime.id }}" position="{{ psTime.position }}" icon="{url:'{{psTime.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showDetails(event, psTime, 2, 3)">
         <!-- on-click="showInfoWindow(event, 'ps')" -->
       </marker>
       <marker ng-repeat="bp in mapBikePointMarkers" id="{{ bp.id }}" position="{{ bp.position }}" icon="{{ bpMarkerIcon }}" on-click="showInfoWindow(event, 'bp')">
