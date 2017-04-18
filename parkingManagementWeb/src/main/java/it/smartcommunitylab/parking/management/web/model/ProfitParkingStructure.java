@@ -17,9 +17,9 @@ package it.smartcommunitylab.parking.management.web.model;
 
 public class ProfitParkingStructure extends ParkingStructure {
 
-	public static enum PaymentMode {
-		CASH, AUTOMATED_TELLER, PREPAID_CARD, PARCOMETRO
-	}
+//	public static enum PaymentMode {
+//		CASH, AUTOMATED_TELLER, PREPAID_CARD, PARCOMETRO
+//	}
 
 //	private String id;
 //	private String id_app;	// used to specify the actual app (tn, rv, ecc...)
