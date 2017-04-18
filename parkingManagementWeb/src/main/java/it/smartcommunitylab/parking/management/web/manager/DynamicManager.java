@@ -4203,6 +4203,10 @@ public class DynamicManager {
 		List<ParkingMeterBean> newParkingmeters = Lists.newArrayList();
 		
 		for(ParkingMeterBean pm : parkingmeters){
+			if (pm.getAgencyId() == null) {
+				logger.error(pm.getId());
+				continue;
+			}
 			if(pm.getAgencyId().contains(agencyId) || agencyId.compareTo(ALL) == 0){
 				double profitVal = 0;
 				int ticketsNum = 0;
