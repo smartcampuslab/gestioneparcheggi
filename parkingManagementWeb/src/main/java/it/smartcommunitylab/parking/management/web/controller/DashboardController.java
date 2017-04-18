@@ -345,6 +345,7 @@ public class DashboardController {
 		return dynamic.getProfitFromAllParkingMeters(appId, type, null, year, month, dayType, weekday, hour, valueType, agencyId);
 		} catch (Exception e) {
 			e.printStackTrace();
+			logger.error(appId, e);
 		}
 		return null;
 	}
