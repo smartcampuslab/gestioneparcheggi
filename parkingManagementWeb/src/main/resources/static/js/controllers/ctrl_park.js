@@ -2970,9 +2970,11 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
 
         var newCorrectedPath = [];
         var createdPath = poly.getPath();
+        var lastPoint=sharedDataService.getConfMapCenter();
         for (var i = 0; i < createdPath.length; i++) {
           var point = gMapService.getPointFromLatLng(createdPath.b[i], 1);
           newCorrectedPath.push(point);
+          lastPoint = [point.latitude+","+point.longitude];
         };
         var myStreetPromise = streetService.createStreetInDb(street, area, zone0, zone1, zone2, zone3, zone4, pms, newCorrectedPath, agencyId);
         myStreetPromise.then(function (result) {
@@ -2988,6 +2990,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
             $scope.editModeS = true;
             $scope.showUpdatingSErrorMessage = true;
           }
+          //set new center temporarly
+          $scope.mapOption.center=lastPoint;
           // Here I try to clear the area and the polyline values
           area = null;
         });

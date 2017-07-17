@@ -297,7 +297,10 @@ pm.controller('MainCtrl', ['$scope', '$http', '$route', '$window', '$cookies', '
       if (stringList && stringList != "null") {
         var subList = stringList.substring(1, stringList.length - 1);
         var elements = subList.split("},");
-
+        if (elements[elements.length-1].endsWith('}'))
+        {
+           elements[elements.length-1]=elements[elements.length-1].slice(0, -1);
+        }
         for (var j = 0; j < elements.length; j++) {
           var allAttribute = elements[j].split(", ");
 
