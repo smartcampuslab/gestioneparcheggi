@@ -477,10 +477,56 @@ pm.controller('ViewCtrlGmap', ['$scope', '$http', '$route', '$routeParams', '$ro
       latitude: 45.88875357753771,
       longitude: 11.037440299987793
     };
-
+ var myStyles = [
+      {
+        featureType: "poi",
+        elementType: "labels",
+        stylers: [
+          {
+            visibility: "off"
+          }
+	        ]
+	    },
+	   /* {
+	    	featureType: "administrative",
+	        elementType: "labels",
+	        stylers: [
+	            { visibility: "off" }
+	        ]
+	    },*/
+      {
+        featureType: "transit.station",
+        elementType: "all",
+        stylers: [
+          {
+            visibility: "off"
+          }
+	        ]
+	    },
+          {
+    featureType: "landscape.natural",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#e2d6b6"
+      }
+    ]
+  },
+  
+          {
+    featureType: "transit.line",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#aaaaaa"
+      }
+    ]
+  }
+	];
     $scope.mapOption = {
       center: sharedDataService.getConfMapCenter(), //"[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
-      zoom: parseInt(sharedDataService.getConfMapZoom())
+      zoom: parseInt(sharedDataService.getConfMapZoom()).toExponential,
+      styles: myStyles
     };
 
     $scope.initMapOption = function (zones) {

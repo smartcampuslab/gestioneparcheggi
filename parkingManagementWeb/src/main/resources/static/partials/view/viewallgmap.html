@@ -6,7 +6,7 @@
 <!--<form name="viewForm"  > ng-init="initWs()" -->
 <div class="row" ng-controller="ViewCtrlGmap" ng-init="initWs()">
   <div class="col-md-9">
-    <map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}">
+    <map id="viewMap" class="angular-google-map-container" center="{{ mapOption.center }}" zoom="{{ mapOption.zoom }}" styles="{{ mapOption.styles }}">
       <marker ng-repeat="pm in mapParkingMetersMarkers" id="{{ pm.id }}" visible="{{ pm.options.visible }}" position="{{ pm.position }}" icon="{url:'{{pm.icon}}',scaledSize:[40,40],anchor: [20,20]}" on-click="showInfoWindow(event, 'pm')">
         <info-window id="pm" visible-on-marker="{{ pm.id }}">
           <div ng-non-bindable="">

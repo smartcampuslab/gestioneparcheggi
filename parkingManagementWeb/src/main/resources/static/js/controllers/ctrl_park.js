@@ -3824,7 +3824,30 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
             visibility: "off"
           }
 	            ]
-	        }
+	        },
+          {
+    featureType: "landscape.natural",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#e2d6b6"
+      }
+    ]
+  },
+  
+          {
+    featureType: "transit.line",
+    elementType: "geometry",
+    stylers: [
+      {
+        color: "#aaaaaa"
+      }
+    ]
+  }
+  
+  
+  
+          
 	   	];
 
     $scope.mapOption = {
