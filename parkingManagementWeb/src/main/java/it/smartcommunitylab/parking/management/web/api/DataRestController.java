@@ -1,24 +1,13 @@
 package it.smartcommunitylab.parking.management.web.api;
 
-import io.swagger.annotations.ApiParam;
-import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
-import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
-import it.smartcommunitylab.parking.management.web.bean.SimpleRateArea;
-import it.smartcommunitylab.parking.management.web.bean.StreetBean;
-import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
-import it.smartcommunitylab.parking.management.web.controller.EditingController;
-import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
-import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
-import it.smartcommunitylab.parking.management.web.manager.StorageManager;
-
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+import java.util.zip.ZipOutputStream;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletResponse;
 
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +18,29 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import de.micromata.opengis.kml.v_2_2_0.Kml;
+import io.swagger.annotations.ApiParam;
+import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
+import it.smartcommunitylab.parking.management.web.bean.RateAreaBean;
+import it.smartcommunitylab.parking.management.web.bean.SimpleRateArea;
+import it.smartcommunitylab.parking.management.web.bean.StreetBean;
+import it.smartcommunitylab.parking.management.web.bean.ZoneBean;
+import it.smartcommunitylab.parking.management.web.controller.EditingController;
+import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
+import it.smartcommunitylab.parking.management.web.kml.KMLExporter;
+import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+
 @Controller
 public class DataRestController {
 	
 	@Autowired
 	StorageManager storage;
+	
+	@Autowired
+	KMLExporter kmlExporter;	
 
 	MarkerIconStorage markerIconStorage;
 
@@ -187,17 +194,17 @@ public class DataRestController {
 		return storage.getBikePointById(pbid, appId);
 	}
 		
-	// Method open to retrieve all parking structure
-	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingstructure")
-	//@ApiOperation(value = "Get Parkingstructures", notes = "Return parking structure items")
-	public @ResponseBody
-	List<ParkingStructureBean> getParkingStructures(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
-		if(agencyId == null){
-			return storage.getAllParkingStructure(appId);
-		} else {
-			return storage.getAllParkingStructureByAgencyId(appId, agencyId);
-		}
-	}
+//	// Method open to retrieve all parking structure
+//	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingstructure")
+//	//@ApiOperation(value = "Get Parkingstructures", notes = "Return parking structure items")
+//	public @ResponseBody
+//	List<ParkingStructureBean> getParkingStructures(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+//		if(agencyId == null){
+//			return storage.getAllParkingStructure(appId);
+//		} else {
+//			return storage.getAllParkingStructureByAgencyId(appId, agencyId);
+//		}
+//	}
 		
 	// Method open to retrieve all parking structure
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingstructure/{psId}")
@@ -207,4 +214,61 @@ public class DataRestController {
 		return storage.getParkingStructureById(psId, appId);
 	}	
 
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/areas")
+	public @ResponseBody void getAreasKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
+		response.setContentType("text/plain");
+		response.setHeader("Content-Disposition", "attachment; filename=\"aree_" + appId + ".kml\"");		
+		
+		Kml kml = kmlExporter.exportArea(appId);
+		kmlExporter.write(kml, response.getOutputStream());
+	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/parkings")
+	public @ResponseBody void getParkingsKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
+		response.setContentType("text/plain");
+		response.setHeader("Content-Disposition", "attachment; filename=\"parcheggi_" + appId + ".kml\"");		
+		
+		Kml kml = kmlExporter.exportParkings(appId);
+		kmlExporter.write(kml, response.getOutputStream());
+	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/streets")
+	public @ResponseBody void getStreetsKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
+		response.setContentType("text/plain");
+		response.setHeader("Content-Disposition", "attachment; filename=\"vie_" + appId + ".kml\"");		
+		
+		Kml kml = kmlExporter.exportStreets(appId);
+		kmlExporter.write(kml, response.getOutputStream());
+	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/zones")
+	public @ResponseBody void getZonesKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
+		response.setContentType("text/plain");
+		response.setHeader("Content-Disposition", "attachment; filename=\"zone_" + appId + ".kml\"");		
+		
+		Kml kml = kmlExporter.exportMacroZone(appId);
+		kmlExporter.write(kml, response.getOutputStream());
+	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/all")
+	public @ResponseBody void getAllKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
+		response.setContentType("application/zip");
+		response.setHeader("Content-Disposition", "attachment; filename=\"export_" + appId + ".zip\"");		
+		
+		ZipOutputStream zos = new ZipOutputStream(response.getOutputStream());
+		
+		Kml kml = kmlExporter.exportArea(appId);
+		kmlExporter.addTozip(kml, "aree_" + appId, zos);
+		kml = kmlExporter.exportParkings(appId);
+		kmlExporter.addTozip(kml, "parcheggi_" + appId, zos);
+		kml = kmlExporter.exportStreets(appId);
+		kmlExporter.addTozip(kml, "vie_" + appId, zos);
+		kml = kmlExporter.exportMacroZone(appId);
+		kmlExporter.addTozip(kml, "zone_" + appId, zos);	
+		
+		zos.close();
+	}		
+	
+	
 }
