@@ -3,6 +3,7 @@ package it.smartcommunitylab.parking.management.web.api;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 import java.util.zip.ZipOutputStream;
 
@@ -233,23 +234,14 @@ public class DataRestController {
 		kmlExporter.write(kml, response.getOutputStream());
 	}	
 	
-	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/streets")
-	public @ResponseBody void getStreetsKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/zones/{zoneType}")
+	public @ResponseBody void getZonesKML(@PathVariable String appId, @PathVariable String zoneType, HttpServletResponse response) throws Exception {	
 		response.setContentType("text/plain");
-		response.setHeader("Content-Disposition", "attachment; filename=\"vie_" + appId + ".kml\"");		
+		response.setHeader("Content-Disposition", "attachment; filename=\"zone_" + zoneType + "_" + appId + ".kml\"");		
 		
-		Kml kml = kmlExporter.exportStreets(appId);
+		Kml kml = kmlExporter.exportZones(appId, zoneType);
 		kmlExporter.write(kml, response.getOutputStream());
-	}	
-	
-	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/zones")
-	public @ResponseBody void getZonesKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
-		response.setContentType("text/plain");
-		response.setHeader("Content-Disposition", "attachment; filename=\"zone_" + appId + ".kml\"");		
-		
-		Kml kml = kmlExporter.exportMacroZone(appId);
-		kmlExporter.write(kml, response.getOutputStream());
-	}	
+	}		
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/all")
 	public @ResponseBody void getAllKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
@@ -262,10 +254,17 @@ public class DataRestController {
 		kmlExporter.addTozip(kml, "aree_" + appId, zos);
 		kml = kmlExporter.exportParkings(appId);
 		kmlExporter.addTozip(kml, "parcheggi_" + appId, zos);
-		kml = kmlExporter.exportStreets(appId);
-		kmlExporter.addTozip(kml, "vie_" + appId, zos);
-		kml = kmlExporter.exportMacroZone(appId);
-		kmlExporter.addTozip(kml, "zone_" + appId, zos);	
+		
+		Set<String> types = kmlExporter.getTypes(appId);
+		for (String type: types) {
+			kml = kmlExporter.exportZones(appId, type);
+			kmlExporter.addTozip(kml, "zone_" + type + "_" + appId, zos);
+		}
+		// TODO
+//		kml = kmlExporter.exportStreets(appId);
+//		kmlExporter.addTozip(kml, "vie_" + appId, zos);
+//		kml = kmlExporter.exportMacroZone(appId);
+//		kmlExporter.addTozip(kml, "zone_" + appId, zos);	
 		
 		zos.close();
 	}		
