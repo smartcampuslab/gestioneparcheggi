@@ -439,10 +439,11 @@
 				<div class="panel-heading">
 					<table width="100%">
 						<tr>
-							<td align="left">
+							<td align="left" width="100%">
 								<h5 class="panel-title">{{ 'street_list' | i18n }}</h5>
 							</td>
 							<td align="right"><button ng-show="streetPermissions >= 3" type="button" class="btn btn-success" ng-click="setSEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+                            <td align="right"><a class="btn btn-primary" ng-href="../data/{{app_id}}/kml/parkings" target="_blank">{{ 'export' | i18n }}</a></td>
 						</tr>
 					</table>
 				</div>

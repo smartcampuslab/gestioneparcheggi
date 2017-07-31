@@ -2,7 +2,7 @@
 
 /* Services */
 var pmServices = angular.module('pmServices');
-pm.service('initializeService', function(){
+pm.service('initializeService', function($rootScope){
 	
 	this.app_id = null;
 	this.widget_base_url = null;
@@ -251,6 +251,7 @@ pm.service('initializeService', function(){
 	};
 	
 	this.setConfAppId = function(app_id){
+		$rootScope.app_id = app_id;
 		this.app_id = app_id;
 	};
 	

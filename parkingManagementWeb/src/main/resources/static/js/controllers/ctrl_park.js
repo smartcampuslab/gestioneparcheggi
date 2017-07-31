@@ -430,6 +430,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
             parktabs.push(zoneTabList[z].tab);
           }
         }
+        $scope.zoneTabList = zoneTabList;
+        
         if (showStreets) parktabs.push(street_tab_obj);
         if (showPs) parktabs.push(ps_tab_obj);
         if (showPm) parktabs.push(pm_tab_obj);

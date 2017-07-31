@@ -1615,6 +1615,10 @@
   "value": "AGGIUNGI",
   "description": "Testo pulsante aggiungi in edit parcheggi"
 }, {
+  "key": "export",
+  "value": "SCARICA KML",
+  "description": "Testo pulsante export"
+}, {
   "key": "info_1",
   "value": "LC: gratuiti con segnaletica, LS: gratuiti senza segnaletica, P: a pagamento, DO: disco orario, R: riservati, H: per disabili, E: con ricarica elettrica, C/S: carico/scarico, RO: rosa, CS: car sharing, ND: non disponibili",
   "description": "Testo pannello informativo per occupazione parcheggi"

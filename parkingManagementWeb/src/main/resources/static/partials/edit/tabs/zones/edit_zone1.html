@@ -117,8 +117,9 @@
 				<div class="panel-heading">
 					<table width="100%">
 						<tr>
-							<td align="left"><h5 class="panel-title">{{ 'zone_list' | i18n }}</h5></td>
+							<td align="left" width="100%"><h5 class="panel-title">{{ 'zone_list' | i18n }}</h5></td>
 							<td align="right"><button ng-show="zonePermissions >= 3" type="button" class="btn btn-success" ng-click="setZEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+                            <td align="right"><a class="btn btn-primary" ng-href="../data/{{app_id}}/kml/zones/{{zoneTabList[1].type}}" target="_blank">{{ 'export' | i18n }}</a></td>
 						</tr>
 					</table>
 <!-- 					<h5 class="panel-title">{{ 'zone_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setZEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
