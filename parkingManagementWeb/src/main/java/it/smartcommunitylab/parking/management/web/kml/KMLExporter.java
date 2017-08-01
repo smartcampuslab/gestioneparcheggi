@@ -165,7 +165,6 @@ public class KMLExporter {
 					data.addToData(d);
 					}
 				});
-//				map.entrySet().stream().collect(Collectors.toMap(x -> x., null));
 			}
 		}
 		
@@ -175,117 +174,19 @@ public class KMLExporter {
 		d = new Data(street.getSlotNumber().toString());
 		d.setName("slotNumber");
 		data.addToData(d);		
-		
-		
 	}	
 	
-	
-//	public Kml exportStreets(String appId) throws Exception {
-//		Kml kml = new Kml();
-//
-//		Criteria criteria = new Criteria("id_app").is(appId);
-//		Query query = new Query(criteria);
-//		query.fields().include("geometryFromSubelement").include("name").include("id");
-//
-//		List<Zone> zones = template.find(query, Zone.class, "zone");
-//
-//		Set<String> colors = Sets.newHashSet();
-//		for (Zone zone : zones) {
-//			if (!zone.isGeometryFromSubelement()) {
-//				continue;
-//			}		
-//			colors.add(validColor(zone.getColor()));
-//		}
-//		Map<String, Style> stylesMap = buildStylesMap(colors);	
-//		
-//		Document doc = kml.createAndSetDocument();
-//		doc.setName("Vie");
-//		for (Style style: stylesMap.values()) {
-//			doc.addToStyleSelector(style);
-//		}		
-//		for (Zone zone : zones) {
-//			if (!zone.isGeometryFromSubelement()) {
-//				continue;
-//			}
-//			String color = validColor(zone.getColor());
-//			
-//			Placemark place = doc.createAndAddPlacemark();
-//			place.setName(zone.getName());
-//			place.setStyleUrl("#" + color);
-//
-//			List<Street> streets = getStreetsInZone(zone.getId(), appId);
-//
-//			for (Street street : streets) {
-//				List<Point> points = street.getGeometry().getPoints();
-//				de.micromata.opengis.kml.v_2_2_0.Polygon poly = place.createAndSetPolygon();
-//				LinearRing ring = poly.createAndSetOuterBoundaryIs().createAndSetLinearRing();
-//
-//				for (Point point : points) {
-//					ring.addToCoordinates(point.getLng(), point.getLat());
-//				}
-//			}
-//		}
-//		return kml;
-//	}
-//
-//	public Kml exportMacroZone(String appId) throws Exception {
-//		Kml kml = new Kml();
-//
-//		Criteria criteria = new Criteria("id_app").is(appId);
-//		Query query = new Query(criteria);
-//
-//		List<Zone> zones = template.find(query, Zone.class, "zone");
-//
-//		Set<String> colors = Sets.newHashSet();
-//		for (Zone zone : zones) {
-//			if (zone.isGeometryFromSubelement()) {
-//				continue;
-//			}		
-//			colors.add(validColor(zone.getColor()));
-//		}
-//		Map<String, Style> stylesMap = buildStylesMap(colors);
-//		
-//		Document doc = kml.createAndSetDocument();
-//		doc.setName("Zone");
-//		for (Style style: stylesMap.values()) {
-//			doc.addToStyleSelector(style);
-//		}			
-//		
-//		for (Zone zone : zones) {
-//			if (zone.isGeometryFromSubelement()) {
-//				continue;
-//			}
-//			String color = validColor(zone.getColor());
-//			
-//			Placemark place = doc.createAndAddPlacemark();
-//			place.setName(zone.getName());
-//			place.setStyleUrl("#" + color);
-//
-//			Polygon polygon = zone.getGeometry();
-//			de.micromata.opengis.kml.v_2_2_0.Polygon poly = place.createAndSetPolygon();
-//			LinearRing ring = poly.createAndSetOuterBoundaryIs().createAndSetLinearRing();
-//
-//			for (Point point : polygon.getPoints()) {
-//				ring.addToCoordinates(point.getLng(), point.getLat());
-//			}
-//		}
-//		return kml;
-//	}
 	
 	public Kml exportZones(String appId, String zoneType) throws Exception {
 		Kml kml = new Kml();
 
 		Criteria criteria = new Criteria("id_app").is(appId).and("type").is(zoneType);
 		Query query = new Query(criteria);
-//		query.fields().include("geometryFromSubelement").include("name").include("id").include("geometry").include("submacro").include("submicro");
 
 		List<Zone> zones = template.find(query, Zone.class, "zone");
 
 		Set<String> colors = Sets.newHashSet();
 		for (Zone zone : zones) {
-			if (!zone.isGeometryFromSubelement()) {
-				continue;
-			}		
 			colors.add(validColor(zone.getColor()));
 		}
 		Map<String, Style> stylesMap = buildStylesMap(colors);	
@@ -404,9 +305,7 @@ public class KMLExporter {
 	public void addTozip(Kml kml, String name, ZipOutputStream zos) throws Exception {
 		ZipEntry entry = new ZipEntry(name + ".kml");
 		zos.putNextEntry(entry);
-
 		kml.marshal(zos);
 	}	
-
 
 }
