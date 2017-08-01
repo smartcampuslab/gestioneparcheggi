@@ -23,6 +23,7 @@ import de.micromata.opengis.kml.v_2_2_0.Data;
 import de.micromata.opengis.kml.v_2_2_0.Document;
 import de.micromata.opengis.kml.v_2_2_0.ExtendedData;
 import de.micromata.opengis.kml.v_2_2_0.Kml;
+import de.micromata.opengis.kml.v_2_2_0.LineStyle;
 import de.micromata.opengis.kml.v_2_2_0.LinearRing;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.PolyStyle;
@@ -37,6 +38,8 @@ import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
 @Component
 public class KMLExporter {
+
+	private static final String GRAY = "808080";
 
 	private static final String ALPHA = "80";
 
@@ -171,9 +174,6 @@ public class KMLExporter {
 		Data d = new Data(street.getSlotNumber().toString());
 		d.setName("slotNumber");
 		data.addToData(d);
-		d = new Data(street.getSlotNumber().toString());
-		d.setName("slotNumber");
-		data.addToData(d);		
 	}	
 	
 	
@@ -186,22 +186,21 @@ public class KMLExporter {
 		List<Zone> zones = template.find(query, Zone.class, "zone");
 
 		Set<String> colors = Sets.newHashSet();
-		for (Zone zone : zones) {
-			colors.add(validColor(zone.getColor()));
-		}
-		Map<String, Style> stylesMap = buildStylesMap(colors);	
+		Set<String> actualColors = Sets.newHashSet();
 		
 		Document doc = kml.createAndSetDocument();
 		doc.setName(zoneType.substring(0,1).toUpperCase() + zoneType.substring(1));
-		for (Style style: stylesMap.values()) {
-			doc.addToStyleSelector(style);
-		}		
+		
 		for (Zone zone : zones) {
 			String color = validColor(zone.getColor());
 			
 			Placemark place = doc.createAndAddPlacemark();
 			place.setName(zone.getName());
-			place.setStyleUrl("#" + color);
+			
+			if (!zone.isGeometryFromSubelement()) {
+				place.setStyleUrl("#" + color);
+				actualColors.add(color);
+			}
 			
 			place.setDescription(zone.getNote());
 			
@@ -225,10 +224,14 @@ public class KMLExporter {
 					List<Point> points = street.getGeometry().getPoints();
 					de.micromata.opengis.kml.v_2_2_0.Polygon poly = place.createAndSetPolygon();
 					LinearRing ring = poly.createAndSetOuterBoundaryIs().createAndSetLinearRing();
-
 					for (Point point : points) {
 						ring.addToCoordinates(point.getLng(), point.getLat());
 					}
+					
+					String color2 = street.getArea_color();
+					colors.add(validColor(color2));
+					place.setStyleUrl("#" + color2);
+					actualColors.add(color2);
 				}
 			} else {
 				Polygon polygon = zone.getGeometry();
@@ -242,6 +245,15 @@ public class KMLExporter {
 				}
 			}
 		}
+		
+//		for (Zone zone : zones) {
+//			colors.add(validColor(zone.getColor()));
+//		}
+		Map<String, Style> stylesMap = buildStylesMap(actualColors);	
+		for (Style style: stylesMap.values()) {
+			doc.addToStyleSelector(style);
+		}		
+		
 		return kml;
 	}	
 	
@@ -260,11 +272,13 @@ public class KMLExporter {
 
 		Criteria criteria = new Criteria("id_app").is(appId);
 		Query query = new Query(criteria);
-		query.fields().include("streets");
+		query.fields().include("streets").include("color");
 
 		List<RateArea> areas = template.find(query, RateArea.class, "rateArea");
 		for (RateArea area : areas) {
-			result.addAll(area.getStreets().values().parallelStream().filter(x -> x.getZones().contains(zoneId)).collect(Collectors.toList()));
+			List<Street> streets = (area.getStreets().values().parallelStream().filter(x -> x.getZones().contains(zoneId)).collect(Collectors.toList()));
+			streets.forEach(x -> x.setArea_color(area.getColor()));
+			result.addAll(streets);
 		}
 
 		return result;
@@ -279,7 +293,7 @@ public class KMLExporter {
 		if (color != null && !color.isEmpty()) {
 			return color;
 		} else {
-			return "808080";
+			return GRAY;
 		}
 	}
 	
@@ -292,6 +306,10 @@ public class KMLExporter {
 			style.setPolyStyle(polyStyle);
 			polyStyle.setColor(rgbTokml(color));
 			result.put(color, style);
+			LineStyle lineStyle = new LineStyle();
+			lineStyle.setColor("ff000000");
+			lineStyle.setWidth(1.5);
+			style.setLineStyle(lineStyle);
 		}
 		return result;
 	}
