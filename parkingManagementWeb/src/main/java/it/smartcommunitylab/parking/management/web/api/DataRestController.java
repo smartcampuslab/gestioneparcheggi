@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import de.micromata.opengis.kml.v_2_2_0.Kml;
+import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import it.smartcommunitylab.parking.management.web.bean.BikePointBean;
 import it.smartcommunitylab.parking.management.web.bean.ParkingMeterBean;
@@ -195,17 +196,17 @@ public class DataRestController {
 		return storage.getBikePointById(pbid, appId);
 	}
 		
-//	// Method open to retrieve all parking structure
-//	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingstructure")
-//	//@ApiOperation(value = "Get Parkingstructures", notes = "Return parking structure items")
-//	public @ResponseBody
-//	List<ParkingStructureBean> getParkingStructures(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
-//		if(agencyId == null){
-//			return storage.getAllParkingStructure(appId);
-//		} else {
-//			return storage.getAllParkingStructureByAgencyId(appId, agencyId);
-//		}
-//	}
+	// Method open to retrieve all parking structure
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingstructure")
+	@ApiOperation(value = "Get Parkingstructures", notes = "Return parking structure items")
+	public @ResponseBody
+	List<ParkingStructureBean> getParkingStructures(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
+		if(agencyId == null){
+			return storage.getAllParkingStructure(appId);
+		} else {
+			return storage.getAllParkingStructureByAgencyId(appId, agencyId);
+		}
+	}
 		
 	// Method open to retrieve all parking structure
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingstructure/{psId}")
