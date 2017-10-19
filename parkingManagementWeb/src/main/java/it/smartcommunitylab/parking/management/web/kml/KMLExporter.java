@@ -19,15 +19,18 @@ import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Sets;
 
+import de.micromata.opengis.kml.v_2_2_0.BalloonStyle;
 import de.micromata.opengis.kml.v_2_2_0.Data;
 import de.micromata.opengis.kml.v_2_2_0.Document;
 import de.micromata.opengis.kml.v_2_2_0.ExtendedData;
+import de.micromata.opengis.kml.v_2_2_0.IconStyle;
 import de.micromata.opengis.kml.v_2_2_0.Kml;
 import de.micromata.opengis.kml.v_2_2_0.LineStyle;
 import de.micromata.opengis.kml.v_2_2_0.LinearRing;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.PolyStyle;
 import de.micromata.opengis.kml.v_2_2_0.Style;
+import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.RatePeriod;
 import it.smartcommunitylab.parking.management.web.model.Street;
@@ -154,6 +157,55 @@ public class KMLExporter {
 		}
 		return kml;
 	}
+	
+	public Kml exportParkingMeters(String appId) throws Exception {
+		Kml kml = new Kml();
+
+		Criteria criteria = new Criteria("id_app").is(appId);
+		Query query = new Query(criteria);
+
+		List<RateArea> areas = template.find(query, RateArea.class, "rateArea");
+
+		Set<String> colors = Sets.newHashSet();
+//		for (RateArea area : areas) {
+//			colors.add(validColor(area.getColor()));
+//		}
+//		Map<String, Style> stylesMap = buildMarkersMap(colors);	
+//		
+		Document doc = kml.createAndSetDocument();
+		doc.setName("Parchimetri");
+		
+//		for (Style style: stylesMap.values()) {
+//			doc.addToStyleSelector(style);
+//		}	
+		
+		for (RateArea area : areas) {
+			String color = area.getColor();
+			
+			for (ParkingMeter parkingMeter : area.getParkingMeters().values()) {
+				Placemark place = doc.createAndAddPlacemark();
+				place.setName(area.getName() + "_" + parkingMeter.getCode());
+//				place.setStyleUrl("#" + color);	
+				
+				ExtendedData data = place.createAndSetExtendedData();
+
+
+				Data d = new Data("" + parkingMeter.getStatus());
+				d.setName("status");
+				data.addToData(d);		
+				
+				if (parkingMeter.getPaymentMethods() != null) {
+					d = new Data(String.join(",", parkingMeter.getPaymentMethods()));
+					d.setName("paymentMethods");
+					data.addToData(d);					
+				}
+				
+				de.micromata.opengis.kml.v_2_2_0.Point point = place.createAndSetPoint();
+				point.addToCoordinates(parkingMeter.getGeometry().getLng(), parkingMeter.getGeometry().getLat());
+			}
+		}
+		return kml;
+	}	
 
 	private void addDataFromStreet(Street street, ExtendedData data) {
 		ObjectMapper mapper = new ObjectMapper();
@@ -296,6 +348,30 @@ public class KMLExporter {
 			return GRAY;
 		}
 	}
+	
+	private Map<String, Style> buildMarkersMap(Set<String> colors) {
+		Map<String, Style> result = Maps.newTreeMap();
+		for (String color: colors) {
+			Style style = new Style();
+			style.setId(color);
+			result.put(color, style);
+//			LineStyle lineStyle = new LineStyle();
+//			lineStyle.setColor(rgbTokml(color));
+//			lineStyle.setWidth(1.5);
+//			style.setLineStyle(lineStyle);
+			
+			BalloonStyle baloonStyle = new BalloonStyle();
+			baloonStyle.setBgColor(rgbTokml(color));
+			baloonStyle.setColor(rgbTokml(color));
+			style.setBalloonStyle(baloonStyle);
+			
+			IconStyle iconStyle = new IconStyle();
+			iconStyle.setColor(rgbTokml(color));
+			style.setIconStyle(iconStyle);
+
+		}
+		return result;
+	}	
 	
 	private Map<String, Style> buildStylesMap(Set<String> colors) {
 		Map<String, Style> result = Maps.newTreeMap();
