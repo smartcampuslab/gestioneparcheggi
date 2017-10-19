@@ -30,7 +30,9 @@ import de.micromata.opengis.kml.v_2_2_0.LinearRing;
 import de.micromata.opengis.kml.v_2_2_0.Placemark;
 import de.micromata.opengis.kml.v_2_2_0.PolyStyle;
 import de.micromata.opengis.kml.v_2_2_0.Style;
+import it.smartcommunitylab.parking.management.web.model.BikePoint;
 import it.smartcommunitylab.parking.management.web.model.ParkingMeter;
+import it.smartcommunitylab.parking.management.web.model.ParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.RateArea;
 import it.smartcommunitylab.parking.management.web.model.RatePeriod;
 import it.smartcommunitylab.parking.management.web.model.Street;
@@ -158,6 +160,67 @@ public class KMLExporter {
 		return kml;
 	}
 	
+	public Kml exportParkingStructures(String appId) throws Exception {
+		Kml kml = new Kml();
+
+		Criteria criteria = new Criteria("id_app").is(appId);
+		Query query = new Query(criteria);
+
+		List<ParkingStructure> pss = template.find(query, ParkingStructure.class, "parkingStructure");
+
+		Document doc = kml.createAndSetDocument();
+		doc.setName("Parcheggi in struttura");
+
+		for (ParkingStructure ps : pss) {
+			if (ps.getGeometry() != null) {
+			Placemark place = doc.createAndAddPlacemark();
+			place.setName(ps.getName());
+
+			ExtendedData data = place.createAndSetExtendedData();
+			
+			addParkingStructuresData(ps, data);
+			
+			de.micromata.opengis.kml.v_2_2_0.Point point = place.createAndSetPoint();
+				point.addToCoordinates(ps.getGeometry().getLng(), ps.getGeometry().getLat());
+			}
+		}
+		return kml;
+	}
+	
+	public Kml exportBikePoints(String appId) throws Exception {
+		Kml kml = new Kml();
+
+		Criteria criteria = new Criteria("id_app").is(appId);
+		Query query = new Query(criteria);
+
+		List<BikePoint> bps = template.find(query, BikePoint.class, "bikePoint");
+
+		Document doc = kml.createAndSetDocument();
+		doc.setName("Punti bici");
+
+		for (BikePoint bp : bps) {
+			if (bp.getGeometry() != null) {
+			Placemark place = doc.createAndAddPlacemark();
+			place.setName(bp.getName());
+
+			ExtendedData data = place.createAndSetExtendedData();
+			
+			Data d = new Data("" + bp.getBikeNumber());
+			d.setName("bikeNumber");
+			data.addToData(d);	
+
+			d = new Data("" + bp.getSlotNumber());
+			d.setName("slotNumber");
+			data.addToData(d);				
+			
+			de.micromata.opengis.kml.v_2_2_0.Point point = place.createAndSetPoint();
+				point.addToCoordinates(bp.getGeometry().getLng(), bp.getGeometry().getLat());
+			}
+		}
+		return kml;
+	}	
+	
+	
 	public Kml exportParkingMeters(String appId) throws Exception {
 		Kml kml = new Kml();
 
@@ -167,17 +230,9 @@ public class KMLExporter {
 		List<RateArea> areas = template.find(query, RateArea.class, "rateArea");
 
 		Set<String> colors = Sets.newHashSet();
-//		for (RateArea area : areas) {
-//			colors.add(validColor(area.getColor()));
-//		}
-//		Map<String, Style> stylesMap = buildMarkersMap(colors);	
-//		
+
 		Document doc = kml.createAndSetDocument();
 		doc.setName("Parchimetri");
-		
-//		for (Style style: stylesMap.values()) {
-//			doc.addToStyleSelector(style);
-//		}	
 		
 		for (RateArea area : areas) {
 			String color = area.getColor();
@@ -185,11 +240,8 @@ public class KMLExporter {
 			for (ParkingMeter parkingMeter : area.getParkingMeters().values()) {
 				Placemark place = doc.createAndAddPlacemark();
 				place.setName(area.getName() + "_" + parkingMeter.getCode());
-//				place.setStyleUrl("#" + color);	
 				
 				ExtendedData data = place.createAndSetExtendedData();
-
-
 				Data d = new Data("" + parkingMeter.getStatus());
 				d.setName("status");
 				data.addToData(d);		
@@ -227,6 +279,47 @@ public class KMLExporter {
 		d.setName("slotNumber");
 		data.addToData(d);
 	}	
+	
+	private void addParkingStructuresData(ParkingStructure ps, ExtendedData data) {
+		ObjectMapper mapper = new ObjectMapper();
+		if (ps.getSlotsConfiguration() != null) {
+			for (VehicleSlot slot : ps.getSlotsConfiguration()) {
+				Map<String, Object> map = mapper.convertValue(slot, Map.class);
+				String type = (String)map.remove("vehicleType");
+				map.forEach((x,y) -> {
+					if (x != null && y != null) {
+					Data d = new Data(y.toString());
+					d.setName(type + "_" + x);
+					data.addToData(d);
+					}
+				});
+			}
+		}
+
+		Map<String, Object> map = mapper.convertValue(ps, Map.class);
+		map.remove("id");
+		map.remove("id_app");
+		map.remove("name");
+		
+		map.forEach((x,y) -> {
+			if (y instanceof String || y instanceof Integer || y instanceof Boolean) {
+				Data d = new Data(y.toString());
+				d.setName(x);
+				data.addToData(d);
+			}
+		});
+
+		if (ps.getPaymentMode() != null && !ps.getPaymentMode().isEmpty()) {
+		Data d = new Data(String.join(",", ps.getPaymentMode().stream().map(x -> x.toString()).collect(Collectors.toList())));
+		d.setName("paymentMode");
+		data.addToData(d);
+		}
+		
+		
+//		Data d = new Data(ps.getSlotNumber().toString());
+//		d.setName("slotNumber");
+//		data.addToData(d);
+	}		
 	
 	
 	public Kml exportZones(String appId, String zoneType) throws Exception {

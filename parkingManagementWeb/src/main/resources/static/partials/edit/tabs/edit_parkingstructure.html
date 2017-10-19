@@ -453,15 +453,15 @@
     <div class="col-md-6" ng-show="!viewModePS">
       <div class="panel panel-success" align="center">
         <div class="panel-heading">
-          <table width="100%">
-            <tr>
-              <td align="left">
-                <h5 class="panel-title">{{ 'ps_list' | i18n }}</h5></td>
-              <td align="right">
-                <button ng-show="psPermissions >= 3" type="button" class="btn btn-success" ng-click="setPsEdit(null)">{{ 'add_new_object' | i18n }}</button>
-              </td>
-            </tr>
-          </table>
+			<table width="100%">
+				<tr>
+					<td align="left" width="100%">
+						<h5 class="panel-title">{{ 'ps_list' | i18n }}</h5>
+					</td>
+					<td align="right"><button ng-show="psPermissions >= 3" type="button" class="btn btn-success" ng-click="setPsEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+	                <td align="right"><a class="btn btn-primary" ng-href="data/{{app_id}}/kml/parkingstructures" target="_blank">{{ 'export' | i18n }}</a></td>
+				</tr>
+			</table>          
         </div>
         <div class="panel-body">
           <div class="field-error" ng-show="showDeletingPSErrorMessage">{{ 'err_in_delete_parkingstructure' | i18n }}</div>

@@ -235,6 +235,24 @@ public class DataRestController {
 		kmlExporter.write(kml, response.getOutputStream());
 	}	
 	
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/parkingstructures")
+	public @ResponseBody void getParkingStructuresKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
+		response.setContentType("text/plain");
+		response.setHeader("Content-Disposition", "attachment; filename=\"parcheggiinstruttura_" + appId + ".kml\"");		
+		
+		Kml kml = kmlExporter.exportParkingStructures(appId);
+		kmlExporter.write(kml, response.getOutputStream());
+	}	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/bikepoints")
+	public @ResponseBody void getBikePointsKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
+		response.setContentType("text/plain");
+		response.setHeader("Content-Disposition", "attachment; filename=\"puntibici_" + appId + ".kml\"");		
+		
+		Kml kml = kmlExporter.exportBikePoints(appId);
+		kmlExporter.write(kml, response.getOutputStream());
+	}	
+	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/parkingmeters")
 	public @ResponseBody void getparkingMetersKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
 		response.setContentType("text/plain");
