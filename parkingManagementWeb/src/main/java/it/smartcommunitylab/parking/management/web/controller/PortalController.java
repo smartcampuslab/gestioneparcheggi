@@ -15,13 +15,6 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.controller;
 
-//import eu.trentorise.smartcampus.aac.AACException;
-import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
-import it.smartcommunitylab.parking.management.web.model.UserSetting;
-import it.smartcommunitylab.parking.management.web.security.YamlUserDetailsService;
-import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
-import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
-
 import java.security.Principal;
 import java.util.List;
 import java.util.Map;
@@ -39,6 +32,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+//import eu.trentorise.smartcampus.aac.AACException;
+import it.smartcommunitylab.parking.management.web.model.ObjectShowSetting;
+import it.smartcommunitylab.parking.management.web.model.UserSetting;
+import it.smartcommunitylab.parking.management.web.security.YamlUserDetailsService;
+import it.smartcommunitylab.parking.management.web.utils.AgencyDataSetup;
+import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 //import eu.trentorise.smartcampus.citizenportal.models.SubjectDn;
 
 //import eu.trentorise.smartcampus.aac.AACException;
@@ -147,7 +147,7 @@ public class PortalController extends SCController{
 	}
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/viewall/{appId}")
-	public ModelAndView viewAllElementsRv(ModelMap model, @PathVariable String appId, @RequestParam(required=false) String elements, @RequestParam(required=false) String filters, @RequestParam(required=false) String zoom, @RequestParam(required=false) String center) {
+	public ModelAndView viewAllElementsRv(ModelMap model, @PathVariable String appId, @RequestParam(required=false) String userId, @RequestParam(required=false) String elements, @RequestParam(required=false) String filters, @RequestParam(required=false) String zoom, @RequestParam(required=false) String center) {
 		String p_elements;
 		String p_filters;
 		p_elements = elements;
@@ -155,7 +155,9 @@ public class PortalController extends SCController{
 		model.addAttribute("no_sec", "true");
 		model.addAttribute("app_id", appId);
 		logger.info(String.format("I am in get viewAll %s", appId));
-		UserSetting user = yamlUserDetailsService.getUserDetailsByAppId(appId);	// I force to pass to user
+//		UserSetting user = yamlUserDetailsService.getUserDetailsByAppId(appId);	// I force to pass to user
+		UserSetting user = yamlUserDetailsService.getUserDetails(userId);
+		
 		ObjectShowSetting objectToShow = yamlUserDetailsService.getObjectShowDetails(user.getUsername());
 		String mapcenter = null;
 		String mapzoom = (objectToShow != null) ? objectToShow.getMapZoom() : "14";
