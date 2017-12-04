@@ -157,6 +157,9 @@ public class PortalController extends SCController{
 		logger.info(String.format("I am in get viewAll %s", appId));
 //		UserSetting user = yamlUserDetailsService.getUserDetailsByAppId(appId);	// I force to pass to user
 		UserSetting user = yamlUserDetailsService.getUserDetails(userId);
+		if (user == null) {
+			user = yamlUserDetailsService.getUserDetailsByAppId(appId);
+		}
 		
 		ObjectShowSetting objectToShow = yamlUserDetailsService.getObjectShowDetails(user.getUsername());
 		String mapcenter = null;
