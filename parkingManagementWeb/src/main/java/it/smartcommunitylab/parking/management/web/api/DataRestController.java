@@ -56,7 +56,7 @@ public class DataRestController {
 	
 	// Method open to get all streets
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/street")
-	//@ApiOperation(value = "Get Streets", notes = "Returns streets park items")
+	@ApiOperation(value = "Get Streets", notes = "Returns streets park items")
 	public @ResponseBody
 	List<StreetBean> getStreets(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
 		if(agencyId == null){
@@ -68,7 +68,7 @@ public class DataRestController {
 			
 	// Method open to get a single street
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/street/{streetId}")
-	//@ApiOperation(value = "Get Street", notes = "Returns a single street park item")
+	@ApiOperation(value = "Get Street", notes = "Returns a single street park item")
 	public @ResponseBody
 	StreetBean getStreetById(@PathVariable("appId") String appId, @PathVariable("streetId") String streetId) {
 		return storage.findStreet(streetId);
@@ -76,7 +76,7 @@ public class DataRestController {
 		
 	// Method open to get all parkingMeters
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingmeter")
-	//@ApiOperation(value = "Get ParkingMeters", notes = "Returns parking meter items")
+	@ApiOperation(value = "Get ParkingMeters", notes = "Returns parking meter items")
 	public @ResponseBody
 	List<ParkingMeterBean> getParkingMeters(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
 		if(agencyId == null){
@@ -88,7 +88,7 @@ public class DataRestController {
 	
 	// Method open to get near parkingMeters
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/nearparkingmeters/{latitude}/{longitude}/{radius}/{limit}")
-	//@ApiOperation(value = "Get ParkingMeters", notes = "Returns parking meter items")
+	@ApiOperation(value = "Get ParkingMeters", notes = "Returns parking meter items")
 	public @ResponseBody
 	List<SimpleRateArea> getNearParkingMeters(@ApiParam(defaultValue="tn") @PathVariable("appId") String appId, @ApiParam(defaultValue="46.057598") @PathVariable double latitude, @ApiParam(defaultValue="11.133676") @PathVariable double longitude,
 			@ApiParam(defaultValue="0.05") @PathVariable double radius, @ApiParam(defaultValue="5") @PathVariable int limit, @ApiParam(required=false) @RequestParam(required=false) String agencyIds) {
@@ -101,7 +101,7 @@ public class DataRestController {
 		
 	// Method open to get all parkingMeters
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingmeter/{pmId}")
-	//@ApiOperation(value = "Get ParkingMeter", notes = "Returns a single parking meter item")
+	@ApiOperation(value = "Get ParkingMeter", notes = "Returns a single parking meter item")
 	public @ResponseBody
 	ParkingMeterBean getParkingMeterById(@PathVariable("appId") String appId, @PathVariable("pmId") String pmId) {
 		return storage.findParkingMeter(pmId, appId);
@@ -109,6 +109,7 @@ public class DataRestController {
 	
 	// Method open to get all area objects
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/area")
+	@ApiOperation(value = "Get Areas", notes = "Return all area items")
 	public @ResponseBody List<RateAreaBean> getRateAreas(@PathVariable("appId") String appId, @RequestParam(required = false) String zoneId, @RequestParam(required = false) String agencyId) {
 		if (zoneId == null) {
 			if (agencyId == null) {
@@ -127,7 +128,7 @@ public class DataRestController {
 			
 	// Method open to get a single area object
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/area/{aid}")
-	//@ApiOperation(value = "Get Area", notes = "Return a single area item")
+	@ApiOperation(value = "Get Area", notes = "Return a single area item")
 	public @ResponseBody
 	RateAreaBean getRateAreaById(@PathVariable("appId") String appId,
 			@PathVariable("aid") String aid) throws NotFoundException {
@@ -136,7 +137,7 @@ public class DataRestController {
 		
 	// Method open to get all zones
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/zone")
-	//@ApiOperation(value = "Get Zones", notes = "Return zone items")
+	@ApiOperation(value = "Get Zones", notes = "Return zone items")
 	public @ResponseBody
 	List<ZoneBean> getAllZones(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
 		if(agencyId == null){
@@ -148,7 +149,7 @@ public class DataRestController {
 		
 	// Method open to get a single zone
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/zone/id/{zId}")
-	//@ApiOperation(value = "Get Zone", notes = "Return a single zone item")
+	@ApiOperation(value = "Get Zone", notes = "Return a single zone item")
 	public @ResponseBody
 	ZoneBean getZoneById(@PathVariable("appId") String appId, @PathVariable("zId") String zId) {
 		return storage.findZoneById(zId, appId);
@@ -156,7 +157,7 @@ public class DataRestController {
 		
 	// Method open to get all zones of a specific type
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/zone/{zType}")
-	//@ApiOperation(value = "Get Zones by type", notes = "Return zone items of specific type")
+	@ApiOperation(value = "Get Zones by type", notes = "Return zone items of specific type")
 	public @ResponseBody
 	List<ZoneBean> getZonesByType(@PathVariable("appId") String appId, @PathVariable("zType") String type, @RequestParam(required=false) String agencyId) {
 		logger.debug("passed params: " + appId + ", " + type);
@@ -177,7 +178,7 @@ public class DataRestController {
 		
 	// Method open to get all bike points
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/bikepoint")
-	//@ApiOperation(value = "Get Bikepoints", notes = "Return bike point items")
+	@ApiOperation(value = "Get Bikepoints", notes = "Return bike point items")
 	public @ResponseBody
 	List<BikePointBean> getBikePoints(@PathVariable("appId") String appId, @RequestParam(required=false) String agencyId) {
 		if(agencyId == null){
@@ -189,7 +190,7 @@ public class DataRestController {
 		
 	// Method open to get a single bike point
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/bikepoint/{pbid}")
-	//@ApiOperation(value = "Get Bikepoint", notes = "Return a single bike point item")
+	@ApiOperation(value = "Get Bikepoint", notes = "Return a single bike point item")
 	public @ResponseBody
 	BikePointBean getBikePointById(@PathVariable("appId") String appId,
 			@PathVariable("pbid") String pbid) throws NotFoundException {
@@ -210,7 +211,7 @@ public class DataRestController {
 		
 	// Method open to retrieve all parking structure
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/parkingstructure/{psId}")
-	//@ApiOperation(value = "Get Parkingstructure", notes = "Return a single parking structure item")
+	@ApiOperation(value = "Get Parkingstructure", notes = "Return a single parking structure item")
 	public @ResponseBody
 	ParkingStructureBean getParkingStructureById(@PathVariable("appId") String appId, @PathVariable("psId") String psId) {
 		return storage.getParkingStructureById(psId, appId);
@@ -218,6 +219,7 @@ public class DataRestController {
 
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/areas")
+	@ApiOperation(value = "Get Area KML", notes = "Return areas in KML format")
 	public @ResponseBody void getAreasKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
 		response.setContentType("text/plain");
 		response.setHeader("Content-Disposition", "attachment; filename=\"aree_" + appId + ".kml\"");		
@@ -227,6 +229,7 @@ public class DataRestController {
 	}	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/parkings")
+	@ApiOperation(value = "Get Parkings KML", notes = "Return parkings in KML format")
 	public @ResponseBody void getParkingsKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
 		response.setContentType("text/plain");
 		response.setHeader("Content-Disposition", "attachment; filename=\"parcheggi_" + appId + ".kml\"");		
@@ -236,6 +239,7 @@ public class DataRestController {
 	}	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/parkingstructures")
+	@ApiOperation(value = "Get Parking Structures KML", notes = "Return parking structures in KML format")
 	public @ResponseBody void getParkingStructuresKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
 		response.setContentType("text/plain");
 		response.setHeader("Content-Disposition", "attachment; filename=\"parcheggiinstruttura_" + appId + ".kml\"");		
@@ -245,6 +249,7 @@ public class DataRestController {
 	}	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/bikepoints")
+	@ApiOperation(value = "Get Bike Points KML", notes = "Return bike points in KML format")
 	public @ResponseBody void getBikePointsKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
 		response.setContentType("text/plain");
 		response.setHeader("Content-Disposition", "attachment; filename=\"puntibici_" + appId + ".kml\"");		
@@ -254,6 +259,7 @@ public class DataRestController {
 	}	
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/parkingmeters")
+	@ApiOperation(value = "Get Parking Meters KML", notes = "Return parking meters in KML format")
 	public @ResponseBody void getparkingMetersKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
 		response.setContentType("text/plain");
 		response.setHeader("Content-Disposition", "attachment; filename=\"parchimetri_" + appId + ".kml\"");		
@@ -263,6 +269,7 @@ public class DataRestController {
 	}		
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/zones/{zoneType}")
+	@ApiOperation(value = "Get Zones KML", notes = "Return zones in KML format")
 	public @ResponseBody void getZonesKML(@PathVariable String appId, @PathVariable String zoneType, HttpServletResponse response) throws Exception {	
 		response.setContentType("text/plain");
 		response.setHeader("Content-Disposition", "attachment; filename=\"zone_" + zoneType + "_" + appId + ".kml\"");		
@@ -272,6 +279,7 @@ public class DataRestController {
 	}		
 	
 	@RequestMapping(method = RequestMethod.GET, value = "/data/{appId}/kml/all")
+	@ApiOperation(value = "Get KML", notes = "Return everything in KML format")
 	public @ResponseBody void getAllKML(@PathVariable String appId, HttpServletResponse response) throws Exception {	
 		response.setContentType("application/zip");
 		response.setHeader("Content-Disposition", "attachment; filename=\"export_" + appId + ".zip\"");		
