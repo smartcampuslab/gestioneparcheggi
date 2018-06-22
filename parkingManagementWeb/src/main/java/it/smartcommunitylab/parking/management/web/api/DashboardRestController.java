@@ -1,17 +1,5 @@
 package it.smartcommunitylab.parking.management.web.api;
 
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
-import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
-import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBeanCore;
-import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
-import it.smartcommunitylab.parking.management.web.controller.DashboardController;
-import it.smartcommunitylab.parking.management.web.manager.CSVManager;
-import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
-import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
-import it.smartcommunitylab.parking.management.web.manager.StorageManager;
-import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
-
 import java.io.IOException;
 import java.util.List;
 
@@ -25,6 +13,19 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import io.swagger.annotations.ApiOperation;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Parking;
+import it.smartcommunitylab.parking.management.web.auxiliary.model.Street;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBean;
+import it.smartcommunitylab.parking.management.web.bean.ParkingStructureBeanCore;
+import it.smartcommunitylab.parking.management.web.bean.StreetBeanCore;
+import it.smartcommunitylab.parking.management.web.controller.DashboardController;
+import it.smartcommunitylab.parking.management.web.manager.CSVManager;
+import it.smartcommunitylab.parking.management.web.manager.DynamicManager;
+import it.smartcommunitylab.parking.management.web.manager.MarkerIconStorage;
+import it.smartcommunitylab.parking.management.web.manager.StorageManager;
+import it.smartcommunitylab.parking.management.web.repository.impl.StatRepositoryImpl;
 
 @Controller
 public class DashboardRestController {
@@ -56,7 +57,7 @@ public class DashboardRestController {
 	// Opened methods
 	// Open method to retrieve all street occupancy data (with complete street data)
 	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/streets")
-	//@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy data items", response=List.class)
+	@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy data items", response=List.class)
 	public @ResponseBody
 	List<StreetBeanCore> getAllStreetOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Street.class.getCanonicalName();
@@ -74,7 +75,7 @@ public class DashboardRestController {
 		
 	// Open method to retrieve all street occupancy data by zone id (with complete street data)
 	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/zone/{zoneId}/streets")
-	//@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy data items")
+	@ApiOperation(value = "Get Streets occupancy by Zone", notes = "Returns streets occupancy by zone data items")
 	public @ResponseBody
 	List<StreetBeanCore> getAllStreetInZoneOccupancyNS(@PathVariable String appId, @PathVariable String zoneId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Street.class.getCanonicalName();
@@ -92,7 +93,7 @@ public class DashboardRestController {
 	
 	// Open method to retrieve all street occupancy data by area id (with complete street data)
 	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/area/{rateAreaId}/streets")
-	//@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy data items")
+	@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy by area data items")
 	public @ResponseBody
 	List<StreetBeanCore> getAllStreetInAreaOccupancyNS(@PathVariable String appId, @PathVariable String rateAreaId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Street.class.getCanonicalName();
@@ -110,7 +111,7 @@ public class DashboardRestController {
 		
 	// Open method to retrieve a single street occupancy data
 	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/street/{id}")
-	//@ApiOperation(value = "Get Street occupancy", notes = "Returns single street occupancy data item")
+	@ApiOperation(value = "Get Street occupancy", notes = "Returns single street occupancy data item")
 	public @ResponseBody StreetBeanCore getStreetOccupancyNS(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Street.class.getCanonicalName();
 		if(valueType == null){
@@ -124,7 +125,7 @@ public class DashboardRestController {
 		
 	// Open method to retrieve all street occupancy data (with complete street data)
 	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/parkings")
-	//@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy data items")
+	@ApiOperation(value = "Get Parkings occupancy", notes = "Returns parkings occupancy data items")
 	public @ResponseBody
 	List<ParkingStructureBeanCore> getAllParkingOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Parking.class.getCanonicalName();
@@ -142,7 +143,7 @@ public class DashboardRestController {
 		
 	// Open method to retrieve all structures occupancy data by zone (with complete street data)
 	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/zone/{zoneId}/parkings")
-	//@ApiOperation(value = "Get Streets occupancy", notes = "Returns streets occupancy data items")
+	@ApiOperation(value = "Get Parkings occupancy by Zone", notes = "Returns parkings occupancy by zone data items")
 	public @ResponseBody
 	List<ParkingStructureBeanCore> getAllParkingInZoneOccupancyNS(@PathVariable String appId, @PathVariable String zoneId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Parking.class.getCanonicalName();
@@ -160,7 +161,7 @@ public class DashboardRestController {
 	
 	// Open method to retrieve a single parking structure occupancy data
 	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/parking/{id}")
-	//@ApiOperation(value = "Get Parking structure occupancy", notes = "Returns single structure occupancy data item")
+	@ApiOperation(value = "Get Parking structure occupancy", notes = "Returns single structure occupancy data item")
 	public @ResponseBody ParkingStructureBeanCore getStructureOccupancyNS(@PathVariable String appId, @PathVariable String id, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String granularity) throws Exception {
 		String type = Parking.class.getCanonicalName();
 		if(valueType == null){
@@ -174,13 +175,17 @@ public class DashboardRestController {
 		
 	// Open method to retrieve all parkingStructures occupancy data (with complete ps data)
 	@RequestMapping(method = RequestMethod.GET, value = "/stats/occupancy/{appId}/parkingstructures")
-	//@ApiOperation(value = "Get Parking structures occupancy", notes = "Returns parking structure occupancy data items")
+	@ApiOperation(value = "Get Parking structures occupancy", notes = "Returns parking structure occupancy data items")
 	public @ResponseBody
 	List<ParkingStructureBean> getAllParkingStructureOccupancyNS(@PathVariable String appId, @RequestParam(required=false) int[] year, @RequestParam(required=false) byte[] month, @RequestParam(required=false) String dayType, @RequestParam(required=false) byte[] weekday, @RequestParam(required=false) byte[] hour, @RequestParam(required=false) Integer valueType, @RequestParam(required=false) String vehicleType, @RequestParam(required=false) String agencyId) throws Exception {
 		String type = Parking.class.getCanonicalName();
 		if(agencyId == null || agencyId.compareTo("") == 0){
 			agencyId = ALL;
 		}
+		if(valueType == null){
+			valueType = 2;
+		}
+			
 		return dynamic.getOccupationRateFromAllParkings(appId, type, null, year, month, dayType, weekday, hour, valueType, vehicleType, agencyId);
 	}
 
