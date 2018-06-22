@@ -4160,7 +4160,7 @@ public class DynamicManager {
 		return corrStructs;
 	}
 	
-	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, int valueType, String vehicleType, String agencyId){
+	public List<ParkingStructureBean> getOccupationRateFromAllParkings(String appId, String type, Map<String, Object> params, int[] years, byte[] months, String dayType, byte[] days, byte[] hours, Integer valueType, String vehicleType, String agencyId){
 		List<ParkingStructureBean> parkings = getAllParkingStructureInAppId(null, appId);
 		Map<StatKey, StatValue> statsVals = null;
 		if(valueType == 1){
