@@ -16,6 +16,7 @@ pm.service('initializeService', function($rootScope){
 	this.conf_show_zone;
 	this.widget_filters;
 	this.widget_elements;
+	this.widget_user;
 	this.slot_types;
 	this.showWidgetArea = false;
 	this.showWidgetStreet = false;
@@ -282,6 +283,14 @@ pm.service('initializeService', function($rootScope){
 	this.getWidgetElements = function(){
 		return this.widget_elements;
 	};
+	
+	this.setWidgetUser = function(user){
+		this.widget_user = user;
+	};
+	
+	this.getWidgetUser = function(){
+		return this.widget_user;
+	};	
 	
 	this.setSlotsTypes = function(slots){
 		this.slot_types = slots;
@@ -1512,6 +1521,7 @@ pm.service('initializeService', function($rootScope){
     				} else {
     					this.checkWidgetArea = false;
     				}	
+//    				this.showWidgetArea = this.checkWidgetArea;
     				break;
     			case "parcheggio": 
     				this.showWidgetStreet = true;
@@ -1520,6 +1530,8 @@ pm.service('initializeService', function($rootScope){
     				} else {
     					this.checkWidgetStreet = false;
     				}
+//    				this.showWidgetStreet = this.checkWidgetStreet;
+    				this.showStreet = this.checkWidgetStreet;
     				break;
     			case "ps": 
     				this.showWidgetPs = true;
@@ -1528,6 +1540,7 @@ pm.service('initializeService', function($rootScope){
     				} else {
     					this.checkWidgetPs = false;
     				}
+//    				this.showWidgetPs = this.checkWidgetPs;
     				break;
     			case "pm": 
     				this.showWidgetPm = true;
@@ -1536,14 +1549,16 @@ pm.service('initializeService', function($rootScope){
     				} else {
     					this.checkWidgetPm = false;
     				}
+//    				this.showWidgetPm = this.checkWidgetPm;
     				break;
-    			case "pb": 
+    			case "bp": 
     				this.showWidgetBp = true;
     				if(elevalue == "1"){
     					this.checkWidgetBp = true;
     				} else {
     					this.checkWidgetBp = false;
     				}
+//    				this.showWidgetBp = this.checkWidgetBp;
     				break;
     			default :
     				// manage zones;

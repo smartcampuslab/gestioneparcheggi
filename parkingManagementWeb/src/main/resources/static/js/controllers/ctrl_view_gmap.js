@@ -291,9 +291,9 @@ pm.controller('ViewCtrlGmap', ['$scope', '$http', '$route', '$routeParams', '$ro
       }
       if ($scope.isBpVisible()) {
         if ($scope.checkBp) {
-          parameters += "pb:1,";
+          parameters += "bp:1,";
         } else {
-          parameters += "pb:0,";
+          parameters += "bp:0,";
         }
       }
       if ($scope.isZones0Visible() && !$scope.filterForZone0) {
@@ -337,7 +337,7 @@ pm.controller('ViewCtrlGmap', ['$scope', '$http', '$route', '$routeParams', '$ro
           		var zVals = initializeService.getZValues();
           	}*/
 
-      return parameters.substring(0, parameters.length - 1);
+      return parameters.substring(0, parameters.length - 1) + "&userId=" + user_name;
     };
 
     $scope.updateWidgetParameter = function (param, value) {
@@ -435,7 +435,7 @@ pm.controller('ViewCtrlGmap', ['$scope', '$http', '$route', '$routeParams', '$ro
           widget_url_filters = filters;
         } else {
           if (agency == "") {
-            widget_url_filters = "";
+//            widget_url_filters = "";
           }
         }
       } else {
@@ -525,7 +525,7 @@ pm.controller('ViewCtrlGmap', ['$scope', '$http', '$route', '$routeParams', '$ro
 	];
     $scope.mapOption = {
       center: sharedDataService.getConfMapCenter(), //"[" + $scope.mapCenter.latitude + "," + $scope.mapCenter.longitude + "]",
-      zoom: parseInt(sharedDataService.getConfMapZoom()).toExponential,
+      zoom: parseInt(sharedDataService.getConfMapZoom()),
       styles: myStyles
     };
 

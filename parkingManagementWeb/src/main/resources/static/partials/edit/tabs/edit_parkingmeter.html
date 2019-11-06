@@ -304,7 +304,7 @@
     <div class="col-md-6" ng-show="!viewModePM">
       <div class="panel panel-success" align="center">
         <div class="panel-heading">
-          <table width="100%">
+<!--           <table width="100%">
             <tr>
               <td align="left">
                 <h5 class="panel-title">{{ 'pm_list' | i18n }}</h5></td>
@@ -312,7 +312,19 @@
                 <button ng-show="pmPermissions >= 3" type="button" class="btn btn-success" ng-click="setPmEdit(null)">{{ 'add_new_object' | i18n }}</button>
               </td>
             </tr>
-          </table>
+          </table> -->
+          
+		<table width="100%">
+			<tr>
+				<td align="left" width="100%">
+					<h5 class="panel-title">{{ 'pm_list' | i18n }}</h5>
+				</td>
+				<td align="right"><button ng-show="pmPermissions >= 3" type="button" class="btn btn-success" ng-click="setPmEdit(null)">{{ 'add_new_object' | i18n }}</button></td>
+                <td align="right"><a class="btn btn-primary" ng-href="data/{{app_id}}/kml/parkingmeters" target="_blank">{{ 'export' | i18n }}</a></td>
+			</tr>
+		</table>          
+          
+          
           <!-- 							<h5 class="panel-title">{{ 'pm_list' | i18n }}&nbsp; &nbsp; <button type="button" class="btn btn-success btn-xs" ng-click="setPmEdit(null)"><i class="glyphicon glyphicon-plus"></i></button></h5> -->
         </div>
         <div class="panel-body">

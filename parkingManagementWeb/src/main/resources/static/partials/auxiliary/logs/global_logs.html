@@ -398,7 +398,8 @@
 						ng-click="stepPage(1)">{{ 'next_label' | i18n }}</button>
 				</td>
 				<td width="33%" align="right">
-                    <a href class="btn btn-success" target="_blank" ng-click="getAllLogsFromDbTP()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a><!-- getAllLogsConfirm() ng-disabled="!isAllLogLoaded" getAllLogCsv() -->
+                    <!-- <a href class="btn btn-success" target="_blank" ng-click="getAllLogsFromDbTP()"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a> -->
+                    <a href class="btn btn-success" target="_blank" ng-href="auxiliary/rest/globallogs/csv/{{app_id}}/{{agencyId}}"><i class="glyphicon glyphicon-list-alt"></i>&nbsp;&nbsp;{{ 'csv_btn_create' | i18n }}</a>
 				</td>
 			</tr>
 		</table>

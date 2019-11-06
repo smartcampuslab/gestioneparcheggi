@@ -15,6 +15,30 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.auxiliary.controller;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.log4j.Logger;
+import org.apache.poi.hssf.usermodel.HSSFSheet;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.Row;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
+
 import it.smartcommunitylab.parking.management.web.auxiliary.data.GeoObjectManager;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.PMProfitData;
 import it.smartcommunitylab.parking.management.web.auxiliary.model.PSOccupancyData;
@@ -29,38 +53,12 @@ import it.smartcommunitylab.parking.management.web.exception.NotFoundException;
 import it.smartcommunitylab.parking.management.web.manager.CSVManager;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-
-import org.apache.log4j.Logger;
-import org.apache.poi.hssf.usermodel.HSSFSheet;
-import org.apache.poi.hssf.usermodel.HSSFWorkbook;
-import org.apache.poi.ss.usermodel.Cell;
-import org.apache.poi.ss.usermodel.Row;
-import org.json.JSONArray;
-import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
 @Controller
 public class ObjectController  {
 
 	private static final Logger logger = Logger.getLogger(ObjectController.class);
+	
+	private static final String TMP_CSV = "./tmp/csv";
 	
 	private static final int DEFAULT_COUNT = 500;	// last 500 values
 	private static final int NO_PERIOD = -1;
@@ -754,186 +752,202 @@ public class ObjectController  {
 	}	
 	
 	// --------------------------------- Part for csv files creation ------------------------------------
-	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/globallogs/csv")
+	// obsolete
+//	@RequestMapping(method = RequestMethod.POST, value = "/auxiliary/rest/globallogs/csv")
+//	public @ResponseBody
+//	String createAllLogCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
+//		ArrayList<DataLogBean> logAllData = new ArrayList<DataLogBean>();
+//		
+//		String createdFile = "";
+//		//byte[] return_data = null;
+//		String path = request.getSession().getServletContext().getRealPath("/csv/");
+//		logger.debug("Current path: " + path);
+//		
+//		JSONArray logList = new JSONArray(data);
+//		logger.debug("log list size: " + logList.length());
+//	   	
+//	    for(int i = 0; i < logList.length(); i++){
+//	    	JSONObject log = logList.getJSONObject(i);
+//	    	//logger.error(String.format("Log Data: %s", log.toString()));
+//	    	String id = log.getString("id");
+//	    	String objId = log.getString("objId");
+//	    	String author = log.getString("author");
+//	    	Long[] periodLog = null;
+//	    	Object period = (!log.isNull("logPeriod") ? log.get("logPeriod") : null);
+//	    	if(period != null){
+//	    		String periodVal = period.toString();
+//	    		String res[] = periodVal.split(",");
+//	    		periodLog = new Long[2];
+//	    		periodLog[0] = Long.parseLong(res[0].substring(1, res[0].length() - 1));
+//	    		periodLog[1] = Long.parseLong(res[1].substring(0, res[1].length() - 2));
+//	    	}
+//	    	Long time = (!log.isNull("time")) ? log.getLong("time") : null;
+//	    	String time_slot = (!log.isNull("timeSlot")) ? log.getString("timeSlot") : "";
+//	    	String week_day = (!log.isNull("week_day")) ? log.getString("week_day") : "";
+//	    	String month = (!log.isNull("month")) ? log.getString("month") : "";
+//	    	String year = (!log.isNull("year")) ? log.getString("year") : "";
+//	    	String type = log.getString("type");
+//	    	Boolean deleted = log.getBoolean("deleted");
+//	    	Boolean holyday = log.getBoolean("holyday");
+//	    	JSONObject value = (!log.isNull("value")) ? log.getJSONObject("value") : null;
+//	    	Map<String, Object> log_value = new HashMap<String, Object>();
+//	    	if(value != null){
+//		    	if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0){
+//			    	log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
+//			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
+//			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
+//			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
+//			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
+//			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
+//			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
+//			    	if(value.isNull("slotsConfiguration")){
+//			    		log_value.put("slotsFree", (!value.isNull("slotsFree")) ? value.getInt("slotsFree") : 0);
+//			    		log_value.put("slotsOccupiedOnFree", (!value.isNull("slotsOccupiedOnFree")) ? value.getInt("slotsOccupiedOnFree") : 0);
+//			    		log_value.put("slotsTimed", (!value.isNull("slotsTimed")) ? value.getInt("slotsTimed") : 0);
+//			    		log_value.put("slotsOccupiedOnTimed", (!value.isNull("slotsOccupiedOnTimed")) ? value.getInt("slotsOccupiedOnTimed") : 0);
+//			    		log_value.put("slotsPaying", (!value.isNull("slotsPaying")) ? value.getInt("slotsPaying") : 0);
+//			    		log_value.put("slotsOccupiedOnPaying", (!value.isNull("slotsOccupiedOnPaying")) ? value.getInt("slotsOccupiedOnPaying") : 0);
+//			    		log_value.put("slotsHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
+//			    		log_value.put("slotsOccupiedOnHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
+//			    		log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+//			    	} else {
+//			    		JSONArray slotsConf = value.getJSONArray("slotsConfiguration");
+//			    		JSONObject slotConf = slotsConf.getJSONObject(0);
+//			    		log_value.put("slotsFree", (!slotConf.isNull("freeParkSlotNumber")) ? slotConf.getInt("freeParkSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnFree", (!slotConf.isNull("freeParkSlotOccupied")) ? slotConf.getInt("freeParkSlotOccupied") : 0);
+//			    		log_value.put("slotsFreeSigned", (!slotConf.isNull("freeParkSlotSignNumber")) ? slotConf.getInt("freeParkSlotSignNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnFreeSigned", (!slotConf.isNull("freeParkSlotSignOccupied")) ? slotConf.getInt("freeParkSlotSignOccupied") : 0);
+//			    		log_value.put("slotsTimed", (!slotConf.isNull("timedParkSlotNumber")) ? slotConf.getInt("timedParkSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnTimed", (!slotConf.isNull("timedParkSlotOccupied")) ? slotConf.getInt("timedParkSlotOccupied") : 0);
+//			    		log_value.put("slotsPaying", (!slotConf.isNull("paidSlotNumber")) ? slotConf.getInt("paidSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnPaying", (!slotConf.isNull("paidSlotOccupied")) ? slotConf.getInt("paidSlotOccupied") : 0);
+//			    		log_value.put("slotsHandicapped", (!slotConf.isNull("handicappedSlotNumber")) ? slotConf.getInt("handicappedSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnHandicapped", (!slotConf.isNull("handicappedSlotOccupied")) ? slotConf.getInt("handicappedSlotOccupied") : 0);
+//			    		log_value.put("slotsReserved", (!slotConf.isNull("reservedSlotNumber")) ? slotConf.getInt("reservedSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnReserved", (!slotConf.isNull("reservedSlotOccupied")) ? slotConf.getInt("reservedSlotOccupied") : 0);
+//			    		log_value.put("slotsRechargeable", (!slotConf.isNull("rechargeableSlotNumber")) ? slotConf.getInt("rechargeableSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnRechargeable", (!slotConf.isNull("rechargeableSlotOccupied")) ? slotConf.getInt("rechargeableSlotOccupied") : 0);
+//			    		log_value.put("slotsCarSharing", (!slotConf.isNull("carSharingSlotNumber")) ? slotConf.getInt("carSharingSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnCarSharing", (!slotConf.isNull("carSharingSlotOccupied")) ? slotConf.getInt("carSharingSlotOccupied") : 0);
+//			    		log_value.put("slotsLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotNumber")) ? slotConf.getInt("loadingUnloadingSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotOccupied")) ? slotConf.getInt("loadingUnloadingSlotOccupied") : 0);
+//			    		log_value.put("slotsPink", (!slotConf.isNull("pinkSlotNumber")) ? slotConf.getInt("pinkSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnPink", (!slotConf.isNull("pinkSlotOccupied")) ? slotConf.getInt("pinkSlotOccupied") : 0);
+//			    		log_value.put("slotsUnavailable", (!slotConf.isNull("unusuableSlotNumber")) ? slotConf.getInt("unusuableSlotNumber") : 0);
+//			    		log_value.put("vehicleType", (!slotConf.isNull("vehicleType")) ? slotConf.getString("vehicleType") : "Car");
+//			    	}
+//			    	log_value.put("polyline", (!value.isNull("polyline")) ? value.getString("polyline") : "n.p.");
+//			    	log_value.put("version", (!value.isNull("version")) ? value.get("version") : "null");
+//			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
+//			    	log_value.put("areaId", (!value.isNull("areaId")) ? value.getString("areaId") : "n.p.");
+//		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Parking") == 0){
+//		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
+//			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
+//			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
+//			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
+//			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
+//			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
+//			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
+//			    	if(value.isNull("slotsConfiguration")){
+//			    		log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
+//			    		log_value.put("slotsOccupiedOnTotal", (!value.isNull("slotsOccupiedOnTotal")) ? value.getInt("slotsOccupiedOnTotal") : 0);
+//			    		log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
+//			    	} else {
+//			    		JSONArray slotsConf = value.getJSONArray("slotsConfiguration");
+//			    		JSONObject slotConf = slotsConf.getJSONObject(0);
+//			    		log_value.put("slotsFree", (!slotConf.isNull("freeParkSlotNumber")) ? slotConf.getInt("freeParkSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnFree", (!slotConf.isNull("freeParkSlotOccupied")) ? slotConf.getInt("freeParkSlotOccupied") : 0);
+//			    		log_value.put("slotsFreeSigned", (!slotConf.isNull("freeParkSlotSignNumber")) ? slotConf.getInt("freeParkSlotSignNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnFreeSigned", (!slotConf.isNull("freeParkSlotSignOccupied")) ? slotConf.getInt("freeParkSlotSignOccupied") : 0);
+//			    		log_value.put("slotsTimed", (!slotConf.isNull("timedParkSlotNumber")) ? slotConf.getInt("timedParkSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnTimed", (!slotConf.isNull("timedParkSlotOccupied")) ? slotConf.getInt("timedParkSlotOccupied") : 0);
+//			    		log_value.put("slotsPaying", (!slotConf.isNull("paidSlotNumber")) ? slotConf.getInt("paidSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnPaying", (!slotConf.isNull("paidSlotOccupied")) ? slotConf.getInt("paidSlotOccupied") : 0);
+//			    		log_value.put("slotsHandicapped", (!slotConf.isNull("handicappedSlotNumber")) ? slotConf.getInt("handicappedSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnHandicapped", (!slotConf.isNull("handicappedSlotOccupied")) ? slotConf.getInt("handicappedSlotOccupied") : 0);
+//			    		log_value.put("slotsReserved", (!slotConf.isNull("reservedSlotNumber")) ? slotConf.getInt("reservedSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnReserved", (!slotConf.isNull("reservedSlotOccupied")) ? slotConf.getInt("reservedSlotOccupied") : 0);
+//			    		log_value.put("slotsRechargeable", (!slotConf.isNull("rechargeableSlotNumber")) ? slotConf.getInt("rechargeableSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnRechargeable", (!slotConf.isNull("rechargeableSlotOccupied")) ? slotConf.getInt("rechargeableSlotOccupied") : 0);
+//			    		log_value.put("slotsCarSharing", (!slotConf.isNull("carSharingSlotNumber")) ? slotConf.getInt("carSharingSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnCarSharing", (!slotConf.isNull("carSharingSlotOccupied")) ? slotConf.getInt("carSharingSlotOccupied") : 0);
+//			    		log_value.put("slotsLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotNumber")) ? slotConf.getInt("loadingUnloadingSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotOccupied")) ? slotConf.getInt("loadingUnloadingSlotOccupied") : 0);
+//			    		log_value.put("slotsPink", (!slotConf.isNull("pinkSlotNumber")) ? slotConf.getInt("pinkSlotNumber") : 0);
+//			    		log_value.put("slotsOccupiedOnPink", (!slotConf.isNull("pinkSlotOccupied")) ? slotConf.getInt("pinkSlotOccupied") : 0);
+//			    		log_value.put("slotsUnavailable", (!slotConf.isNull("unusuableSlotNumber")) ? slotConf.getInt("unusuableSlotNumber") : 0);
+//			    		log_value.put("vehicleType", (!slotConf.isNull("vehicleType")) ? slotConf.getString("vehicleType") : "Car");
+//			    	}
+//			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
+//			    	log_value.put("version", (!value.isNull("version")) ? value.get("version") : "null");
+//		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct") == 0){
+//		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
+//			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
+//			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
+//			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
+//			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
+//			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
+//			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
+//			    	//log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
+//			    	log_value.put("profit", (!value.isNull("profit")) ? value.getInt("profit") : 0);
+//			    	log_value.put("tickets", (!value.isNull("tickets")) ? value.getInt("tickets") : 0);
+//			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
+//			    	log_value.put("version", (!value.isNull("version")) ? value.get("version") : "null");
+//		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter") == 0){
+//		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
+//			    	log_value.put("code", (!value.isNull("code")) ? value.getString("code") : "n.p.");
+//			    	log_value.put("note", (!value.isNull("note")) ? value.getString("note") : "n.p.");
+//			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
+//			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
+//			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
+//			    	log_value.put("status", (!value.isNull("status")) ? value.getString("status") : "n.p.");
+//			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
+//			    	//log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
+//			    	log_value.put("profit", (!value.isNull("profit")) ? value.getInt("profit") : 0);
+//			    	log_value.put("tickets", (!value.isNull("tickets")) ? value.getInt("tickets") : 0);
+//			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
+//		    	}
+//	    	}
+//	    	DataLogBean pl = new DataLogBean();
+//	    	pl.setId(id);
+//	    	pl.setObjId(objId);
+//	    	pl.setAuthor(author);
+//	    	pl.setLogPeriod(periodLog);
+//	    	pl.setTime(time);
+//	    	pl.setTimeSlot(time_slot);
+//	    	pl.setWeek_day(week_day);
+//	    	pl.setMonth(month);
+//	    	pl.setYear(year);
+//	    	pl.setType(type);
+//	    	pl.setDeleted(deleted);
+//	    	pl.setHolyday(holyday);
+//	    	pl.setValue(log_value);
+//	    	logAllData.add(pl);
+//	    }	
+//		
+//		try {
+//			createdFile = csvManager.create_file_log(logAllData, path);
+//		} catch (Exception e) {
+//			logger.error("Errore in creazione CSV per log: " + e.getMessage());
+//		}
+//		return createdFile;
+//	}
+	
+	
+	@RequestMapping(method = RequestMethod.GET, value = "/auxiliary/rest/globallogs/csv/{appId}/{agencyId}")
 	public @ResponseBody
-	String createAllLogCSV(HttpServletRequest request, HttpServletResponse response, @RequestBody String data) {
-		ArrayList<DataLogBean> logAllData = new ArrayList<DataLogBean>();
-		
-		String createdFile = "";
-		//byte[] return_data = null;
-		String path = request.getSession().getServletContext().getRealPath("/csv/");
-		logger.debug("Current path: " + path);
-		
-		JSONArray logList = new JSONArray(data);
-		logger.debug("log list size: " + logList.length());
-	   	
-	    for(int i = 0; i < logList.length(); i++){
-	    	JSONObject log = logList.getJSONObject(i);
-	    	//logger.error(String.format("Log Data: %s", log.toString()));
-	    	String id = log.getString("id");
-	    	String objId = log.getString("objId");
-	    	String author = log.getString("author");
-	    	Long[] periodLog = null;
-	    	Object period = (!log.isNull("logPeriod") ? log.get("logPeriod") : null);
-	    	if(period != null){
-	    		String periodVal = period.toString();
-	    		String res[] = periodVal.split(",");
-	    		periodLog = new Long[2];
-	    		periodLog[0] = Long.parseLong(res[0].substring(1, res[0].length() - 1));
-	    		periodLog[1] = Long.parseLong(res[1].substring(0, res[1].length() - 2));
-	    	}
-	    	Long time = (!log.isNull("time")) ? log.getLong("time") : null;
-	    	String time_slot = (!log.isNull("timeSlot")) ? log.getString("timeSlot") : "";
-	    	String week_day = (!log.isNull("week_day")) ? log.getString("week_day") : "";
-	    	String month = (!log.isNull("month")) ? log.getString("month") : "";
-	    	String year = (!log.isNull("year")) ? log.getString("year") : "";
-	    	String type = log.getString("type");
-	    	Boolean deleted = log.getBoolean("deleted");
-	    	Boolean holyday = log.getBoolean("holyday");
-	    	JSONObject value = (!log.isNull("value")) ? log.getJSONObject("value") : null;
-	    	Map<String, Object> log_value = new HashMap<String, Object>();
-	    	if(value != null){
-		    	if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0){
-			    	log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
-			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
-			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
-			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
-			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
-			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
-			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
-			    	if(value.isNull("slotsConfiguration")){
-			    		log_value.put("slotsFree", (!value.isNull("slotsFree")) ? value.getInt("slotsFree") : 0);
-			    		log_value.put("slotsOccupiedOnFree", (!value.isNull("slotsOccupiedOnFree")) ? value.getInt("slotsOccupiedOnFree") : 0);
-			    		log_value.put("slotsTimed", (!value.isNull("slotsTimed")) ? value.getInt("slotsTimed") : 0);
-			    		log_value.put("slotsOccupiedOnTimed", (!value.isNull("slotsOccupiedOnTimed")) ? value.getInt("slotsOccupiedOnTimed") : 0);
-			    		log_value.put("slotsPaying", (!value.isNull("slotsPaying")) ? value.getInt("slotsPaying") : 0);
-			    		log_value.put("slotsOccupiedOnPaying", (!value.isNull("slotsOccupiedOnPaying")) ? value.getInt("slotsOccupiedOnPaying") : 0);
-			    		log_value.put("slotsHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
-			    		log_value.put("slotsOccupiedOnHandicapped", (!value.isNull("slotsHandicapped")) ? value.getInt("slotsHandicapped") : 0);
-			    		log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
-			    	} else {
-			    		JSONArray slotsConf = value.getJSONArray("slotsConfiguration");
-			    		JSONObject slotConf = slotsConf.getJSONObject(0);
-			    		log_value.put("slotsFree", (!slotConf.isNull("freeParkSlotNumber")) ? slotConf.getInt("freeParkSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnFree", (!slotConf.isNull("freeParkSlotOccupied")) ? slotConf.getInt("freeParkSlotOccupied") : 0);
-			    		log_value.put("slotsFreeSigned", (!slotConf.isNull("freeParkSlotSignNumber")) ? slotConf.getInt("freeParkSlotSignNumber") : 0);
-			    		log_value.put("slotsOccupiedOnFreeSigned", (!slotConf.isNull("freeParkSlotSignOccupied")) ? slotConf.getInt("freeParkSlotSignOccupied") : 0);
-			    		log_value.put("slotsTimed", (!slotConf.isNull("timedParkSlotNumber")) ? slotConf.getInt("timedParkSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnTimed", (!slotConf.isNull("timedParkSlotOccupied")) ? slotConf.getInt("timedParkSlotOccupied") : 0);
-			    		log_value.put("slotsPaying", (!slotConf.isNull("paidSlotNumber")) ? slotConf.getInt("paidSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnPaying", (!slotConf.isNull("paidSlotOccupied")) ? slotConf.getInt("paidSlotOccupied") : 0);
-			    		log_value.put("slotsHandicapped", (!slotConf.isNull("handicappedSlotNumber")) ? slotConf.getInt("handicappedSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnHandicapped", (!slotConf.isNull("handicappedSlotOccupied")) ? slotConf.getInt("handicappedSlotOccupied") : 0);
-			    		log_value.put("slotsReserved", (!slotConf.isNull("reservedSlotNumber")) ? slotConf.getInt("reservedSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnReserved", (!slotConf.isNull("reservedSlotOccupied")) ? slotConf.getInt("reservedSlotOccupied") : 0);
-			    		log_value.put("slotsRechargeable", (!slotConf.isNull("rechargeableSlotNumber")) ? slotConf.getInt("rechargeableSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnRechargeable", (!slotConf.isNull("rechargeableSlotOccupied")) ? slotConf.getInt("rechargeableSlotOccupied") : 0);
-			    		log_value.put("slotsCarSharing", (!slotConf.isNull("carSharingSlotNumber")) ? slotConf.getInt("carSharingSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnCarSharing", (!slotConf.isNull("carSharingSlotOccupied")) ? slotConf.getInt("carSharingSlotOccupied") : 0);
-			    		log_value.put("slotsLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotNumber")) ? slotConf.getInt("loadingUnloadingSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotOccupied")) ? slotConf.getInt("loadingUnloadingSlotOccupied") : 0);
-			    		log_value.put("slotsPink", (!slotConf.isNull("pinkSlotNumber")) ? slotConf.getInt("pinkSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnPink", (!slotConf.isNull("pinkSlotOccupied")) ? slotConf.getInt("pinkSlotOccupied") : 0);
-			    		log_value.put("slotsUnavailable", (!slotConf.isNull("unusuableSlotNumber")) ? slotConf.getInt("unusuableSlotNumber") : 0);
-			    		log_value.put("vehicleType", (!slotConf.isNull("vehicleType")) ? slotConf.getString("vehicleType") : "Car");
-			    	}
-			    	log_value.put("polyline", (!value.isNull("polyline")) ? value.getString("polyline") : "n.p.");
-			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
-			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
-			    	log_value.put("areaId", (!value.isNull("areaId")) ? value.getString("areaId") : "n.p.");
-		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Parking") == 0){
-		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
-			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
-			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
-			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
-			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
-			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
-			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
-			    	if(value.isNull("slotsConfiguration")){
-			    		log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
-			    		log_value.put("slotsOccupiedOnTotal", (!value.isNull("slotsOccupiedOnTotal")) ? value.getInt("slotsOccupiedOnTotal") : 0);
-			    		log_value.put("slotsUnavailable", (!value.isNull("slotsUnavailable")) ? value.getInt("slotsUnavailable") : 0);
-			    	} else {
-			    		JSONArray slotsConf = value.getJSONArray("slotsConfiguration");
-			    		JSONObject slotConf = slotsConf.getJSONObject(0);
-			    		log_value.put("slotsFree", (!slotConf.isNull("freeParkSlotNumber")) ? slotConf.getInt("freeParkSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnFree", (!slotConf.isNull("freeParkSlotOccupied")) ? slotConf.getInt("freeParkSlotOccupied") : 0);
-			    		log_value.put("slotsFreeSigned", (!slotConf.isNull("freeParkSlotSignNumber")) ? slotConf.getInt("freeParkSlotSignNumber") : 0);
-			    		log_value.put("slotsOccupiedOnFreeSigned", (!slotConf.isNull("freeParkSlotSignOccupied")) ? slotConf.getInt("freeParkSlotSignOccupied") : 0);
-			    		log_value.put("slotsTimed", (!slotConf.isNull("timedParkSlotNumber")) ? slotConf.getInt("timedParkSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnTimed", (!slotConf.isNull("timedParkSlotOccupied")) ? slotConf.getInt("timedParkSlotOccupied") : 0);
-			    		log_value.put("slotsPaying", (!slotConf.isNull("paidSlotNumber")) ? slotConf.getInt("paidSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnPaying", (!slotConf.isNull("paidSlotOccupied")) ? slotConf.getInt("paidSlotOccupied") : 0);
-			    		log_value.put("slotsHandicapped", (!slotConf.isNull("handicappedSlotNumber")) ? slotConf.getInt("handicappedSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnHandicapped", (!slotConf.isNull("handicappedSlotOccupied")) ? slotConf.getInt("handicappedSlotOccupied") : 0);
-			    		log_value.put("slotsReserved", (!slotConf.isNull("reservedSlotNumber")) ? slotConf.getInt("reservedSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnReserved", (!slotConf.isNull("reservedSlotOccupied")) ? slotConf.getInt("reservedSlotOccupied") : 0);
-			    		log_value.put("slotsRechargeable", (!slotConf.isNull("rechargeableSlotNumber")) ? slotConf.getInt("rechargeableSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnRechargeable", (!slotConf.isNull("rechargeableSlotOccupied")) ? slotConf.getInt("rechargeableSlotOccupied") : 0);
-			    		log_value.put("slotsCarSharing", (!slotConf.isNull("carSharingSlotNumber")) ? slotConf.getInt("carSharingSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnCarSharing", (!slotConf.isNull("carSharingSlotOccupied")) ? slotConf.getInt("carSharingSlotOccupied") : 0);
-			    		log_value.put("slotsLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotNumber")) ? slotConf.getInt("loadingUnloadingSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnLoadingUnloading", (!slotConf.isNull("loadingUnloadingSlotOccupied")) ? slotConf.getInt("loadingUnloadingSlotOccupied") : 0);
-			    		log_value.put("slotsPink", (!slotConf.isNull("pinkSlotNumber")) ? slotConf.getInt("pinkSlotNumber") : 0);
-			    		log_value.put("slotsOccupiedOnPink", (!slotConf.isNull("pinkSlotOccupied")) ? slotConf.getInt("pinkSlotOccupied") : 0);
-			    		log_value.put("slotsUnavailable", (!slotConf.isNull("unusuableSlotNumber")) ? slotConf.getInt("unusuableSlotNumber") : 0);
-			    		log_value.put("vehicleType", (!slotConf.isNull("vehicleType")) ? slotConf.getString("vehicleType") : "Car");
-			    	}
-			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
-			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
-		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct") == 0){
-		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
-			    	log_value.put("name", (!value.isNull("name")) ? csvManager.cleanCommaValue(value.getString("name")) : "n.p.");
-			    	log_value.put("description", (!value.isNull("description")) ? value.getString("description") : "n.p.");
-			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
-			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
-			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
-			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
-			    	//log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
-			    	log_value.put("profit", (!value.isNull("profit")) ? value.getInt("profit") : 0);
-			    	log_value.put("tickets", (!value.isNull("tickets")) ? value.getInt("tickets") : 0);
-			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
-			    	log_value.put("version", (!value.isNull("version")) ? value.getString("version") : "null");
-		    	} else if(type.compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkMeter") == 0){
-		    		log_value.put("id", (!value.isNull("id")) ? value.getString("id") : "n.p.");
-			    	log_value.put("code", (!value.isNull("code")) ? value.getString("code") : "n.p.");
-			    	log_value.put("note", (!value.isNull("note")) ? value.getString("note") : "n.p.");
-			    	log_value.put("user", (!value.isNull("user")) ? value.getInt("user") : "n.p.");
-			    	log_value.put("agency", (!value.isNull("agency")) ? value.getString("agency") : "n.p.");
-			    	log_value.put("position", (!value.isNull("position")) ? value.get("position") : "n.p.");
-			    	log_value.put("status", (!value.isNull("status")) ? value.getString("status") : "n.p.");
-			    	log_value.put("updateTime", (!value.isNull("updateTime")) ? value.getLong("updateTime") : "n.p.");
-			    	//log_value.put("slotsTotal", (!value.isNull("slotsTotal")) ? value.getInt("slotsTotal") : 0);
-			    	log_value.put("profit", (!value.isNull("profit")) ? value.getInt("profit") : 0);
-			    	log_value.put("tickets", (!value.isNull("tickets")) ? value.getInt("tickets") : 0);
-			    	log_value.put("lastChange", (!value.isNull("lastChange")) ? value.get("lastChange") : "null");
-		    	}
-	    	}
-	    	DataLogBean pl = new DataLogBean();
-	    	pl.setId(id);
-	    	pl.setObjId(objId);
-	    	pl.setAuthor(author);
-	    	pl.setLogPeriod(periodLog);
-	    	pl.setTime(time);
-	    	pl.setTimeSlot(time_slot);
-	    	pl.setWeek_day(week_day);
-	    	pl.setMonth(month);
-	    	pl.setYear(year);
-	    	pl.setType(type);
-	    	pl.setDeleted(deleted);
-	    	pl.setHolyday(holyday);
-	    	pl.setValue(log_value);
-	    	logAllData.add(pl);
-	    }	
-		
+	void exportLogCSV(HttpServletRequest request, HttpServletResponse response, @PathVariable String appId, @PathVariable String agencyId) {	
 		try {
-			//return_data = csvManager.create_file_streets(streetData, path);
-			createdFile = csvManager.create_file_log(logAllData, path);
+			List<DataLogBean> logAllData = dataService.findAllLogsByAgency(appId, agencyId, 0, -1);
+		
+		response.setContentType("text/plain");
+		response.setHeader("Content-Disposition", "attachment; filename=\"reportLog.csv\"");		
+		csvManager.exportAll(logAllData, response.getOutputStream());
 		} catch (Exception e) {
-			logger.error("Errore in creazione CSV per log: " + e.getMessage());
-		}
-		return createdFile;
+			logger.error("Error exporting log CSV: " + e.getMessage());
+		}		
 	}
+	
 	// ------------------------------ End of part for csv files creation --------------------------------
 
 }

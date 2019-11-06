@@ -15,6 +15,30 @@
  ******************************************************************************/
 package it.smartcommunitylab.parking.management.web.manager;
 
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
+
+import org.apache.log4j.Logger;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
+
 import it.smartcommunitylab.parking.management.web.bean.DataLogBean;
 import it.smartcommunitylab.parking.management.web.model.OccupancyParkingStructure;
 import it.smartcommunitylab.parking.management.web.model.OccupancyRateArea;
@@ -38,21 +62,6 @@ import it.smartcommunitylab.parking.management.web.model.slots.VehicleSlot;
 import it.smartcommunitylab.parking.management.web.model.slots.VehicleType;
 import it.smartcommunitylab.parking.management.web.utils.VehicleTypeDataSetup;
 
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.io.UnsupportedEncodingException;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
-
-import org.apache.log4j.Logger;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 @Service("csvManager")
 public class CSVManager {
 	
@@ -65,6 +74,12 @@ public class CSVManager {
 	private static final String CSV_NEWLINE = "\n";
 	private static final String CSV_NOVAL = "/";
 
+	private String csvHeaders[] = {"Id oggetto","Nome","Tipo","Autore","Ora","Ora(millisecondi)","Periodo","Mezzo","Posti Gratuiti","Posti Occupati Gratuiti","Posti Gratuiti Con Segnaletica","Posti Occupati Gratuiti Con Segnaletica","Posti a Pagamento","Posti Occupati a Pagamento","Posti a Disco Orario","Posti Occupati a Disco Orario","Posti per Disabili","Posti Occupati per Disabili","Posti Car Sharing","Posti Occupati Car Sharing","Posti Riservati","Posti Occupati Riservati","Posti Rosa","Posti Occupati Rosa","Posti con Ricarica Elettrica","Posti Occupati con Ricarica Elettrica","Posti Carico Scarico","Posti Occupati Carico Scarico","Posti Totali","Posti Occupati Totali","Posti Non Disponibili","Ricavi","Ticket emessi"};
+//	private String valueFields[] = {"slotsFree","slotsOccupiedOnFree","slotsFreeSigned","slotsOccupiedOnFreeSigned","slotsPaying","slotsOccupiedOnPaying","slotsTimed","slotsOccupiedOnTimed","slotsHandicapped","slotsOccupiedOnHandicapped","slotsReserved","slotsOccupiedOnReserved","slotsRechargeable","slotsOccupiedOnRechargeable","slotsCarSharing","slotsOccupiedOnCarSharing","slotsLoadingUnloading","slotsOccupiedOnLoadingUnloading","slotsPink","slotsOccupiedOnPink","slotsTotal","slotsOccupiedOnTotal","slotsUnavailable","profit","tickets"};
+	private String valueFields[] = {"freeParkSlotNumber","freeParkSlotOccupied","freeParkSlotSignNumber","freeParkSlotSignOccupied","paidSlotNumber","paidSlotOccupied","timedParkSlotNumber","timedParkSlotOccupied","handicappedSlotNumber","handicappedSlotOccupied","reservedSlotNumber","reservedSlotOccupied","rechargeableSlotNumber","rechargeableSlotOccupied","carSharingSlotNumber","carSharingSlotOccupied","loadingUnloadingSlotNumber","loadingUnloadingSlotOccupied","pinkSlotNumber","pinkSlotOccupied","slotNumber","slotOccupied","unusuableSlotNumber","profit","tickets"};
+	
+	private String jsonMapping = "{\"slotsTotal\":\"slotNumber\",\"slotsHandicapped\":\"handicappedSlotNumber\",\"slotsReserved\":\"reservedSlotNumber\",\"slotsTimed\":\"timedParkSlotNumber\",\"slotsFree\":\"freeParkSlotNumber\",\"slotsFreeSigned\":\"freeParkSlotSignNumber\",\"slotsPaying\":\"paidSlotNumber\",\"slotsRechargeable\":\"rechargeableSlotNumber\",\"slotsLoadingUnloading\":\"loadingUnloadingSlotNumber\",\"slotsPink\":\"pinkSlotNumber\",\"slotsCarSharing\":\"carSharingSlotNumber\",\"slotsUnavailable\":\"unusuableSlotNumber\",\"slotsOccupiedOnHandicapped\":\"handicappedSlotOccupied\",\"slotsOccupiedOnReserved\":\"reservedSlotOccupied\",\"slotsOccupiedOnTimed\":\"timedParkSlotOccupied\",\"slotsOccupiedOnFree\":\"freeParkSlotOccupied\",\"slotsOccupiedOnFreeSigned\":\"freeParkSlotSignOccupied\",\"slotsOccupiedOnPaying\":\"paidSlotOccupied\",\"slotsOccupiedOnRechargeable\":\"rechargeableSlotOccupied\",\"slotsOccupiedOnLoadingUnloading\":\"loadingUnloadingSlotOccupied\",\"slotsOccupiedOnPink\":\"pinkSlotOccupied\",\"slotsOccupiedOnCarSharing\":\"carSharingSlotOccupied\",\"slotsOccupiedOnTotal\":\"slotOccupied\"}";
+	
 	public CSVManager() {
 	}
 	
@@ -778,88 +793,164 @@ public class CSVManager {
 	}
 	
 	// Method used to create the csv file for the logs history
-	public String create_file_log(ArrayList<DataLogBean> logs, String path)
-			throws FileNotFoundException, UnsupportedEncodingException {
-		String name = FILE_NAME + "Log.csv";
-		String long_name = path + "/" + name;
+	// obsolete
+//	public String create_file_log(ArrayList<DataLogBean> logs, String path)
+//			throws FileNotFoundException, UnsupportedEncodingException {
+//		String name = FILE_NAME + "Log.csv";
+//		String long_name = path + "/" + name;
+//		try {
+//			FileWriter writer = new FileWriter(long_name);
+//
+//			// Added the table cols headers
+//			writer.append("Id oggetto");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Nome");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Tipo");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Autore");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Ora");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Ora(millisecondi)");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Periodo");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Mezzo");
+//			writer.append(CSV_SEPARATOR);
+//			// writer.append("Valore");
+//			writer.append("Posti Gratuiti");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati Gratuiti");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Gratuiti Con Segnaletica");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati Gratuiti Con Segnaletica");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti a Pagamento");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati a Pagamento");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti a Disco Orario");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati a Disco Orario");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti per Disabili");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati per Disabili");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Car Sharing");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati Car Sharing");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Riservati");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati Riservati");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Rosa");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati Rosa");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti con Ricarica Elettrica");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati con Ricarica Elettrica");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Carico Scarico");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati Carico Scarico");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Totali");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Occupati Totali");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Posti Non Disponibili");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Ricavi");
+//			writer.append(CSV_SEPARATOR);
+//			writer.append("Ticket emessi");
+//			writer.append(CSV_NEWLINE);
+//
+//			// Add the list of data in a table
+//			for (DataLogBean l : logs) {	
+//				writer.append(l.getObjId());
+//				writer.append(CSV_SEPARATOR);
+//				writer.append(getNameFromValue(l.getValue() + ""));
+//				writer.append(CSV_SEPARATOR);
+//				String type = "";
+//				if(l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0){
+//					type = "Via";
+//				} else if(l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Parking") == 0){
+//					type = "Parcheggio (Occupazione)";
+//				} else if(l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.ParkStruct") == 0){
+//					type = "Parcheggio (Incassi)";
+//				} else {
+//					type = "Parcometro";
+//				}
+//				writer.append((type));
+//				writer.append(CSV_SEPARATOR);
+//				writer.append(l.getAuthor());
+//				writer.append(CSV_SEPARATOR);
+//				writer.append(correctDateTime(l.getTime()));
+//				writer.append(CSV_SEPARATOR);
+//				writer.append(l.getTime() + "");
+//				writer.append(CSV_SEPARATOR);
+//				Long[] period = l.getLogPeriod();
+//				String periodVal = "Nessuno";
+//				if(period != null && period.length == 2){
+//					periodVal = correctDateTime(period[0]) + "-" + correctDateTime(period[1]);
+//				}
+//				writer.append(periodVal);
+//				writer.append(CSV_SEPARATOR);
+//				writer.append(correctValue(l.getValue()));
+//				// writer.append(l.getValueToString());
+//				writer.append(CSV_NEWLINE);
+//			}
+//			writer.flush();
+//			writer.close();
+//
+//		} catch (IOException e1) {
+//			e1.printStackTrace();
+//			logger.error("Error in log csv creation: " + e1);
+//		}
+//		return "csv/" + name; // ba
+//	}
+	
+	public void exportAll(List<DataLogBean> logs, OutputStream os)
+			throws Exception {
+		PrintWriter writer = new PrintWriter(os);
+		ObjectMapper mapper = new ObjectMapper();
+		
+		long start = System.currentTimeMillis();
+		
+		Map<String, String> mapping = mapper.readValue(jsonMapping, Map.class);
+		
 		try {
-			FileWriter writer = new FileWriter(long_name);
-
+			StringBuilder sb = new StringBuilder();
+			for (String h: csvHeaders) {
+				sb.append(h + CSV_SEPARATOR);
+			}
+			String s = sb.toString();
+			s = s.substring(0, s.length() - 1);
+			
 			// Added the table cols headers
-			writer.append("Id oggetto");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Nome");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Tipo");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Autore");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Ora");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Ora(millisecondi)");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Periodo");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Mezzo");
-			writer.append(CSV_SEPARATOR);
-			// writer.append("Valore");
-			writer.append("Posti Gratuiti");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati Gratuiti");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Gratuiti Con Segnaletica");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati Gratuiti Con Segnaletica");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti a Pagamento");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati a Pagamento");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti a Disco Orario");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati a Disco Orario");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti per Disabili");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati per Disabili");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Car Sharing");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati Car Sharing");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Riservati");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati Riservati");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Rosa");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati Rosa");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti con Ricarica Elettrica");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati con Ricarica Elettrica");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Carico Scarico");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati Carico Scarico");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Totali");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Occupati Totali");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Posti Non Disponibili");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Ricavi");
-			writer.append(CSV_SEPARATOR);
-			writer.append("Ticket emessi");
+			writer.append(s);
 			writer.append(CSV_NEWLINE);
 
+			Collections.sort(logs, new Comparator<DataLogBean>() {
+
+				@Override
+				public int compare(DataLogBean o1, DataLogBean o2) {
+					return (int)((o2.getTime() - o1.getTime()) / 1000);
+				}});
+			
 			// Add the list of data in a table
 			for (DataLogBean l : logs) {	
-				writer.append(l.getObjId());
-				writer.append(CSV_SEPARATOR);
-				writer.append(getNameFromValue(l.getValue() + ""));
-				writer.append(CSV_SEPARATOR);
+				sb = new StringBuilder();
+				
+				sb.append(l.getObjId());
+				sb.append(CSV_SEPARATOR);
+				sb.append(getNameFromValue(l.getValue() + ""));
+				sb.append(CSV_SEPARATOR);
 				String type = "";
 				if(l.getType().compareTo("it.smartcommunitylab.parking.management.web.auxiliary.model.Street") == 0){
 					type = "Via";
@@ -870,34 +961,53 @@ public class CSVManager {
 				} else {
 					type = "Parcometro";
 				}
-				writer.append((type));
-				writer.append(CSV_SEPARATOR);
-				writer.append(l.getAuthor());
-				writer.append(CSV_SEPARATOR);
-				writer.append(correctDateTime(l.getTime()));
-				writer.append(CSV_SEPARATOR);
-				writer.append(l.getTime() + "");
-				writer.append(CSV_SEPARATOR);
+				sb.append((type));
+				sb.append(CSV_SEPARATOR);
+				sb.append(l.getAuthor());
+				sb.append(CSV_SEPARATOR);
+				sb.append(correctDateTime(l.getTime()));
+				sb.append(CSV_SEPARATOR);
+				sb.append(l.getTime() + "");
+				sb.append(CSV_SEPARATOR);
 				Long[] period = l.getLogPeriod();
 				String periodVal = "Nessuno";
 				if(period != null && period.length == 2){
 					periodVal = correctDateTime(period[0]) + "-" + correctDateTime(period[1]);
 				}
-				writer.append(periodVal);
-				writer.append(CSV_SEPARATOR);
-				writer.append(correctValue(l.getValue()));
-				// writer.append(l.getValueToString());
-				writer.append(CSV_NEWLINE);
+				sb.append(periodVal);
+				sb.append(CSV_SEPARATOR);
+				
+				Map valueMap = Maps.newTreeMap();
+				
+				if (l.getValueString() != null) {
+				String value = new String(l.getValueString());
+				if (l.getValueString() != null) {
+					for (Entry<String, String> entry : mapping.entrySet()) {
+						value = value.replaceAll("\"" + entry.getKey() + "\"", "\"" + entry.getValue() + "\"");
+					}
+				}			
+				
+				valueMap = mapper.readValue(value, Map.class);
+				}
+				
+				List<String> corrected = correctValues(valueMap);
+				
+				for (String corr: corrected) {
+					String line = sb.toString() + corr;
+					writer.append(line);
+					writer.append(CSV_NEWLINE);
+				}
 			}
 			writer.flush();
 			writer.close();
 
-		} catch (IOException e1) {
+		} catch (Exception e1) {
 			e1.printStackTrace();
 			logger.error("Error in log csv creation: " + e1);
 		}
-		return "csv/" + name; // ba
-	}
+	}	
+	
+	
 		
 	// Method used to create the csv file for the street profit
 	public String create_profit_file_streets(ArrayList<ProfitStreet> streets, String path) throws FileNotFoundException,
@@ -2247,145 +2357,37 @@ public class CSVManager {
 		tot = occupiedCarSharingSlots + occupiedFreeSlots + occupiedFreeSlotsSigned + occupiedPayingSlots + occupiedTimedSlots + occupiedHandicappedSlots + occupiedReservedSlots + occupiedPinkSlots + occupiedRechargeableSlots + occupiedLoadingUnloadingSlots;
 		return tot;
 	}
-		
-	private String correctValue(Map<String, Object> value) {
-		String vehicleType = "Automobile";
-		String carSharingSlots = "0";
-		String occupiedCarSharingSlots = "0";
-		String freeSlots = "0";
-		String occupiedFreeSlots = "0";
-		String freeSlotsSigned = "0";
-		String occupiedFreeSlotsSigned = "0";
-		String payingSlots = "0";
-		String occupiedPayingSlots = "0";
-		String timedSlots = "0";
-		String occupiedTimedSlots = "0";
-		String handicappedSlots = "0";
-		String occupiedHandicappedSlots = "0";
-		String reservedSlots = "0";
-		String occupiedReservedSlots = "0";
-		String pinkSlots = "0";
-		String occupiedPinkSlots = "0";
-		String rechargeableSlots = "0";
-		String occupiedRechargeableSlots = "0";
-		String loadingUnloadingSlots = "0";
-		String occupiedLoadingUnloadingSlots = "0";
-		String totalSlots = "0";
-		String occupiedTotalSlots = "0";
-		String unavailableSlots = "0";
-		String profit = "0";
-		String tickets = "0";
-		String to_clean = value.toString();
-		// logger.error("Value in CSV: " + to_clean);
-		String completeVals[] = to_clean.split(",");
-		for (String s : completeVals) {
-	    	if (s.contains("vehicleType")) {
-				String vehicleTmp = s.substring(s.indexOf("=") + 1, s.length());
-	    		vehicleType = (vehicleTmp.compareTo("Car") == 0) ? "Automobile" : "Moto";
+	
+	private List<String> correctValues(Map<String, Object> value) {
+		List<String> result = Lists.newArrayList();
+		if (value.containsKey("slotsConfiguration")) {
+			List<Map<String, Object>> slots = (List<Map<String, Object>>)value.get("slotsConfiguration");
+			for (Map<String, Object> slot: slots) {
+				result.add(correctValue(slot));
 			}
-			if (s.contains("slotsFree")) {
-				freeSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnFree")) {
-				occupiedFreeSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsFreeSigned")) {
-				freeSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnFreeSigned")) {
-				occupiedFreeSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsPaying")) {
-				payingSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnPaying")) {
-				occupiedPayingSlots = s.substring(s.indexOf("=") + 1,
-						s.length());
-			}
-			if (s.contains("slotsTimed")) {
-				timedSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnTimed")) {
-				occupiedTimedSlots = s
-						.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsHandicapped")) {
-				handicappedSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnHandicapped")) {
-				occupiedHandicappedSlots = s.substring(s.indexOf("=") + 1,
-						s.length());
-			}
-			if (s.contains("slotsReserved")) {
-				reservedSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnReserved")) {
-				occupiedReservedSlots = s.substring(s.indexOf("=") + 1,
-						s.length());
-			}
-			if (s.contains("slotsRechargeable")) {
-				rechargeableSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnRechargeable")) {
-				occupiedRechargeableSlots = s.substring(s.indexOf("=") + 1,
-						s.length());
-			}
-			if (s.contains("slotsCarSharing")) {
-				carSharingSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnCarSharing")) {
-				occupiedCarSharingSlots = s.substring(s.indexOf("=") + 1,
-						s.length());
-			}
-			if (s.contains("slotsLoadingUnloading")) {
-				loadingUnloadingSlots = s.substring(s.indexOf("=") + 1, s.length() - 1);
-			}
-			if (s.contains("slotsOccupiedOnLoadingUnloading")) {
-				occupiedLoadingUnloadingSlots = s.substring(s.indexOf("=") + 1,
-						s.length());
-			}
-			if (s.contains("slotsPink")) {
-				pinkSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnPink")) {
-				occupiedPinkSlots = s.substring(s.indexOf("=") + 1,
-						s.length());
-			}
-			if (s.contains("slotsTotal")) {
-				totalSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsOccupiedOnTotal")) {
-				occupiedTotalSlots = s
-						.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("slotsUnavailable")) {
-				unavailableSlots = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("profit")) {
-				profit = s.substring(s.indexOf("=") + 1, s.length());
-			}
-			if (s.contains("tickets")) {
-				tickets = s.substring(s.indexOf("=") + 1, s.length());
-			}
+		} else {
+			result.add(correctValue(value));
 		}
-
-		// String cleaned = to_clean.replaceAll(",", " / ");
-		// cleaned = cleaned.substring(1, cleaned.length()-1);
-		String cleaned = vehicleType + "," + freeSlots + "," + occupiedFreeSlots + ","
-				+ freeSlotsSigned + "," + occupiedFreeSlotsSigned + ","
-				+ payingSlots + "," + occupiedPayingSlots + "," + timedSlots
-				+ "," + occupiedTimedSlots + "," + handicappedSlots + ","
-				+ occupiedHandicappedSlots + ","
-				+ carSharingSlots + "," + occupiedCarSharingSlots + ","
-				+ reservedSlots + "," + occupiedReservedSlots + ","
-				+ pinkSlots + "," + occupiedPinkSlots + ","
-				+ rechargeableSlots + "," + occupiedRechargeableSlots + ","
-				+ loadingUnloadingSlots + "," + occupiedLoadingUnloadingSlots + ","
-				+ totalSlots + "," + occupiedTotalSlots + "," + unavailableSlots + ","
-				+ profit + "," + tickets;
-		return cleaned;
+		return result;
 	}
+	
+	private String correctValue(Map<String, Object> value) {
+		StringBuilder sb = new StringBuilder();
 		
+		String vehicleType = "Automobile";
+    	if (value.containsKey("vehicleType")) {
+			String vehicleTmp = (String)value.get("vehicleType");
+    		vehicleType = (vehicleTmp.compareTo("Car") == 0) ? "Automobile" : "Moto";
+		}
+    	sb.append(vehicleType);
+    	for (String field: valueFields) {
+    		String val = value.getOrDefault(field, "0").toString();
+    		sb.append(CSV_SEPARATOR + val);
+    	}
+    	
+    	return sb.toString();
+	}
+	
 	// Method getNameFromValue: extract the object name from the value
 	private String getNameFromValue(String value) {
 		String name = "";
