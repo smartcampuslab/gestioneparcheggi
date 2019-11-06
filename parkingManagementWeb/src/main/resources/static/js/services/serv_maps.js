@@ -1911,13 +1911,15 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
       var updatedPath = map.shapes.editPolyline.getPath();
       if (updatedPath != null && updatedPath.length > 0) {
         for (var i = 0; i < updatedPath.length; i++) {
-          var point = this.getPointFromLatLng(updatedPath.b[i], 1);
-          editCorrectedPath.push(point);
+	          var mp = updatedPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
+	          editCorrectedPath.push(point);
         }
       } else {
         var createdPath = poly.getPath();
         for (var i = 0; i < createdPath.length; i++) {
-          var point = this.getPointFromLatLng(createdPath.b[i], 1);
+	          var mp = createdPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
           editCorrectedPath.push(point);
         }
       }
@@ -1936,7 +1938,8 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
           if (updatedPath != null && updatedPath.length > 0) {
             editCorrectedPath = [];
             for (var i = 0; i < updatedPath.length; i++) {
-              var point = this.getPointFromLatLng(updatedPath.b[i], 1);
+  	          var mp = updatedPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
               if (point) editCorrectedPath.push(point);
             }
             editPaths.push(editCorrectedPath);
@@ -1950,7 +1953,8 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
       var createdPath = garea.getPath();
       editCorrectedPath = [];
       for (var i = 0; i < createdPath.length; i++) {
-        var point = this.getPointFromLatLng(createdPath.b[i], 1);
+          var mp = createdPath.getAt(i);
+          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
         if (point) editCorrectedPath.push(point);
       }
       editPaths.push(editCorrectedPath);
@@ -1960,7 +1964,8 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
           createdPath = editNewAreas[j].getPath();
           editCorrectedPath = [];
           for (var i = 0; i < createdPath.length; i++) {
-            var point = this.getPointFromLatLng(createdPath.b[i], 1);
+	          var mp = createdPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
             editCorrectedPath.push(point);
           };
           editPaths.push(editCorrectedPath);
@@ -1973,7 +1978,8 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
     this.createPolygonInAreaEdit = function (garea, editCorrectedPath, editPaths, allNewAreas) {
       var createdPath = garea.getPath();
       for (var i = 0; i < createdPath.length; i++) {
-        var point = this.getPointFromLatLng(createdPath.b[i], 1);
+          var mp = createdPath.getAt(i);
+          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
         editCorrectedPath.push(point);
       }
       editPaths.push(editCorrectedPath);
@@ -1982,7 +1988,8 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
           createdPath = allNewAreas[i].getPath();
           editCorrectedPath = [];
           for (var i = 0; i < createdPath.length; i++) {
-            var point = this.getPointFromLatLng(createdPath.b[i], 1);
+	          var mp = createdPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
             editCorrectedPath.push(point);
           };
           if (editCorrectedPath.length > 0) {
@@ -1998,7 +2005,8 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
       var createdPath = garea.getPath();
       if (createdPath.length > 0) {
         for (var i = 0; i < createdPath.length; i++) {
-          var point = this.getPointFromLatLng(createdPath.b[i], 1);
+	          var mp = createdPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
           newCorrectedPath.push(point);
         };
         createdPaths.push(newCorrectedPath);
@@ -2008,7 +2016,8 @@ pm.service('gMapService', ['$rootScope', '$dialogs', '$timeout', 'sharedDataServ
           createdPath = allNewAreas[j].getPath();
           newCorrectedPath = [];
           for (var i = 0; i < createdPath.length; i++) {
-            var point = this.getPointFromLatLng(createdPath.b[i], 1);
+	          var mp = createdPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
             newCorrectedPath.push(point);
           };
           createdPaths.push(newCorrectedPath);

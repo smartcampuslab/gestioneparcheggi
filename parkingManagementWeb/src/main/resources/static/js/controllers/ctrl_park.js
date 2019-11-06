@@ -2465,13 +2465,15 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
         var updatedPath = $scope.map.shapes.editZPolygon.getPath();
         if (updatedPath != null && updatedPath.length > 0) {
           for (var i = 0; i < updatedPath.length; i++) {
-            var point = gMapService.getPointFromLatLng(updatedPath.b[i], 1);
+	          var mp = updatedPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
             editCorrectedPath.push(point);
           }
         } else {
           var createdPath = gzone.getPath();
           for (var i = 0; i < createdPath.length; i++) {
-            var point = gMapService.getPointFromLatLng(createdPath.b[i], 1);
+	          var mp = createdPath.getAt(i);
+	          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
             editCorrectedPath.push(point);
           }
         }
@@ -2502,7 +2504,8 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
         var newCorrectedPath = [];
         var createdPath = gzone.getPath();
         for (var i = 0; i < createdPath.length; i++) {
-          var point = gMapService.getPointFromLatLng(createdPath.b[i], 1);
+          var mp = createdPath.getAt(i);
+          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
           newCorrectedPath.push(point);
         };
 
@@ -2973,8 +2976,9 @@ pm.controller('ParkCtrl', ['$scope', '$http', '$routeParams', '$rootScope', '$ro
         var newCorrectedPath = [];
         var createdPath = poly.getPath();
         var lastPoint=sharedDataService.getConfMapCenter();
-        for (var i = 0; i < createdPath.length; i++) {
-          var point = gMapService.getPointFromLatLng(createdPath.b[i], 1);
+        for (var i = 0; i < createdPath.getLength(); i++) {
+          var mp = createdPath.getAt(i);
+          var point = {latitude: mp.lat(), longitude: mp.lng()};//gMapService.getPointFromLatLng({lat:mp.lat(), lng: mp.lng()}, 1);
           newCorrectedPath.push(point);
           lastPoint = [point.latitude+","+point.longitude];
         };
