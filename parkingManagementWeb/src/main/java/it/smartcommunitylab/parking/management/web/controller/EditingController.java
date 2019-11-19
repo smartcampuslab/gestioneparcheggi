@@ -53,8 +53,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 //@Api(value = "Metroparco", description = "Metroparco objects API")
 public class EditingController {
 
-	private static final String STATIC = "./static/";
-
+	@Autowired
+	@Value("${resource.folder:./src/main/resources/static/}")
+	private String STATIC;
 	@Autowired
 	StorageManager storage;
 	

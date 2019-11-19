@@ -46,8 +46,6 @@ public class YamlUserDetailsService implements UserDetailsService {
     private static final Logger logger = Logger.getLogger(YamlUserDetailsService.class);
     private static final Integer role = 1;
     
-    private org.springframework.security.core.userdetails.User userdetails;
-
     public UserDetails loadUserByUsername(String username)
             throws UsernameNotFoundException {
         boolean enabled = true;
@@ -58,12 +56,13 @@ public class YamlUserDetailsService implements UserDetailsService {
         //System.out.println(user.getRole());
         
         UserSetting myUser = userSetup.findUserByUsername(username);
-        if(myUser != null){
+        User userdetails = null;
+		if(myUser != null){
         	objectShowSetup.setApp_id(myUser.getAppId());
         	logger.info(String.format("username : %s", myUser.getUsername()));
         	logger.info(String.format("pwd : %s", myUser.getPassword()));
             
-            userdetails = new User(myUser.getUsername(), 
+            userdetails  = new User(myUser.getUsername(), 
             				myUser.getPassword(),
      			   			enabled,
      			   			accountNonExpired,
