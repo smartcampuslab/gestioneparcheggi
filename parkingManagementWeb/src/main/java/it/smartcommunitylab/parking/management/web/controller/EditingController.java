@@ -109,7 +109,7 @@ public class EditingController {
 		}
 		try {
 			return storage.editStreet(street, appId, agencyId, user_name);
-		} catch (DatabaseException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error(e.getMessage(), e);
 			throw e;
