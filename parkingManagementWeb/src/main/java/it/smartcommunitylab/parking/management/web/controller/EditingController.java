@@ -101,6 +101,8 @@ public class EditingController {
 			@PathVariable("sid") String vid, @RequestBody StreetBean street, 
 			@RequestParam(required=true) String agencyId, @RequestParam(required=false) String username)
 			throws DatabaseException {
+		
+		logger.error("Doing edit!");
 		String user_name = "unknown";
 		if(username != null && username.compareTo("") != 0){
 			user_name = username;
@@ -108,6 +110,7 @@ public class EditingController {
 		try {
 			return storage.editStreet(street, appId, agencyId, user_name);
 		} catch (DatabaseException e) {
+			e.printStackTrace();
 			logger.error(e.getMessage(), e);
 			throw e;
 		}
