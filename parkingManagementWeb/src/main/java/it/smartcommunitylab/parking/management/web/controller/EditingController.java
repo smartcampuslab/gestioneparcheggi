@@ -105,7 +105,12 @@ public class EditingController {
 		if(username != null && username.compareTo("") != 0){
 			user_name = username;
 		}
-		return storage.editStreet(street, appId, agencyId, user_name);
+		try {
+			return storage.editStreet(street, appId, agencyId, user_name);
+		} catch (DatabaseException e) {
+			logger.error(e.getMessage(), e);
+			throw e;
+		}
 	}
 
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/street")

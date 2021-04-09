@@ -49,6 +49,7 @@ import java.security.AccessControlException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -545,6 +546,8 @@ public class StorageManager {
 						if (area.getParkingMeters() == null) {
 							area.setParkingMeters(new HashMap<String, ParkingMeter>());
 						}
+						if (parcometro.getAgencyId() == null) parcometro.setAgencyId(new LinkedList<>());
+						if (!parcometro.getAgencyId().contains(agencyId)) parcometro.getAgencyId().add(agencyId);
 						// TODO check if parcometro is already present
 						//area.getParkingMeters().add(parcometro);
 						area.getParkingMeters().put(parcometro.getId(), parcometro);
