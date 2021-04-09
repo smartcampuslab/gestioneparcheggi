@@ -854,6 +854,7 @@ public class StorageManager {
 
 		if (!founded) {
 			StreetBean todel = findStreet(sb.getId());
+			logger.info("Street " + todel.getId());
 			if (todel != null) {
 				removeStreet(todel.getRateAreaId(), sb.getId(), appId, agencyId, username);
 			}
@@ -864,6 +865,7 @@ public class StorageManager {
 	}
 
 	public boolean removeStreet(String areaId, String streetId, String appId, String agencyId, String username) {
+		logger.info("Street area " + areaId);
 		RateArea area = getAreaObjectById(areaId, appId);	//mongodb.findById(areaId, RateArea.class);
 		boolean result = false;
 		if(area.getAgencyId() != null && !area.getAgencyId().isEmpty()){
