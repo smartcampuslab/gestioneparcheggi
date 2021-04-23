@@ -853,7 +853,7 @@ public class StorageManager {
 		}
 
 		if (!founded) {
-			StreetBean todel = findStreet(sb.getId());
+			StreetBean todel = findStreet(sb.getId(), appId);
 			logger.info("Street " + todel.getId());
 			if (todel != null) {
 				removeStreet(todel.getRateAreaId(), sb.getId(), appId, agencyId, username);

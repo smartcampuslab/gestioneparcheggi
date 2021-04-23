@@ -143,7 +143,7 @@ public class EditingController {
 	@RequestMapping(method = RequestMethod.GET, value = "/rest/{appId}/street/{streetId}")
 	public @ResponseBody
 	StreetBean getStreetById(@PathVariable("appId") String appId, @PathVariable("streetId") String streetId) {
-		return storage.findStreet(streetId);
+		return storage.findStreet(streetId, appId);
 	}
 	
 	// Method open to get a single street
@@ -151,7 +151,7 @@ public class EditingController {
 	//@ApiOperation(value = "Get Street", notes = "Returns a single street park item")
 	public @ResponseBody
 	StreetBean getStreetByIdNS(@PathVariable("appId") String appId, @PathVariable("streetId") String streetId) {
-		return storage.findStreet(streetId);
+		return storage.findStreet(streetId, appId);
 	}
 
 	@RequestMapping(method = RequestMethod.POST, value = "/rest/{appId}/parkingmeter")
